@@ -1,7 +1,8 @@
 import type { Movie } from "@/data/movies";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { useDynamic } from "@/dynamic/shared";
+import { useDynamicSystem } from "@/dynamic/shared";
 import { cn } from "@/library/utils";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface MovieCardProps {
   movie: Movie;
@@ -9,16 +10,16 @@ interface MovieCardProps {
 }
 
 export function MovieCard({ movie, onSelect }: MovieCardProps) {
-  const dyn = useDynamic();
+  const dyn = useDynamicSystem();
   
   return (
     <>
       {dyn.v1.wrap("movie-card", (
         <div 
-          id={dyn.v3.id("movie-card")}
+          id={dyn.v3.getVariant("movie-card", ID_VARIANTS_MAP, "movie-card")}
           className={cn(
             "group flex h-full flex-col rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-6 text-white shadow-xl backdrop-blur-sm transition-all duration-300 hover:border-secondary/50 hover:bg-white/15 hover:shadow-2xl hover:shadow-secondary/20 hover:-translate-y-2",
-            dyn.v3.class("card", "")
+            dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")
           )}
         >
           <div
@@ -47,13 +48,13 @@ export function MovieCard({ movie, onSelect }: MovieCardProps) {
             <SeedLink
               href={`/movies/${movie.id}`}
               onClick={() => onSelect?.(movie)}
-              id={dyn.v3.id("view-details-button")}
+              id={dyn.v3.getVariant("view-details-button", ID_VARIANTS_MAP, "view-details-button")}
               className={cn(
                 "mt-4 inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-secondary hover:text-black hover:border-secondary hover:scale-105 shadow-lg",
-                dyn.v3.class("button", "")
+                dyn.v3.getVariant("button", CLASS_VARIANTS_MAP, "")
               )}
             >
-              {dyn.v3.text("view_details", "View detail")}
+              {dyn.v3.getVariant("view_details", undefined, "View detail")}
             </SeedLink>
           </div>
         </div>

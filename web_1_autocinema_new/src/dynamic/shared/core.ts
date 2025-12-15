@@ -1,5 +1,5 @@
 /**
- * CORE - Funciones base y hook principal useDynamic()
+ * CORE - Funciones base y hook principal useDynamicSystem()
  * 
  * Funciones base para variantes y hook centralizado
  */
@@ -10,9 +10,7 @@ import { useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
 import { applyV1Wrapper, type V1WrapperOptions } from "../v1/structure";
 import { isV3Enabled } from "./flags";
-import { generateElementId } from "../v3/utils/id-generator";
-import { getVariant } from "../v3/utils/variant-selector";
-import { getClassForElement } from "../v3/utils/class-selector";
+import { getVariant, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "../v3/utils/variant-selector";
 import { generateDynamicOrder } from "./order-utils";
 import type { ReactNode } from "react";
 
@@ -35,14 +33,15 @@ export function hashString(value: string): number {
 }
 
 /**
- * Selecciona una variante basada en seed y key
+ * Selecciona el índice de una variante basada en seed y key
+ * Función interna usada por getVariant para calcular qué variante usar
  * 
  * @param seed - El seed base (1-999)
  * @param key - Identificador único del componente
  * @param count - Número de variantes disponibles (devuelve 0 a count-1)
- * @returns Número de variante (0, 1, 2, ..., count-1)
+ * @returns Índice de la variante (0, 1, 2, ..., count-1)
  */
-export function pickVariant(seed: number, key: string, count: number): number {
+export function selectVariantIndex(seed: number, key: string, count: number): number {
   if (count <= 1) return 0;
   
   // Combinar seed y key en una cadena única y hashearla
@@ -63,33 +62,34 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
 }
 
 // ============================================================================
-// HOOK PRINCIPAL: useDynamic()
+// HOOK PRINCIPAL: useDynamicSystem()
 // ============================================================================
 
 /**
  * Hook centralizado que unifica V1 (wrappers/decoy) y V3 (atributos/textos)
  * 
  * Uso:
- *   const dyn = useDynamic();
- *   dyn.v1.wrap()      // V1: Wrappers y decoys
- *   dyn.v3.text()      // V3: Textos
- *   dyn.v3.id()        // V3: IDs
- *   dyn.v3.class()     // V3: Clases
+ *   const dyn = useDynamicSystem();
+ *   dyn.v1.wrap()         // V1: Wrappers y decoys
+ *   dyn.v1.changeOrder()  // V1: Cambiar orden de elementos
+ *   dyn.v3.getVariant()   // V3: Obtener variantes (IDs, clases, textos) - TODO usa esta función
  * 
  * Funciona igual aunque V1/V3 estén OFF:
  * - Si V1 OFF: dyn.v1.wrap() devuelve children sin cambios
- * - Si V3 OFF: dyn.v3.text/id/class devuelve valores por defecto
+ * - Si V3 OFF: dyn.getVariant() devuelve fallback o key
+ * 
+ * El seed se obtiene automáticamente del SeedContext (que lo lee de la URL).
+ * No necesitas pasar el seed manualmente.
  */
-export function useDynamic() {
+export function useDynamicSystem() {
   const { seed } = useSeed();
   
   return useMemo(() => ({
     seed,
     
     /**
-     * V1: Estructura DOM (wrappers y decoys)
-     * Rompe XPath añadiendo elementos invisibles
-     * Cada componente puede tener sus propias variantes
+     * V1: Estructura DOM (wrappers, decoys y orden)
+     * Rompe XPath añadiendo elementos invisibles y cambiando el orden
      */
     v1: {
       /**
@@ -108,63 +108,50 @@ export function useDynamic() {
         options?: V1WrapperOptions,
         reactKey?: string
       ) => applyV1Wrapper(seed, componentKey, children, options, reactKey),
+      
+      /**
+       * Cambia el orden dinámico de arrays de elementos
+       * @param key - Identificador único (ej: "stats-cards", "featured-movies")
+       * @param count - Número de elementos (ej: 4, 6, 10)
+       * @returns Array de índices reordenados
+       */
+      changeOrder: (key: string, count: number) => 
+        generateDynamicOrder(seed, key, count),
     },
     
     /**
-     * V3: Atributos y textos (IDs, clases, textos)
-     * Evita memorización cambiando atributos
+     * V3: Variantes (IDs, clases, textos)
+     * Una sola función para todo - misma lógica, misma estructura
      */
     v3: {
       /**
-       * Obtiene texto dinámico
-       * Si V3 está OFF, devuelve fallback
+       * Obtener variante (IDs, clases, textos)
        * 
-       * @param key - Text key (e.g., 'search_placeholder', 'view_details')
-       * @param fallback - Fallback text if variant not found
-       * @param localVariants - Optional local dictionary for component-specific texts
-       */
-      text: (key: string, fallback: string, localVariants?: Record<string, string[]>) => {
-        if (!isV3Enabled()) return fallback;
-        return getVariant(seed, key, localVariants, fallback);
-      },
-      
-      /**
-       * Obtiene ID dinámico
-       * Si V3 está OFF, devuelve ID por defecto
+       * @param key - La key a buscar
+       * @param variants - Diccionario opcional (local del componente o global como ID_VARIANTS_MAP)
+       * @param fallback - Valor por defecto si no encuentra
+       * @returns La variante seleccionada (string)
        * 
-       * NOTA: Los IDs pueden cambiar entre SSR y cliente debido a diferencias en el seed.
-       * Esto es esperado y se maneja con suppressHydrationWarning en los elementos.
+       * Ejemplos:
+       *   dyn.v3.getVariant("section", dynamicV3Ids)  // IDs locales
+       *   dyn.v3.getVariant("button", CLASS_VARIANTS_MAP)  // Clases globales
+       *   dyn.v3.getVariant("search_placeholder", undefined, "Search...")  // Textos (busca en TEXT_VARIANTS_MAP)
        */
-      id: (elementType: string, index?: number) => {
-        if (!isV3Enabled()) {
-          return index && index > 0 ? `${elementType}-${index}` : elementType;
-        }
-        return generateElementId(seed, elementType, index ?? 0);
-      },
-      
-      /**
-       * Obtiene clase CSS dinámica
-       * Si V3 está OFF, devuelve fallback
-       */
-      class: (classType: string, fallback?: string) => {
-        if (!isV3Enabled()) return fallback ?? "";
-        return getClassForElement(seed, classType, fallback ?? "");
+      getVariant: (
+        key: string,
+        variants?: Record<string, string[]>,
+        fallback?: string
+      ) => {
+        if (!isV3Enabled() && fallback !== undefined) return fallback;
+        if (!isV3Enabled()) return key;
+        return getVariant(seed, key, variants, fallback);
       },
     },
     
     /**
-     * Utilidad: seleccionar variante para lógica personalizada
+     * Utilidad: seleccionar índice de variante para lógica personalizada
      */
-    pickVariant: (key: string, count: number) => 
-      pickVariant(seed, key, count),
-    
-    /**
-     * Utilidad: generar orden dinámico para arrays de elementos
-     * @param key - Identificador único (ej: "stats-cards", "featured-movies")
-     * @param count - Número de elementos (ej: 4, 6, 10)
-     * @returns Array de índices reordenados
-     */
-    generateOrder: (key: string, count: number) => 
-      generateDynamicOrder(seed, key, count),
+    selectVariantIndex: (key: string, count: number) => 
+      selectVariantIndex(seed, key, count),
   }), [seed]);
 }

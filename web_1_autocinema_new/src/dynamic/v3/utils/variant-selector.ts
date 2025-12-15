@@ -8,7 +8,7 @@
 import idVariantsJson from '../data/id-variants.json';
 import classVariantsJson from '../data/class-variants.json';
 import textVariantsJson from '../data/text-variants.json';
-import { pickVariant } from '../../shared/core';
+import { selectVariantIndex } from '../../shared/core';
 
 export const ID_VARIANTS_MAP: Record<string, string[]> = idVariantsJson;
 export const CLASS_VARIANTS_MAP: Record<string, string[]> = classVariantsJson;
@@ -92,7 +92,7 @@ export function getVariant(
     return selectedVariants[0]; // seed=1 = original (first variant)
   }
 
-  const variantIndex = pickVariant(seed, key, selectedVariants.length);
+  const variantIndex = selectVariantIndex(seed, key, selectedVariants.length);
   return selectedVariants[variantIndex] || selectedVariants[0];
 }
 

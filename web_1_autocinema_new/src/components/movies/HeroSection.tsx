@@ -7,9 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Sparkles, TrendingUp, Play, Star, Search as SearchIcon } from "lucide-react";
 import { useMemo } from "react";
 import { cn } from "@/library/utils";
-import { useDynamic } from "@/dynamic/shared";
-import { useSeed } from "@/context/SeedContext";
-import { getVariant } from "@/dynamic/v3";
+import { useDynamicSystem } from "@/dynamic/shared";
 
 interface HeroSectionProps {
   searchQuery: string;
@@ -26,8 +24,7 @@ export function HeroSection({
   featuredMovies,
   className,
 }: HeroSectionProps) {
-  const dyn = useDynamic();
-  const { seed } = useSeed();
+  const dyn = useDynamicSystem();
 
   // Variantes locales de IDs específicos del HeroSection (no se reutilizan en otros componentes)
   // Si no están aquí, se buscarán en id-variants.json (generales)
@@ -61,7 +58,7 @@ export function HeroSection({
     <>
       {dyn.v1.wrap("hero-section", (
         <section
-          id={getVariant(seed, "section", dynamicV3Ids)}
+          id={dyn.v3.getVariant("section", dynamicV3Ids)}
           className={cn(
             "relative w-full overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] text-white",
             className
@@ -90,11 +87,11 @@ export function HeroSection({
               </div>
               
               <h1 className="text-5xl font-bold leading-[1.1] tracking-tight lg:text-6xl xl:text-7xl mb-6">
-                {dyn.v3.text("hero_title", "Discover AI-driven stories, remixed genres, and cinematic experiments.")}
+                {dyn.v3.getVariant("hero_title", undefined, "Discover AI-driven stories, remixed genres, and cinematic experiments.")}
               </h1>
               
               <p className="text-lg text-white/70 leading-relaxed mb-8">
-                {dyn.v3.text("hero_description", "Search hundreds of procedurally generated movies loaded directly from our datasets service. No backend, no forms – just cinema.")}
+                {dyn.v3.getVariant("hero_description", undefined, "Search hundreds of procedurally generated movies loaded directly from our datasets service. No backend, no forms – just cinema.")}
               </p>
 
               <form
@@ -118,7 +115,7 @@ export function HeroSection({
                   type="submit" 
                   className="h-14 px-8 bg-secondary text-black hover:bg-secondary/90 shadow-lg shadow-secondary/20 font-semibold text-base"
                 >
-                  {dyn.v3.text("search_button", "Search library")}
+                  {dyn.v3.getVariant("search_button", undefined, "Search library")}
                 </Button>
               </form>
 
@@ -145,8 +142,8 @@ export function HeroSection({
                   <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-secondary/20">
                     <TrendingUp className="h-5 w-5 text-secondary" />
                   </div>
-                  <h2 id={getVariant(seed, "title", dynamicV3Ids)} className="text-3xl font-bold">
-                    {dyn.v3.text("featured_title", "Featured This Week")}
+                  <h2 id={dyn.v3.getVariant("title", dynamicV3Ids)} className="text-3xl font-bold">
+                    {dyn.v3.getVariant("featured_title", undefined, "Featured This Week")}
                   </h2>
                 </div>
               ))}
@@ -205,11 +202,11 @@ export function HeroSection({
                         {/* CTA Button */}
                         <SeedLink
                           href={`/movies/${movie.id}`}
-                          id={getVariant(seed, "button", dynamicV3Ids)}
+                          id={dyn.v3.getVariant("button", dynamicV3Ids)}
                           className="inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-6 py-3 text-sm font-bold text-black transition-all hover:bg-secondary/90 hover:scale-105 shadow-lg shadow-secondary/20"
                         >
                           <Play className="h-4 w-4" />
-                          {dyn.v3.text("view_details", "View Details")}
+                          {dyn.v3.getVariant("view_details", undefined, "View Details")}
                         </SeedLink>
                       </div>
                     </div>

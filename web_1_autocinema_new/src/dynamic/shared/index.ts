@@ -4,9 +4,9 @@
 
 export { 
   hashString, 
-  pickVariant, 
+  selectVariantIndex, 
   generateId,
-  useDynamic
+  useDynamicSystem
 } from "./core";
 
 export { isV1Enabled, isV3Enabled } from "./flags";

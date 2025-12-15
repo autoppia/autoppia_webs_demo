@@ -5,7 +5,7 @@
  */
 
 import textVariantsJson from '../data/text-variants.json';
-import { pickVariant } from '../../shared/core';
+import { selectVariantIndex } from '../../shared/core';
 
 type TextVariantMap = Record<string, string>;
 
@@ -35,9 +35,9 @@ export function getTextForElement(
   }
   
   // Otros seeds: usar variantes dinámicas
-  // Usar pickVariant con el key como identificador para consistencia
+  // Usar selectVariantIndex con el key como identificador para consistencia
   // El resultado es 0-based, pero VARIANTS usa claves 1-based (strings "1", "2", etc.), así que sumamos 1
-  const variantIndex = pickVariant(seed, key, VARIANT_COUNT) + 1;
+  const variantIndex = selectVariantIndex(seed, key, VARIANT_COUNT) + 1;
   const variant = VARIANTS[String(variantIndex)];
   
   return (variant && variant[key]) || fallback;
@@ -48,7 +48,7 @@ export function getTextForElement(
  */
 export function getAllTextsForSeed(seed: number): TextVariantMap {
   // Usar un key genérico para obtener la variante del seed
-  const variantIndex = pickVariant(seed, "text-variants", VARIANT_COUNT) + 1;
+  const variantIndex = selectVariantIndex(seed, "text-variants", VARIANT_COUNT) + 1;
   return VARIANTS[String(variantIndex)] || VARIANTS["1"];
 }
 

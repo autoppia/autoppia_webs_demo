@@ -1,14 +1,15 @@
 import * as React from "react"
 
 import { cn } from "@/library/utils"
-import { useDynamic } from "@/dynamic/shared"
+import { useDynamicSystem } from "@/dynamic/shared"
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3"
 
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, id, placeholder, ...props }, ref) => {
-    const dyn = useDynamic();
-    const dynamicId = id || dyn.v3.id("input");
-    const dynamicPlaceholder = placeholder ? dyn.v3.text("search_placeholder", placeholder as string) : undefined;
-    const dynamicClass = dyn.v3.class("input", "");
+    const dyn = useDynamicSystem();
+    const dynamicId = id || dyn.v3.getVariant("input", ID_VARIANTS_MAP, "input");
+    const dynamicPlaceholder = placeholder ? dyn.v3.getVariant("search_placeholder", undefined, placeholder as string) : undefined;
+    const dynamicClass = dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "");
     
     return (
       <>

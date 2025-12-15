@@ -19,7 +19,7 @@ import {
 } from "@/dynamic/v2-data";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { cn } from "@/library/utils";
-import { useDynamic } from "@/dynamic/shared";
+import { useDynamicSystem } from "@/dynamic/shared";
 import { useSeed } from "@/context/SeedContext";
 import { generateDynamicOrder } from "@/dynamic/shared/order-utils";
 
@@ -30,7 +30,7 @@ type SortOption = "default" | "rating-desc" | "rating-asc" | "year-desc" | "year
 function SearchContent() {
   const searchParams = useSearchParams();
   const router = useSeedRouter();
-  const dyn = useDynamic();
+  const dyn = useDynamicSystem();
   const { seed } = useSeed();
 
   const initialSearch = searchParams.get("search") ?? "";
@@ -372,19 +372,19 @@ function SearchContent() {
               {
                 key: "search-stats-rating",
                 icon: Star,
-                label: dyn.v3.text("search_stats_rating_label", "Avg Rating"),
+                label: dyn.v3.getVariant("search_stats_rating_label", undefined, "Avg Rating"),
                 value: stats.avgRating,
               },
               {
                 key: "search-stats-duration",
                 icon: Clock,
-                label: dyn.v3.text("search_stats_duration_label", "Avg Duration"),
+                label: dyn.v3.getVariant("search_stats_duration_label", undefined, "Avg Duration"),
                 value: `${stats.avgDuration}m`,
               },
               {
                 key: "search-stats-year-range",
                 icon: Calendar,
-                label: dyn.v3.text("search_stats_year_range_label", "Year Range"),
+                label: dyn.v3.getVariant("search_stats_year_range_label", undefined, "Year Range"),
                 value: stats.yearRange,
               },
             ];

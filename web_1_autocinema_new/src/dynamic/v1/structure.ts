@@ -9,7 +9,7 @@
 
 import type { ReactNode } from "react";
 import React, { Fragment } from "react";
-import { pickVariant, generateId } from "../shared/core";
+import { selectVariantIndex, generateId } from "../shared/core";
 import { isV1Enabled } from "../shared/flags";
 
 export interface V1WrapperOptions {
@@ -67,8 +67,8 @@ export function applyV1Wrapper(
     decoyVariant = 0;
   } else {
     // Otros seeds: usar variantes dinámicas
-    wrapperVariant = pickVariant(seed, `${componentKey}-wrapper`, wrapperVariants);
-    decoyVariant = pickVariant(seed, `${componentKey}-decoy`, decoyVariants);
+    wrapperVariant = selectVariantIndex(seed, `${componentKey}-wrapper`, wrapperVariants);
+    decoyVariant = selectVariantIndex(seed, `${componentKey}-decoy`, decoyVariants);
   }
 
   // Aplicar wrapper si la variante lo requiere (variante 0 = sin wrapper, variante 1+ = con wrapper)

@@ -5,7 +5,7 @@
  */
 
 import classVariantsJson from '../data/class-variants.json';
-import { pickVariant } from '../../shared/core';
+import { selectVariantIndex } from '../../shared/core';
 
 const CLASS_VARIANTS_MAP: Record<string, string[]> = classVariantsJson;
 
@@ -34,7 +34,7 @@ export function getClassForElement(
     variantIndex = 0; // Primera variante = original
   } else {
     // Otros seeds: usar variantes dinámicas
-    variantIndex = pickVariant(seed, classType, variants.length);
+    variantIndex = selectVariantIndex(seed, classType, variants.length);
   }
   
   return variants[variantIndex] || variants[0] || fallback;

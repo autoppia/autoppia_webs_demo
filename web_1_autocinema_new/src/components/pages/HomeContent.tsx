@@ -12,13 +12,14 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/library/utils";
-import { useDynamic } from "@/dynamic/shared";
+import { useDynamicSystem } from "@/dynamic/shared";
 import { generateDynamicOrder } from "@/dynamic/shared/order-utils";
 import { useSeed } from "@/context/SeedContext";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 
 export function HomeContent() {
   const router = useSeedRouter();
-  const dyn = useDynamic();
+  const dyn = useDynamicSystem();
   const { isSeedReady, seed } = useSeed();
   const [searchQuery, setSearchQuery] = useState("");
   const [isMounted, setIsMounted] = useState(false);
@@ -147,20 +148,20 @@ export function HomeContent() {
               <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/0 rounded-3xl" />
               
               <div
-                id={dyn.v3.id("home-main-container")}
+                id={dyn.v3.getVariant("home-main-container", ID_VARIANTS_MAP, "home-main-container")}
                 className={cn(
                   "relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 md:p-12 backdrop-blur-sm",
-                  dyn.v3.class("main-container", "")
+                  dyn.v3.getVariant("main-container", CLASS_VARIANTS_MAP, "")
                 )}
               >
               {/* Header Section */}
               {dyn.v1.wrap("home-header", (
                 <div className="text-center mb-10">
-                  <h2 id={dyn.v3.id("home-title")} className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4">
-                    {dyn.v3.text("app_title", "Autocinema")}
+                  <h2 id={dyn.v3.getVariant("home-title", ID_VARIANTS_MAP, "home-title")} className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4">
+                    {dyn.v3.getVariant("app_title", undefined, "Autocinema")}
                   </h2>
                   <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-                    {dyn.v3.text("app_description", "Your intelligent movie search engine. Discover thousands of films, explore by genre, and find your next cinematic adventure.")}
+                    {dyn.v3.getVariant("app_description", undefined, "Your intelligent movie search engine. Discover thousands of films, explore by genre, and find your next cinematic adventure.")}
                   </p>
                 </div>
               ))}
@@ -169,10 +170,10 @@ export function HomeContent() {
               {dyn.v1.wrap("home-search-section", (
                 <div className="mb-10 w-full">
                   <form
-                    id={dyn.v3.id("search-form")}
+                    id={dyn.v3.getVariant("search-form", ID_VARIANTS_MAP, "search-form")}
                     className={cn(
                       "flex flex-col gap-3 sm:flex-row w-full",
-                      dyn.v3.class("search-form", "")
+                      dyn.v3.getVariant("search-form", CLASS_VARIANTS_MAP, "")
                     )}
                     onSubmit={(event) => {
                       event.preventDefault();
@@ -182,30 +183,30 @@ export function HomeContent() {
                     {dyn.v1.wrap("search-input-container", (
                       <div className="relative flex-1 w-full">
                         <Search
-                          id={dyn.v3.id("search-icon")}
+                          id={dyn.v3.getVariant("search-icon", ID_VARIANTS_MAP, "search-icon")}
                           className={cn(
                             "absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/40",
-                            dyn.v3.class("icon-search", "")
+                            dyn.v3.getVariant("icon-search", CLASS_VARIANTS_MAP, "")
                           )}
                         />
                         <Input
                           type="search"
                           value={searchQuery}
                           onChange={(event) => setSearchQuery(event.target.value)}
-                          placeholder={dyn.v3.text("search_placeholder", "Search directors, titles, or moods")}
+                          placeholder={dyn.v3.getVariant("search_placeholder", undefined, "Search directors, titles, or moods")}
                           className="pl-12 h-14 w-full min-w-0 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base"
                         />
                       </div>
                     ))}
                     <Button
-                      id={dyn.v3.id("search-submit-button")}
+                      id={dyn.v3.getVariant("search-submit-button", ID_VARIANTS_MAP, "search-submit-button")}
                       type="submit"
                       className={cn(
                         "h-14 min-w-[120px] px-8 bg-secondary text-black hover:bg-secondary/90 shadow-lg shadow-secondary/20 font-semibold text-base whitespace-nowrap",
-                        dyn.v3.class("search-button", "")
+                        dyn.v3.getVariant("search-button", CLASS_VARIANTS_MAP, "")
                       )}
                     >
-                      {dyn.v3.text("search_button", "Search")}
+                      {dyn.v3.getVariant("search_button", undefined, "Search")}
                     </Button>
                   </form>
                 </div>
@@ -221,7 +222,7 @@ export function HomeContent() {
                     icon: Film,
                     iconColor: "secondary",
                     value: isMounted ? `${stats.totalMovies}+` : "0+",
-                    label: dyn.v3.text("stats_movies_label", "Movies"),
+                    label: dyn.v3.getVariant("stats_movies_label", undefined, "Movies"),
                     iconBg: "bg-secondary/20",
                     iconHover: "group-hover:bg-secondary/30",
                     iconTextColor: "text-secondary",
@@ -232,7 +233,7 @@ export function HomeContent() {
                     icon: Sparkles,
                     iconColor: "purple",
                     value: isMounted ? stats.totalGenres : "0",
-                    label: dyn.v3.text("stats_genres_label", "Genres"),
+                    label: dyn.v3.getVariant("stats_genres_label", undefined, "Genres"),
                     iconBg: "bg-purple-500/20",
                     iconHover: "group-hover:bg-purple-500/30",
                     iconTextColor: "text-purple-400",
@@ -243,7 +244,7 @@ export function HomeContent() {
                     icon: Star,
                     iconColor: "yellow",
                     value: isMounted ? stats.avgRating : "0.0",
-                    label: dyn.v3.text("stats_rating_label", "Avg Rating"),
+                    label: dyn.v3.getVariant("stats_rating_label", undefined, "Avg Rating"),
                     iconBg: "bg-yellow-500/20",
                     iconHover: "group-hover:bg-yellow-500/30",
                     iconTextColor: "text-yellow-400",
@@ -254,7 +255,7 @@ export function HomeContent() {
                     icon: Clock,
                     iconColor: "blue",
                     value: isMounted ? `${stats.avgDuration}m` : "0m",
-                    label: dyn.v3.text("stats_duration_label", "Avg Duration"),
+                    label: dyn.v3.getVariant("stats_duration_label", undefined, "Avg Duration"),
                     iconBg: "bg-blue-500/20",
                     iconHover: "group-hover:bg-blue-500/30",
                     iconTextColor: "text-blue-400",
@@ -273,20 +274,20 @@ export function HomeContent() {
                       return dyn.v1.wrap(card.key, (
                         <div
                           key={`${card.key}-${index}`}
-                          id={dyn.v3.id(card.id)}
+                          id={dyn.v3.getVariant(card.id, ID_VARIANTS_MAP, card.id)}
                           data-dyn-key={card.key}
                           className={cn(
                             "group rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:scale-105",
-                            dyn.v3.class("stats-card", "")
+                            dyn.v3.getVariant("stats-card", CLASS_VARIANTS_MAP, "")
                           )}
                         >
                           <div className={cn(
                             "flex items-center justify-center w-10 h-10 rounded-xl mb-3 transition-colors",
                             card.iconBg,
                             card.iconHover,
-                            dyn.v3.class("stats-icon-container", "")
+                            dyn.v3.getVariant("stats-icon-container", CLASS_VARIANTS_MAP, "")
                           )}>
-                            <IconComponent className={cn("h-5 w-5", card.iconTextColor, dyn.v3.class(`icon-${card.iconColor}`, ""))} />
+                            <IconComponent className={cn("h-5 w-5", card.iconTextColor, dyn.v3.getVariant(`icon-${card.iconColor}`, CLASS_VARIANTS_MAP, ""))} />
                           </div>
                           <div className="text-3xl md:text-4xl font-bold text-white mb-1">
                             {card.value}
@@ -306,22 +307,22 @@ export function HomeContent() {
                 {dyn.v1.wrap("home-featured-header", (
                   <div className="flex items-center gap-3 mb-6">
                     <div
-                      id={dyn.v3.id("featured-header-icon-container")}
+                      id={dyn.v3.getVariant("featured-header-icon-container", ID_VARIANTS_MAP, "featured-header-icon-container")}
                       className={cn(
                         "flex items-center justify-center w-10 h-10 rounded-xl bg-secondary/20",
-                        dyn.v3.class("header-icon-container", "")
+                        dyn.v3.getVariant("header-icon-container", CLASS_VARIANTS_MAP, "")
                       )}
                     >
                       <TrendingUp
-                        id={dyn.v3.id("featured-header-icon")}
+                        id={dyn.v3.getVariant("featured-header-icon", ID_VARIANTS_MAP, "featured-header-icon")}
                         className={cn(
                           "h-5 w-5 text-secondary",
-                          dyn.v3.class("icon-trending-up", "")
+                          dyn.v3.getVariant("icon-trending-up", CLASS_VARIANTS_MAP, "")
                         )}
                       />
                     </div>
-                    <h2 id={dyn.v3.id("featured-section-title")} className="text-3xl font-bold text-white">
-                      {dyn.v3.text("featured_title", "Featured This Week")}
+                    <h2 id={dyn.v3.getVariant("featured-section-title", ID_VARIANTS_MAP, "featured-section-title")} className="text-3xl font-bold text-white">
+                      {dyn.v3.getVariant("featured_title", undefined, "Featured This Week")}
                     </h2>
                   </div>
                 ))}
@@ -340,11 +341,11 @@ export function HomeContent() {
                       dyn.v1.wrap(`featured-movie-${originalIndex}`, (
                         <div
                           key={movie.id}
-                          id={dyn.v3.id("featured-movie-card", displayIndex)}
+                          id={dyn.v3.getVariant(displayIndex > 0 ? `featured-movie-card-${displayIndex}` : "featured-movie-card", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-movie-card-${displayIndex}` : "featured-movie-card")}
                           suppressHydrationWarning
                           className={cn(
                             "group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm transition-all duration-300 hover:border-secondary/50 hover:shadow-2xl hover:shadow-secondary/30 hover:-translate-y-1",
-                            dyn.v3.class("featured-movie-card", "")
+                            dyn.v3.getVariant("featured-movie-card", CLASS_VARIANTS_MAP, "")
                           )}
                         >
                         {/* Movie poster with overlay */}
@@ -367,10 +368,10 @@ export function HomeContent() {
                               <div className="flex items-center gap-2 mb-3 flex-wrap">
                                 {dyn.v1.wrap(`featured-movie-genre-badge-${originalIndex}`, (
                                   <span
-                                    id={dyn.v3.id("featured-movie-genre", displayIndex)}
+                                    id={dyn.v3.getVariant(displayIndex > 0 ? `featured-movie-genre-${displayIndex}` : "featured-movie-genre", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-movie-genre-${displayIndex}` : "featured-movie-genre")}
                                     className={cn(
                                       "rounded-full bg-secondary/30 backdrop-blur-md px-4 py-1.5 text-xs font-bold text-secondary border border-secondary/30",
-                                      dyn.v3.class("genre-badge", "")
+                                      dyn.v3.getVariant("genre-badge", CLASS_VARIANTS_MAP, "")
                                     )}
                                   >
                                     {movie.genres[0] || "Cinematic"}
@@ -378,13 +379,13 @@ export function HomeContent() {
                                 ))}
                                 {dyn.v1.wrap(`featured-movie-rating-badge-${originalIndex}`, (
                                   <div
-                                    id={dyn.v3.id("featured-movie-rating", displayIndex)}
+                                    id={dyn.v3.getVariant(displayIndex > 0 ? `featured-movie-rating-${displayIndex}` : "featured-movie-rating", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-movie-rating-${displayIndex}` : "featured-movie-rating")}
                                     className={cn(
                                       "flex items-center gap-1.5 rounded-full bg-black/60 backdrop-blur-md px-3 py-1.5 text-xs font-semibold text-white border border-white/10",
-                                      dyn.v3.class("rating-badge", "")
+                                      dyn.v3.getVariant("rating-badge", CLASS_VARIANTS_MAP, "")
                                     )}
                                   >
-                                    <Star className={cn("h-3.5 w-3.5 fill-yellow-400 text-yellow-400", dyn.v3.class("icon-star-small", ""))} />
+                                    <Star className={cn("h-3.5 w-3.5 fill-yellow-400 text-yellow-400", dyn.v3.getVariant("icon-star-small", CLASS_VARIANTS_MAP, ""))} />
                                     {movie.rating}
                                   </div>
                                 ))}
@@ -393,10 +394,10 @@ export function HomeContent() {
                             
                             {/* Title */}
                             <h3
-                              id={dyn.v3.id("featured-movie-title", displayIndex)}
+                              id={dyn.v3.getVariant(displayIndex > 0 ? `featured-movie-title-${displayIndex}` : "featured-movie-title", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-movie-title-${displayIndex}` : "featured-movie-title")}
                               className={cn(
                                 "text-2xl lg:text-3xl font-bold leading-tight mb-3 drop-shadow-lg",
-                                dyn.v3.class("movie-title", "")
+                                dyn.v3.getVariant("movie-title", CLASS_VARIANTS_MAP, "")
                               )}
                             >
                               {movie.title}
@@ -404,10 +405,10 @@ export function HomeContent() {
                             
                             {/* Synopsis */}
                             <p
-                              id={dyn.v3.id("featured-movie-synopsis", displayIndex)}
+                              id={dyn.v3.getVariant(displayIndex > 0 ? `featured-movie-synopsis-${displayIndex}` : "featured-movie-synopsis", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-movie-synopsis-${displayIndex}` : "featured-movie-synopsis")}
                               className={cn(
                                 "text-sm lg:text-base text-white/90 mb-4 line-clamp-2 leading-relaxed",
-                                dyn.v3.class("movie-synopsis", "")
+                                dyn.v3.getVariant("movie-synopsis", CLASS_VARIANTS_MAP, "")
                               )}
                             >
                               {movie.synopsis}
@@ -415,10 +416,10 @@ export function HomeContent() {
                             
                             {/* Meta info */}
                             <div
-                              id={dyn.v3.id("featured-movie-meta", displayIndex)}
+                              id={dyn.v3.getVariant(displayIndex > 0 ? `featured-movie-meta-${displayIndex}` : "featured-movie-meta", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-movie-meta-${displayIndex}` : "featured-movie-meta")}
                               className={cn(
                                 "flex items-center gap-3 text-xs lg:text-sm text-white/80 mb-5 font-medium",
-                                dyn.v3.class("movie-meta", "")
+                                dyn.v3.getVariant("movie-meta", CLASS_VARIANTS_MAP, "")
                               )}
                             >
                               <span>{movie.year}</span>
@@ -431,11 +432,11 @@ export function HomeContent() {
                             {/* CTA Button */}
                             <SeedLink
                               href={`/movies/${movie.id}`}
-                              id={dyn.v3.id("featured-movie-view-details-btn", displayIndex)}
+                              id={dyn.v3.getVariant(displayIndex > 0 ? `featured-movie-view-details-btn-${displayIndex}` : "featured-movie-view-details-btn", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-movie-view-details-btn-${displayIndex}` : "featured-movie-view-details-btn")}
                               className="inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-6 py-3 text-sm font-bold text-black transition-all hover:bg-secondary/90 hover:scale-105 shadow-lg shadow-secondary/20 whitespace-nowrap min-w-[120px]"
                             >
                               <Play className="h-4 w-4" />
-                              {dyn.v3.text("view_details", "View Details")}
+                              {dyn.v3.getVariant("view_details", undefined, "View Details")}
                             </SeedLink>
                           </div>
                         </div>
@@ -453,18 +454,18 @@ export function HomeContent() {
           <div className="w-full">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h2 id={dyn.v3.id("genres-title")} className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  {dyn.v3.text("browse_genres", "Browse by Genre")}
+                <h2 id={dyn.v3.getVariant("genres-title", ID_VARIANTS_MAP, "genres-title")} className="text-3xl md:text-4xl font-bold text-white mb-2">
+                  {dyn.v3.getVariant("browse_genres", undefined, "Browse by Genre")}
                 </h2>
                 <p className="text-white/70">
-                  {dyn.v3.text("genres_description", "Explore movies by your favorite genre")}
+                  {dyn.v3.getVariant("genres_description", undefined, "Explore movies by your favorite genre")}
                 </p>
               </div>
               <SeedLink
                 href="/search"
                 className="hidden md:flex items-center gap-2 text-secondary hover:text-secondary/80 font-semibold transition-colors"
               >
-                {dyn.v3.text("view_all", "View All")}
+                {dyn.v3.getVariant("view_all", undefined, "View All")}
                 <ArrowRight className="h-4 w-4" />
               </SeedLink>
             </div>
@@ -476,10 +477,10 @@ export function HomeContent() {
                     <SeedLink
                       key={genre}
                       href={`/search?genre=${encodeURIComponent(genre)}`}
-                      id={dyn.v3.id("genre-card", displayIndex)}
+                      id={dyn.v3.getVariant(displayIndex > 0 ? `genre-card-${displayIndex}` : "genre-card", ID_VARIANTS_MAP, displayIndex > 0 ? `genre-card-${displayIndex}` : "genre-card")}
                       className={cn(
                         "group relative rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-4 sm:p-6 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:scale-105 text-center w-full",
-                        dyn.v3.class("genre-card", "")
+                        dyn.v3.getVariant("genre-card", CLASS_VARIANTS_MAP, "")
                       )}
                     >
                       <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-secondary/20 mb-3 mx-auto group-hover:bg-secondary/30 transition-colors">
@@ -487,7 +488,7 @@ export function HomeContent() {
                       </div>
                       <h3 className="font-bold text-white mb-1 text-sm sm:text-base truncate">{genre}</h3>
                       <p className="text-xs text-white/60">
-                        {genreMovies.length} {dyn.v3.text("movies_label", "movies")}
+                        {genreMovies.length} {dyn.v3.getVariant("movies_label", undefined, "movies")}
                       </p>
                     </SeedLink>
                   );
@@ -503,14 +504,14 @@ export function HomeContent() {
               <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 md:p-12 backdrop-blur-sm">
                 {dyn.v1.wrap("home-features-header", (
                   <div className="text-center mb-12">
-                    <h2 id={dyn.v3.id("features-title")} className="text-4xl md:text-5xl font-bold text-white mb-4">
-                      {dyn.v3.text("why_choose", "Why Choose")}
+                    <h2 id={dyn.v3.getVariant("features-title", ID_VARIANTS_MAP, "features-title")} className="text-4xl md:text-5xl font-bold text-white mb-4">
+                      {dyn.v3.getVariant("why_choose", undefined, "Why Choose")}
                       <span className="block text-transparent bg-clip-text bg-gradient-to-r from-secondary to-yellow-400">
-                        {dyn.v3.text("app_title", "Autocinema")}?
+                        {dyn.v3.getVariant("app_title", undefined, "Autocinema")}?
                       </span>
                     </h2>
                     <p className="text-lg text-white/70 max-w-2xl mx-auto">
-                      {dyn.v3.text("features_description", "The ultimate movie discovery platform designed for cinephiles")}
+                      {dyn.v3.getVariant("features_description", undefined, "The ultimate movie discovery platform designed for cinephiles")}
                     </p>
                   </div>
                 ))}
@@ -519,20 +520,20 @@ export function HomeContent() {
                     dyn.v1.wrap(`feature-card-${displayIndex}`, (
                       <div
                         key={feature.key}
-                        id={dyn.v3.id("feature-card", displayIndex)}
+                        id={dyn.v3.getVariant(displayIndex > 0 ? `feature-card-${displayIndex}` : "feature-card", ID_VARIANTS_MAP, displayIndex > 0 ? `feature-card-${displayIndex}` : "feature-card")}
                         className={cn(
                           "group rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:-translate-y-1 w-full h-full",
-                          dyn.v3.class("feature-card", "")
+                          dyn.v3.getVariant("feature-card", CLASS_VARIANTS_MAP, "")
                         )}
                       >
                         <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-secondary/20 mb-4 group-hover:bg-secondary/30 transition-colors">
                           <div className="text-secondary">{feature.icon}</div>
                         </div>
                         <h3 className="text-xl font-bold text-white mb-2">
-                          {dyn.v3.text(`${feature.key}_title`, feature.key === "feature_1" ? "Smart Search" : feature.key === "feature_2" ? "Vast Collection" : feature.key === "feature_3" ? "Curated Picks" : "Trending Now")}
+                          {dyn.v3.getVariant(`${feature.key}_title`, undefined, feature.key === "feature_1" ? "Smart Search" : feature.key === "feature_2" ? "Vast Collection" : feature.key === "feature_3" ? "Curated Picks" : "Trending Now")}
                         </h3>
                         <p className="text-sm text-white/70">
-                          {dyn.v3.text(`${feature.key}_description`, feature.key === "feature_1" ? "Find movies instantly by title, director, or any keyword" : feature.key === "feature_2" ? "Explore thousands of movies across all genres" : feature.key === "feature_3" ? "Hand-selected featured movies updated weekly" : "Discover what's popular and trending")}
+                          {dyn.v3.getVariant(`${feature.key}_description`, undefined, feature.key === "feature_1" ? "Find movies instantly by title, director, or any keyword" : feature.key === "feature_2" ? "Explore thousands of movies across all genres" : feature.key === "feature_3" ? "Hand-selected featured movies updated weekly" : "Discover what's popular and trending")}
                         </p>
                       </div>
                     ), undefined, `feature-${displayIndex}`)
@@ -576,17 +577,17 @@ export function HomeContent() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.2),transparent_70%)]" />
               <div className="relative">
                 <TrendingUp className="h-16 w-16 text-secondary mx-auto mb-6" />
-                <h2 id={dyn.v3.id("cta-title")} className="text-4xl md:text-5xl font-bold text-white mb-4">
-                  {dyn.v3.text("cta_title", "Ready to explore?")}
+                <h2 id={dyn.v3.getVariant("cta-title", ID_VARIANTS_MAP, "cta-title")} className="text-4xl md:text-5xl font-bold text-white mb-4">
+                  {dyn.v3.getVariant("cta_title", undefined, "Ready to explore?")}
                 </h2>
                 <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-                  {dyn.v3.text("cta_description", "Start searching for movies now and discover your next favorite story")}
+                  {dyn.v3.getVariant("cta_description", undefined, "Start searching for movies now and discover your next favorite story")}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <SeedLink href="/search">
                     <Button className="h-14 px-8 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105">
                       <Search className="h-5 w-5 mr-2" />
-                      {dyn.v3.text("go_to_search", "Go to Search")}
+                      {dyn.v3.getVariant("go_to_search", undefined, "Go to Search")}
                     </Button>
                   </SeedLink>
                   <SeedLink href="/about">
@@ -594,7 +595,7 @@ export function HomeContent() {
                       variant="outline"
                       className="h-14 px-8 border-white/20 bg-white/10 text-white hover:bg-white/20 font-semibold text-base backdrop-blur-sm"
                     >
-                      {dyn.v3.text("learn_more", "Learn More")}
+                      {dyn.v3.getVariant("learn_more", undefined, "Learn More")}
                     </Button>
                   </SeedLink>
                 </div>

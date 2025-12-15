@@ -1,8 +1,9 @@
 import type { Movie } from "@/data/movies";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { Star, Play, Calendar, Clock, ArrowRight } from "lucide-react";
-import { useDynamic } from "@/dynamic/shared";
+import { useDynamicSystem } from "@/dynamic/shared";
 import { cn } from "@/library/utils";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface SpotlightRowProps {
   title: string;
@@ -11,20 +12,20 @@ interface SpotlightRowProps {
 }
 
 export function SpotlightRow({ title, description, movies }: SpotlightRowProps) {
-  const dyn = useDynamic();
+  const dyn = useDynamicSystem();
   if (!movies.length) return null;
 
   return (
     <>
       {dyn.v1.wrap("spotlight-row", (
         <section 
-          id={dyn.v3.id("spotlight-row")}
-          className={cn("space-y-6", dyn.v3.class("spotlight-row", ""))}
+          id={dyn.v3.getVariant("spotlight-row", ID_VARIANTS_MAP, "spotlight-row")}
+          className={cn("space-y-6", dyn.v3.getVariant("spotlight-row", CLASS_VARIANTS_MAP, ""))}
         >
           {dyn.v1.wrap("spotlight-header", (
             <div className="flex items-baseline justify-between text-white">
               <div>
-                <h3 id={dyn.v3.id("spotlight-title")} className="text-3xl md:text-4xl font-bold mb-2">
+                <h3 id={dyn.v3.getVariant("spotlight-title", ID_VARIANTS_MAP, "spotlight-title")} className="text-3xl md:text-4xl font-bold mb-2">
                   {title}
                 </h3>
                 <p className="text-base text-white/70">{description}</p>
@@ -36,10 +37,10 @@ export function SpotlightRow({ title, description, movies }: SpotlightRowProps) 
               dyn.v1.wrap(`spotlight-movie-${index}`, (
                 <div 
                   key={movie.id}
-                  id={dyn.v3.id("spotlight-movie-card", index)}
+                  id={dyn.v3.getVariant(index > 0 ? `spotlight-movie-card-${index}` : "spotlight-movie-card", ID_VARIANTS_MAP, index > 0 ? `spotlight-movie-card-${index}` : "spotlight-movie-card")}
                   className={cn(
                     "group min-w-[320px] max-w-[320px] flex-shrink-0 flex flex-col rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-6 text-white backdrop-blur-sm transition-all duration-300 hover:border-secondary/50 hover:bg-white/15 hover:shadow-2xl hover:shadow-secondary/20 hover:-translate-y-2",
-                    dyn.v3.class("movie-card", "")
+                    dyn.v3.getVariant("movie-card", CLASS_VARIANTS_MAP, "")
                   )}
                 >
                   {/* Movie Poster */}
@@ -106,10 +107,10 @@ export function SpotlightRow({ title, description, movies }: SpotlightRowProps) 
                     {/* CTA Button */}
                     <SeedLink
                       href={`/movies/${movie.id}`}
-                      id={dyn.v3.id("spotlight-view-details-btn", index)}
+                      id={dyn.v3.getVariant(index > 0 ? `spotlight-view-details-btn-${index}` : "spotlight-view-details-btn", ID_VARIANTS_MAP, index > 0 ? `spotlight-view-details-btn-${index}` : "spotlight-view-details-btn")}
                       className="inline-flex items-center justify-center gap-2 w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-secondary hover:text-black hover:border-secondary hover:scale-105 group/btn flex-shrink-0 mt-auto"
                     >
-                      <span>{dyn.v3.text("view_details", "View Details")}</span>
+                      <span>{dyn.v3.getVariant("view_details", undefined, "View Details")}</span>
                       <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform flex-shrink-0" />
                     </SeedLink>
                   </div>

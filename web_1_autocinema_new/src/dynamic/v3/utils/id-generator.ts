@@ -5,7 +5,7 @@
  */
 
 import idVariantsJson from '../data/id-variants.json';
-import { pickVariant } from '../../shared/core';
+import { selectVariantIndex } from '../../shared/core';
 
 const ID_VARIANTS_MAP: Record<string, string[]> = idVariantsJson;
 
@@ -39,7 +39,7 @@ export function generateElementId(
     variantIndex = 0; // Primera variante = original
   } else {
     // Otros seeds: usar variantes dinámicas
-    variantIndex = pickVariant(seed, elementType, variants.length);
+    variantIndex = selectVariantIndex(seed, elementType, variants.length);
   }
   
   const baseId = variants[variantIndex] || variants[0];

@@ -3,7 +3,8 @@ import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/library/utils"
-import { useDynamic } from "@/dynamic/shared"
+import { useDynamicSystem } from "@/dynamic/shared"
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3"
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -43,12 +44,12 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, id, ...props }, ref) => {
-    const dyn = useDynamic();
+    const dyn = useDynamicSystem();
     const Comp = asChild ? Slot : "button"
     
     // V3: ID y clase dinámicos
-    const dynamicId = id || dyn.v3.id("button");
-    const dynamicClass = dyn.v3.class("button", "");
+    const dynamicId = id || dyn.v3.getVariant("button", ID_VARIANTS_MAP, "button");
+    const dynamicClass = dyn.v3.getVariant("button", CLASS_VARIANTS_MAP, "");
     
     return (
       <>

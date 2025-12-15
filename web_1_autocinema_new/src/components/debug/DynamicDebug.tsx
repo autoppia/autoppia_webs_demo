@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { useDynamic } from "@/dynamic/shared";
+import { useDynamicSystem } from "@/dynamic/shared";
 import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
 
 export function DynamicDebug() {
-  const dyn = useDynamic();
+  const dyn = useDynamicSystem();
   
   useEffect(() => {
     console.log("=== 🔍 DEBUG DINÁMICO ===");

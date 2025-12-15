@@ -4,7 +4,7 @@
  * Genera órdenes diferentes según el seed sin necesidad de hardcodear todas las permutaciones
  */
 
-import { pickVariant } from "./core";
+import { selectVariantIndex } from "./core";
 
 /**
  * Genera un orden dinámico para un array de elementos
@@ -75,8 +75,8 @@ export function generateDynamicOrder(
     return Array.from({ length: count }, (_, i) => i);
   }
   
-  // Seleccionar variante usando pickVariant
-  const variantIndex = pickVariant(seed, key, uniqueVariants.length);
+  // Seleccionar variante usando selectVariantIndex
+  const variantIndex = selectVariantIndex(seed, key, uniqueVariants.length);
   return uniqueVariants[variantIndex];
 }
 
