@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Sparkles, TrendingUp, Play, Star, Search as SearchIcon } from "lucide-react";
 import { useMemo } from "react";
 import { cn } from "@/library/utils";
+import { useDynamic } from "@/dynamic/shared";
 
 interface HeroSectionProps {
   searchQuery: string;
@@ -23,6 +24,7 @@ export function HeroSection({
   featuredMovies,
   className,
 }: HeroSectionProps) {
+  const dyn = useDynamic();
   const stats = useMemo(() => {
     const totalDuration = featuredMovies.reduce((acc, movie) => acc + movie.duration, 0);
     return {
@@ -37,12 +39,16 @@ export function HeroSection({
   const topMovies = featuredMovies.slice(0, 3);
 
   return (
-    <section
-      className={cn(
-        "relative w-full overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] text-white",
-        className
-      )}
-    >
+    <>
+      {dyn.v1.wrap("hero-section", (
+        <section
+          id={dyn.v3.id("hero-section")}
+          className={cn(
+            "relative w-full overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] text-white",
+            className,
+            dyn.v3.class("hero-section", "")
+          )}
+        >
       {/* Animated background effects */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)]" />
@@ -66,12 +72,11 @@ export function HeroSection({
               </div>
               
               <h1 className="text-5xl font-bold leading-[1.1] tracking-tight lg:text-6xl xl:text-7xl mb-6">
-                Discover AI-driven stories, remixed genres, and cinematic experiments.
+                {dyn.v3.text("hero_title", "Discover AI-driven stories, remixed genres, and cinematic experiments.")}
               </h1>
               
               <p className="text-lg text-white/70 leading-relaxed mb-8">
-                Search hundreds of procedurally generated movies loaded directly from our datasets service. 
-                No backend, no forms – just cinema.
+                {dyn.v3.text("hero_description", "Search hundreds of procedurally generated movies loaded directly from our datasets service. No backend, no forms – just cinema.")}
               </p>
 
               <form
@@ -95,7 +100,7 @@ export function HeroSection({
                   type="submit" 
                   className="h-14 px-8 bg-secondary text-black hover:bg-secondary/90 shadow-lg shadow-secondary/20 font-semibold text-base"
                 >
-                  Search library
+                  {dyn.v3.text("search_button", "Search library")}
                 </Button>
               </form>
 
@@ -117,12 +122,16 @@ export function HeroSection({
 
             {/* Right side - Featured movies showcase */}
             <div className="lg:col-span-7 xl:col-span-8">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-secondary/20">
-                  <TrendingUp className="h-5 w-5 text-secondary" />
+              {dyn.v1.wrap("hero-featured-header", (
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-secondary/20">
+                    <TrendingUp className="h-5 w-5 text-secondary" />
+                  </div>
+                  <h2 id={dyn.v3.id("featured-title")} className="text-3xl font-bold">
+                    {dyn.v3.text("featured_title", "Featured This Week")}
+                  </h2>
                 </div>
-                <h2 className="text-3xl font-bold">Featured This Week</h2>
-              </div>
+              ))}
               
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {topMovies.map((movie, index) => (
@@ -178,10 +187,11 @@ export function HeroSection({
                         {/* CTA Button */}
                         <SeedLink
                           href={`/movies/${movie.id}`}
+                          id={dyn.v3.id("hero-view-details-btn")}
                           className="inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-6 py-3 text-sm font-bold text-black transition-all hover:bg-secondary/90 hover:scale-105 shadow-lg shadow-secondary/20"
                         >
                           <Play className="h-4 w-4" />
-                          View Details
+                          {dyn.v3.text("view_details", "View Details")}
                         </SeedLink>
                       </div>
                     </div>
@@ -193,5 +203,7 @@ export function HeroSection({
         </div>
       </div>
     </section>
+      ))}
+    </>
   );
 }
