@@ -24,6 +24,30 @@ export function HomeContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMounted, setIsMounted] = useState(false);
 
+  // Variantes locales de textos específicos de HomeContent (solo se usan aquí)
+  const dynamicV3TextVariants: Record<string, string[]> = {
+    // Features section
+    feature_1_title: ["Smart Search", "Búsqueda Inteligente", "Intelligent Search", "Advanced Search", "Quick Search", "Powerful Search", "Instant Search", "Smart Finder", "Fast Search", "Efficient Search"],
+    feature_1_description: ["Find movies instantly by title, director, or any keyword", "Encuentra películas al instante por título, director o cualquier palabra clave", "Locate films quickly by name, director, or keyword", "Discover films immediately by title, director, or keyword", "Locate films instantly by name, director, or search term", "Find movies quickly by title, director, or any keyword", "Discover films immediately by title, director, or keyword", "Locate movies instantly by name, director, or search term", "Find films quickly by title, director, or keyword", "Discover movies instantly by title, director, or keyword"],
+    feature_2_title: ["Vast Collection", "Colección Amplia", "Extensive Library", "Huge Catalog", "Massive Database", "Complete Library", "Full Catalog", "Vast Archive", "Huge Collection", "Comprehensive Library"],
+    feature_2_description: ["Explore thousands of movies across all genres", "Explora miles de películas de todos los géneros", "Browse thousands of films from every genre", "Access thousands of movies spanning all categories", "Browse extensive collections covering every genre", "Access thousands of films from all genres", "Explore thousands of movies across all categories", "Browse thousands of films spanning all genres", "Access thousands of movies from every genre", "Browse thousands of films covering all genres"],
+    feature_3_title: ["Curated Picks", "Selección Curada", "Expert Selection", "Handpicked Content", "Editor's Choice", "Weekly Picks", "Featured Selection", "Curated Content", "Best Picks", "Top Selection"],
+    feature_3_description: ["Hand-selected featured movies updated weekly", "Películas destacadas seleccionadas a mano actualizadas semanalmente", "Carefully chosen featured films refreshed weekly", "Expertly curated featured films updated each week", "Carefully selected featured films refreshed weekly", "Expertly curated featured movies updated weekly", "Handpicked featured films updated every week", "Expertly selected featured films refreshed weekly", "Carefully chosen featured films updated weekly", "Hand-selected featured movies updated weekly"],
+    feature_4_title: ["Trending Now", "Tendencias", "Popular Now", "What's Hot", "Hot Picks", "Trending Content", "Popular Now", "What's Trending", "Trending Now", "Hot Trends"],
+    feature_4_description: ["Discover what's popular and trending", "Descubre lo que es popular y está de moda", "See what's trending and gaining popularity", "Explore trending and popular content", "Find what's currently trending and popular", "See what's popular and gaining attention", "Discover trending and popular content", "Explore popular and trending selections", "See what's popular and trending right now", "Explore what's popular and gaining momentum"],
+    // Header section
+    app_title: ["Autocinema", "Autocinema", "Autocinema", "Autocinema", "Autocinema", "Autocinema", "Autocinema", "Autocinema", "Autocinema", "Autocinema"],
+    app_description: ["Your intelligent movie search engine. Discover thousands of films, explore by genre, and find your next cinematic adventure.", "Tu motor de búsqueda inteligente de películas. Descubre miles de films, explora por género y encuentra tu próxima aventura cinematográfica.", "Your smart cinema search. Browse thousands of films, filter by genre, and discover your next movie experience.", "Intelligent film discovery. Explore thousands of movies, search by genre, and find your perfect cinematic match.", "Smart movie search engine. Browse extensive film collections, filter by genre, and discover your ideal movie.", "Advanced film search. Navigate thousands of movies, explore genres, and find your perfect watch.", "Your cinema search companion. Explore vast movie libraries, filter by genre, and discover great films.", "Intelligent film finder. Search through thousands of movies, explore genres, and find your next watch.", "Smart cinema search. Browse extensive film collections, filter by genre, and discover perfect movies.", "Your film discovery engine. Explore thousands of movies, search by genre, and find amazing cinema."],
+    // Features section header
+    why_choose: ["Why Choose", "Por Qué Elegir", "Why Choose", "Why Us", "Why Choose Us", "Why Autocinema", "Why Choose", "Why Us", "Why Choose", "Why Choose"],
+    features_description: ["The ultimate movie discovery platform designed for cinephiles", "La plataforma definitiva de descubrimiento de películas diseñada para cinéfilos", "The premier movie discovery platform for film enthusiasts", "The complete movie discovery experience for cinema lovers", "The ultimate platform for movie discovery and exploration", "The best movie discovery platform for film fans", "The premier destination for movie discovery", "The complete movie discovery experience", "The ultimate movie discovery platform", "The best platform for movie discovery"],
+    // CTA section
+    cta_title: ["Ready to explore?", "¿Listo para explorar?", "Ready to start?", "Start exploring?", "Ready?", "Explore now?", "Ready?", "Start exploring?", "Ready?", "Explore?"],
+    cta_description: ["Start searching for movies now and discover your next favorite story", "Comienza a buscar películas ahora y descubre tu próxima historia favorita", "Begin your movie search journey and find your next favorite film", "Search our collection and discover your next cinematic favorite", "Start your movie search and find amazing films", "Search our library and find your next favorite movie", "Start searching and find amazing movies", "Search our collection and find great films", "Start your movie search journey", "Search and discover great movies"],
+    go_to_search: ["Go to Search", "Ir a Búsqueda", "Start Searching", "Explore Now", "Search Now", "Browse", "Search", "Explore", "Go", "Search"],
+    learn_more: ["Learn More", "Saber Más", "Learn More", "More Info", "Details", "Info", "More", "Learn", "More", "Learn"],
+  };
+
   // Evitar problemas de hidratación - esperar hasta que el seed esté sincronizado
   useEffect(() => {
     setIsMounted(true);
@@ -158,10 +182,10 @@ export function HomeContent() {
               {dyn.v1.wrap("home-header", (
                 <div className="text-center mb-10">
                   <h2 id={dyn.v3.getVariant("home-title", ID_VARIANTS_MAP, "home-title")} className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4">
-                    {dyn.v3.getVariant("app_title", undefined, "Autocinema")}
+                    {dyn.v3.getVariant("app_title", dynamicV3TextVariants)}
                   </h2>
                   <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-                    {dyn.v3.getVariant("app_description", undefined, "Your intelligent movie search engine. Discover thousands of films, explore by genre, and find your next cinematic adventure.")}
+                    {dyn.v3.getVariant("app_description", dynamicV3TextVariants)}
                   </p>
                 </div>
               ))}
@@ -505,13 +529,13 @@ export function HomeContent() {
                 {dyn.v1.wrap("home-features-header", (
                   <div className="text-center mb-12">
                     <h2 id={dyn.v3.getVariant("features-title", ID_VARIANTS_MAP, "features-title")} className="text-4xl md:text-5xl font-bold text-white mb-4">
-                      {dyn.v3.getVariant("why_choose", undefined, "Why Choose")}
+                      {dyn.v3.getVariant("why_choose", dynamicV3TextVariants)}
                       <span className="block text-transparent bg-clip-text bg-gradient-to-r from-secondary to-yellow-400">
-                        {dyn.v3.getVariant("app_title", undefined, "Autocinema")}?
+                        {dyn.v3.getVariant("app_title", dynamicV3TextVariants)}?
                       </span>
                     </h2>
                     <p className="text-lg text-white/70 max-w-2xl mx-auto">
-                      {dyn.v3.getVariant("features_description", undefined, "The ultimate movie discovery platform designed for cinephiles")}
+                      {dyn.v3.getVariant("features_description", dynamicV3TextVariants)}
                     </p>
                   </div>
                 ))}
@@ -530,10 +554,10 @@ export function HomeContent() {
                           <div className="text-secondary">{feature.icon}</div>
                         </div>
                         <h3 className="text-xl font-bold text-white mb-2">
-                          {dyn.v3.getVariant(`${feature.key}_title`, undefined, feature.key === "feature_1" ? "Smart Search" : feature.key === "feature_2" ? "Vast Collection" : feature.key === "feature_3" ? "Curated Picks" : "Trending Now")}
+                          {dyn.v3.getVariant(`${feature.key}_title`, dynamicV3TextVariants)}
                         </h3>
                         <p className="text-sm text-white/70">
-                          {dyn.v3.getVariant(`${feature.key}_description`, undefined, feature.key === "feature_1" ? "Find movies instantly by title, director, or any keyword" : feature.key === "feature_2" ? "Explore thousands of movies across all genres" : feature.key === "feature_3" ? "Hand-selected featured movies updated weekly" : "Discover what's popular and trending")}
+                          {dyn.v3.getVariant(`${feature.key}_description`, dynamicV3TextVariants)}
                         </p>
                       </div>
                     ), undefined, `feature-${displayIndex}`)
@@ -578,16 +602,16 @@ export function HomeContent() {
               <div className="relative">
                 <TrendingUp className="h-16 w-16 text-secondary mx-auto mb-6" />
                 <h2 id={dyn.v3.getVariant("cta-title", ID_VARIANTS_MAP, "cta-title")} className="text-4xl md:text-5xl font-bold text-white mb-4">
-                  {dyn.v3.getVariant("cta_title", undefined, "Ready to explore?")}
+                  {dyn.v3.getVariant("cta_title", dynamicV3TextVariants)}
                 </h2>
                 <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-                  {dyn.v3.getVariant("cta_description", undefined, "Start searching for movies now and discover your next favorite story")}
+                  {dyn.v3.getVariant("cta_description", dynamicV3TextVariants)}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <SeedLink href="/search">
                     <Button className="h-14 px-8 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105">
                       <Search className="h-5 w-5 mr-2" />
-                      {dyn.v3.getVariant("go_to_search", undefined, "Go to Search")}
+                      {dyn.v3.getVariant("go_to_search", dynamicV3TextVariants)}
                     </Button>
                   </SeedLink>
                   <SeedLink href="/about">
@@ -595,7 +619,7 @@ export function HomeContent() {
                       variant="outline"
                       className="h-14 px-8 border-white/20 bg-white/10 text-white hover:bg-white/20 font-semibold text-base backdrop-blur-sm"
                     >
-                      {dyn.v3.getVariant("learn_more", undefined, "Learn More")}
+                      {dyn.v3.getVariant("learn_more", dynamicV3TextVariants)}
                     </Button>
                   </SeedLink>
                 </div>

@@ -133,9 +133,10 @@ export function useDynamicSystem() {
        * @returns La variante seleccionada (string)
        * 
        * Ejemplos:
-       *   dyn.v3.getVariant("section", dynamicV3Ids)  // IDs locales
+       *   dyn.v3.getVariant("section", dynamicV3IdsVariants)  // IDs locales
        *   dyn.v3.getVariant("button", CLASS_VARIANTS_MAP)  // Clases globales
        *   dyn.v3.getVariant("search_placeholder", undefined, "Search...")  // Textos (busca en TEXT_VARIANTS_MAP)
+       *   dyn.v3.getVariant("feature_1_title", dynamicV3TextVariants)  // Textos locales
        */
       getVariant: (
         key: string,

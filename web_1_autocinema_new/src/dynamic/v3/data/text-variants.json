@@ -11,102 +11,6 @@
     "Share films, discover...",
     "Search titles, films..."
   ],
-  "play": [
-    "Play",
-    "Watch",
-    "View",
-    "Start",
-    "Begin",
-    "Launch",
-    "Open",
-    "Stream",
-    "Resume",
-    "Continue"
-  ],
-  "add_to_list": [
-    "Add to List",
-    "Save",
-    "Add",
-    "Keep",
-    "Store",
-    "Bookmark",
-    "Mark",
-    "Pin",
-    "Flag",
-    "Remember"
-  ],
-  "my_list": [
-    "My List",
-    "Watchlist",
-    "Saved",
-    "Collection",
-    "Library",
-    "Bookmarks",
-    "Marked",
-    "Pinned",
-    "Flagged",
-    "Remembered"
-  ],
-  "featured": [
-    "Featured",
-    "Popular",
-    "Highlighted",
-    "Spotlight",
-    "Featured Films",
-    "Curated",
-    "Recommended",
-    "Must Watch",
-    "Editor's Choice",
-    "Staff Picks"
-  ],
-  "trending": [
-    "Trending",
-    "Hot Now",
-    "Popular Now",
-    "Trending Now",
-    "Hot Titles",
-    "Popular Films",
-    "Hot Movies",
-    "What's Hot",
-    "Viral Now",
-    "Buzz Worthy"
-  ],
-  "top_rated": [
-    "Top Rated",
-    "Best Rated",
-    "Highest Rated",
-    "Top Picks",
-    "Premium",
-    "Elite",
-    "Best Films",
-    "Top Quality",
-    "Best Choice",
-    "Top Tier"
-  ],
-  "app_title": [
-    "Autocinema",
-    "Autocinema",
-    "Autocinema",
-    "Autocinema",
-    "Autocinema",
-    "Autocinema",
-    "Autocinema",
-    "Autocinema",
-    "Autocinema",
-    "Autocinema"
-  ],
-  "app_description": [
-    "Your intelligent movie search engine. Discover thousands of films, explore by genre, and find your next cinematic adventure.",
-    "Tu motor de búsqueda inteligente de películas. Descubre miles de films, explora por género y encuentra tu próxima aventura cinematográfica.",
-    "Your smart cinema search. Browse thousands of films, filter by genre, and discover your next movie experience.",
-    "Intelligent film discovery. Explore thousands of movies, search by genre, and find your perfect cinematic match.",
-    "Smart movie search engine. Browse extensive film collections, filter by genre, and discover your ideal movie.",
-    "Advanced film search. Navigate thousands of movies, explore genres, and find your perfect watch.",
-    "Your cinema search companion. Explore vast movie libraries, filter by genre, and discover great films.",
-    "Intelligent film finder. Search through thousands of movies, explore genres, and find your next watch.",
-    "Smart cinema search. Browse extensive film collections, filter by genre, and discover perfect movies.",
-    "Your film discovery engine. Explore thousands of movies, search by genre, and find amazing cinema."
-  ],
   "search_button": [
     "Search",
     "Buscar",
@@ -118,6 +22,30 @@
     "Query",
     "Lookup",
     "Search"
+  ],
+  "featured_title": [
+    "Featured This Week",
+    "Destacadas Esta Semana",
+    "This Week's Highlights",
+    "Weekly Spotlight",
+    "Featured Selection",
+    "Curated Picks",
+    "Recommended This Week",
+    "Must Watch",
+    "Editor's Picks",
+    "Staff Recommendations"
+  ],
+  "view_details": [
+    "View Details",
+    "Ver Detalles",
+    "See More",
+    "View Details",
+    "More Info",
+    "View More",
+    "View Details",
+    "See Details",
+    "More Info",
+    "View More"
   ],
   "stats_movies_label": [
     "Movies",
@@ -167,30 +95,6 @@
     "Avg Duration",
     "Avg Duration"
   ],
-  "featured_title": [
-    "Featured This Week",
-    "Destacadas Esta Semana",
-    "This Week's Highlights",
-    "Weekly Spotlight",
-    "Featured Selection",
-    "Curated Picks",
-    "Recommended This Week",
-    "Must Watch",
-    "Editor's Picks",
-    "Staff Recommendations"
-  ],
-  "view_details": [
-    "View Details",
-    "Ver Detalles",
-    "See More",
-    "View Details",
-    "More Info",
-    "View More",
-    "View Details",
-    "See Details",
-    "More Info",
-    "View More"
-  ],
   "browse_genres": [
     "Browse by Genre",
     "Explorar por Género",
@@ -239,174 +143,6 @@
     "titles",
     "movies"
   ],
-  "why_choose": [
-    "Why Choose",
-    "Por Qué Elegir",
-    "Why Choose",
-    "Why Us",
-    "Why Choose Us",
-    "Why Autocinema",
-    "Why Choose",
-    "Why Us",
-    "Why Choose",
-    "Why Choose"
-  ],
-  "features_description": [
-    "The ultimate movie discovery platform designed for cinephiles",
-    "La plataforma definitiva de descubrimiento de películas diseñada para cinéfilos",
-    "The premier movie discovery platform for film enthusiasts",
-    "The complete movie discovery experience for cinema lovers",
-    "The ultimate platform for movie discovery and exploration",
-    "The best movie discovery platform for film fans",
-    "The premier destination for movie discovery",
-    "The complete movie discovery experience",
-    "The ultimate movie discovery platform",
-    "The best platform for movie discovery"
-  ],
-  "feature_1_title": [
-    "Smart Search",
-    "Búsqueda Inteligente",
-    "Intelligent Search",
-    "Advanced Search",
-    "Quick Search",
-    "Powerful Search",
-    "Instant Search",
-    "Smart Finder",
-    "Fast Search",
-    "Efficient Search"
-  ],
-  "feature_1_description": [
-    "Find movies instantly by title, director, or any keyword",
-    "Encuentra películas al instante por título, director o cualquier palabra clave",
-    "Locate films quickly by name, director, or keyword",
-    "Discover films immediately by title, director, or keyword",
-    "Locate films instantly by name, director, or search term",
-    "Find movies quickly by title, director, or any keyword",
-    "Discover films immediately by title, director, or keyword",
-    "Locate movies instantly by name, director, or search term",
-    "Find films quickly by title, director, or keyword",
-    "Discover movies instantly by title, director, or keyword"
-  ],
-  "feature_2_title": [
-    "Vast Collection",
-    "Colección Amplia",
-    "Extensive Library",
-    "Huge Catalog",
-    "Massive Database",
-    "Complete Library",
-    "Full Catalog",
-    "Vast Archive",
-    "Huge Collection",
-    "Comprehensive Library"
-  ],
-  "feature_2_description": [
-    "Explore thousands of movies across all genres",
-    "Explora miles de películas de todos los géneros",
-    "Browse thousands of films from every genre",
-    "Access thousands of movies spanning all categories",
-    "Browse extensive collections covering every genre",
-    "Access thousands of films from all genres",
-    "Explore thousands of movies across all categories",
-    "Browse thousands of films spanning all genres",
-    "Access thousands of movies from every genre",
-    "Browse thousands of films covering all genres"
-  ],
-  "feature_3_title": [
-    "Curated Picks",
-    "Selección Curada",
-    "Expert Selection",
-    "Handpicked Content",
-    "Editor's Choice",
-    "Weekly Picks",
-    "Featured Selection",
-    "Curated Content",
-    "Best Picks",
-    "Top Selection"
-  ],
-  "feature_3_description": [
-    "Hand-selected featured movies updated weekly",
-    "Películas destacadas seleccionadas a mano actualizadas semanalmente",
-    "Carefully chosen featured films refreshed weekly",
-    "Expertly curated featured films updated each week",
-    "Carefully selected featured films refreshed weekly",
-    "Expertly curated featured movies updated weekly",
-    "Handpicked featured films updated every week",
-    "Expertly selected featured films refreshed weekly",
-    "Carefully chosen featured films updated weekly",
-    "Hand-selected featured movies updated weekly"
-  ],
-  "feature_4_title": [
-    "Trending Now",
-    "Tendencias",
-    "Popular Now",
-    "What's Hot",
-    "Hot Picks",
-    "Trending Content",
-    "Popular Now",
-    "What's Trending",
-    "Trending Now",
-    "Hot Trends"
-  ],
-  "feature_4_description": [
-    "Discover what's popular and trending",
-    "Descubre lo que es popular y está de moda",
-    "See what's trending and gaining popularity",
-    "Explore trending and popular content",
-    "Find what's currently trending and popular",
-    "See what's popular and gaining attention",
-    "Discover trending and popular content",
-    "Explore popular and trending selections",
-    "See what's popular and trending right now",
-    "Explore what's popular and gaining momentum"
-  ],
-  "cta_title": [
-    "Ready to explore?",
-    "¿Listo para explorar?",
-    "Ready to start?",
-    "Start exploring?",
-    "Ready?",
-    "Explore now?",
-    "Ready?",
-    "Start exploring?",
-    "Ready?",
-    "Explore?"
-  ],
-  "cta_description": [
-    "Start searching for movies now and discover your next favorite story",
-    "Comienza a buscar películas ahora y descubre tu próxima historia favorita",
-    "Begin your movie search journey and find your next favorite film",
-    "Search our collection and discover your next cinematic favorite",
-    "Start your movie search and find amazing films",
-    "Search our library and find your next favorite movie",
-    "Start searching and find amazing movies",
-    "Search our collection and find great films",
-    "Start your movie search journey",
-    "Search and discover great movies"
-  ],
-  "go_to_search": [
-    "Go to Search",
-    "Ir a Búsqueda",
-    "Start Searching",
-    "Explore Now",
-    "Search Now",
-    "Browse",
-    "Search",
-    "Explore",
-    "Go",
-    "Search"
-  ],
-  "learn_more": [
-    "Learn More",
-    "Saber Más",
-    "Learn More",
-    "More Info",
-    "Details",
-    "Info",
-    "More",
-    "Learn",
-    "More",
-    "Learn"
-  ],
   "search_stats_rating_label": [
     "Avg Rating",
     "Rating Promedio",
@@ -415,6 +151,7 @@
     "Avg Score",
     "Avg Rating",
     "Score",
+    "Avg Rating",
     "Avg Rating",
     "Avg Rating"
   ],
@@ -427,6 +164,7 @@
     "Duration",
     "Runtime",
     "Avg Time",
+    "Duration",
     "Duration"
   ],
   "search_stats_year_range_label": [
@@ -437,6 +175,7 @@
     "Years Range",
     "Year Span",
     "Years",
+    "Year Range",
     "Year Range",
     "Year Range"
   ]
