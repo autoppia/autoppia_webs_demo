@@ -30,7 +30,7 @@ function HiddenPostsContent() {
 
   const list = useMemo(() => hiddenPosts, [hiddenPosts]);
 
-  const restore = (postId: string) => {
+  const restore = (postId: string, post?: Post) => {
     setHiddenIds((prev) => {
       const next = new Set(prev);
       next.delete(postId);
@@ -39,6 +39,9 @@ function HiddenPostsContent() {
     setHiddenPosts((prev) => prev.filter((p) => p.id !== postId));
     logEvent(EVENT_TYPES.UNHIDE_POST, {
       postId,
+      author: post?.user?.name,
+      postContent: post?.content,
+      reason: "user_unhide",
       source: "hidden_posts_page",
     });
   };
@@ -89,7 +92,7 @@ function HiddenPostsContent() {
                 </div>
                 <button
                   className="text-sm text-blue-600 hover:underline"
-                  onClick={() => restore(post.id)}
+                  onClick={() => restore(post.id, post)}
                 >
                   Restore
                 </button>
