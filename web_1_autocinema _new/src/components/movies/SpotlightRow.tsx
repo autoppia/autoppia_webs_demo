@@ -19,7 +19,7 @@ export function SpotlightRow({ title, description, movies }: SpotlightRowProps) 
           <p className="text-base text-white/70">{description}</p>
         </div>
       </div>
-      <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+      <div className="flex gap-6 overflow-x-auto overflow-y-visible pb-4 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
         {movies.map((movie) => (
           <div 
             key={movie.id} 

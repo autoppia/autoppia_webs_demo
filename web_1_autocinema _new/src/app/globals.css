@@ -70,10 +70,15 @@
   * {
     @apply border-border;
   }
+  html {
+    overflow-y: auto;
+  }
   body {
     @apply bg-background text-foreground;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
       Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    overflow-y: auto;
+    min-height: 100vh;
   }
   
   /* Dynamic body padding based on navbar style */
@@ -277,8 +282,35 @@
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+  /* Ensure scrolling still works */
+  overflow-x: auto;
+  overflow-y: visible;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Show scrollbar on hover for better UX */
+.scrollbar-hide:hover {
+  scrollbar-width: thin;
+}
+
+.scrollbar-hide:hover::-webkit-scrollbar {
+  display: block;
+  height: 6px;
+}
+
+.scrollbar-hide:hover::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.scrollbar-hide:hover::-webkit-scrollbar-thumb {
+  background: rgba(251, 191, 36, 0.5);
+  border-radius: 3px;
+}
+
+.scrollbar-hide:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(251, 191, 36, 0.8);
 }
