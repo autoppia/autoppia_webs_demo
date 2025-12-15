@@ -19,6 +19,9 @@ import {
 } from "@/dynamic/v2-data";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { cn } from "@/library/utils";
+import { useDynamic } from "@/dynamic/shared";
+import { useSeed } from "@/context/SeedContext";
+import { generateDynamicOrder } from "@/dynamic/shared/order-utils";
 
 const MOVIES_PER_PAGE = 9;
 
@@ -27,6 +30,8 @@ type SortOption = "default" | "rating-desc" | "rating-asc" | "year-desc" | "year
 function SearchContent() {
   const searchParams = useSearchParams();
   const router = useSeedRouter();
+  const dyn = useDynamic();
+  const { seed } = useSeed();
 
   const initialSearch = searchParams.get("search") ?? "";
   const initialGenre = searchParams.get("genre") ?? "";
@@ -361,32 +366,49 @@ function SearchContent() {
             totalResults={filteredMovies.length}
           />
 
-          {/* Stats for filtered results */}
-          {filteredMovies.length > 0 && (
-            <div className="grid grid-cols-3 gap-4">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-                <div className="flex items-center gap-2 text-white/60 mb-1">
-                  <Star className="h-4 w-4" />
-                  <span className="text-xs font-semibold uppercase">Avg Rating</span>
-                </div>
-                <div className="text-2xl font-bold text-white">{stats.avgRating}</div>
+          {/* Stats for filtered results - Orden dinámico y textos V3 */}
+          {filteredMovies.length > 0 && (() => {
+            const statsCards = [
+              {
+                key: "search-stats-rating",
+                icon: Star,
+                label: dyn.v3.text("search_stats_rating_label", "Avg Rating"),
+                value: stats.avgRating,
+              },
+              {
+                key: "search-stats-duration",
+                icon: Clock,
+                label: dyn.v3.text("search_stats_duration_label", "Avg Duration"),
+                value: `${stats.avgDuration}m`,
+              },
+              {
+                key: "search-stats-year-range",
+                icon: Calendar,
+                label: dyn.v3.text("search_stats_year_range_label", "Year Range"),
+                value: stats.yearRange,
+              },
+            ];
+
+            const order = generateDynamicOrder(seed, "search-stats-cards", statsCards.length);
+            const orderedCards = order.map(i => statsCards[i]);
+
+            return (
+              <div className="grid grid-cols-3 gap-4">
+                {orderedCards.map((card, index) => {
+                  const IconComponent = card.icon;
+                  return (
+                    <div key={card.key} className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+                      <div className="flex items-center gap-2 text-white/60 mb-1">
+                        <IconComponent className="h-4 w-4" />
+                        <span className="text-xs font-semibold uppercase">{card.label}</span>
+                      </div>
+                      <div className="text-2xl font-bold text-white">{card.value}</div>
+                    </div>
+                  );
+                })}
               </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-                <div className="flex items-center gap-2 text-white/60 mb-1">
-                  <Clock className="h-4 w-4" />
-                  <span className="text-xs font-semibold uppercase">Avg Duration</span>
-                </div>
-                <div className="text-2xl font-bold text-white">{stats.avgDuration}m</div>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-                <div className="flex items-center gap-2 text-white/60 mb-1">
-                  <Calendar className="h-4 w-4" />
-                  <span className="text-xs font-semibold uppercase">Year Range</span>
-                </div>
-                <div className="text-2xl font-bold text-white">{stats.yearRange}</div>
-              </div>
-            </div>
-          )}
+            );
+          })()}
 
           {filteredMovies.length > 0 ? (
             <>

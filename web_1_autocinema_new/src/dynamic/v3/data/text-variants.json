@@ -33,7 +33,10 @@
     "cta_title": "Ready to explore?",
     "cta_description": "Start searching for movies now and discover your next favorite story",
     "go_to_search": "Go to Search",
-    "learn_more": "Learn More"
+    "learn_more": "Learn More",
+    "search_stats_rating_label": "Avg Rating",
+    "search_stats_duration_label": "Avg Duration",
+    "search_stats_year_range_label": "Year Range"
   },
   "2": {
     "search_placeholder": "Find films, directors...",
@@ -69,7 +72,10 @@
     "cta_title": "¿Listo para explorar?",
     "cta_description": "Comienza a buscar películas ahora y descubre tu próxima historia favorita",
     "go_to_search": "Ir a Búsqueda",
-    "learn_more": "Saber Más"
+    "learn_more": "Saber Más",
+    "search_stats_rating_label": "Rating Promedio",
+    "search_stats_duration_label": "Duración Promedio",
+    "search_stats_year_range_label": "Rango de Años"
   },
   "3": {
     "search_placeholder": "Look for movies, titles...",
@@ -105,7 +111,10 @@
     "cta_title": "Ready to start?",
     "cta_description": "Begin your movie search journey and find your next favorite film",
     "go_to_search": "Start Searching",
-    "learn_more": "Learn More"
+    "learn_more": "Learn More",
+    "search_stats_rating_label": "Average Rating",
+    "search_stats_duration_label": "Average Duration",
+    "search_stats_year_range_label": "Year Range"
   },
   "4": {
     "search_placeholder": "Discover films, directors...",
@@ -141,7 +150,10 @@
     "cta_title": "Start exploring?",
     "cta_description": "Search our collection and discover your next cinematic favorite",
     "go_to_search": "Explore Now",
-    "learn_more": "More Info"
+    "learn_more": "More Info",
+    "search_stats_rating_label": "Score Avg",
+    "search_stats_duration_label": "Time Avg",
+    "search_stats_year_range_label": "Years"
   },
   "5": {
     "search_placeholder": "Type movie name, genre...",
@@ -213,7 +225,10 @@
     "cta_title": "Explore now?",
     "cta_description": "Search our library and find your next favorite movie",
     "go_to_search": "Browse",
-    "learn_more": "Info"
+    "learn_more": "Info",
+    "search_stats_rating_label": "Avg Score",
+    "search_stats_duration_label": "Avg Time",
+    "search_stats_year_range_label": "Years Range"
   },
   "7": {
     "search_placeholder": "Find titles, movies...",
@@ -249,7 +264,10 @@
     "cta_title": "Ready?",
     "cta_description": "Start searching and find amazing movies",
     "go_to_search": "Search",
-    "learn_more": "More"
+    "learn_more": "More",
+    "search_stats_rating_label": "Avg Rating",
+    "search_stats_duration_label": "Duration",
+    "search_stats_year_range_label": "Year Span"
   },
   "8": {
     "search_placeholder": "Query movies, titles...",
@@ -285,7 +303,10 @@
     "cta_title": "Start exploring?",
     "cta_description": "Search our collection and find great films",
     "go_to_search": "Explore",
-    "learn_more": "Learn"
+    "learn_more": "Learn",
+    "search_stats_rating_label": "Score",
+    "search_stats_duration_label": "Runtime",
+    "search_stats_year_range_label": "Years"
   },
   "9": {
     "search_placeholder": "Share films, discover...",
@@ -321,7 +342,10 @@
     "cta_title": "Ready?",
     "cta_description": "Start your movie search journey",
     "go_to_search": "Go",
-    "learn_more": "More"
+    "learn_more": "More",
+    "search_stats_rating_label": "Avg Rating",
+    "search_stats_duration_label": "Avg Time",
+    "search_stats_year_range_label": "Year Range"
   },
   "10": {
     "search_placeholder": "Search titles, films...",
@@ -357,7 +381,10 @@
     "cta_title": "Explore?",
     "cta_description": "Search and discover great movies",
     "go_to_search": "Search",
-    "learn_more": "Learn"
+    "learn_more": "Learn",
+    "search_stats_rating_label": "Avg Rating",
+    "search_stats_duration_label": "Duration",
+    "search_stats_year_range_label": "Year Range"
   }
 }
 

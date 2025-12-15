@@ -13,12 +13,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/library/utils";
 import { useDynamic } from "@/dynamic/shared";
+import { generateDynamicOrder } from "@/dynamic/shared/order-utils";
 import { useSeed } from "@/context/SeedContext";
 
 export function HomeContent() {
   const router = useSeedRouter();
   const dyn = useDynamic();
-  const { isSeedReady } = useSeed();
+  const { isSeedReady, seed } = useSeed();
   const [searchQuery, setSearchQuery] = useState("");
   const [isMounted, setIsMounted] = useState(false);
 
@@ -76,9 +77,9 @@ export function HomeContent() {
   // Dynamic order for genres (only order, no V1 wrappers/decoys)
   const orderedGenres = useMemo(() => {
     if (popularGenres.length === 0) return [];
-    const order = dyn.generateOrder("genres", popularGenres.length);
+    const order = generateDynamicOrder(seed, "genres", popularGenres.length);
     return order.map((idx) => popularGenres[idx]);
-  }, [popularGenres, dyn.seed]);
+  }, [popularGenres, seed]);
 
   // Calculate stats
   const stats = useMemo(() => {
@@ -122,9 +123,9 @@ export function HomeContent() {
   // Dynamic order for features
   const orderedFeatures = useMemo(() => {
     if (features.length === 0) return [];
-    const order = dyn.generateOrder("features", features.length);
+    const order = generateDynamicOrder(seed, "features", features.length);
     return order.map((idx) => features[idx]);
-  }, [dyn.seed]);
+  }, [seed]);
 
   return (
     <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative">
@@ -262,7 +263,7 @@ export function HomeContent() {
 
                 // Generar orden dinámico usando la función genérica
                 // count = 4 (Movies, Genres, Rating, Duration)
-                const order = dyn.generateOrder("stats-cards", statsCards.length);
+                const order = generateDynamicOrder(seed, "stats-cards", statsCards.length);
                 const orderedCards = order.map(i => statsCards[i]);
 
                 return (
@@ -332,7 +333,7 @@ export function HomeContent() {
                     
                     // Generar orden dinámico usando la función genérica
                     // count = 3 (3 películas)
-                    const order = dyn.generateOrder("featured-movies", moviesToShow.length);
+                    const order = generateDynamicOrder(seed, "featured-movies", moviesToShow.length);
                     const orderedMovies = order.map(i => ({ movie: moviesToShow[i], originalIndex: i }));
 
                     return orderedMovies.map(({ movie, originalIndex }, displayIndex) => (
