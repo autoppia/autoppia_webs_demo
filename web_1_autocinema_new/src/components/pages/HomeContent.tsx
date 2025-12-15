@@ -73,6 +73,13 @@ export function HomeContent() {
       .map((g) => g.genre);
   }, [genres]);
 
+  // Dynamic order for genres (only order, no V1 wrappers/decoys)
+  const orderedGenres = useMemo(() => {
+    if (popularGenres.length === 0) return [];
+    const order = dyn.generateOrder("genres", popularGenres.length);
+    return order.map((idx) => popularGenres[idx]);
+  }, [popularGenres, dyn.seed]);
+
   // Calculate stats
   const stats = useMemo(() => {
     if (allMovies.length === 0) {
@@ -96,25 +103,28 @@ export function HomeContent() {
   const features = [
     {
       icon: <Search className="h-6 w-6" />,
-      title: "Smart Search",
-      description: "Find movies instantly by title, director, or any keyword",
+      key: "feature_1",
     },
     {
       icon: <Film className="h-6 w-6" />,
-      title: "Vast Collection",
-      description: "Explore thousands of movies across all genres",
+      key: "feature_2",
     },
     {
       icon: <Star className="h-6 w-6" />,
-      title: "Curated Picks",
-      description: "Hand-selected featured movies updated weekly",
+      key: "feature_3",
     },
     {
       icon: <TrendingUp className="h-6 w-6" />,
-      title: "Trending Now",
-      description: "Discover what's popular and trending",
+      key: "feature_4",
     },
   ];
+
+  // Dynamic order for features
+  const orderedFeatures = useMemo(() => {
+    if (features.length === 0) return [];
+    const order = dyn.generateOrder("features", features.length);
+    return order.map((idx) => features[idx]);
+  }, [dyn.seed]);
 
   return (
     <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative">
@@ -138,7 +148,7 @@ export function HomeContent() {
               <div
                 id={dyn.v3.id("home-main-container")}
                 className={cn(
-                  "relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 md:p-12 backdrop-blur-sm overflow-hidden",
+                  "relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 md:p-12 backdrop-blur-sm",
                   dyn.v3.class("main-container", "")
                 )}
               >
@@ -250,32 +260,10 @@ export function HomeContent() {
                   },
                 ];
 
-                // Orden original (seed=1): Movies, Genres, Rating, Duration
-                const originalOrder = [0, 1, 2, 3];
-                
-                // Si seed=1, usar orden original. Si no, usar orden dinámico
-                const orderedCards = dyn.seed === 1 
-                  ? originalOrder.map(i => statsCards[i])
-                  : (() => {
-                      // Generar orden dinámico usando pickVariant
-                      // Usar diferentes keys para generar diferentes órdenes según el seed
-                      const orderVariants = [
-                        [0, 1, 2, 3], // Original: Movies, Genres, Rating, Duration
-                        [1, 0, 3, 2], // Genres, Movies, Duration, Rating
-                        [2, 3, 0, 1], // Rating, Duration, Movies, Genres
-                        [3, 2, 1, 0], // Duration, Rating, Genres, Movies
-                        [0, 2, 1, 3], // Movies, Rating, Genres, Duration
-                        [1, 3, 0, 2], // Genres, Duration, Movies, Rating
-                        [2, 0, 3, 1], // Rating, Movies, Duration, Genres
-                        [3, 1, 2, 0], // Duration, Genres, Rating, Movies
-                        [0, 3, 2, 1], // Movies, Duration, Rating, Genres
-                        [1, 2, 3, 0], // Genres, Rating, Duration, Movies
-                      ];
-                      
-                      const variantIndex = dyn.pickVariant("stats-order", orderVariants.length);
-                      const order = orderVariants[variantIndex];
-                      return order.map(i => statsCards[i]);
-                    })();
+                // Generar orden dinámico usando la función genérica
+                // count = 4 (Movies, Genres, Rating, Duration)
+                const order = dyn.generateOrder("stats-cards", statsCards.length);
+                const orderedCards = order.map(i => statsCards[i]);
 
                 return (
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
@@ -338,17 +326,26 @@ export function HomeContent() {
                 ))}
                 
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {featuredMovies.slice(0, 3).map((movie, index) => (
-                    dyn.v1.wrap(`featured-movie-${index}`, (
-                      <div
-                        key={movie.id}
-                        id={dyn.v3.id("featured-movie-card", index)}
-                        suppressHydrationWarning
-                        className={cn(
-                          "group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm transition-all duration-300 hover:border-secondary/50 hover:shadow-2xl hover:shadow-secondary/30 hover:-translate-y-1",
-                          dyn.v3.class("featured-movie-card", "")
-                        )}
-                      >
+                  {(() => {
+                    // Obtener las primeras 3 películas
+                    const moviesToShow = featuredMovies.slice(0, 3);
+                    
+                    // Generar orden dinámico usando la función genérica
+                    // count = 3 (3 películas)
+                    const order = dyn.generateOrder("featured-movies", moviesToShow.length);
+                    const orderedMovies = order.map(i => ({ movie: moviesToShow[i], originalIndex: i }));
+
+                    return orderedMovies.map(({ movie, originalIndex }, displayIndex) => (
+                      dyn.v1.wrap(`featured-movie-${originalIndex}`, (
+                        <div
+                          key={movie.id}
+                          id={dyn.v3.id("featured-movie-card", displayIndex)}
+                          suppressHydrationWarning
+                          className={cn(
+                            "group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm transition-all duration-300 hover:border-secondary/50 hover:shadow-2xl hover:shadow-secondary/30 hover:-translate-y-1",
+                            dyn.v3.class("featured-movie-card", "")
+                          )}
+                        >
                         {/* Movie poster with overlay */}
                         <div
                           className="relative overflow-hidden bg-cover bg-center aspect-[2/3] transition-transform duration-500 group-hover:scale-105"
@@ -365,11 +362,11 @@ export function HomeContent() {
                           {/* Content overlay */}
                           <div className="absolute inset-0 flex flex-col justify-end p-6 lg:p-8">
                             {/* Badges */}
-                            {dyn.v1.wrap(`featured-movie-badges-${index}`, (
+                            {dyn.v1.wrap(`featured-movie-badges-${originalIndex}`, (
                               <div className="flex items-center gap-2 mb-3 flex-wrap">
-                                {dyn.v1.wrap(`featured-movie-genre-badge-${index}`, (
+                                {dyn.v1.wrap(`featured-movie-genre-badge-${originalIndex}`, (
                                   <span
-                                    id={dyn.v3.id("featured-movie-genre", index)}
+                                    id={dyn.v3.id("featured-movie-genre", displayIndex)}
                                     className={cn(
                                       "rounded-full bg-secondary/30 backdrop-blur-md px-4 py-1.5 text-xs font-bold text-secondary border border-secondary/30",
                                       dyn.v3.class("genre-badge", "")
@@ -378,9 +375,9 @@ export function HomeContent() {
                                     {movie.genres[0] || "Cinematic"}
                                   </span>
                                 ))}
-                                {dyn.v1.wrap(`featured-movie-rating-badge-${index}`, (
+                                {dyn.v1.wrap(`featured-movie-rating-badge-${originalIndex}`, (
                                   <div
-                                    id={dyn.v3.id("featured-movie-rating", index)}
+                                    id={dyn.v3.id("featured-movie-rating", displayIndex)}
                                     className={cn(
                                       "flex items-center gap-1.5 rounded-full bg-black/60 backdrop-blur-md px-3 py-1.5 text-xs font-semibold text-white border border-white/10",
                                       dyn.v3.class("rating-badge", "")
@@ -395,7 +392,7 @@ export function HomeContent() {
                             
                             {/* Title */}
                             <h3
-                              id={dyn.v3.id("featured-movie-title", index)}
+                              id={dyn.v3.id("featured-movie-title", displayIndex)}
                               className={cn(
                                 "text-2xl lg:text-3xl font-bold leading-tight mb-3 drop-shadow-lg",
                                 dyn.v3.class("movie-title", "")
@@ -406,7 +403,7 @@ export function HomeContent() {
                             
                             {/* Synopsis */}
                             <p
-                              id={dyn.v3.id("featured-movie-synopsis", index)}
+                              id={dyn.v3.id("featured-movie-synopsis", displayIndex)}
                               className={cn(
                                 "text-sm lg:text-base text-white/90 mb-4 line-clamp-2 leading-relaxed",
                                 dyn.v3.class("movie-synopsis", "")
@@ -417,7 +414,7 @@ export function HomeContent() {
                             
                             {/* Meta info */}
                             <div
-                              id={dyn.v3.id("featured-movie-meta", index)}
+                              id={dyn.v3.id("featured-movie-meta", displayIndex)}
                               className={cn(
                                 "flex items-center gap-3 text-xs lg:text-sm text-white/80 mb-5 font-medium",
                                 dyn.v3.class("movie-meta", "")
@@ -433,7 +430,7 @@ export function HomeContent() {
                             {/* CTA Button */}
                             <SeedLink
                               href={`/movies/${movie.id}`}
-                              id={dyn.v3.id("featured-movie-view-details-btn", index)}
+                              id={dyn.v3.id("featured-movie-view-details-btn", displayIndex)}
                               className="inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-6 py-3 text-sm font-bold text-black transition-all hover:bg-secondary/90 hover:scale-105 shadow-lg shadow-secondary/20 whitespace-nowrap min-w-[120px]"
                             >
                               <Play className="h-4 w-4" />
@@ -443,63 +440,60 @@ export function HomeContent() {
                         </div>
                       </div>
                     ), undefined, movie.id)
-                  ))}
+                    ));
+                  })()}
                 </div>
               </div>
             </div>
             </div>
           ))}
 
-          {/* Popular Genres */}
-          {dyn.v1.wrap("home-genres-section", (
-            <div>
-              {dyn.v1.wrap("home-genres-header", (
-                <div className="flex items-center justify-between mb-8">
-                  <div>
-                    <h2 id={dyn.v3.id("genres-title")} className="text-3xl md:text-4xl font-bold text-white mb-2">
-                      {dyn.v3.text("browse_genres", "Browse by Genre")}
-                    </h2>
-                    <p className="text-white/70">
-                      {dyn.v3.text("genres_description", "Explore movies by your favorite genre")}
-                    </p>
-                  </div>
-                  <SeedLink
-                    href="/search"
-                    className="hidden md:flex items-center gap-2 text-secondary hover:text-secondary/80 font-semibold transition-colors"
-                  >
-                    {dyn.v3.text("view_all", "View All")}
-                    <ArrowRight className="h-4 w-4" />
-                  </SeedLink>
-                </div>
-              ))}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {popularGenres.map((genre, index) => {
+          {/* Popular Genres - Solo orden dinámico, sin V1 wrappers/decoys */}
+          <div className="w-full">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 id={dyn.v3.id("genres-title")} className="text-3xl md:text-4xl font-bold text-white mb-2">
+                  {dyn.v3.text("browse_genres", "Browse by Genre")}
+                </h2>
+                <p className="text-white/70">
+                  {dyn.v3.text("genres_description", "Explore movies by your favorite genre")}
+                </p>
+              </div>
+              <SeedLink
+                href="/search"
+                className="hidden md:flex items-center gap-2 text-secondary hover:text-secondary/80 font-semibold transition-colors"
+              >
+                {dyn.v3.text("view_all", "View All")}
+                <ArrowRight className="h-4 w-4" />
+              </SeedLink>
+            </div>
+            <div className="w-full">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                {orderedGenres.map((genre, displayIndex) => {
                   const genreMovies = getMoviesByGenre(genre);
                   return (
-                    dyn.v1.wrap(`genre-card-${index}`, (
-                      <SeedLink
-                        key={genre}
-                        href={`/search?genre=${encodeURIComponent(genre)}`}
-                        id={dyn.v3.id("genre-card", index)}
-                        className={cn(
-                          "group relative rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-6 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:scale-105 text-center",
-                          dyn.v3.class("genre-card", "")
-                        )}
-                      >
-                        <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-secondary/20 mb-3 mx-auto group-hover:bg-secondary/30 transition-colors">
-                          <Film className="h-6 w-6 text-secondary" />
-                        </div>
-                        <h3 className="font-bold text-white mb-1">{genre}</h3>
-                        <p className="text-xs text-white/60">
-                          {genreMovies.length} {dyn.v3.text("movies_label", "movies")}
-                        </p>
-                      </SeedLink>
-                    ), undefined, genre)
+                    <SeedLink
+                      key={genre}
+                      href={`/search?genre=${encodeURIComponent(genre)}`}
+                      id={dyn.v3.id("genre-card", displayIndex)}
+                      className={cn(
+                        "group relative rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-4 sm:p-6 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:scale-105 text-center w-full",
+                        dyn.v3.class("genre-card", "")
+                      )}
+                    >
+                      <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-secondary/20 mb-3 mx-auto group-hover:bg-secondary/30 transition-colors">
+                        <Film className="h-5 w-5 sm:h-6 sm:w-6 text-secondary" />
+                      </div>
+                      <h3 className="font-bold text-white mb-1 text-sm sm:text-base truncate">{genre}</h3>
+                      <p className="text-xs text-white/60">
+                        {genreMovies.length} {dyn.v3.text("movies_label", "movies")}
+                      </p>
+                    </SeedLink>
                   );
                 })}
               </div>
             </div>
-          ))}
+          </div>
 
           {/* Features Section */}
           {dyn.v1.wrap("home-features-section", (
@@ -520,23 +514,27 @@ export function HomeContent() {
                   </div>
                 ))}
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                  {features.map((feature, index) => (
-                    dyn.v1.wrap(`feature-card-${index}`, (
+                  {orderedFeatures.map((feature, displayIndex) => (
+                    dyn.v1.wrap(`feature-card-${displayIndex}`, (
                       <div
-                        key={index}
-                        id={dyn.v3.id("feature-card", index)}
+                        key={feature.key}
+                        id={dyn.v3.id("feature-card", displayIndex)}
                         className={cn(
-                          "group rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:-translate-y-1",
+                          "group rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:-translate-y-1 w-full h-full",
                           dyn.v3.class("feature-card", "")
                         )}
                       >
                         <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-secondary/20 mb-4 group-hover:bg-secondary/30 transition-colors">
                           <div className="text-secondary">{feature.icon}</div>
                         </div>
-                        <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
-                        <p className="text-sm text-white/70">{feature.description}</p>
+                        <h3 className="text-xl font-bold text-white mb-2">
+                          {dyn.v3.text(`${feature.key}_title`, feature.key === "feature_1" ? "Smart Search" : feature.key === "feature_2" ? "Vast Collection" : feature.key === "feature_3" ? "Curated Picks" : "Trending Now")}
+                        </h3>
+                        <p className="text-sm text-white/70">
+                          {dyn.v3.text(`${feature.key}_description`, feature.key === "feature_1" ? "Find movies instantly by title, director, or any keyword" : feature.key === "feature_2" ? "Explore thousands of movies across all genres" : feature.key === "feature_3" ? "Hand-selected featured movies updated weekly" : "Discover what's popular and trending")}
+                        </p>
                       </div>
-                    ), undefined, `feature-${index}`)
+                    ), undefined, `feature-${displayIndex}`)
                   ))}
                 </div>
               </div>

@@ -13,6 +13,7 @@ import { isV3Enabled } from "./flags";
 import { generateElementId } from "../v3/utils/id-generator";
 import { getTextForElement } from "../v3/utils/text-selector";
 import { getClassForElement } from "../v3/utils/class-selector";
+import { generateDynamicOrder } from "./order-utils";
 import type { ReactNode } from "react";
 
 // ============================================================================
@@ -152,5 +153,14 @@ export function useDynamic() {
      */
     pickVariant: (key: string, count: number) => 
       pickVariant(seed, key, count),
+    
+    /**
+     * Utilidad: generar orden dinámico para arrays de elementos
+     * @param key - Identificador único (ej: "stats-cards", "featured-movies")
+     * @param count - Número de elementos (ej: 4, 6, 10)
+     * @returns Array de índices reordenados
+     */
+    generateOrder: (key: string, count: number) => 
+      generateDynamicOrder(seed, key, count),
   }), [seed]);
 }

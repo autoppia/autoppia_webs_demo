@@ -76,7 +76,13 @@ export function applyV1Wrapper(
   
   // Aplicar wrapper si es necesario
   // Usar div en lugar de span para elementos que necesitan ocupar todo el ancho
-  const useDivWrapper = componentKey.includes("input-container") || componentKey.includes("form") || componentKey.includes("search");
+  const useDivWrapper = 
+    componentKey.includes("input-container") || 
+    componentKey.includes("form") || 
+    componentKey.includes("search") ||
+    componentKey.includes("feature-card") ||
+    componentKey.includes("genre-card") ||
+    componentKey.includes("stats-card");
   const WrapperElement = useDivWrapper ? "div" : "span";
   
   const core = shouldWrap
@@ -86,7 +92,7 @@ export function applyV1Wrapper(
           "data-dyn-wrap": componentKey,
           "data-v1": "true",
           "data-wrapper-variant": wrapperVariant,
-          className: useDivWrapper ? "w-full" : undefined,
+          className: useDivWrapper ? "w-full h-full" : undefined,
         },
         children
       )
