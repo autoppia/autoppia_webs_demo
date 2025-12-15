@@ -17,12 +17,12 @@ export function SpotlightRow({ title, description, movies }: SpotlightRowProps) 
 
   return (
     <>
-      {dyn.v1.wrap("spotlight-row", (
+      {dyn.v1.addWrapDecoy("spotlight-row", (
         <section 
           id={dyn.v3.getVariant("spotlight-row", ID_VARIANTS_MAP, "spotlight-row")}
           className={cn("space-y-6", dyn.v3.getVariant("spotlight-row", CLASS_VARIANTS_MAP, ""))}
         >
-          {dyn.v1.wrap("spotlight-header", (
+          {dyn.v1.addWrapDecoy("spotlight-header", (
             <div className="flex items-baseline justify-between text-white">
               <div>
                 <h3 id={dyn.v3.getVariant("spotlight-title", ID_VARIANTS_MAP, "spotlight-title")} className="text-3xl md:text-4xl font-bold mb-2">
@@ -34,7 +34,7 @@ export function SpotlightRow({ title, description, movies }: SpotlightRowProps) 
           ))}
           <div className="flex gap-6 overflow-x-auto overflow-y-visible pb-4 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
             {movies.map((movie, index) => (
-              dyn.v1.wrap(`spotlight-movie-${index}`, (
+              dyn.v1.addWrapDecoy(`spotlight-movie-${index}`, (
                 <div 
                   key={movie.id}
                   id={dyn.v3.getVariant(index > 0 ? `spotlight-movie-card-${index}` : "spotlight-movie-card", ID_VARIANTS_MAP, index > 0 ? `spotlight-movie-card-${index}` : "spotlight-movie-card")}

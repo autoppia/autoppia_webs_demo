@@ -2,8 +2,8 @@
  * V1 - Estructura DOM (Wrappers y Decoys)
  * 
  * Añade wrappers y decoys al DOM para romper XPath.
- * Cada componente puede tener sus propias variantes.
+ * También proporciona orden dinámico de elementos.
  */
 
 export { applyV1Wrapper } from "./structure";
-export type { V1WrapperOptions } from "./structure";
+export { generateDynamicOrder } from "./order-utils";

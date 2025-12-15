@@ -8,10 +8,10 @@
 
 import { useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
-import { applyV1Wrapper, type V1WrapperOptions } from "../v1/structure";
+import { applyV1Wrapper } from "../v1/structure";
 import { isV3Enabled } from "./flags";
 import { getVariant, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "../v3/utils/variant-selector";
-import { generateDynamicOrder } from "./order-utils";
+import { generateDynamicOrder } from "../v1/order-utils";
 import type { ReactNode } from "react";
 
 // ============================================================================
@@ -70,12 +70,12 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
  * 
  * Uso:
  *   const dyn = useDynamicSystem();
- *   dyn.v1.wrap()         // V1: Wrappers y decoys
- *   dyn.v1.changeOrder()  // V1: Cambiar orden de elementos
- *   dyn.v3.getVariant()   // V3: Obtener variantes (IDs, clases, textos) - TODO usa esta función
+ *   dyn.v1.addWrapDecoy()      // V1: Añade wrappers y decoys
+ *   dyn.v1.changeOrderElements()  // V1: Cambiar orden de elementos
+ *   dyn.v3.getVariant()        // V3: Obtener variantes (IDs, clases, textos)
  * 
  * Funciona igual aunque V1/V3 estén OFF:
- * - Si V1 OFF: dyn.v1.wrap() devuelve children sin cambios
+ * - Si V1 OFF: dyn.v1.addWrapDecoy() devuelve children sin cambios
  * - Si V3 OFF: dyn.getVariant() devuelve fallback o key
  * 
  * El seed se obtiene automáticamente del SeedContext (que lo lee de la URL).
@@ -95,19 +95,19 @@ export function useDynamicSystem() {
       /**
        * Añade wrapper y decoy para romper XPath
        * 
+       * Siempre usa 2 variantes de wrapper (0=sin, 1=con) y 3 de decoy (0=sin, 1=antes, 2=después)
+       * 
        * @param componentKey - Identificador único del componente (ej: "movie-card", "search-button")
        * @param children - Elemento a envolver
-       * @param options - Opciones de variantes específicas para este componente
        * @param reactKey - React key opcional
        * 
        * Si V1 está OFF, devuelve children sin cambios
        */
-      wrap: (
+      addWrapDecoy: (
         componentKey: string,
         children: ReactNode,
-        options?: V1WrapperOptions,
         reactKey?: string
-      ) => applyV1Wrapper(seed, componentKey, children, options, reactKey),
+      ) => applyV1Wrapper(seed, componentKey, children, reactKey),
       
       /**
        * Cambia el orden dinámico de arrays de elementos
@@ -115,7 +115,7 @@ export function useDynamicSystem() {
        * @param count - Número de elementos (ej: 4, 6, 10)
        * @returns Array de índices reordenados
        */
-      changeOrder: (key: string, count: number) => 
+      changeOrderElements: (key: string, count: number) => 
         generateDynamicOrder(seed, key, count),
     },
     

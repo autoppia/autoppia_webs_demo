@@ -14,7 +14,7 @@ export function MovieCard({ movie, onSelect }: MovieCardProps) {
   
   return (
     <>
-      {dyn.v1.wrap("movie-card", (
+      {dyn.v1.addWrapDecoy("movie-card", (
         <div 
           id={dyn.v3.getVariant("movie-card", ID_VARIANTS_MAP, "movie-card")}
           className={cn(
@@ -29,7 +29,7 @@ export function MovieCard({ movie, onSelect }: MovieCardProps) {
           />
 
           <div className="mt-4 flex flex-1 flex-col gap-2">
-            {dyn.v1.wrap("movie-meta", (
+            {dyn.v1.addWrapDecoy("movie-meta", (
               <p className="text-xs uppercase tracking-wide text-white/50">
                 {movie.genres.slice(0, 2).join(" · ")} — {movie.year}
               </p>
@@ -38,7 +38,7 @@ export function MovieCard({ movie, onSelect }: MovieCardProps) {
               <SeedLink href={`/movies/${movie.id}`} className="hover:underline">{movie.title}</SeedLink>
             </h3>
             <p className="flex-1 text-sm text-white/80 leading-relaxed">{movie.synopsis}</p>
-            {dyn.v1.wrap("movie-tags", (
+            {dyn.v1.addWrapDecoy("movie-tags", (
               <div className="flex flex-wrap gap-2 text-xs text-white/70">
                 <span className="rounded-full border border-white/15 px-3 py-1">{movie.duration}m</span>
                 <span className="rounded-full border border-white/15 px-3 py-1">⭐ {movie.rating}</span>

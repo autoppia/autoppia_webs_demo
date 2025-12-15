@@ -53,7 +53,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     
     return (
       <>
-        {dyn.v1.wrap("button", (
+        {dyn.v1.addWrapDecoy("button", (
           <Comp
             id={dynamicId}
             className={cn(

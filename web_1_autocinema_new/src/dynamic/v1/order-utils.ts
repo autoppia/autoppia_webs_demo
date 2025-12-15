@@ -1,10 +1,11 @@
 /**
- * Utilidades para generar órdenes dinámicos de elementos
+ * Utilidades para generar órdenes dinámicos de elementos (V1)
  * 
  * Genera órdenes diferentes según el seed sin necesidad de hardcodear todas las permutaciones
+ * Esta funcionalidad es parte de V1 ya que modifica la estructura/orden de elementos
  */
 
-import { selectVariantIndex } from "./core";
+import { selectVariantIndex } from "../shared/core";
 
 /**
  * Genera un orden dinámico para un array de elementos

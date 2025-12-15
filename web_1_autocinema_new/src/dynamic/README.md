@@ -15,13 +15,15 @@ src/dynamic/
   │   └── index.ts
   │
   ├── v3/               # V3: Atributos y textos
-  │   ├── utils/        # Utilidades (id-generator, text-selector, class-selector)
+  │   ├── utils/
+  │   │   └── variant-selector.ts  # Función unificada getVariant()
   │   ├── data/         # JSON files (text-variants, id-variants, class-variants)
   │   └── index.ts
   │
   ├── shared/           # Compartido entre V1 y V3
-  │   ├── core.ts       # Funciones base + hook useDynamic()
+  │   ├── core.ts       # Funciones base + hook useDynamicSystem()
   │   ├── flags.ts      # Flags de habilitación (isV1Enabled, isV3Enabled)
+  │   ├── order-utils.ts # Generación de orden dinámico
   │   └── index.ts      # Export principal
   │
   └── index.ts          # Export principal
@@ -31,13 +33,13 @@ src/dynamic/
 
 ### Concepto Base
 
-Todo el sistema usa **`pickVariant(seed, key, count)`** para seleccionar variantes de forma determinística:
+Todo el sistema usa **`selectVariantIndex(seed, key, count)`** para seleccionar variantes de forma determinística:
 
 ```typescript
-pickVariant(seed, "movie-card", 3)  // Devuelve 0, 1 o 2
+selectVariantIndex(seed, "movie-card", 3)  // Devuelve 0, 1 o 2
 ```
 
-- **`seed`**: El seed base (1-999) que viene del contexto
+- **`seed`**: El seed base (1-999) que viene de la URL
 - **`key`**: Identificador único del componente (ej: "movie-card", "search-button")
 - **`count`**: Número de variantes disponibles
 - **Resultado**: Un número determinístico (0 a count-1) que siempre será el mismo para el mismo seed+key
@@ -45,30 +47,14 @@ pickVariant(seed, "movie-card", 3)  // Devuelve 0, 1 o 2
 ### V1: Wrappers y Decoys (Rompe XPath)
 
 **¿Qué hace?**
-- Añade `<span>` wrappers alrededor de elementos
+- Añade wrappers `<div>` alrededor de elementos
 - Añade elementos decoy invisibles antes/después
 - **Objetivo**: Romper XPath memorizado por scrapers
 
 **¿Cómo funciona?**
 ```typescript
-// Cada componente tiene sus propias variantes
-dyn.v1.wrap("movie-card", <div>...</div>)
-```
-
-Internamente:
-1. `pickVariant(seed, "movie-card-wrapper", 2)` → Decide si añadir wrapper (0=sin, 1=con)
-2. `pickVariant(seed, "movie-card-decoy", 3)` → Decide posición del decoy (0=none, 1=before, 2=after)
-
-**Ejemplo:**
-```typescript
-// Básico: usa variantes por defecto (2 wrappers, 3 decoys)
-{dyn.v1.wrap("movie-card", <div>...</div>)}
-
-// Avanzado: define variantes personalizadas
-{dyn.v1.wrap("movie-card", <div>...</div>, {
-  wrapperVariants: 3,  // Este componente tiene 3 opciones de wrapper
-  decoyVariants: 4     // Este componente tiene 4 opciones de decoy
-})}
+// Siempre usa 2 variantes de wrapper (0=sin, 1=con) y 3 de decoy (0=sin, 1=antes, 2=después)
+dyn.v1.addWrapDecoy("movie-card", <div>...</div>)
 ```
 
 ### V3: Atributos y Textos (Anti-memorización)
@@ -80,50 +66,53 @@ Internamente:
 - **Objetivo**: Evitar que scrapers memoricen selectores fijos
 
 **¿Cómo funciona?**
-Cada componente usa su propio `key` único:
+Una sola función unificada `getVariant()` para todo:
 
 ```typescript
-// IDs: cada componente tiene su propio key
-<input id={dyn.v3.id("search-input")} />        // key: "search-input"
-<button id={dyn.v3.id("submit-button")} />       // key: "submit-button"
+// IDs: usando diccionario local o global
+<input id={dyn.v3.getVariant("search-input", ID_VARIANTS_MAP)} />
 
-// Clases: cada componente tiene su propio key
-<div className={dyn.v3.class("movie-card", "")} />  // key: "movie-card"
-<button className={dyn.v3.class("primary-btn", "")} /> // key: "primary-btn"
+// Clases: usando diccionario global
+<button className={dyn.v3.getVariant("button", CLASS_VARIANTS_MAP)} />
 
-// Textos: cada componente tiene su propio key
-<label>{dyn.v3.text("first_name", "First Name")}</label>  // key: "first_name"
-<button>{dyn.v3.text("submit", "Submit")}</button>         // key: "submit"
+// Textos: busca automáticamente en TEXT_VARIANTS_MAP
+<label>{dyn.v3.getVariant("search_placeholder", undefined, "Search...")}</label>
+
+// Textos locales: usando diccionario del componente
+<h3>{dyn.v3.getVariant("feature_1_title", dynamicV3TextVariants)}</h3>
 ```
-
-Internamente:
-1. `dyn.v3.id("movie-card")` → `pickVariant(seed, "movie-card", variants.length)` → Selecciona ID del JSON
-2. `dyn.v3.class("button", "")` → `pickVariant(seed, "button", variants.length)` → Selecciona clase del JSON
-3. `dyn.v3.text("view_details", "...")` → `pickVariant(seed, "view_details", VARIANT_COUNT)` → Selecciona texto del JSON
 
 ## 🚀 Uso
 
 ### Hook Principal (Recomendado)
 
 ```typescript
-import { useDynamic } from "@/dynamic/shared";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 
 function MyComponent() {
-  const dyn = useDynamic();
+  const dyn = useDynamicSystem();
+  
+  // Variantes locales (solo para este componente)
+  const dynamicV3IdsVariants: Record<string, string[]> = {
+    "section": ["hero-section", "main-hero", "primary-hero"],
+  };
+  
+  const dynamicV3TextVariants: Record<string, string[]> = {
+    "title": ["Welcome", "Bienvenido", "Hello"],
+  };
   
   return (
     <>
       {/* V1: Wrappers específicos para este componente */}
-      {dyn.v1.wrap("my-component", (
+      {dyn.v1.addWrapDecoy("my-component", (
         <div 
-          id={dyn.v3.id("my-component")}  // V3: ID específico
-          className={dyn.v3.class("my-component", "")}  // V3: Clase específica
+          id={dyn.v3.getVariant("section", dynamicV3IdsVariants)}  // IDs locales
+          className={dyn.v3.getVariant("button", CLASS_VARIANTS_MAP)}  // Clases globales
         >
-          <button
-            id={dyn.v3.id("my-button")}  // V3: ID específico del botón
-            className={dyn.v3.class("button", "")}  // V3: Clase específica
-          >
-            {dyn.v3.text("submit", "Submit")}  // V3: Texto específico
+          <h1>{dyn.v3.getVariant("title", dynamicV3TextVariants)}</h1>
+          <button>
+            {dyn.v3.getVariant("search_placeholder", undefined, "Search...")}  // Textos globales
           </button>
         </div>
       ))}
@@ -132,12 +121,14 @@ function MyComponent() {
 }
 ```
 
-### Uso Directo (Si se necesita)
+### Orden Dinámico
 
 ```typescript
-import { applyV1Wrapper } from "@/dynamic/v1";
-import { generateElementId, getTextForElement, getClassForElement } from "@/dynamic/v3";
-import { pickVariant, isV1Enabled, isV3Enabled } from "@/dynamic/shared";
+// Cambiar orden de elementos basado en seed
+const orderedItems = useMemo(() => {
+  const order = dyn.v1.changeOrderElements("my-items", items.length);
+  return order.map((idx) => items[idx]);
+}, [dyn.seed, items]);
 ```
 
 ## 📋 Reglas Importantes
@@ -146,29 +137,40 @@ import { pickVariant, isV1Enabled, isV3Enabled } from "@/dynamic/shared";
 
 ✅ **Correcto:**
 ```typescript
-dyn.v1.wrap("movie-card", ...)        // Key específico del componente
-dyn.v1.wrap("movie-card-button", ...) // Key específico del botón dentro del card
-dyn.v3.id("movie-card")               // Key específico
-dyn.v3.id("view-details-btn")         // Key específico del botón
+dyn.v1.addWrapDecoy("movie-card", ...)        // Key específico del componente
+dyn.v1.addWrapDecoy("movie-card-button", ...) // Key específico del botón dentro del card
+dyn.v3.getVariant("movie-card", ID_VARIANTS_MAP)  // Key específico
 ```
 
 ❌ **Incorrecto:**
 ```typescript
-dyn.v1.wrap("card", ...)  // Demasiado genérico, puede colisionar
-dyn.v3.id("button")       // Demasiado genérico, puede colisionar
+dyn.v1.addWrapDecoy("card", ...)  // Demasiado genérico, puede colisionar
+dyn.v3.getVariant("button", ID_VARIANTS_MAP)  // Demasiado genérico
 ```
 
-### 2. Todo usa `pickVariant(seed, key, count)`
+### 2. Organización de Variantes
 
-- **V1**: `pickVariant(seed, "movie-card-wrapper", wrapperVariants)`
-- **V3 IDs**: `pickVariant(seed, "movie-card", variants.length)`
-- **V3 Clases**: `pickVariant(seed, "button", variants.length)`
-- **V3 Textos**: `pickVariant(seed, "view_details", VARIANT_COUNT)`
+- **Globales** (en JSONs): Elementos que se reutilizan en múltiples componentes
+  - `id-variants.json`: IDs reutilizables
+  - `class-variants.json`: Clases reutilizables
+  - `text-variants.json`: Textos reutilizables
+
+- **Locales** (en componentes): Elementos específicos de un solo componente
+  ```typescript
+  const dynamicV3IdsVariants: Record<string, string[]> = {
+    "hero-section": ["hero", "main-hero", "primary-hero"],
+  };
+  ```
 
 ### 3. Funciona igual aunque estén OFF
 
 - **V1 OFF**: `dyn.v1.wrap()` devuelve children sin cambios
-- **V3 OFF**: `dyn.v3.text/id/class` devuelve valores por defecto
+- **V3 OFF**: `dyn.v3.getVariant()` devuelve fallback o key
+
+### 4. Seed = 1 siempre es la versión original
+
+- `seed=1` siempre devuelve la primera variante (índice 0)
+- Esto asegura que la versión "base" siempre sea la misma
 
 ## 🔧 Configuración
 
@@ -180,13 +182,13 @@ Controlados por variables de entorno:
 
 ### Archivos JSON de Variantes
 
-Los archivos JSON definen las variantes disponibles:
+Los archivos JSON definen las variantes disponibles (solo para elementos reutilizables):
 
-- **`v3/data/text-variants.json`**: Variantes de textos
+- **`v3/data/text-variants.json`**: Variantes de textos (formato key-based)
   ```json
   {
-    "1": { "view_details": "View detail", "submit": "Submit" },
-    "2": { "view_details": "See more", "submit": "Send" }
+    "search_placeholder": ["Search...", "Find...", "Look for..."],
+    "view_details": ["View Details", "See More", "More Info"]
   }
   ```
 
@@ -209,32 +211,35 @@ Los archivos JSON definen las variantes disponibles:
 ## 📝 Ejemplo Completo
 
 ```typescript
-import { useDynamic } from "@/dynamic/shared";
-import { cn } from "@/library/utils";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { generateDynamicOrder } from "@/dynamic/v1";
 
 export function MovieCard({ movie }: { movie: Movie }) {
-  const dyn = useDynamic();
+  const dyn = useDynamicSystem();
+  
+  // Variantes locales específicas de este componente
+  const dynamicV3IdsVariants: Record<string, string[]> = {
+    "card": ["movie-card", "film-card", "movie-tile"],
+  };
   
   return (
     <>
       {/* V1: Wrapper específico para el card */}
-      {dyn.v1.wrap("movie-card", (
+      {dyn.v1.addWrapDecoy("movie-card", (
         <div 
-          id={dyn.v3.id("movie-card")}  // V3: ID específico
-          className={cn(
-            "card-base",
-            dyn.v3.class("movie-card", "")  // V3: Clase específica
-          )}
+          id={dyn.v3.getVariant("card", dynamicV3IdsVariants)}  // ID local
+          className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP)}  // Clase global
         >
           <h3>{movie.title}</h3>
           
           {/* V1: Wrapper específico para el botón dentro del card */}
-          {dyn.v1.wrap("movie-card-button", (
+          {dyn.v1.addWrapDecoy("movie-card-button", (
             <button
-              id={dyn.v3.id("view-details-btn")}  // V3: ID específico del botón
-              className={dyn.v3.class("view-button", "")}  // V3: Clase específica
+              id={dyn.v3.getVariant("view-details-btn", ID_VARIANTS_MAP)}  // ID global
+              className={dyn.v3.getVariant("button", CLASS_VARIANTS_MAP)}  // Clase global
             >
-              {dyn.v3.text("view_details", "View detail")}  // V3: Texto específico
+              {dyn.v3.getVariant("view_details", undefined, "View Details")}  // Texto global
             </button>
           ))}
         </div>
@@ -246,29 +251,31 @@ export function MovieCard({ movie }: { movie: Movie }) {
 
 ## 🔍 Flujo de Ejecución
 
-1. **Componente llama a `useDynamic()`**
-   - Obtiene `seed` del contexto
-   - Calcula `v3Seed` si está disponible
+1. **Componente llama a `useDynamicSystem()`**
+   - Obtiene `seed` del contexto (que lo lee de la URL)
+   - El seed se pasa automáticamente a todas las funciones
 
-2. **V1: `dyn.v1.wrap("movie-card", children)`**
-   - `pickVariant(seed, "movie-card-wrapper", 2)` → Decide wrapper
-   - `pickVariant(seed, "movie-card-decoy", 3)` → Decide decoy
+2. **V1: `dyn.v1.addWrapDecoy("movie-card", children)`**
+   - `selectVariantIndex(seed, "movie-card-wrapper", 2)` → Decide wrapper
+   - `selectVariantIndex(seed, "movie-card-decoy", 3)` → Decide decoy
    - Aplica wrappers/decoy si V1 está habilitado
 
-3. **V3: `dyn.v3.id("movie-card")`**
-   - `pickVariant(v3Seed, "movie-card", variants.length)` → Selecciona índice
-   - Busca en `id-variants.json` el ID correspondiente
-   - Devuelve el ID seleccionado
+3. **V3: `dyn.v3.getVariant("movie-card", ID_VARIANTS_MAP)`**
+   - Busca primero en el diccionario proporcionado (si existe)
+   - Si no, busca en `ID_VARIANTS_MAP`, `CLASS_VARIANTS_MAP`, o `TEXT_VARIANTS_MAP`
+   - `selectVariantIndex(seed, "movie-card", variants.length)` → Selecciona índice
+   - Devuelve la variante seleccionada (o fallback si no existe)
 
-4. **V3: `dyn.v3.text("view_details", "View detail")`**
-   - `pickVariant(v3Seed, "view_details", VARIANT_COUNT)` → Selecciona variante
-   - Busca en `text-variants.json` el texto correspondiente
-   - Devuelve el texto o fallback si no existe
+4. **V1: `dyn.v1.changeOrderElements("features", 4)`**
+   - Genera un orden dinámico basado en el seed
+   - `seed=1` siempre devuelve el orden original [0, 1, 2, 3]
+   - Otros seeds generan permutaciones determinísticas
 
 ## ✅ Ventajas
 
 - **Determinístico**: Mismo seed = mismas variantes
 - **Por componente**: Cada componente tiene variantes independientes
-- **Escalable**: Fácil añadir más variantes en los JSON
-- **Simple**: Todo centralizado en `useDynamic()`
+- **Organizado**: Globales en JSON, locales en componentes
+- **Escalable**: Fácil añadir más variantes
+- **Simple**: Una sola función `getVariant()` para todo
 - **Funciona OFF**: Si V1/V3 están deshabilitados, funciona igual

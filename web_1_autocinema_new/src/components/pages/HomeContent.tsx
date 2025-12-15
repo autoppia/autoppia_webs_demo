@@ -1,7 +1,6 @@
 "use client";
 
 import { Suspense, useMemo, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
 import { HeroSection } from "@/components/movies/HeroSection";
 import { SpotlightRow } from "@/components/movies/SpotlightRow";
@@ -13,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/library/utils";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { generateDynamicOrder } from "@/dynamic/shared/order-utils";
 import { useSeed } from "@/context/SeedContext";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 
@@ -102,9 +100,9 @@ export function HomeContent() {
   // Dynamic order for genres (only order, no V1 wrappers/decoys)
   const orderedGenres = useMemo(() => {
     if (popularGenres.length === 0) return [];
-    const order = generateDynamicOrder(seed, "genres", popularGenres.length);
+    const order = dyn.v1.changeOrderElements("genres", popularGenres.length);
     return order.map((idx) => popularGenres[idx]);
-  }, [popularGenres, seed]);
+  }, [popularGenres, dyn.seed]);
 
   // Calculate stats
   const stats = useMemo(() => {
@@ -148,9 +146,9 @@ export function HomeContent() {
   // Dynamic order for features
   const orderedFeatures = useMemo(() => {
     if (features.length === 0) return [];
-    const order = generateDynamicOrder(seed, "features", features.length);
+    const order = dyn.v1.changeOrderElements("features", features.length);
     return order.map((idx) => features[idx]);
-  }, [seed]);
+  }, [dyn.seed, features]);
 
   return (
     <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative">
@@ -165,7 +163,7 @@ export function HomeContent() {
       <main className="relative mx-auto w-full max-w-7xl px-6 py-16 sm:px-8 lg:px-12">
         <div className="space-y-20">
           {/* Enhanced Stats & Featured Section */}
-          {dyn.v1.wrap("home-main-section", (
+          {dyn.v1.addWrapDecoy("home-main-section", (
             <div className="relative">
               {/* Background effects */}
               <div className="absolute inset-0 bg-gradient-to-r from-secondary/10 via-transparent to-secondary/10 rounded-3xl blur-3xl" />
@@ -179,7 +177,7 @@ export function HomeContent() {
                 )}
               >
               {/* Header Section */}
-              {dyn.v1.wrap("home-header", (
+              {dyn.v1.addWrapDecoy("home-header", (
                 <div className="text-center mb-10">
                   <h2 id={dyn.v3.getVariant("home-title", ID_VARIANTS_MAP, "home-title")} className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4">
                     {dyn.v3.getVariant("app_title", dynamicV3TextVariants)}
@@ -191,7 +189,7 @@ export function HomeContent() {
               ))}
 
               {/* Search Bar */}
-              {dyn.v1.wrap("home-search-section", (
+              {dyn.v1.addWrapDecoy("home-search-section", (
                 <div className="mb-10 w-full">
                   <form
                     id={dyn.v3.getVariant("search-form", ID_VARIANTS_MAP, "search-form")}
@@ -204,7 +202,7 @@ export function HomeContent() {
                       handleSearchSubmit();
                     }}
                   >
-                    {dyn.v1.wrap("search-input-container", (
+                    {dyn.v1.addWrapDecoy("search-input-container", (
                       <div className="relative flex-1 w-full">
                         <Search
                           id={dyn.v3.getVariant("search-icon", ID_VARIANTS_MAP, "search-icon")}
@@ -288,14 +286,14 @@ export function HomeContent() {
 
                 // Generar orden dinámico usando la función genérica
                 // count = 4 (Movies, Genres, Rating, Duration)
-                const order = generateDynamicOrder(seed, "stats-cards", statsCards.length);
+                const order = dyn.v1.changeOrderElements("stats-cards", statsCards.length);
                 const orderedCards = order.map(i => statsCards[i]);
 
                 return (
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
                     {orderedCards.map((card, index) => {
                       const IconComponent = card.icon;
-                      return dyn.v1.wrap(card.key, (
+                      return dyn.v1.addWrapDecoy(card.key, (
                         <div
                           key={`${card.key}-${index}`}
                           id={dyn.v3.getVariant(card.id, ID_VARIANTS_MAP, card.id)}
@@ -328,7 +326,7 @@ export function HomeContent() {
 
               {/* Featured Movies */}
               <div>
-                {dyn.v1.wrap("home-featured-header", (
+                {dyn.v1.addWrapDecoy("home-featured-header", (
                   <div className="flex items-center gap-3 mb-6">
                     <div
                       id={dyn.v3.getVariant("featured-header-icon-container", ID_VARIANTS_MAP, "featured-header-icon-container")}
@@ -358,11 +356,11 @@ export function HomeContent() {
                     
                     // Generar orden dinámico usando la función genérica
                     // count = 3 (3 películas)
-                    const order = generateDynamicOrder(seed, "featured-movies", moviesToShow.length);
+                    const order = dyn.v1.changeOrderElements("featured-movies", moviesToShow.length);
                     const orderedMovies = order.map(i => ({ movie: moviesToShow[i], originalIndex: i }));
 
                     return orderedMovies.map(({ movie, originalIndex }, displayIndex) => (
-                      dyn.v1.wrap(`featured-movie-${originalIndex}`, (
+                      dyn.v1.addWrapDecoy(`featured-movie-${originalIndex}`, (
                         <div
                           key={movie.id}
                           id={dyn.v3.getVariant(displayIndex > 0 ? `featured-movie-card-${displayIndex}` : "featured-movie-card", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-movie-card-${displayIndex}` : "featured-movie-card")}
@@ -388,9 +386,9 @@ export function HomeContent() {
                           {/* Content overlay */}
                           <div className="absolute inset-0 flex flex-col justify-end p-6 lg:p-8">
                             {/* Badges */}
-                            {dyn.v1.wrap(`featured-movie-badges-${originalIndex}`, (
+                            {dyn.v1.addWrapDecoy(`featured-movie-badges-${originalIndex}`, (
                               <div className="flex items-center gap-2 mb-3 flex-wrap">
-                                {dyn.v1.wrap(`featured-movie-genre-badge-${originalIndex}`, (
+                                {dyn.v1.addWrapDecoy(`featured-movie-genre-badge-${originalIndex}`, (
                                   <span
                                     id={dyn.v3.getVariant(displayIndex > 0 ? `featured-movie-genre-${displayIndex}` : "featured-movie-genre", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-movie-genre-${displayIndex}` : "featured-movie-genre")}
                                     className={cn(
@@ -401,7 +399,7 @@ export function HomeContent() {
                                     {movie.genres[0] || "Cinematic"}
                                   </span>
                                 ))}
-                                {dyn.v1.wrap(`featured-movie-rating-badge-${originalIndex}`, (
+                                {dyn.v1.addWrapDecoy(`featured-movie-rating-badge-${originalIndex}`, (
                                   <div
                                     id={dyn.v3.getVariant(displayIndex > 0 ? `featured-movie-rating-${displayIndex}` : "featured-movie-rating", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-movie-rating-${displayIndex}` : "featured-movie-rating")}
                                     className={cn(
@@ -522,11 +520,11 @@ export function HomeContent() {
           </div>
 
           {/* Features Section */}
-          {dyn.v1.wrap("home-features-section", (
+          {dyn.v1.addWrapDecoy("home-features-section", (
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-secondary/5 via-transparent to-secondary/5 rounded-3xl" />
               <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 md:p-12 backdrop-blur-sm">
-                {dyn.v1.wrap("home-features-header", (
+                {dyn.v1.addWrapDecoy("home-features-header", (
                   <div className="text-center mb-12">
                     <h2 id={dyn.v3.getVariant("features-title", ID_VARIANTS_MAP, "features-title")} className="text-4xl md:text-5xl font-bold text-white mb-4">
                       {dyn.v3.getVariant("why_choose", dynamicV3TextVariants)}
@@ -541,7 +539,7 @@ export function HomeContent() {
                 ))}
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                   {orderedFeatures.map((feature, displayIndex) => (
-                    dyn.v1.wrap(`feature-card-${displayIndex}`, (
+                    dyn.v1.addWrapDecoy(`feature-card-${displayIndex}`, (
                       <div
                         key={feature.key}
                         id={dyn.v3.getVariant(displayIndex > 0 ? `feature-card-${displayIndex}` : "feature-card", ID_VARIANTS_MAP, displayIndex > 0 ? `feature-card-${displayIndex}` : "feature-card")}
@@ -596,7 +594,7 @@ export function HomeContent() {
           </div>
 
           {/* CTA Section */}
-          {dyn.v1.wrap("home-cta-section", (
+          {dyn.v1.addWrapDecoy("home-cta-section", (
             <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-secondary/20 via-secondary/10 to-transparent p-12 text-center backdrop-blur-sm overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.2),transparent_70%)]" />
               <div className="relative">

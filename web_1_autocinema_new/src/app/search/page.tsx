@@ -21,7 +21,6 @@ import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { cn } from "@/library/utils";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { useSeed } from "@/context/SeedContext";
-import { generateDynamicOrder } from "@/dynamic/shared/order-utils";
 
 const MOVIES_PER_PAGE = 9;
 
@@ -389,21 +388,21 @@ function SearchContent() {
               },
             ];
 
-            const order = generateDynamicOrder(seed, "search-stats-cards", statsCards.length);
+            const order = dyn.v1.changeOrderElements("search-stats-cards", statsCards.length);
             const orderedCards = order.map(i => statsCards[i]);
 
             return (
-              <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-4">
                 {orderedCards.map((card, index) => {
                   const IconComponent = card.icon;
                   return (
                     <div key={card.key} className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-                      <div className="flex items-center gap-2 text-white/60 mb-1">
+                <div className="flex items-center gap-2 text-white/60 mb-1">
                         <IconComponent className="h-4 w-4" />
                         <span className="text-xs font-semibold uppercase">{card.label}</span>
-                      </div>
+                </div>
                       <div className="text-2xl font-bold text-white">{card.value}</div>
-                    </div>
+              </div>
                   );
                 })}
               </div>

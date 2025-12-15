@@ -56,7 +56,7 @@ export function HeroSection({
 
   return (
     <>
-      {dyn.v1.wrap("hero-section", (
+      {dyn.v1.addWrapDecoy("hero-section", (
         <section
           id={dyn.v3.getVariant("section", dynamicV3IdsVariants)}
           className={cn(
@@ -137,7 +137,7 @@ export function HeroSection({
 
             {/* Right side - Featured movies showcase */}
             <div className="lg:col-span-7 xl:col-span-8">
-              {dyn.v1.wrap("hero-featured-header", (
+              {dyn.v1.addWrapDecoy("hero-featured-header", (
                 <div className="flex items-center gap-3 mb-8">
                   <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-secondary/20">
                     <TrendingUp className="h-5 w-5 text-secondary" />

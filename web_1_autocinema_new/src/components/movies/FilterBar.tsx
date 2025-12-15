@@ -2,8 +2,7 @@
 
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { useSeed } from "@/context/SeedContext";
-import { generateDynamicOrder } from "@/dynamic/shared/order-utils";
+import { useDynamicSystem } from "@/dynamic/shared";
 
 interface FilterBarProps {
   genres: string[];
@@ -26,49 +25,49 @@ export function FilterBar({
   onClear,
   totalResults,
 }: FilterBarProps) {
-  const { seed } = useSeed();
+  const dyn = useDynamicSystem();
 
   // Dynamic order for filter dropdowns (All genres and All years)
   const filterOrder = useMemo(() => {
-    return generateDynamicOrder(seed, "filter-dropdowns", 2);
-  }, [seed]);
+    return dyn.v1.changeOrderElements("filter-dropdowns", 2);
+  }, [dyn.seed]);
 
   // Create filter elements array
   const filterElements = useMemo(() => [
     {
       key: "genre",
       element: (
-        <select
+          <select
           key="genre"
-          value={selectedGenre}
-          onChange={(event) => onGenreChange(event.target.value)}
-          className="h-12 min-w-[160px] rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary hover:bg-white/15 cursor-pointer"
-        >
-          <option value="" className="bg-neutral-900 text-white">All genres</option>
-          {genres.map((genre) => (
-            <option key={genre} value={genre} className="bg-neutral-900 text-white">
-              {genre}
-            </option>
-          ))}
-        </select>
+            value={selectedGenre}
+            onChange={(event) => onGenreChange(event.target.value)}
+            className="h-12 min-w-[160px] rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary hover:bg-white/15 cursor-pointer"
+          >
+            <option value="" className="bg-neutral-900 text-white">All genres</option>
+            {genres.map((genre) => (
+              <option key={genre} value={genre} className="bg-neutral-900 text-white">
+                {genre}
+              </option>
+            ))}
+          </select>
       ),
     },
     {
       key: "year",
       element: (
-        <select
+          <select
           key="year"
-          value={selectedYear}
-          onChange={(event) => onYearChange(event.target.value)}
-          className="h-12 min-w-[160px] rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary hover:bg-white/15 cursor-pointer"
-        >
-          <option value="" className="bg-neutral-900 text-white">All years</option>
-          {years.map((year) => (
-            <option key={year} value={year} className="bg-neutral-900 text-white">
-              {year}
-            </option>
-          ))}
-        </select>
+            value={selectedYear}
+            onChange={(event) => onYearChange(event.target.value)}
+            className="h-12 min-w-[160px] rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary hover:bg-white/15 cursor-pointer"
+          >
+            <option value="" className="bg-neutral-900 text-white">All years</option>
+            {years.map((year) => (
+              <option key={year} value={year} className="bg-neutral-900 text-white">
+                {year}
+              </option>
+            ))}
+          </select>
       ),
     },
   ], [selectedGenre, selectedYear, onGenreChange, onYearChange, genres, years]);

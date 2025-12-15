@@ -8,7 +8,6 @@ export {
   getAvailableGenres,
   getAvailableYears,
   searchMovies,
-  isDynamicModeEnabled,
 } from "./data-provider";
 export type { MovieSearchFilters } from "./data-provider";
 

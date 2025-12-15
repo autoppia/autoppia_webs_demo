@@ -13,7 +13,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
     
     return (
       <>
-        {dyn.v1.wrap("input", (
+        {dyn.v1.addWrapDecoy("input", (
           <input
             id={dynamicId}
             type={type}
