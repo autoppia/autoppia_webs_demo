@@ -34,11 +34,11 @@ export function FilterBar({
           <select
             value={selectedGenre}
             onChange={(event) => onGenreChange(event.target.value)}
-            className="h-12 min-w-[160px] rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary hover:bg-white/15"
+            className="h-12 min-w-[160px] rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary hover:bg-white/15 cursor-pointer"
           >
-            <option value="">All genres</option>
+            <option value="" className="bg-neutral-900 text-white">All genres</option>
             {genres.map((genre) => (
-              <option key={genre} value={genre}>
+              <option key={genre} value={genre} className="bg-neutral-900 text-white">
                 {genre}
               </option>
             ))}
@@ -46,11 +46,11 @@ export function FilterBar({
           <select
             value={selectedYear}
             onChange={(event) => onYearChange(event.target.value)}
-            className="h-12 min-w-[160px] rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary hover:bg-white/15"
+            className="h-12 min-w-[160px] rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary hover:bg-white/15 cursor-pointer"
           >
-            <option value="">All years</option>
+            <option value="" className="bg-neutral-900 text-white">All years</option>
             {years.map((year) => (
-              <option key={year} value={year}>
+              <option key={year} value={year} className="bg-neutral-900 text-white">
                 {year}
               </option>
             ))}
