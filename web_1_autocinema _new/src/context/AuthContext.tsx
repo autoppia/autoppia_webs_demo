@@ -16,6 +16,8 @@ interface AuthContextValue {
   login: (username: string, password: string) => Promise<void>;
   register: (input: RegisterInput) => Promise<void>;
   logout: () => void;
+  addAllowedMovie: (movieId: string) => void;
+  removeAllowedMovie: (movieId: string) => void;
 }
 
 interface RegisterInput {
@@ -220,6 +222,110 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem(STORAGE_KEY);
   }, [currentUser]);
 
+  const addAllowedMovie = useCallback(
+    (movieId: string) => {
+      if (!currentUser) return;
+      
+      // Check if movie is already in the list
+      if (currentUser.allowedMovies.includes(movieId)) {
+        return;
+      }
+
+      // Update current user
+      const updatedUser: AuthUser = {
+        ...currentUser,
+        allowedMovies: [...currentUser.allowedMovies, movieId],
+      };
+      
+      // Update state and localStorage
+      setCurrentUser(updatedUser);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
+
+      // Update custom users if this is a custom user
+      const customUsers = loadCustomUsers();
+      const customUserIndex = customUsers.findIndex(
+        (user) => user.username.toLowerCase() === currentUser.username.toLowerCase()
+      );
+      
+      if (customUserIndex !== -1) {
+        const updatedCustomUsers = [...customUsers];
+        updatedCustomUsers[customUserIndex] = {
+          ...updatedCustomUsers[customUserIndex],
+          allowedMovies: updatedUser.allowedMovies,
+        };
+        saveCustomUsers(updatedCustomUsers);
+        persistCustomUsers(updatedCustomUsers);
+        setCustomUsers((prev) => {
+          const index = prev.findIndex(
+            (user) => user.username.toLowerCase() === currentUser.username.toLowerCase()
+          );
+          if (index !== -1) {
+            const updated = [...prev];
+            updated[index] = {
+              ...updated[index],
+              allowedMovies: updatedUser.allowedMovies,
+            };
+            return updated;
+          }
+          return prev;
+        });
+      }
+    },
+    [currentUser]
+  );
+
+  const removeAllowedMovie = useCallback(
+    (movieId: string) => {
+      if (!currentUser) return;
+      
+      // Check if movie is in the list
+      if (!currentUser.allowedMovies.includes(movieId)) {
+        return;
+      }
+
+      // Update current user
+      const updatedUser: AuthUser = {
+        ...currentUser,
+        allowedMovies: currentUser.allowedMovies.filter((id) => id !== movieId),
+      };
+      
+      // Update state and localStorage
+      setCurrentUser(updatedUser);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
+
+      // Update custom users if this is a custom user
+      const customUsers = loadCustomUsers();
+      const customUserIndex = customUsers.findIndex(
+        (user) => user.username.toLowerCase() === currentUser.username.toLowerCase()
+      );
+      
+      if (customUserIndex !== -1) {
+        const updatedCustomUsers = [...customUsers];
+        updatedCustomUsers[customUserIndex] = {
+          ...updatedCustomUsers[customUserIndex],
+          allowedMovies: updatedUser.allowedMovies,
+        };
+        saveCustomUsers(updatedCustomUsers);
+        persistCustomUsers(updatedCustomUsers);
+        setCustomUsers((prev) => {
+          const index = prev.findIndex(
+            (user) => user.username.toLowerCase() === currentUser.username.toLowerCase()
+          );
+          if (index !== -1) {
+            const updated = [...prev];
+            updated[index] = {
+              ...updated[index],
+              allowedMovies: updatedUser.allowedMovies,
+            };
+            return updated;
+          }
+          return prev;
+        });
+      }
+    },
+    [currentUser]
+  );
+
   const value = useMemo(
     () => ({
       currentUser,
@@ -227,8 +333,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       login,
       register,
       logout,
+      addAllowedMovie,
+      removeAllowedMovie,
     }),
-    [currentUser, login, logout, register]
+    [currentUser, login, logout, register, addAllowedMovie, removeAllowedMovie]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
