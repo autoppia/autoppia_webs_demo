@@ -81,7 +81,7 @@ function resolveSeedsLocal(baseSeed: number, enabledFlags?: { v1: boolean; v2: b
     v3: null,
   };
   if (flags.v1) {
-    resolved.v1 = ((safeSeed * 37 + 11) % 10) + 1;
+    resolved.v1 = ((safeSeed * 29 + 7) % 300) + 1;
   }
   if (flags.v2) {
     resolved.v2 = ((safeSeed * 53 + 17) % 300) + 1;

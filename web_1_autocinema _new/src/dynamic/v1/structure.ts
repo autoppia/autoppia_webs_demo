@@ -8,7 +8,7 @@
  */
 
 import type { ReactNode } from "react";
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import { pickVariant, generateId } from "../shared/core";
 import { isV1Enabled } from "../shared/flags";
 
@@ -50,7 +50,7 @@ export function applyV1Wrapper(
 ): ReactNode {
   // Si V1 no está habilitado, devolver sin cambios (funciona igual)
   if (!isV1Enabled()) {
-    return <Fragment key={reactKey}>{children}</Fragment>;
+    return children;
   }
 
   // Opciones por defecto
@@ -66,44 +66,50 @@ export function applyV1Wrapper(
   const shouldWrap = wrapperVariant > 0;
   
   // Aplicar wrapper si es necesario
-  const core = shouldWrap ? (
-    <span data-dyn-wrap={componentKey} data-v1="true" data-wrapper-variant={wrapperVariant}>
-      {children}
-    </span>
-  ) : (
-    children
-  );
+  const core = shouldWrap
+    ? React.createElement(
+        "span",
+        {
+          "data-dyn-wrap": componentKey,
+          "data-v1": "true",
+          "data-wrapper-variant": wrapperVariant,
+        },
+        children
+      )
+    : children;
 
   // Crear decoy según la variante (0=none, 1=before, 2=after, etc.)
   const decoy =
-    decoyVariant === 0 ? null : (
-      <span
-        data-decoy={generateId(seed, `${componentKey}-decoy`, "decoy")}
-        className="hidden"
-        aria-hidden="true"
-        data-v1="true"
-        data-decoy-variant={decoyVariant}
-      />
-    );
+    decoyVariant === 0
+      ? null
+      : React.createElement("span", {
+          "data-decoy": generateId(seed, `${componentKey}-decoy`, "decoy"),
+          className: "hidden",
+          "aria-hidden": "true",
+          "data-v1": "true",
+          "data-decoy-variant": decoyVariant,
+        });
 
   // Retornar según posición del decoy
+  const fragmentKey = reactKey ?? generateId(seed, componentKey, "wrap");
+  
   if (decoyVariant === 1) {
-    return (
-      <Fragment key={reactKey ?? generateId(seed, componentKey, "wrap")}>
-        {decoy}
-        {core}
-      </Fragment>
+    return React.createElement(
+      Fragment,
+      { key: fragmentKey },
+      decoy,
+      core
     );
   }
   
   if (decoyVariant >= 2) {
-    return (
-      <Fragment key={reactKey ?? generateId(seed, componentKey, "wrap")}>
-        {core}
-        {decoy}
-      </Fragment>
+    return React.createElement(
+      Fragment,
+      { key: fragmentKey },
+      core,
+      decoy
     );
   }
   
-  return <Fragment key={reactKey ?? generateId(seed, componentKey, "wrap")}>{core}</Fragment>;
+  return React.createElement(Fragment, { key: fragmentKey }, core);
 }

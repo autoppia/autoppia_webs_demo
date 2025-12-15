@@ -143,12 +143,16 @@ let moviesCache: Movie[] = [];
 
 export async function initializeMovies(v2SeedValue?: number | null, limit = 300): Promise<Movie[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
+  
+  // If v2 DB mode is disabled, always load from local JSON
   if (!dbModeEnabled) {
+    console.log("[autocinema] v2 DB mode disabled, loading from local JSON");
     moviesCache = (fallbackMovies as DatasetMovie[]).map(normalizeMovie);
     return moviesCache;
   }
+  // Wait a bit for SeedContext to sync v2Seed to window if needed
   if (dbModeEnabled && typeof window !== "undefined" && v2SeedValue == null) {
-    await new Promise((resolve) => setTimeout(resolve, 75));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
   const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
 
@@ -162,17 +166,24 @@ export async function initializeMovies(v2SeedValue?: number | null, limit = 300)
       filterKey: "category",
     });
 
-    if (!Array.isArray(movies) || movies.length === 0) {
-      throw new Error(`[autocinema] No movies returned from dataset (seed=${effectiveSeed})`);
+    if (Array.isArray(movies) && movies.length > 0) {
+      console.log(
+        `[autocinema] Loaded ${movies.length} movies from dataset (seed=${effectiveSeed})`
+      );
+      moviesCache = movies.map(normalizeMovie);
+      return moviesCache;
     }
 
-    moviesCache = movies.map(normalizeMovie);
-    return moviesCache;
+    // If no movies returned from backend, fallback to local JSON (no error, just fallback)
+    console.warn(`[autocinema] No movies returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
   } catch (error) {
-    console.warn("[autocinema] Falling back to static movies:", error);
-    moviesCache = (fallbackMovies as DatasetMovie[]).map(normalizeMovie);
-    return moviesCache;
+    // If backend fails, fallback to local JSON (no error, just fallback)
+    console.warn("[autocinema] Backend unavailable, falling back to local JSON:", error);
   }
+
+  // Fallback to local JSON
+  moviesCache = (fallbackMovies as DatasetMovie[]).map(normalizeMovie);
+  return moviesCache;
 }
 
 export const getCachedMovies = () => moviesCache;
