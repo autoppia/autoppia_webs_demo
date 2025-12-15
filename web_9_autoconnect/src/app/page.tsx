@@ -20,8 +20,10 @@ import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import {
   loadHiddenPostIds,
+  loadHiddenPosts,
   loadSavedPosts,
   persistHiddenPostIds,
+  persistHiddenPosts,
   persistSavedPosts,
 } from "@/library/localState";
 import Link from "next/link";
@@ -43,11 +45,13 @@ function HomeContent() {
   );
   const [savedPosts, setSavedPosts] = useState<PostType[]>([]);
   const [hiddenPostIds, setHiddenPostIds] = useState<Set<string>>(new Set());
+  const [hiddenPosts, setHiddenPosts] = useState<PostType[]>([]);
   const [newPost, setNewPost] = useState("");
 
   useEffect(() => {
     setSavedPosts(loadSavedPosts());
     setHiddenPostIds(loadHiddenPostIds());
+    setHiddenPosts(loadHiddenPosts());
   }, []);
 
   useEffect(() => {
@@ -56,7 +60,8 @@ function HomeContent() {
 
   useEffect(() => {
     persistHiddenPostIds(hiddenPostIds);
-  }, [hiddenPostIds]);
+    persistHiddenPosts(hiddenPosts);
+  }, [hiddenPostIds, hiddenPosts]);
 
   function handleSubmitPost(e: React.FormEvent) {
     e.preventDefault();
@@ -201,6 +206,13 @@ function HomeContent() {
                   setHiddenPostIds((prev) => {
                     const next = new Set(prev);
                     next.add(postId);
+                    const found = posts.find((p) => p.id === postId);
+                    if (found) {
+                      setHiddenPosts((hp) => {
+                        const filtered = hp.filter((p) => p.id !== postId);
+                        return [found, ...filtered];
+                      });
+                    }
                     return next;
                   })
                 }

@@ -15,8 +15,10 @@ import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import {
   loadHiddenPostIds,
+  loadHiddenPosts,
   loadSavedPosts,
   persistHiddenPostIds,
+  persistHiddenPosts,
   persistSavedPosts,
 } from "@/library/localState";
 
@@ -49,9 +51,13 @@ function ProfileContent({ username }: { username: string }) {
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [isEditingProfileHeader, setIsEditingProfileHeader] = useState(false);
   const [isEditingExperience, setIsEditingExperience] = useState(false);
+  const [experienceBackup, setExperienceBackup] = useState<ExperienceEntry[] | null>(null);
+  const [isAddingExperience, setIsAddingExperience] = useState(false);
+  const [addedExperienceIndex, setAddedExperienceIndex] = useState<number | null>(null);
   const [newPostContent, setNewPostContent] = useState("");
   const [savedPosts, setSavedPosts] = useState<Post[]>([]);
   const [hiddenPostIds, setHiddenPostIds] = useState<Set<string>>(new Set());
+  const [hiddenPosts, setHiddenPosts] = useState<Post[]>([]);
 
   // Load saved about/name/bio/title/experience from localStorage
   useEffect(() => {
@@ -82,6 +88,7 @@ function ProfileContent({ username }: { username: string }) {
   useEffect(() => {
     setSavedPosts(loadSavedPosts());
     setHiddenPostIds(loadHiddenPostIds());
+    setHiddenPosts(loadHiddenPosts());
   }, []);
 
   useEffect(() => {
@@ -90,7 +97,8 @@ function ProfileContent({ username }: { username: string }) {
 
   useEffect(() => {
     persistHiddenPostIds(hiddenPostIds);
-  }, [hiddenPostIds]);
+    persistHiddenPosts(hiddenPosts);
+  }, [hiddenPostIds, hiddenPosts]);
 
   // Load saved posts from localStorage
   const getLocalPosts = (): Post[] => {
@@ -270,6 +278,7 @@ function ProfileContent({ username }: { username: string }) {
       JSON.stringify(experience)
     );
     setIsEditingExperience(false);
+    setExperienceBackup(null);
     logEvent(EVENT_TYPES.EDIT_EXPERIENCE, {
       username: user.username,
       name: user.name,
@@ -277,21 +286,46 @@ function ProfileContent({ username }: { username: string }) {
       roles: experience.map((exp) => exp?.title),
       experiences: experience,
     });
+    if (addedExperienceIndex !== null && experience[addedExperienceIndex]) {
+      const newExp = experience[addedExperienceIndex];
+      logEvent(EVENT_TYPES.ADD_EXPERIENCE, {
+        username: user.username,
+        name: user.name,
+        experience: newExp,
+        experienceCount: experience.length,
+      });
+    }
+    setIsAddingExperience(false);
+    setAddedExperienceIndex(null);
+  };
+
+  const handleCancelExperience = () => {
+    if (experienceBackup) {
+      setExperience(experienceBackup);
+    }
+    setIsEditingExperience(false);
+    setExperienceBackup(null);
+    setIsAddingExperience(false);
+    setAddedExperienceIndex(null);
   };
 
   const handleAddExperience = () => {
-    setExperience((prev) => {
-      const sample: ExperienceEntry = {
-        title: "Full Stack Developer",
-        company: "Stripe",
-        logo: "/media/avatars/default-avatar.jpg",
-        duration: "Jun 2020 - Present • 4 yrs 6 mos",
-        location: "San Francisco, CA",
-        description:
-          "Developing payment processing APIs and dashboard interfaces. Building scalable backend services and frontend applications using React and Node.js.",
-      };
-      return [...prev, sample];
-    });
+    if (!isEditingExperience) {
+      setExperienceBackup(experience.map((e) => ({ ...e })));
+    }
+    setExperience((prev) => [
+      ...prev,
+      {
+        title: "",
+        company: "",
+        logo: "",
+        duration: "",
+        location: "",
+        description: "",
+      },
+    ]);
+    setIsAddingExperience(true);
+    setAddedExperienceIndex(experience.length);
     setIsEditingExperience(true);
   };
 
@@ -556,6 +590,7 @@ function ProfileContent({ username }: { username: string }) {
               if (isEditingExperience) {
                 handleSaveExperience();
               } else {
+                setExperienceBackup(experience.map((e) => ({ ...e })));
                 setIsEditingExperience(true);
               }
             }}
@@ -587,30 +622,38 @@ function ProfileContent({ username }: { username: string }) {
                   }}
                 />
               </div>
-              <div className="flex-1 space-y-2">
-                {isEditingExperience ? (
-                  <>
-                    <input
-                      value={exp.title}
-                      onChange={(e) =>
+        <div className="flex-1 space-y-2">
+          {isEditingExperience ? (
+            <>
+              <input
+                value={exp.title}
+                onChange={(e) =>
                         updateExperienceField(i, "title", e.target.value)
                       }
                       className="w-full border rounded px-3 py-2 text-sm"
                       placeholder="Title"
                     />
-                    <input
-                      value={exp.company}
-                      onChange={(e) =>
-                        updateExperienceField(i, "company", e.target.value)
-                      }
-                      className="w-full border rounded px-3 py-2 text-sm"
-                      placeholder="Company"
-                    />
-                    <input
-                      value={exp.duration}
-                      onChange={(e) =>
-                        updateExperienceField(i, "duration", e.target.value)
-                      }
+              <input
+                value={exp.company}
+                onChange={(e) =>
+                  updateExperienceField(i, "company", e.target.value)
+                }
+                className="w-full border rounded px-3 py-2 text-sm"
+                placeholder="Company"
+              />
+              <input
+                value={exp.logo}
+                onChange={(e) =>
+                  updateExperienceField(i, "logo", e.target.value)
+                }
+                className="w-full border rounded px-3 py-2 text-sm"
+                placeholder="Logo URL (optional)"
+              />
+              <input
+                value={exp.duration}
+                onChange={(e) =>
+                  updateExperienceField(i, "duration", e.target.value)
+                }
                       className="w-full border rounded px-3 py-2 text-sm"
                       placeholder="Duration"
                     />
@@ -634,25 +677,41 @@ function ProfileContent({ username }: { username: string }) {
                 ) : (
                   <>
                     <div className="font-bold text-lg text-gray-900 mb-1">
-                      {exp.title}
+                      {exp.title || "New experience"}
                     </div>
                     <div className="font-semibold text-blue-700 text-base mb-2">
-                      {exp.company}
+                      {exp.company || "Company"}
                     </div>
                     <div className="text-sm text-gray-600 mb-1">
-                      {exp.duration}
+                      {exp.duration || "Duration"}
                     </div>
                     <div className="text-sm text-gray-600 mb-3">
-                      {exp.location}
+                      {exp.location || "Location"}
                     </div>
                     <div className="text-gray-700 text-sm leading-relaxed">
-                      {exp.description}
+                      {exp.description || "No description provided."}
                     </div>
                   </>
                 )}
               </div>
             </div>
           ))}
+        </div>
+      )}
+      {isSelf && isEditingExperience && (
+        <div className="flex items-center justify-end gap-3 mt-4">
+          <button
+            onClick={handleCancelExperience}
+            className="px-4 py-2 rounded border border-gray-300 text-sm text-gray-700 hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSaveExperience}
+            className="px-4 py-2 rounded bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700"
+          >
+            Save experience
+          </button>
         </div>
       )}
       {isSelf && (
@@ -722,7 +781,16 @@ function ProfileContent({ username }: { username: string }) {
               onLike={handleLike}
               onAddComment={handleAddComment}
               onSave={handleSavePost}
-              onHide={handleHidePost}
+              onHide={(postId) => {
+                handleHidePost(postId);
+                const target = allPosts.find((p) => p.id === postId);
+                if (target) {
+                  setHiddenPosts((prev) => {
+                    const filtered = prev.filter((p) => p.id !== postId);
+                    return [target, ...filtered];
+                  });
+                }
+              }}
               onDelete={isSelf ? handleDeletePost : undefined}
             />
           ))

@@ -91,6 +91,16 @@ export default function LeftSidebar() {
         <span className="text-yellow-500">&#9734;</span>
         <span>Saved items</span>
       </Link>
+      <Link
+        href="/hidden"
+        className="mt-2 inline-flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:text-blue-600"
+        onClick={() =>
+          logEvent(EVENT_TYPES.VIEW_HIDDEN_POSTS, { source: "left_sidebar" })
+        }
+      >
+        <span className="text-gray-500">👁‍🗨</span>
+        <span>Hidden posts</span>
+      </Link>
 
       {/* Curioso: Estadísticas divertidas */}
       <div className="mt-4 pt-4 border-t">
