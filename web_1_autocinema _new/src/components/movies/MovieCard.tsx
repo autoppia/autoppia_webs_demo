@@ -17,12 +17,12 @@ export function MovieCard({ movie, onSelect }: MovieCardProps) {
         <div 
           id={dyn.v3.id("movie-card")}
           className={cn(
-            "flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-4 text-white shadow-xl backdrop-blur",
+            "group flex h-full flex-col rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-6 text-white shadow-xl backdrop-blur-sm transition-all duration-300 hover:border-secondary/50 hover:bg-white/15 hover:shadow-2xl hover:shadow-secondary/20 hover:-translate-y-2",
             dyn.v3.class("card", "")
           )}
         >
           <div
-            className="aspect-[2/3] w-full max-w-[200px] mx-auto rounded-xl bg-cover bg-center"
+            className="aspect-[2/3] w-full max-w-[220px] mx-auto rounded-2xl bg-cover bg-center overflow-hidden shadow-2xl transition-transform duration-500 group-hover:scale-105"
             style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.5)), url(${movie.poster}), url('/media/gallery/default_movie.png')` }}
             aria-label={`${movie.title} poster`}
           />
@@ -33,10 +33,10 @@ export function MovieCard({ movie, onSelect }: MovieCardProps) {
                 {movie.genres.slice(0, 2).join(" · ")} — {movie.year}
               </p>
             ))}
-            <h3 className="text-xl font-semibold leading-tight">
-              <SeedLink href={`/movies/${movie.id}`}>{movie.title}</SeedLink>
+            <h3 className="text-xl font-bold leading-tight group-hover:text-secondary transition-colors">
+              <SeedLink href={`/movies/${movie.id}`} className="hover:underline">{movie.title}</SeedLink>
             </h3>
-            <p className="flex-1 text-sm text-white/70">{movie.synopsis}</p>
+            <p className="flex-1 text-sm text-white/80 leading-relaxed">{movie.synopsis}</p>
             {dyn.v1.wrap("movie-tags", (
               <div className="flex flex-wrap gap-2 text-xs text-white/70">
                 <span className="rounded-full border border-white/15 px-3 py-1">{movie.duration}m</span>
@@ -49,7 +49,7 @@ export function MovieCard({ movie, onSelect }: MovieCardProps) {
               onClick={() => onSelect?.(movie)}
               id={dyn.v3.id("view-details-button")}
               className={cn(
-                "mt-2 inline-flex items-center justify-center rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-white transition hover:bg-white/20",
+                "mt-4 inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-secondary hover:text-black hover:border-secondary hover:scale-105 shadow-lg",
                 dyn.v3.class("button", "")
               )}
             >

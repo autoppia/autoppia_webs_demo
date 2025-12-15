@@ -7,10 +7,9 @@ import { useAuth } from "@/context/AuthContext";
 
 const NAV_LINKS = [
   { label: "Home", href: "/", preserveSeed: true },
-  { label: "Library", href: "#library", preserveSeed: false },
-  { label: "Genres", href: "#genres", preserveSeed: false },
-  { label: "About", href: "#about", preserveSeed: false },
-  { label: "Contact", href: "#contact", preserveSeed: false },
+  { label: "Search", href: "/search", preserveSeed: true },
+  { label: "About", href: "/about", preserveSeed: true },
+  { label: "Contact", href: "/contact", preserveSeed: true },
 ];
 
 export function Header() {
