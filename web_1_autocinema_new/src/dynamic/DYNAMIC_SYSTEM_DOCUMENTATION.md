@@ -31,8 +31,8 @@ V1 and V3 work independently and can be enabled/disabled via environment variabl
 ```
 src/dynamic/
   ├── v1/                    # V1: DOM structure (wrappers/decoy)
-  │   ├── structure.ts       # applyV1Wrapper function
-  │   ├── order-utils.ts     # generateDynamicOrder function
+  │   ├── add-wrap-decoy.ts  # applyV1Wrapper function
+  │   ├── change-order-elements.ts  # generateDynamicOrder function
   │   └── index.ts
   │
   ├── v2-data/               # V2: Data loading (separate system)

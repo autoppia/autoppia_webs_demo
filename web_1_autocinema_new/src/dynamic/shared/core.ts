@@ -8,10 +8,10 @@
 
 import { useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
-import { applyV1Wrapper } from "../v1/structure";
+import { applyV1Wrapper } from "../v1/add-wrap-decoy";
 import { isV3Enabled } from "./flags";
 import { getVariant, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "../v3/utils/variant-selector";
-import { generateDynamicOrder } from "../v1/order-utils";
+import { generateDynamicOrder } from "../v1/change-order-elements";
 import type { ReactNode } from "react";
 
 // ============================================================================

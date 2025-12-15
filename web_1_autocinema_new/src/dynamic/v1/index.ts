@@ -5,5 +5,5 @@
  * También proporciona orden dinámico de elementos.
  */
 
-export { applyV1Wrapper } from "./structure";
-export { generateDynamicOrder } from "./order-utils";
+export { applyV1Wrapper } from "./add-wrap-decoy";
+export { generateDynamicOrder } from "./change-order-elements";

@@ -7,7 +7,8 @@ Sistema centralizado para variantes dinámicas que rompen XPath (V1) y evitan me
 ```
 src/dynamic/
   ├── v1/              # V1: Wrappers y decoys (estructura DOM)
-  │   ├── structure.ts  # Aplicar wrappers y decoys
+  │   ├── add-wrap-decoy.ts  # Aplicar wrappers y decoys
+  │   ├── change-order-elements.ts # Generación de orden dinámico
   │   └── index.ts
   │
   ├── v2-data/          # V2: Data loading (ya funciona bien)
@@ -23,7 +24,6 @@ src/dynamic/
   ├── shared/           # Compartido entre V1 y V3
   │   ├── core.ts       # Funciones base + hook useDynamicSystem()
   │   ├── flags.ts      # Flags de habilitación (isV1Enabled, isV3Enabled)
-  │   ├── order-utils.ts # Generación de orden dinámico
   │   └── index.ts      # Export principal
   │
   └── index.ts          # Export principal
