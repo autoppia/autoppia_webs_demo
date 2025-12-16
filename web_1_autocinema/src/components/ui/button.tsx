@@ -3,6 +3,8 @@ import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/library/utils"
+import { useDynamicSystem } from "@/dynamic/shared"
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3"
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -41,14 +43,28 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, id, ...props }, ref) => {
+    const dyn = useDynamicSystem();
     const Comp = asChild ? Slot : "button"
+    
+    // V3: Dynamic ID and class
+    const dynamicId = id || dyn.v3.getVariant("button", ID_VARIANTS_MAP, "button");
+    const dynamicClass = dyn.v3.getVariant("button", CLASS_VARIANTS_MAP, "");
+    
     return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
+      <>
+        {dyn.v1.addWrapDecoy("button", (
+          <Comp
+            id={dynamicId}
+            className={cn(
+              buttonVariants({ variant, size, className }),
+              dynamicClass
+            )}
+            ref={ref}
+            {...props}
+          />
+        ))}
+      </>
     )
   }
 )

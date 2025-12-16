@@ -3,13 +3,13 @@
 import type React from "react";
 import { createContext, useContext, useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { resolveSeeds, resolveSeedsSync, clampBaseSeed, type ResolvedSeeds } from "@/shared/seed-resolver";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 
 interface SeedContextType {
   seed: number;
   setSeed: (seed: number) => void;
   getNavigationUrl: (path: string) => string;
-  resolvedSeeds: ResolvedSeeds;
+  isSeedReady: boolean; // Indicates whether the seed is synchronized with the URL
 }
 
 const DEFAULT_SEED = 1;
@@ -18,25 +18,10 @@ const SeedContext = createContext<SeedContextType>({
   seed: DEFAULT_SEED,
   setSeed: () => {},
   getNavigationUrl: (path: string) => path,
-  resolvedSeeds: resolveSeedsSync(DEFAULT_SEED),
+  isSeedReady: false,
 });
 
 const STORAGE_KEY = "autocinema_seed_base";
-
-const LAYOUT_MIRRORS: Record<number, number> = {
-  3: 6,
-};
-
-const applyLayoutOverrides = (baseSeed: number, seeds: ResolvedSeeds): ResolvedSeeds => {
-  const mirrorSeed = LAYOUT_MIRRORS[baseSeed];
-  if (!mirrorSeed) return seeds;
-  const mirroredSeeds = resolveSeedsSync(mirrorSeed);
-  const mirroredLayoutSeed = mirroredSeeds.v1 ?? mirrorSeed;
-  if (seeds.v1 === mirroredLayoutSeed) {
-    return seeds;
-  }
-  return { ...seeds, v1: mirroredLayoutSeed };
-};
 
 function SeedInitializer({ onSeedFromUrl }: { onSeedFromUrl: (seed: number | null) => void }) {
   const searchParams = useSearchParams();
@@ -54,41 +39,84 @@ function SeedInitializer({ onSeedFromUrl }: { onSeedFromUrl: (seed: number | nul
   return null;
 }
 
-export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
+export const SeedProvider = ({ 
+  children, 
+  initialSeed 
+}: { 
+  children: React.ReactNode;
+  initialSeed?: number; // Seed from Server Component (priority over useSearchParams)
+}) => {
   return (
     <Suspense fallback={children}>
-      <SeedProviderInner>{children}</SeedProviderInner>
+      <SeedProviderInner initialSeed={initialSeed}>{children}</SeedProviderInner>
     </Suspense>
   );
 };
 
-function SeedProviderInner({ children }: { children: React.ReactNode }) {
+function SeedProviderInner({ 
+  children, 
+  initialSeed 
+}: { 
+  children: React.ReactNode;
+  initialSeed?: number;
+}) {
   const searchParams = useSearchParams();
-  const [seed, setSeedState] = useState<number>(DEFAULT_SEED);
-  const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() =>
-    resolveSeedsSync(DEFAULT_SEED)
-  );
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  useEffect(() => {
-    if (isInitialized) return;
-    if (typeof window !== "undefined") {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          const parsed = clampBaseSeed(Number.parseInt(saved, 10));
-          setSeedState(parsed);
-        }
-      } catch (error) {
-        console.error("Error loading seed:", error);
+  
+  // Initialize seed directly from the URL to avoid hydration issues
+  const getInitialSeed = (): number => {
+    // PRIORITY 1: Read from window.__INITIAL_SEED__ injected by the Server Component
+    // This guarantees SSR and client use the same seed from the start
+    if (typeof window !== "undefined" && (window as any).__INITIAL_SEED__ !== undefined) {
+      const serverSeed = (window as any).__INITIAL_SEED__;
+      if (typeof serverSeed === "number" && Number.isFinite(serverSeed)) {
+        return clampBaseSeed(serverSeed);
       }
     }
-    setIsInitialized(true);
-  }, [isInitialized]);
+    
+    // PRIORITY 2: If initialSeed comes as a prop, use it
+    if (initialSeed !== undefined) {
+      return clampBaseSeed(initialSeed);
+    }
+    
+    // PRIORITY 3: Try reading from useSearchParams (may fail during SSR)
+    try {
+      const urlSeed = searchParams.get("seed");
+      if (urlSeed) {
+        return clampBaseSeed(Number.parseInt(urlSeed, 10));
+      }
+    } catch (error) {
+      // useSearchParams can fail during SSR
+    }
+    
+    // PRIORITY 4: Try reading from window.location (client only)
+    if (typeof window !== "undefined") {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const urlSeed = params.get("seed");
+        if (urlSeed) {
+          return clampBaseSeed(Number.parseInt(urlSeed, 10));
+        }
+        
+        // If there is no seed in URL, try localStorage
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          return clampBaseSeed(Number.parseInt(saved, 10));
+        }
+      } catch (error) {
+        // Ignore errors
+      }
+    }
+    
+    return DEFAULT_SEED;
+  };
+  
+  const [seed, setSeedState] = useState<number>(getInitialSeed);
+  const [isSeedReady, setIsSeedReady] = useState<boolean>(false);
 
   const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
     if (urlSeed !== null) {
       setSeedState(urlSeed);
+      setIsSeedReady(true);
       if (typeof window !== "undefined") {
         try {
           localStorage.setItem(STORAGE_KEY, urlSeed.toString());
@@ -96,51 +124,44 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
           console.error("Error saving seed to localStorage:", error);
         }
       }
+    } else {
+      // If there is no seed in the URL, the default seed is ready
+      setIsSeedReady(true);
     }
+  }, []);
+  
+  // Synchronize seed when the URL changes
+  useEffect(() => {
+    // Read seed from the URL (priority over window.__INITIAL_SEED__)
+    const urlSeed = searchParams.get("seed");
+    if (urlSeed) {
+      const parsed = clampBaseSeed(Number.parseInt(urlSeed, 10));
+      if (parsed !== seed) {
+        console.log(`[autocinema][seed] Actualizando seed desde URL: ${seed} → ${parsed}`);
+        setSeedState(parsed);
+      }
+      setIsSeedReady(true);
+    } else {
+      // If there is no seed in the URL, check window.__INITIAL_SEED__
+      if (typeof window !== "undefined" && (window as any).__INITIAL_SEED__ !== undefined) {
+        const initialSeed = clampBaseSeed((window as any).__INITIAL_SEED__);
+        if (initialSeed !== seed) {
+          console.log(`[autocinema][seed] Actualizando seed desde window.__INITIAL_SEED__: ${seed} → ${initialSeed}`);
+          setSeedState(initialSeed);
+        }
+      }
+      setIsSeedReady(true);
+    }
+  }, [searchParams, seed]);
+  
+  // Mark as ready after the first client render
+  useEffect(() => {
+    setIsSeedReady(true);
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
-    const syncResolved = applyLayoutOverrides(seed, resolveSeedsSync(seed));
-    setResolvedSeeds(syncResolved);
-    console.log(
-      "[autocinema][seeds]",
-      `base=${syncResolved.base}`,
-      `layout(v1)=${syncResolved.v1 ?? "disabled"}`,
-      `data(v2)=${syncResolved.v2 ?? "disabled"}`,
-      `v3=${syncResolved.v3 ?? "disabled"}`
-    );
-    resolveSeeds(seed)
-      .then((resolved) => {
-        if (!cancelled) {
-          setResolvedSeeds(applyLayoutOverrides(seed, resolved));
-          console.log(
-            "[autocinema][seeds:update]",
-            `base=${resolved.base}`,
-            `layout(v1)=${resolved.v1 ?? "disabled"}`,
-            `data(v2)=${resolved.v2 ?? "disabled"}`,
-            `v3=${resolved.v3 ?? "disabled"}`
-          );
-        }
-      })
-      .catch((error) => {
-        if (!cancelled) {
-          console.warn("[autocinema] Seed resolver fallback:", error);
-        }
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [seed, searchParams]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base ?? null;
-    (window as any).__autocinemaV2Seed = v2Seed;
-    window.dispatchEvent(
-      new CustomEvent("autocinema:v2SeedChange", { detail: { seed: v2Seed } })
-    );
-  }, [resolvedSeeds.v2, resolvedSeeds.base]);
+    console.log("[autocinema][seed] base=", seed);
+  }, [seed]);
 
   const setSeed = useCallback((newSeed: number) => {
     setSeedState(clampBaseSeed(newSeed));
@@ -166,7 +187,7 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, resolvedSeeds }}>
+    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, isSeedReady }}>
       <SeedInitializer onSeedFromUrl={handleSeedFromUrl} />
       {children}
     </SeedContext.Provider>

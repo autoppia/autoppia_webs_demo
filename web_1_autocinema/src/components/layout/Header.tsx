@@ -1,38 +1,39 @@
 "use client";
 
 import { Film } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
-import { getLayoutConfig } from "@/dynamic/v2-data";
-import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { useAuth } from "@/context/AuthContext";
+import { cn } from "@/library/utils";
 
 const NAV_LINKS = [
   { label: "Home", href: "/", preserveSeed: true },
-  { label: "Library", href: "#library", preserveSeed: false },
-  { label: "Genres", href: "#genres", preserveSeed: false },
-  { label: "About", href: "#about", preserveSeed: false },
-  { label: "Contact", href: "#contact", preserveSeed: false },
+  { label: "Search", href: "/search", preserveSeed: true },
+  { label: "About", href: "/about", preserveSeed: true },
+  { label: "Contact", href: "/contact", preserveSeed: true },
 ];
 
 export function Header() {
-  const { seed, resolvedSeeds } = useSeed();
+  const { seed } = useSeed();
   const { currentUser, logout } = useAuth();
-  const layoutSeed = resolvedSeeds.v1 ?? seed;
-  const layoutConfig = getLayoutConfig(layoutSeed);
-  const layoutClasses = getLayoutClasses(layoutConfig);
-  const isSeedThree = seed === 3;
-  const floatingAlignmentClass =
-    layoutClasses.header.includes("navbar-floating") ?
-      (isSeedThree ? "navbar-floating-left" : "navbar-floating-right") :
-      "";
+  const pathname = usePathname();
 
+  const isActive = (href: string) => {
+    if (!pathname) return false;
+    // Remove query parameters for comparison
+    const cleanPathname = pathname.split("?")[0];
+    
+    if (href === "/") {
+      return cleanPathname === "/";
+    }
+    // For exact matches like /login, /register, /search, etc.
+    return cleanPathname === href || cleanPathname.startsWith(href + "/");
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-neutral-950/80 backdrop-blur">
-      <div
-        className={`mx-auto flex w-full flex-col gap-2 px-6 py-4 md:flex-row md:items-center md:justify-between ${layoutClasses.header} ${floatingAlignmentClass}`}
-      >
+      <div className="mx-auto flex w-full flex-col gap-2 px-6 py-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
           <SeedLink href="/" className="flex items-center gap-2">
             <Film className="h-6 w-6 text-secondary" />
@@ -44,35 +45,59 @@ export function Header() {
         </div>
 
         <nav className="flex flex-wrap items-center gap-4 text-sm text-white/70">
-          {NAV_LINKS.map((link) => (
-            <SeedLink
-              key={link.label}
-              href={link.href}
-              preserveSeed={link.preserveSeed}
-              className="transition hover:text-white"
-            >
-              {link.label}
-            </SeedLink>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const active = isActive(link.href);
+            return (
+              <SeedLink
+                key={link.label}
+                href={link.href}
+                preserveSeed={link.preserveSeed}
+                className={cn(
+                  "transition hover:text-white",
+                  active && "font-semibold text-secondary"
+                )}
+              >
+                {link.label}
+              </SeedLink>
+            );
+          })}
           {currentUser ? (
             <>
-              <SeedLink href="/profile" className="font-semibold text-secondary">
+              <SeedLink 
+                href="/profile" 
+                className={cn(
+                  "font-semibold transition",
+                  isActive("/profile") ? "text-secondary" : "text-secondary/80 hover:text-secondary"
+                )}
+              >
                 {currentUser.username}
               </SeedLink>
               <button
                 type="button"
                 onClick={logout}
-                className="text-xs uppercase tracking-wide text-white/60 hover:text-white"
+                className="text-xs uppercase tracking-wide text-white/60 hover:text-white transition"
               >
                 Logout
               </button>
             </>
           ) : (
             <>
-              <SeedLink href="/register" className="font-semibold text-secondary">
+              <SeedLink 
+                href="/register" 
+                className={cn(
+                  "transition",
+                  isActive("/register") ? "font-semibold text-secondary" : "text-white/70 hover:text-white"
+                )}
+              >
                 Register
               </SeedLink>
-              <SeedLink href="/login" className="text-white/80 hover:text-white">
+              <SeedLink 
+                href="/login"
+                className={cn(
+                  "transition",
+                  isActive("/login") ? "font-semibold text-secondary" : "text-white/70 hover:text-white"
+                )}
+              >
                 Login
               </SeedLink>
             </>

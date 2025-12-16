@@ -1,6 +1,5 @@
 import type { Movie } from "@/data/movies";
 import { initializeMovies } from "@/data/movies";
-import { getEffectiveLayoutConfig, isDynamicEnabled } from "@/dynamic/v1-layouts";
 import { clampBaseSeed } from "@/shared/seed-resolver";
 
 export interface MovieSearchFilters {
@@ -18,7 +17,8 @@ export class DynamicDataProvider {
   private readyPromise: Promise<void>;
 
   private constructor() {
-    this.isEnabled = isDynamicEnabled();
+    // V2 siempre habilitado si hay datos
+    this.isEnabled = true;
     if (typeof window === "undefined") {
       this.ready = true;
       this.readyPromise = Promise.resolve();
@@ -146,10 +146,6 @@ export class DynamicDataProvider {
 
   public isDynamicModeEnabled(): boolean {
     return this.isEnabled;
-  }
-
-  public getLayoutConfig(seed?: number) {
-    return getEffectiveLayoutConfig(seed);
   }
 }
 
