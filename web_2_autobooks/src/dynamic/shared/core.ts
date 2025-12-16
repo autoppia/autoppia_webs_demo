@@ -143,8 +143,16 @@ export function useDynamicSystem() {
         variants?: Record<string, string[]>,
         fallback?: string
       ) => {
-        if (!isV3Enabled() && fallback !== undefined) return fallback;
-        if (!isV3Enabled()) return key;
+        // Si V3 está deshabilitado, devolver fallback o primera variante disponible
+        if (!isV3Enabled()) {
+          if (fallback !== undefined) return fallback;
+          // Si hay variantes locales, devolver la primera
+          if (variants && key in variants && variants[key].length > 0) {
+            return variants[key][0];
+          }
+          // Si no hay variantes, devolver la key (pero esto no debería pasar)
+          return key;
+        }
         return getVariant(seed, key, variants, fallback);
       },
     },

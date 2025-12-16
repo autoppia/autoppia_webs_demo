@@ -10,6 +10,7 @@ interface SeedContextType {
   setSeed: (seed: number) => void;
   getNavigationUrl: (path: string) => string;
   resolvedSeeds: ResolvedSeeds;
+  isSeedReady: boolean; // Indicates whether the seed is synchronized with the URL
 }
 
 const DEFAULT_SEED = 1;
@@ -19,6 +20,7 @@ const SeedContext = createContext<SeedContextType>({
   setSeed: () => {},
   getNavigationUrl: (path: string) => path,
   resolvedSeeds: resolveSeedsSync(DEFAULT_SEED),
+  isSeedReady: false,
 });
 
 const STORAGE_KEY = "autobooks_seed_base";
@@ -54,6 +56,7 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
     resolveSeedsSync(DEFAULT_SEED)
   );
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isSeedReady, setIsSeedReady] = useState(false);
 
   useEffect(() => {
     if (isInitialized) return;
@@ -69,6 +72,7 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
       }
     }
     setIsInitialized(true);
+    setIsSeedReady(true);
   }, [isInitialized]);
 
   const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
@@ -151,7 +155,7 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, resolvedSeeds }}>
+    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, resolvedSeeds, isSeedReady }}>
       <SeedInitializer onSeedFromUrl={handleSeedFromUrl} />
       {children}
     </SeedContext.Provider>

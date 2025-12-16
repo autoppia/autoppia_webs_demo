@@ -56,6 +56,15 @@ export function HomeContent() {
   const allBooks = useMemo(() => getBooks(), []);
   const genres = useMemo(() => getAvailableGenres(), []);
 
+  // Debug: verificar si hay datos
+  useEffect(() => {
+    if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
+      console.log("[HomeContent] Books loaded:", allBooks.length, "Genres:", genres.length);
+      console.log("[HomeContent] V3 enabled:", process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3);
+      console.log("[HomeContent] Seed:", seed, "isReady:", isReady);
+    }
+  }, [allBooks.length, genres.length, seed, isReady]);
+
   const handleSearchSubmit = () => {
     // Redirect to search page with query
     const params = new URLSearchParams();
@@ -102,7 +111,7 @@ export function HomeContent() {
       };
     }
     const totalPages = allBooks.reduce((acc, book) => acc + (book.duration || 0), 0);
-    const totalRating = allBooks.reduce((acc, book) => acc + book.rating, 0);
+    const totalRating = allBooks.reduce((acc, book) => acc + (book.rating || 0), 0);
     return {
       totalBooks: allBooks.length,
       totalGenres: genres.length,
@@ -167,10 +176,10 @@ export function HomeContent() {
                 {dyn.v1.addWrapDecoy("home-header", (
                   <div className="text-center mb-10">
                     <h2 id={dyn.v3.getVariant("home-title", ID_VARIANTS_MAP, "home-title")} className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4">
-                      {dyn.v3.getVariant("app_title", dynamicV3TextVariants)}
+                      {dyn.v3.getVariant("app_title", dynamicV3TextVariants, "Autobooks")}
                     </h2>
                     <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-                      {dyn.v3.getVariant("app_description", dynamicV3TextVariants)}
+                      {dyn.v3.getVariant("app_description", dynamicV3TextVariants, "Your intelligent book search engine. Discover thousands of books, explore by genre, and find your next reading adventure.")}
                     </p>
                   </div>
                 ))}
@@ -229,7 +238,7 @@ export function HomeContent() {
                       id: "stats-books-card",
                       icon: BookOpen,
                       iconColor: "secondary",
-                      value: isReady ? `${stats.totalBooks}+` : "0+",
+                      value: `${stats.totalBooks}+`,
                       label: dyn.v3.getVariant("stats_books_label", undefined, "Books"),
                       iconBg: "bg-secondary/20",
                       iconHover: "group-hover:bg-secondary/30",
@@ -240,7 +249,7 @@ export function HomeContent() {
                       id: "stats-genres-card",
                       icon: Sparkles,
                       iconColor: "purple",
-                      value: isReady ? stats.totalGenres : "0",
+                      value: stats.totalGenres.toString(),
                       label: dyn.v3.getVariant("stats_genres_label", undefined, "Genres"),
                       iconBg: "bg-purple-500/20",
                       iconHover: "group-hover:bg-purple-500/30",
@@ -251,7 +260,7 @@ export function HomeContent() {
                       id: "stats-rating-card",
                       icon: Star,
                       iconColor: "yellow",
-                      value: isReady ? stats.avgRating : "0.0",
+                      value: stats.avgRating,
                       label: dyn.v3.getVariant("stats_rating_label", undefined, "Avg Rating"),
                       iconBg: "bg-yellow-500/20",
                       iconHover: "group-hover:bg-yellow-500/30",
@@ -262,7 +271,7 @@ export function HomeContent() {
                       id: "stats-pages-card",
                       icon: Book,
                       iconColor: "blue",
-                      value: isReady ? stats.avgPages : "0",
+                      value: stats.avgPages.toString(),
                       label: dyn.v3.getVariant("stats_pages_label", undefined, "Avg Pages"),
                       iconBg: "bg-blue-500/20",
                       iconHover: "group-hover:bg-blue-500/30",
@@ -505,13 +514,13 @@ export function HomeContent() {
                 {dyn.v1.addWrapDecoy("home-features-header", (
                   <div className="text-center mb-12">
                     <h2 id={dyn.v3.getVariant("features-title", ID_VARIANTS_MAP, "features-title")} className="text-4xl md:text-5xl font-bold text-white mb-4">
-                      {dyn.v3.getVariant("why_choose", dynamicV3TextVariants)}
+                      {dyn.v3.getVariant("why_choose", dynamicV3TextVariants, "Why Choose")}
                       <span className="block text-transparent bg-clip-text bg-gradient-to-r from-secondary to-yellow-400">
-                        {dyn.v3.getVariant("app_title", dynamicV3TextVariants)}?
+                        {dyn.v3.getVariant("app_title", dynamicV3TextVariants, "Autobooks")}?
                       </span>
                     </h2>
                     <p className="text-lg text-white/70 max-w-2xl mx-auto">
-                      {dyn.v3.getVariant("features_description", dynamicV3TextVariants)}
+                      {dyn.v3.getVariant("features_description", dynamicV3TextVariants, "The ultimate book discovery platform designed for book lovers")}
                     </p>
                   </div>
                 ))}
@@ -530,10 +539,10 @@ export function HomeContent() {
                           <div className="text-secondary">{feature.icon}</div>
                         </div>
                         <h3 className="text-xl font-bold text-white mb-2">
-                          {dyn.v3.getVariant(`${feature.key}_title`, dynamicV3TextVariants)}
+                          {dyn.v3.getVariant(`${feature.key}_title`, dynamicV3TextVariants, feature.key === "feature_1" ? "Smart Search" : feature.key === "feature_2" ? "Vast Collection" : feature.key === "feature_3" ? "Curated Picks" : "Trending Now")}
                         </h3>
                         <p className="text-sm text-white/70">
-                          {dyn.v3.getVariant(`${feature.key}_description`, dynamicV3TextVariants)}
+                          {dyn.v3.getVariant(`${feature.key}_description`, dynamicV3TextVariants, feature.key === "feature_1" ? "Find books instantly by title, author, or any keyword" : feature.key === "feature_2" ? "Explore thousands of books across all genres" : feature.key === "feature_3" ? "Hand-selected featured books updated weekly" : "Discover what's popular and trending")}
                         </p>
                       </div>
                     ), undefined, `feature-${displayIndex}`)
@@ -582,16 +591,16 @@ export function HomeContent() {
               <div className="relative">
                 <TrendingUp className="h-16 w-16 text-secondary mx-auto mb-6" />
                 <h2 id={dyn.v3.getVariant("cta-title", ID_VARIANTS_MAP, "cta-title")} className="text-4xl md:text-5xl font-bold text-white mb-4">
-                  {dyn.v3.getVariant("cta_title", dynamicV3TextVariants)}
+                  {dyn.v3.getVariant("cta_title", dynamicV3TextVariants, "Ready to explore?")}
                 </h2>
                 <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-                  {dyn.v3.getVariant("cta_description", dynamicV3TextVariants)}
+                  {dyn.v3.getVariant("cta_description", dynamicV3TextVariants, "Start searching for books now and discover your next favorite story")}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <SeedLink href="/search">
                     <Button className="h-14 px-8 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105">
                       <Search className="h-5 w-5 mr-2" />
-                      {dyn.v3.getVariant("go_to_search", dynamicV3TextVariants)}
+                      {dyn.v3.getVariant("go_to_search", dynamicV3TextVariants, "Go to Search")}
                     </Button>
                   </SeedLink>
                   <SeedLink href="/about">
@@ -599,7 +608,7 @@ export function HomeContent() {
                       variant="outline"
                       className="h-14 px-8 border-white/20 bg-white/10 text-white hover:bg-white/20 font-semibold text-base backdrop-blur-sm"
                     >
-                      {dyn.v3.getVariant("learn_more", dynamicV3TextVariants)}
+                      {dyn.v3.getVariant("learn_more", dynamicV3TextVariants, "Learn More")}
                     </Button>
                   </SeedLink>
                 </div>
