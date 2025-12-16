@@ -47,7 +47,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const dyn = useDynamicSystem();
     const Comp = asChild ? Slot : "button"
     
-    // V3: ID y clase dinámicos
+    // V3: Dynamic ID and class
     const dynamicId = id || dyn.v3.getVariant("button", ID_VARIANTS_MAP, "button");
     const dynamicClass = dyn.v3.getVariant("button", CLASS_VARIANTS_MAP, "");
     

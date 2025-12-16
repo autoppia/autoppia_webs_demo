@@ -365,7 +365,7 @@ function SearchContent() {
             totalResults={filteredMovies.length}
           />
 
-          {/* Stats for filtered results - Orden dinámico y textos V3 */}
+          {/* Stats for filtered results - Dynamic ordering and V3 texts */}
           {filteredMovies.length > 0 && (() => {
             const statsCards = [
               {

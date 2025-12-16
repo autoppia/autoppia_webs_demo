@@ -1,20 +1,20 @@
 /**
- * FLAGS - Control de habilitación de V1 y V3
+ * FLAGS - Enablement control for V1 and V3
  * 
- * V1: Estructura DOM (wrappers, decoys) - Rompe XPath
- * V3: Atributos y textos (IDs, clases, textos) - Anti-memorización
+ * V1: DOM structure (wrappers, decoys) - Breaks XPath
+ * V3: Attributes and text (IDs, classes, texts) - Anti-memorization
  */
 
 /**
- * Verifica si V1 está habilitado
- * V1 añade wrappers y decoys al DOM para romper XPath
+ * Checks whether V1 is enabled
+ * V1 adds wrappers and decoys to the DOM to break XPath
  */
 export function isV1Enabled(): boolean {
-  // En Next.js, las variables NEXT_PUBLIC_* están disponibles tanto en servidor como cliente
+  // In Next.js, NEXT_PUBLIC_* variables are available on both server and client
   const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1;
   const enabled = value === "true" || value === true;
   
-  // Debug en desarrollo
+  // Debug in development
   if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
     if (!enabled) {
       console.warn("[dynamic] V1 está deshabilitado. Para habilitarlo, configura NEXT_PUBLIC_ENABLE_DYNAMIC_V1=true");
@@ -25,15 +25,15 @@ export function isV1Enabled(): boolean {
 }
 
 /**
- * Verifica si V3 está habilitado
- * V3 cambia IDs, clases y textos para evitar memorización
+ * Checks whether V3 is enabled
+ * V3 changes IDs, classes, and texts to prevent memorization
  */
 export function isV3Enabled(): boolean {
-  // En Next.js, las variables NEXT_PUBLIC_* están disponibles tanto en servidor como cliente
+  // In Next.js, NEXT_PUBLIC_* variables are available on both server and client
   const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3;
   const enabled = value === "true" || value === true;
   
-  // Debug en desarrollo
+  // Debug in development
   if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
     if (!enabled) {
       console.warn("[dynamic] V3 está deshabilitado. Para habilitarlo, configura NEXT_PUBLIC_ENABLE_DYNAMIC_V3=true");

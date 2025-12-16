@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 
 export function DataReadyGate({ children }: { children: React.ReactNode }) {
-  // Inicializar como true en servidor para evitar diferencias de hidratación
-  // Luego verificar en el cliente si realmente está listo
+  // Initialize as true on the server to avoid hydration mismatches
+  // Then verify on the client if it is actually ready
   const [ready, setReady] = useState(true);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    // Verificar si realmente está listo después del mount
+    // Check if it is actually ready after mounting
     if (!dynamicDataProvider.isReady()) {
       setReady(false);
       let isMounted = true;
@@ -32,8 +32,8 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Durante SSR y el primer render del cliente, mostrar children
-  // Solo mostrar loading si estamos en cliente y realmente no está listo
+  // During SSR and the first client render, show children
+  // Only show loading if we are on the client and it truly is not ready
   if (mounted && !ready) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center text-gray-700">

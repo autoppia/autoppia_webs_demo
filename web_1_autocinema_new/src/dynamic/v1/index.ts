@@ -1,8 +1,8 @@
 /**
- * V1 - Estructura DOM (Wrappers y Decoys)
+ * V1 - DOM structure (Wrappers and Decoys)
  * 
- * Añade wrappers y decoys al DOM para romper XPath.
- * También proporciona orden dinámico de elementos.
+ * Adds wrappers and decoys to the DOM to break XPath.
+ * Also provides dynamic ordering of elements.
  */
 
 export { applyV1Wrapper } from "./add-wrap-decoy";

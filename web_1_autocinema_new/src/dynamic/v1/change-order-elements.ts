@@ -1,57 +1,57 @@
 /**
- * Utilidades para generar órdenes dinámicos de elementos (V1)
+ * Utilities to generate dynamic ordering of elements (V1)
  * 
- * Genera órdenes diferentes según el seed sin necesidad de hardcodear todas las permutaciones
- * Esta funcionalidad es parte de V1 ya que modifica la estructura/orden de elementos
+ * Generates different orders based on the seed without hardcoding every permutation
+ * This functionality belongs to V1 because it modifies element structure/order
  */
 
 import { selectVariantIndex } from "../shared/core";
 
 /**
- * Genera un orden dinámico para un array de elementos
+ * Generates a dynamic order for an array of elements
  * 
- * @param seed - Seed base (1-999)
- * @param key - Identificador único para este conjunto de elementos (ej: "featured-movies", "stats-cards")
- * @param count - Número de elementos (ej: 3, 4, 6)
- * @returns Array de índices reordenados (ej: [0,1,2] o [2,0,1] para count=3)
+ * @param seed - Base seed (1-999)
+ * @param key - Unique identifier for this set of elements (e.g. "featured-movies", "stats-cards")
+ * @param count - Number of elements (e.g. 3, 4, 6)
+ * @returns Array of reordered indexes (e.g. [0,1,2] or [2,0,1] for count=3)
  */
 export function generateDynamicOrder(
   seed: number,
   key: string,
   count: number
 ): number[] {
-  // Seed 1 = orden original (0, 1, 2, ..., count-1)
+  // Seed 1 = original order (0, 1, 2, ..., count-1)
   if (seed === 1) {
     return Array.from({ length: count }, (_, i) => i);
   }
 
-  // Para otros seeds, generar orden dinámico
-  // Usamos una función hash determinística para generar el orden
+  // For other seeds, generate dynamic order
+  // Use a deterministic hash function to generate the order
   
-  // Generar múltiples variantes de orden usando diferentes offsets
+  // Generate multiple order variants using different offsets
   const orderVariants: number[][] = [];
   
-  // Generar variantes usando diferentes estrategias:
-  // 1. Rotaciones
+  // Generate variants using different strategies:
+  // 1. Rotations
   for (let offset = 0; offset < count; offset++) {
     const rotated = Array.from({ length: count }, (_, i) => (i + offset) % count);
     orderVariants.push(rotated);
   }
   
-  // 2. Intercambios de pares
+  // 2. Pair swaps
   for (let i = 0; i < count - 1; i++) {
     const swapped = Array.from({ length: count }, (_, j) => {
       if (j === i) return i + 1;
       if (j === i + 1) return i;
       return j;
     });
-    // Solo añadir si es diferente del orden original
+    // Only add if it differs from the original order
     if (!arraysEqual(swapped, Array.from({ length: count }, (_, j) => j))) {
       orderVariants.push(swapped);
     }
   }
   
-  // 3. Inversiones parciales
+  // 3. Partial reversals
   for (let split = 1; split < count; split++) {
     const reversed = [
       ...Array.from({ length: split }, (_, i) => split - 1 - i),
@@ -62,30 +62,30 @@ export function generateDynamicOrder(
     }
   }
   
-  // 4. Shuffle determinístico usando hash
+  // 4. Deterministic shuffle using hash
   const hashBased = generateHashBasedOrder(seed, key, count);
   if (!arraysEqual(hashBased, Array.from({ length: count }, (_, j) => j))) {
     orderVariants.push(hashBased);
   }
   
-  // Eliminar duplicados
+  // Remove duplicates
   const uniqueVariants = removeDuplicateOrders(orderVariants);
   
-  // Si no hay variantes, devolver orden original
+  // If there are no variants, return original order
   if (uniqueVariants.length === 0) {
     return Array.from({ length: count }, (_, i) => i);
   }
   
-  // Seleccionar variante usando selectVariantIndex
+  // Select variant using selectVariantIndex
   const variantIndex = selectVariantIndex(seed, key, uniqueVariants.length);
   return uniqueVariants[variantIndex];
 }
 
 /**
- * Genera un orden basado en hash para máxima variación
+ * Generates a hash-based order for maximum variation
  */
 function generateHashBasedOrder(seed: number, key: string, count: number): number[] {
-  // Combinar seed y key para generar hash
+  // Combine seed and key to generate hash
   const combined = `${key}:${seed}`;
   let hash = 0;
   for (let i = 0; i < combined.length; i++) {
@@ -94,7 +94,7 @@ function generateHashBasedOrder(seed: number, key: string, count: number): numbe
     hash = hash & hash;
   }
   
-  // Generar orden usando Fisher-Yates shuffle determinístico
+  // Generate order using deterministic Fisher-Yates shuffle
   const order = Array.from({ length: count }, (_, i) => i);
   for (let i = count - 1; i > 0; i--) {
     const j = Math.abs(hash + i * 7919) % (i + 1);
@@ -105,7 +105,7 @@ function generateHashBasedOrder(seed: number, key: string, count: number): numbe
 }
 
 /**
- * Compara dos arrays para ver si son iguales
+ * Compares two arrays to see if they are equal
  */
 function arraysEqual(a: number[], b: number[]): boolean {
   if (a.length !== b.length) return false;
@@ -113,7 +113,7 @@ function arraysEqual(a: number[], b: number[]): boolean {
 }
 
 /**
- * Elimina órdenes duplicados de un array
+ * Removes duplicate orders from an array
  */
 function removeDuplicateOrders(orders: number[][]): number[][] {
   const seen = new Set<string>();

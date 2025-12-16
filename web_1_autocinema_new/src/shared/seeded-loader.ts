@@ -34,7 +34,7 @@ export function getSeedValueFromEnv(defaultSeed = 1): number {
 }
 
 export async function fetchSeededSelection<T = unknown>(options: SeededLoadOptions): Promise<T[]> {
-  // Si el modo DB está deshabilitado, NO hacer ninguna llamada HTTP
+  // If DB mode is disabled, DO NOT make any HTTP calls
   if (!isDbLoadModeEnabled()) {
     console.log(`[seeded-loader] DB mode disabled, skipping API call for ${options.entityType}`);
     return [] as T[];
@@ -81,4 +81,3 @@ export async function fetchPoolInfo(projectKey: string, entityType: string): Pro
     return null;
   }
 }
-

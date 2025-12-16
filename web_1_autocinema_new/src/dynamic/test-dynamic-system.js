@@ -1,32 +1,32 @@
 #!/usr/bin/env node
 /**
- * 🧪 TEST DEL SISTEMA DINÁMICO - GENÉRICO
+ * 🧪 GENERIC DYNAMIC SYSTEM TEST
  * 
- * Este script valida que el sistema dinámico (V1 y V3) funciona correctamente.
- * Es genérico y puede adaptarse a diferentes webs cambiando la configuración.
+ * This script validates that the dynamic system (V1 and V3) works correctly.
+ * It is generic and can be adapted to different sites by changing the configuration.
  * 
- * USO:
- *   1. Desde Node.js: node src/dynamic/test-dynamic-system.js
- *   2. Desde navegador: Copia el contenido en la consola (F12) y ejecuta testDynamicSystem()
+ * USAGE:
+ *   1. From Node.js: node src/dynamic/test-dynamic-system.js
+ *   2. From the browser: copy the contents into the console (F12) and run testDynamicSystem()
  * 
- * CONFIGURACIÓN:
- *   Modifica MIN_REQUIREMENTS según los requisitos de tu web.
+ * CONFIGURATION:
+ *   Modify MIN_REQUIREMENTS according to your site's requirements.
  */
 
 // ============================================================================
-// CONFIGURACIÓN (ADAPTAR SEGÚN LA WEB)
+// CONFIGURATION (ADAPT AS NEEDED FOR THE SITE)
 // ============================================================================
 
 const MIN_REQUIREMENTS = {
-  v1Wrappers: 10,      // Mínimo de wrappers/decoy
-  v1OrderChanges: 3,   // Mínimo de cambios de orden
-  v3Ids: 20,           // Mínimo de IDs dinámicos
-  v3Classes: 15,       // Mínimo de clases dinámicas
-  v3Texts: 15,         // Mínimo de textos dinámicos (ajustado: muchos textos son locales)
-  minVariants: 3,      // Mínimo de variantes por key
+  v1Wrappers: 10,      // Minimum wrappers/decoys
+  v1OrderChanges: 3,   // Minimum order changes
+  v3Ids: 20,           // Minimum dynamic IDs
+  v3Classes: 15,       // Minimum dynamic classes
+  v3Texts: 15,         // Minimum dynamic texts (adjusted: many texts are local)
+  minVariants: 3,      // Minimum variants per key
 };
 
-// Rutas a los archivos (adaptar si la estructura es diferente)
+// Paths to the files (adjust if the structure is different)
 const FILE_PATHS = {
   idVariants: 'src/dynamic/v3/data/id-variants.json',
   classVariants: 'src/dynamic/v3/data/class-variants.json',
@@ -38,7 +38,7 @@ const FILE_PATHS = {
 };
 
 // ============================================================================
-// UTILIDADES
+// UTILITIES
 // ============================================================================
 
 function isBrowser() {
@@ -62,7 +62,7 @@ function fileExists(path) {
 }
 
 // ============================================================================
-// TEST 1: Estructura de archivos
+// TEST 1: File structure
 // ============================================================================
 
 function testFileStructure() {
@@ -101,7 +101,7 @@ function testFileStructure() {
 }
 
 // ============================================================================
-// TEST 2: Variantes en JSONs
+// TEST 2: Variants in JSON files
 // ============================================================================
 
 function testVariantFiles() {
@@ -130,12 +130,12 @@ function testVariantFiles() {
     const classVariants = loadJSON(FILE_PATHS.classVariants);
     const textVariants = loadJSON(FILE_PATHS.textVariants);
     
-    // Contar keys y verificar variantes
+    // Count keys and verify variants
     results.stats.idKeys = Object.keys(idVariants).length;
     results.stats.classKeys = Object.keys(classVariants).length;
     results.stats.textKeys = Object.keys(textVariants).length;
     
-    // Verificar que cada key tenga suficientes variantes
+    // Check that each key has enough variants
     [idVariants, classVariants, textVariants].forEach((variants, index) => {
       const type = ['IDs', 'Clases', 'Textos'][index];
       Object.entries(variants).forEach(([key, variantsArray]) => {
@@ -150,7 +150,7 @@ function testVariantFiles() {
     console.log(`   📊 Clases: ${results.stats.classKeys} keys`);
     console.log(`   📊 Textos: ${results.stats.textKeys} keys`);
     
-    // Verificar requisitos
+    // Validate requirements
     if (results.stats.idKeys >= MIN_REQUIREMENTS.v3Ids) {
       console.log(`   ✅ IDs: ${results.stats.idKeys} >= ${MIN_REQUIREMENTS.v3Ids}`);
       results.passed++;
@@ -193,7 +193,7 @@ function testVariantFiles() {
 }
 
 // ============================================================================
-// TEST 3: Determinismo
+// TEST 3: Determinism
 // ============================================================================
 
 function testDeterminism() {
@@ -202,7 +202,7 @@ function testDeterminism() {
   
   const results = { passed: 0, failed: 0, errors: [] };
   
-  // Función hash (debe ser igual a la del código)
+  // Hash function (must match the code)
   function hashString(str) {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
@@ -220,7 +220,7 @@ function testDeterminism() {
     return Math.abs(hash) % count;
   }
   
-  // Test casos
+  // Test cases
   const testCases = [
     { seed: 42, key: 'movie-card', count: 10 },
     { seed: 100, key: 'search-input', count: 10 },
@@ -246,7 +246,7 @@ function testDeterminism() {
 }
 
 // ============================================================================
-// TEST 4: Uso en DOM (solo navegador)
+// TEST 4: DOM usage (browser only)
 // ============================================================================
 
 function testDOMUsage() {
@@ -260,7 +260,7 @@ function testDOMUsage() {
     return results;
   }
   
-  // Contar V1
+  // Count V1
   const wrappers = document.querySelectorAll('[data-dyn-wrap]').length;
   const decoys = document.querySelectorAll('[data-decoy]').length;
   const totalV1 = wrappers + decoys;
@@ -277,7 +277,7 @@ function testDOMUsage() {
     results.errors.push(`Faltan ${MIN_REQUIREMENTS.v1Wrappers - totalV1} elementos V1`);
   }
   
-  // Contar V3 IDs
+  // Count V3 IDs
   const uniqueIds = new Set(
     Array.from(document.querySelectorAll('[id]'))
       .map(el => el.id)
@@ -300,7 +300,7 @@ function testDOMUsage() {
 }
 
 // ============================================================================
-// REPORTE FINAL
+// FINAL REPORT
 // ============================================================================
 
 function generateReport(allResults) {
@@ -357,7 +357,7 @@ function generateReport(allResults) {
 }
 
 // ============================================================================
-// EJECUCIÓN
+// EXECUTION
 // ============================================================================
 
 function runAllTests() {
@@ -379,7 +379,7 @@ function runAllTests() {
 }
 
 // ============================================================================
-// EXPORTAR/EJECUTAR
+// EXPORT/RUN
 // ============================================================================
 
 if (isBrowser()) {

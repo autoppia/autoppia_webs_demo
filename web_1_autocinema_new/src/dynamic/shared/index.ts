@@ -1,5 +1,5 @@
 /**
- * SHARED - Sistema dinámico centralizado
+ * SHARED - Centralized dynamic system
  */
 
 export { 

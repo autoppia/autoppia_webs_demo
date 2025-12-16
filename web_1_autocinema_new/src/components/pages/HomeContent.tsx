@@ -22,7 +22,7 @@ export function HomeContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMounted, setIsMounted] = useState(false);
 
-  // Variantes locales de textos específicos de HomeContent (solo se usan aquí)
+  // Local text variants specific to HomeContent (used only here)
   const dynamicV3TextVariants: Record<string, string[]> = {
     // Features section
     feature_1_title: ["Smart Search", "Búsqueda Inteligente", "Intelligent Search", "Advanced Search", "Quick Search", "Powerful Search", "Instant Search", "Smart Finder", "Fast Search", "Efficient Search"],
@@ -46,15 +46,15 @@ export function HomeContent() {
     learn_more: ["Learn More", "Saber Más", "Learn More", "More Info", "Details", "Info", "More", "Learn", "More", "Learn"],
   };
 
-  // Evitar problemas de hidratación - esperar hasta que el seed esté sincronizado
+  // Avoid hydration issues - wait until the seed is synchronized
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // No renderizar contenido dinámico hasta que el seed esté listo
+  // Do not render dynamic content until the seed is ready
   const isReady = isMounted && isSeedReady;
 
-  // Debug: Verificar que V1 y V3 están funcionando
+  // Debug: Verify V1 and V3 are working
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
       console.log("[page.tsx] Debug dinámico:", {
@@ -234,9 +234,9 @@ export function HomeContent() {
                 </div>
               ))}
 
-              {/* Stats Grid - Orden dinámico según seed */}
+              {/* Stats Grid - Dynamic order based on seed */}
               {(() => {
-                // Definir las 4 stats cards
+                // Define the 4 stats cards
                 const statsCards = [
                   {
                     key: "stats-movies-card",
@@ -284,7 +284,7 @@ export function HomeContent() {
                   },
                 ];
 
-                // Generar orden dinámico usando la función genérica
+                // Generate dynamic order using the generic function
                 // count = 4 (Movies, Genres, Rating, Duration)
                 const order = dyn.v1.changeOrderElements("stats-cards", statsCards.length);
                 const orderedCards = order.map(i => statsCards[i]);
@@ -351,11 +351,11 @@ export function HomeContent() {
                 
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {(() => {
-                    // Obtener las primeras 3 películas
+                    // Get the first 3 movies
                     const moviesToShow = featuredMovies.slice(0, 3);
                     
-                    // Generar orden dinámico usando la función genérica
-                    // count = 3 (3 películas)
+                    // Generate dynamic order using the generic function
+                    // count = 3 (3 movies)
                     const order = dyn.v1.changeOrderElements("featured-movies", moviesToShow.length);
                     const orderedMovies = order.map(i => ({ movie: moviesToShow[i], originalIndex: i }));
 
@@ -472,7 +472,7 @@ export function HomeContent() {
             </div>
           ))}
 
-          {/* Popular Genres - Solo orden dinámico, sin V1 wrappers/decoys */}
+          {/* Popular Genres - Only dynamic ordering, no V1 wrappers/decoys */}
           <div className="w-full">
             <div className="flex items-center justify-between mb-8">
               <div>
