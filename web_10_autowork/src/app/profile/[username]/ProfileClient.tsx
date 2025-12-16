@@ -142,6 +142,7 @@ export default function ProfileClient({ username }: { username: string }) {
     logEvent(EVENT_TYPES.EDIT_ABOUT, {
       username,
       length: aboutText.length,
+      about: aboutText,
     });
     setIsEditingAbout(false);
   };
