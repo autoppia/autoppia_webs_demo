@@ -22,6 +22,15 @@ export function HomeContent() {
 
   // Local text variants specific to HomeContent (used only here)
   const dynamicV3TextVariants: Record<string, string[]> = {
+    // Genres section
+    browse_genres: [
+      "Browse by Genre",
+      "Explore Genres"
+    ],
+    genres_description: [
+      "Explore books by your favorite genre",
+      "Discover books by genre"
+    ],
     // Features section
     feature_1_title: ["Smart Search", "Búsqueda Inteligente", "Intelligent Search", "Advanced Search", "Quick Search", "Powerful Search", "Instant Search", "Smart Finder", "Fast Search", "Efficient Search"],
     feature_1_description: ["Find books instantly by title, author, or any keyword", "Encuentra libros al instante por título, autor o cualquier palabra clave", "Locate books quickly by name, author, or keyword", "Discover books immediately by title, author, or keyword", "Locate books instantly by name, author, or search term", "Find books quickly by title, author, or any keyword", "Discover books immediately by title, author, or keyword", "Locate books instantly by name, author, or search term", "Find books quickly by title, author, or keyword", "Discover books instantly by title, author, or keyword"],
@@ -33,7 +42,11 @@ export function HomeContent() {
     feature_4_description: ["Discover what's popular and trending", "Descubre lo que es popular y está de moda", "See what's trending and gaining popularity", "Explore trending and popular content", "Find what's currently trending and popular", "See what's popular and gaining attention", "Discover trending and popular content", "Explore popular and trending selections", "See what's popular and trending right now", "Explore what's popular and gaining momentum"],
     // Header section
     app_title: ["Autobooks", "Autobooks", "Autobooks", "Autobooks", "Autobooks", "Autobooks", "Autobooks", "Autobooks", "Autobooks", "Autobooks"],
-    app_description: ["Your intelligent book search engine. Discover thousands of books, explore by genre, and find your next reading adventure.", "Tu motor de búsqueda inteligente de libros. Descubre miles de libros, explora por género y encuentra tu próxima aventura de lectura.", "Your smart book search. Browse thousands of books, filter by genre, and discover your next reading experience.", "Intelligent book discovery. Explore thousands of books, search by genre, and find your perfect read.", "Smart book search engine. Browse extensive book collections, filter by genre, and discover your ideal book.", "Advanced book search. Navigate thousands of books, explore genres, and find your perfect read.", "Your book search companion. Explore vast book libraries, filter by genre, and discover great reads.", "Intelligent book finder. Search through thousands of books, explore genres, and find your next read.", "Smart book search. Browse extensive book collections, filter by genre, and discover perfect books.", "Your book discovery engine. Explore thousands of books, search by genre, and find amazing reads."],
+    app_description: [
+      "Your intelligent book search engine. Discover thousands of books, explore by genre, and find your next reading adventure.",
+      "Your smart book search. Browse thousands of books, filter by genre, and discover your next reading experience.",
+      "Intelligent book discovery. Explore thousands of books, search by genre, and find your perfect read."
+    ],
     // Features section header
     why_choose: ["Why Choose", "Por Qué Elegir", "Why Choose", "Why Us", "Why Choose Us", "Why Autobooks", "Why Choose", "Why Us", "Why Choose", "Why Choose"],
     features_description: ["The ultimate book discovery platform designed for book lovers", "La plataforma definitiva de descubrimiento de libros diseñada para amantes de los libros", "The premier book discovery platform for reading enthusiasts", "The complete book discovery experience for book lovers", "The ultimate platform for book discovery and exploration", "The best book discovery platform for readers", "The premier destination for book discovery", "The complete book discovery experience", "The ultimate book discovery platform", "The best platform for book discovery"],
@@ -209,10 +222,14 @@ export function HomeContent() {
                           />
                           <Input
                             type="search"
+                            id={dyn.v3.getVariant("search-input", ID_VARIANTS_MAP, "search-input")}
                             value={searchQuery}
                             onChange={(event) => setSearchQuery(event.target.value)}
                             placeholder={dyn.v3.getVariant("search_placeholder", undefined, "Search authors, titles, or keywords")}
-                            className="pl-12 h-14 w-full min-w-0 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base"
+                            className={cn(
+                              "pl-12 h-14 w-full min-w-0 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base",
+                              dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "")
+                            )}
                           />
                         </div>
                       ))}
@@ -464,10 +481,10 @@ export function HomeContent() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 id={dyn.v3.getVariant("genres-title", ID_VARIANTS_MAP, "genres-title")} className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  {dyn.v3.getVariant("browse_genres", undefined, "Browse by Genre")}
+                  {dyn.v3.getVariant("browse_genres", dynamicV3TextVariants, "Browse by Genre")}
                 </h2>
                 <p className="text-white/70">
-                  {dyn.v3.getVariant("genres_description", undefined, "Explore books by your favorite genre")}
+                  {dyn.v3.getVariant("genres_description", dynamicV3TextVariants, "Explore books by your favorite genre")}
                 </p>
               </div>
               <SeedLink
