@@ -9,11 +9,13 @@ import { useV3Attributes } from "@/dynamic/v3-dynamic";
 export default function JobCard({
   job,
   onApply,
+  isApplied = false,
 }: {
   job: Job;
-  onApply?: (id: string) => void;
+  onApply?: (job: Job) => void;
+  isApplied?: boolean;
 }) {
-  const [applied, setApplied] = useState<"none" | "pending" | "done">("none");
+  const [pending, setPending] = useState(false);
   const { getText } = useV3Attributes();
   const [avatarError, setAvatarError] = useState(false);
 
@@ -29,8 +31,8 @@ export default function JobCard({
   const handleApply = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    if (applied !== "none") return;
+
+    if (pending || isApplied) return;
 
     logEvent(EVENT_TYPES.APPLY_FOR_JOB, {
       jobId: job.id,
@@ -39,9 +41,9 @@ export default function JobCard({
       location: job.location,
     });
 
-    setApplied("pending");
-    setTimeout(() => setApplied("done"), 1000);
-    onApply?.(job.id);
+    setPending(true);
+    onApply?.(job);
+    setTimeout(() => setPending(false), 600);
   };
 
   const handleViewJob = () => {
@@ -81,20 +83,20 @@ export default function JobCard({
       </div>
       <button
         className={`px-4 py-1.5 rounded-full font-semibold transition ${
-          applied === "done"
+          isApplied
             ? "bg-green-600 text-white cursor-default"
-            : applied === "pending"
+            : pending
             ? "bg-gray-400 text-white cursor-wait"
             : "bg-blue-600 hover:bg-blue-700 text-white"
         }`}
         onClick={handleApply}
-        disabled={applied !== "none"}
+        disabled={isApplied || pending}
       >
-        {applied === "none"
-          ? getText("jobs_apply_button", "Apply")
-          : applied === "pending"
+        {isApplied
+          ? getText("jobs_apply_done", "Applied")
+          : pending
           ? getText("jobs_apply_pending", "Pending...")
-          : getText("jobs_apply_done", "Applied")}
+          : getText("jobs_apply_button", "Apply")}
       </button>
     </SeedLink>
   );

@@ -125,6 +125,7 @@ export default function CartPage() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<CartItem | null>(null);
   const [editingMenuItem, setEditingMenuItem] = useState<MenuItem | null>(null);
+  const [deliveryPriority, setDeliveryPriority] = useState<"priority" | "normal">("normal");
 
   const [expressTime, setExpressTime] = useState(
     restaurant?.deliveryTime || "20-30 min"
@@ -241,6 +242,7 @@ export default function CartPage() {
       mode,
       deliveryTime,
       dropoff: selectedDropoff,
+      delivery_priority: deliveryPriority,
       items: items.map((item) => ({
         id: item.id,
         name: item.name,
@@ -365,97 +367,145 @@ export default function CartPage() {
           </span>
         </div>
         {mode === "delivery" ? (
-          <RadioGroup
-            id="delivery-time-options"
-            className="flex flex-row gap-4 mb-6"
-            value={deliveryTime}
-            onValueChange={(v) =>
-              setDeliveryTime(v as "express" | "standard" | "scheduled")
-            }
-          >
-            <div
-              className={`border rounded-xl px-4 py-3 flex flex-col min-w-[8.5rem] cursor-pointer transition relative ${
-                deliveryTime === "express"
-                  ? "border-black shadow-lg bg-zinc-50"
-                  : "border-zinc-200 hover:border-black"
-              }`}
+          <>
+            <RadioGroup
+              id="delivery-time-options"
+              className="flex flex-row gap-4 mb-4"
+              value={deliveryTime}
+              onValueChange={(v) =>
+                setDeliveryTime(v as "express" | "standard" | "scheduled")
+              }
             >
-              <RadioGroupItem
-                id="express-delivery-option"
-                value="express"
-                className="absolute top-3 right-3 focus-visible:outline-none"
-              />
-              <div className="font-bold text-zinc-900 mb-0.5">Express</div>
-              <div className="text-xs text-zinc-500">
-                <EditableTime
-                  id="express-time-display"
-                  value={expressTime}
-                  onChange={setExpressTime}
-                  editing={editing.field === "express"}
-                  setEditing={(state) =>
-                    setEditing({ field: state ? "express" : null })
-                  }
+              <div
+                className={`border rounded-xl px-4 py-3 flex flex-col min-w-[8.5rem] cursor-pointer transition relative ${
+                  deliveryTime === "express"
+                    ? "border-black shadow-lg bg-zinc-50"
+                    : "border-zinc-200 hover:border-black"
+                }`}
+              >
+                <RadioGroupItem
+                  id="express-delivery-option"
+                  value="express"
+                  className="absolute top-3 right-3 focus-visible:outline-none"
                 />
-              </div>
-              <div className="text-xs text-orange-500 mt-0.5">
-                Direct to you + $2.99
-              </div>
-            </div>
-            <div
-              className={`border rounded-xl px-4 py-3 flex flex-col min-w-[8.5rem] cursor-pointer transition relative ${
-                deliveryTime === "standard"
-                  ? "border-black shadow-lg bg-zinc-50"
-                  : "border-zinc-200 hover:border-black"
-              }`}
-            >
-              <RadioGroupItem
-                id="standard-delivery-option"
-                value="standard"
-                className="absolute top-3 right-3 focus-visible:outline-none"
-              />
-              <div className="font-bold text-zinc-900 mb-0.5">Standard</div>
-              <div className="text-xs text-zinc-500">
-                <EditableTime
-                  id="standard-time-display"
-                  value={standardTime}
-                  onChange={setStandardTime}
-                  editing={editing.field === "standard"}
-                  setEditing={(state) =>
-                    setEditing({ field: state ? "standard" : null })
-                  }
-                />
-              </div>
-            </div>
-            <div
-              className={`rounded-xl pr-8 pl-4 py-3 flex flex-col min-w-[10rem] cursor-pointer border transition relative ${
-                deliveryTime === "scheduled"
-                  ? "border-black shadow-lg bg-zinc-50"
-                  : "border-zinc-200 hover:border-black"
-              }`}
-            >
-              <RadioGroupItem
-                id="scheduled-delivery-option"
-                value="scheduled"
-                className="absolute top-3 right-[3px] focus-visible:outline-none"
-              />
-              <div className="font-bold text-zinc-900 mb-0.5">
-                Schedule for later
-              </div>
-              <div className="text-xs text-zinc-400">
-                {deliveryTime === "scheduled" ? (
-                  <input
-                    id="scheduled-time-input"
-                    className="border-b outline-none w-auto py-0.5 px-1 bg-zinc-50"
-                    value={scheduledInput}
-                    onChange={(e) => setScheduledInput(e.target.value)}
-                    placeholder="Type a time: e.g., 7:15 pm"
+                <div className="font-bold text-zinc-900 mb-0.5">Express</div>
+                <div className="text-xs text-zinc-500">
+                  <EditableTime
+                    id="express-time-display"
+                    value={expressTime}
+                    onChange={setExpressTime}
+                    editing={editing.field === "express"}
+                    setEditing={(state) =>
+                      setEditing({ field: state ? "express" : null })
+                    }
                   />
-                ) : (
-                  "Choose a time"
-                )}
+                </div>
+                <div className="text-xs text-orange-500 mt-0.5">
+                  Direct to you + $2.99
+                </div>
+              </div>
+              <div
+                className={`border rounded-xl px-4 py-3 flex flex-col min-w-[8.5rem] cursor-pointer transition relative ${
+                  deliveryTime === "standard"
+                    ? "border-black shadow-lg bg-zinc-50"
+                    : "border-zinc-200 hover:border-black"
+                }`}
+              >
+                <RadioGroupItem
+                  id="standard-delivery-option"
+                  value="standard"
+                  className="absolute top-3 right-3 focus-visible:outline-none"
+                />
+                <div className="font-bold text-zinc-900 mb-0.5">Standard</div>
+                <div className="text-xs text-zinc-500">
+                  <EditableTime
+                    id="standard-time-display"
+                    value={standardTime}
+                    onChange={setStandardTime}
+                    editing={editing.field === "standard"}
+                    setEditing={(state) =>
+                      setEditing({ field: state ? "standard" : null })
+                    }
+                  />
+                </div>
+              </div>
+              <div
+                className={`rounded-xl pr-8 pl-4 py-3 flex flex-col min-w-[10rem] cursor-pointer border transition relative ${
+                  deliveryTime === "scheduled"
+                    ? "border-black shadow-lg bg-zinc-50"
+                    : "border-zinc-200 hover:border-black"
+                }`}
+              >
+                <RadioGroupItem
+                  id="scheduled-delivery-option"
+                  value="scheduled"
+                  className="absolute top-3 right-[3px] focus-visible:outline-none"
+                />
+                <div className="font-bold text-zinc-900 mb-0.5">
+                  Schedule for later
+                </div>
+                <div className="text-xs text-zinc-400">
+                  {deliveryTime === "scheduled" ? (
+                    <input
+                      id="scheduled-time-input"
+                      className="border-b outline-none w-auto py-0.5 px-1 bg-zinc-50"
+                      value={scheduledInput}
+                      onChange={(e) => setScheduledInput(e.target.value)}
+                      placeholder="Type a time: e.g., 7:15 pm"
+                    />
+                  ) : (
+                    "Choose a time"
+                  )}
+                </div>
+              </div>
+            </RadioGroup>
+            <div className="mb-6">
+              <div className="text-sm font-semibold mb-2">Delivery priority</div>
+              <div className="flex gap-3">
+                {[
+                  { id: "priority", label: "Priority: ready & rushed", value: "priority" },
+                  { id: "normal", label: "Normal: standard prep", value: "normal" },
+                ].map((opt) => (
+                  <label
+                    key={opt.id}
+                    className={`flex-1 border rounded-xl px-4 py-3 cursor-pointer transition ${
+                      deliveryPriority === opt.value
+                        ? "border-black shadow-sm bg-zinc-50"
+                        : "border-zinc-200 hover:border-black"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="delivery-priority"
+                      value={opt.value}
+                      className="hidden"
+                      checked={deliveryPriority === opt.value}
+                      onChange={() => {
+                        setDeliveryPriority(opt.value as "priority" | "normal");
+                        logEvent(EVENT_TYPES.DELIVERY_PRIORITY_SELECTED, {
+                          priority: opt.value,
+                          mode,
+                          address: form.address,
+                          name: form.name,
+                          phone: form.phone,
+                          restaurantId: restaurant?.id || "unknown",
+                          restaurantName: restaurant?.name || "Unknown Restaurant",
+                          items: items.map(item => ({
+                            id: item.id,
+                            name: item.name,
+                            quantity: item.quantity,
+                            price: item.price,
+                          })),
+                          cartTotal: getTotal(),
+                        });
+                      }}
+                    />
+                    <div className="font-semibold text-sm">{opt.label}</div>
+                  </label>
+                ))}
               </div>
             </div>
-          </RadioGroup>
+          </>
         ) : (
           <div className="py-2 pl-1 text-sm">
             <span className="font-semibold">Pickup Time: </span>

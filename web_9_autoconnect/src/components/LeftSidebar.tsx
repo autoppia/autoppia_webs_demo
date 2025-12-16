@@ -9,6 +9,8 @@ import {
 } from "@/dynamic/v1-layouts";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import type { User } from "@/library/dataset";
+import Link from "next/link";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export default function LeftSidebar() {
   const { seed, resolvedSeeds } = useSeed();
@@ -79,9 +81,26 @@ export default function LeftSidebar() {
         </span>
       </div>
 
-      <div className="mt-3 text-gray-600 text-sm cursor-pointer hover:text-blue-600">
-        <span>&#9734;</span> Saved items
-      </div>
+      <Link
+        href="/saved"
+        className="mt-3 inline-flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:text-blue-600"
+        onClick={() =>
+          logEvent(EVENT_TYPES.VIEW_SAVED_POSTS, { source: "left_sidebar" })
+        }
+      >
+        <span className="text-yellow-500">&#9734;</span>
+        <span>Saved items</span>
+      </Link>
+      <Link
+        href="/hidden"
+        className="mt-2 inline-flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:text-blue-600"
+        onClick={() =>
+          logEvent(EVENT_TYPES.VIEW_HIDDEN_POSTS, { source: "left_sidebar" })
+        }
+      >
+        <span className="text-gray-500">👁‍🗨</span>
+        <span>Hidden posts</span>
+      </Link>
 
       {/* Curioso: Estadísticas divertidas */}
       <div className="mt-4 pt-4 border-t">

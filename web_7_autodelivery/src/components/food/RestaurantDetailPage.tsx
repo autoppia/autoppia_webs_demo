@@ -4,13 +4,18 @@ import { MenuItem, MenuItemSize, type Restaurant } from "@/data/restaurants";
 import { useRestaurants } from "@/contexts/RestaurantContext";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
-import { Loader2, Trash } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { AddToCartModal } from "./AddToCartModal";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useLayout } from "@/contexts/LayoutProvider";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { SafeImage } from "@/components/ui/SafeImage";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -40,36 +45,15 @@ type Review = {
 };
 function ReviewsSection({
   reviews,
-  isAdmin,
   restaurant,
 }: {
   reviews: Review[];
-  isAdmin?: boolean;
   restaurant: Restaurant;
 }) {
   const layout = useLayout();
   const seedStructure = layout.seed;
   const { getText, getId, getAria } = useV3Attributes();
-  const [localReviews, setLocalReviews] = useState(reviews);
-  const handleDelete = (idx: number) => {
-    const deleted = localReviews[idx];
-
-    logEvent(EVENT_TYPES.DELETE_REVIEW, {
-      author: deleted.author,
-      rating: deleted.rating,
-      comment: deleted.comment,
-      date: deleted.date,
-      restaurantId: restaurant.id,
-      restaurantName: restaurant.name,
-      cuisine: restaurant.cuisine,
-      restaurantRating: restaurant.rating,
-      restaurantDescription: restaurant.description,
-    });
-
-    setLocalReviews((r) => r.filter((_, i) => i !== idx));
-  };
-
-  if (!localReviews?.length) return null;
+  if (!reviews?.length) return null;
 
   const reviewsTitleAttributes = layout.getElementAttributes("reviews-title", 0);
   const reviewsTitleId = getId(
@@ -95,7 +79,7 @@ function ReviewsSection({
         className={`space-y-4 ${layout.generateSeedClass('reviews-list')}`}
         {...layout.getElementAttributes('reviews-list', 0)}
       >
-        {localReviews.map((r, i) => (
+        {reviews.map((r, i) => (
           <div
             key={i}
             className="bg-white rounded-xl shadow p-5 flex items-start gap-4 group relative"
@@ -115,18 +99,6 @@ function ReviewsSection({
               <div className="text-zinc-700 text-base">{r.comment}</div>
               <span className="text-xs text-zinc-400 ">{r.date}</span>
             </div>
-            {isAdmin && (
-              <button
-                {...layout.getElementAttributes("delete-review-button", i)}
-                id={getId("delete-review-button", `delete-review-${seedStructure}-${i}`)}
-                aria-label={getAria("delete-review-button", "Delete review")}
-                title={getAria("delete-review-button", "Delete review")}
-                className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full shadow bg-zinc-100 text-zinc-400 hover:bg-red-100 hover:text-red-700 transition duration-150"
-                onClick={() => handleDelete(i)}
-              >
-                <Trash size={18} />
-              </button>
-            )}
           </div>
         ))}
       </div>
@@ -142,7 +114,6 @@ export default function RestaurantDetailPage({
   const layout = useLayout();
   const seedStructure = layout.seed;
   const { getText, getId, getAria } = useV3Attributes();
-  const isAdmin = true; // <-- Set false to test regular user (admin-only delete)
   const router = useSeedRouter();
   const { restaurants, isLoading } = useRestaurants();
   const restaurant = useMemo(() => {
@@ -153,6 +124,13 @@ export default function RestaurantDetailPage({
   const [modalOpen, setModalOpen] = useState(false);
   const [modalItem, setModalItem] = useState<MenuItem | null>(null);
   const [mode, setMode] = useState<"delivery" | "pickup">("delivery");
+  const [reviews, setReviews] = useState<Review[]>(restaurant?.reviews ?? []);
+
+  useEffect(() => {
+    if (restaurant?.reviews) {
+      setReviews(restaurant.reviews);
+    }
+  }, [restaurant?.id]);
 
   useEffect(() => {
     if (restaurant) {
@@ -360,9 +338,31 @@ export default function RestaurantDetailPage({
       {/* Reviews */}
       <ReviewsSection 
         key="reviews"
-        reviews={restaurant.reviews} 
-        isAdmin={isAdmin} 
-        restaurant={restaurant} 
+        reviews={reviews} 
+        restaurant={restaurant}
+      />
+
+      <AddReviewForm
+        restaurant={restaurant}
+        onSubmit={(payload) => {
+          setReviews((prev) => [
+            {
+              avatar: "/media/avatars/default-avatar.jpg",
+              author: payload.author || "Guest",
+              rating: payload.rating,
+              comment: payload.comment,
+              date: new Date().toLocaleDateString(),
+            },
+            ...prev,
+          ]);
+          logEvent(EVENT_TYPES.REVIEW_SUBMITTED, {
+            ...payload,
+            restaurantId: restaurant.id,
+            restaurantName: restaurant.name,
+            cuisine: restaurant.cuisine,
+            restaurantRating: restaurant.rating,
+          });
+        }}
       />
       
       {/* Modal for item customizations */}
@@ -413,5 +413,79 @@ function CartFab() {
         {total} item{total > 1 ? "s" : ""}
       </span>
     </button>
+  );
+}
+
+function AddReviewForm({
+  restaurant,
+  onSubmit,
+}: {
+  restaurant: Restaurant;
+  onSubmit: (payload: { author: string; rating: number; comment: string }) => void;
+}) {
+  const { getId, getText } = useV3Attributes();
+  const [author, setAuthor] = useState("");
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!comment.trim()) return;
+    onSubmit({
+      author: author.trim() || "Guest",
+      rating,
+      comment: comment.trim(),
+    });
+    setComment("");
+  };
+
+  return (
+    <Card className="mt-10 p-6 bg-white shadow-sm border border-zinc-200">
+      <h3 className="text-lg font-semibold mb-4">Leave a review</h3>
+      <form className="space-y-4" onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor={getId("reviewer-name", "reviewer-name-input")}>Name</Label>
+            <Input
+              id={getId("reviewer-name", "reviewer-name-input")}
+              placeholder="Your name"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor={getId("review-rating", "review-rating-input")}>Rating</Label>
+            <Select
+              value={String(rating)}
+              onValueChange={(v) => setRating(Number(v))}
+            >
+              <SelectTrigger id={getId("review-rating", "review-rating-input")}>
+                <SelectValue placeholder="Select rating" />
+              </SelectTrigger>
+              <SelectContent>
+                {[5, 4, 3, 2, 1].map((val) => (
+                  <SelectItem key={val} value={String(val)}>
+                    {val} stars
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor={getId("review-comment", "review-comment-input")}>Comment</Label>
+          <Textarea
+            id={getId("review-comment", "review-comment-input")}
+            placeholder={getText("review-placeholder", `Share your experience at ${restaurant.name}`)}
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            rows={4}
+          />
+        </div>
+        <Button type="submit" className="bg-green-600 hover:bg-green-700 text-white">
+          Submit review
+        </Button>
+      </form>
+    </Card>
   );
 }

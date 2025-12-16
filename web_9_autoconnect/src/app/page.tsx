@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   type Post as PostType,
   type User as UserType,
@@ -18,6 +18,15 @@ import {
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
+import {
+  loadHiddenPostIds,
+  loadHiddenPosts,
+  loadSavedPosts,
+  persistHiddenPostIds,
+  persistHiddenPosts,
+  persistSavedPosts,
+} from "@/library/localState";
+import Link from "next/link";
 
 function HomeContent() {
   const { seed, resolvedSeeds } = useSeed();
@@ -34,7 +43,25 @@ function HomeContent() {
   const [posts, setPosts] = useState<PostType[]>(
     () => defaultPosts.map((post) => ({ ...post, liked: false })) // ensure fresh local likes
   );
+  const [savedPosts, setSavedPosts] = useState<PostType[]>([]);
+  const [hiddenPostIds, setHiddenPostIds] = useState<Set<string>>(new Set());
+  const [hiddenPosts, setHiddenPosts] = useState<PostType[]>([]);
   const [newPost, setNewPost] = useState("");
+
+  useEffect(() => {
+    setSavedPosts(loadSavedPosts());
+    setHiddenPostIds(loadHiddenPostIds());
+    setHiddenPosts(loadHiddenPosts());
+  }, []);
+
+  useEffect(() => {
+    persistSavedPosts(savedPosts);
+  }, [savedPosts]);
+
+  useEffect(() => {
+    persistHiddenPostIds(hiddenPostIds);
+    persistHiddenPosts(hiddenPosts);
+  }, [hiddenPostIds, hiddenPosts]);
 
   function handleSubmitPost(e: React.FormEvent) {
     e.preventDefault();
@@ -117,7 +144,83 @@ function HomeContent() {
     });
   }
 
-  const shuffledPosts = getShuffledItems(posts, layoutSeed);
+  const shuffledPosts = useMemo(
+    () => getShuffledItems(posts, layoutSeed),
+    [posts, layoutSeed]
+  );
+  const visiblePosts = useMemo(
+    () => shuffledPosts.filter((p) => !hiddenPostIds.has(p.id)),
+    [shuffledPosts, hiddenPostIds]
+  );
+  const renderPostsBlock = () => (
+    <>
+      {savedPosts.length > 0 && (
+        <div className="mb-4 bg-white rounded-lg shadow p-4">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-semibold text-sm text-gray-700">
+              Saved posts ({savedPosts.length})
+            </h2>
+            <button
+              className="text-xs text-blue-600 hover:underline"
+              onClick={() => setSavedPosts([])}
+            >
+              Clear
+            </button>
+          </div>
+          <div className="flex items-center gap-3 text-xs text-blue-700 mb-2">
+            <Link href="/saved" className="hover:underline font-semibold">
+              View all saved
+            </Link>
+            <span className="text-gray-300">•</span>
+            <span className="text-gray-600">
+              Saved posts persist locally for this session.
+            </span>
+          </div>
+          <ul className="space-y-2 text-sm text-gray-700">
+            {savedPosts.map((p) => (
+              <li key={`saved-${p.id}`} className="flex items-start gap-2">
+                <span className="text-gray-400">•</span>
+                <div>
+                  <div className="font-semibold">{p.user.name}</div>
+                  <div className="text-gray-600 line-clamp-2">{p.content}</div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+          <div className="space-y-4">
+            {visiblePosts.map((post) => (
+              <Post
+                key={post.id}
+                post={post}
+                onLike={handleLike}
+                onAddComment={handleAddComment}
+                onSave={(p) =>
+                  setSavedPosts((prev) => {
+                    const deduped = prev.filter((x) => x.id !== p.id);
+                    return [p, ...deduped];
+                  })
+                }
+                onHide={(postId) =>
+                  setHiddenPostIds((prev) => {
+                    const next = new Set(prev);
+                    next.add(postId);
+                    const found = posts.find((p) => p.id === postId);
+                    if (found) {
+                      setHiddenPosts((hp) => {
+                        const filtered = hp.filter((p) => p.id !== postId);
+                        return [found, ...filtered];
+                      });
+                    }
+                    return next;
+                  })
+                }
+              />
+            ))}
+          </div>
+        </>
+  );
   const sidebarClasses = getLayoutClasses(layout, 'sidebarPosition');
   const postBoxClasses = getLayoutClasses(layout, 'postBoxPosition');
 
@@ -228,16 +331,7 @@ function HomeContent() {
           <main className="w-full max-w-[950px] mx-auto flex-1 px-6">
             <section>
               {renderPostBox()}
-              <div className="space-y-4">
-                {shuffledPosts.map((post) => (
-                  <Post
-                    key={post.id}
-                    post={post}
-                    onLike={handleLike}
-                    onAddComment={handleAddComment}
-                  />
-                ))}
-              </div>
+              {renderPostsBlock()}
             </section>
           </main>
           {renderSidebar('right')}
@@ -247,16 +341,7 @@ function HomeContent() {
 
     if (layout.mainLayout === 'masonry') {
       return (
-        <div className="space-y-4">
-          {shuffledPosts.map((post) => (
-            <Post
-              key={post.id}
-              post={post}
-              onLike={handleLike}
-              onAddComment={handleAddComment}
-            />
-          ))}
-        </div>
+        <div className="space-y-4">{renderPostsBlock()}</div>
       );
     }
 
@@ -267,16 +352,7 @@ function HomeContent() {
           <main className="w-full max-w-[950px] mx-auto flex-1 px-6">
             <section>
               {renderPostBox()}
-              <div className="space-y-4">
-                {shuffledPosts.map((post) => (
-                  <Post
-                    key={post.id}
-                    post={post}
-                    onLike={handleLike}
-                    onAddComment={handleAddComment}
-                  />
-                ))}
-              </div>
+              {renderPostsBlock()}
             </section>
           </main>
         </>
@@ -289,16 +365,7 @@ function HomeContent() {
           <main className="w-full max-w-[950px] mx-auto flex-1 px-6">
             <section>
               {renderPostBox()}
-              <div className="space-y-4">
-                {shuffledPosts.map((post) => (
-                  <Post
-                    key={post.id}
-                    post={post}
-                    onLike={handleLike}
-                    onAddComment={handleAddComment}
-                  />
-                ))}
-              </div>
+              {renderPostsBlock()}
             </section>
           </main>
           {renderSidebar('bottom')}
@@ -312,16 +379,7 @@ function HomeContent() {
         <main className="w-full max-w-[950px] mx-auto flex-1 px-6">
           <section>
             {renderPostBox()}
-            <div className="space-y-4">
-              {shuffledPosts.map((post) => (
-                <Post
-                  key={post.id}
-                  post={post}
-                  onLike={handleLike}
-                  onAddComment={handleAddComment}
-                />
-              ))}
-            </div>
+            {renderPostsBlock()}
           </section>
         </main>
         {renderSidebar('right')}
