@@ -7,6 +7,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 interface AuthUser {
   username: string;
   allowedBooks: string[];
+  readingList?: string[];
 }
 
 interface AuthContextValue {
@@ -17,6 +18,8 @@ interface AuthContextValue {
   logout: () => void;
   addAllowedBook: (bookId: string) => void;
   removeAllowedBook: (bookId: string) => void;
+  addToReadingList: (bookId: string) => void;
+  removeFromReadingList: (bookId: string) => void;
 }
 
 const STORAGE_KEY = "autobooksUser";
@@ -37,6 +40,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           parsed.allowedBooks = parsed.allowedMovies;
           parsed.allowedMovies = undefined;
         }
+        // Ensure readingList exists
+        if (!parsed.readingList) {
+          parsed.readingList = [];
+        }
         setCurrentUser(parsed);
       }
     } catch {
@@ -53,6 +60,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const authUser: AuthUser = {
       username: record.username,
       allowedBooks: record.allowedBooks,
+      readingList: [],
     };
     setCurrentUser(authUser);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
@@ -82,6 +90,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const authUser: AuthUser = {
         username: newUser.username,
         allowedBooks: newUser.allowedBooks,
+        readingList: [],
       };
       setCurrentUser(authUser);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
@@ -192,6 +201,54 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [currentUser]
   );
 
+  const addToReadingList = useCallback(
+    (bookId: string) => {
+      if (!currentUser) return;
+      
+      const readingList = currentUser.readingList || [];
+      
+      // Check if book is already in the list
+      if (readingList.includes(bookId)) {
+        return;
+      }
+
+      // Update current user
+      const updatedUser: AuthUser = {
+        ...currentUser,
+        readingList: [...readingList, bookId],
+      };
+      
+      // Update state and localStorage
+      setCurrentUser(updatedUser);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
+    },
+    [currentUser]
+  );
+
+  const removeFromReadingList = useCallback(
+    (bookId: string) => {
+      if (!currentUser) return;
+      
+      const readingList = currentUser.readingList || [];
+      
+      // Check if book is in the list
+      if (!readingList.includes(bookId)) {
+        return;
+      }
+
+      // Update current user
+      const updatedUser: AuthUser = {
+        ...currentUser,
+        readingList: readingList.filter((id) => id !== bookId),
+      };
+      
+      // Update state and localStorage
+      setCurrentUser(updatedUser);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
+    },
+    [currentUser]
+  );
+
   const value = useMemo(
     () => ({
       currentUser,
@@ -201,8 +258,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       logout,
       addAllowedBook,
       removeAllowedBook,
+      addToReadingList,
+      removeFromReadingList,
     }),
-    [currentUser, login, signup, logout, addAllowedBook, removeAllowedBook]
+    [currentUser, login, signup, logout, addAllowedBook, removeAllowedBook, addToReadingList, removeFromReadingList]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

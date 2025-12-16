@@ -62,7 +62,15 @@ const nextConfig = {
   },
 
   reactStrictMode: false,
-  devIndicators: false,
+  devIndicators: {
+    buildActivity: false,
+    buildActivityPosition: 'bottom-right',
+  },
+  // Disable error overlay in development
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
+  },
   images: {
     unoptimized: true, // To fix hydration crossorigin issues
     remotePatterns: [

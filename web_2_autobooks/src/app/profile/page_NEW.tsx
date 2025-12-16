@@ -10,7 +10,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import { MovieEditor, type MovieEditorData } from "@/components/movies/MovieEditor";
 import type { Book } from "@/data/books";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { User, BookOpen, Edit, Trash2, Plus, Save, Mail, MapPin, Globe, Heart, FileText, Bookmark } from "lucide-react";
+import { User, BookOpen, Edit, Trash2, Plus, Save, Mail, MapPin, Globe, Heart, FileText } from "lucide-react";
 
 type ProfileFormState = {
   firstName: string;
@@ -45,7 +45,7 @@ const parseGenreList = (value: string) =>
     .filter(Boolean);
 
 export default function ProfilePage() {
-  const { currentUser, addAllowedBook, removeAllowedBook, removeFromReadingList } = useAuth();
+  const { currentUser, addAllowedBook, removeAllowedBook } = useAuth();
   const books = getBooks();
   const initialProfileState: ProfileFormState = {
     firstName: "",
@@ -75,9 +75,6 @@ export default function ProfilePage() {
       email: prev.email || `${currentUser.username}@autobooks.com`,
     }));
   }, [currentUser]);
-
-  // Move useMemo before conditional return to follow Rules of Hooks
-  const addBookTemplate = useMemo(() => buildFallbackBook(`new-book-${addBookKey}`), [addBookKey]);
 
   if (!currentUser) {
     return (
@@ -109,6 +106,8 @@ export default function ProfilePage() {
     bookId,
     book: books.find((book) => book.id === bookId),
   }));
+
+  const addBookTemplate = useMemo(() => buildFallbackBook(`new-book-${addBookKey}`), [addBookKey]);
 
   const handleProfileInputChange = (key: keyof ProfileFormState, value: string) => {
     setProfileForm((prev) => ({ ...prev, [key]: value }));
@@ -242,10 +241,6 @@ export default function ProfilePage() {
             <TabsTrigger value="books" className="flex items-center gap-2">
               <BookOpen className="h-4 w-4" />
               Edit Books
-            </TabsTrigger>
-            <TabsTrigger value="reading-list" className="flex items-center gap-2">
-              <Bookmark className="h-4 w-4" />
-              Reading List
             </TabsTrigger>
             <TabsTrigger value="add-books" className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
@@ -445,103 +440,6 @@ export default function ProfilePage() {
             </div>
           </TabsContent>
 
-          {/* Reading List Tab */}
-          <TabsContent value="reading-list" className="space-y-6">
-            <div className="space-y-4">
-              {currentUser.readingList && currentUser.readingList.length > 0 && (
-                <div className="flex items-center gap-3 mb-4">
-                  <Bookmark className="h-5 w-5 text-secondary" />
-                  <h2 className="text-2xl font-bold text-white">Reading List</h2>
-                  <span className="text-sm text-white/60">({currentUser.readingList.length})</span>
-                </div>
-              )}
-              
-              {currentUser.readingList && currentUser.readingList.length > 0 ? (
-                currentUser.readingList.map((bookId) => {
-                  const book = books.find((b) => b.id === bookId);
-                  const baseBook = book ?? buildFallbackBook(bookId);
-                  
-                  return (
-                    <div key={bookId} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl">
-                      <div className="flex items-start justify-between mb-6">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-4">
-                            <div
-                              className="w-24 h-32 rounded-xl bg-cover bg-center shadow-xl"
-                              style={{ backgroundImage: `url(${baseBook.poster}), url('/media/gallery/default_book.png')` }}
-                            />
-                            <div className="flex-1">
-                              <p className="text-xs uppercase tracking-wide text-white/50 mb-2">Reading List</p>
-                              <h3 className="text-2xl font-bold text-white mb-2">{baseBook.title}</h3>
-                              {book ? (
-                                <>
-                                  <p className="text-sm text-white/70 mb-4 line-clamp-2">{book.synopsis}</p>
-                                  <div className="grid gap-3 text-sm text-white/80 md:grid-cols-2">
-                                    <div className="space-y-2">
-                                      <p><span className="text-white/50">Author:</span> <span className="font-medium">{book.director}</span></p>
-                                      <p><span className="text-white/50">Year:</span> <span className="font-medium">{book.year}</span></p>
-                                      <p><span className="text-white/50">Pages:</span> <span className="font-medium">{book.duration}</span></p>
-                                    </div>
-                                    <div className="space-y-2">
-                                      <p><span className="text-white/50">Genres:</span> <span className="font-medium">{book.genres.join(", ")}</span></p>
-                                      <p><span className="text-white/50">Rating:</span> <span className="font-medium">{book.rating}</span></p>
-                                    </div>
-                                  </div>
-                                </>
-                              ) : (
-                                <p className="text-sm text-white/60">
-                                  This book is not available in the current dataset.
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex flex-wrap gap-3">
-                        {book && (
-                          <SeedLink
-                            href={`/books/${book.id}`}
-                            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 transition-colors"
-                          >
-                            <BookOpen className="h-4 w-4" />
-                            View Details
-                          </SeedLink>
-                        )}
-                        <Button
-                          variant="ghost"
-                          className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-400/10 text-red-300 hover:bg-red-400/20 transition-colors"
-                          onClick={() => {
-                            removeFromReadingList(bookId);
-                            setBookMessage(`Book removed from reading list: ${baseBook.title}`);
-                          }}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          Remove from List
-                        </Button>
-                      </div>
-                    </div>
-                  );
-                })
-              ) : (
-                <div className="rounded-3xl border border-dashed border-white/20 bg-gradient-to-br from-white/5 to-white/0 p-12 text-center backdrop-blur-sm">
-                  <Bookmark className="h-16 w-16 text-white/20 mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-white mb-2">Your reading list is empty</h3>
-                  <p className="text-white/70 mb-6">
-                    Start building your reading list by adding books from the catalog.
-                  </p>
-                  <SeedLink
-                    href="/search"
-                    className="inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-secondary/20 px-6 py-3 text-sm font-semibold text-secondary hover:bg-secondary hover:text-black transition-colors"
-                  >
-                    <BookOpen className="h-4 w-4" />
-                    Browse Books
-                  </SeedLink>
-                </div>
-              )}
-            </div>
-          </TabsContent>
-
           {/* Add Books Tab */}
           <TabsContent value="add-books" className="space-y-6">
             <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl">
@@ -565,3 +463,4 @@ export default function ProfilePage() {
     </div>
   );
 }
+

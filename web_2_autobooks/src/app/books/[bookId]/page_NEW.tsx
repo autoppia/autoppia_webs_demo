@@ -50,13 +50,12 @@ export default function BookDetailPage() {
   const params = useParams<{ bookId: string }>();
   const bookId = decodeURIComponent(params.bookId);
   const book = getBookById(bookId);
-  const { currentUser, addToReadingList, removeFromReadingList } = useAuth();
+  const { currentUser } = useAuth();
 
   const [comments, setComments] = useState(() =>
     book ? createMockComments(book) : []
   );
   const [message, setMessage] = useState<string | null>(null);
-  const [readingListMessage, setReadingListMessage] = useState<string | null>(null);
 
   if (!book) {
     return (
@@ -156,29 +155,9 @@ export default function BookDetailPage() {
   };
 
   const handleWatchlist = () => {
-    if (!currentUser) {
-      setReadingListMessage("Please sign in to add books to your reading list");
-      setTimeout(() => setReadingListMessage(null), 3000);
-      return;
-    }
-    
     const payload = buildBookDetailPayload(book);
     logEvent(EVENT_TYPES.ADD_TO_READING_LIST, payload);
-    
-    const isInReadingList = currentUser.readingList?.includes(book.id);
-    if (isInReadingList) {
-      removeFromReadingList(book.id);
-      setReadingListMessage(`"${book.title}" removed from reading list`);
-    } else {
-      addToReadingList(book.id);
-      setReadingListMessage(`"${book.title}" added to reading list`);
-    }
-    
-    // Auto-hide message after 3 seconds
-    setTimeout(() => setReadingListMessage(null), 3000);
   };
-  
-  const isInReadingList = currentUser?.readingList?.includes(book.id) ?? false;
 
   const handleShare = () => {
     const payload = buildBookDetailPayload(book);
@@ -226,24 +205,11 @@ export default function BookDetailPage() {
             <p className="text-sm text-green-200">{message}</p>
           </div>
         )}
-        {readingListMessage && (
-          <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-5 rounded-xl border border-secondary/30 bg-secondary/20 backdrop-blur-md px-6 py-4 shadow-2xl shadow-secondary/20">
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary/30">
-                <svg className="h-5 w-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <p className="text-sm font-semibold text-white">{readingListMessage}</p>
-            </div>
-          </div>
-        )}
         <MovieDetailHero
           movie={book}
           onWatchTrailer={handleWatchTrailer}
           onWatchlist={handleWatchlist}
           onShare={handleShare}
-          isInReadingList={isInReadingList}
         />
         <MovieMeta movie={book} />
         {canManageBook && (
@@ -274,3 +240,4 @@ export default function BookDetailPage() {
     </div>
   );
 }
+

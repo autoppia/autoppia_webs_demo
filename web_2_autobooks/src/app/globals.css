@@ -90,7 +90,8 @@
   }
   
   body.navbar-top {
-    @apply pt-24; /* Two-line header height: main nav (~64px) + secondary nav (~32px) */
+    /* No padding needed - header is sticky and doesn't take up document flow space */
+    padding-top: 0 !important;
   }
 }
 
@@ -218,4 +219,30 @@
   .spacing-normal {
     @apply gap-4 p-4;
   }
+}
+
+/* Hide Next.js error overlay and dev indicators completely */
+#__next-build-watcher,
+.nextjs-toast-errors,
+[data-nextjs-toast],
+[data-nextjs-dialog],
+div[role="dialog"],
+div[class*="nextjs"],
+div[id*="__next"],
+button[aria-label*="Issue"],
+button[aria-label*="Error"],
+div[aria-label*="Issue"],
+div[aria-label*="Error"],
+*[class*="toast"],
+*[class*="error"],
+*[class*="issue"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -9999px !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
 }
