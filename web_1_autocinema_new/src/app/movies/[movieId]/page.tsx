@@ -54,12 +54,13 @@ export default function MovieDetailPage() {
   const params = useParams<{ movieId: string }>();
   const movieId = decodeURIComponent(params.movieId);
   const movie = getMovieById(movieId);
-  const { currentUser } = useAuth();
+  const { currentUser, addToWatchlist, removeFromWatchlist } = useAuth();
 
   const [comments, setComments] = useState(() =>
     movie ? createMockComments(movie) : []
   );
   const [message, setMessage] = useState<string | null>(null);
+  const [watchlistMessage, setWatchlistMessage] = useState<string | null>(null);
 
   if (!movie) {
     return (
@@ -133,9 +134,30 @@ export default function MovieDetailPage() {
 
   const handleWatchlist = () => {
     if (!movie) return;
+    
+    if (!currentUser) {
+      setWatchlistMessage("Please sign in to add movies to your watchlist");
+      setTimeout(() => setWatchlistMessage(null), 3000);
+      return;
+    }
+    
     const payload = movieToFilmPayload(movie);
     logEvent(EVENT_TYPES.ADD_TO_WATCHLIST, payload);
+    
+    const isInWatchlist = currentUser.watchlist?.includes(movie.id);
+    if (isInWatchlist) {
+      removeFromWatchlist(movie.id);
+      setWatchlistMessage(`"${movie.title}" removed from watchlist`);
+    } else {
+      addToWatchlist(movie.id);
+      setWatchlistMessage(`"${movie.title}" added to watchlist`);
+    }
+    
+    // Auto-hide message after 3 seconds
+    setTimeout(() => setWatchlistMessage(null), 3000);
   };
+  
+  const isInWatchlist = currentUser?.watchlist?.includes(movie.id) ?? false;
 
   const handleShare = () => {
     if (!movie) return;
@@ -188,11 +210,24 @@ export default function MovieDetailPage() {
             <p className="text-sm text-green-200">{message}</p>
           </div>
         )}
+        {watchlistMessage && (
+          <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-5 rounded-xl border border-secondary/30 bg-secondary/20 backdrop-blur-md px-6 py-4 shadow-2xl shadow-secondary/20">
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary/30">
+                <svg className="h-5 w-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <p className="text-sm font-semibold text-white">{watchlistMessage}</p>
+            </div>
+          </div>
+        )}
         <MovieDetailHero
           movie={movie}
           onWatchTrailer={handleWatchTrailer}
           onWatchlist={handleWatchlist}
           onShare={handleShare}
+          isInWatchlist={isInWatchlist}
         />
         <MovieMeta movie={movie} />
         {canManageMovie && (

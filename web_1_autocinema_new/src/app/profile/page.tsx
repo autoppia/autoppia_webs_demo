@@ -15,7 +15,7 @@ import {
   movieToFilmPayload,
 } from "@/utils/eventPayloads";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { User, Film, Edit, Trash2, Plus, Save, Mail, MapPin, Globe, Heart, FileText } from "lucide-react";
+import { User, Film, Edit, Trash2, Plus, Save, Mail, MapPin, Globe, Heart, FileText, Bookmark } from "lucide-react";
 
 type ProfileFormState = {
   firstName: string;
@@ -50,7 +50,7 @@ const parseGenreList = (value: string) =>
     .filter(Boolean);
 
 export default function ProfilePage() {
-  const { currentUser, addAllowedMovie, removeAllowedMovie } = useAuth();
+  const { currentUser, addAllowedMovie, removeAllowedMovie, removeFromWatchlist } = useAuth();
   const movies = getMovies();
   const initialProfileState: ProfileFormState = {
     firstName: "",
@@ -233,6 +233,10 @@ export default function ProfilePage() {
             <TabsTrigger value="movies" className="flex items-center gap-2">
               <Film className="h-4 w-4" />
               Edit Movies
+            </TabsTrigger>
+            <TabsTrigger value="watchlist" className="flex items-center gap-2">
+              <Bookmark className="h-4 w-4" />
+              Watchlist
             </TabsTrigger>
             <TabsTrigger value="add-movies" className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
@@ -429,6 +433,103 @@ export default function ProfilePage() {
                   </div>
                 );
               })}
+            </div>
+          </TabsContent>
+
+          {/* Watchlist Tab */}
+          <TabsContent value="watchlist" className="space-y-6">
+            <div className="space-y-4">
+              {currentUser.watchlist && currentUser.watchlist.length > 0 && (
+                <div className="flex items-center gap-3 mb-4">
+                  <Bookmark className="h-5 w-5 text-secondary" />
+                  <h2 className="text-2xl font-bold text-white">Watchlist</h2>
+                  <span className="text-sm text-white/60">({currentUser.watchlist.length})</span>
+                </div>
+              )}
+              
+              {currentUser.watchlist && currentUser.watchlist.length > 0 ? (
+                currentUser.watchlist.map((movieId) => {
+                  const movie = movies.find((m) => m.id === movieId);
+                  const baseMovie = movie ?? buildFallbackMovie(movieId);
+                  
+                  return (
+                    <div key={movieId} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl">
+                      <div className="flex items-start justify-between mb-6">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-4">
+                            <div
+                              className="w-24 h-32 rounded-xl bg-cover bg-center shadow-xl"
+                              style={{ backgroundImage: `url(${baseMovie.poster}), url('/media/gallery/default_movie.png')` }}
+                            />
+                            <div className="flex-1">
+                              <p className="text-xs uppercase tracking-wide text-white/50 mb-2">Watchlist</p>
+                              <h3 className="text-2xl font-bold text-white mb-2">{baseMovie.title}</h3>
+                              {movie ? (
+                                <>
+                                  <p className="text-sm text-white/70 mb-4 line-clamp-2">{movie.synopsis}</p>
+                                  <div className="grid gap-3 text-sm text-white/80 md:grid-cols-2">
+                                    <div className="space-y-2">
+                                      <p><span className="text-white/50">Director:</span> <span className="font-medium">{movie.director}</span></p>
+                                      <p><span className="text-white/50">Year:</span> <span className="font-medium">{movie.year}</span></p>
+                                      <p><span className="text-white/50">Duration:</span> <span className="font-medium">{movie.duration} min</span></p>
+                                    </div>
+                                    <div className="space-y-2">
+                                      <p><span className="text-white/50">Genres:</span> <span className="font-medium">{movie.genres.join(", ")}</span></p>
+                                      <p><span className="text-white/50">Rating:</span> <span className="font-medium">{movie.rating}</span></p>
+                                    </div>
+                                  </div>
+                                </>
+                              ) : (
+                                <p className="text-sm text-white/60">
+                                  This movie is not available in the current dataset.
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-3">
+                        {movie && (
+                          <SeedLink
+                            href={`/movies/${movie.id}`}
+                            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 transition-colors"
+                          >
+                            <Film className="h-4 w-4" />
+                            View Details
+                          </SeedLink>
+                        )}
+                        <Button
+                          variant="ghost"
+                          className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-400/10 text-red-300 hover:bg-red-400/20 transition-colors"
+                          onClick={() => {
+                            removeFromWatchlist(movieId);
+                            setFilmMessage(`Movie removed from watchlist: ${baseMovie.title}`);
+                          }}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          Remove from List
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="rounded-3xl border border-dashed border-white/20 bg-gradient-to-br from-white/5 to-white/0 p-12 text-center backdrop-blur-sm">
+                  <Bookmark className="h-16 w-16 text-white/20 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold text-white mb-2">Your watchlist is empty</h3>
+                  <p className="text-white/70 mb-6">
+                    Start building your watchlist by adding movies from the catalog.
+                  </p>
+                  <SeedLink
+                    href="/search"
+                    className="inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-secondary/20 px-6 py-3 text-sm font-semibold text-secondary hover:bg-secondary hover:text-black transition-colors"
+                  >
+                    <Film className="h-4 w-4" />
+                    Browse Movies
+                  </SeedLink>
+                </div>
+              )}
             </div>
           </TabsContent>
 

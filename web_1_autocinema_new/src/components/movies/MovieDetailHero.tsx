@@ -7,9 +7,10 @@ interface MovieDetailHeroProps {
   onWatchTrailer: () => void;
   onWatchlist: () => void;
   onShare: () => void;
+  isInWatchlist?: boolean;
 }
 
-export function MovieDetailHero({ movie, onWatchTrailer, onWatchlist, onShare }: MovieDetailHeroProps) {
+export function MovieDetailHero({ movie, onWatchTrailer, onWatchlist, onShare, isInWatchlist = false }: MovieDetailHeroProps) {
   return (
     <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl lg:flex lg:items-start lg:gap-8">
       <div className="relative group">
@@ -64,10 +65,15 @@ export function MovieDetailHero({ movie, onWatchTrailer, onWatchlist, onShare }:
           )}
           <Button 
             variant="ghost" 
-            className="h-12 px-6 border border-white/20 bg-white/5 text-white hover:bg-white/10 transition-all hover:scale-105" 
+            className={`h-12 px-6 border transition-all hover:scale-105 ${
+              isInWatchlist 
+                ? "border-secondary/30 bg-secondary/20 text-secondary hover:bg-secondary/30" 
+                : "border-white/20 bg-white/5 text-white hover:bg-white/10"
+            }`}
             onClick={onWatchlist}
           >
-            <Bookmark className="h-5 w-5 mr-2" /> Add to watchlist
+            <Bookmark className={`h-5 w-5 mr-2 ${isInWatchlist ? "fill-secondary" : ""}`} /> 
+            {isInWatchlist ? "Remove from watchlist" : "Add to watchlist"}
           </Button>
           <Button 
             variant="ghost" 

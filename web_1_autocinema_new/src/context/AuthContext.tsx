@@ -8,6 +8,7 @@ import { readJson, writeJson } from "@/shared/storage";
 interface AuthUser {
   username: string;
   allowedMovies: string[];
+  watchlist?: string[];
 }
 
 interface AuthContextValue {
@@ -18,6 +19,8 @@ interface AuthContextValue {
   logout: () => void;
   addAllowedMovie: (movieId: string) => void;
   removeAllowedMovie: (movieId: string) => void;
+  addToWatchlist: (movieId: string) => void;
+  removeFromWatchlist: (movieId: string) => void;
 }
 
 interface RegisterInput {
@@ -73,6 +76,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored) as AuthUser;
+        // Ensure watchlist exists
+        if (!parsed.watchlist) {
+          parsed.watchlist = [];
+        }
         setCurrentUser(parsed);
       }
     } catch {
@@ -119,10 +126,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     async (username: string, password: string) => {
       const record = findUser(username);
       if (record && record.password === password) {
-        const authUser: AuthUser = {
-          username: record.username,
-          allowedMovies: record.allowedMovies,
-        };
+      const authUser: AuthUser = {
+        username: record.username,
+        allowedMovies: record.allowedMovies,
+        watchlist: [],
+      };
         persistUser(authUser, "login");
         return;
       }
@@ -133,6 +141,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const authUser: AuthUser = {
           username: custom.username,
           allowedMovies: custom.allowedMovies,
+          watchlist: [],
         };
         persistUser(authUser, "login");
         return;
@@ -173,6 +182,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const authUser: AuthUser = {
           username: existingRecord.username,
           allowedMovies: existingRecord.allowedMovies,
+          watchlist: [],
         };
         persistUser(authUser, "login");
         return;
@@ -208,6 +218,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const authUser: AuthUser = {
         username: safeUsername,
         allowedMovies: nextCustomUsers[nextCustomUsers.length - 1].allowedMovies,
+        watchlist: [],
       };
       persistUser(authUser, "register");
     },
@@ -326,6 +337,54 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [currentUser]
   );
 
+  const addToWatchlist = useCallback(
+    (movieId: string) => {
+      if (!currentUser) return;
+      
+      const watchlist = currentUser.watchlist || [];
+      
+      // Check if movie is already in the list
+      if (watchlist.includes(movieId)) {
+        return;
+      }
+
+      // Update current user
+      const updatedUser: AuthUser = {
+        ...currentUser,
+        watchlist: [...watchlist, movieId],
+      };
+      
+      // Update state and localStorage
+      setCurrentUser(updatedUser);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
+    },
+    [currentUser]
+  );
+
+  const removeFromWatchlist = useCallback(
+    (movieId: string) => {
+      if (!currentUser) return;
+      
+      const watchlist = currentUser.watchlist || [];
+      
+      // Check if movie is in the list
+      if (!watchlist.includes(movieId)) {
+        return;
+      }
+
+      // Update current user
+      const updatedUser: AuthUser = {
+        ...currentUser,
+        watchlist: watchlist.filter((id) => id !== movieId),
+      };
+      
+      // Update state and localStorage
+      setCurrentUser(updatedUser);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
+    },
+    [currentUser]
+  );
+
   const value = useMemo(
     () => ({
       currentUser,
@@ -335,8 +394,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       logout,
       addAllowedMovie,
       removeAllowedMovie,
+      addToWatchlist,
+      removeFromWatchlist,
     }),
-    [currentUser, login, logout, register, addAllowedMovie, removeAllowedMovie]
+    [currentUser, login, logout, register, addAllowedMovie, removeAllowedMovie, addToWatchlist, removeFromWatchlist]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
