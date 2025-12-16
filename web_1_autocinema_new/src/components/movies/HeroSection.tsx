@@ -26,18 +26,18 @@ export function HeroSection({
 }: HeroSectionProps) {
   const dyn = useDynamicSystem();
 
-  // Variantes locales de IDs específicos del HeroSection (no se reutilizan en otros componentes)
-  // Si no están aquí, se buscarán en id-variants.json (generales)
+  // Local ID variants specific to HeroSection (not reused in other components)
+  // If they are not here, they will be looked up in id-variants.json (global)
   const dynamicV3IdsVariants: Record<string, string[]> = {
     section: ["hero-section", "main-hero", "primary-hero", "hero-container", "main-section"],
     title: ["featured-title", "highlighted-title", "spotlight-title", "featured-heading", "main-featured"],
     button: ["hero-view-details-btn", "view-details-button", "details-action", "view-movie-btn", "details-btn"],
   };
 
-  // Variantes locales de clases específicas del HeroSection (si las hay)
-  // Si no están aquí, se buscarán en class-variants.json (generales)
+  // Local class variants specific to HeroSection (if any)
+  // If they are not here, they will be looked up in class-variants.json (global)
   const dynamicV3ClassVariants: Record<string, string[]> = {
-    // Ejemplo: si necesitáramos clases dinámicas locales
+    // Example: if we needed local dynamic classes
     // section: ["hero-section", "main-hero-section", "primary-hero-section"],
   };
 

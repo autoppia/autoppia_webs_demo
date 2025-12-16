@@ -1,10 +1,10 @@
 /**
- * V3 - Atributos y Textos (IDs, Clases, Textos)
+ * V3 - Attributes and Texts (IDs, Classes, Texts)
  * 
- * Cambia IDs, clases CSS y textos para evitar memorización.
+ * Changes IDs, CSS classes, and texts to avoid memorization.
  * 
- * Usa la función unificada getVariant() para todo.
+ * Uses the unified getVariant() function for everything.
  */
 
-// Exportar la función unificada y los mapas de variantes
+// Export the unified function and variant maps
 export { getVariant, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "./utils/variant-selector";

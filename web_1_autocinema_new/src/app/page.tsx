@@ -1,15 +1,15 @@
-// Server Component - puede leer searchParams directamente
+// Server Component - can read searchParams directly
 import { Suspense } from "react";
 import { HomeContent } from "@/components/pages/HomeContent";
 
-// Server Component - lee searchParams durante SSR
+// Server Component - reads searchParams during SSR
 export default async function HomePage({
   searchParams,
 }: {
   searchParams: Promise<{ seed?: string }>;
 }) {
-  // En Next.js 15+, searchParams es una Promise y debe ser awaited
-  // Aunque no lo usamos aquí directamente, lo leemos para validar
+  // In Next.js 15+, searchParams is a Promise and must be awaited
+  // Even though we do not use it directly here, we read it to validate
   await searchParams;
 
   return (

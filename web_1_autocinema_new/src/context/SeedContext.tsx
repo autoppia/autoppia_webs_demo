@@ -9,7 +9,7 @@ interface SeedContextType {
   seed: number;
   setSeed: (seed: number) => void;
   getNavigationUrl: (path: string) => string;
-  isSeedReady: boolean; // Indica si el seed está sincronizado con la URL
+  isSeedReady: boolean; // Indicates whether the seed is synchronized with the URL
 }
 
 const DEFAULT_SEED = 1;
@@ -44,7 +44,7 @@ export const SeedProvider = ({
   initialSeed 
 }: { 
   children: React.ReactNode;
-  initialSeed?: number; // Seed desde Server Component (prioridad sobre useSearchParams)
+  initialSeed?: number; // Seed from Server Component (priority over useSearchParams)
 }) => {
   return (
     <Suspense fallback={children}>
@@ -62,10 +62,10 @@ function SeedProviderInner({
 }) {
   const searchParams = useSearchParams();
   
-  // Inicializar seed directamente desde la URL para evitar problemas de hidratación
+  // Initialize seed directly from the URL to avoid hydration issues
   const getInitialSeed = (): number => {
-    // PRIORIDAD 1: Leer de window.__INITIAL_SEED__ inyectado por Server Component
-    // Esto garantiza que SSR y cliente usen el mismo seed desde el inicio
+    // PRIORITY 1: Read from window.__INITIAL_SEED__ injected by the Server Component
+    // This guarantees SSR and client use the same seed from the start
     if (typeof window !== "undefined" && (window as any).__INITIAL_SEED__ !== undefined) {
       const serverSeed = (window as any).__INITIAL_SEED__;
       if (typeof serverSeed === "number" && Number.isFinite(serverSeed)) {
@@ -73,22 +73,22 @@ function SeedProviderInner({
       }
     }
     
-    // PRIORIDAD 2: Si initialSeed viene como prop, usarlo
+    // PRIORITY 2: If initialSeed comes as a prop, use it
     if (initialSeed !== undefined) {
       return clampBaseSeed(initialSeed);
     }
     
-    // PRIORIDAD 3: Intentar leer de useSearchParams (puede fallar en SSR)
+    // PRIORITY 3: Try reading from useSearchParams (may fail during SSR)
     try {
       const urlSeed = searchParams.get("seed");
       if (urlSeed) {
         return clampBaseSeed(Number.parseInt(urlSeed, 10));
       }
     } catch (error) {
-      // useSearchParams puede fallar durante SSR
+      // useSearchParams can fail during SSR
     }
     
-    // PRIORIDAD 4: Intentar leer de window.location (solo en cliente)
+    // PRIORITY 4: Try reading from window.location (client only)
     if (typeof window !== "undefined") {
       try {
         const params = new URLSearchParams(window.location.search);
@@ -97,13 +97,13 @@ function SeedProviderInner({
           return clampBaseSeed(Number.parseInt(urlSeed, 10));
         }
         
-        // Si no hay seed en URL, intentar localStorage
+        // If there is no seed in URL, try localStorage
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
           return clampBaseSeed(Number.parseInt(saved, 10));
         }
       } catch (error) {
-        // Ignorar errores
+        // Ignore errors
       }
     }
     
@@ -125,14 +125,14 @@ function SeedProviderInner({
         }
       }
     } else {
-      // Si no hay seed en URL, el seed por defecto está listo
+      // If there is no seed in the URL, the default seed is ready
       setIsSeedReady(true);
     }
   }, []);
   
-  // Sincronizar seed cuando cambie la URL
+  // Synchronize seed when the URL changes
   useEffect(() => {
-    // Leer seed de la URL (prioridad sobre window.__INITIAL_SEED__)
+    // Read seed from the URL (priority over window.__INITIAL_SEED__)
     const urlSeed = searchParams.get("seed");
     if (urlSeed) {
       const parsed = clampBaseSeed(Number.parseInt(urlSeed, 10));
@@ -142,7 +142,7 @@ function SeedProviderInner({
       }
       setIsSeedReady(true);
     } else {
-      // Si no hay seed en URL, verificar window.__INITIAL_SEED__
+      // If there is no seed in the URL, check window.__INITIAL_SEED__
       if (typeof window !== "undefined" && (window as any).__INITIAL_SEED__ !== undefined) {
         const initialSeed = clampBaseSeed((window as any).__INITIAL_SEED__);
         if (initialSeed !== seed) {
@@ -154,7 +154,7 @@ function SeedProviderInner({
     }
   }, [searchParams, seed]);
   
-  // Marcar como listo después del primer render del cliente
+  // Mark as ready after the first client render
   useEffect(() => {
     setIsSeedReady(true);
   }, []);

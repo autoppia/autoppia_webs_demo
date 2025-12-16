@@ -1,15 +1,15 @@
-// 🔍 SCRIPT DE VERIFICACIÓN - Copia y pega esto en la consola del navegador (F12)
+// 🔍 VERIFICATION SCRIPT - Copy and paste this into the browser console (F12)
 
 console.log("=== 🔍 VERIFICACIÓN DEL SISTEMA DINÁMICO ===\n");
 
-// 1. Obtener seed de la URL
+// 1. Get the seed from the URL
 const urlParams = new URLSearchParams(window.location.search);
 const seedFromUrl = urlParams.get('seed') || '1';
 console.log("1️⃣ SEED ACTUAL:");
 console.log("   Seed de la URL:", seedFromUrl);
 console.log("");
 
-// 2. Verificar V1 y V3 (verificamos elementos en el DOM)
+// 2. Check V1 and V3 (verify elements in the DOM)
 console.log("2️⃣ VERIFICACIÓN DE HABILITACIÓN:");
 const hasV1Elements = document.querySelectorAll('[data-v1="true"]').length > 0;
 const statsCard = document.querySelector('[id^="stats-movies-card"]');
@@ -23,12 +23,12 @@ if (!hasV1Elements && !hasV3DynamicIds) {
 }
 console.log("");
 
-// 2. Verificar V2 Seed
+// 2. Check V2 Seed
 console.log("2️⃣ V2 SEED (para datos):");
 console.log("   V2 Seed:", window.__autocinemaV2Seed || "No encontrado");
 console.log("");
 
-// 3. Verificar V1 (Wrappers)
+// 3. Check V1 (Wrappers)
 console.log("3️⃣ V1 - WRAPPERS (deberías ver elementos con data-v1='true'):");
 const v1Elements = document.querySelectorAll('[data-v1="true"]');
 console.log("   Elementos V1 encontrados:", v1Elements.length);
@@ -42,7 +42,7 @@ if (v1Elements.length > 0) {
 }
 console.log("");
 
-// 4. Verificar V3 (IDs dinámicos)
+// 4. Check V3 (Dynamic IDs)
 console.log("4️⃣ V3 - IDs DINÁMICOS:");
 const statsCard = document.querySelector('[id^="stats-movies-card"]');
 const featuredCard = document.querySelector('[id^="featured-movie-card"]');
@@ -59,7 +59,7 @@ if (featuredCard) {
 }
 console.log("");
 
-// 5. Verificar V3 (Clases dinámicas)
+// 5. Check V3 (Dynamic classes)
 console.log("5️⃣ V3 - CLASES DINÁMICAS:");
 if (statsCard) {
   const classes = statsCard.className.split(' ').filter(c => c.includes('variant') || c.includes('card-'));
@@ -67,7 +67,7 @@ if (statsCard) {
 }
 console.log("");
 
-// 6. Verificar V3 (Textos)
+// 6. Check V3 (Texts)
 console.log("6️⃣ V3 - TEXTOS:");
 const searchButton = document.querySelector('button[type="submit"]');
 const statsLabel = document.querySelector('[id^="stats-movies-card"]')?.parentElement?.querySelector('.text-xs');
@@ -79,7 +79,7 @@ if (statsLabel) {
 }
 console.log("");
 
-// 7. Verificar V2 (Datos - lo más importante)
+// 7. Check V2 (Data - most important)
 console.log("7️⃣ V2 - DATOS (esto SÍ debería cambiar visualmente):");
 const statsValues = {
   movies: document.querySelector('[id^="stats-movies-card"]')?.textContent.match(/\d+\+/)?.[0],
@@ -97,7 +97,7 @@ const movieTitles = Array.from(document.querySelectorAll('[id^="featured-movie-t
 console.log("   Películas destacadas:", movieTitles.length > 0 ? movieTitles : "No encontradas");
 console.log("");
 
-// 8. Resumen
+// 8. Summary
 console.log("📊 RESUMEN:");
 console.log("   ✅ V1 (Wrappers):", v1Elements.length > 0 ? "Funcionando" : "No encontrado");
 console.log("   ✅ V3 (IDs):", statsCard && statsCard.id.includes('-') ? "Funcionando" : "Verificar");

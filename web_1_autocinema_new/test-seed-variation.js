@@ -1,9 +1,9 @@
 /**
- * Script de prueba para verificar que los IDs cambian correctamente con diferentes seeds
- * Ejecutar: node test-seed-variation.js
+ * Test script to verify that IDs change correctly with different seeds
+ * Run: node test-seed-variation.js
  */
 
-// Simular las funciones del código
+// Simulate the functions from the main code
 function hashString(value) {
   return value.split("").reduce((acc, char) => acc * 31 + char.charCodeAt(0), 7);
 }
@@ -30,7 +30,7 @@ const searchButtonVariants = [
   "lookup-button"
 ];
 
-// Test: Verificar que diferentes seeds producen diferentes variantIndex
+// Test: Ensure different seeds produce different variantIndex values
 console.log("🧪 Test de variación de seeds para 'search-submit-button'\n");
 
 const testedSeeds = [1, 2, 3, 5, 10, 25, 50, 100, 250, 500, 999];
@@ -48,7 +48,7 @@ testedSeeds.forEach(seed => {
   console.log(`  Seed ${seed.toString().padStart(3)} → variantIndex: ${variantIndex.toString().padStart(2)} → ID: "${selectedId}"`);
 });
 
-// Verificar que hay variación
+// Verify there is variation
 const uniqueVariants = new Set(Object.values(results).map(r => r.variantIndex));
 const uniqueIds = new Set(Object.values(results).map(r => r.selectedId));
 
@@ -63,7 +63,7 @@ if (uniqueVariants.size === testedSeeds.length) {
   console.log("❌ PROBLEMA: Poca variación entre seeds");
 }
 
-// Test adicional: Verificar distribución
+// Additional test: Check distribution
 console.log("\n📊 Distribución de variantIndex:");
 const distribution = {};
 Object.values(results).forEach(r => {

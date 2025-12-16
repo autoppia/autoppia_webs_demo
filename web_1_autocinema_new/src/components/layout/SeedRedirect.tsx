@@ -5,15 +5,15 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 /**
  * Default seed to use when no seed is in the URL.
- * Cambiado a 1 para que sea consistente con el sistema dinámico.
+ * Changed to 1 so it stays consistent with the dynamic system.
  */
 const DEFAULT_SEED = 1;
 
 /**
  * Component that redirects to seed=1 URL if no seed parameter exists in the URL.
- * Esto asegura que siempre haya un seed en la URL.
+ * This guarantees there is always a seed in the URL.
  * 
- * NOTA: Si el usuario especifica un seed en la URL (ej: ?seed=5), se respeta ese seed.
+ * NOTE: If the user specifies a seed in the URL (e.g. ?seed=5), that seed is honored.
  */
 export function SeedRedirect() {
   const searchParams = useSearchParams();

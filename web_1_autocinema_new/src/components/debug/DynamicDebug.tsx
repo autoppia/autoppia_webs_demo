@@ -15,15 +15,15 @@ export function DynamicDebug() {
     console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V1:", typeof window !== "undefined" ? (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 : "SSR");
     console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V3:", typeof window !== "undefined" ? (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 : "SSR");
     
-    // Verificar elementos en el DOM
+    // Check elements in the DOM
     const v1Elements = document.querySelectorAll('[data-v1="true"]');
     console.log("Elementos V1 encontrados:", v1Elements.length);
     if (v1Elements.length > 0) {
       console.log("Ejemplo V1 wrapper:", v1Elements[0].getAttribute('data-dyn-wrap') || v1Elements[0].getAttribute('data-decoy'));
     }
     
-    // Buscar stats card - el ID puede ser cualquiera de las variantes
-    // Buscar por data-dyn-key primero
+    // Look for stats card - the ID can be any of the variants
+    // First search by data-dyn-key
     const statsCardByKey = document.querySelector('[data-dyn-key="stats-movies-card"]');
     if (statsCardByKey) {
       console.log("✅ Stats card encontrada por data-dyn-key:");
@@ -32,7 +32,7 @@ export function DynamicDebug() {
       console.log("  Clases:", statsCardByKey.className);
     } else {
       console.log("⚠️ Stats card no encontrada por data-dyn-key");
-      // Buscar por grid
+      // Search by grid
       const statsGrid = document.querySelector('.grid.grid-cols-2.md\\:grid-cols-4');
       if (statsGrid) {
         const statsCards = Array.from(statsGrid.children);
@@ -47,19 +47,19 @@ export function DynamicDebug() {
       }
     }
     
-    // Verificar IDs dinámicos (buscar cualquier ID que no sea simple)
+    // Check dynamic IDs (find any ID that is not simple)
     const allElementsWithIds = Array.from(document.querySelectorAll('[id]'));
     const dynamicIds = allElementsWithIds
       .filter(el => {
         const id = el.id;
-        // IDs dinámicos suelen tener guiones y números, no solo el nombre base
+        // Dynamic IDs usually have hyphens and numbers, not just the base name
         return id.includes('-') && id !== el.tagName.toLowerCase();
       })
       .slice(0, 10)
       .map(el => ({ id: el.id, tag: el.tagName }));
     console.log("IDs dinámicos encontrados (primeros 10):", dynamicIds);
     
-    // Verificar textos dinámicos
+    // Check dynamic text
     const searchButton = document.querySelector('button[type="submit"]');
     if (searchButton) {
       console.log("Botón Search texto:", searchButton.textContent?.trim());
