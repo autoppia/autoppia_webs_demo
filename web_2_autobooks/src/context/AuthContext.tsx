@@ -15,6 +15,8 @@ interface AuthContextValue {
   login: (username: string, password: string) => Promise<void>;
   signup: (username: string, password: string, confirmPassword: string) => Promise<void>;
   logout: () => void;
+  addAllowedBook: (bookId: string) => void;
+  removeAllowedBook: (bookId: string) => void;
 }
 
 const STORAGE_KEY = "autobooksUser";
@@ -98,6 +100,98 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem(STORAGE_KEY);
   }, [currentUser]);
 
+  const addAllowedBook = useCallback(
+    (bookId: string) => {
+      if (!currentUser) return;
+      
+      // Check if book is already in the list
+      if (currentUser.allowedBooks.includes(bookId)) {
+        return;
+      }
+
+      // Update current user
+      const updatedUser: AuthUser = {
+        ...currentUser,
+        allowedBooks: [...currentUser.allowedBooks, bookId],
+      };
+      
+      // Update state and localStorage
+      setCurrentUser(updatedUser);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
+
+      // Update custom users if this is a custom user
+      if (typeof window !== "undefined") {
+        try {
+          const storedUsers = localStorage.getItem("autobooks_custom_users");
+          if (storedUsers) {
+            const customUsers: UserRecord[] = JSON.parse(storedUsers);
+            const userIndex = customUsers.findIndex(
+              (user) => user.username.toLowerCase() === currentUser.username.toLowerCase()
+            );
+            
+            if (userIndex !== -1) {
+              const updatedCustomUsers = [...customUsers];
+              updatedCustomUsers[userIndex] = {
+                ...updatedCustomUsers[userIndex],
+                allowedBooks: updatedUser.allowedBooks,
+              };
+              localStorage.setItem("autobooks_custom_users", JSON.stringify(updatedCustomUsers));
+            }
+          }
+        } catch {
+          // ignore storage errors
+        }
+      }
+    },
+    [currentUser]
+  );
+
+  const removeAllowedBook = useCallback(
+    (bookId: string) => {
+      if (!currentUser) return;
+      
+      // Check if book is in the list
+      if (!currentUser.allowedBooks.includes(bookId)) {
+        return;
+      }
+
+      // Update current user
+      const updatedUser: AuthUser = {
+        ...currentUser,
+        allowedBooks: currentUser.allowedBooks.filter((id) => id !== bookId),
+      };
+      
+      // Update state and localStorage
+      setCurrentUser(updatedUser);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
+
+      // Update custom users if this is a custom user
+      if (typeof window !== "undefined") {
+        try {
+          const storedUsers = localStorage.getItem("autobooks_custom_users");
+          if (storedUsers) {
+            const customUsers: UserRecord[] = JSON.parse(storedUsers);
+            const userIndex = customUsers.findIndex(
+              (user) => user.username.toLowerCase() === currentUser.username.toLowerCase()
+            );
+            
+            if (userIndex !== -1) {
+              const updatedCustomUsers = [...customUsers];
+              updatedCustomUsers[userIndex] = {
+                ...updatedCustomUsers[userIndex],
+                allowedBooks: updatedUser.allowedBooks,
+              };
+              localStorage.setItem("autobooks_custom_users", JSON.stringify(updatedCustomUsers));
+            }
+          }
+        } catch {
+          // ignore storage errors
+        }
+      }
+    },
+    [currentUser]
+  );
+
   const value = useMemo(
     () => ({
       currentUser,
@@ -105,8 +199,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       login,
       signup,
       logout,
+      addAllowedBook,
+      removeAllowedBook,
     }),
-    [currentUser, login, signup, logout]
+    [currentUser, login, signup, logout, addAllowedBook, removeAllowedBook]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { SeedLink } from "@/components/ui/SeedLink";
+import { EVENT_TYPES, logEvent } from "@/library/events";
+import { BookOpen, LogIn, Lock, User } from "lucide-react";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -25,6 +27,8 @@ export default function LoginPage() {
       setPassword("");
       router.push("/profile");
     } catch (err) {
+      const usernameValue = username.trim() || username;
+      logEvent(EVENT_TYPES.LOGIN_FAILURE, { username: usernameValue, reason: (err as Error).message || "login_error" });
       setError((err as Error).message || "Unable to log in");
     } finally {
       setIsSubmitting(false);
@@ -32,50 +36,96 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="mx-auto flex max-w-md flex-col gap-6 px-4 py-12 text-white">
-      <div>
-        <p className="text-sm uppercase tracking-[0.3em] text-white/60">Autobooks</p>
-        <h1 className="mt-2 text-3xl font-semibold">Sign in to start</h1>
-        <p className="text-white/70">
-          Enter the credential provided in your task instructions. The UI will simply record the authentication events.
-        </p>
-      </div>
-      <form className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-6" onSubmit={handleSubmit}>
-        <label className="block text-xs uppercase tracking-wide text-white/60">
-          Username
-          <Input
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-            className="mt-1 bg-black/40 text-white"
-            placeholder="username"
-            autoComplete="username"
-          />
-        </label>
-        <label className="block text-xs uppercase tracking-wide text-white/60">
-          Password
-          <Input
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            className="mt-1 bg-black/40 text-white"
-            placeholder="password"
-            autoComplete="current-password"
-          />
-        </label>
-        {error && <p className="text-sm text-red-400">{error}</p>}
-        <Button type="submit" className="w-full bg-secondary text-black hover:bg-secondary/80" disabled={isSubmitting}>
-          {isSubmitting ? "Verifying…" : "Sign in"}
-        </Button>
-      </form>
-      <p className="text-center text-sm text-white/60">
-        Don't have an account?{" "}
-        <SeedLink href="/signup" className="text-secondary hover:underline">
-          Sign up
-        </SeedLink>
-      </p>
-      <p className="text-sm text-white/60">
-        Each user can only manage their assigned book. Once signed in, visit your profile to review or simulate edits.
-      </p>
-    </main>
+    <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative min-h-screen flex items-center justify-center">
+      {/* Background grid pattern */}
+      <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+      {/* Background gradient overlays */}
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
+      <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
+      
+      <main className="relative mx-auto w-full max-w-md px-6 py-12">
+        <div className="space-y-8">
+          {/* Header */}
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-secondary/20 border border-secondary/30 mb-4">
+              <BookOpen className="h-8 w-8 text-secondary" />
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
+              Welcome Back
+            </h1>
+            <p className="text-lg text-white/70">
+              Sign in to access your book curator dashboard
+            </p>
+          </div>
+
+          {/* Login Form */}
+          <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl">
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div className="space-y-5">
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
+                    <User className="h-4 w-4 text-secondary" />
+                    Username
+                  </label>
+                  <Input
+                    value={username}
+                    onChange={(event) => setUsername(event.target.value)}
+                    className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20"
+                    placeholder="Enter your username"
+                    autoComplete="username"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
+                    <Lock className="h-4 w-4 text-secondary" />
+                    Password
+                  </label>
+                  <Input
+                    type="password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20"
+                    placeholder="Enter your password"
+                    autoComplete="current-password"
+                    required
+                  />
+                </div>
+              </div>
+
+              {error && (
+                <div className="rounded-xl border border-red-400/30 bg-red-400/10 p-4">
+                  <p className="text-sm text-red-200">{error}</p>
+                </div>
+              )}
+
+              <Button 
+                type="submit" 
+                className="w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105" 
+                disabled={isSubmitting}
+              >
+                <LogIn className="h-5 w-5 mr-2" />
+                {isSubmitting ? "Signing in…" : "Sign in"}
+              </Button>
+            </form>
+          </div>
+
+          {/* Footer Links */}
+          <div className="text-center space-y-3">
+            <p className="text-sm text-white/60">
+              Need an account?{" "}
+              <SeedLink href="/signup" className="font-semibold text-secondary hover:text-secondary/80 transition-colors">
+                Create one
+              </SeedLink>
+            </p>
+            <p className="text-xs text-white/50 max-w-md mx-auto">
+              Each user can only manage their assigned book. Once signed in, visit your profile to review or simulate edits.
+            </p>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }

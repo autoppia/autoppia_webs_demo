@@ -807,6 +807,267 @@ When developing, test with multiple seeds to ensure:
 
 ---
 
+## Testing and Validation
+
+### Automated Testing Script
+
+The system includes a comprehensive test script (`test-dynamic-system.js`) that validates:
+
+- ✅ File structure (all required files exist)
+- ✅ Variant files (sufficient keys and variants)
+- ✅ Determinism (same seed = same result)
+- ✅ DOM usage (wrappers, decoys, IDs, classes in browser)
+
+**How to Run:**
+
+```bash
+# From project root
+node src/dynamic/test-dynamic-system.js
+```
+
+**Expected Output:**
+```
+✅ SISTEMA DINÁMICO: VALIDACIÓN EXITOSA
+   El sistema cumple con todos los requisitos mínimos.
+```
+
+### Minimum Requirements
+
+The test script validates these minimum requirements:
+
+- **V1 Wrappers/Decoys**: Minimum 10 active elements
+- **V1 Order Changes**: Minimum 3 dynamic orderings
+- **V3 IDs**: Minimum 20 dynamic IDs
+- **V3 Classes**: Minimum 15 dynamic classes
+- **V3 Texts**: Minimum 15 dynamic texts
+- **Variants**: Each key must have at least 3 variants
+
+### Customizing Requirements
+
+To adapt the test for different websites, modify `MIN_REQUIREMENTS` in `test-dynamic-system.js`:
+
+```javascript
+const MIN_REQUIREMENTS = {
+  v1Wrappers: 10,      // Adjust for your website
+  v1OrderChanges: 3,   // Adjust for your website
+  v3Ids: 20,           // Adjust for your website
+  v3Classes: 15,       // Adjust for your website
+  v3Texts: 15,         // Adjust for your website
+  minVariants: 3,      // Adjust for your website
+};
+```
+
+For more details, see [TEST_VALIDATION.md](./TEST_VALIDATION.md).
+
+---
+
+## Performance Considerations
+
+### Optimization Strategies
+
+1. **Use `useMemo` for Dynamic Ordering**
+   ```typescript
+   const orderedItems = useMemo(() => {
+     const order = dyn.v1.changeOrderElements("items", items.length);
+     return order.map((idx) => items[idx]);
+   }, [dyn.seed, items]);
+   ```
+
+2. **Cache Variant Lookups**
+   - The `getVariant()` function is optimized with efficient hashing
+   - No need to manually cache results - the hash function is fast
+
+3. **Minimize Re-renders**
+   - `useDynamicSystem()` uses `useMemo` internally
+   - Only re-computes when `seed` changes
+
+4. **Bundle Size**
+   - JSON files are loaded at build time
+   - No runtime network requests for variants
+   - Minimal impact on bundle size
+
+### Performance Metrics
+
+- **Hash Function**: O(n) where n is string length (very fast)
+- **Variant Selection**: O(1) after hash calculation
+- **Memory**: Minimal - only stores variant arrays in memory
+- **Bundle Impact**: ~5-10KB for typical variant files
+
+---
+
+## Common Pitfalls and Solutions
+
+### Pitfall 1: Hydration Mismatches
+
+**Problem:** Server renders with one seed, client hydrates with different seed.
+
+**Solution:**
+- Ensure `window.__INITIAL_SEED__` is set in `layout.tsx`
+- Use Server Components to read seed from URL
+- Wait for `isSeedReady` before rendering dynamic content
+
+### Pitfall 2: Layout Breaking with Wrappers
+
+**Problem:** V1 wrappers break CSS layouts (flexbox, grid).
+
+**Solution:**
+- Use `div` wrappers with `w-full h-full` for layout-sensitive components
+- The system automatically uses `div` for keys containing: `"input-container"`, `"form"`, `"search"`, `"feature-card"`, `"genre-card"`, `"stats-card"`
+
+### Pitfall 3: Too Few Variants
+
+**Problem:** Scrapers can still memorize if there are only 2-3 variants.
+
+**Solution:**
+- Aim for 5-10 variants per key
+- More variants = better protection
+- Test script will warn if keys have < 3 variants
+
+### Pitfall 4: Non-Deterministic Behavior
+
+**Problem:** Same seed produces different results.
+
+**Solution:**
+- Never use `Math.random()` or `Date.now()` in variant selection
+- Always use `selectVariantIndex()` for variant selection
+- Test determinism with the test script
+
+### Pitfall 5: Forgetting Seed=1 Special Case
+
+**Problem:** Seed=1 doesn't return original version.
+
+**Solution:**
+- Always check `if (seed === 1)` before applying dynamic changes
+- Seed=1 should return first variant (index 0) or original structure
+
+### Pitfall 6: Generic Keys Colliding
+
+**Problem:** Using generic keys like `"button"` or `"card"` causes collisions.
+
+**Solution:**
+- Use specific keys: `"movie-card"`, `"search-button"`, `"feature-card-1"`
+- Include component context in key names
+
+---
+
+## Migration Guide
+
+### Adding Dynamic System to a New Website
+
+1. **Copy Core Files**
+   ```bash
+   cp -r src/dynamic /path/to/new/web/src/
+   ```
+
+2. **Install Dependencies**
+   - Ensure React and Next.js are set up
+   - No additional npm packages required
+
+3. **Set Up Seed Context**
+   - Copy `SeedContext` from existing website
+   - Ensure `page.tsx` reads seed from `searchParams`
+
+4. **Configure Environment Variables**
+   ```env
+   NEXT_PUBLIC_ENABLE_DYNAMIC_V1=true
+   NEXT_PUBLIC_ENABLE_DYNAMIC_V3=true
+   ```
+
+5. **Add Variants**
+   - Start with `id-variants.json`, `class-variants.json`, `text-variants.json`
+   - Add variants as you implement components
+
+6. **Run Test Script**
+   ```bash
+   node src/dynamic/test-dynamic-system.js
+   ```
+
+7. **Fix Issues**
+   - Add missing variants
+   - Increase usage of `dyn.v1.addWrapDecoy()` and `dyn.v3.getVariant()`
+   - Adjust `MIN_REQUIREMENTS` if needed
+
+### Adapting Test Script for Different Websites
+
+1. **Copy Test Script**
+   ```bash
+   cp src/dynamic/test-dynamic-system.js /path/to/new/web/src/dynamic/
+   ```
+
+2. **Adjust File Paths** (if structure differs)
+   ```javascript
+   const FILE_PATHS = {
+     idVariants: 'src/dynamic/v3/data/id-variants.json',
+     // Adjust if your structure is different
+   };
+   ```
+
+3. **Adjust Requirements**
+   ```javascript
+   const MIN_REQUIREMENTS = {
+     v1Wrappers: 10,      // Adjust for your website size
+     v3Ids: 20,          // Adjust for your website complexity
+     // ...
+   };
+   ```
+
+---
+
+## FAQ (Frequently Asked Questions)
+
+### Q: Why use a hash function instead of simple modulo?
+
+**A:** Hash functions provide better distribution. With simple modulo, similar seeds might produce similar results. The hash ensures each `(seed, key)` combination produces a unique, well-distributed index.
+
+### Q: Can I use the same key for different variant types?
+
+**A:** Yes, but it's not recommended. Keys like `"button"` can exist in both `id-variants.json` and `class-variants.json`, but using specific keys like `"button-id"` and `"button-class"` is clearer.
+
+### Q: What happens if a key doesn't exist in variants?
+
+**A:** `getVariant()` returns the `fallback` parameter if provided, or the `key` itself if no fallback is given. This ensures the system never breaks - it gracefully degrades.
+
+### Q: How many variants should each key have?
+
+**A:** Minimum 3, recommended 5-10. More variants = better protection, but diminishing returns after ~10 variants.
+
+### Q: Does V1 affect performance?
+
+**A:** Minimal impact. Wrappers and decoys are lightweight DOM elements. Decoys are hidden and don't affect layout. The system uses React fragments efficiently.
+
+### Q: Can I disable V1 or V3 for specific components?
+
+**A:** Yes, simply don't use `dyn.v1.addWrapDecoy()` or `dyn.v3.getVariant()` for those components. The system gracefully handles missing usage.
+
+### Q: How do I test if variants are working?
+
+**A:** 
+1. Run the test script: `node src/dynamic/test-dynamic-system.js`
+2. Change seed in URL: `?seed=1` vs `?seed=42`
+3. Compare IDs, classes, and texts - they should be different
+4. Check browser console for V1 elements: `document.querySelectorAll('[data-v1="true"]').length`
+
+### Q: What's the difference between global and local variants?
+
+**A:** 
+- **Global variants** (JSON files): Used across multiple components (e.g., `"button"`, `"card"`)
+- **Local variants** (component dictionaries): Used only in one component (e.g., `"feature_1_title"`)
+
+### Q: Can I add variants at runtime?
+
+**A:** No, variants are defined at build time in JSON files or component dictionaries. This ensures determinism and performance.
+
+### Q: How does seed=1 work?
+
+**A:** Seed=1 is special - it always returns:
+- V1: No wrappers, no decoys (original structure)
+- V3: First variant (index 0) for all keys
+- Order: Original order `[0, 1, 2, ...]`
+
+This ensures the "original" version is always accessible.
+
+---
+
 ## Summary
 
 The Dynamic System provides a comprehensive, deterministic solution for preventing web scraping through:
@@ -865,3 +1126,26 @@ The system is designed to be maintainable, scalable, and easy to use while provi
 - **V1**: ✅ Active - Modifies DOM structure (wrappers/decoy)
 - **V2**: ⏸️ Disabled - Currently uses original data, will provide randomized data when enabled
 - **V3**: ✅ Active - Modifies attributes and texts (IDs, classes, texts)
+
+### Quick Reference
+
+**Main Hook:**
+```typescript
+const dyn = useDynamicSystem();
+```
+
+**V1 Functions:**
+- `dyn.v1.addWrapDecoy(componentKey, children, reactKey?)` - Add wrappers/decoy
+- `dyn.v1.changeOrderElements(key, count)` - Change element order
+
+**V3 Function:**
+- `dyn.v3.getVariant(key, variants?, fallback?)` - Get variant (IDs, classes, texts)
+
+**Testing:**
+```bash
+node src/dynamic/test-dynamic-system.js
+```
+
+**Documentation:**
+- [Complete Documentation](./DYNAMIC_SYSTEM_DOCUMENTATION.md) - This file
+- [Test Validation Guide](./TEST_VALIDATION.md) - How to validate the system
