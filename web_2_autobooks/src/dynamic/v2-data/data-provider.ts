@@ -1,6 +1,5 @@
 import type { Book } from "@/data/books";
 import { initializeBooks } from "@/data/books";
-import { getEffectiveLayoutConfig, isDynamicEnabled } from "@/dynamic/v1-layouts";
 import { clampBaseSeed } from "@/shared/seed-resolver";
 
 export interface BookSearchFilters {
@@ -13,12 +12,10 @@ const BASE_SEED_STORAGE_KEY = "autobooks_seed_base";
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private books: Book[] = [];
-  private isEnabled = false;
   private ready = false;
   private readyPromise: Promise<void>;
 
   private constructor() {
-    this.isEnabled = isDynamicEnabled();
     if (typeof window === "undefined") {
       this.ready = true;
       this.readyPromise = Promise.resolve();
@@ -171,11 +168,8 @@ export class DynamicDataProvider {
   }
 
   public isDynamicModeEnabled(): boolean {
-    return this.isEnabled;
-  }
-
-  public getLayoutConfig(seed?: number) {
-    return getEffectiveLayoutConfig(seed);
+    // V2 está desactivado por ahora, siempre devuelve false
+    return false;
   }
 }
 
@@ -190,4 +184,3 @@ export const getBooksByGenre = (genre: string) => dynamicDataProvider.getBooksBy
 export const getAvailableGenres = () => dynamicDataProvider.getAvailableGenres();
 export const getAvailableYears = () => dynamicDataProvider.getAvailableYears();
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
-export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);

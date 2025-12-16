@@ -1,18 +1,8 @@
 "use client";
 
-import { useSeed } from "@/context/SeedContext";
-import { getLayoutConfig } from "@/dynamic/v2-data";
-import { applyLayoutOverrides, getLayoutClasses } from "@/dynamic/v1-layouts";
-
 export function Footer() {
-  const { seed, resolvedSeeds } = useSeed();
-  const layoutSeed = resolvedSeeds.v1 ?? seed;
-  const baseSeed = resolvedSeeds.base ?? seed;
-  const config = applyLayoutOverrides(getLayoutConfig(layoutSeed), baseSeed);
-  const classes = getLayoutClasses(config);
-
   return (
-    <footer className={`border-t border-white/10 bg-neutral-950/90 text-white/70 ${classes.footer}`}>
+    <footer className="border-t border-white/10 bg-neutral-950/90 text-white/70">
       <div className="mx-auto max-w-4xl px-6 py-12">
         <div className="text-center">
           <p className="text-sm uppercase tracking-[0.3em] text-secondary">Autobooks</p>
