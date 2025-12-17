@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { SpotlightRow } from "@/components/movies/SpotlightRow";
+import { SpotlightRow } from "@/components/books/SpotlightRow";
 import { getFeaturedBooks, getBooksByGenre, getAvailableGenres, getBooks } from "@/dynamic/v2-data";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Search, BookOpen, Star, TrendingUp, Sparkles, ArrowRight, Book, Calendar } from "lucide-react";
@@ -255,7 +255,7 @@ export function HomeContent() {
                       id: "stats-books-card",
                       icon: BookOpen,
                       iconColor: "secondary",
-                      value: `${stats.totalBooks}+`,
+                      value: isMounted ? stats.totalBooks.toString() : "0",
                       label: dyn.v3.getVariant("stats_books_label", undefined, "Books"),
                       iconBg: "bg-secondary/20",
                       iconHover: "group-hover:bg-secondary/30",
@@ -266,7 +266,7 @@ export function HomeContent() {
                       id: "stats-genres-card",
                       icon: Sparkles,
                       iconColor: "purple",
-                      value: stats.totalGenres.toString(),
+                      value: isMounted ? stats.totalGenres.toString() : "0",
                       label: dyn.v3.getVariant("stats_genres_label", undefined, "Genres"),
                       iconBg: "bg-purple-500/20",
                       iconHover: "group-hover:bg-purple-500/30",
@@ -277,7 +277,7 @@ export function HomeContent() {
                       id: "stats-rating-card",
                       icon: Star,
                       iconColor: "yellow",
-                      value: stats.avgRating,
+                      value: isMounted ? stats.avgRating : "0.0",
                       label: dyn.v3.getVariant("stats_rating_label", undefined, "Avg Rating"),
                       iconBg: "bg-yellow-500/20",
                       iconHover: "group-hover:bg-yellow-500/30",
@@ -288,7 +288,7 @@ export function HomeContent() {
                       id: "stats-pages-card",
                       icon: Book,
                       iconColor: "blue",
-                      value: stats.avgPages.toString(),
+                      value: isMounted ? stats.avgPages.toString() : "0",
                       label: dyn.v3.getVariant("stats_pages_label", undefined, "Avg Pages"),
                       iconBg: "bg-blue-500/20",
                       iconHover: "group-hover:bg-blue-500/30",
@@ -355,10 +355,10 @@ export function HomeContent() {
                     </div>
                     
                     {(() => {
-                      const moviesToShow = featuredBooks.slice(0, 3);
+                      const booksToShow = featuredBooks.slice(0, 3);
                       
-                      const order = dyn.v1.changeOrderElements("featured-books", moviesToShow.length);
-                      const orderedBooks = order.map(i => ({ book: moviesToShow[i], originalIndex: i }));
+                      const order = dyn.v1.changeOrderElements("featured-books", booksToShow.length);
+                      const orderedBooks = order.map(i => ({ book: booksToShow[i], originalIndex: i }));
 
                       return (
                         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -373,12 +373,17 @@ export function HomeContent() {
                                 )}
                               >
                                 {/* Book cover with overlay */}
-                                <div
-                                  className="relative overflow-hidden bg-cover bg-center aspect-[2/3] transition-transform duration-500 group-hover:scale-105"
-                                  style={{
-                                    backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url(${book.poster}), url('/media/gallery/default_book.png')`,
-                                  }}
-                                >
+                                {dyn.v1.addWrapDecoy(`featured-book-cover-${originalIndex}`, (
+                                  <div
+                                    id={dyn.v3.getVariant(displayIndex > 0 ? `featured-book-cover-${displayIndex}` : "featured-book-cover", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-book-cover-${displayIndex}` : "featured-book-cover")}
+                                    className={cn(
+                                      "relative overflow-hidden bg-cover bg-center aspect-[2/3] transition-transform duration-500 group-hover:scale-105",
+                                      dyn.v3.getVariant("card-image", CLASS_VARIANTS_MAP, "")
+                                    )}
+                                    style={{
+                                      backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url(${book.poster}), url('/media/gallery/default_book.png')`,
+                                    }}
+                                  >
                                   {/* Gradient overlay */}
                                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                                   
@@ -454,16 +459,22 @@ export function HomeContent() {
                                     </div>
                                     
                                     {/* CTA Button */}
-                                    <SeedLink
-                                      href={`/books/${book.id}`}
-                                      id={dyn.v3.getVariant(displayIndex > 0 ? `featured-book-view-details-btn-${displayIndex}` : "featured-book-view-details-btn", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-book-view-details-btn-${displayIndex}` : "featured-book-view-details-btn")}
-                                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-6 py-3 text-sm font-bold text-black transition-all hover:bg-secondary/90 hover:scale-105 shadow-lg shadow-secondary/20 whitespace-nowrap min-w-[120px]"
-                                    >
-                                      <BookOpen className="h-4 w-4" />
-                                      {dyn.v3.getVariant("view_details", undefined, "View Details")}
-                                    </SeedLink>
+                                    {dyn.v1.addWrapDecoy(`featured-book-view-details-btn-${originalIndex}`, (
+                                      <SeedLink
+                                        href={`/books/${book.id}`}
+                                        id={dyn.v3.getVariant(displayIndex > 0 ? `featured-book-view-details-btn-${displayIndex}` : "featured-book-view-details-btn", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-book-view-details-btn-${displayIndex}` : "featured-book-view-details-btn")}
+                                        className={cn(
+                                          "inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-6 py-3 text-sm font-bold text-black transition-all hover:bg-secondary/90 hover:scale-105 shadow-lg shadow-secondary/20 whitespace-nowrap min-w-[120px]",
+                                          dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")
+                                        )}
+                                      >
+                                        <BookOpen className="h-4 w-4" />
+                                        {dyn.v3.getVariant("view_details", undefined, "View Details")}
+                                      </SeedLink>
+                                    ))}
                                   </div>
                                 </div>
+                                ), undefined, `featured-cover-${originalIndex}`)}
                               </div>
                             ), undefined, `featured-${originalIndex}`)
                           ))}
@@ -575,28 +586,28 @@ export function HomeContent() {
               <SpotlightRow
                 title="Drama focus"
                 description="Slow burns, futuristic romances, and everything in between"
-                movies={dramaFocus}
+                books={dramaFocus}
               />
             )}
             {thrillerFocus.length > 0 && (
               <SpotlightRow
                 title="Thriller lab"
                 description="High-tension reads sourced from the dataset variant you picked"
-                movies={thrillerFocus}
+                books={thrillerFocus}
               />
             )}
             {fictionFocus.length > 0 && (
               <SpotlightRow
                 title="Fiction collection"
                 description="Literary masterpieces and contemporary fiction"
-                movies={fictionFocus}
+                books={fictionFocus}
               />
             )}
             {romanceFocus.length > 0 && (
               <SpotlightRow
                 title="Romance reads"
                 description="Love stories and heartwarming tales"
-                movies={romanceFocus}
+                books={romanceFocus}
               />
             )}
           </div>

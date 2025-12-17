@@ -20,7 +20,7 @@ export function AboutSection() {
       };
     }
 
-    const totalPages = books.reduce((acc, book) => acc + (book.pages || 0), 0);
+    const totalPages = books.reduce((acc, book) => acc + (book.duration || 0), 0);
     const totalRating = books.reduce((acc, book) => acc + book.rating, 0);
     const minYear = Math.min(...books.map((b) => b.year));
     const maxYear = Math.max(...books.map((b) => b.year));
@@ -119,7 +119,7 @@ export function AboutSection() {
           <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-secondary/20 mb-4 group-hover:bg-secondary/30 transition-colors">
             <BookOpen className="h-6 w-6 text-secondary" />
           </div>
-          <div className="text-3xl md:text-4xl font-bold text-white mb-1">{stats.totalBooks}+</div>
+          <div className="text-3xl md:text-4xl font-bold text-white mb-1">{stats.totalBooks}</div>
           <div className="text-sm text-white/60 font-medium">Books</div>
         </div>
 

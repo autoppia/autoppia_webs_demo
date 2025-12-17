@@ -7,7 +7,7 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { MovieEditor, type MovieEditorData } from "@/components/movies/MovieEditor";
+import { BookEditor, type BookEditorData } from "@/components/books/BookEditor";
 import type { Book } from "@/data/books";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { User, BookOpen, Edit, Trash2, Plus, Save, Mail, MapPin, Globe, Heart, FileText, Bookmark } from "lucide-react";
@@ -141,7 +141,7 @@ export default function ProfilePage() {
     setProfileMessage("Profile updated successfully.");
   };
 
-  const handleEntryEdit = (baseBook: Book, data: MovieEditorData) => {
+  const handleEntryEdit = (baseBook: Book, data: BookEditorData) => {
     logEvent(EVENT_TYPES.EDIT_BOOK, {
       book_id: baseBook.id,
       username: currentUser.username,
@@ -168,7 +168,7 @@ export default function ProfilePage() {
     setBookMessage(`Book deleted: ${baseBook.title}`);
   };
 
-  const handleAddBook = (data: MovieEditorData) => {
+  const handleAddBook = (data: BookEditorData) => {
     // Generate a unique book ID based on timestamp
     const timestamp = Math.floor(Date.now() / 1000);
     const newBookId = `book-v2-${timestamp}`;
@@ -437,7 +437,7 @@ export default function ProfilePage() {
                     </div>
                     
                     <div className="border-t border-white/10 pt-6">
-                      <MovieEditor movie={baseBook} onSubmit={(data) => handleEntryEdit(baseBook, data)} submitLabel="Save Changes" />
+                      <BookEditor book={baseBook} onSubmit={(data) => handleEntryEdit(baseBook, data)} submitLabel="Save Changes" />
                     </div>
                   </div>
                 );
@@ -552,9 +552,9 @@ export default function ProfilePage() {
                   <p className="text-sm text-white/70">Add a new book to the catalog.</p>
                 </div>
               </div>
-              <MovieEditor
+              <BookEditor
                 key={`add-book-${addBookKey}`}
-                movie={addBookTemplate}
+                book={addBookTemplate}
                 onSubmit={handleAddBook}
                 submitLabel="Add Book"
               />

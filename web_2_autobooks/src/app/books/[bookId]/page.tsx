@@ -2,13 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
-import { MovieDetailHero } from "@/components/movies/MovieDetailHero";
-import { MovieMeta } from "@/components/movies/MovieMeta";
-import { RelatedBooks } from "@/components/movies/RelatedBooks";
+import { BookDetailHero } from "@/components/books/BookDetailHero";
+import { BookMeta } from "@/components/books/BookMeta";
+import { RelatedBooks } from "@/components/books/RelatedBooks";
 import {
   CommentsPanel,
   type CommentEntry,
-} from "@/components/movies/CommentsPanel";
+} from "@/components/books/CommentsPanel";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { getBookById, getRelatedBooks } from "@/dynamic/v2-data";
 import { SeedLink } from "@/components/ui/SeedLink";
@@ -16,9 +16,9 @@ import type { Book } from "@/data/books";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import {
-  MovieEditor,
-  type MovieEditorData,
-} from "@/components/movies/MovieEditor";
+  BookEditor,
+  type BookEditorData,
+} from "@/components/books/BookEditor";
 import { buildBookDetailPayload } from "@/utils/bookEventPayload";
 
 const AVATARS = [
@@ -115,7 +115,7 @@ export default function BookDetailPage() {
     setMessage("Book deleted successfully.");
   };
 
-  const handleEditSubmit = (data: MovieEditorData) => {
+  const handleEditSubmit = (data: BookEditorData) => {
     const newValues = {
       name: data.title,
       author: data.director,
@@ -238,14 +238,14 @@ export default function BookDetailPage() {
             </div>
           </div>
         )}
-        <MovieDetailHero
-          movie={book}
-          onWatchTrailer={handleWatchTrailer}
-          onWatchlist={handleWatchlist}
+        <BookDetailHero
+          book={book}
+          onReadBook={handleWatchTrailer}
+          onReadingList={handleWatchlist}
           onShare={handleShare}
           isInReadingList={isInReadingList}
         />
-        <MovieMeta movie={book} />
+        <BookMeta book={book} />
         {canManageBook && (
           <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl text-white">
             <h2 className="text-2xl font-bold mb-2">Manage Book</h2>
@@ -261,8 +261,8 @@ export default function BookDetailPage() {
                 Delete book
               </Button>
             </div>
-            <MovieEditor
-              movie={book}
+            <BookEditor
+              book={book}
               onSubmit={handleEditSubmit}
               submitLabel="Edit Book"
             />

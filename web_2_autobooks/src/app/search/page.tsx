@@ -2,9 +2,9 @@
 
 import { Suspense, useMemo, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { FilterBar } from "@/components/movies/FilterBar";
-import { MovieGrid } from "@/components/movies/MovieGrid";
-import { SpotlightRow } from "@/components/movies/SpotlightRow";
+import { FilterBar } from "@/components/books/FilterBar";
+import { BookGrid } from "@/components/books/BookGrid";
+import { SpotlightRow } from "@/components/books/SpotlightRow";
 import { Pagination } from "@/components/ui/Pagination";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -390,7 +390,7 @@ function SearchContent() {
 
           {filteredBooks.length > 0 ? (
             <>
-              <MovieGrid movies={paginatedBooks} onSelectMovie={handleSelectBook} />
+              <BookGrid books={paginatedBooks} onSelectBook={handleSelectBook} />
 
               {filteredBooks.length > BOOKS_PER_PAGE && (
                 <Pagination
@@ -403,12 +403,12 @@ function SearchContent() {
               <SpotlightRow
                 title="Fiction focus"
                 description="Slow burns, futuristic romances, essays and more pulled from this variant."
-                movies={fictionFocus}
+                books={fictionFocus}
               />
               <SpotlightRow
                 title="Thriller lab"
                 description="High-tension reads sourced from the dataset variant you picked."
-                movies={thrillerFocus}
+                books={thrillerFocus}
               />
             </>
           ) : (

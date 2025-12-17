@@ -1,4 +1,6 @@
 // Set default environment variables for local development
+
+
 // For local development (non-Docker), always enable dynamic HTML
 // Docker builds will override these values via build args
 const isDockerBuild = process.env.DOCKER_BUILD === 'true' || process.env.NODE_ENV === 'production';
@@ -15,6 +17,15 @@ if (isLocalDev) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'false';
 }
 
+// For local development, always force NEXT_PUBLIC_ENABLE_DYNAMIC_V3 to true
+if (!process.env.ENABLE_DYNAMIC_V3) {
+  process.env.ENABLE_DYNAMIC_V3 = isLocalDev ? 'true' : 'false';
+}
+if (isLocalDev) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = 'true';
+} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = 'false';
+}
 
 // Handle ENABLE_DYNAMIC_V1_STRUCTURE (separate from layout control)
 if (!process.env.ENABLE_DYNAMIC_V1_STRUCTURE) {
@@ -37,6 +48,8 @@ console.log('  ENABLE_DYNAMIC_V1:', process.env.ENABLE_DYNAMIC_V1);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V1:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1);
 console.log('  ENABLE_DYNAMIC_V1_STRUCTURE:', process.env.ENABLE_DYNAMIC_V1_STRUCTURE);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE);
+console.log('  ENABLE_DYNAMIC_V3:', process.env.ENABLE_DYNAMIC_V3);
+console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V3:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3);
 console.log('  ENABLE_DYNAMIC_V2_AI_GENERATE:', process.env.ENABLE_DYNAMIC_V2_AI_GENERATE);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE);
 console.log('  NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);

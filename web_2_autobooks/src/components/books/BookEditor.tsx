@@ -5,7 +5,7 @@ import type { Book } from "@/data/books";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export interface MovieEditorData {
+export interface BookEditorData {
   title: string;
   synopsis: string;
   year: string;
@@ -17,9 +17,9 @@ export interface MovieEditorData {
   trailerUrl: string;
 }
 
-interface MovieEditorProps {
-  movie: Book;
-  onSubmit: (data: MovieEditorData) => void;
+interface BookEditorProps {
+  book: Book;
+  onSubmit: (data: BookEditorData) => void;
   onCancel?: () => void;
   submitLabel?: string;
 }
@@ -34,22 +34,25 @@ const GENRE_OPTIONS = [
   "Horror",
   "Documentary",
   "Romance",
+  "Fiction",
+  "Non-Fiction",
+  "Mystery",
 ];
 
-export function MovieEditor({ movie, onSubmit, onCancel, submitLabel = "Save changes" }: MovieEditorProps) {
-  const [form, setForm] = useState<MovieEditorData>({
-    title: movie.title,
-    synopsis: movie.synopsis,
-    year: movie.year.toString(),
-    duration: movie.duration.toString(),
-    rating: movie.rating.toString(),
-    director: movie.director ?? "",
-    genres: movie.genres.join(", "),
-    cast: movie.cast.join(", "),
-    trailerUrl: movie.trailerUrl ?? "",
+export function BookEditor({ book, onSubmit, onCancel, submitLabel = "Save changes" }: BookEditorProps) {
+  const [form, setForm] = useState<BookEditorData>({
+    title: book.title,
+    synopsis: book.synopsis,
+    year: book.year.toString(),
+    duration: book.duration.toString(),
+    rating: book.rating.toString(),
+    director: book.director ?? "",
+    genres: book.genres.join(", "),
+    cast: book.cast.join(", "),
+    trailerUrl: book.trailerUrl ?? "",
   });
 
-  const handleChange = (field: keyof MovieEditorData, value: string) => {
+  const handleChange = (field: keyof BookEditorData, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -118,10 +121,6 @@ export function MovieEditor({ movie, onSubmit, onCancel, submitLabel = "Save cha
         />
       </div>
       <label className="block text-xs uppercase tracking-wide text-white/60">
-        Contributors (comma separated)
-        <Input value={form.cast} onChange={(event) => handleChange("cast", event.target.value)} className="mt-1 bg-black/40 text-white" />
-      </label>
-      <label className="block text-xs uppercase tracking-wide text-white/60">
         Synopsis
         <textarea
           value={form.synopsis}
@@ -143,3 +142,4 @@ export function MovieEditor({ movie, onSubmit, onCancel, submitLabel = "Save cha
     </form>
   );
 }
+

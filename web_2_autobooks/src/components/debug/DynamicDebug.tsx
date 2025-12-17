@@ -24,7 +24,7 @@ export function DynamicDebug() {
     
     // Look for stats card - the ID can be any of the variants
     // First search by data-dyn-key
-    const statsCardByKey = document.querySelector('[data-dyn-key="stats-movies-card"]');
+    const statsCardByKey = document.querySelector('[data-dyn-key="stats-books-card"]');
     if (statsCardByKey) {
       console.log("✅ Stats card found by data-dyn-key:");
       console.log("  ID:", statsCardByKey.id);
@@ -70,3 +70,4 @@ export function DynamicDebug() {
   
   return null;
 }
+

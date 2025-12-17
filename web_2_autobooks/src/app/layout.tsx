@@ -8,6 +8,7 @@ import "./globals.css";
 import { BodyWrapper } from "@/components/layout/BodyWrapper";
 import { DataReadyGate } from "@/components/layout/DataReadyGate";
 import { SeedRedirect } from "@/components/layout/SeedRedirect";
+import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -115,6 +116,7 @@ export default function RootLayout({
                 </BodyWrapper>
               </DataReadyGate>
             </Suspense>
+            <DynamicDebug />
           </SeedProvider>
         </AuthProvider>
       </body>
