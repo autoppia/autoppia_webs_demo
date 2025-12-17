@@ -30,9 +30,9 @@ export default function RightSidebar() {
     const newState = { ...followed, [name]: !isFollowed };
     setFollowed(newState);
 
-    logEvent(EVENT_TYPES.FOLLOW_PAGE, {
+    const eventType = !isFollowed ? EVENT_TYPES.FOLLOW_PAGE : EVENT_TYPES.UNFOLLOW_PAGE;
+    logEvent(eventType, {
       company: name,
-      action: !isFollowed ? "followed" : "unfollowed",
       source: "right_sidebar",
     });
   };

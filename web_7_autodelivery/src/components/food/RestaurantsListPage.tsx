@@ -22,7 +22,7 @@ export default function RestaurantsListPage() {
   const rating = useSearchStore(s => s.rating);
   const setRating = useSearchStore(s => s.setRating);
   const [page, setPage] = useState(1);
-  const itemsPerPage = 9;
+  const itemsPerPage = 15;
   const [quickOrderOpen, setQuickOrderOpen] = useState(false);
 
   const { restaurants, isLoading } = useRestaurants();
@@ -200,7 +200,16 @@ export default function RestaurantsListPage() {
               variant="outline"
               size="sm"
               disabled={page === 1}
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              onClick={() => {
+                if (page === 1) return;
+                logEvent(EVENT_TYPES.RESTAURANT_PREV_PAGE, {
+                  from_page: page,
+                  to_page: page - 1,
+                  page_size: itemsPerPage,
+                  total_items: filtered.length,
+                });
+                setPage((p) => Math.max(1, p - 1));
+              }}
               {...layout.getElementAttributes('pagination-prev', 0)}
             >
               Prev
@@ -212,7 +221,16 @@ export default function RestaurantsListPage() {
               variant="outline"
               size="sm"
               disabled={page === totalPages}
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              onClick={() => {
+                if (page === totalPages) return;
+                logEvent(EVENT_TYPES.RESTAURANT_NEXT_PAGE, {
+                  from_page: page,
+                  to_page: page + 1,
+                  page_size: itemsPerPage,
+                  total_items: filtered.length,
+                });
+                setPage((p) => Math.min(totalPages, p + 1));
+              }}
               {...layout.getElementAttributes('pagination-next', 0)}
             >
               Next

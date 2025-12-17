@@ -11,7 +11,7 @@ export default function BottomNav() {
     { href: "/", label: "Home", event: EVENT_TYPES.HOME_NAVBAR },
     { href: "/jobs", label: "Jobs", event: EVENT_TYPES.JOBS_NAVBAR },
     { href: "/recommendations", label: "Recs", event: EVENT_TYPES.VIEW_ALL_RECOMMENDATIONS },
-    { href: "/profile/alexsmith", label: "Profile", event: EVENT_TYPES.PROFILE_NAVBAR },
+    { href: "/profile/alexsmith", label: "Profile", event: null },
   ];
 
   return (
@@ -21,7 +21,11 @@ export default function BottomNav() {
           <li key={it.href}>
             <SeedLink
               href={it.href}
-              onClick={() => logEvent(it.event, { source: "bottom_nav", label: it.label })}
+              onClick={() => {
+                if (it.event) {
+                  logEvent(it.event, { source: "bottom_nav", label: it.label });
+                }
+              }}
               className={`px-3 py-2 rounded text-sm font-medium ${
                 pathname === it.href ? "text-blue-700 bg-blue-50" : "text-gray-700 hover:bg-gray-100"
               }`}
@@ -34,5 +38,4 @@ export default function BottomNav() {
     </nav>
   );
 }
-
 

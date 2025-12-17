@@ -162,6 +162,34 @@ export function EmailList({ textStructure }: EmailListProps) {
     clearSelection();
   };
 
+  const handlePageChange = (direction: "next" | "prev") => {
+    const total = filteredEmails.length;
+    const targetPage =
+      direction === "next"
+        ? currentPage + 1
+        : Math.max(1, currentPage - 1);
+    const eventName =
+      direction === "next"
+        ? EVENT_TYPES.EMAILS_NEXT_PAGE
+        : EVENT_TYPES.EMAILS_PREV_PAGE;
+
+    if (direction === "next" && !hasNextPage) return;
+    if (direction === "prev" && !hasPrevPage) return;
+
+    logEvent(eventName, {
+      from_page: currentPage,
+      to_page: targetPage,
+      page_size: itemsPerPage,
+      total_items: total,
+    });
+
+    if (direction === "next") {
+      nextPage();
+    } else {
+      prevPage();
+    }
+  };
+
   const getFolderTitle = () => {
     if (searchQuery) {
       return "Search Results";
@@ -252,7 +280,7 @@ export function EmailList({ textStructure }: EmailListProps) {
               variant="ghost"
               size="icon"
               className="h-6 w-6"
-              onClick={prevPage}
+              onClick={() => handlePageChange("prev")}
               disabled={!hasPrevPage}
             >
               <ChevronLeft className="h-3 w-3" />
@@ -261,7 +289,7 @@ export function EmailList({ textStructure }: EmailListProps) {
               variant="ghost"
               size="icon"
               className="h-6 w-6"
-              onClick={nextPage}
+              onClick={() => handlePageChange("next")}
               disabled={!hasNextPage}
             >
               <ChevronRight className="h-3 w-3" />

@@ -1,6 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
-import { type Job } from "@/library/dataset";
+import { useState, useMemo, useEffect } from "react";
 import JobCard from "@/components/JobCard";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
@@ -12,6 +11,13 @@ import {
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
+import type { Job } from "@/library/dataset";
+import {
+  loadAppliedJobs,
+  persistAppliedJobs,
+  type StoredAppliedJob,
+} from "@/library/localState";
+import Link from "next/link";
 
 interface Filters {
   search: string;
@@ -33,6 +39,17 @@ function JobsContent() {
     location: "",
     remote: false,
   });
+  const [appliedJobs, setAppliedJobs] = useState<
+    Record<string, StoredAppliedJob>
+  >({});
+
+  useEffect(() => {
+    setAppliedJobs(loadAppliedJobs());
+  }, []);
+
+  useEffect(() => {
+    persistAppliedJobs(appliedJobs);
+  }, [appliedJobs]);
 
   // Get jobs from dynamic provider
   const mockJobs = dynamicDataProvider.getJobs();
@@ -62,36 +79,30 @@ function JobsContent() {
     { value: "150000+", label: "$150,000+" },
   ];
 
-  // Filter jobs based on all criteria
-  const filteredJobs = useMemo(() => {
+  const filterJobsBy = (currentFilters: Filters) => {
     return mockJobs.filter((job) => {
-      // Search filter
       if (
-        filters.search &&
-        !job.title.toLowerCase().includes(filters.search.toLowerCase()) &&
-        !job.company.toLowerCase().includes(filters.search.toLowerCase())
+        currentFilters.search &&
+        !job.title.toLowerCase().includes(currentFilters.search.toLowerCase()) &&
+        !job.company.toLowerCase().includes(currentFilters.search.toLowerCase())
       ) {
         return false;
       }
 
-      // Experience filter
-      if (filters.experience && job.experience !== filters.experience) {
+      if (currentFilters.experience && job.experience !== currentFilters.experience) {
         return false;
       }
 
-      // Location filter
-      if (filters.location && job.location !== filters.location) {
+      if (currentFilters.location && job.location !== currentFilters.location) {
         return false;
       }
 
-      // Remote filter
-      if (filters.remote && !job.remote) {
+      if (currentFilters.remote && !job.remote) {
         return false;
       }
 
-      // Salary filter
-      if (filters.salary && job.salary) {
-        const salaryRange = filters.salary;
+      if (currentFilters.salary && job.salary) {
+        const salaryRange = currentFilters.salary;
         const jobSalary = job.salary.replace(/[$,]/g, "");
         const salaryMatch = jobSalary.match(/(\d+)/g);
 
@@ -99,7 +110,6 @@ function JobsContent() {
           const minSalary = parseInt(salaryMatch[0]);
           const maxSalary = parseInt(salaryMatch[1]);
 
-          // Check if the job's salary range overlaps with the selected filter range
           switch (salaryRange) {
             case "0-50000":
               if (minSalary >= 50000) return false;
@@ -121,14 +131,19 @@ function JobsContent() {
               break;
           }
         } else {
-          // If we can't parse the salary properly, exclude the job
           return false;
         }
       }
 
       return true;
     });
-  }, [filters]);
+  };
+
+  // Filter jobs based on all criteria
+  const filteredJobs = useMemo(
+    () => filterJobsBy(filters),
+    [filters, mockJobs]
+  );
 
   function triggerSearchEvent() {
     const query = filters.search.trim();
@@ -140,15 +155,18 @@ function JobsContent() {
   }
   function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value;
-    setFilters((prev) => ({ ...prev, search: val }));
+    const nextFilters = { ...filters, search: val };
+    setFilters(nextFilters);
 
-    // if (val.trim().length >= 2) {
-    //   logEvent(EVENT_TYPES.SEARCH_JOBS, {
-    //     query: val.trim(),
-    //     filters: filters,
-    //     resultCount: filteredJobs.length,
-    //   });
-    // }
+    const trimmed = val.trim();
+    if (trimmed.length > 0) {
+      const nextResults = filterJobsBy(nextFilters);
+      logEvent(EVENT_TYPES.SEARCH_JOBS, {
+        query: trimmed,
+        filters: nextFilters,
+        resultCount: nextResults.length,
+      });
+    }
   }
 
   function handleFilterChange(
@@ -168,9 +186,41 @@ function JobsContent() {
     });
   }
 
-  const hasActiveFilters = Object.values(filters).some(
+  const filtersWithoutSearch = {
+    experience: filters.experience,
+    salary: filters.salary,
+    location: filters.location,
+    remote: filters.remote,
+  };
+
+  const hasActiveFilters = Object.values(filtersWithoutSearch).some(
     (value) => value !== "" && value !== false
   );
+
+  useEffect(() => {
+    if (!hasActiveFilters) return;
+    logEvent(EVENT_TYPES.FILTER_JOBS, {
+      filters: filtersWithoutSearch,
+      resultCount: filteredJobs.length,
+    });
+  }, [
+    filtersWithoutSearch.experience,
+    filtersWithoutSearch.salary,
+    filtersWithoutSearch.location,
+    filtersWithoutSearch.remote,
+    filteredJobs.length,
+    hasActiveFilters,
+  ]);
+
+  const handleApplyJob = (job: Job) => {
+    setAppliedJobs((prev) => {
+      if (prev[job.id]) return prev;
+      return {
+        ...prev,
+        [job.id]: { job, appliedAt: new Date().toISOString() },
+      };
+    });
+  };
 
   const shuffledJobs = getShuffledItems(filteredJobs, layoutSeed);
   const jobCardsClasses = getLayoutClasses(layout, "jobCardsLayout");
@@ -178,9 +228,17 @@ function JobsContent() {
 
   return (
     <section>
-      <h1 className="font-bold text-2xl mb-6">
-        {getText("jobs_title", "Job Search")}
-      </h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="font-bold text-2xl">
+          {getText("jobs_title", "Job Search")}
+        </h1>
+        <Link
+          href="/jobs/applied"
+          className="text-sm text-blue-700 hover:underline font-semibold"
+        >
+          View applied jobs ({Object.keys(appliedJobs).length})
+        </Link>
+      </div>
 
       {/* Search Bar */}
       <div className="mb-6">
@@ -321,7 +379,14 @@ function JobsContent() {
             </p>
           </div>
         ) : (
-          shuffledJobs.map((job) => <JobCard key={job.id} job={job} />)
+          shuffledJobs.map((job) => (
+            <JobCard
+              key={job.id}
+              job={job}
+              isApplied={Boolean(appliedJobs[job.id])}
+              onApply={handleApplyJob}
+            />
+          ))
         )}
       </div>
     </section>

@@ -17,13 +17,12 @@ import {
 } from "lucide-react";
 import Cookies from "js-cookie";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { DEMO_MATTERS } from "@/library/dataset";
+import { initializeMatters, initializeClients } from "@/data/crm-enhanced";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
-import { clients as staticClients } from "@/library/dataset";
 
 const STORAGE_KEY = "matters";
 
@@ -100,14 +99,21 @@ function MattersListPageContent() {
     entityType: "clients",
     seedValue: v2Seed,
   });
+  const [fallbackClients, setFallbackClients] = useState<any[]>([]);
+  useEffect(() => {
+    initializeClients().then((rows) => {
+      setFallbackClients(rows);
+    });
+  }, []);
   
   const clients = useMemo(() => {
-    return (clientsData && clientsData.length > 0 ? clientsData : staticClients).map((c: any) => ({
+    const base = clientsData && clientsData.length > 0 ? clientsData : fallbackClients;
+    return base.map((c: any) => ({
       id: c.id,
       name: c.name ?? c.title ?? "",
       avatar: c.avatar ?? "",
     }));
-  }, [clientsData]);
+  }, [clientsData, fallbackClients]);
   
   const getClientAvatar = (clientName: string): string => {
     const client = clients.find((c) => c.name === clientName);
@@ -121,9 +127,15 @@ function MattersListPageContent() {
     error,
     sample: (data || []).slice(0, 3),
   });
-  const normalizedDemo = useMemo(() => DEMO_MATTERS.map((m, idx) => normalizeMatter(m, idx)), []);
+  const [fallbackMatters, setFallbackMatters] = useState<Matter[]>([]);
+  useEffect(() => {
+    initializeMatters().then((rows) => {
+      setFallbackMatters(rows.map((m: any, idx: number) => normalizeMatter(m, idx)));
+    });
+  }, []);
+
   const normalizedApi = useMemo(() => (data || []).map((m, idx) => normalizeMatter(m, idx)), [data]);
-  const resolvedMatters = normalizedApi.length > 0 ? normalizedApi : normalizedDemo;
+  const resolvedMatters = normalizedApi.length > 0 ? normalizedApi : fallbackMatters;
   const storageKey = useMemo(
     () => `${STORAGE_KEY}_${v2Seed ?? "default"}`,
     [v2Seed]

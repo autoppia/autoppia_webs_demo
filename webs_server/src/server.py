@@ -284,7 +284,7 @@ async def save_event_endpoint(event: EventInput, request: Request):
     """
     Saves a single event using a prepared statement obtained from the pool.
     The web_url is stored as its origin (scheme://host[:port]).
-    
+
     Can read web_agent_id and validator_id from headers (X-WebAgent-Id, X-Validator-Id)
     as fallback or override if provided. Headers take precedence over body values.
     """
@@ -298,18 +298,18 @@ async def save_event_endpoint(event: EventInput, request: Request):
         # Leer valores de headers PRIMERO (tienen prioridad sobre body)
         header_web_agent_id = request.headers.get("X-WebAgent-Id")
         header_validator_id = request.headers.get("X-Validator-Id")
-        
+
         # Verificar que los headers no sean vacíos o None
         has_header_web_agent = header_web_agent_id and header_web_agent_id.strip()
         has_header_validator = header_validator_id and header_validator_id.strip()
-        
+
         # PRIORIDAD: Headers primero, luego body, luego defaults
         final_web_agent_id = header_web_agent_id if has_header_web_agent else (event.web_agent_id or "UNKNOWN_AGENT")
         final_validator_id = header_validator_id if has_header_validator else (event.validator_id or "1")
-        
+
         logger.debug(f"Event save - Using web_agent_id={final_web_agent_id} (from headers={has_header_web_agent})")
         logger.debug(f"Event save - Using validator_id={final_validator_id} (from headers={has_header_validator})")
-        
+
         event_data_json_string = orjson.dumps(event.data).decode("utf-8")
         # --- Apply trimming before saving ---
         trimmed_url = trim_url_to_origin(event.web_url)

@@ -30,9 +30,13 @@ function RecommendationsContent() {
     const nowFollowing = !following[id];
     setFollowing((prev) => ({ ...prev, [id]: nowFollowing }));
 
-    logEvent(EVENT_TYPES.FOLLOW_PAGE, {
+    const eventType = nowFollowing
+      ? EVENT_TYPES.FOLLOW_PAGE
+      : EVENT_TYPES.UNFOLLOW_PAGE;
+    logEvent(eventType, {
       recommendation: title,
       action: nowFollowing ? "followed" : "unfollowed",
+      source: "recommendations_page",
     });
   };
 
