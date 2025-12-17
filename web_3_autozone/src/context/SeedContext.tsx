@@ -59,9 +59,11 @@ function SeedInitializer({
     if (urlSeed) {
       const parsedSeed = Number.parseInt(urlSeed, 10);
       const clampedSeed = Number.isNaN(parsedSeed) ? null : clampBaseSeed(parsedSeed);
-      onSeedFromUrl(clampedSeed);
       if (clampedSeed !== null) {
+        onSeedFromUrl(clampedSeed);
         onSeedChange(clampedSeed);
+      } else {
+        onSeedFromUrl(null);
       }
     } else {
       onSeedFromUrl(null);
