@@ -19,7 +19,7 @@ import {
   BookEditor,
   type BookEditorData,
 } from "@/components/books/BookEditor";
-import { buildBookDetailPayload } from "@/utils/bookEventPayload";
+import { buildBookDetailPayload } from "@/library/bookEventPayload";
 
 const AVATARS = [
   "/media/gallery/people/person1.jpg",

@@ -21,14 +21,6 @@ export const EVENT_TYPES = {
   SHARE_BOOK: "SHARE_BOOK",
   ADD_TO_READING_LIST: "ADD_TO_READING_LIST",
   // POST_REVIEW: "POST_REVIEW",
-  // LOGIN_SUCCESS: "login.success",
-  // LOGIN_FAILURE: "login.failure",
-  // LOGOUT: "logout",
-  // SIGNUP_SUCCESS: "signup.success",
-  // SIGNUP_FAILURE: "signup.failure",
-  // EDIT_BOOK: "edit.event",
-  // DELETE_BOOK: "delete.event",
-  // CONTACT_MESSAGE: "contact.message",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
