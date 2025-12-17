@@ -1,6 +1,6 @@
 [
   {
-    "id": "book-original-001",
+    "id": "book-1",
     "name": "1984",
     "desc": "A dystopian social science fiction novel and cautionary tale about the dangers of totalitarianism. Written by George Orwell, it describes life in a totalitarian regime where the Party exercises total control over people's lives.",
     "year": 1949,
@@ -16,7 +16,7 @@
     ]
   },
   {
-    "id": "book-original-002",
+    "id": "book-2",
     "name": "To Kill a Mockingbird",
     "desc": "A gripping, heart-wrenching, and wholly remarkable tale of coming-of-age in a South poisoned by virulent prejudice, it views a world of great beauty and savage inequities through the eyes of a young girl.",
     "year": 1960,
@@ -32,7 +32,7 @@
     ]
   },
   {
-    "id": "book-original-003",
+    "id": "book-3",
     "name": "The Great Gatsby",
     "desc": "A classic American novel set in the Jazz Age, following Jay Gatsby's mysterious life and his obsession with Daisy Buchanan. A tale of love, betrayal, and the American Dream.",
     "year": 1925,
@@ -48,7 +48,7 @@
     ]
   },
   {
-    "id": "book-original-004",
+    "id": "book-4",
     "name": "Pride and Prejudice",
     "desc": "A romantic novel of manners that depicts the emotional development of Elizabeth Bennet, who learns the error of making hasty judgments and comes to appreciate the difference between the superficial and the essential.",
     "year": 1813,
@@ -64,7 +64,7 @@
     ]
   },
   {
-    "id": "book-original-005",
+    "id": "book-5",
     "name": "The Catcher in the Rye",
     "desc": "A controversial novel following Holden Caulfield's experiences in New York City after being expelled from prep school, exploring themes of alienation, loss, and connection.",
     "year": 1951,
@@ -80,7 +80,7 @@
     ]
   },
   {
-    "id": "book-original-006",
+    "id": "book-6",
     "name": "Lord of the Flies",
     "desc": "A group of British boys stranded on a deserted island must govern themselves, with disastrous results. A powerful allegory about the conflict between civilization and savagery.",
     "year": 1954,
@@ -96,7 +96,7 @@
     ]
   },
   {
-    "id": "book-original-007",
+    "id": "book-7",
     "name": "The Hobbit",
     "desc": "Bilbo Baggins is swept into a quest to reclaim the lost Dwarf Kingdom of Erebor from the fearsome dragon Smaug. A classic fantasy adventure.",
     "year": 1937,
@@ -112,7 +112,7 @@
     ]
   },
   {
-    "id": "book-original-008",
+    "id": "book-8",
     "name": "The Lord of the Rings",
     "desc": "An epic high fantasy trilogy following Frodo Baggins and the Fellowship of the Ring as they journey to destroy the One Ring and defeat the Dark Lord Sauron.",
     "year": 1954,
@@ -128,7 +128,7 @@
     ]
   },
   {
-    "id": "book-original-009",
+    "id": "book-9",
     "name": "Harry Potter and the Sorcerer's Stone",
     "desc": "An orphaned boy discovers he is a wizard and begins his journey at Hogwarts School of Witchcraft and Wizardry, where he learns about his mysterious past and faces dark forces.",
     "year": 1997,
@@ -144,7 +144,7 @@
     ]
   },
   {
-    "id": "book-original-010",
+    "id": "book-10",
     "name": "The Chronicles of Narnia: The Lion, the Witch and the Wardrobe",
     "desc": "Four children discover a magical world through an old wardrobe, where they must help Aslan the lion defeat the White Witch and restore peace to Narnia.",
     "year": 1950,
@@ -160,7 +160,7 @@
     ]
   },
   {
-    "id": "book-original-011",
+    "id": "book-11",
     "name": "The Hunger Games",
     "desc": "In a dystopian future, Katniss Everdeen volunteers to take her younger sister's place in the Hunger Games, a televised competition where children fight to the death.",
     "year": 2008,
@@ -176,7 +176,7 @@
     ]
   },
   {
-    "id": "book-original-012",
+    "id": "book-12",
     "name": "The Book Thief",
     "desc": "Set in Nazi Germany, a young girl's relationship with her foster parents, the other residents of their neighborhood, and a Jewish fist-fighter transforms her life.",
     "year": 2005,
@@ -192,7 +192,7 @@
     ]
   },
   {
-    "id": "book-original-013",
+    "id": "book-13",
     "name": "The Kite Runner",
     "desc": "An epic tale of fathers and sons, friendship and betrayal, that takes us from Afghanistan in the final days of the monarchy to the atrocities of the present.",
     "year": 2003,
@@ -208,7 +208,7 @@
     ]
   },
   {
-    "id": "book-original-014",
+    "id": "book-14",
     "name": "The Fault in Our Stars",
     "desc": "Despite the tumor-shrinking medical miracle that has bought her a few years, Hazel has never been anything but terminal. But when a gorgeous plot twist named Augustus Waters appears, Hazel's story is about to be completely rewritten.",
     "year": 2012,
@@ -224,7 +224,7 @@
     ]
   },
   {
-    "id": "book-original-015",
+    "id": "book-15",
     "name": "The Alchemist",
     "desc": "A shepherd boy named Santiago travels from his homeland in Spain to the Egyptian desert in search of a treasure buried near the Pyramids, discovering the importance of following one's dreams.",
     "year": 1988,
@@ -240,7 +240,7 @@
     ]
   },
   {
-    "id": "book-original-016",
+    "id": "book-16",
     "name": "Life of Pi",
     "desc": "After a shipwreck, a young man named Pi finds himself adrift in the Pacific Ocean on a lifeboat with a Bengal tiger named Richard Parker, exploring themes of survival and faith.",
     "year": 2001,
@@ -256,7 +256,7 @@
     ]
   },
   {
-    "id": "book-original-017",
+    "id": "book-17",
     "name": "The Handmaid's Tale",
     "desc": "In the Republic of Gilead, Offred serves in the household of the Commander and his wife, in a society where women are subjugated and used for reproduction.",
     "year": 1985,
@@ -272,7 +272,7 @@
     ]
   },
   {
-    "id": "book-original-018",
+    "id": "book-18",
     "name": "Animal Farm",
     "desc": "A farm is taken over by its overworked, mistreated animals. With flaming idealism and stirring slogans, they set out to create a paradise of progress, justice, and equality.",
     "year": 1945,
@@ -288,7 +288,7 @@
     ]
   },
   {
-    "id": "book-original-019",
+    "id": "book-19",
     "name": "Brave New World",
     "desc": "A dystopian novel set in a futuristic World State, where humans are genetically bred and pharmaceutically conditioned to serve in a ruling order.",
     "year": 1932,
@@ -304,7 +304,7 @@
     ]
   },
   {
-    "id": "book-original-020",
+    "id": "book-20",
     "name": "Fahrenheit 451",
     "desc": "A dystopian novel about a future American society where books are outlawed and firemen burn any that are found, following fireman Guy Montag's transformation.",
     "year": 1953,
@@ -320,7 +320,7 @@
     ]
   },
   {
-    "id": "book-original-021",
+    "id": "book-21",
     "name": "The Picture of Dorian Gray",
     "desc": "A philosophical novel about a young man who remains forever young while a portrait of him ages, exploring themes of aestheticism, moral duplicity, and the nature of beauty.",
     "year": 1890,
@@ -336,7 +336,7 @@
     ]
   },
   {
-    "id": "book-original-022",
+    "id": "book-22",
     "name": "Dracula",
     "desc": "An epistolary novel about Count Dracula's attempt to move from Transylvania to England so he may spread the undead curse, and the battle between Dracula and a small group of men and women.",
     "year": 1897,
@@ -352,7 +352,7 @@
     ]
   },
   {
-    "id": "book-original-023",
+    "id": "book-23",
     "name": "Frankenstein",
     "desc": "A scientist creates a sapient creature in an unorthodox scientific experiment, leading to tragic consequences as the creature seeks revenge on its creator.",
     "year": 1818,
@@ -368,12 +368,12 @@
     ]
   },
   {
-    "id": "book-original-024",
+    "id": "book-24",
     "name": "Jane Eyre",
     "desc": "A coming-of-age story following Jane Eyre from her childhood as an orphan to her position as governess at Thornfield Hall, where she falls in love with Mr. Rochester.",
     "year": 1847,
     "img": "/media/gallery/9780141441146.webp",
-    "director": "Charlotte Brontë",
+    "director": "Charlotte Bront\u00eb",
     "duration": 532,
     "trailer_url": "https://www.bookstores.com/books/jane-eyre/9780141441146",
     "rating": 4.7,
@@ -384,12 +384,12 @@
     ]
   },
   {
-    "id": "book-original-025",
+    "id": "book-25",
     "name": "Wuthering Heights",
     "desc": "A tale of love, revenge, and the destructive nature of obsession set in the Yorkshire moors, following the relationship between Catherine Earnshaw and Heathcliff.",
     "year": 1847,
     "img": "/media/gallery/9780141439556.webp",
-    "director": "Emily Brontë",
+    "director": "Emily Bront\u00eb",
     "duration": 416,
     "trailer_url": "https://www.bookstores.com/books/wuthering-heights/9780141439556",
     "rating": 4.7,
@@ -400,7 +400,7 @@
     ]
   },
   {
-    "id": "book-original-026",
+    "id": "book-26",
     "name": "Moby Dick",
     "desc": "Ishmael's narrative of the obsessive quest of Ahab, captain of the whaler Pequod, for revenge on Moby Dick, the giant white sperm whale that on the ship's previous voyage bit off Ahab's leg.",
     "year": 1851,
@@ -416,7 +416,7 @@
     ]
   },
   {
-    "id": "book-original-027",
+    "id": "book-27",
     "name": "The Adventures of Huckleberry Finn",
     "desc": "A story of a young boy, Huck Finn, and a runaway slave, Jim, as they travel down the Mississippi River on a raft, exploring themes of freedom and moral growth.",
     "year": 1884,
@@ -432,7 +432,7 @@
     ]
   },
   {
-    "id": "book-original-028",
+    "id": "book-28",
     "name": "The Adventures of Tom Sawyer",
     "desc": "The story of a young boy growing up along the Mississippi River, filled with mischief, adventure, and coming-of-age experiences in a small Missouri town.",
     "year": 1876,
@@ -448,7 +448,7 @@
     ]
   },
   {
-    "id": "book-original-029",
+    "id": "book-29",
     "name": "Little Women",
     "desc": "The story of four sisters - Meg, Jo, Beth, and Amy March - as they grow from children to women during the American Civil War, navigating love, loss, and personal growth.",
     "year": 1868,
@@ -464,9 +464,9 @@
     ]
   },
   {
-    "id": "book-original-030",
+    "id": "book-30",
     "name": "The Count of Monte Cristo",
-    "desc": "A tale of revenge and redemption following Edmond Dantès, who is wrongfully imprisoned and escapes to seek revenge against those who betrayed him.",
+    "desc": "A tale of revenge and redemption following Edmond Dant\u00e8s, who is wrongfully imprisoned and escapes to seek revenge against those who betrayed him.",
     "year": 1844,
     "img": "/media/gallery/9780140449266.webp",
     "director": "Alexandre Dumas",
@@ -480,8 +480,8 @@
     ]
   },
   {
-    "id": "book-original-031",
-    "name": "Les Misérables",
+    "id": "book-31",
+    "name": "Les Mis\u00e9rables",
     "desc": "An epic novel set in early 19th-century France, following Jean Valjean's journey from ex-convict to respected citizen, set against the backdrop of the French Revolution.",
     "year": 1862,
     "img": "/media/gallery/9780140444308.webp",
@@ -496,7 +496,7 @@
     ]
   },
   {
-    "id": "book-original-032",
+    "id": "book-32",
     "name": "Don Quixote",
     "desc": "A middle-aged man becomes so enamored by old stories of brave knights that he seeks out his own adventures as a knight-errant, with his squire Sancho Panza.",
     "year": 1605,
@@ -512,7 +512,7 @@
     ]
   },
   {
-    "id": "book-original-033",
+    "id": "book-33",
     "name": "War and Peace",
     "desc": "An epic novel that intertwines the lives of five aristocratic families during the Napoleonic era, exploring themes of love, war, and the meaning of life.",
     "year": 1869,
@@ -528,7 +528,7 @@
     ]
   },
   {
-    "id": "book-original-034",
+    "id": "book-34",
     "name": "Anna Karenina",
     "desc": "A tragic love story set against the backdrop of Russian high society, following Anna Karenina's affair with Count Vronsky and its devastating consequences.",
     "year": 1877,
@@ -544,7 +544,7 @@
     ]
   },
   {
-    "id": "book-original-035",
+    "id": "book-35",
     "name": "Crime and Punishment",
     "desc": "A psychological novel about a poor ex-student in Saint Petersburg who plans to kill an unscrupulous pawnbroker, exploring themes of morality and redemption.",
     "year": 1866,
@@ -560,12 +560,12 @@
     ]
   },
   {
-    "id": "book-original-036",
+    "id": "book-36",
     "name": "One Hundred Years of Solitude",
-    "desc": "The multi-generational story of the Buendía family, whose patriarch, José Arcadio Buendía, founds the town of Macondo, a fictional town in Colombia.",
+    "desc": "The multi-generational story of the Buend\u00eda family, whose patriarch, Jos\u00e9 Arcadio Buend\u00eda, founds the town of Macondo, a fictional town in Colombia.",
     "year": 1967,
     "img": "/media/gallery/9780060883287.webp",
-    "director": "Gabriel García Márquez",
+    "director": "Gabriel Garc\u00eda M\u00e1rquez",
     "duration": 417,
     "trailer_url": "https://www.bookstores.com/books/one-hundred-years-of-solitude/9780060883287",
     "rating": 4.8,
@@ -576,7 +576,7 @@
     ]
   },
   {
-    "id": "book-original-037",
+    "id": "book-37",
     "name": "The Stranger",
     "desc": "A philosophical novel about Meursault, an emotionally detached man who commits a senseless murder and faces the absurdity of human existence.",
     "year": 1942,
@@ -592,7 +592,7 @@
     ]
   },
   {
-    "id": "book-original-038",
+    "id": "book-38",
     "name": "The Metamorphosis",
     "desc": "A novella about Gregor Samsa, a traveling salesman who wakes up one morning to find himself transformed into a giant insect, exploring themes of alienation and identity.",
     "year": 1915,
@@ -608,12 +608,12 @@
     ]
   },
   {
-    "id": "book-original-039",
+    "id": "book-39",
     "name": "The Little Prince",
     "desc": "A philosophical tale about a young prince who visits various planets, including Earth, and explores themes of love, loss, and the importance of seeing with the heart.",
     "year": 1943,
     "img": "/media/gallery/9780156012195.webp",
-    "director": "Antoine de Saint-Exupéry",
+    "director": "Antoine de Saint-Exup\u00e9ry",
     "duration": 96,
     "trailer_url": "https://www.bookstores.com/books/the-little-prince/9780156012195",
     "rating": 4.8,
@@ -624,7 +624,7 @@
     ]
   },
   {
-    "id": "book-original-040",
+    "id": "book-40",
     "name": "The Old Man and the Sea",
     "desc": "The story of an aging Cuban fisherman who struggles with a giant marlin far out in the Gulf Stream, exploring themes of perseverance, respect, and the human spirit.",
     "year": 1952,
@@ -640,7 +640,7 @@
     ]
   },
   {
-    "id": "book-original-041",
+    "id": "book-41",
     "name": "The Sun Also Rises",
     "desc": "A group of American and British expatriates travel from Paris to Pamplona to watch the running of the bulls, exploring themes of disillusionment and the Lost Generation.",
     "year": 1926,
@@ -656,7 +656,7 @@
     ]
   },
   {
-    "id": "book-original-042",
+    "id": "book-42",
     "name": "The Bell Jar",
     "desc": "A semi-autobiographical novel following Esther Greenwood's descent into mental illness, exploring themes of identity, sexuality, and the constraints of society.",
     "year": 1963,
@@ -672,7 +672,7 @@
     ]
   },
   {
-    "id": "book-original-043",
+    "id": "book-43",
     "name": "Beloved",
     "desc": "Set after the American Civil War, the novel follows Sethe, a former slave who is haunted by the ghost of her dead daughter, exploring themes of trauma and memory.",
     "year": 1987,
@@ -688,7 +688,7 @@
     ]
   },
   {
-    "id": "book-original-044",
+    "id": "book-44",
     "name": "The Color Purple",
     "desc": "An epistolary novel following Celie, an African American woman in the early 1900s American South, as she navigates abuse, love, and self-discovery.",
     "year": 1982,
@@ -704,7 +704,7 @@
     ]
   },
   {
-    "id": "book-original-045",
+    "id": "book-45",
     "name": "Things Fall Apart",
     "desc": "A novel about Okonkwo, a leader in an Igbo village in Nigeria, and the impact of European colonization on traditional African society.",
     "year": 1958,
@@ -720,7 +720,7 @@
     ]
   },
   {
-    "id": "book-original-046",
+    "id": "book-46",
     "name": "The Road",
     "desc": "A post-apocalyptic novel following a father and son as they journey through a desolate landscape, struggling to survive in a world destroyed by an unspecified cataclysm.",
     "year": 2006,
@@ -736,7 +736,7 @@
     ]
   },
   {
-    "id": "book-original-047",
+    "id": "book-47",
     "name": "The Giver",
     "desc": "In a seemingly perfect community without war, pain, suffering, or differences, a young boy is chosen to learn from an elderly man about the true pain and pleasure of life.",
     "year": 1993,
@@ -752,7 +752,7 @@
     ]
   },
   {
-    "id": "book-original-048",
+    "id": "book-48",
     "name": "The Nightingale",
     "desc": "Set in France during World War II, two sisters face impossible choices as they navigate the German occupation and resistance, showing courage in different ways.",
     "year": 2015,
@@ -768,7 +768,7 @@
     ]
   },
   {
-    "id": "book-original-049",
+    "id": "book-49",
     "name": "Educated",
     "desc": "A memoir about a woman who grows up in a survivalist Mormon family in rural Idaho and eventually goes on to earn a PhD from Cambridge University.",
     "year": 2018,
@@ -784,7 +784,7 @@
     ]
   },
   {
-    "id": "book-original-050",
+    "id": "book-50",
     "name": "Where the Crawdads Sing",
     "desc": "An isolated young woman who raised herself in the marshes of the North Carolina coast becomes embroiled in a murder investigation, with the marsh setting becoming a character itself.",
     "year": 2018,
