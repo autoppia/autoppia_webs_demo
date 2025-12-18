@@ -45,22 +45,16 @@ export default function RegisterPage() {
     const normalizedUsername = username.trim();
     const normalizedPassword = password.trim();
     const normalizedConfirmPassword = confirmPassword.trim();
-    const failurePayload = {
-      username: normalizedUsername || username,
-    };
 
     if (!normalizedUsername) {
-      logEvent(EVENT_TYPES.REGISTER_FAILURE, { ...failurePayload, reason: "missing_username" });
       setError("Username is required");
       return;
     }
     if (normalizedPassword.length < MIN_PASSWORD_LENGTH) {
-      logEvent(EVENT_TYPES.REGISTER_FAILURE, { ...failurePayload, reason: "password_too_short" });
       setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters`);
       return;
     }
     if (normalizedPassword !== normalizedConfirmPassword) {
-      logEvent(EVENT_TYPES.REGISTER_FAILURE, { ...failurePayload, reason: "password_mismatch" });
       setError("Passwords do not match");
       return;
     }
@@ -79,8 +73,6 @@ export default function RegisterPage() {
       });
       router.push("/profile");
     } catch (err) {
-      const reason = (err as Error).message || "unknown_error";
-      logEvent(EVENT_TYPES.REGISTER_FAILURE, { ...failurePayload, reason });
       setError((err as Error).message ?? "Unable to register");
     } finally {
       setIsSubmitting(false);

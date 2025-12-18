@@ -119,7 +119,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const persistUser = useCallback((authUser: AuthUser, source: "login" | "register") => {
     setCurrentUser(authUser);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
-    logEvent(EVENT_TYPES.LOGIN_SUCCESS, { username: authUser.username, source });
+    // Only emit LOGIN on a successful login. Registration emits REGISTRATION from the register page.
+    if (source === "login") {
+      logEvent(EVENT_TYPES.LOGIN, { username: authUser.username, source });
+    }
   }, []);
 
   const login = useCallback(
@@ -147,7 +150,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
-      logEvent(EVENT_TYPES.LOGIN_FAILURE, { username });
       throw new Error("Invalid credentials");
     },
     [persistUser]
