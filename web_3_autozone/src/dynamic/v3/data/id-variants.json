@@ -634,6 +634,18 @@
     "view-all-btn",
     "discover-more-btn",
     "more-link"
+  ],
+  "promo-input": [
+    "promo",
+    "promo-input",
+    "promo-code",
+    "promo-field",
+    "discount-input",
+    "coupon-input",
+    "promo-code-input",
+    "discount-code",
+    "coupon-code",
+    "offer-code"
   ]
 }
 

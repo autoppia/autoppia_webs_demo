@@ -57,26 +57,8 @@ function ProductContent() {
   const fallbackImage = getCategoryFallback(product?.category);
   const [deliveryDate, setDeliveryDate] = useState<string>("");
 
-  // Local text variants
-  const dynamicV3TextVariants: Record<string, string[]> = {
-    loading_product: ["Loading product", "Loading", "Please wait"],
-    product_not_found: ["Product not found", "Not found", "Product unavailable"],
-    return_to_home: ["Return to home", "Go home", "Back"],
-    share_success: ["Shared", "Shared successfully", "Sent"],
-    link_copied: ["Link copied", "Copied", "Link saved"],
-    share_product: ["Share product", "Share", "Send"],
-    in_wishlist: ["In wishlist", "Saved", "In favorites"],
-    add_to_wishlist: ["Add to wishlist", "Save", "Add to favorites"],
-    in_stock: ["IN STOCK", "Available", "Ready"],
-    add_to_cart: ["Add to Cart", "Add to Basket", "Add"],
-    buy_now: ["Buy Now", "Purchase Now", "Order Now"],
-    quantity: ["QUANTITY", "Qty", "Amount"],
-    collapse: ["Collapse", "Close", "Hide"],
-    expand: ["Expand", "Open", "Show more"],
-    about_this_item: ["ABOUT THIS ITEM", "Product Details", "About"],
-    product_details: ["Product Details", "Details", "Information"],
-    why_shoppers_love: ["Why shoppers love it", "Highlights", "Features"]
-  };
+  const t = (key: string, fallback: string) =>
+    dyn.v3.getVariant(key, TEXT_VARIANTS_MAP, fallback);
   
   useEffect(() => {
     // Set delivery date on client side to avoid hydration mismatch
@@ -259,7 +241,7 @@ function ProductContent() {
           htmlFor={dyn.v3.getVariant("quantity-input", ID_VARIANTS_MAP, "quantity-select")}
           className="mb-1 block text-xs font-semibold uppercase tracking-[0.3em] text-slate-400"
         >
-          {dyn.v3.getVariant("quantity", dynamicV3TextVariants, "QUANTITY")}
+          {t("qty", "Quantity")}
         </label>
         <select
           id={dyn.v3.getVariant("quantity-input", ID_VARIANTS_MAP, "quantity-select")}
@@ -302,7 +284,7 @@ function ProductContent() {
           router.push("/cart");
         }}
       >
-        {dyn.v3.getVariant("add_to_cart", dynamicV3TextVariants, "Add to Cart")}
+        {t("add_to_cart", "Add to cart")}
       </Button>
     ))
   );
@@ -328,7 +310,7 @@ function ProductContent() {
           router.push("/checkout");
         }}
       >
-        {dyn.v3.getVariant("buy_now", dynamicV3TextVariants, "Buy Now")}
+        {t("buy_now", "Buy now")}
       </Button>
     ))
   );
@@ -411,7 +393,7 @@ function ProductContent() {
       dyn.v1.addWrapDecoy("product-loading", (
         <div className="omnizon-container py-8">
           <div className="text-center">
-            <p className="mt-4">{dyn.v3.getVariant("loading_product", dynamicV3TextVariants, "Loading product")}...</p>
+            <p className="mt-4">{t("loading_product", "Loading product")}...</p>
           </div>
         </div>
       ))
@@ -423,9 +405,12 @@ function ProductContent() {
       dyn.v1.addWrapDecoy("product-not-found", (
         <div className="omnizon-container py-8">
           <div className="text-center">
-            <h1 className="text-2xl font-bold">{dyn.v3.getVariant("product_not_found", dynamicV3TextVariants, "Product not found")}</h1>
+            <h1 className="text-2xl font-bold">{t("product_not_found", "Product not found")}</h1>
             <p className="mt-4">
-              The product you are looking for does not exist or has been removed.
+              {t(
+                "product_missing_message",
+                "The product you are looking for does not exist or has been removed."
+              )}
             </p>
             {dyn.v1.addWrapDecoy("product-return-home-btn", (
               <Button 
@@ -433,7 +418,7 @@ function ProductContent() {
                 id={dyn.v3.getVariant("back-button", ID_VARIANTS_MAP)}
                 onClick={() => router.push("/")}
               >
-                {dyn.v3.getVariant("return_to_home", dynamicV3TextVariants, "Return to home")}
+                {t("return_to_home", "Return to home")}
               </Button>
             ))}
           </div>
@@ -519,7 +504,7 @@ function ProductContent() {
                         {dyn.v1.addWrapDecoy("product-title-section", (
                           <div className="space-y-2">
                             <p className="text-xs uppercase tracking-[0.35em] text-slate-400">
-                              VISIT {product.brand} STORE
+                              {t("visit", "Visit")} {product.brand} {t("store", "Store")}
                             </p>
                             <h1 className="text-3xl font-semibold text-slate-900">
                               {product.title}
@@ -538,10 +523,10 @@ function ProductContent() {
                                 <Share2 className="h-4 w-4" />
                                 <span>
                                   {shareStatus === "shared"
-                                    ? dyn.v3.getVariant("share_success", dynamicV3TextVariants, "Shared")
+                                    ? t("share_success", "Shared")
                                     : shareStatus === "copied"
-                                    ? dyn.v3.getVariant("link_copied", dynamicV3TextVariants, "Link copied")
-                                    : dyn.v3.getVariant("share_product", dynamicV3TextVariants, "Share product")}
+                                    ? t("link_copied", "Link copied")
+                                    : t("share_product", "Share product")}
                                 </span>
                               </button>
                             ))}
@@ -557,7 +542,11 @@ function ProductContent() {
                                     wishlistAdded ? "text-red-500 fill-red-100" : ""
                                   }`}
                                 />
-                                <span>{wishlistAdded ? dyn.v3.getVariant("in_wishlist", dynamicV3TextVariants, "In wishlist") : dyn.v3.getVariant("add_to_wishlist", dynamicV3TextVariants, "Add to wishlist")}</span>
+                                <span>
+                                  {wishlistAdded
+                                    ? t("in_wishlist", "In wishlist")
+                                    : t("add_to_wishlist", "Add to wishlist")}
+                                </span>
                               </button>
                             ))}
                           </div>
@@ -569,7 +558,7 @@ function ProductContent() {
                               {formattedPrice}
                             </span>
                             <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.4em] text-emerald-700">
-                              {dyn.v3.getVariant("in_stock", dynamicV3TextVariants, "IN STOCK")}
+                              {t("in_stock", "In stock")}
                             </span>
                           </div>
                         ))}
@@ -604,7 +593,7 @@ function ProductContent() {
                         className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "space-y-4 p-6")}
                       >
                         <h3 className="text-lg font-semibold text-slate-900">
-                          {dyn.v3.getVariant("why_shoppers_love", dynamicV3TextVariants, "Why shoppers love it")}
+                          {t("why_shoppers_love", "Why shoppers love it")}
                         </h3>
                         <ul className="space-y-2 text-sm text-slate-600">
                           {orderedHighlightBullets.map((point) => (
@@ -630,15 +619,19 @@ function ProductContent() {
                       >
                         {dyn.v1.addWrapDecoy("product-purchase-header", (
                           <div className="flex items-center justify-between text-xs uppercase tracking-[0.4em] text-slate-400">
-                            <span>BUY NEW</span>
-                            <span>DELIVER TO {DELIVERY_ADDRESS}</span>
+                            <span>{t("buy_new", "Buy new")}</span>
+                            <span>
+                              {t("deliver_to", "Deliver to")} {DELIVERY_ADDRESS}
+                            </span>
                           </div>
                         ))}
                         <div className="text-3xl font-semibold text-slate-900">
                           {product.price}
                         </div>
                         <p className="text-sm text-slate-600">
-                          Free delivery <strong>{deliveryDate}</strong> — Autozone courier partners
+                          {t("free_delivery_label", "Free delivery")}{" "}
+                          <strong>{deliveryDate}</strong> —{" "}
+                          {t("courier_partners", "Autozone courier partners")}
                         </p>
                         {layouts[order].map((elementKey) => (
                           <div key={elementKey}>{actionMap[elementKey]}</div>
@@ -646,22 +639,28 @@ function ProductContent() {
                         {dyn.v1.addWrapDecoy("product-purchase-details", (
                           <dl className="grid gap-2 text-xs text-slate-500">
                             <div className="flex justify-between">
-                              <dt>Ships from</dt>
-                              <dd className="text-slate-900">Autozone Fulfillment</dd>
-                            </div>
-                            <div className="flex justify-between">
-                              <dt>Sold by</dt>
+                              <dt>{t("ships_from", "Ships from")}</dt>
                               <dd className="text-slate-900">
-                                {product.brand || "Verified Partner"}
+                                {t("autozone_fulfillment", "Autozone Fulfillment")}
                               </dd>
                             </div>
                             <div className="flex justify-between">
-                              <dt>Returns</dt>
-                              <dd className="text-slate-900">30-day refund policy</dd>
+                              <dt>{t("sold_by", "Sold by")}</dt>
+                              <dd className="text-slate-900">
+                                {product.brand || t("verified_partner", "Verified Partner")}
+                              </dd>
                             </div>
                             <div className="flex justify-between">
-                              <dt>Payment</dt>
-                              <dd className="text-slate-900">Secure transaction</dd>
+                              <dt>{t("returns", "Returns")}</dt>
+                              <dd className="text-slate-900">
+                                {t("returns_policy", "30-day refund policy")}
+                              </dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt>{t("payment", "Payment")}</dt>
+                              <dd className="text-slate-900">
+                                {t("secure_transaction", "Secure transaction")}
+                              </dd>
                             </div>
                           </dl>
                         ))}
@@ -676,7 +675,7 @@ function ProductContent() {
                       >
                         {dyn.v1.addWrapDecoy("product-shipping-header", (
                           <div className="flex items-center justify-between text-xs uppercase tracking-[0.4em] text-slate-400">
-                            <span>SHIPPING OPTIONS</span>
+                            <span>{t("shipping_options", "Shipping options")}</span>
                             {dyn.v1.addWrapDecoy("product-shipping-toggle", (
                               <button
                                 type="button"
@@ -689,24 +688,38 @@ function ProductContent() {
                                 ) : (
                                   <ChevronDown className="h-3 w-3" />
                                 )}
-                                {isExploreOpen ? dyn.v3.getVariant("collapse", dynamicV3TextVariants, "Collapse") : dyn.v3.getVariant("expand", dynamicV3TextVariants, "Expand")}
+                                {isExploreOpen
+                                  ? t("collapse", "Collapse")
+                                  : t("expand", "Expand")}
                               </button>
                             ))}
                           </div>
                         ))}
                         <p className="text-sm text-slate-600">
-                          Deliver to {DELIVERY_ADDRESS}
+                          {t("deliver_to", "Deliver to")} {DELIVERY_ADDRESS}
                         </p>
                         {isExploreOpen && (
                           <ul className="space-y-2 text-sm text-slate-600">
                             <li>
-                              • Choose standard, expedited, or same-day when available.
+                              •{" "}
+                              {t(
+                                "shipping_bullet_1",
+                                "Choose standard, expedited, or same-day when available."
+                              )}
                             </li>
                             <li>
-                              • Free returns within 30 days on most items.
+                              •{" "}
+                              {t(
+                                "shipping_bullet_2",
+                                "Free returns within 30 days on most items."
+                              )}
                             </li>
                             <li>
-                              • Bundle matching accessories for automatic discounts.
+                              •{" "}
+                              {t(
+                                "shipping_bullet_3",
+                                "Bundle matching accessories for automatic discounts."
+                              )}
                             </li>
                           </ul>
                         )}
@@ -717,12 +730,14 @@ function ProductContent() {
                               className="rounded border-slate-300 text-slate-900 focus:ring-slate-400"
                               id={dyn.v3.getVariant("gift-receipt-checkbox", ID_VARIANTS_MAP, "gift-receipt")}
                             />
-                            <label htmlFor={dyn.v3.getVariant("gift-receipt-checkbox", ID_VARIANTS_MAP, "gift-receipt")}>Add gift receipt</label>
+                            <label htmlFor={dyn.v3.getVariant("gift-receipt-checkbox", ID_VARIANTS_MAP, "gift-receipt")}>
+                              {t("add_gift_receipt", "Add gift receipt")}
+                            </label>
                           </div>
                         ))}
                         {addedToCart && (
                           <div className="rounded-full bg-emerald-100 px-4 py-2 text-center text-sm font-semibold text-emerald-700">
-                            ✓ {dyn.v3.getVariant("add_to_cart", dynamicV3TextVariants, "Added to cart")}
+                            ✓ {t("added", "Added")}
                           </div>
                         )}
                       </BlurCard>
@@ -736,9 +751,12 @@ function ProductContent() {
               dyn.v1.addWrapDecoy("product-details-section", (
                 <section className="mt-16 space-y-6">
                   <SectionHeading
-                    eyebrow={dyn.v3.getVariant("about_this_item", dynamicV3TextVariants, "ABOUT THIS ITEM")}
-                    title={dyn.v3.getVariant("product_details", dynamicV3TextVariants, "Product Details")}
-                    description="What shoppers and our product team call out before you add it to cart."
+                    eyebrow={t("about_this_item", "About this item")}
+                    title={t("product_details", "Product details")}
+                    description={t(
+                      "product_details_description",
+                      "What shoppers and our product team call out before you add it to cart."
+                    )}
                   />
                   {dyn.v1.addWrapDecoy("product-details-card", (
                     <BlurCard 

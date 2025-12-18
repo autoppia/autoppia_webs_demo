@@ -421,14 +421,14 @@ export function CartPageContent() {
                     </div>
                     <div className="space-y-2">
                       <label
-                        htmlFor="promo"
+                        htmlFor={dyn.v3.getVariant("promo-input", ID_VARIANTS_MAP, "promo")}
                         className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500"
                       >
                         {promoLabel}
                       </label>
                       <div className="flex gap-2">
                         <Input
-                          id="promo"
+                          id={dyn.v3.getVariant("promo-input", ID_VARIANTS_MAP, "promo")}
                           placeholder={dyn.v3.getVariant(
                             "promo_placeholder",
                             TEXT_VARIANTS_MAP,
