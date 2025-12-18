@@ -16,7 +16,7 @@ export function ContactSection() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!name.trim() || !email.trim() || !message.trim()) return;
-    logEvent(EVENT_TYPES.CONTACT, {
+    logEvent(EVENT_TYPES.CONTACT_BOOK, {
       name: name.trim(),
       email: email.trim(),
       subject: subject.trim(),

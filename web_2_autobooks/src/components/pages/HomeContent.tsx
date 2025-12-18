@@ -327,7 +327,7 @@ export function HomeContent() {
                               {card.label}
                             </div>
                           </div>
-                        ), undefined, `stats-${index}`);
+                        ), `stats-${index}`);
                       })}
                     </div>
                   );
@@ -474,9 +474,9 @@ export function HomeContent() {
                                     ))}
                                   </div>
                                 </div>
-                                ), undefined, `featured-cover-${originalIndex}`)}
+                                ), `featured-cover-${originalIndex}`)}
                               </div>
-                            ), undefined, `featured-${originalIndex}`)
+                            ), `featured-${originalIndex}`)
                           ))}
                         </div>
                       );
@@ -573,7 +573,7 @@ export function HomeContent() {
                           {dyn.v3.getVariant(`${feature.key}_description`, dynamicV3TextVariants, feature.key === "feature_1" ? "Find books instantly by title, author, or any keyword" : feature.key === "feature_2" ? "Explore thousands of books across all genres" : feature.key === "feature_3" ? "Hand-selected featured books updated weekly" : "Discover what's popular and trending")}
                         </p>
                       </div>
-                    ), undefined, `feature-${displayIndex}`)
+                    ), `feature-${displayIndex}`)
                   ))}
                 </div>
               </div>

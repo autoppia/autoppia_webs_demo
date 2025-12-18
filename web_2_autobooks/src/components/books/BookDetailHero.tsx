@@ -1,16 +1,24 @@
 import type { Book } from "@/data/books";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Bookmark, Share2 } from "lucide-react";
+import { BookOpen, Bookmark, Share2, ShoppingCart } from "lucide-react";
 
 interface BookDetailHeroProps {
   book: Book;
   onReadBook: () => void;
   onReadingList: () => void;
   onShare: () => void;
+  onAddToCart?: () => void;
   isInReadingList?: boolean;
 }
 
-export function BookDetailHero({ book, onReadBook, onReadingList, onShare, isInReadingList = false }: BookDetailHeroProps) {
+export function BookDetailHero({
+  book,
+  onReadBook,
+  onReadingList,
+  onShare,
+  onAddToCart,
+  isInReadingList = false,
+}: BookDetailHeroProps) {
   return (
     <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl lg:flex lg:items-start lg:gap-8">
       <div className="relative group">
@@ -57,6 +65,15 @@ export function BookDetailHero({ book, onReadBook, onReadingList, onShare, isInR
               onClick={onReadBook}
             >
               <BookOpen className="h-5 w-5 mr-2" /> Read book
+            </Button>
+          )}
+          {onAddToCart && (
+            <Button
+              variant="ghost"
+              className="h-12 px-6 border border-white/20 bg-white/5 text-white hover:bg-white/10 transition-all hover:scale-105"
+              onClick={onAddToCart}
+            >
+              <ShoppingCart className="h-5 w-5 mr-2" /> Add to cart
             </Button>
           )}
           <Button 

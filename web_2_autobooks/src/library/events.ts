@@ -20,6 +20,10 @@ export const EVENT_TYPES = {
   OPEN_PREVIEW: "OPEN_PREVIEW",
   SHARE_BOOK: "SHARE_BOOK",
   ADD_TO_READING_LIST: "ADD_TO_READING_LIST",
+  REMOVE_FROM_READING_LIST: "REMOVE_FROM_READING_LIST",
+  VIEW_CART_BOOK: "VIEW_CART_BOOK",
+  ADD_TO_CART_BOOK: "ADD_TO_CART_BOOK",
+  REMOVE_FROM_CART_BOOK: "REMOVE_FROM_CART_BOOK",
   // POST_REVIEW: "POST_REVIEW",
 } as const;
 
@@ -27,7 +31,8 @@ export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
 
 export function logEvent(
   eventType: EventType,
-  data: Record<string, unknown> = {},
+  // Accept any object payload (some callers pass typed payloads like BookDetailPayload)
+  data: object = {},
   extraHeaders: Record<string, string> = {}
 ) {
   if (typeof window === "undefined") return;

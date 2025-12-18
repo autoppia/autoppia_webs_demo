@@ -88,9 +88,6 @@ export default function SignupPage() {
     const normalizedUsername = username.trim();
     const normalizedPassword = password.trim();
     const normalizedConfirmPassword = confirmPassword.trim();
-    const failurePayload = {
-      username: normalizedUsername || username,
-    };
 
     if (!normalizedUsername) {
       setError(dyn.v3.getVariant("error_username_required", dynamicV3TextVariants, "Username is required"));
@@ -102,7 +99,6 @@ export default function SignupPage() {
       return;
     }
     if (normalizedPassword !== normalizedConfirmPassword) {
-      logEvent(EVENT_TYPES.REGISTER_FAILURE, { ...failurePayload, reason: "password_mismatch" });
       setError(dyn.v3.getVariant("error_password_mismatch", dynamicV3TextVariants, "Passwords do not match"));
       return;
     }
@@ -115,7 +111,6 @@ export default function SignupPage() {
       });
       router.push("/profile");
     } catch (err) {
-      const reason = (err as Error).message || "unknown_error";
       setError((err as Error).message ?? dyn.v3.getVariant("error_unknown", dynamicV3TextVariants, "Unable to register"));
     } finally {
       setIsSubmitting(false);

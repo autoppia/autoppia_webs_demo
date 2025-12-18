@@ -1,6 +1,7 @@
 import { Header } from "@/components/layout/Header";
 import { SeedProvider } from "@/context/SeedContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { CartProvider } from "@/context/CartContext";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
@@ -102,6 +103,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} bg-neutral-950 text-white`} suppressHydrationWarning>
         <AuthProvider>
+          <CartProvider>
           <SeedProvider>
             <Suspense fallback={null}>
               <SeedRedirect />
@@ -118,6 +120,7 @@ export default function RootLayout({
             </Suspense>
             <DynamicDebug />
           </SeedProvider>
+          </CartProvider>
         </AuthProvider>
       </body>
     </html>

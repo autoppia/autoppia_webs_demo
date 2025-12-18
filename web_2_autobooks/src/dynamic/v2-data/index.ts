@@ -9,9 +9,10 @@ export {
   getAvailableYears,
   searchBooks,
   isDynamicModeEnabled,
-  getLayoutConfig,
 } from "./data-provider";
 export type { BookSearchFilters } from "./data-provider";
 
 // Export whenReady function
+import { dynamicDataProvider } from "./data-provider";
+
 export const whenReady = () => dynamicDataProvider.whenReady();

@@ -65,8 +65,6 @@ export default function LoginPage() {
       setPassword("");
       router.push("/profile");
     } catch (err) {
-      const usernameValue = username.trim() || username;
-      logEvent(EVENT_TYPES.LOGIN_FAILURE, { username: usernameValue, reason: (err as Error).message || "login_error" });
       setError((err as Error).message || "Unable to log in");
     } finally {
       setIsSubmitting(false);

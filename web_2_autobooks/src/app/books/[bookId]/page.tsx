@@ -20,6 +20,7 @@ import {
   type BookEditorData,
 } from "@/components/books/BookEditor";
 import { buildBookDetailPayload } from "@/library/bookEventPayload";
+import { useCart } from "@/context/CartContext";
 
 const AVATARS = [
   "/media/gallery/people/person1.jpg",
@@ -51,6 +52,7 @@ export default function BookDetailPage() {
   const bookId = decodeURIComponent(params.bookId);
   const book = getBookById(bookId);
   const { currentUser, addToReadingList, removeFromReadingList } = useAuth();
+  const { addToCart } = useCart();
 
   const [comments, setComments] = useState(() =>
     book ? createMockComments(book) : []
@@ -163,13 +165,13 @@ export default function BookDetailPage() {
     }
     
     const payload = buildBookDetailPayload(book);
-    logEvent(EVENT_TYPES.ADD_TO_READING_LIST, payload);
-    
     const isInReadingList = currentUser.readingList?.includes(book.id);
     if (isInReadingList) {
+      logEvent(EVENT_TYPES.REMOVE_FROM_READING_LIST, payload);
       removeFromReadingList(book.id);
       setReadingListMessage(`"${book.title}" removed from reading list`);
     } else {
+      logEvent(EVENT_TYPES.ADD_TO_READING_LIST, payload);
       addToReadingList(book.id);
       setReadingListMessage(`"${book.title}" added to reading list`);
     }
@@ -179,6 +181,18 @@ export default function BookDetailPage() {
   };
   
   const isInReadingList = currentUser?.readingList?.includes(book.id) ?? false;
+
+  const handleAddToCart = () => {
+    const payload = buildBookDetailPayload(book);
+    logEvent(EVENT_TYPES.ADD_TO_CART_BOOK, {
+      ...payload,
+      quantity: 1,
+      price: book.price ?? null,
+    });
+    addToCart(book, 1);
+    setMessage(`"${book.title}" added to cart.`);
+    setTimeout(() => setMessage(null), 2500);
+  };
 
   const handleShare = () => {
     const payload = buildBookDetailPayload(book);
@@ -243,6 +257,7 @@ export default function BookDetailPage() {
           onReadBook={handleWatchTrailer}
           onReadingList={handleWatchlist}
           onShare={handleShare}
+          onAddToCart={handleAddToCart}
           isInReadingList={isInReadingList}
         />
         <BookMeta book={book} />

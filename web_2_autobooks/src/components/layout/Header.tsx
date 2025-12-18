@@ -1,23 +1,27 @@
 "use client";
 
-import { BookOpen } from "lucide-react";
+import { BookOpen, Bookmark, ShoppingCart, Home, Search, Info, Mail } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { useSeed } from "@/context/SeedContext";
 import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
 import { cn } from "@/library/utils";
 
 const NAV_LINKS = [
-  { label: "Home", href: "/", preserveSeed: true },
-  { label: "Search", href: "/search", preserveSeed: true },
-  { label: "About", href: "/about", preserveSeed: true },
-  { label: "Contact", href: "/contact", preserveSeed: true },
+  { label: "Home", href: "/", preserveSeed: true, icon: Home },
+  { label: "Search", href: "/search", preserveSeed: true, icon: Search },
+  { label: "Wishlist", href: "/wishlist", preserveSeed: true, icon: Bookmark },
+  { label: "Cart", href: "/cart", preserveSeed: true, icon: ShoppingCart },
+  { label: "About", href: "/about", preserveSeed: true, icon: Info },
+  { label: "Contact", href: "/contact", preserveSeed: true, icon: Mail },
 ];
 
 export function Header() {
-  const { seed } = useSeed();
   const { currentUser, logout } = useAuth();
+  const { state: cartState } = useCart();
   const pathname = usePathname();
+  const readingListCount = currentUser?.readingList?.length ?? 0;
+  const cartCount = cartState.totalItems ?? 0;
 
   const isActive = (href: string) => {
     if (!pathname) return false;
@@ -47,17 +51,43 @@ export function Header() {
         <nav className="flex flex-wrap items-center gap-4 text-sm text-white/70">
           {NAV_LINKS.map((link) => {
             const active = isActive(link.href);
+            const showBadge =
+              link.href === "/wishlist"
+                ? readingListCount > 0
+                : link.href === "/cart"
+                  ? cartCount > 0
+                  : false;
+            const badgeValue =
+              link.href === "/wishlist" ? readingListCount : link.href === "/cart" ? cartCount : 0;
+            const Icon = link.icon;
             return (
               <SeedLink
                 key={link.label}
                 href={link.href}
                 preserveSeed={link.preserveSeed}
                 className={cn(
-                  "transition hover:text-white",
-                  active && "font-semibold text-secondary"
+                  "relative inline-flex items-center gap-2 transition-colors hover:text-white",
+                  active ? "font-semibold text-secondary" : "text-white/70"
                 )}
               >
+                <Icon
+                  className={cn(
+                    "h-4 w-4",
+                    active ? "text-secondary" : "text-white/50 group-hover:text-white"
+                  )}
+                  aria-hidden="true"
+                />
                 {link.label}
+                {showBadge && (
+                  <span
+                    className={cn(
+                      "ml-1 inline-flex min-w-5 items-center justify-center rounded-full px-2 py-0.5 text-[11px] font-semibold",
+                      active ? "bg-secondary/30 text-secondary" : "bg-secondary/20 text-secondary"
+                    )}
+                  >
+                    {badgeValue}
+                  </span>
+                )}
               </SeedLink>
             );
           })}
