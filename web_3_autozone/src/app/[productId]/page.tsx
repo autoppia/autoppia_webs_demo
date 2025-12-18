@@ -175,13 +175,7 @@ function ProductContent() {
   const orderedSpecEntries = useMemo(() => {
     const order = dyn.v1.changeOrderElements("product-specs", specEntries.length);
     return order.map((idx) => specEntries[idx]);
-  }, [dyn.seed, specEntries]);
-
-  // Dynamic ordering for highlight bullets
-  const orderedHighlightBullets = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("product-highlights", highlightBullets.length);
-    return order.map((idx) => highlightBullets[idx]);
-  }, [dyn.seed, highlightBullets]);
+  }, [dyn.v1.changeOrderElements, specEntries]);
 
   const highlightBullets = useMemo(() => {
     if (!product?.description) {
@@ -193,6 +187,12 @@ function ProductContent() {
     }
     return product.description.split("\n\n").slice(0, 4);
   }, [product?.description]);
+
+  // Dynamic ordering for highlight bullets
+  const orderedHighlightBullets = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("product-highlights", highlightBullets.length);
+    return order.map((idx) => highlightBullets[idx]);
+  }, [dyn.v1.changeOrderElements, highlightBullets]);
 
   const handleShareProduct = async () => {
     if (!product || !productEventData) return;
@@ -371,7 +371,7 @@ function ProductContent() {
     if (!description) return null;
 
     return description.split("\n\n").map((paragraph, idx) => (
-      <p key={`para-${paragraph.substring(0, 10)}-${idx}`} className="mb-4">
+      <p key={`para-${paragraph.substring(0, 10)}-${idx}`} className="leading-relaxed">
         {paragraph}
       </p>
     ));
@@ -409,7 +409,7 @@ function ProductContent() {
   if (isLoading) {
     return (
       dyn.v1.addWrapDecoy("product-loading", (
-        <div className="container mx-auto px-4 py-8">
+        <div className="omnizon-container py-8">
           <div className="text-center">
             <p className="mt-4">{dyn.v3.getVariant("loading_product", dynamicV3TextVariants, "Loading product")}...</p>
           </div>
@@ -421,7 +421,7 @@ function ProductContent() {
   if (!product) {
     return (
       dyn.v1.addWrapDecoy("product-not-found", (
-        <div className="container mx-auto px-4 py-8">
+        <div className="omnizon-container py-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold">{dyn.v3.getVariant("product_not_found", dynamicV3TextVariants, "Product not found")}</h1>
             <p className="mt-4">
@@ -453,11 +453,12 @@ function ProductContent() {
         suppressHydrationWarning
       >
         {dyn.v1.addWrapDecoy("product-page-container", (
-          <div className="omnizon-container px-2 py-8 md:px-4">
+          // Keep page content aligned with the header by using the shared omnizon container padding.
+          <div className="omnizon-container py-8">
             {dyn.v1.addWrapDecoy("product-page-content", (
-              <div className="grid gap-10 lg:grid-cols-[1.2fr,0.8fr]">
+              <div className="grid gap-8 lg:grid-cols-[1.2fr,0.8fr]">
                 {dyn.v1.addWrapDecoy("product-page-left", (
-                  <div className="space-y-8">
+                  <div className="space-y-6">
                     {dyn.v1.addWrapDecoy("product-gallery", (
                       <BlurCard 
                         id={dyn.v3.getVariant("product-gallery", ID_VARIANTS_MAP)}
@@ -513,7 +514,7 @@ function ProductContent() {
                     {dyn.v1.addWrapDecoy("product-info-card", (
                       <BlurCard 
                         id={dyn.v3.getVariant("product-info", ID_VARIANTS_MAP)}
-                        className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "space-y-4 p-6")}
+                        className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "space-y-5 p-6")}
                       >
                         {dyn.v1.addWrapDecoy("product-title-section", (
                           <div className="space-y-2">
@@ -572,7 +573,7 @@ function ProductContent() {
                             </span>
                           </div>
                         ))}
-                        <div className="space-y-3 text-sm text-slate-600">
+                        <div className="space-y-4 text-sm text-slate-600">
                           {product.description && renderDescription(product.description)}
                         </div>
                         {orderedSpecEntries.length > 0 && (
@@ -600,7 +601,7 @@ function ProductContent() {
                     {dyn.v1.addWrapDecoy("product-highlights", (
                       <BlurCard 
                         id={dyn.v3.getVariant("product-highlights", ID_VARIANTS_MAP)}
-                        className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "space-y-3 p-6")}
+                        className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "space-y-4 p-6")}
                       >
                         <h3 className="text-lg font-semibold text-slate-900">
                           {dyn.v3.getVariant("why_shoppers_love", dynamicV3TextVariants, "Why shoppers love it")}
@@ -670,7 +671,7 @@ function ProductContent() {
                     {dyn.v1.addWrapDecoy("product-shipping-card", (
                       <BlurCard 
                         id={dyn.v3.getVariant("product-shipping", ID_VARIANTS_MAP)}
-                        className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "space-y-4 p-5")} 
+                        className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "space-y-4 p-6")} 
                         data-variant="muted"
                       >
                         {dyn.v1.addWrapDecoy("product-shipping-header", (

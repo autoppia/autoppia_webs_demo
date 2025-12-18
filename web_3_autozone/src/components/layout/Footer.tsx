@@ -2,57 +2,52 @@
 
 import Image from "next/image";
 import { useMemo } from "react";
-import { useSeed } from "@/context/SeedContext";
-import { getLayoutConfig } from "@/dynamic/v2-data";
-import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { SeedLink } from "@/components/ui/SeedLink";
 
+const FOOTER_LINK_COLUMNS = [
+  {
+    title: "Shop",
+    links: [
+      { text: "All Products", href: "/search", clickable: true },
+      { text: "Wishlist", href: "/wishlist", clickable: true },
+      { text: "Shopping Cart", href: "/cart", clickable: true },
+    ],
+  },
+  {
+    title: "Your Account",
+    links: [
+      { text: "Orders", href: "/cart", clickable: true },
+      { text: "Checkout", href: "/checkout", clickable: true },
+      { text: "Saved Items", href: "/wishlist", clickable: true },
+    ],
+  },
+  {
+    title: "Customer Service",
+    links: [
+      { text: "Help Center", href: "/", clickable: false },
+      { text: "Shipping Info", href: "/", clickable: false },
+      { text: "Returns Policy", href: "/", clickable: false },
+    ],
+  },
+] as const;
+
 export function Footer() {
-  const { seed } = useSeed();
   const dyn = useDynamicSystem();
-  const layoutConfig = getLayoutConfig(seed);
-  const layoutClasses = getLayoutClasses(layoutConfig);
   const router = useSeedRouter();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const linkColumns = [
-    {
-      title: "Shop",
-      links: [
-        { text: "All Products", href: "/search", clickable: true },
-        { text: "Wishlist", href: "/wishlist", clickable: true },
-        { text: "Shopping Cart", href: "/cart", clickable: true },
-      ],
-    },
-    {
-      title: "Your Account",
-      links: [
-        { text: "Orders", href: "/cart", clickable: true },
-        { text: "Checkout", href: "/checkout", clickable: true },
-        { text: "Saved Items", href: "/wishlist", clickable: true },
-      ],
-    },
-    {
-      title: "Customer Service",
-      links: [
-        { text: "Help Center", href: "/", clickable: false },
-        { text: "Shipping Info", href: "/", clickable: false },
-        { text: "Returns Policy", href: "/", clickable: false },
-      ],
-    },
-  ];
-
   // Dynamic ordering for footer link columns
+  const changeOrderElements = dyn.v1.changeOrderElements;
   const orderedLinkColumns = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("footer-link-columns", linkColumns.length);
-    return order.map((idx) => linkColumns[idx]);
-  }, [dyn.seed]);
+    const order = changeOrderElements("footer-link-columns", FOOTER_LINK_COLUMNS.length);
+    return order.map((idx) => FOOTER_LINK_COLUMNS[idx]);
+  }, [changeOrderElements]);
 
   // Local text variants
   const dynamicV3TextVariants: Record<string, string[]> = {
@@ -76,7 +71,7 @@ export function Footer() {
     dyn.v1.addWrapDecoy("footer-container", (
       <footer 
         id={dyn.v3.getVariant("footer", ID_VARIANTS_MAP, "footer")}
-        className={dyn.v3.getVariant("footer", CLASS_VARIANTS_MAP, `mt-20 text-white ${layoutClasses.footer}`)}
+        className={dyn.v3.getVariant("footer", CLASS_VARIANTS_MAP, "mt-20 text-white")}
       >
         {dyn.v1.addWrapDecoy("footer-back-to-top", (
           <button

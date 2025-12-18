@@ -145,6 +145,15 @@ export function useDynamicSystem() {
       ) => {
         if (!isV3Enabled() && fallback !== undefined) return fallback;
         if (!isV3Enabled()) return key;
+
+        // IMPORTANT:
+        // Class variants currently come from JSON (e.g. "btn-secondary") without any CSS backing.
+        // Replacing real Tailwind classes breaks layout (navbar alignment, buttons, etc).
+        // So for class variants, always keep the real classes (fallback) for correct UI.
+        if (variants === CLASS_VARIANTS_MAP) {
+          return fallback ?? key;
+        }
+
         return getVariant(seed, key, variants, fallback);
       },
     },

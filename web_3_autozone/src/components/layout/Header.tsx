@@ -20,6 +20,15 @@ import { cn } from "@/library/utils";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
+const HEADER_CATEGORIES = [
+  { label: "All categories", value: "all" },
+  { label: "Kitchen", value: "kitchen" },
+  { label: "Technology", value: "technology" },
+  { label: "Home", value: "home" },
+  { label: "Electronics", value: "electronics" },
+  { label: "Fitness", value: "fitness" },
+] as const;
+
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMounted, setIsMounted] = useState(false);
@@ -28,21 +37,16 @@ export function Header() {
   const router = useSeedRouter();
   const dyn = useDynamicSystem();
 
-  const categories = [
-    { label: "All categories", value: "all" },
-    { label: "Kitchen", value: "kitchen" },
-    { label: "Technology", value: "technology" },
-    { label: "Home", value: "home" },
-    { label: "Electronics", value: "electronics" },
-    { label: "Fitness", value: "fitness" },
-  ];
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  const [selectedCategory, setSelectedCategory] = useState<(typeof HEADER_CATEGORIES)[number]>(
+    HEADER_CATEGORIES[0]
+  );
 
   // Dynamic ordering for categories
+  const changeOrderElements = dyn.v1.changeOrderElements;
   const orderedCategories = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("header-categories", categories.length);
-    return order.map((idx) => categories[idx]);
-  }, [dyn.seed]);
+    const order = changeOrderElements("header-categories", HEADER_CATEGORIES.length);
+    return order.map((idx) => HEADER_CATEGORIES[idx]);
+  }, [changeOrderElements]);
 
   // Local text variants
   const dynamicV3TextVariants: Record<string, string[]> = {
@@ -111,7 +115,7 @@ export function Header() {
     };
   }, [mobileMenuOpen]);
 
-  const handleCategorySelect = (category: (typeof categories)[number]) => {
+  const handleCategorySelect = (category: (typeof HEADER_CATEGORIES)[number]) => {
     setSelectedCategory(category);
     setIsCategoryOpen(false);
     const destination = buildSearchUrl(searchQuery, category.value);
@@ -142,17 +146,19 @@ export function Header() {
           {dyn.v1.addWrapDecoy("header-nav", (
             <nav 
               id={dyn.v3.getVariant("nav-menu", ID_VARIANTS_MAP, "main-nav")}
-              className={dyn.v3.getVariant("nav-menu", CLASS_VARIANTS_MAP, "w-full mx-auto max-w-[1360px] px-4 pb-4 pt-4 sm:px-6 md:px-8")}
+              // Keep header aligned with page content by using the shared omnizon container.
+              className={dyn.v3.getVariant("nav-menu", CLASS_VARIANTS_MAP, "w-full omnizon-container pb-4 pt-4")}
             >
               {dyn.v1.addWrapDecoy("header-nav-content", (
                 <div className="glass-panel w-full rounded-[28px] border-white/60 bg-white/85 shadow-lg px-4 py-3 shadow-elevated md:px-6 md:py-4">
-                  <div className="flex w-full flex-wrap items-center gap-4 md:flex-nowrap md:gap-6 justify-between">
+                  {/* 3-zone layout: Logo | Search | Actions (stable symmetry across pages) */}
+                  <div className="grid w-full grid-cols-1 items-center gap-3 md:grid-cols-[auto,1fr,auto] md:gap-4">
                     {/* Logo */}
                     {dyn.v1.addWrapDecoy("header-logo", (
                       <SeedLink
                         href="/"
                         id={dyn.v3.getVariant("logo-link", ID_VARIANTS_MAP)}
-                        className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "flex items-center rounded-2xl bg-slate-900 px-3 py-2 text-white shadow-lg")}
+                        className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-4 py-2 text-white shadow-lg")}
                       >
                         <span className="text-lg font-semibold tracking-wide">
                           AUTOZONE
@@ -167,7 +173,11 @@ export function Header() {
                     {dyn.v1.addWrapDecoy("header-search-bar", (
                       <div 
                         id={dyn.v3.getVariant("search-input", ID_VARIANTS_MAP, "search-container")}
-                        className={dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP, "flex min-w-[320px] flex-1 items-stretch gap-0 rounded-full border border-slate-200 bg-white shadow-inner md:min-w-[420px] mx-1 md:mx-4")}
+                        className={dyn.v3.getVariant(
+                          "search-input",
+                          CLASS_VARIANTS_MAP,
+                          "mx-auto flex w-full max-w-[760px] items-stretch gap-0 rounded-full border border-slate-200 bg-white/90 shadow-inner"
+                        )}
                       >
                         {dyn.v1.addWrapDecoy("header-category-dropdown", (
                           <div ref={categoryRef} className="relative flex items-center">
@@ -176,15 +186,19 @@ export function Header() {
                                 type="button"
                                 onClick={() => setIsCategoryOpen((prev) => !prev)}
                                 id={dyn.v3.getVariant("category-link", ID_VARIANTS_MAP)}
-                                className={dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "flex h-full items-center gap-1.5 rounded-full bg-slate-100 px-4 py-3 text-[13px] font-semibold text-slate-700")}
+                                className={dyn.v3.getVariant(
+                                  "button-secondary",
+                                  CLASS_VARIANTS_MAP,
+                                  "flex h-12 items-center gap-2 rounded-full bg-slate-100 px-4 text-[13px] font-semibold text-slate-700 hover:bg-slate-200/70"
+                                )}
                               >
-                                {selectedCategory.label}
-                                <ChevronDown size={14} className="text-slate-400" />
+                                <span className="max-w-40 truncate">{selectedCategory.label}</span>
+                                <ChevronDown size={14} className="shrink-0 text-slate-400" />
                               </button>
                             ))}
                             {isCategoryOpen && (
                               dyn.v1.addWrapDecoy("header-category-menu", (
-                                <div className="absolute left-0 top-full z-50 mt-2 w-52 rounded-2xl border border-slate-100 bg-white p-2 shadow-2xl">
+                                <div className="absolute left-0 top-full z-50 mt-2 w-60 rounded-2xl border border-slate-100 bg-white p-2 shadow-2xl">
                                   {orderedCategories.map((category) => (
                                     dyn.v1.addWrapDecoy(`header-category-item-${category.value}`, (
                                       <button
@@ -193,7 +207,11 @@ export function Header() {
                                         onClick={() => handleCategorySelect(category)}
                                         id={dyn.v3.getVariant("category-link", ID_VARIANTS_MAP, `category-${category.value}`)}
                                         className={cn(
-                                          dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "block w-full rounded-xl px-3 py-2 text-left text-sm text-slate-600 hover:bg-slate-50"),
+                                          dyn.v3.getVariant(
+                                            "button-secondary",
+                                            CLASS_VARIANTS_MAP,
+                                            "block w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-slate-700 hover:bg-slate-50"
+                                          ),
                                           category.value === selectedCategory.value &&
                                             "bg-slate-900/5 font-semibold text-slate-900"
                                         )}
@@ -217,14 +235,14 @@ export function Header() {
                             }}
                             id={dyn.v3.getVariant("search-input", ID_VARIANTS_MAP)}
                             placeholder={dyn.v3.getVariant("search_placeholder", dynamicV3TextVariants, "Search products, brands, and categories")}
-                            className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "h-full min-h-[48px] flex-1 border-none bg-transparent px-4 text-sm focus-visible:ring-0")}
+                            className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "h-12 flex-1 border-none bg-transparent px-4 text-sm focus-visible:ring-0")}
                           />
                         ))}
                         {dyn.v1.addWrapDecoy("header-search-button", (
                           <Button
                             aria-label={dyn.v3.getVariant("search_button", TEXT_VARIANTS_MAP, "Search")}
                             id={dyn.v3.getVariant("search-button", ID_VARIANTS_MAP)}
-                            className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "h-full min-h-[48px] rounded-l-none rounded-r-full bg-gradient-to-r from-indigo-500 to-sky-500 px-6 text-white shadow-md")}
+                            className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "h-12 rounded-l-none rounded-r-full bg-gradient-to-r from-indigo-500 to-sky-500 px-6 text-white shadow-md")}
                             onClick={triggerSearch}
                           >
                             <Search className="h-4 w-4" />
@@ -235,15 +253,21 @@ export function Header() {
 
                     {/* Desktop Navigation */}
                     {dyn.v1.addWrapDecoy("header-desktop-nav", (
-                      <div className="hidden flex-1 items-center justify-end gap-3 md:flex">
+                      <div className="hidden items-center justify-end gap-3 md:flex">
                         {dyn.v1.addWrapDecoy("header-wishlist-link", (
                           <SeedLink
                             href="/wishlist"
                             id={dyn.v3.getVariant("wishlist-button", ID_VARIANTS_MAP)}
-                            className={dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "h-11 rounded-full border border-slate-200 px-4 inline-flex items-center text-xs font-semibold text-slate-600 hover:border-slate-400")}
+                            className={dyn.v3.getVariant(
+                              "button-secondary",
+                              CLASS_VARIANTS_MAP,
+                              "inline-flex h-12 min-w-[148px] items-center justify-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 text-sm font-semibold text-slate-700 shadow-sm hover:bg-white hover:border-slate-300"
+                            )}
                           >
-                            <Heart className="h-4 w-4 mr-2" />
-                            {dyn.v3.getVariant("wishlist", dynamicV3TextVariants, "Wishlist")}
+                            <Heart className="h-5 w-5" />
+                            <span className="max-w-[92px] truncate">
+                              {dyn.v3.getVariant("wishlist", dynamicV3TextVariants, "Favorites")}
+                            </span>
                           </SeedLink>
                         ))}
 
@@ -251,11 +275,18 @@ export function Header() {
                           <SeedLink
                             href="/cart"
                             id={dyn.v3.getVariant("cart-button", ID_VARIANTS_MAP)}
-                            className={dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "relative inline-flex h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-slate-700 shadow-sm")}
+                            className={dyn.v3.getVariant(
+                              "button-secondary",
+                              CLASS_VARIANTS_MAP,
+                              "relative inline-flex h-12 min-w-[148px] items-center justify-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 text-sm font-semibold text-slate-700 shadow-sm hover:bg-white hover:border-slate-300"
+                            )}
                             onClick={() => logEvent(EVENT_TYPES.VIEW_CART)}
                           >
                             <ShoppingCart className="h-5 w-5" />
-                            <span className="ml-2 rounded-full bg-emerald-500/90 px-2 py-0.5 text-xs font-semibold text-white">
+                            <span className="max-w-[92px] truncate">
+                              {dyn.v3.getVariant("cart", dynamicV3TextVariants, "Cart")}
+                            </span>
+                            <span className="ml-1 inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-emerald-500 px-2 text-xs font-semibold text-white">
                               {cartItemCount}
                             </span>
                           </SeedLink>

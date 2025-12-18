@@ -1,12 +1,39 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { SafeImage } from "@/components/ui/SafeImage";
 
 const AUTO_DELAY = 5000;
+const SLIDER_IMAGES = [
+  {
+    id: 1,
+    url: "/images/slider/amazon_slider_1.jpg",
+    altKey: "slider_alt_1",
+  },
+  {
+    id: 2,
+    url: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1600&q=80",
+    altKey: "slider_alt_2",
+  },
+  {
+    id: 3,
+    url: "/images/slider/amazon_slider_3.jpg",
+    altKey: "slider_alt_3",
+  },
+  {
+    id: 4,
+    url: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1600&q=80",
+    altKey: "slider_alt_4",
+  },
+  {
+    id: 5,
+    url: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1600&q=80",
+    altKey: "slider_alt_5",
+  },
+] as const;
 
 export function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -29,42 +56,18 @@ export function HeroSlider() {
     ]
   };
 
-  const sliderImages = [
-    {
-      id: 1,
-      url: "/images/slider/amazon_slider_1.jpg",
-      altKey: "slider_alt_1",
-    },
-    {
-      id: 2,
-      url: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1600&q=80",
-      altKey: "slider_alt_2",
-    },
-    {
-      id: 3,
-      url: "/images/slider/amazon_slider_3.jpg",
-      altKey: "slider_alt_3",
-    },
-    {
-      id: 4,
-      url: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1600&q=80",
-      altKey: "slider_alt_4",
-    },
-    {
-      id: 5,
-      url: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1600&q=80",
-      altKey: "slider_alt_5",
-    },
-  ];
-  const slideCount = sliderImages.length;
+  const slideCount = SLIDER_IMAGES.length;
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === slideCount - 1 ? 0 : prev + 1));
-  };
+  const goToSlide = useCallback((index: number) => {
+    setCurrentSlide(() => {
+      if (index < 0) return slideCount - 1;
+      if (index >= slideCount) return 0;
+      return index;
+    });
+  }, [slideCount]);
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? slideCount - 1 : prev - 1));
-  };
+  const nextSlide = useCallback(() => goToSlide(currentSlide + 1), [currentSlide, goToSlide]);
+  const prevSlide = useCallback(() => goToSlide(currentSlide - 1), [currentSlide, goToSlide]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -76,10 +79,17 @@ export function HeroSlider() {
   }, [slideCount]);
 
   // Dynamic ordering for slider images - but keep original order for display logic
+  const changeOrderElements = dyn.v1.changeOrderElements;
   const orderedSliderImages = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("hero-slider-images", sliderImages.length);
-    return order.map((idx) => ({ ...sliderImages[idx], originalIndex: idx }));
-  }, [dyn.seed]);
+    const order = changeOrderElements("hero-slider-images", SLIDER_IMAGES.length);
+    return order.map((idx) => ({ ...SLIDER_IMAGES[idx], originalIndex: idx }));
+  }, [changeOrderElements]);
+
+  // Render only the current slide image (instead of all slides stacked),
+  // to avoid LCP warnings and reduce dev-time main-thread work.
+  const currentSlideData = useMemo(() => {
+    return orderedSliderImages.find((s) => s.originalIndex === currentSlide) ?? orderedSliderImages[0];
+  }, [orderedSliderImages, currentSlide]);
 
   return (
     dyn.v1.addWrapDecoy("hero-slider-container", (
@@ -89,28 +99,23 @@ export function HeroSlider() {
       >
         {dyn.v1.addWrapDecoy("hero-slider-images", (
           <div className="absolute inset-0 rounded-3xl overflow-hidden">
-            {orderedSliderImages.map((slide) => {
-              const isCurrent = slide.originalIndex === currentSlide;
-              return (
-                dyn.v1.addWrapDecoy(`hero-slide-${slide.id}`, (
-                  <div
-                    key={slide.id}
-                    className={`absolute inset-0 transition-opacity duration-700 ${
-                      isCurrent ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    <SafeImage
-                      src={slide.url}
-                      alt={dyn.v3.getVariant(slide.altKey, dynamicV3TextVariants, "Shop Autozone")}
-                      fill
-                      className="object-cover"
-                      priority={slide.originalIndex === 0}
-                      fallbackSrc="/images/slider/amazon_slider_1.jpg"
-                    />
-                  </div>
-                ), slide.id.toString())
-              );
-            })}
+            {dyn.v1.addWrapDecoy(`hero-slide-${currentSlideData.id}`, (
+              <div
+                key={currentSlideData.id}
+                className="absolute inset-0"
+              >
+                <SafeImage
+                  src={currentSlideData.url}
+                  alt={dyn.v3.getVariant(currentSlideData.altKey, dynamicV3TextVariants, "Shop Autozone")}
+                  fill
+                  className="object-cover"
+                  // If this is above the fold, always mark as priority to satisfy Next's LCP guidance.
+                  priority
+                  sizes="100vw"
+                  fallbackSrc="/images/slider/amazon_slider_1.jpg"
+                />
+              </div>
+            ), currentSlideData.id.toString())}
           </div>
         ))}
 
@@ -150,13 +155,13 @@ export function HeroSlider() {
 
         {dyn.v1.addWrapDecoy("hero-slider-indicators", (
           <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
-            {sliderImages.map((slide, index) => (
+            {SLIDER_IMAGES.map((slide, index) => (
               dyn.v1.addWrapDecoy(`hero-slider-indicator-${slide.id}`, (
                 <button
                   key={slide.id}
                   type="button"
                   aria-label={`Go to slide ${index + 1}`}
-                  onClick={() => setCurrentSlide(index)}
+                  onClick={() => goToSlide(index)}
                   className={`h-1.5 w-8 rounded-full transition ${
                     index === currentSlide ? "bg-white" : "bg-white/40"
                   }`}

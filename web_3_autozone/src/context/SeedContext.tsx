@@ -7,6 +7,7 @@ import {
   useState,
   useEffect,
   useCallback,
+  useRef,
   Suspense,
 } from "react";
 import { useSearchParams } from "next/navigation";
@@ -53,29 +54,30 @@ function SeedInitializer({
   onSeedChange: (seed: number) => void;
 }) {
   const searchParams = useSearchParams();
+  const seedParam = searchParams.get("seed");
+  const lastAppliedSeedRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const urlSeed = searchParams.get("seed");
-    if (urlSeed) {
-      const parsedSeed = Number.parseInt(urlSeed, 10);
+    if (seedParam) {
+      const parsedSeed = Number.parseInt(seedParam, 10);
       const clampedSeed = Number.isNaN(parsedSeed) ? null : clampBaseSeed(parsedSeed);
       if (clampedSeed !== null) {
         onSeedFromUrl(clampedSeed);
-        onSeedChange(clampedSeed);
+        // Prevent spamming state updates/logs if useSearchParams identity changes
+        // without the actual seed value changing.
+        if (lastAppliedSeedRef.current !== clampedSeed) {
+          lastAppliedSeedRef.current = clampedSeed;
+          onSeedChange(clampedSeed);
+        }
       } else {
         onSeedFromUrl(null);
+        lastAppliedSeedRef.current = null;
       }
     } else {
       onSeedFromUrl(null);
+      lastAppliedSeedRef.current = null;
     }
-    
-    const enableDynamic = searchParams.get("enable_dynamic");
-    if (enableDynamic) {
-      console.log("[SeedContext:web3] enable_dynamic from URL (user override):", enableDynamic);
-    } else {
-      console.log("[SeedContext:web3] No enable_dynamic in URL, using env vars as default");
-    }
-  }, [searchParams, onSeedFromUrl, onSeedChange]);
+  }, [seedParam, onSeedFromUrl, onSeedChange]);
 
   return null;
 }
@@ -87,6 +89,9 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   );
   const [isInitialized, setIsInitialized] = useState(false);
   const [urlSeedProcessed, setUrlSeedProcessed] = useState(false);
+  const isDebugSeed =
+    typeof window !== "undefined" &&
+    new URLSearchParams(window.location.search).get("debug_seed") === "1";
 
   // Initialize seed from localStorage (fallback if no URL seed)
   useEffect(() => {
@@ -98,28 +103,43 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
         if (savedSeed) {
           const parsedSeed = clampBaseSeed(Number.parseInt(savedSeed, 10));
           setSeedState(parsedSeed);
-          console.log(`[SeedContext:web3] Using seed from localStorage: ${parsedSeed}`);
+          if (isDebugSeed) {
+            console.log(`[SeedContext:web3] Using seed from localStorage: ${parsedSeed}`);
+          }
         }
       } catch (error) {
         console.error("Error loading seed from localStorage:", error);
       }
     }
     setIsInitialized(true);
-  }, [isInitialized]);
+  }, [isInitialized, isDebugSeed]);
 
   // Handle seed from URL changes
   const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
     if (urlSeed !== null) {
       setUrlSeedProcessed(true);
     } else if (urlSeedProcessed) {
-      console.log(`[SeedContext:web3] Seed removed from URL, using default: ${DEFAULT_SEED}`);
+      // Keep quiet by default; enable with ?debug_seed=1
+      if (typeof window !== "undefined") {
+        const isDebug =
+          new URLSearchParams(window.location.search).get("debug_seed") === "1";
+        if (isDebug) {
+          console.log(`[SeedContext:web3] Seed removed from URL, using default: ${DEFAULT_SEED}`);
+        }
+      }
       setSeedState(DEFAULT_SEED);
     }
   }, [urlSeedProcessed]);
 
   // Handle seed change from URL
   const handleSeedChange = useCallback((newSeed: number) => {
-    console.log(`[SeedContext:web3] Seed changed in URL: ${newSeed}`);
+    if (typeof window !== "undefined") {
+      const isDebug =
+        new URLSearchParams(window.location.search).get("debug_seed") === "1";
+      if (isDebug) {
+        console.log(`[SeedContext:web3] Seed changed in URL: ${newSeed}`);
+      }
+    }
     setSeedState(newSeed);
   }, []);
 
@@ -161,7 +181,13 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
     const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
     window.__autozoneV2Seed = v2Seed ?? null;
     window.dispatchEvent(new CustomEvent("autozone:v2SeedChange", { detail: { seed: v2Seed ?? null } }));
-    console.log("[SeedContext:web3] v2-seed synced to window:", v2Seed);
+    if (typeof window !== "undefined") {
+      const isDebug =
+        new URLSearchParams(window.location.search).get("debug_seed") === "1";
+      if (isDebug) {
+        console.log("[SeedContext:web3] v2-seed synced to window:", v2Seed);
+      }
+    }
   }, [resolvedSeeds.v2, resolvedSeeds.base]);
 
   const setSeed = useCallback((newSeed: number) => {

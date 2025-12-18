@@ -17,6 +17,14 @@ import { SafeImage } from "@/components/ui/SafeImage";
 import { cn } from "@/library/utils";
 import { LayoutGrid, List, SlidersHorizontal } from "lucide-react";
 
+const QUICK_FILTERS = [
+  { label: "Top deals", query: "deal" },
+  { label: "Home essentials", query: "home" },
+  { label: "Kitchen finds", query: "kitchen" },
+  { label: "Fitness gear", query: "fitness" },
+  { label: "Headphones", query: "headphone" },
+] as const;
+
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const router = useSeedRouter();
@@ -25,6 +33,7 @@ export default function SearchPage() {
   const categoryParam = (searchParams.get("category") ?? "all").toLowerCase();
   const { addToCart } = useCart();
   const dyn = useDynamicSystem();
+  const changeOrderElements = dyn.v1.changeOrderElements;
   const [addedToCartId, setAddedToCartId] = useState<string | null>(null);
   const [activeQuickFilter, setActiveQuickFilter] = useState<string | null>(
     null
@@ -74,14 +83,6 @@ export default function SearchPage() {
     setActiveCategory(categoryParam || "all");
   }, [categoryParam]);
 
-  const quickFilters = [
-    { label: "Top deals", query: "deal" },
-    { label: "Home essentials", query: "home" },
-    { label: "Kitchen finds", query: "kitchen" },
-    { label: "Fitness gear", query: "fitness" },
-    { label: "Headphones", query: "headphone" },
-  ];
-
   const baseResults = searchProducts(query);
   const availableCategories = useMemo(() => {
     const options = new Set<string>(["all"]);
@@ -95,25 +96,14 @@ export default function SearchPage() {
 
   // Dynamic ordering for categories and quick filters
   const orderedAvailableCategories = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("search-categories", availableCategories.length);
+    const order = changeOrderElements("search-categories", availableCategories.length);
     return order.map((idx) => availableCategories[idx]);
-  }, [dyn.seed, availableCategories]);
+  }, [changeOrderElements, availableCategories]);
 
   const orderedQuickFilters = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("search-quick-filters", quickFilters.length);
-    return order.map((idx) => quickFilters[idx]);
-  }, [dyn.seed]);
-
-  // Dynamic ordering for categories and quick filters
-  const orderedAvailableCategories = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("search-categories", availableCategories.length);
-    return order.map((idx) => availableCategories[idx]);
-  }, [dyn.seed, availableCategories]);
-
-  const orderedQuickFilters = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("search-quick-filters", quickFilters.length);
-    return order.map((idx) => quickFilters[idx]);
-  }, [dyn.seed]);
+    const order = changeOrderElements("search-quick-filters", QUICK_FILTERS.length);
+    return order.map((idx) => QUICK_FILTERS[idx]);
+  }, [changeOrderElements]);
 
   const buildSearchUrl = (value: string, category: string) => {
     const params = new URLSearchParams();
@@ -163,9 +153,9 @@ export default function SearchPage() {
 
   // Dynamic ordering for products
   const orderedSortedResults = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("search-products", sortedResults.length);
+    const order = changeOrderElements("search-products", sortedResults.length);
     return order.map((idx) => sortedResults[idx]);
-  }, [dyn.seed, sortedResults]);
+  }, [changeOrderElements, sortedResults]);
 
   const resultCount = sortedResults.length;
 
@@ -221,67 +211,86 @@ export default function SearchPage() {
     router.push(`/${product.id}`);
   };
 
-  // Dynamic ordering for products
-  const orderedSortedResults = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("search-products", sortedResults.length);
-    return order.map((idx) => sortedResults[idx]);
-  }, [dyn.seed, sortedResults]);
-
   const renderProductCard = (product: Product, index: number) => (
     dyn.v1.addWrapDecoy(`search-product-card-${product.id}`, (
       <BlurCard
         key={product.id}
         interactive
         id={dyn.v3.getVariant("product-card", ID_VARIANTS_MAP, `product-card-${index}`)}
-        className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "flex min-h-[320px] flex-col gap-3 p-4")}
+        className={dyn.v3.getVariant(
+          "card",
+          CLASS_VARIANTS_MAP,
+          // Match home carousel card rhythm: stable height, consistent image frame, and stable actions.
+          "flex h-full min-h-[312px] flex-col gap-1.5 rounded-3xl border-white/50 bg-white/85 p-4"
+        )}
       >
         {dyn.v1.addWrapDecoy(`search-product-image-${product.id}`, (
           <button
             type="button"
             onClick={() => handleViewProduct(product)}
             aria-label={`View ${product.title}`}
-            className="relative h-48 w-full overflow-hidden rounded-2xl bg-slate-50 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+            className="group relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-slate-50 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
           >
             <SafeImage
               src={product.image}
               alt={product.title}
               fill
               sizes="(max-width: 768px) 50vw, 320px"
-              className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+              className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
               fallbackSrc="/images/homepage_categories/coffee_machine.jpg"
             />
+            {product.price && (
+              <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-900 shadow">
+                {product.price}
+              </span>
+            )}
           </button>
         ))}
-        <div className="space-y-1 text-sm">
-          <p className="line-clamp-2 font-semibold text-slate-900">
+        <div className="space-y-1">
+          <p className="line-clamp-2 min-h-[2.5rem] text-sm font-semibold leading-snug text-slate-900">
             {product.title}
           </p>
-          <p className="text-slate-500">{product.brand || product.category}</p>
+          <p className="min-h-[1.125rem] text-xs text-slate-500">
+            {product.brand || product.category}
+          </p>
         </div>
-        <div className="flex items-center justify-between text-sm font-semibold text-slate-900">
-          <span>{product.price}</span>
-          <span className="text-xs text-emerald-600">
+        <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
+          <span className="text-slate-900">{product.price}</span>
+          <span className="text-emerald-600">
             {product.rating ?? "4.8"} ★
           </span>
         </div>
-        <div className="flex gap-2">
+        {/* Stack actions like home cards so labels never wrap/truncate */}
+        <div className="grid grid-cols-1 items-center gap-1 text-xs font-semibold text-slate-600">
           {dyn.v1.addWrapDecoy(`search-add-cart-btn-${product.id}`, (
             <Button
               id={dyn.v3.getVariant("add-to-cart", ID_VARIANTS_MAP, `add-cart-${index}`)}
-              className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "flex-1 rounded-full bg-slate-900 text-white hover:bg-slate-800")}
+              className={dyn.v3.getVariant(
+                "button-primary",
+                CLASS_VARIANTS_MAP,
+                "h-9 w-full rounded-full bg-slate-900 px-3 text-xs font-semibold text-white shadow-sm hover:bg-slate-800"
+              )}
               onClick={() => handleAddToCart(product)}
             >
-              {dyn.v3.getVariant("add_to_cart", dynamicV3TextVariants, "Add to Cart")}
+              <span className="whitespace-nowrap">
+                {dyn.v3.getVariant("add_to_cart", dynamicV3TextVariants, "Add to Cart")}
+              </span>
             </Button>
           ))}
           {dyn.v1.addWrapDecoy(`search-view-btn-${product.id}`, (
             <Button
               variant="secondary"
               id={dyn.v3.getVariant("view-details-btn", ID_VARIANTS_MAP)}
-              className={dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "rounded-full border border-slate-200 px-4 text-sm font-semibold text-slate-700")}
+              className={dyn.v3.getVariant(
+                "button-secondary",
+                CLASS_VARIANTS_MAP,
+                "h-9 w-full rounded-full border border-slate-200 bg-white/70 px-3 text-xs font-semibold text-slate-700 shadow-sm hover:bg-white"
+              )}
               onClick={() => handleViewProduct(product)}
             >
-              {dyn.v3.getVariant("view", dynamicV3TextVariants, "View")}
+              <span className="whitespace-nowrap">
+                {dyn.v3.getVariant("view", dynamicV3TextVariants, "Details")}
+              </span>
             </Button>
           ))}
         </div>
@@ -300,53 +309,72 @@ export default function SearchPage() {
         key={`${product.id}-row`}
         interactive
         id={dyn.v3.getVariant("product-card", ID_VARIANTS_MAP, `product-row-${index}`)}
-        className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "flex flex-col gap-4 p-4 md:flex-row md:items-center")}
+        className={dyn.v3.getVariant(
+          "card",
+          CLASS_VARIANTS_MAP,
+          "flex flex-col gap-4 rounded-3xl border-white/50 bg-white/85 p-4 md:flex-row md:items-center"
+        )}
       >
         {dyn.v1.addWrapDecoy(`search-product-row-image-${product.id}`, (
           <button
             type="button"
             onClick={() => handleViewProduct(product)}
             aria-label={`View ${product.title}`}
-            className="relative h-32 w-full overflow-hidden rounded-2xl bg-slate-50 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 md:h-28 md:w-32"
+            className="group relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-slate-50 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 md:h-28 md:w-40 md:shrink-0 md:aspect-auto"
           >
             <SafeImage
               src={product.image}
               alt={product.title}
               fill
               sizes="(max-width: 768px) 50vw, 180px"
-              className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+              className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
               fallbackSrc="/images/homepage_categories/coffee_machine.jpg"
             />
+            {product.price && (
+              <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-900 shadow">
+                {product.price}
+              </span>
+            )}
           </button>
         ))}
         <div className="flex flex-1 flex-col gap-2 text-sm">
           <p className="text-lg font-semibold text-slate-900">{product.title}</p>
-          <p className="text-slate-500">{product.brand || product.category}</p>
+          <p className="text-sm text-slate-500">{product.brand || product.category}</p>
           <div className="flex flex-wrap items-center gap-4 text-sm font-semibold text-slate-900">
             <span>{product.price}</span>
-            <span className="text-xs text-emerald-600">
-              {product.rating ?? "4.8"} ★
-            </span>
+            <span className="text-xs text-emerald-600">{product.rating ?? "4.8"} ★</span>
           </div>
         </div>
-        <div className="flex flex-col gap-2 md:w-48">
+        <div className="grid grid-cols-1 gap-2 md:w-56">
           {dyn.v1.addWrapDecoy(`search-row-add-cart-btn-${product.id}`, (
             <Button
               id={dyn.v3.getVariant("add-to-cart", ID_VARIANTS_MAP, `add-cart-row-${index}`)}
-              className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "rounded-full bg-slate-900 text-white hover:bg-slate-800")}
+              className={dyn.v3.getVariant(
+                "button-primary",
+                CLASS_VARIANTS_MAP,
+                "h-10 w-full rounded-full bg-slate-900 px-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
+              )}
               onClick={() => handleAddToCart(product)}
             >
-              {dyn.v3.getVariant("add_to_cart", dynamicV3TextVariants, "Add to Cart")}
+              <span className="whitespace-nowrap">
+                {dyn.v3.getVariant("add_to_cart", dynamicV3TextVariants, "Add to Cart")}
+              </span>
             </Button>
           ))}
           {dyn.v1.addWrapDecoy(`search-row-view-btn-${product.id}`, (
             <Button
               variant="secondary"
               id={dyn.v3.getVariant("view-details-btn", ID_VARIANTS_MAP)}
-              className={dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "rounded-full border border-slate-200 px-4 text-sm font-semibold text-slate-700")}
+              className={dyn.v3.getVariant(
+                "button-secondary",
+                CLASS_VARIANTS_MAP,
+                "h-10 w-full rounded-full border border-slate-200 bg-white/70 px-3 text-sm font-semibold text-slate-700 shadow-sm hover:bg-white"
+              )}
               onClick={() => handleViewProduct(product)}
             >
-              {dyn.v3.getVariant("view", dynamicV3TextVariants, "View")}
+              <span className="whitespace-nowrap">
+                {dyn.v3.getVariant("view", dynamicV3TextVariants, "Details")}
+              </span>
             </Button>
           ))}
         </div>
@@ -536,7 +564,7 @@ export default function SearchPage() {
                           onClick={() => setViewMode("grid")}
                           id={dyn.v3.getVariant("grid-view-btn", ID_VARIANTS_MAP)}
                           className={cn(
-                            dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "flex items-center gap-1 rounded-l-full px-3 py-2 text-sm font-semibold"),
+                            dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "flex items-center gap-2 rounded-l-full px-4 py-2 text-sm font-semibold whitespace-nowrap"),
                             viewMode === "grid"
                               ? "bg-slate-900 text-white"
                               : "text-slate-600"
@@ -552,7 +580,7 @@ export default function SearchPage() {
                           onClick={() => setViewMode("list")}
                           id={dyn.v3.getVariant("list-view-btn", ID_VARIANTS_MAP)}
                           className={cn(
-                            dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "flex items-center gap-1 rounded-r-full px-3 py-2 text-sm font-semibold"),
+                            dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "flex items-center gap-2 rounded-r-full px-4 py-2 text-sm font-semibold whitespace-nowrap"),
                             viewMode === "list"
                               ? "bg-slate-900 text-white"
                               : "text-slate-600"
@@ -581,7 +609,7 @@ export default function SearchPage() {
               ))
             ) : viewMode === "grid" ? (
               dyn.v1.addWrapDecoy("search-grid-results", (
-                <div className="grid auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {orderedSortedResults.map((product, index) => renderProductCard(product, index))}
                 </div>
               ))

@@ -33,7 +33,6 @@ export default function RootLayout({
             <Suspense fallback={null}>
               <SeedRedirect />
             </Suspense>
-            {/* <NotificationBanner /> */}
             <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
               <Header />
             </Suspense>

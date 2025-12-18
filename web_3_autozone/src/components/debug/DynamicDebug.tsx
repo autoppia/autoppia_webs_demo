@@ -6,14 +6,21 @@ import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
 
 export function DynamicDebug() {
   const dyn = useDynamicSystem();
+  const enabled =
+    typeof window !== "undefined" &&
+    new URLSearchParams(window.location.search).get("dynamic_debug") === "1";
+
+  // Keep console clean by default; opt-in with ?dynamic_debug=1
+  if (!enabled) return null;
   
   useEffect(() => {
+    const nextData = (window as unknown as { __NEXT_DATA__?: { env?: Record<string, unknown> } }).__NEXT_DATA__;
     console.log("=== 🔍 DYNAMIC DEBUG ===");
     console.log("Seed:", dyn.seed);
     console.log("V1 enabled:", isV1Enabled());
     console.log("V3 enabled:", isV3Enabled());
-    console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V1:", typeof window !== "undefined" ? (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 : "SSR");
-    console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V3:", typeof window !== "undefined" ? (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 : "SSR");
+    console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V1:", nextData?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ?? "SSR");
+    console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V3:", nextData?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 ?? "SSR");
     
     // Check elements in the DOM
     const v1Elements = document.querySelectorAll('[data-v1="true"]');

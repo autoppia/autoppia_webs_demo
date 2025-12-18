@@ -17,6 +17,9 @@ export const CLASS_VARIANTS_MAP: Record<string, string[]> = classVariantsJson;
 // Formato: { "key1": ["variant1", "variant2", ...], "key2": [...] }
 export const TEXT_VARIANTS_MAP: Record<string, string[]> = textVariantsJson as Record<string, string[]>;
 
+// Avoid spamming the console in dev when many elements request keys that are not
+// present in the variants maps (e.g. repeated buttons on rerender/scroll).
+const warnedMissingVariantKeys = new Set<string>();
 
 /**
  * Get a variant from a dictionary or global JSONs
@@ -55,9 +58,22 @@ export function getVariant(
       return fallback;
     }
     if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
-      console.warn(
-        `[variant-selector] No variants found for "${key}", using fallback: "${key}"`
-      );
+      // Keep console clean by default; opt-in with ?debug_variants=1 or localStorage.debug_variants="1"
+      let debugVariants = false;
+      try {
+        debugVariants =
+          new URLSearchParams(window.location.search).get("debug_variants") === "1" ||
+          localStorage.getItem("debug_variants") === "1";
+      } catch {
+        debugVariants = new URLSearchParams(window.location.search).get("debug_variants") === "1";
+      }
+
+      if (debugVariants && !warnedMissingVariantKeys.has(key)) {
+        warnedMissingVariantKeys.add(key);
+        console.warn(
+          `[variant-selector] No variants found for "${key}", using fallback: "${key}"`
+        );
+      }
     }
     return key;
   }

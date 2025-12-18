@@ -19,6 +19,8 @@ import { useSeed } from "@/context/SeedContext";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
+const HOME_CATEGORIES = ["Kitchen", "Electronics", "Technology", "Home", "Fitness"] as const;
+
 function HomeContent() {
   const { resolvedSeeds } = useSeed();
   const dyn = useDynamicSystem();
@@ -128,26 +130,29 @@ function HomeContent() {
     router.push(`/${item.id}`);
   };
 
-  const carouselConfigs = [
-    { title: "Kitchen Essentials", products: kitchenProducts },
-    { title: "Technology & Gadgets", products: techProducts },
-    { title: "Home & Living", products: homeProducts },
-    { title: "Electronics", products: electronicProducts },
-    { title: "Fitness & Wellness", products: fitnessProducts },
-  ];
+  const carouselConfigs = useMemo(
+    () => [
+      { title: "Kitchen Essentials", products: kitchenProducts },
+      { title: "Technology & Gadgets", products: techProducts },
+      { title: "Home & Living", products: homeProducts },
+      { title: "Electronics", products: electronicProducts },
+      { title: "Fitness & Wellness", products: fitnessProducts },
+    ],
+    [kitchenProducts, techProducts, homeProducts, electronicProducts, fitnessProducts]
+  );
 
   // Dynamic ordering for category buttons
-  const categories = ["Kitchen", "Electronics", "Technology", "Home", "Fitness"];
+  const changeOrderElements = dyn.v1.changeOrderElements;
   const orderedCategories = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("home-categories", categories.length);
-    return order.map((idx) => categories[idx]);
-  }, [dyn.seed]);
+    const order = changeOrderElements("home-categories", HOME_CATEGORIES.length);
+    return order.map((idx) => HOME_CATEGORIES[idx]);
+  }, [changeOrderElements]);
 
   // Dynamic ordering for carousel configs
   const orderedCarouselConfigs = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("home-carousels", carouselConfigs.length);
+    const order = changeOrderElements("home-carousels", carouselConfigs.length);
     return order.map((idx) => carouselConfigs[idx]);
-  }, [dyn.seed, carouselConfigs]);
+  }, [changeOrderElements, carouselConfigs]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -185,7 +190,9 @@ function HomeContent() {
       className={dyn.v3.getVariant("main-container", CLASS_VARIANTS_MAP, "min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 overflow-x-hidden")}
     >
       {dyn.v1.addWrapDecoy("home-main-container", (
-        <div className="relative z-10 px-4 pb-16">
+        // Horizontal padding is handled by `omnizon-container` on each section.
+        // Keeping padding here causes double-padding and misalignment with the header.
+        <div className="relative z-10 pb-16">
           {/* Hero Section */}
           {dyn.v1.addWrapDecoy("home-hero-section", (
             <section 
