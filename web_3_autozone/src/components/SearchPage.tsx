@@ -312,7 +312,8 @@ export default function SearchPage() {
         className={dyn.v3.getVariant(
           "card",
           CLASS_VARIANTS_MAP,
-          "flex flex-col gap-4 rounded-3xl border-white/50 bg-white/85 p-4 md:flex-row md:items-center"
+          // Use a 3-column grid for stable symmetry: image | details | actions
+          "grid gap-4 rounded-3xl border-white/50 bg-white/85 p-4 md:grid-cols-[160px,1fr,220px] md:items-center"
         )}
       >
         {dyn.v1.addWrapDecoy(`search-product-row-image-${product.id}`, (
@@ -320,7 +321,7 @@ export default function SearchPage() {
             type="button"
             onClick={() => handleViewProduct(product)}
             aria-label={`View ${product.title}`}
-            className="group relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-slate-50 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 md:h-28 md:w-40 md:shrink-0 md:aspect-auto"
+            className="group relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-slate-50 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
           >
             <SafeImage
               src={product.image}
@@ -337,15 +338,19 @@ export default function SearchPage() {
             )}
           </button>
         ))}
-        <div className="flex flex-1 flex-col gap-2 text-sm">
-          <p className="text-lg font-semibold text-slate-900">{product.title}</p>
+        <div className="min-w-0 space-y-1">
+          <p className="line-clamp-2 text-lg font-semibold leading-snug text-slate-900">
+            {product.title}
+          </p>
           <p className="text-sm text-slate-500">{product.brand || product.category}</p>
-          <div className="flex flex-wrap items-center gap-4 text-sm font-semibold text-slate-900">
+          <div className="flex items-center justify-between text-sm font-semibold text-slate-900">
             <span>{product.price}</span>
-            <span className="text-xs text-emerald-600">{product.rating ?? "4.8"} ★</span>
+            <span className="text-xs font-semibold text-emerald-600">
+              {product.rating ?? "4.8"} ★
+            </span>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-2 md:w-56">
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-1">
           {dyn.v1.addWrapDecoy(`search-row-add-cart-btn-${product.id}`, (
             <Button
               id={dyn.v3.getVariant("add-to-cart", ID_VARIANTS_MAP, `add-cart-row-${index}`)}

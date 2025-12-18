@@ -30,6 +30,7 @@ export function ProductCarousel({
   const router = useSeedRouter();
   const { addToCart } = useCart();
   const [progressStep, setProgressStep] = useState(0);
+  const [lastAddedId, setLastAddedId] = useState<string | null>(null);
   const rafIdRef = useRef<number | null>(null);
   const lastProgressStepRef = useRef<number>(0);
   const progressMarkers = useMemo(
@@ -147,6 +148,8 @@ export function ProductCarousel({
     }
     if (!addToCart) return handleViewProduct(product, event);
     addToCart(product);
+    setLastAddedId(product.id);
+    window.setTimeout(() => setLastAddedId(null), 1200);
     logEvent(EVENT_TYPES.ADD_TO_CART, {
       productId: product.id,
       title: product.title,
@@ -342,7 +345,9 @@ export function ProductCarousel({
                       >
                         <Plus className="h-3 w-3" />
                         <span className="whitespace-nowrap">
-                          {dyn.v3.getVariant("quick_add", dynamicV3TextVariants, "Quick add")}
+                          {lastAddedId === product.id
+                            ? dyn.v3.getVariant("added", TEXT_VARIANTS_MAP, "Added")
+                            : dyn.v3.getVariant("quick_add", dynamicV3TextVariants, "Quick add")}
                         </span>
                       </button>
                     ))}
