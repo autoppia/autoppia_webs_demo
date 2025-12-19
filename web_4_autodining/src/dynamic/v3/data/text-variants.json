@@ -178,5 +178,77 @@
     "Guests Number",
     "Total Guests",
     "Party Count"
+  ],
+  "help_center": [
+    "How can we help you?",
+    "Help Center",
+    "Support Center",
+    "Need Assistance?",
+    "How can we assist?",
+    "What can we help with?",
+    "Support Hub",
+    "Help & Support",
+    "Get Help",
+    "Find Help"
+  ],
+  "help_description": [
+    "Find answers to common questions or get in touch with our support team. We're here to help make your dining experience seamless.",
+    "Browse our FAQ section or contact our support team for personalized assistance with your dining needs.",
+    "Get instant answers to your questions or reach out to our friendly support team for help.",
+    "Discover solutions to common issues or connect with our support team for expert guidance.",
+    "Explore helpful resources or contact our support team for immediate assistance.",
+    "Find quick answers or get in touch with our dedicated support team.",
+    "Access helpful guides or reach out to our support team for personalized help.",
+    "Browse frequently asked questions or contact our support team for assistance.",
+    "Get answers to your questions or connect with our support team for help.",
+    "Find solutions and get support from our helpful team."
+  ],
+  "contact_support": [
+    "Contact Support",
+    "Get Support",
+    "Reach Support",
+    "Contact Help",
+    "Support Contact",
+    "Get Help",
+    "Reach Out",
+    "Contact Us",
+    "Support Team",
+    "Get Assistance"
+  ],
+  "get_in_touch": [
+    "Get in Touch",
+    "Contact Us",
+    "Reach Out",
+    "Connect With Us",
+    "Get Contact",
+    "Contact Support",
+    "Reach Support",
+    "Get Help",
+    "Contact Team",
+    "Connect"
+  ],
+  "contact_description": [
+    "Have questions or feedback? We'd love to hear from you! Reach out to us and we'll get back to you as soon as possible.",
+    "Questions or suggestions? Contact us and we'll respond promptly to help you.",
+    "Need assistance or have feedback? Get in touch and we'll get back to you quickly.",
+    "Have inquiries or comments? Reach out and we'll respond as soon as we can.",
+    "Questions or ideas? Contact us and we'll reply promptly.",
+    "Need help or want to share feedback? Get in touch and we'll respond quickly.",
+    "Have questions or thoughts? Reach out and we'll get back to you soon.",
+    "Inquiries or suggestions? Contact us and we'll respond promptly.",
+    "Questions or feedback? Get in touch and we'll reply as soon as possible.",
+    "Need assistance or have comments? Reach out and we'll get back to you quickly."
+  ],
+  "send_message": [
+    "Send Message",
+    "Submit Message",
+    "Send",
+    "Submit",
+    "Send Inquiry",
+    "Submit Inquiry",
+    "Send Request",
+    "Submit Request",
+    "Send Form",
+    "Submit Form"
   ]
 }

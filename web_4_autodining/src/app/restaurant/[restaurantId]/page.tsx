@@ -19,7 +19,7 @@ import Image from "next/image";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP } from "@/dynamic/v3";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { initializeRestaurants, getRestaurants } from "@/dynamic/v2-data";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 import { SeedLink } from "@/components/ui/SeedLink";
@@ -60,33 +60,39 @@ export default function RestaurantPage() {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const dyn = useDynamicSystem();
 
-  // Define labels with fallbacks
-  const personLabel = dyn.v3.getVariant("person", undefined, "Guest");
-  const peopleLabel = dyn.v3.getVariant("people", undefined, "Guests");
-  const pickLabel = dyn.v3.getVariant("pick", undefined, "Pick");
-  const selectDateLabel = dyn.v3.getVariant("date_picker", undefined, "Select date");
-  const selectTimeLabel = dyn.v3.getVariant("select_time", undefined, "Select time");
-  const viewFullMenuLabel = dyn.v3.getVariant("view_full_menu", undefined, "View Full Menu");
-  const collapseMenuLabel = dyn.v3.getVariant("collapse_menu", undefined, "Collapse Menu");
-  const bookNowLabel = dyn.v3.getVariant("book_now", undefined, "Book Now");
+  // Define labels
+  const personLabel = "Guest";
+  const peopleLabel = "Guests";
+  const pickLabel = "Pick";
+  const selectDateLabel = "Select date";
+  const selectTimeLabel = "Select time";
+  const viewFullMenuLabel = dyn.v3.getVariant("view_full_menu", TEXT_VARIANTS_MAP, "View Full Menu");
+  const collapseMenuLabel = dyn.v3.getVariant("collapse_menu", TEXT_VARIANTS_MAP, "Collapse Menu");
+  const bookNowLabel = dyn.v3.getVariant("reserve_now", TEXT_VARIANTS_MAP, "Book Now");
 
   const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
 
-  // Calculate ordered tags and photos at top level (hooks must be called unconditionally)
-  const orderedTags = useMemo(() => {
-    const tags = r?.tags || [];
-    if (tags.length === 0) return [];
-    const order = dyn.v1.changeOrderElements("restaurant-tags", tags.length);
-    return order.map(i => tags[i]);
-  }, [r?.tags, dyn.v1]);
+  const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
+  const timeOptions = [
+    "12:00 PM",
+    "12:30 PM",
+    "1:00 PM",
+    "1:30 PM",
+    "2:00 PM",
+    "2:30 PM",
+  ];
 
-  const orderedPhotos = useMemo(() => {
-    const photos = r?.photos || [];
-    if (photos.length === 0) return [];
-    const order = dyn.v1.changeOrderElements("restaurant-photos", photos.length);
-    return order.map(i => photos[i]);
-  }, [r?.photos, dyn.v1]);
+  // Calculate ordered dropdown options at top level (hooks must be called unconditionally)
+  const orderedPeopleOptions = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("people-options", peopleOptions.length);
+    return order.map(i => peopleOptions[i]);
+  }, [dyn.v1]);
+
+  const orderedTimeOptions = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("time-options", timeOptions.length);
+    return order.map(i => timeOptions[i]);
+  }, [dyn.v1]);
 
   useEffect(() => {
     // Ensure data is initialized and loaded from DB or generator as configured
@@ -187,7 +193,6 @@ export default function RestaurantPage() {
       }
     );
   };
-  const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
   const handlePeopleSelect = (n: number) => {
     setPeople(n);
     logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
@@ -196,14 +201,6 @@ export default function RestaurantPage() {
     setTime(t);
     logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
   };
-  const timeOptions = [
-    "12:00 PM",
-    "12:30 PM",
-    "1:00 PM",
-    "1:30 PM",
-    "2:00 PM",
-    "2:30 PM",
-  ];
   function toLocalISO(date: Date): string {
     const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -308,7 +305,7 @@ export default function RestaurantPage() {
                       {r?.rating?.toFixed(1) ?? "4.5"}
                     </span>
                     <span className="text-gray-700">
-                      {dyn.v3.getVariant("reviews_count", undefined, `${r?.reviews ?? 0} Reviews`)}
+                      {`${r?.reviews ?? 0} Reviews`}
                     </span>
                   </span>
                   <span 
@@ -326,24 +323,22 @@ export default function RestaurantPage() {
                 </div>
           ), "restaurant-meta-wrap")}
           {/* Tags/Pills */}
-              {orderedTags.length > 0 && dyn.v1.addWrapDecoy("restaurant-tags", (
-                <div 
-                  className="flex gap-2 mb-4"
-                  id={dyn.v3.getVariant("restaurant-tags", ID_VARIANTS_MAP, "restaurant-tags")}
+          {(r?.tags || []).length > 0 && (
+            <div 
+              className="flex flex-wrap gap-2 mb-4"
+              id={dyn.v3.getVariant("restaurant-tags", ID_VARIANTS_MAP, "restaurant-tags")}
+            >
+              {(r?.tags || []).map((tag: string, index: number) => (
+                <span
+                  key={`${tag}-${index}`}
+                  className="inline-flex items-center py-1.5 px-4 bg-gray-100 rounded-full text-gray-800 font-semibold text-sm border border-gray-200 whitespace-nowrap"
+                  id={dyn.v3.getVariant(`restaurant-tag-${index}`, ID_VARIANTS_MAP, `restaurant-tag-${index}`)}
                 >
-                  {orderedTags.map((tag: string, index: number) => (
-                    dyn.v1.addWrapDecoy(`restaurant-tag-${index}`, (
-                      <span
-                        key={tag}
-                        className="py-1 px-4 bg-gray-100 rounded-full text-gray-800 font-semibold text-base border"
-                        id={dyn.v3.getVariant(`restaurant-tag-${index}`, ID_VARIANTS_MAP, `restaurant-tag-${index}`)}
-                      >
-                        {tag}
-                      </span>
-                    ), `restaurant-tag-wrap-${index}`)
-                  ))}
-                </div>
-          ), "restaurant-tags-wrap")}
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
           {/* Description */}
           {r?.desc && dyn.v1.addWrapDecoy("restaurant-description", (
                 <div 
@@ -354,32 +349,30 @@ export default function RestaurantPage() {
                 </div>
           ), "restaurant-description-wrap")}
           {/* Photos Grid */}
-              {orderedPhotos.length > 0 && dyn.v1.addWrapDecoy("restaurant-photos", (
-                <>
-                  <h2 
-                    className="text-2xl font-bold mb-5 mt-10"
-                    id={dyn.v3.getVariant("photos-title", ID_VARIANTS_MAP, "photos-title")}
-                  >
-                    {dyn.v3.getVariant("photos", undefined, "Photos")}
-                  </h2>
-                  <div 
-                    className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-12"
-                    id={dyn.v3.getVariant("restaurant-photos-grid", ID_VARIANTS_MAP, "restaurant-photos-grid")}
-                  >
-                    {orderedPhotos.map((url: string, i: number) => (
-                      dyn.v1.addWrapDecoy(`restaurant-photo-${i}`, (
-                        <img
-                          key={i}
-                          src={url}
-                          alt={`${r?.name} photo ${i + 1}`}
-                          className="rounded-lg object-cover aspect-square w-full h-[160px] md:h-[200px] hover:opacity-90 transition-opacity cursor-pointer shadow-md"
-                          id={dyn.v3.getVariant(`restaurant-photo-${i}`, ID_VARIANTS_MAP, `restaurant-photo-${i}`)}
-                        />
-                      ), `restaurant-photo-wrap-${i}`)
-                    ))}
-                  </div>
-                </>
-          ), "restaurant-photos-wrap")}
+          {r?.photos && r.photos.length > 0 && (
+            <>
+              <h2 
+                className="text-2xl font-bold mb-5 mt-10"
+                id={dyn.v3.getVariant("photos-title", ID_VARIANTS_MAP, "photos-title")}
+              >
+                Photos
+              </h2>
+              <div 
+                className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-12"
+                id={dyn.v3.getVariant("restaurant-photos-grid", ID_VARIANTS_MAP, "restaurant-photos-grid")}
+              >
+                {r.photos.map((url: string, i: number) => (
+                  <img
+                    key={i}
+                    src={url}
+                    alt={`${r?.name} photo ${i + 1}`}
+                    className="rounded-lg object-cover aspect-square w-full h-[160px] md:h-[200px] hover:opacity-90 transition-opacity cursor-pointer shadow-md"
+                    id={dyn.v3.getVariant(`restaurant-photo-${i}`, ID_VARIANTS_MAP, `restaurant-photo-${i}`)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
           {/* Menu Section */}
           {dyn.v1.addWrapDecoy("menu-section", (
                 <section 
@@ -390,7 +383,7 @@ export default function RestaurantPage() {
                     className="text-2xl font-bold mb-4 mt-8"
                     id={dyn.v3.getVariant("menu-title", ID_VARIANTS_MAP, "menu-title")}
                   >
-                    {dyn.v3.getVariant("menu", undefined, "Menu")}
+                    Menu
                   </h2>
                   <div 
                     className="bg-white border rounded-lg p-6"
@@ -404,13 +397,13 @@ export default function RestaurantPage() {
                         className="border-b-2 border-[#46a758] text-[#46a758] font-semibold px-4 py-2 -mb-px bg-white"
                         id={dyn.v3.getVariant("menu-tab", ID_VARIANTS_MAP, "menu-tab")}
                       >
-                        {dyn.v3.getVariant("main_menu", undefined, "Main Menu")}
+                        Main Menu
                       </button>
                     </div>
               <div className="space-y-8">
                 <div>
                   <div className="font-bold text-lg mb-4 text-gray-900">
-                    {dyn.v3.getVariant("starters", undefined, "Starters")}
+                    Starters
                   </div>
                   <div className="space-y-4">
                     <div className="flex justify-between items-start border-b pb-3">
@@ -457,7 +450,7 @@ export default function RestaurantPage() {
                 {showFullMenu && (
                   <div>
                     <div className="font-bold text-lg mb-4 text-gray-900">
-                      {dyn.v3.getVariant("mains", undefined, "Main Courses")}
+                      Main Courses
                     </div>
                     <div className="space-y-4">
                       <div className="flex justify-between items-start border-b pb-3">
@@ -490,13 +483,15 @@ export default function RestaurantPage() {
                   </div>
                 )}
                 <div className="flex justify-center pt-4">
-                  <Button
-                    className="border-2 border-gray-300 px-8 py-2.5 rounded-lg font-semibold bg-white hover:bg-gray-50 text-gray-700 transition-colors"
-                    onClick={handleToggleMenu}
-                    id={dyn.v3.getVariant("menu-toggle-button", ID_VARIANTS_MAP, "menu-toggle-button")}
-                  >
-                    {showFullMenu ? collapseMenuLabel : viewFullMenuLabel}
-                  </Button>
+                  {dyn.v1.addWrapDecoy("menu-toggle-button", (
+                    <Button
+                      className={dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "border-2 border-gray-300 px-8 py-2.5 rounded-lg font-semibold bg-white hover:bg-gray-50 text-gray-700 transition-colors")}
+                      onClick={handleToggleMenu}
+                      id={dyn.v3.getVariant("menu-toggle-button", ID_VARIANTS_MAP, "menu-toggle-button")}
+                    >
+                      {showFullMenu ? collapseMenuLabel : viewFullMenuLabel}
+                    </Button>
+                  ), "menu-toggle-button-wrap")}
                 </div>
               </div>
             </div>
@@ -512,7 +507,7 @@ export default function RestaurantPage() {
                     className="text-2xl font-bold mb-6"
                     id={dyn.v3.getVariant("about-place-title", ID_VARIANTS_MAP, "about-place-title")}
                   >
-                    {dyn.v3.getVariant("about_place", undefined, "About This Place")}
+                    About This Place
                   </h2>
                   <div 
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
@@ -524,7 +519,7 @@ export default function RestaurantPage() {
                         id={dyn.v3.getVariant("info-card-cuisine", ID_VARIANTS_MAP, "info-card-cuisine")}
                       >
                         <h3 className="font-semibold text-base mb-2 text-gray-900 flex items-center gap-2">
-                          <span>🍽️</span> {dyn.v3.getVariant("cuisine_type", undefined, "Cuisine")}
+                          <span>🍽️</span> Cuisine
                         </h3>
                         <p className="text-gray-700 font-medium">
                           {r?.cuisine ?? "International"}
@@ -537,7 +532,7 @@ export default function RestaurantPage() {
                         id={dyn.v3.getVariant("info-card-price", ID_VARIANTS_MAP, "info-card-price")}
                       >
                         <h3 className="font-semibold text-base mb-2 text-gray-900 flex items-center gap-2">
-                          <span>💰</span> {dyn.v3.getVariant("price_range", undefined, "Price Range")}
+                          <span>💰</span> Price Range
                         </h3>
                         <p className="text-gray-700 font-medium">{r?.price ?? "$$"}</p>
                       </div>
@@ -548,7 +543,7 @@ export default function RestaurantPage() {
                         id={dyn.v3.getVariant("info-card-location", ID_VARIANTS_MAP, "info-card-location")}
                       >
                         <h3 className="font-semibold text-base mb-2 text-gray-900 flex items-center gap-2">
-                          <span>📍</span> {dyn.v3.getVariant("location", undefined, "Location")}
+                          <span>📍</span> Location
                         </h3>
                         <p className="text-gray-700 font-medium">
                           {r?.desc?.includes("heart of")
@@ -563,7 +558,7 @@ export default function RestaurantPage() {
                         id={dyn.v3.getVariant("info-card-times", ID_VARIANTS_MAP, "info-card-times")}
                       >
                         <h3 className="font-semibold text-base mb-2 text-gray-900 flex items-center gap-2">
-                          <span>⏰</span> {dyn.v3.getVariant("popular_times", undefined, "Popular Times")}
+                          <span>⏰</span> Popular Times
                         </h3>
                         <p className="text-gray-700 font-medium">7:00 PM - 9:00 PM</p>
                       </div>
@@ -582,7 +577,7 @@ export default function RestaurantPage() {
                     className="text-2xl font-bold mb-6"
                     id={dyn.v3.getVariant("reviews-title", ID_VARIANTS_MAP, "reviews-title")}
                   >
-                    {dyn.v3.getVariant("reviews_tab", undefined, "Customer Reviews")}
+                    Customer Reviews
                   </h2>
                   <div 
                     className="bg-white border-2 border-gray-200 rounded-xl p-8 shadow-sm"
@@ -611,7 +606,7 @@ export default function RestaurantPage() {
                           className="text-gray-600 text-base font-medium"
                           id={dyn.v3.getVariant("reviews-count", ID_VARIANTS_MAP, "reviews-count")}
                         >
-                          {dyn.v3.getVariant("reviews_based_on", undefined, `Based on ${r?.reviews ?? 0} verified reviews`)}
+                          {`Based on ${r?.reviews ?? 0} verified reviews`}
                         </div>
                       </div>
                     </div>
@@ -619,7 +614,7 @@ export default function RestaurantPage() {
                       className="text-gray-700 text-lg leading-relaxed"
                       id={dyn.v3.getVariant("reviews-description", ID_VARIANTS_MAP, "reviews-description")}
                     >
-                      {dyn.v3.getVariant("reviews_text", undefined, `Customers consistently praise the exceptional atmosphere and outstanding food quality at ${r?.name ?? "this restaurant"}. Recent reviews highlight the excellent service, authentic flavors, and memorable dining experience. Many guests return regularly and recommend it to friends and family.`)}
+                      {`Customers consistently praise the exceptional atmosphere and outstanding food quality at ${r?.name ?? "this restaurant"}. Recent reviews highlight the excellent service, authentic flavors, and memorable dining experience. Many guests return regularly and recommend it to friends and family.`}
                     </p>
                   </div>
                 </section>
@@ -634,13 +629,18 @@ export default function RestaurantPage() {
                 className="font-bold text-xl mb-4 text-center text-gray-900"
                 id={dyn.v3.getVariant("reservation-title", ID_VARIANTS_MAP, "reservation-title")}
               >
-                {dyn.v3.getVariant("make_reservation", undefined, "Make a Reservation")}
+                Make a Reservation
               </h2>
           <div className="flex flex-col gap-4">
             {/* People select */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                {dyn.v3.getVariant("number_of_guests", undefined, "Number of Guests")}
+            <div
+              id={dyn.v3.getVariant("people-select-container", ID_VARIANTS_MAP, "people-select-container")}
+            >
+              <label 
+                className="block text-sm font-medium text-gray-700 mb-1.5"
+                htmlFor={dyn.v3.getVariant("people_picker", ID_VARIANTS_MAP, "people_picker")}
+              >
+                Number of Guests
               </label>
               <Popover
                 open={peopleOpen}
@@ -649,7 +649,7 @@ export default function RestaurantPage() {
               >
                 <PopoverTrigger asChild>
                   <Button
-                    id={dyn.v3.getVariant("people_picker", undefined, "people_picker")}
+                    id={dyn.v3.getVariant("people_picker", ID_VARIANTS_MAP, "people_picker")}
                     variant="outline"
                     className="w-full flex items-center justify-between border-gray-300 hover:border-[#46a758]"
                   >
@@ -666,28 +666,43 @@ export default function RestaurantPage() {
                     <ChevronDownIcon className="h-4 w-4 text-gray-400" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-full p-1" align="start">
-                  {peopleOptions.map((n) => (
-                    <Button
-                      key={n}
-                      variant="ghost"
-                      className="w-full justify-start"
-                      onClick={() => {
-                        handlePeopleSelect(n);
-                        setPeopleOpen(false);
-                      }}
-                    >
-                      {n} {n === 1 ? personLabel : peopleLabel}
-                    </Button>
+                <PopoverContent 
+                  className="w-full p-1" 
+                  align="start"
+                  id={dyn.v3.getVariant("people-picker-content", ID_VARIANTS_MAP, "people-picker-content")}
+                >
+                  {orderedPeopleOptions.map((n) => (
+                    dyn.v1.addWrapDecoy(`people-option-${n}`, (
+                      <Button
+                        key={n}
+                        variant="ghost"
+                        className="w-full justify-start"
+                        onClick={() => {
+                          handlePeopleSelect(n);
+                          setPeopleOpen(false);
+                        }}
+                        id={dyn.v3.getVariant(`people-option-${n}`, ID_VARIANTS_MAP, `people-option-${n}`)}
+                      >
+                        {n} {n === 1 ? personLabel : peopleLabel}
+                      </Button>
+                    ), `people-option-wrap-${n}`)
                   ))}
                 </PopoverContent>
               </Popover>
             </div>
             {/* Date/time row */}
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  {dyn.v3.getVariant("date", undefined, "Date")}
+            <div 
+              className="grid grid-cols-2 gap-3"
+              id={dyn.v3.getVariant("date-time-row", ID_VARIANTS_MAP, "date-time-row")}
+            >
+              <div
+                id={dyn.v3.getVariant("date-picker-container", ID_VARIANTS_MAP, "date-picker-container")}
+              >
+                <label 
+                  className="block text-sm font-medium text-gray-700 mb-1.5"
+                  htmlFor={dyn.v3.getVariant("date_picker", ID_VARIANTS_MAP, "date_picker")}
+                >
+                  Date
                 </label>
                 <Popover
                   open={dateOpen}
@@ -696,7 +711,7 @@ export default function RestaurantPage() {
                 >
                   <PopoverTrigger asChild>
                     <Button
-                      id={dyn.v3.getVariant("date_picker", undefined, "date_picker")}
+                      id={dyn.v3.getVariant("date_picker", ID_VARIANTS_MAP, "date_picker")}
                       variant="outline"
                       className="w-full flex items-center justify-between border-gray-300 hover:border-[#46a758]"
                     >
@@ -708,7 +723,11 @@ export default function RestaurantPage() {
                       </div>
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent 
+                    className="w-auto p-0" 
+                    align="start"
+                    id={dyn.v3.getVariant("date-picker-content", ID_VARIANTS_MAP, "date-picker-content")}
+                  >
                     <Calendar
                       mode="single"
                       selected={date}
@@ -721,9 +740,14 @@ export default function RestaurantPage() {
                   </PopoverContent>
                 </Popover>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  {dyn.v3.getVariant("time", undefined, "Time")}
+              <div
+                id={dyn.v3.getVariant("time-picker-container", ID_VARIANTS_MAP, "time-picker-container")}
+              >
+                <label 
+                  className="block text-sm font-medium text-gray-700 mb-1.5"
+                  htmlFor={dyn.v3.getVariant("time_picker", ID_VARIANTS_MAP, "time_picker")}
+                >
+                  Time
                 </label>
                 <Popover
                   open={timeOpen}
@@ -732,7 +756,7 @@ export default function RestaurantPage() {
                 >
                   <PopoverTrigger asChild>
                     <Button
-                      id={dyn.v3.getVariant("time_picker", undefined, "time_picker")}
+                      id={dyn.v3.getVariant("time_picker", ID_VARIANTS_MAP, "time_picker")}
                       variant="outline"
                       className="w-full flex items-center justify-between border-gray-300 hover:border-[#46a758]"
                     >
@@ -745,19 +769,26 @@ export default function RestaurantPage() {
                       <ChevronDownIcon className="h-4 w-4 text-gray-400" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-36 p-1" align="start">
-                    {timeOptions.map((t) => (
-                      <Button
-                        key={t}
-                        variant="ghost"
-                        className="w-full justify-start"
-                        onClick={() => {
-                          handleTimeSelect(t);
-                          setTimeOpen(false);
-                        }}
-                      >
-                        {t}
-                      </Button>
+                  <PopoverContent 
+                    className="w-36 p-1" 
+                    align="start"
+                    id={dyn.v3.getVariant("time-picker-content", ID_VARIANTS_MAP, "time-picker-content")}
+                  >
+                    {orderedTimeOptions.map((t) => (
+                      dyn.v1.addWrapDecoy(`time-option-${t}`, (
+                        <Button
+                          key={t}
+                          variant="ghost"
+                          className="w-full justify-start"
+                          onClick={() => {
+                            handleTimeSelect(t);
+                            setTimeOpen(false);
+                          }}
+                          id={dyn.v3.getVariant(`time-option-${t}`, ID_VARIANTS_MAP, `time-option-${t}`)}
+                        >
+                          {t}
+                        </Button>
+                      ), `time-option-wrap-${t}`)
                     ))}
                   </PopoverContent>
                 </Popover>
@@ -786,10 +817,10 @@ export default function RestaurantPage() {
               }
             >
               <Button
-                id={dyn.v3.getVariant("book_button", undefined, "book_button")}
-                className="w-full bg-[#46a758] hover:bg-[#3d8f4a] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-sm transition-colors"
+                id={dyn.v3.getVariant("book_button", ID_VARIANTS_MAP, "book_button")}
+                className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "w-full bg-[#46a758] hover:bg-[#3d8f4a] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-sm transition-colors")}
               >
-                {bookNowLabel || "Book Now"}
+                {bookNowLabel}
               </Button>
             </SeedLink>
           </div>

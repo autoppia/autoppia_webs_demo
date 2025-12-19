@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import { countries } from "@/library/dataset";
 import { initializeRestaurants, getRestaurants } from "@/dynamic/v2-data";
 import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
 import Navbar from "@/components/Navbar";
@@ -158,22 +159,26 @@ export default function Page() {
   };
 
   return (
-    <main suppressHydrationWarning>
-      <Navbar />
+    dyn.v1.addWrapDecoy("booking-page", (
+      <main suppressHydrationWarning id={dyn.v3.getVariant("booking-page", ID_VARIANTS_MAP, "booking-page")}>
+        <Navbar />
 
       {/* Hero Banner - Restaurant Image */}
-      <div className="w-full h-[340px] bg-gray-200 mb-10">
-        <div className="relative w-full h-full">
-          {data?.image && (
-            <Image
-              src={data.image}
-              alt={data.name || "Restaurant"}
-              fill
-              className="object-cover"
-            />
-          )}
+      {dyn.v1.addWrapDecoy("booking-banner", (
+        <div className="w-full h-[340px] bg-gray-200 mb-10" id={dyn.v3.getVariant("booking-banner", ID_VARIANTS_MAP, "booking-banner")}>
+          <div className="relative w-full h-full">
+            {data?.image && (
+              <Image
+                src={data.image}
+                alt={data.name || "Restaurant"}
+                fill
+                className="object-cover"
+                id={dyn.v3.getVariant("booking-banner-image", ID_VARIANTS_MAP, "booking-banner-image")}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      ), "booking-banner-wrap")}
 
       <div className="max-w-2xl mx-auto px-4 pb-10">
         <h2 className="font-bold text-lg mt-8 mb-4">
@@ -333,13 +338,15 @@ export default function Page() {
           </div>
         </div>
 
-        <Button
-          id={dyn.v3.getVariant("confirm_button", undefined, "confirm_button")}
-          onClick={handleReservation}
-          className="w-full bg-[#46a758] hover:bg-[#3d8f4a] text-white py-6 text-lg rounded-lg font-semibold mt-6 transition-colors shadow-sm"
-        >
-          {dyn.v3.getVariant("confirm_booking", undefined, "Complete Reservation")}
-        </Button>
+        {dyn.v1.addWrapDecoy("confirm-booking-button", (
+          <Button
+            id={dyn.v3.getVariant("confirm_button", ID_VARIANTS_MAP, "confirm_button")}
+            onClick={handleReservation}
+            className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "w-full bg-[#46a758] hover:bg-[#3d8f4a] text-white py-6 text-lg rounded-lg font-semibold mt-6 transition-colors shadow-sm")}
+          >
+            {dyn.v3.getVariant("confirm_booking", TEXT_VARIANTS_MAP, "Complete Reservation")}
+          </Button>
+        ), "confirm-booking-button-wrap")}
 
         <p className="text-xs text-gray-600 mt-3 text-center">
           By completing this reservation, you agree to our{" "}
@@ -356,9 +363,10 @@ export default function Page() {
 
       {showToast && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white px-20 py-5 rounded shadow-lg z-50">
-          {dyn.v3.getVariant("confirmation_message", undefined, "Reservation confirmed!")}
+          {dyn.v3.getVariant("confirmation_message", TEXT_VARIANTS_MAP, "Reservation confirmed!")}
         </div>
       )}
-    </main>
+      </main>
+    ), "booking-page-wrap")
   );
 }

@@ -23,7 +23,7 @@ import { getRestaurants, initializeRestaurants } from "@/dynamic/v2-data";
 import type { RestaurantData } from "@/dynamic/v2-data";
 import { useSearchParams } from "next/navigation";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP } from "@/dynamic/v3";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 import { buildBookingHref } from "@/utils/bookingPaths";
 import Navbar from "@/components/Navbar";
@@ -123,8 +123,8 @@ function RestaurantCard({
 
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
 
-  const viewDetailsLabel = dyn.v3.getVariant("view_details", undefined, "View details");
-  const bookNowLabel = dyn.v3.getVariant("book_now", undefined, "Book now");
+  const viewDetailsLabel = dyn.v3.getVariant("see_details", TEXT_VARIANTS_MAP, "View details");
+  const bookNowLabel = dyn.v3.getVariant("reserve_now", TEXT_VARIANTS_MAP, "Book now");
 
   // Usar rating para el número y stars para las estrellas
   const ratingValue = r.rating ?? 4.5; // Para mostrar el número (con decimales)
@@ -208,7 +208,7 @@ function RestaurantCard({
                     <SeedLink
                       id={dyn.v3.getVariant("view_details_button", ID_VARIANTS_MAP, `view-details-${r.id}`)}
                       href={`/restaurant/${encodeURIComponent(r.id)}`}
-                      className="text-sm bg-[#46a758] hover:bg-[#3d8f4a] text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+                      className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "text-sm bg-[#46a758] hover:bg-[#3d8f4a] text-white px-4 py-2 rounded-lg font-semibold transition-colors")}
                       onClick={() =>
                         logEvent(EVENT_TYPES.VIEW_RESTAURANT, { restaurantId: r.id })
                       }

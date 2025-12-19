@@ -68,7 +68,11 @@ export function applyV1Wrapper(
     componentKey.includes("restaurant-info-section") ||
     componentKey.includes("restaurant-details") ||
     componentKey.includes("reservation-box") ||
-    componentKey.includes("restaurant-banner");
+    componentKey.includes("restaurant-banner") ||
+    componentKey.includes("select-dropdown") ||
+    componentKey.includes("picker-dropdown") ||
+    componentKey.includes("picker-container") ||
+    componentKey.includes("date-time-row");
   const WrapperElement = useDivWrapper ? "div" : "span";
   
   const core = shouldWrap

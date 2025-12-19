@@ -2,6 +2,7 @@
 
 import { useSeed } from "@/context/SeedContext";
 import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import Navbar from "@/components/Navbar";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
@@ -145,19 +146,22 @@ export default function HelpPage() {
   }, [seed, hasSeedParam]);
 
   return (
-    <main>
-      <Navbar />
-      <div className="max-w-6xl mx-auto px-4 py-8">
+    dyn.v1.addWrapDecoy("help-page", (
+      <main id={dyn.v3.getVariant("help-page", ID_VARIANTS_MAP, "help-page")}>
+        <Navbar />
+        {dyn.v1.addWrapDecoy("help-content", (
+          <div className="max-w-6xl mx-auto px-4 py-8" id={dyn.v3.getVariant("help-content", ID_VARIANTS_MAP, "help-content")}>
         {/* Hero Section */}
-        <div className="mb-12 text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            How can we help you?
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Find answers to common questions or get in touch with our support team.
-            We're here to help make your dining experience seamless.
-          </p>
-        </div>
+        {dyn.v1.addWrapDecoy("help-hero", (
+          <div className="mb-12 text-center" id={dyn.v3.getVariant("help-hero", ID_VARIANTS_MAP, "help-hero")}>
+            <h1 className="text-5xl font-bold text-gray-900 mb-4" id={dyn.v3.getVariant("help-title", ID_VARIANTS_MAP, "help-title")}>
+              {dyn.v3.getVariant("help_center", TEXT_VARIANTS_MAP, "How can we help you?")}
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto" id={dyn.v3.getVariant("help-subtitle", ID_VARIANTS_MAP, "help-subtitle")}>
+              {dyn.v3.getVariant("help_description", TEXT_VARIANTS_MAP, "Find answers to common questions or get in touch with our support team. We're here to help make your dining experience seamless.")}
+            </p>
+          </div>
+        ), "help-hero-wrap")}
 
         {/* Search Section */}
         <section className="mb-12">
@@ -268,15 +272,20 @@ export default function HelpPage() {
             <p className="text-lg mb-6 opacity-90">
               Can't find what you're looking for? Our support team is ready to assist you.
             </p>
-            <a
-              href="/contact"
-              className="inline-block bg-white text-[#46a758] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-            >
-              Contact Support
-            </a>
+            {dyn.v1.addWrapDecoy("contact-support-button", (
+              <a
+                href="/contact"
+                className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "inline-block bg-white text-[#46a758] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors")}
+                id={dyn.v3.getVariant("contact-support-button", ID_VARIANTS_MAP, "contact-support-button")}
+              >
+                {dyn.v3.getVariant("contact_support", TEXT_VARIANTS_MAP, "Contact Support")}
+              </a>
+            ), "contact-support-button-wrap")}
           </div>
         </section>
-      </div>
-    </main>
+        </div>
+        ), "help-content-wrap")}
+      </main>
+    ), "help-page-wrap")
   );
 }

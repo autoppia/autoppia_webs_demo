@@ -2,6 +2,7 @@
 
 import { useSeed } from "@/context/SeedContext";
 import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import Navbar from "@/components/Navbar";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
@@ -83,19 +84,22 @@ export default function ContactPage() {
   }, [seed, hasSeedParam]);
 
   return (
-    <main>
-      <Navbar />
-      <div className="max-w-6xl mx-auto px-4 py-8">
+    dyn.v1.addWrapDecoy("contact-page", (
+      <main id={dyn.v3.getVariant("contact-page", ID_VARIANTS_MAP, "contact-page")}>
+        <Navbar />
+        {dyn.v1.addWrapDecoy("contact-content", (
+          <div className="max-w-6xl mx-auto px-4 py-8" id={dyn.v3.getVariant("contact-content", ID_VARIANTS_MAP, "contact-content")}>
         {/* Hero Section */}
-        <div className="mb-12 text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            Get in Touch
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Have questions or feedback? We'd love to hear from you! Reach out to
-            us and we'll get back to you as soon as possible.
-          </p>
-        </div>
+        {dyn.v1.addWrapDecoy("contact-hero", (
+          <div className="mb-12 text-center" id={dyn.v3.getVariant("contact-hero", ID_VARIANTS_MAP, "contact-hero")}>
+            <h1 className="text-5xl font-bold text-gray-900 mb-4" id={dyn.v3.getVariant("contact-title", ID_VARIANTS_MAP, "contact-title")}>
+              {dyn.v3.getVariant("get_in_touch", TEXT_VARIANTS_MAP, "Get in Touch")}
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto" id={dyn.v3.getVariant("contact-subtitle", ID_VARIANTS_MAP, "contact-subtitle")}>
+              {dyn.v3.getVariant("contact_description", TEXT_VARIANTS_MAP, "Have questions or feedback? We'd love to hear from you! Reach out to us and we'll get back to you as soon as possible.")}
+            </p>
+          </div>
+        ), "contact-hero-wrap")}
 
         {/* Main Content: Contact Info + Form */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
@@ -230,13 +234,16 @@ export default function ContactPage() {
 
                 {/* Submit Button */}
                 <div className="pt-2">
-                  <Button
-                    type="submit"
-                    className="w-full bg-[#46a758] hover:bg-[#3d8f4e] text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors"
-                  >
-                    <Send className="w-5 h-5" />
-                    Send Message
-                  </Button>
+                  {dyn.v1.addWrapDecoy("send-message-button", (
+                    <Button
+                      type="submit"
+                      id={dyn.v3.getVariant("send-message-button", ID_VARIANTS_MAP, "send-message-button")}
+                      className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "w-full bg-[#46a758] hover:bg-[#3d8f4e] text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors")}
+                    >
+                      <Send className="w-5 h-5" />
+                      {dyn.v3.getVariant("send_message", TEXT_VARIANTS_MAP, "Send Message")}
+                    </Button>
+                  ), "send-message-button-wrap")}
                 </div>
               </form>
             </div>
@@ -278,7 +285,9 @@ export default function ContactPage() {
             ))}
           </div>
         </div>
-      </div>
-    </main>
+        </div>
+        ), "contact-content-wrap")}
+      </main>
+    ), "contact-page-wrap")
   );
 }
