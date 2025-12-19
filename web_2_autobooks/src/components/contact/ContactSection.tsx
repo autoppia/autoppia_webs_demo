@@ -235,10 +235,11 @@ export function ContactSection() {
                 </form>
               </div>
             ), "contact-form-wrap")}
+            </div>
           </div>
         </div>
       ), "contact-form-section-wrap")}
-    </section>
+      </section>
     ), "contact-content-wrap")
   );
 }

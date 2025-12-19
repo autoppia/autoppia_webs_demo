@@ -468,7 +468,7 @@ export default function ProfilePage() {
                           </div>
                         </div>
                       ), `book-entry-wrap-${bookId}`)
-                    };
+                    );
                   })}
                 </div>
               ), "edit-books-section-wrap")}
@@ -489,79 +489,82 @@ export default function ProfilePage() {
                 )}
                 
                 {currentUser.readingList && currentUser.readingList.length > 0 ? (
-                  currentUser.readingList.map((bookId) => {
-                    const book = books.find((b) => b.id === bookId);
-                    const baseBook = book ?? buildFallbackBook(bookId);
-                    
-                    return (
-                      dyn.v1.addWrapDecoy(`reading-list-item-${bookId}`, (
-                        <div key={bookId} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl">
-                      <div className="flex items-start justify-between mb-6">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-4">
-                            <div
-                              className="w-24 h-32 rounded-xl bg-cover bg-center shadow-xl"
-                              style={{ backgroundImage: `url(${baseBook.poster}), url('/media/gallery/default_book.png')` }}
-                            />
-                            <div className="flex-1">
-                              <p className="text-xs uppercase tracking-wide text-white/50 mb-2">Reading List</p>
-                              <h3 className="text-2xl font-bold text-white mb-2">{baseBook.title}</h3>
-                              {book ? (
-                                <>
-                                  <p className="text-sm text-white/70 mb-4 line-clamp-2">{book.synopsis}</p>
-                                  <div className="grid gap-3 text-sm text-white/80 md:grid-cols-2">
-                                    <div className="space-y-2">
-                                      <p><span className="text-white/50">Author:</span> <span className="font-medium">{book.director}</span></p>
-                                      <p><span className="text-white/50">Year:</span> <span className="font-medium">{book.year}</span></p>
-                                      <p><span className="text-white/50">Pages:</span> <span className="font-medium">{book.duration}</span></p>
-                                    </div>
-                                    <div className="space-y-2">
-                                      <p><span className="text-white/50">Genres:</span> <span className="font-medium">{book.genres.join(", ")}</span></p>
-                                      <p><span className="text-white/50">Rating:</span> <span className="font-medium">{book.rating}</span></p>
-                                    </div>
+                  <div className="space-y-4">
+                    {currentUser.readingList.map((bookId) => {
+                      const book = books.find((b) => b.id === bookId);
+                      const baseBook = book ?? buildFallbackBook(bookId);
+                      
+                      return (
+                        dyn.v1.addWrapDecoy(`reading-list-item-${bookId}`, (
+                          <div key={bookId} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl">
+                            <div className="flex items-start justify-between mb-6">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-3 mb-4">
+                                  <div
+                                    className="w-24 h-32 rounded-xl bg-cover bg-center shadow-xl"
+                                    style={{ backgroundImage: `url(${baseBook.poster}), url('/media/gallery/default_book.png')` }}
+                                  />
+                                  <div className="flex-1">
+                                    <p className="text-xs uppercase tracking-wide text-white/50 mb-2">Reading List</p>
+                                    <h3 className="text-2xl font-bold text-white mb-2">{baseBook.title}</h3>
+                                    {book ? (
+                                      <>
+                                        <p className="text-sm text-white/70 mb-4 line-clamp-2">{book.synopsis}</p>
+                                        <div className="grid gap-3 text-sm text-white/80 md:grid-cols-2">
+                                          <div className="space-y-2">
+                                            <p><span className="text-white/50">Author:</span> <span className="font-medium">{book.director}</span></p>
+                                            <p><span className="text-white/50">Year:</span> <span className="font-medium">{book.year}</span></p>
+                                            <p><span className="text-white/50">Pages:</span> <span className="font-medium">{book.duration}</span></p>
+                                          </div>
+                                          <div className="space-y-2">
+                                            <p><span className="text-white/50">Genres:</span> <span className="font-medium">{book.genres.join(", ")}</span></p>
+                                            <p><span className="text-white/50">Rating:</span> <span className="font-medium">{book.rating}</span></p>
+                                          </div>
+                                        </div>
+                                      </>
+                                    ) : (
+                                      <p className="text-sm text-white/60">
+                                        This book is not available in the current dataset.
+                                      </p>
+                                    )}
                                   </div>
-                                </>
-                              ) : (
-                                <p className="text-sm text-white/60">
-                                  This book is not available in the current dataset.
-                                </p>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="flex flex-wrap gap-3">
+                              {book && (
+                                dyn.v1.addWrapDecoy(`view-details-reading-${bookId}`, (
+                                  <SeedLink
+                                    href={`/books/${book.id}`}
+                                    id={dyn.v3.getVariant("view-details-button", ID_VARIANTS_MAP, `view-details-reading-${bookId}`)}
+                                    className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 transition-colors"
+                                  >
+                                    <BookOpen className="h-4 w-4" />
+                                    {dyn.v3.getVariant("view_details", TEXT_VARIANTS_MAP, "View Details")}
+                                  </SeedLink>
+                                ), `view-details-reading-wrap-${bookId}`)
                               )}
+                              {dyn.v1.addWrapDecoy(`remove-from-list-button-${bookId}`, (
+                                <Button
+                                  variant="ghost"
+                                  id={dyn.v3.getVariant("remove-from-list-button", ID_VARIANTS_MAP, `remove-from-list-button-${bookId}`)}
+                                  className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-400/10 text-red-300 hover:bg-red-400/20 transition-colors"
+                                  onClick={() => {
+                                    removeFromReadingList(bookId);
+                                    setBookMessage(`Book removed from reading list: ${baseBook.title}`);
+                                  }}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                  {dyn.v3.getVariant("remove_from_list", TEXT_VARIANTS_MAP, "Remove from List")}
+                                </Button>
+                              ), `remove-from-list-button-wrap-${bookId}`)}
                             </div>
                           </div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex flex-wrap gap-3">
-                          {book && (
-                            dyn.v1.addWrapDecoy(`view-details-reading-${bookId}`, (
-                              <SeedLink
-                                href={`/books/${book.id}`}
-                                id={dyn.v3.getVariant("view-details-button", ID_VARIANTS_MAP, `view-details-reading-${bookId}`)}
-                                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 transition-colors"
-                              >
-                                <BookOpen className="h-4 w-4" />
-                                {dyn.v3.getVariant("view_details", TEXT_VARIANTS_MAP, "View Details")}
-                              </SeedLink>
-                            ), `view-details-reading-wrap-${bookId}`)
-                          )}
-                          {dyn.v1.addWrapDecoy(`remove-from-list-button-${bookId}`, (
-                            <Button
-                              variant="ghost"
-                              id={dyn.v3.getVariant("remove-from-list-button", ID_VARIANTS_MAP, `remove-from-list-button-${bookId}`)}
-                              className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-400/10 text-red-300 hover:bg-red-400/20 transition-colors"
-                              onClick={() => {
-                                removeFromReadingList(bookId);
-                                setBookMessage(`Book removed from reading list: ${baseBook.title}`);
-                              }}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                              {dyn.v3.getVariant("remove_from_list", TEXT_VARIANTS_MAP, "Remove from List")}
-                            </Button>
-                          ), `remove-from-list-button-wrap-${bookId}`)}
-                        </div>
-                      </div>
-                    ), `reading-list-item-wrap-${bookId}`)
-                  })
+                        ), `reading-list-item-wrap-${bookId}`)
+                      );
+                    })}
+                  </div>
                 ) : (
                 <div className="rounded-3xl border border-dashed border-white/20 bg-gradient-to-br from-white/5 to-white/0 p-12 text-center backdrop-blur-sm">
                   <Bookmark className="h-16 w-16 text-white/20 mx-auto mb-4" />
@@ -578,7 +581,8 @@ export default function ProfilePage() {
                   </SeedLink>
                 </div>
               )}
-            </div>
+              </div>
+            ), "reading-list-section-wrap")}
           </TabsContent>
 
           {/* Add Books Tab */}
