@@ -11,6 +11,8 @@ import { BookEditor, type BookEditorData } from "@/components/books/BookEditor";
 import type { Book } from "@/data/books";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { User, BookOpen, Edit, Trash2, Plus, Save, Mail, MapPin, Globe, Heart, FileText, Bookmark } from "lucide-react";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 type ProfileFormState = {
   firstName: string;
@@ -78,6 +80,7 @@ export default function ProfilePage() {
 
   // Move useMemo before conditional return to follow Rules of Hooks
   const addBookTemplate = useMemo(() => buildFallbackBook(`new-book-${addBookKey}`), [addBookKey]);
+  const dyn = useDynamicSystem();
 
   if (!currentUser) {
     return (
@@ -192,28 +195,36 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative min-h-screen">
-      {/* Background grid pattern */}
-      <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
-      {/* Background gradient overlays */}
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
-      <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-      
-      <main className="relative mx-auto max-w-5xl px-4 py-10 text-white">
-        {/* Header */}
-        <header className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-secondary/20 border border-secondary/30">
-              <User className="h-6 w-6 text-secondary" />
-            </div>
-            <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-white/60">Profile</p>
-              <h1 className="text-3xl md:text-4xl font-bold">Welcome, {currentUser.username}</h1>
-            </div>
-          </div>
-          <p className="text-white/70">Manage your profile and assigned books for validation.</p>
-        </header>
+    dyn.v1.addWrapDecoy("profile-page", (
+      <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative min-h-screen" id={dyn.v3.getVariant("profile-page", ID_VARIANTS_MAP, "profile-page")}>
+        {/* Background grid pattern */}
+        <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+        {/* Background gradient overlays */}
+        <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
+        <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
+        <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
+        
+        {dyn.v1.addWrapDecoy("profile-content", (
+          <main className="relative mx-auto max-w-5xl px-4 py-10 text-white" id={dyn.v3.getVariant("profile-content", ID_VARIANTS_MAP, "profile-content")}>
+            {/* Header */}
+            {dyn.v1.addWrapDecoy("profile-header", (
+              <header className="mb-8" id={dyn.v3.getVariant("profile-header", ID_VARIANTS_MAP, "profile-header")}>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-secondary/20 border border-secondary/30">
+                    <User className="h-6 w-6 text-secondary" />
+                  </div>
+                  <div>
+                    <p className="text-sm uppercase tracking-[0.3em] text-white/60">Profile</p>
+                    <h1 className="text-3xl md:text-4xl font-bold" id={dyn.v3.getVariant("profile-title", ID_VARIANTS_MAP, "profile-title")}>
+                      {dyn.v3.getVariant("profile_welcome", TEXT_VARIANTS_MAP, "Welcome")}, {currentUser.username}
+                    </h1>
+                  </div>
+                </div>
+                <p className="text-white/70">
+                  {dyn.v3.getVariant("profile_description", TEXT_VARIANTS_MAP, "Manage your profile and assigned books for validation.")}
+                </p>
+              </header>
+            ), "profile-header-wrap")}
 
         {/* Success Messages */}
         {profileMessage && (
@@ -237,34 +248,36 @@ export default function ProfilePage() {
           <TabsList className="w-full justify-start">
             <TabsTrigger value="profile" className="flex items-center gap-2">
               <User className="h-4 w-4" />
-              Edit Profile
+              {dyn.v3.getVariant("edit_profile", TEXT_VARIANTS_MAP, "Edit Profile")}
             </TabsTrigger>
             <TabsTrigger value="books" className="flex items-center gap-2">
               <BookOpen className="h-4 w-4" />
-              Edit Books
+              {dyn.v3.getVariant("edit_books", TEXT_VARIANTS_MAP, "Edit Books")}
             </TabsTrigger>
             <TabsTrigger value="reading-list" className="flex items-center gap-2">
               <Bookmark className="h-4 w-4" />
-              Reading List
+              {dyn.v3.getVariant("reading_list", TEXT_VARIANTS_MAP, "Reading List")}
             </TabsTrigger>
             <TabsTrigger value="add-books" className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
-              Add Books
+              {dyn.v3.getVariant("add_books", TEXT_VARIANTS_MAP, "Add Books")}
             </TabsTrigger>
           </TabsList>
 
           {/* Profile Tab */}
           <TabsContent value="profile" className="space-y-6">
-            <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl">
-              <div className="flex items-center gap-3 mb-6">
-                <Edit className="h-5 w-5 text-secondary" />
-                <div>
-                  <h2 className="text-2xl font-bold text-white">Edit Profile</h2>
-                  <p className="text-sm text-white/70">Update your profile information and preferences.</p>
+            {dyn.v1.addWrapDecoy("edit-profile-section", (
+              <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl" id={dyn.v3.getVariant("edit-profile-section", ID_VARIANTS_MAP, "edit-profile-section")}>
+                <div className="flex items-center gap-3 mb-6">
+                  <Edit className="h-5 w-5 text-secondary" />
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">{dyn.v3.getVariant("edit_profile", TEXT_VARIANTS_MAP, "Edit Profile")}</h2>
+                    <p className="text-sm text-white/70">Update your profile information and preferences.</p>
+                  </div>
                 </div>
-              </div>
-              
-              <form className="space-y-6" onSubmit={handleProfileSubmit}>
+                
+                {dyn.v1.addWrapDecoy("edit-profile-form", (
+                  <form className="space-y-6" onSubmit={handleProfileSubmit} id={dyn.v3.getVariant("edit-profile-form", ID_VARIANTS_MAP, "edit-profile-form")}>
                 <div className="grid gap-6 md:grid-cols-2">
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
@@ -359,39 +372,47 @@ export default function ProfilePage() {
                   />
                 </div>
                 
-                <div className="flex flex-wrap gap-3 pt-2">
-                  <Button 
-                    type="submit" 
-                    className="h-12 px-8 bg-secondary text-black hover:bg-secondary/90 font-bold shadow-lg shadow-secondary/20 transition-all hover:scale-105"
-                  >
-                    <Save className="h-5 w-5 mr-2" />
-                    Save Profile
-                  </Button>
-                </div>
-              </form>
-            </div>
+                    <div className="flex flex-wrap gap-3 pt-2">
+                      {dyn.v1.addWrapDecoy("save-profile-button", (
+                        <Button 
+                          type="submit"
+                          id={dyn.v3.getVariant("save-profile-button", ID_VARIANTS_MAP, "save-profile-button")}
+                          className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "h-12 px-8 bg-secondary text-black hover:bg-secondary/90 font-bold shadow-lg shadow-secondary/20 transition-all hover:scale-105")}
+                        >
+                          <Save className="h-5 w-5 mr-2" />
+                          {dyn.v3.getVariant("save_profile", TEXT_VARIANTS_MAP, "Save Profile")}
+                        </Button>
+                      ), "save-profile-button-wrap")}
+                    </div>
+                  </form>
+                ), "edit-profile-form-wrap")}
+              </div>
+            ), "edit-profile-section-wrap")}
           </TabsContent>
 
           {/* Books Tab */}
           <TabsContent value="books" className="space-y-6">
-            {/* Assigned Books */}
-            <div className="space-y-4">
-              {entries.length > 0 && (
-                <div className="flex items-center gap-3 mb-4">
-                  <BookOpen className="h-5 w-5 text-secondary" />
-                  <h2 className="text-2xl font-bold text-white">Assigned Books</h2>
-                  <span className="text-sm text-white/60">({entries.length})</span>
-                </div>
-              )}
-              
-              {entries.map(({ bookId, book }) => {
-                const baseBook = book ?? buildFallbackBook(bookId);
-                return (
-                  <div key={bookId} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl">
-                    <div className="flex items-start justify-between mb-6">
-                      <div className="flex-1">
-                        <p className="text-xs uppercase tracking-wide text-white/50 mb-2">Assigned Book</p>
-                        <h3 className="text-2xl font-bold text-white mb-2">{baseBook.title}</h3>
+            {dyn.v1.addWrapDecoy("edit-books-section", (
+              <div className="space-y-4" id={dyn.v3.getVariant("edit-books-section", ID_VARIANTS_MAP, "edit-books-section")}>
+                {entries.length > 0 && (
+                  <div className="flex items-center gap-3 mb-4">
+                    <BookOpen className="h-5 w-5 text-secondary" />
+                    <h2 className="text-2xl font-bold text-white">{dyn.v3.getVariant("edit_books", TEXT_VARIANTS_MAP, "Edit Books")}</h2>
+                    <span className="text-sm text-white/60">({entries.length})</span>
+                  </div>
+                )}
+                
+                {entries.map(({ bookId, book }) => {
+                  const baseBook = book ?? buildFallbackBook(bookId);
+                  return (
+                    dyn.v1.addWrapDecoy(`book-entry-${bookId}`, (
+                      <div key={bookId} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl">
+                        <div className="flex items-start justify-between mb-6">
+                          <div className="flex-1">
+                            <p className="text-xs uppercase tracking-wide text-white/50 mb-2">
+                              {dyn.v3.getVariant("assigned_book", TEXT_VARIANTS_MAP, "Assigned Book")}
+                            </p>
+                            <h3 className="text-2xl font-bold text-white mb-2">{baseBook.title}</h3>
                         {book ? (
                           <>
                             <p className="text-sm text-white/70 mb-4 line-clamp-2">{book.synopsis}</p>
@@ -417,52 +438,64 @@ export default function ProfilePage() {
                     </div>
                     
                     <div className="flex flex-wrap gap-3 mb-6">
-                      {book && (
-                        <SeedLink
-                          href={`/books/${book.id}`}
-                          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 transition-colors"
-                        >
-                          <BookOpen className="h-4 w-4" />
-                          View Details
-                        </SeedLink>
-                      )}
-                      <Button
-                        variant="ghost"
-                        className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-400/10 text-red-300 hover:bg-red-400/20 transition-colors"
-                        onClick={() => handleEntryDelete(baseBook)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        Delete Book
-                      </Button>
-                    </div>
-                    
-                    <div className="border-t border-white/10 pt-6">
-                      <BookEditor book={baseBook} onSubmit={(data) => handleEntryEdit(baseBook, data)} submitLabel="Save Changes" />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                            {book && (
+                              dyn.v1.addWrapDecoy(`view-details-button-${bookId}`, (
+                                <SeedLink
+                                  href={`/books/${book.id}`}
+                                  id={dyn.v3.getVariant("view-details-button", ID_VARIANTS_MAP, `view-details-button-${bookId}`)}
+                                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 transition-colors"
+                                >
+                                  <BookOpen className="h-4 w-4" />
+                                  {dyn.v3.getVariant("view_details", TEXT_VARIANTS_MAP, "View Details")}
+                                </SeedLink>
+                              ), `view-details-button-wrap-${bookId}`)
+                            )}
+                            {dyn.v1.addWrapDecoy(`delete-book-button-${bookId}`, (
+                              <Button
+                                variant="ghost"
+                                id={dyn.v3.getVariant("delete-book-button", ID_VARIANTS_MAP, `delete-book-button-${bookId}`)}
+                                className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-400/10 text-red-300 hover:bg-red-400/20 transition-colors"
+                                onClick={() => handleEntryDelete(baseBook)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                                {dyn.v3.getVariant("delete_book", TEXT_VARIANTS_MAP, "Delete Book")}
+                              </Button>
+                            ), `delete-book-button-wrap-${bookId}`)}
+                          </div>
+                          
+                          <div className="border-t border-white/10 pt-6">
+                            <BookEditor book={baseBook} onSubmit={(data) => handleEntryEdit(baseBook, data)} submitLabel={dyn.v3.getVariant("save_changes", TEXT_VARIANTS_MAP, "Save Changes")} />
+                          </div>
+                        </div>
+                      ), `book-entry-wrap-${bookId}`)
+                    };
+                  })}
+                </div>
+              ), "edit-books-section-wrap")}
           </TabsContent>
 
           {/* Reading List Tab */}
           <TabsContent value="reading-list" className="space-y-6">
-            <div className="space-y-4">
-              {currentUser.readingList && currentUser.readingList.length > 0 && (
-                <div className="flex items-center gap-3 mb-4">
-                  <Bookmark className="h-5 w-5 text-secondary" />
-                  <h2 className="text-2xl font-bold text-white">Reading List</h2>
-                  <span className="text-sm text-white/60">({currentUser.readingList.length})</span>
-                </div>
-              )}
-              
-              {currentUser.readingList && currentUser.readingList.length > 0 ? (
-                currentUser.readingList.map((bookId) => {
-                  const book = books.find((b) => b.id === bookId);
-                  const baseBook = book ?? buildFallbackBook(bookId);
-                  
-                  return (
-                    <div key={bookId} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl">
+            {dyn.v1.addWrapDecoy("reading-list-section", (
+              <div className="space-y-4" id={dyn.v3.getVariant("reading-list-section", ID_VARIANTS_MAP, "reading-list-section")}>
+                {currentUser.readingList && currentUser.readingList.length > 0 && (
+                  <div className="flex items-center gap-3 mb-4">
+                    <Bookmark className="h-5 w-5 text-secondary" />
+                    <h2 className="text-2xl font-bold text-white">
+                      {dyn.v3.getVariant("reading_list", TEXT_VARIANTS_MAP, "Reading List")}
+                    </h2>
+                    <span className="text-sm text-white/60">({currentUser.readingList.length})</span>
+                  </div>
+                )}
+                
+                {currentUser.readingList && currentUser.readingList.length > 0 ? (
+                  currentUser.readingList.map((bookId) => {
+                    const book = books.find((b) => b.id === bookId);
+                    const baseBook = book ?? buildFallbackBook(bookId);
+                    
+                    return (
+                      dyn.v1.addWrapDecoy(`reading-list-item-${bookId}`, (
+                        <div key={bookId} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl">
                       <div className="flex items-start justify-between mb-6">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-4">
@@ -499,31 +532,37 @@ export default function ProfilePage() {
                       </div>
                       
                       <div className="flex flex-wrap gap-3">
-                        {book && (
-                          <SeedLink
-                            href={`/books/${book.id}`}
-                            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 transition-colors"
-                          >
-                            <BookOpen className="h-4 w-4" />
-                            View Details
-                          </SeedLink>
-                        )}
-                        <Button
-                          variant="ghost"
-                          className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-400/10 text-red-300 hover:bg-red-400/20 transition-colors"
-                          onClick={() => {
-                            removeFromReadingList(bookId);
-                            setBookMessage(`Book removed from reading list: ${baseBook.title}`);
-                          }}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          Remove from List
-                        </Button>
+                          {book && (
+                            dyn.v1.addWrapDecoy(`view-details-reading-${bookId}`, (
+                              <SeedLink
+                                href={`/books/${book.id}`}
+                                id={dyn.v3.getVariant("view-details-button", ID_VARIANTS_MAP, `view-details-reading-${bookId}`)}
+                                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 transition-colors"
+                              >
+                                <BookOpen className="h-4 w-4" />
+                                {dyn.v3.getVariant("view_details", TEXT_VARIANTS_MAP, "View Details")}
+                              </SeedLink>
+                            ), `view-details-reading-wrap-${bookId}`)
+                          )}
+                          {dyn.v1.addWrapDecoy(`remove-from-list-button-${bookId}`, (
+                            <Button
+                              variant="ghost"
+                              id={dyn.v3.getVariant("remove-from-list-button", ID_VARIANTS_MAP, `remove-from-list-button-${bookId}`)}
+                              className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-400/10 text-red-300 hover:bg-red-400/20 transition-colors"
+                              onClick={() => {
+                                removeFromReadingList(bookId);
+                                setBookMessage(`Book removed from reading list: ${baseBook.title}`);
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              {dyn.v3.getVariant("remove_from_list", TEXT_VARIANTS_MAP, "Remove from List")}
+                            </Button>
+                          ), `remove-from-list-button-wrap-${bookId}`)}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })
-              ) : (
+                    ), `reading-list-item-wrap-${bookId}`)
+                  })
+                ) : (
                 <div className="rounded-3xl border border-dashed border-white/20 bg-gradient-to-br from-white/5 to-white/0 p-12 text-center backdrop-blur-sm">
                   <Bookmark className="h-16 w-16 text-white/20 mx-auto mb-4" />
                   <h3 className="text-2xl font-bold text-white mb-2">Your reading list is empty</h3>
@@ -544,24 +583,30 @@ export default function ProfilePage() {
 
           {/* Add Books Tab */}
           <TabsContent value="add-books" className="space-y-6">
-            <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl">
-              <div className="flex items-center gap-3 mb-6">
-                <Plus className="h-5 w-5 text-secondary" />
-                <div>
-                  <h2 className="text-2xl font-bold text-white">Add New Book</h2>
-                  <p className="text-sm text-white/70">Add a new book to the catalog.</p>
+            {dyn.v1.addWrapDecoy("add-books-section", (
+              <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl" id={dyn.v3.getVariant("add-books-section", ID_VARIANTS_MAP, "add-books-section")}>
+                <div className="flex items-center gap-3 mb-6">
+                  <Plus className="h-5 w-5 text-secondary" />
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">
+                      {dyn.v3.getVariant("add_books", TEXT_VARIANTS_MAP, "Add Books")}
+                    </h2>
+                    <p className="text-sm text-white/70">Add a new book to the catalog.</p>
+                  </div>
                 </div>
+                <BookEditor
+                  key={`add-book-${addBookKey}`}
+                  book={addBookTemplate}
+                  onSubmit={handleAddBook}
+                  submitLabel={dyn.v3.getVariant("add_book", TEXT_VARIANTS_MAP, "Add Book")}
+                />
               </div>
-              <BookEditor
-                key={`add-book-${addBookKey}`}
-                book={addBookTemplate}
-                onSubmit={handleAddBook}
-                submitLabel="Add Book"
-              />
-            </div>
+            ), "add-books-section-wrap")}
           </TabsContent>
         </Tabs>
-      </main>
+        </main>
+      ), "profile-content-wrap")}
     </div>
+    ), "profile-page-wrap")
   );
 }

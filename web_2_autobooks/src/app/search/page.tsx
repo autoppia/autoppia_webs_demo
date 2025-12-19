@@ -19,6 +19,8 @@ import {
 } from "@/dynamic/v2-data";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { cn } from "@/library/utils";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 const BOOKS_PER_PAGE = 9;
 
@@ -27,6 +29,7 @@ type SortOption = "default" | "rating-desc" | "rating-asc" | "year-desc" | "year
 function SearchContent() {
   const searchParams = useSearchParams();
   const router = useSeedRouter();
+  const dyn = useDynamicSystem();
 
   const initialSearch = searchParams.get("search") ?? "";
   const initialGenre = searchParams.get("genre") ?? "";
@@ -203,15 +206,17 @@ function SearchContent() {
   const thrillerFocus = useMemo(() => getBooksByGenre("Thriller").slice(0, 5), []);
 
   return (
-    <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative">
-      {/* Background grid pattern */}
-      <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
-      {/* Background gradient overlays */}
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
-      <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-      
-      <main className="relative mx-auto w-full max-w-7xl px-6 py-16 sm:px-8 lg:px-12">
+    dyn.v1.addWrapDecoy("search-page", (
+      <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative" id={dyn.v3.getVariant("search-page", ID_VARIANTS_MAP, "search-page")}>
+        {/* Background grid pattern */}
+        <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+        {/* Background gradient overlays */}
+        <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
+        <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
+        <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
+        
+        {dyn.v1.addWrapDecoy("search-content", (
+          <main className="relative mx-auto w-full max-w-7xl px-6 py-16 sm:px-8 lg:px-12" id={dyn.v3.getVariant("search-content", ID_VARIANTS_MAP, "search-content")}>
         <div className="mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Search Books</h1>
           <p className="text-lg text-white/70">
@@ -220,32 +225,41 @@ function SearchContent() {
         </div>
 
         {/* Search bar */}
-        <div className="mb-6">
-          <form
-            className="flex flex-col gap-3 sm:flex-row"
-            onSubmit={(event) => {
-              event.preventDefault();
-              handleSearchSubmit();
-            }}
-          >
-            <div className="relative flex-1">
-              <SearchIcon className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/40" />
-              <Input
-                type="search"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="Search authors, titles, or keywords"
-                className="pl-12 h-14 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base"
-              />
-            </div>
-            <Button 
-              type="submit" 
-              className="h-14 px-8 bg-secondary text-black hover:bg-secondary/90 shadow-lg shadow-secondary/20 font-semibold text-base"
+        {dyn.v1.addWrapDecoy("search-bar", (
+          <div className="mb-6" id={dyn.v3.getVariant("search-bar-container", ID_VARIANTS_MAP, "search-bar-container")}>
+            <form
+              className="flex flex-col gap-3 sm:flex-row"
+              onSubmit={(event) => {
+                event.preventDefault();
+                handleSearchSubmit();
+              }}
+              id={dyn.v3.getVariant("search-form", ID_VARIANTS_MAP, "search-form")}
             >
-              Search
-            </Button>
-          </form>
-        </div>
+              {dyn.v1.addWrapDecoy("search-input-container", (
+                <div className="relative flex-1" id={dyn.v3.getVariant("search-input-container", ID_VARIANTS_MAP, "search-input-container")}>
+                  <SearchIcon className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/40" />
+                  <Input
+                    type="search"
+                    value={searchQuery}
+                    onChange={(event) => setSearchQuery(event.target.value)}
+                    placeholder={dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search authors, titles, or keywords")}
+                    className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "pl-12 h-14 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base")}
+                    id={dyn.v3.getVariant("search-input", ID_VARIANTS_MAP, "search-input")}
+                  />
+                </div>
+              ), "search-input-container-wrap")}
+              {dyn.v1.addWrapDecoy("search-button", (
+                <Button 
+                  type="submit"
+                  id={dyn.v3.getVariant("search-button", ID_VARIANTS_MAP, "search-button")}
+                  className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "h-14 px-8 bg-secondary text-black hover:bg-secondary/90 shadow-lg shadow-secondary/20 font-semibold text-base")}
+                >
+                  {dyn.v3.getVariant("search_button", TEXT_VARIANTS_MAP, "Search")}
+                </Button>
+              ), "search-button-wrap")}
+            </form>
+          </div>
+        ), "search-bar-wrap")}
 
         {/* Quick Genre Filters */}
         <div className="mb-6">
@@ -440,8 +454,10 @@ function SearchContent() {
             </div>
           )}
         </div>
-      </main>
-    </div>
+        </main>
+        ), "search-content-wrap")}
+      </div>
+    ), "search-page-wrap")
   );
 }
 

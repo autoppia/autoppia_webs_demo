@@ -3,11 +3,14 @@
 import { BookOpen, Search, Filter, Star, Calendar, Book, Users, Sparkles, TrendingUp, Zap } from "lucide-react";
 import { useMemo } from "react";
 import { getAvailableGenres, getAvailableYears, getBooks } from "@/dynamic/v2-data";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 export function AboutSection() {
   const books = useMemo(() => getBooks(), []);
   const genres = useMemo(() => getAvailableGenres(), []);
   const years = useMemo(() => getAvailableYears(), []);
+  const dyn = useDynamicSystem();
 
   const stats = useMemo(() => {
     if (books.length === 0) {
@@ -91,27 +94,29 @@ export function AboutSection() {
   ];
 
   return (
-    <section className="space-y-20">
-      {/* Hero Section */}
-      <div className="relative text-center">
-        <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 via-transparent to-secondary/5 rounded-3xl blur-3xl" />
-        <div className="relative">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/20 border border-secondary/30 mb-6">
-            <BookOpen className="h-5 w-5 text-secondary" />
-            <span className="text-sm font-semibold text-secondary">Book Search Engine</span>
+    dyn.v1.addWrapDecoy("about-content", (
+      <section className="space-y-20" id={dyn.v3.getVariant("about-content", ID_VARIANTS_MAP, "about-content")}>
+        {/* Hero Section */}
+        {dyn.v1.addWrapDecoy("about-hero", (
+          <div className="relative text-center" id={dyn.v3.getVariant("about-hero", ID_VARIANTS_MAP, "about-hero")}>
+            <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 via-transparent to-secondary/5 rounded-3xl blur-3xl" />
+            <div className="relative">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/20 border border-secondary/30 mb-6">
+                <BookOpen className="h-5 w-5 text-secondary" />
+                <span className="text-sm font-semibold text-secondary">Book Search Engine</span>
+              </div>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight" id={dyn.v3.getVariant("about-title", ID_VARIANTS_MAP, "about-title")}>
+                Your Digital
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-secondary via-yellow-400 to-secondary">
+                  {dyn.v3.getVariant("about_title", TEXT_VARIANTS_MAP, "Reading Room")}
+                </span>
+              </h1>
+              <p className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
+                {dyn.v3.getVariant("about_description", TEXT_VARIANTS_MAP, "Discover, search, and explore thousands of books with our intelligent search engine. Find your next favorite read in seconds.")}
+              </p>
+            </div>
           </div>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Your Digital
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-secondary via-yellow-400 to-secondary">
-              Reading Room
-            </span>
-          </h1>
-          <p className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-            Discover, search, and explore thousands of books with our intelligent search engine. 
-            Find your next favorite read in seconds.
-          </p>
-        </div>
-      </div>
+        ), "about-hero-wrap")}
 
       {/* Stats Section */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
@@ -233,25 +238,31 @@ export function AboutSection() {
       </div>
 
       {/* CTA Section */}
-      <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-secondary/20 via-secondary/10 to-transparent p-12 text-center backdrop-blur-sm overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.2),transparent_70%)]" />
-        <div className="relative">
-          <TrendingUp className="h-16 w-16 text-secondary mx-auto mb-6" />
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Ready to explore?
-          </h2>
-          <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-            Start searching for books now and discover your next favorite story
-          </p>
-          <a
-            href="/search"
-            className="inline-flex items-center gap-2 rounded-xl bg-secondary px-8 py-4 text-lg font-bold text-black transition-all hover:bg-secondary/90 hover:scale-105 shadow-lg shadow-secondary/20"
-          >
-            <Search className="h-5 w-5" />
-            Go to Search
-          </a>
+      {dyn.v1.addWrapDecoy("about-cta", (
+        <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-secondary/20 via-secondary/10 to-transparent p-12 text-center backdrop-blur-sm overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.2),transparent_70%)]" />
+          <div className="relative">
+            <TrendingUp className="h-16 w-16 text-secondary mx-auto mb-6" />
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Ready to explore?
+            </h2>
+            <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
+              Start searching for books now and discover your next favorite story
+            </p>
+            {dyn.v1.addWrapDecoy("about-cta-button", (
+              <a
+                href="/search"
+                id={dyn.v3.getVariant("about-cta-button", ID_VARIANTS_MAP, "about-cta-button")}
+                className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "inline-flex items-center gap-2 rounded-xl bg-secondary px-8 py-4 text-lg font-bold text-black transition-all hover:bg-secondary/90 hover:scale-105 shadow-lg shadow-secondary/20")}
+              >
+                <Search className="h-5 w-5" />
+                {dyn.v3.getVariant("go_to_search", TEXT_VARIANTS_MAP, "Go to Search")}
+              </a>
+            ), "about-cta-button-wrap")}
+          </div>
         </div>
-      </div>
+      ), "about-cta-wrap")}
     </section>
+    ), "about-content-wrap")
   );
 }
