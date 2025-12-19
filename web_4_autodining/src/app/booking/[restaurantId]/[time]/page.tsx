@@ -9,8 +9,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import dayjs from "dayjs";
 import { countries } from "@/library/dataset";
 import { initializeRestaurants, getRestaurants } from "@/dynamic/v2-data";
-// LAYOUT FIJO - Sin variaciones V1
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
 import Navbar from "@/components/Navbar";
@@ -33,7 +32,6 @@ export default function Page() {
   const searchParams = useSearchParams();
   const { seed: baseSeed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
-  const layoutSeed = resolvedSeeds.v1 ?? baseSeed;
 
   const restaurantId = params.restaurantId as string;
   const reservationTimeParam = decodeURIComponent(params.time as string);
@@ -59,11 +57,9 @@ export default function Page() {
   const [showToast, setShowToast] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
   const [email, setEmail] = useState("user_name@gmail.com");
-  const { getText, getId } = useV3Attributes();
+  const dyn = useDynamicSystem();
 
   const [data, setData] = useState<RestaurantView | null>(null);
-
-  // LAYOUT COMPLETAMENTE FIJO - Sin variaciones
 
   const restaurantInfo = {
     restaurantId,
@@ -181,7 +177,7 @@ export default function Page() {
 
       <div className="max-w-2xl mx-auto px-4 pb-10">
         <h2 className="font-bold text-lg mt-8 mb-4">
-          {getText("you_almost_done")}
+          {dyn.v3.getVariant("you_almost_done", undefined, "You're almost done!")}
         </h2>
         <div className="flex items-center gap-3 mb-6">
           <img
@@ -196,23 +192,23 @@ export default function Page() {
             <div className="flex items-center gap-5 text-gray-700 mt-1 text-[15px]">
               <span className="flex items-center gap-1">
                 <CalendarIcon className="w-4 h-4 mr-1" />
-                {formattedDate ?? getText("select_date")}
+                {formattedDate ?? dyn.v3.getVariant("select_date", undefined, "Select date")}
               </span>
               <span className="flex items-center gap-1">
                 <ClockIcon className="w-4 h-4 mr-1" />
-                {reservationTime ?? getText("select_time")}
+                {reservationTime ?? dyn.v3.getVariant("select_time", undefined, "Select time")}
               </span>
               <span className="flex items-center gap-1">
                 <UserIcon className="w-4 h-4 mr-1" />
-                {reservationPeople ?? getText("select_people")}{" "}
-                {getText("people")}
+                {reservationPeople ?? dyn.v3.getVariant("select_people", undefined, "Select people")}{" "}
+                {dyn.v3.getVariant("people", undefined, "people")}
               </span>
             </div>
           </div>
         </div>
 
         <h3 className="font-semibold text-lg mb-4 mt-6">
-          {getText("diner_details") || "Your Details"}
+          {dyn.v3.getVariant("diner_details", undefined, "Your Details")}
         </h3>
         <div className="space-y-4">
           {/* Name Field */}
@@ -232,7 +228,7 @@ export default function Page() {
           {/* Phone Field */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {getText("phone_number") || "Phone Number"}
+              {dyn.v3.getVariant("phone_number", undefined, "Phone Number")}
             </label>
             <div className="flex">
               <select
@@ -260,7 +256,7 @@ export default function Page() {
               </select>
               <input
                 type="tel"
-                placeholder={getText("phone_number") || "Phone number"}
+                placeholder={dyn.v3.getVariant("phone_number", undefined, "Phone number")}
                 className="flex-1 border border-gray-300 rounded-r-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]"
                 value={phoneNumber}
                 onChange={(e) => {
@@ -271,7 +267,7 @@ export default function Page() {
             </div>
             {phoneError && (
               <p className="text-red-500 text-sm mt-1">
-                {getText("phone_required") || "Phone number is required"}
+                {dyn.v3.getVariant("phone_required", undefined, "Phone number is required")}
               </p>
             )}
           </div>
@@ -292,7 +288,7 @@ export default function Page() {
           {/* Occasion Field */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {getText("select_occasion") || "Occasion (Optional)"}
+              {dyn.v3.getVariant("select_occasion", undefined, "Occasion (Optional)")}
             </label>
             <select
               id="select-occasion"
@@ -308,27 +304,26 @@ export default function Page() {
             >
               <option value="">Select an occasion (optional)</option>
               <option value="birthday">
-                {getText("birthday") || "Birthday"}
+                {dyn.v3.getVariant("birthday", undefined, "Birthday")}
               </option>
               <option value="anniversary">
-                {getText("anniversary") || "Anniversary"}
+                {dyn.v3.getVariant("anniversary", undefined, "Anniversary")}
               </option>
               <option value="business">
-                {getText("business_meal") || "Business Meal"}
+                {dyn.v3.getVariant("business_meal", undefined, "Business Meal")}
               </option>
-              <option value="other">{getText("other") || "Other"}</option>
+              <option value="other">{dyn.v3.getVariant("other", undefined, "Other")}</option>
             </select>
           </div>
 
           {/* Special Request Field */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {getText("special_request") || "Special Requests (Optional)"}
+              {dyn.v3.getVariant("special_request", undefined, "Special Requests (Optional)")}
             </label>
             <textarea
               placeholder={
-                getText("special_request") ||
-                "Any special requests or dietary requirements?"
+                dyn.v3.getVariant("special_request", undefined, "Any special requests or dietary requirements?")
               }
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] resize-none"
               rows={3}
@@ -339,29 +334,29 @@ export default function Page() {
         </div>
 
         <Button
-          id={getId("confirm_button")}
+          id={dyn.v3.getVariant("confirm_button", undefined, "confirm_button")}
           onClick={handleReservation}
           className="w-full bg-[#46a758] hover:bg-[#3d8f4a] text-white py-6 text-lg rounded-lg font-semibold mt-6 transition-colors shadow-sm"
         >
-          {getText("confirm_booking") || "Complete Reservation"}
+          {dyn.v3.getVariant("confirm_booking", undefined, "Complete Reservation")}
         </Button>
 
         <p className="text-xs text-gray-600 mt-3 text-center">
           By completing this reservation, you agree to our{" "}
           <Link href="#" className="text-[#46a758] underline">
-            {getText("terms_of_use") || "Terms of Use"}
+            {dyn.v3.getVariant("terms_of_use", undefined, "Terms of Use")}
           </Link>{" "}
           and{" "}
           <Link href="#" className="text-[#46a758] underline">
-            {getText("privacy_policy") || "Privacy Policy"}
+            {dyn.v3.getVariant("privacy_policy", undefined, "Privacy Policy")}
           </Link>
-          . {getText("message_rates")}
+          . {dyn.v3.getVariant("message_rates", undefined, "Message and data rates may apply.")}
         </p>
       </div>
 
       {showToast && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white px-20 py-5 rounded shadow-lg z-50">
-          {getText("confirmation_message")}
+          {dyn.v3.getVariant("confirmation_message", undefined, "Reservation confirmed!")}
         </div>
       )}
     </main>

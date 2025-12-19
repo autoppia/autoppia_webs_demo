@@ -1233,11 +1233,6 @@ export class SeedVariationManager {
   }
 }
 
-// Helper function to check if dynamic HTML is enabled
-export function isDynamicModeEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === "true";
-}
-
 // Helper function to map seed to layout index (1-total variants)
 export function getLayoutIndexFromSeed(seed: number): number {
   if (!Number.isFinite(seed) || seed < 1 || seed > MAX_V1_SEED) {

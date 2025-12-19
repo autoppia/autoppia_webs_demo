@@ -1,7 +1,7 @@
 "use client";
 
 import { useSeed } from "@/context/SeedContext";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
 import Navbar from "@/components/Navbar";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
@@ -16,10 +16,9 @@ interface FAQItem {
 
 export default function HelpPage() {
   const { seed, resolvedSeeds } = useSeed();
-  const { getText } = useV3Attributes();
+  const dyn = useDynamicSystem();
   const searchParams = useSearchParams();
   const hasSeedParam = Boolean(searchParams?.get("seed"));
-  const layoutSeed = hasSeedParam ? (resolvedSeeds.v1 ?? seed) : 8;
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -140,10 +139,10 @@ export default function HelpPage() {
 
   useEffect(() => {
     logEvent(EVENT_TYPES.HELP_PAGE_VIEW, {
-      layoutSeed,
+      seed,
       fromSeedParam: hasSeedParam,
     });
-  }, [layoutSeed, hasSeedParam]);
+  }, [seed, hasSeedParam]);
 
   return (
     <main>
@@ -201,7 +200,7 @@ export default function HelpPage() {
                   setSelectedCategory(category);
                   logEvent(EVENT_TYPES.HELP_CATEGORY_SELECTED, {
                     category,
-                    layoutSeed,
+                    seed,
                   });
                 }}
                 className={`px-6 py-2 rounded-full font-medium transition-colors ${

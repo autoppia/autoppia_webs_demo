@@ -9,8 +9,6 @@ export {
   initializeRestaurants,
   getRestaurants,
   isDynamicModeEnabled,
-  getEffectiveSeedValue,
-  getLayoutConfig,
 } from "./data-provider";
 export type { RestaurantData } from "./data-provider";
 

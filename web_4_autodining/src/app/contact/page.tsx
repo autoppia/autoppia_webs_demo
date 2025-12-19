@@ -1,7 +1,7 @@
 "use client";
 
 import { useSeed } from "@/context/SeedContext";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
 import Navbar from "@/components/Navbar";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
@@ -11,10 +11,9 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export default function ContactPage() {
   const { seed, resolvedSeeds } = useSeed();
-  const { getText, getId } = useV3Attributes();
+  const dyn = useDynamicSystem();
   const searchParams = useSearchParams();
   const hasSeedParam = Boolean(searchParams?.get("seed"));
-  const layoutSeed = hasSeedParam ? resolvedSeeds.v1 ?? seed : 8;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -34,7 +33,7 @@ export default function ContactPage() {
 
     logEvent(EVENT_TYPES.CONTACT_FORM_SUBMIT, {
       ...formData,
-      layoutSeed,
+      seed,
     });
   };
 
@@ -78,10 +77,10 @@ export default function ContactPage() {
 
   useEffect(() => {
     logEvent(EVENT_TYPES.CONTACT_PAGE_VIEW, {
-      layoutSeed,
+      seed,
       fromSeedParam: hasSeedParam,
     });
-  }, [layoutSeed, hasSeedParam]);
+  }, [seed, hasSeedParam]);
 
   return (
     <main>
@@ -118,7 +117,7 @@ export default function ContactPage() {
                   onClick={() =>
                     logEvent(EVENT_TYPES.CONTACT_CARD_CLICK, {
                       type: info.title,
-                      layoutSeed,
+                      seed,
                     })
                   }
                 >

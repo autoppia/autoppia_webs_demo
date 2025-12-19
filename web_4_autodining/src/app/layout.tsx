@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientBody from "./ClientBody";
-// DynamicStructureProvider removed - now using v3-dynamic
 import { SeedProvider } from "@/context/SeedContext";
 import { Suspense } from "react";
 import { SeedRedirect } from "@/components/layout/SeedRedirect";
+import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
         <ClientBody>
           <Suspense fallback={<div>Loading...</div>}>
@@ -40,6 +40,7 @@ export default function RootLayout({
                 <SeedRedirect />
               </Suspense>
               {children}
+              <DynamicDebug />
             </SeedProvider>
           </Suspense>
         </ClientBody>
