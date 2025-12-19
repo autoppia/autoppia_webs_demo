@@ -66,8 +66,6 @@ export default function RestaurantPage() {
   const pickLabel = "Pick";
   const selectDateLabel = "Select date";
   const selectTimeLabel = "Select time";
-  const viewFullMenuLabel = dyn.v3.getVariant("view_full_menu", TEXT_VARIANTS_MAP, "View Full Menu");
-  const collapseMenuLabel = dyn.v3.getVariant("collapse_menu", TEXT_VARIANTS_MAP, "Collapse Menu");
   const bookNowLabel = dyn.v3.getVariant("reserve_now", TEXT_VARIANTS_MAP, "Book Now");
 
   const { seed, resolvedSeeds } = useSeed();
@@ -489,7 +487,10 @@ export default function RestaurantPage() {
                       onClick={handleToggleMenu}
                       id={dyn.v3.getVariant("menu-toggle-button", ID_VARIANTS_MAP, "menu-toggle-button")}
                     >
-                      {showFullMenu ? collapseMenuLabel : viewFullMenuLabel}
+                      {showFullMenu 
+                        ? dyn.v3.getVariant("collapse_menu", TEXT_VARIANTS_MAP, "Collapse Menu")
+                        : dyn.v3.getVariant("view_full_menu", TEXT_VARIANTS_MAP, "View Full Menu")
+                      }
                     </Button>
                   ), "menu-toggle-button-wrap")}
                 </div>

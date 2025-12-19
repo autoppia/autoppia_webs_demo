@@ -164,125 +164,151 @@ export default function HelpPage() {
         ), "help-hero-wrap")}
 
         {/* Search Section */}
-        <section className="mb-12">
-          <div className="relative max-w-2xl mx-auto">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search for help..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none text-lg"
-            />
-          </div>
-        </section>
+        {dyn.v1.addWrapDecoy("help-search-section", (
+          <section className="mb-12" id={dyn.v3.getVariant("help-search-section", ID_VARIANTS_MAP, "help-search-section")}>
+            <div className="relative max-w-2xl mx-auto">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                id={dyn.v3.getVariant("search-input-help", ID_VARIANTS_MAP, "search-input-help")}
+                placeholder={dyn.v3.getVariant("search_help_placeholder", TEXT_VARIANTS_MAP, "Search for help...")}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none text-lg")}
+              />
+            </div>
+          </section>
+        ), "help-search-section-wrap")}
 
         {/* Help Sections */}
-        <section className="mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {helpSections.map((section, index) => (
-              <a
-                key={index}
-                href={section.link}
-                className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300 hover:border-[#46a758] text-center cursor-default"
-              >
-                <div className="text-[#46a758] mb-4 flex justify-center">{section.icon}</div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{section.title}</h3>
-                <p className="text-gray-600 text-sm">{section.description}</p>
-              </a>
-            ))}
-          </div>
-        </section>
+        {dyn.v1.addWrapDecoy("help-sections-grid", (
+          <section className="mb-12" id={dyn.v3.getVariant("help-sections-grid", ID_VARIANTS_MAP, "help-sections-grid")}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {helpSections.map((section, index) => (
+                dyn.v1.addWrapDecoy(`help-section-${index}`, (
+                  <a
+                    key={index}
+                    href={section.link}
+                    id={dyn.v3.getVariant(`help-section-${index === 0 ? "guides" : index === 1 ? "chat" : index === 2 ? "forum" : "videos"}`, ID_VARIANTS_MAP, `help-section-${index}`)}
+                    className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300 hover:border-[#46a758] text-center cursor-default")}
+                  >
+                    <div className="text-[#46a758] mb-4 flex justify-center">{section.icon}</div>
+                    <h3 className={dyn.v3.getVariant("card-title", CLASS_VARIANTS_MAP, "text-lg font-semibold text-gray-900 mb-2")}>
+                      {section.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      {section.description}
+                    </p>
+                  </a>
+                ), `help-section-wrap-${index}`)
+              ))}
+            </div>
+          </section>
+        ), "help-sections-grid-wrap")}
 
         {/* Category Filters */}
-        <section className="mb-8">
-          <div className="flex flex-wrap gap-3 justify-center">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => {
-                  setSelectedCategory(category);
-                  logEvent(EVENT_TYPES.HELP_CATEGORY_SELECTED, {
-                    category,
-                    seed,
-                  });
-                }}
-                className={`px-6 py-2 rounded-full font-medium transition-colors ${
-                  selectedCategory === category
-                    ? "bg-[#46a758] text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </button>
-            ))}
-          </div>
-        </section>
+        {dyn.v1.addWrapDecoy("help-category-filters", (
+          <section className="mb-8" id={dyn.v3.getVariant("help-category-filters", ID_VARIANTS_MAP, "help-category-filters")}>
+            <div className="flex flex-wrap gap-3 justify-center">
+              {categories.map((category) => (
+                dyn.v1.addWrapDecoy(`help-category-${category}`, (
+                  <button
+                    key={category}
+                    onClick={() => {
+                      setSelectedCategory(category);
+                      logEvent(EVENT_TYPES.HELP_CATEGORY_SELECTED, {
+                        category,
+                        seed,
+                      });
+                    }}
+                    id={dyn.v3.getVariant(`help-category-${category}`, ID_VARIANTS_MAP, `help-category-${category}`)}
+                    className={`px-6 py-2 rounded-full font-medium transition-colors ${
+                      selectedCategory === category
+                        ? "bg-[#46a758] text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                  </button>
+                ), `help-category-wrap-${category}`)
+              ))}
+            </div>
+          </section>
+        ), "help-category-filters-wrap")}
 
         {/* FAQ Section */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Frequently Asked Questions
-          </h2>
-          <div className="space-y-4">
-            {filteredFAQs.map((faq, index) => (
-              <div
-                key={index}
-                className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow"
-              >
-                <button
-                  onClick={() => toggleFAQ(index, faq)}
-                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex-1">
-                    <span className="text-xs font-semibold text-[#46a758] uppercase tracking-wide mr-3">
-                      {faq.category}
-                    </span>
-                    <span className="text-lg font-semibold text-gray-900">{faq.question}</span>
+        {dyn.v1.addWrapDecoy("help-faq-section", (
+          <section className="mb-12" id={dyn.v3.getVariant("help-faq-section", ID_VARIANTS_MAP, "help-faq-section")}>
+            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center" id={dyn.v3.getVariant("faq-section-title", ID_VARIANTS_MAP, "faq-section-title")}>
+              {dyn.v3.getVariant("frequently_asked_questions", TEXT_VARIANTS_MAP, "Frequently Asked Questions")}
+            </h2>
+            <div className="space-y-4">
+              {filteredFAQs.map((faq, index) => (
+                dyn.v1.addWrapDecoy(`faq-item-${index}`, (
+                  <div
+                    key={index}
+                    id={dyn.v3.getVariant(`faq-item-${index}`, ID_VARIANTS_MAP, `faq-item-${index}`)}
+                    className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow"
+                  >
+                    <button
+                      onClick={() => toggleFAQ(index, faq)}
+                      className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="flex-1">
+                        <span className="text-xs font-semibold text-[#46a758] uppercase tracking-wide mr-3">
+                          {faq.category}
+                        </span>
+                        <span className="text-lg font-semibold text-gray-900" id={dyn.v3.getVariant(`faq-question-${index}`, ID_VARIANTS_MAP, `faq-question-${index}`)}>{faq.question}</span>
+                      </div>
+                      {openIndex === index ? (
+                        <ChevronUp className="w-5 h-5 text-gray-400 flex-shrink-0 ml-4" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 ml-4" />
+                      )}
+                    </button>
+                    {openIndex === index && (
+                      <div className="px-6 pb-5 pt-0">
+                        <div className="pl-0 border-l-4 border-[#46a758] pl-4">
+                          <p className="text-gray-600 leading-relaxed" id={dyn.v3.getVariant(`faq-answer-${index}`, ID_VARIANTS_MAP, `faq-answer-${index}`)}>{faq.answer}</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                  {openIndex === index ? (
-                    <ChevronUp className="w-5 h-5 text-gray-400 flex-shrink-0 ml-4" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 ml-4" />
-                  )}
-                </button>
-                {openIndex === index && (
-                  <div className="px-6 pb-5 pt-0">
-                    <div className="pl-0 border-l-4 border-[#46a758] pl-4">
-                      <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-          {filteredFAQs.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">
-                No results found. Try adjusting your search or category filter.
-              </p>
+                ), `faq-item-wrap-${index}`)
+              ))}
             </div>
-          )}
-        </section>
+            {filteredFAQs.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">
+                  No results found. Try adjusting your search or category filter.
+                </p>
+              </div>
+            )}
+          </section>
+        ), "help-faq-section-wrap")}
 
         {/* CTA Section */}
-        <section className="mb-12">
-          <div className="bg-gradient-to-r from-[#46a758] to-[#3d8f4e] rounded-2xl p-8 md:p-12 text-white text-center">
-            <h2 className="text-3xl font-bold mb-4">Still need help?</h2>
-            <p className="text-lg mb-6 opacity-90">
-              Can't find what you're looking for? Our support team is ready to assist you.
-            </p>
-            {dyn.v1.addWrapDecoy("contact-support-button", (
-              <a
-                href="/contact"
-                className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "inline-block bg-white text-[#46a758] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors")}
-                id={dyn.v3.getVariant("contact-support-button", ID_VARIANTS_MAP, "contact-support-button")}
-              >
-                {dyn.v3.getVariant("contact_support", TEXT_VARIANTS_MAP, "Contact Support")}
-              </a>
-            ), "contact-support-button-wrap")}
-          </div>
-        </section>
+        {dyn.v1.addWrapDecoy("help-cta-section", (
+          <section className="mb-12" id={dyn.v3.getVariant("help-cta-section", ID_VARIANTS_MAP, "help-cta-section")}>
+            <div className="bg-gradient-to-r from-[#46a758] to-[#3d8f4e] rounded-2xl p-8 md:p-12 text-white text-center">
+              <h2 className="text-3xl font-bold mb-4" id={dyn.v3.getVariant("still-need-help-title", ID_VARIANTS_MAP, "still-need-help-title")}>
+                {dyn.v3.getVariant("still_need_help", TEXT_VARIANTS_MAP, "Still need help?")}
+              </h2>
+              <p className="text-lg mb-6 opacity-90" id={dyn.v3.getVariant("still-need-help-description", ID_VARIANTS_MAP, "still-need-help-description")}>
+                {dyn.v3.getVariant("still_need_help_description", TEXT_VARIANTS_MAP, "Can't find what you're looking for? Our support team is ready to assist you.")}
+              </p>
+              {dyn.v1.addWrapDecoy("contact-support-button", (
+                <a
+                  href="/contact"
+                  className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "inline-block bg-white text-[#46a758] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors")}
+                  id={dyn.v3.getVariant("contact-support-button", ID_VARIANTS_MAP, "contact-support-button")}
+                >
+                  {dyn.v3.getVariant("contact_support", TEXT_VARIANTS_MAP, "Contact Support")}
+                </a>
+              ), "contact-support-button-wrap")}
+            </div>
+          </section>
+        ), "help-cta-section-wrap")}
         </div>
         ), "help-content-wrap")}
       </main>
