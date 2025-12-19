@@ -165,13 +165,13 @@ export function ContactSection() {
                   <div className="group">
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                       <User className="h-4 w-4 text-secondary" />
-                      Name
+                      {dyn.v3.getVariant("name_field", TEXT_VARIANTS_MAP, "Name")}
                     </label>
                     <Input
                       value={name}
                       onChange={(event) => setName(event.target.value)}
                       className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all")}
-                      placeholder="Your name"
+                      placeholder={dyn.v3.getVariant("name_placeholder", TEXT_VARIANTS_MAP, "Your name")}
                       required
                       id={dyn.v3.getVariant("contact-name-input", ID_VARIANTS_MAP, "contact-name-input")}
                     />
@@ -180,14 +180,14 @@ export function ContactSection() {
                   <div className="group">
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                       <Mail className="h-4 w-4 text-secondary" />
-                      Email
+                      {dyn.v3.getVariant("email_field", TEXT_VARIANTS_MAP, "Email")}
                     </label>
                     <Input
                       type="email"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all")}
-                      placeholder="you@example.com"
+                      placeholder={dyn.v3.getVariant("email_placeholder", TEXT_VARIANTS_MAP, "you@example.com")}
                       required
                       id={dyn.v3.getVariant("contact-email-input", ID_VARIANTS_MAP, "contact-email-input")}
                     />
@@ -196,13 +196,13 @@ export function ContactSection() {
                   <div className="group">
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                       <FileText className="h-4 w-4 text-secondary" />
-                      Subject
+                      {dyn.v3.getVariant("subject_field", TEXT_VARIANTS_MAP, "Subject")}
                     </label>
                     <Input
                       value={subject}
                       onChange={(event) => setSubject(event.target.value)}
                       className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all")}
-                      placeholder="What's this about?"
+                      placeholder={dyn.v3.getVariant("subject_placeholder", TEXT_VARIANTS_MAP, "What's this about?")}
                       id={dyn.v3.getVariant("contact-subject-input", ID_VARIANTS_MAP, "contact-subject-input")}
                     />
                   </div>
@@ -210,13 +210,13 @@ export function ContactSection() {
                   <div className="group">
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                       <MessageSquare className="h-4 w-4 text-secondary" />
-                      Message
+                      {dyn.v3.getVariant("message_field", TEXT_VARIANTS_MAP, "Message")}
                     </label>
                     <textarea
                       value={message}
                       onChange={(event) => setMessage(event.target.value)}
-                      className="w-full h-32 rounded-xl border border-white/20 bg-white/10 p-4 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all resize-none"
-                      placeholder="Tell us what's on your mind..."
+                      className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "w-full h-32 rounded-xl border border-white/20 bg-white/10 p-4 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all resize-none")}
+                      placeholder={dyn.v3.getVariant("message_placeholder", TEXT_VARIANTS_MAP, "Tell us what's on your mind...")}
                       required
                       id={dyn.v3.getVariant("contact-message-textarea", ID_VARIANTS_MAP, "contact-message-textarea")}
                     />

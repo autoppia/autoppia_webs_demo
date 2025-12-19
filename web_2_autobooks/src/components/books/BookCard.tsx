@@ -2,7 +2,7 @@ import type { Book } from "@/data/books";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { cn } from "@/library/utils";
-import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface BookCardProps {
   book: Book;
@@ -54,7 +54,7 @@ export function BookCard({ book, onSelect }: BookCardProps) {
                 dyn.v3.getVariant("button", CLASS_VARIANTS_MAP, "")
               )}
             >
-              {dyn.v3.getVariant("view_details", undefined, "View detail")}
+              {dyn.v3.getVariant("view_details", TEXT_VARIANTS_MAP, "Info")}
             </SeedLink>
           </div>
         </div>

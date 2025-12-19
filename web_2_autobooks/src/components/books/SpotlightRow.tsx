@@ -3,7 +3,7 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { Star, BookOpen, Calendar, Clock, ArrowRight } from "lucide-react";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { cn } from "@/library/utils";
-import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface SpotlightRowProps {
   title: string;
@@ -108,9 +108,12 @@ export function SpotlightRow({ title, description, books }: SpotlightRowProps) {
                     <SeedLink
                       href={`/books/${book.id}`}
                       id={dyn.v3.getVariant(index > 0 ? `spotlight-view-details-btn-${index}` : "spotlight-view-details-btn", ID_VARIANTS_MAP, index > 0 ? `spotlight-view-details-btn-${index}` : "spotlight-view-details-btn")}
-                      className="inline-flex items-center justify-center gap-2 w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-secondary hover:text-black hover:border-secondary hover:scale-105 group/btn flex-shrink-0 mt-auto"
+                      className={cn(
+                        "inline-flex items-center justify-center gap-2 w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-secondary hover:text-black hover:border-secondary hover:scale-105 group/btn flex-shrink-0 mt-auto",
+                        dyn.v3.getVariant("button", CLASS_VARIANTS_MAP, "")
+                      )}
                     >
-                      <span>{dyn.v3.getVariant("view_details", undefined, "View Details")}</span>
+                      <span>{dyn.v3.getVariant("view_details", TEXT_VARIANTS_MAP, "Info")}</span>
                       <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform flex-shrink-0" />
                     </SeedLink>
                   </div>

@@ -1198,5 +1198,89 @@
     "contact-message-form-section",
     "contact-support-form-section",
     "reach-out-form-section"
+  ],
+  "first-name-input": [
+    "first-name-input",
+    "first-name-field",
+    "given-name-input",
+    "first-name-text-input",
+    "first-name-entry",
+    "first-name-textbox",
+    "given-name-field",
+    "first-name-form-input",
+    "first-name-input-field",
+    "first-name-entry-field"
+  ],
+  "last-name-input": [
+    "last-name-input",
+    "last-name-field",
+    "family-name-input",
+    "last-name-text-input",
+    "last-name-entry",
+    "last-name-textbox",
+    "family-name-field",
+    "last-name-form-input",
+    "last-name-input-field",
+    "last-name-entry-field"
+  ],
+  "email-input-profile": [
+    "email-input-profile",
+    "profile-email-input",
+    "email-field-profile",
+    "email-text-input-profile",
+    "email-entry-profile",
+    "email-textbox-profile",
+    "profile-email-field",
+    "email-form-input-profile",
+    "email-input-field-profile",
+    "email-entry-field-profile"
+  ],
+  "favorite-genres-input": [
+    "favorite-genres-input",
+    "genres-input",
+    "preferred-genres-input",
+    "favorite-genres-field",
+    "genres-field",
+    "preferred-genres-field",
+    "favorite-genres-text-input",
+    "genres-text-input",
+    "favorite-genres-entry",
+    "genres-entry"
+  ],
+  "location-input": [
+    "location-input",
+    "location-field",
+    "city-input",
+    "location-text-input",
+    "location-entry",
+    "location-textbox",
+    "city-field",
+    "location-form-input",
+    "location-input-field",
+    "location-entry-field"
+  ],
+  "website-input": [
+    "website-input",
+    "website-field",
+    "website-url-input",
+    "website-text-input",
+    "website-entry",
+    "website-textbox",
+    "website-url-field",
+    "website-form-input",
+    "website-input-field",
+    "website-entry-field"
+  ],
+  "bio-textarea": [
+    "bio-textarea",
+    "bio-field",
+    "biography-textarea",
+    "bio-text-area",
+    "bio-entry",
+    "bio-textbox",
+    "biography-field",
+    "bio-form-textarea",
+    "bio-textarea-field",
+    "bio-entry-field"
   ]
 }

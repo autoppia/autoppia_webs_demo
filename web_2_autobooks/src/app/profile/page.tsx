@@ -282,25 +282,27 @@ export default function ProfilePage() {
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                       <User className="h-4 w-4 text-secondary" />
-                      First Name
+                      {dyn.v3.getVariant("first_name_field", TEXT_VARIANTS_MAP, "First Name")}
                     </label>
                     <Input 
                       value={profileForm.firstName} 
                       onChange={(event) => handleProfileInputChange("firstName", event.target.value)} 
-                      className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20" 
-                      placeholder="Enter your first name"
+                      className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20")}
+                      placeholder={dyn.v3.getVariant("first_name_placeholder", TEXT_VARIANTS_MAP, "Enter your first name")}
+                      id={dyn.v3.getVariant("first-name-input", ID_VARIANTS_MAP, "first-name-input")}
                     />
                   </div>
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                       <User className="h-4 w-4 text-secondary" />
-                      Last Name
+                      {dyn.v3.getVariant("last_name_field", TEXT_VARIANTS_MAP, "Last Name")}
                     </label>
                     <Input 
                       value={profileForm.lastName} 
                       onChange={(event) => handleProfileInputChange("lastName", event.target.value)} 
-                      className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20" 
-                      placeholder="Enter your last name"
+                      className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20")}
+                      placeholder={dyn.v3.getVariant("last_name_placeholder", TEXT_VARIANTS_MAP, "Enter your last name")}
+                      id={dyn.v3.getVariant("last-name-input", ID_VARIANTS_MAP, "last-name-input")}
                     />
                   </div>
                 </div>
@@ -309,25 +311,27 @@ export default function ProfilePage() {
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                       <Mail className="h-4 w-4 text-secondary" />
-                      Email
+                      {dyn.v3.getVariant("email_field", TEXT_VARIANTS_MAP, "Email")}
                     </label>
                     <Input 
                       value={profileForm.email} 
                       onChange={(event) => handleProfileInputChange("email", event.target.value)} 
-                      className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20" 
-                      placeholder="your.email@example.com"
+                      className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20")}
+                      placeholder={dyn.v3.getVariant("email_placeholder", TEXT_VARIANTS_MAP, "your.email@example.com")}
+                      id={dyn.v3.getVariant("email-input-profile", ID_VARIANTS_MAP, "email-input-profile")}
                     />
                   </div>
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                       <Heart className="h-4 w-4 text-secondary" />
-                      Favorite Genres
+                      {dyn.v3.getVariant("favorite_genres_field", TEXT_VARIANTS_MAP, "Favorite Genres")}
                     </label>
                     <Input
                       value={profileForm.favoriteGenres}
                       onChange={(event) => handleProfileInputChange("favoriteGenres", event.target.value)}
-                      className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                      placeholder="Fiction, Mystery, Romance..."
+                      className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20")}
+                      placeholder={dyn.v3.getVariant("favorite_genres_placeholder", TEXT_VARIANTS_MAP, "Fiction, Mystery, Romance...")}
+                      id={dyn.v3.getVariant("favorite-genres-input", ID_VARIANTS_MAP, "favorite-genres-input")}
                     />
                   </div>
                 </div>
@@ -336,25 +340,27 @@ export default function ProfilePage() {
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                       <MapPin className="h-4 w-4 text-secondary" />
-                      Location
+                      {dyn.v3.getVariant("location_field", TEXT_VARIANTS_MAP, "Location")}
                     </label>
                     <Input 
                       value={profileForm.location} 
                       onChange={(event) => handleProfileInputChange("location", event.target.value)} 
-                      className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20" 
-                      placeholder="City, Country"
+                      className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20")}
+                      placeholder={dyn.v3.getVariant("location_placeholder", TEXT_VARIANTS_MAP, "City, Country")}
+                      id={dyn.v3.getVariant("location-input", ID_VARIANTS_MAP, "location-input")}
                     />
                   </div>
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                       <Globe className="h-4 w-4 text-secondary" />
-                      Website
+                      {dyn.v3.getVariant("website_field", TEXT_VARIANTS_MAP, "Website")}
                     </label>
                     <Input 
                       value={profileForm.website} 
                       onChange={(event) => handleProfileInputChange("website", event.target.value)} 
-                      className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20" 
-                      placeholder="https://yourwebsite.com"
+                      className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20")}
+                      placeholder={dyn.v3.getVariant("website_placeholder", TEXT_VARIANTS_MAP, "https://yourwebsite.com")}
+                      id={dyn.v3.getVariant("website-input", ID_VARIANTS_MAP, "website-input")}
                     />
                   </div>
                 </div>
@@ -362,13 +368,14 @@ export default function ProfilePage() {
                 <div>
                   <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                     <FileText className="h-4 w-4 text-secondary" />
-                    Bio
+                    {dyn.v3.getVariant("bio_field", TEXT_VARIANTS_MAP, "Bio")}
                   </label>
                   <textarea
                     value={profileForm.bio}
                     onChange={(event) => handleProfileInputChange("bio", event.target.value)}
-                    className="w-full min-h-[120px] rounded-2xl border border-white/20 bg-white/10 p-4 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary resize-none"
-                    placeholder="Tell us about yourself..."
+                    className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "w-full min-h-[120px] rounded-2xl border border-white/20 bg-white/10 p-4 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary resize-none")}
+                    placeholder={dyn.v3.getVariant("bio_placeholder", TEXT_VARIANTS_MAP, "Tell us about yourself...")}
+                    id={dyn.v3.getVariant("bio-textarea", ID_VARIANTS_MAP, "bio-textarea")}
                   />
                 </div>
                 
