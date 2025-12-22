@@ -534,7 +534,13 @@ function PostJobWizard({
                         name="scope"
                         value={opt}
                         checked={form.scope === opt}
-                        onChange={() => setValue("scope", opt)}
+                        onChange={() => {
+                          setValue("scope", opt);
+                          logEvent(EVENT_TYPES.CHOOSE_PROJECT_SIZE, {
+                            scope: opt,
+                            step,
+                          });
+                        }}
                         required
                         className="mt-1 accent-[#08b4ce]"
                       />
@@ -567,7 +573,13 @@ function PostJobWizard({
                           name="duration"
                           value={opt}
                           checked={form.duration === opt}
-                          onChange={() => setValue("duration", opt)}
+                          onChange={() => {
+                            setValue("duration", opt);
+                            logEvent(EVENT_TYPES.CHOOSE_PROJECT_TIMELINE, {
+                              duration: opt,
+                              step,
+                            });
+                          }}
                           required
                           className="accent-[#08b4ce]"
                         />
@@ -592,7 +604,13 @@ function PostJobWizard({
                             <button
                               key={option.key}
                               type="button"
-                              onClick={() => setValue("budgetType", option.key)}
+                              onClick={() => {
+                                setValue("budgetType", option.key);
+                                logEvent(EVENT_TYPES.CHOOSE_BUDGET_TYPE, {
+                                  budgetType: option.key,
+                                  step,
+                                });
+                              }}
                               className={`flex-1 px-6 py-5 rounded-xl border text-left ${
                                 form.budgetType === option.key
                                   ? "border-green-600 bg-[#f8fff8]"
@@ -632,7 +650,15 @@ function PostJobWizard({
                               placeholder="0"
                               className="rounded border border-gray-300 px-4 py-2 w-28 text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
                               value={form.rateFrom}
-                              onChange={(e) => setValue("rateFrom", e.target.value)}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                setValue("rateFrom", value);
+                                logEvent(EVENT_TYPES.SET_RATE_RANGE, {
+                                  rateFrom: value,
+                                  rateTo: form.rateTo,
+                                  step,
+                                });
+                              }}
                             />
                           </div>
                           <span className="text-gray-500 font-medium pb-2">/hr</span>
@@ -647,7 +673,15 @@ function PostJobWizard({
                               placeholder="0"
                               className="rounded border border-gray-300 px-4 py-2 w-28 text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
                               value={form.rateTo}
-                              onChange={(e) => setValue("rateTo", e.target.value)}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                setValue("rateTo", value);
+                                logEvent(EVENT_TYPES.SET_RATE_RANGE, {
+                                  rateFrom: form.rateFrom,
+                                  rateTo: value,
+                                  step,
+                                });
+                              }}
                             />
                           </div>
                           <span className="text-gray-500 font-medium pb-2">/hr</span>
@@ -695,7 +729,15 @@ function PostJobWizard({
                   {...getElementAttributes('job-description-textarea', 0)}
                   className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none h-28 resize-vertical"
                   value={form.description}
-                  onChange={(e) => setValue("description", e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setValue("description", value);
+                    logEvent(EVENT_TYPES.WRITE_JOB_DESCRIPTION, {
+                      description: value,
+                      length: value.length,
+                      step,
+                    });
+                  }}
                   placeholder={getText(
                     "job-description-placeholder",
                     "Already have a description? Paste it here!"
@@ -1222,6 +1264,10 @@ export default function Home() {
 										src={hire.avatar}
 										alt={hire.name}
 										className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 shadow-md group-hover:border-blue-400 transition-colors"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src =
+                        "https://ext.same-assets.com/1836270417/1435009301.png";
+                    }}
 									/>
 									{hire.rehire && (
 										<div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
@@ -1301,6 +1347,7 @@ export default function Home() {
 			}
 		}, []);
 
+
 		// Save favorites to localStorage
 		const saveFavorites = (newFavorites: Set<string>) => {
 			setFavorites(newFavorites);
@@ -1313,25 +1360,39 @@ export default function Home() {
 			}
 		};
 
-		const toggleFavorite = (expertName: string, e: React.MouseEvent) => {
+		const getExpertSlug = (expert: any) =>
+			(expert as any).slug ??
+			expert.name
+				.toLowerCase()
+				.replace(/\s+/g, "-")
+				.replace(/\./g, "");
+
+		const toggleFavorite = (expertName: string, e: React.MouseEvent, expert?: any) => {
 			e.preventDefault();
 			e.stopPropagation();
 			const newFavorites = new Set(favorites);
 			if (newFavorites.has(expertName)) {
 				newFavorites.delete(expertName);
-				logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
-					action: "unfavorite_expert",
-					expertName,
-				});
-			} else {
-				newFavorites.add(expertName);
-				logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
-					action: "favorite_expert",
-					expertName,
-				});
-			}
-			saveFavorites(newFavorites);
-		};
+        logEvent(EVENT_TYPES.FAVORITE_EXPERT_REMOVED, {
+          expertName,
+          source: "experts_grid",
+          role: expert?.role,
+          country: expert?.country,
+          expertSlug: expert?.slug ?? getExpertSlug(expert),
+        });
+      } else {
+        newFavorites.add(expertName);
+        logEvent(EVENT_TYPES.FAVORITE_EXPERT_SELECTED, {
+          expertName,
+          source: "experts_grid",
+          role: expert?.role,
+          country: expert?.country,
+          expertSlug: expert?.slug ?? getExpertSlug(expert),
+        });
+      }
+      saveFavorites(newFavorites);
+    };
+		
 		
 		const totalExperts = expertsState.data.length;
 		const avgRating = expertsState.data.length > 0
@@ -1339,10 +1400,7 @@ export default function Home() {
 			: "0.0";
 
 		const handleViewExpert = (expert: any) => {
-			const slug = (expert as any).slug ?? expert.name
-				.toLowerCase()
-				.replace(/\s+/g, "-")
-				.replace(/\./g, "");
+			const slug = getExpertSlug(expert);
 			router.push(`/expert/${slug}`);
 		};
 
@@ -1401,7 +1459,7 @@ export default function Home() {
 								{/* Favorite Button */}
 								<button
 									type="button"
-									onClick={(e) => toggleFavorite(expert.name, e)}
+									onClick={(e) => toggleFavorite(expert.name, e, expert)}
 									className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors z-10"
 									title={isFavorite ? "Remove from favorites" : "Add to favorites"}
 								>
@@ -1428,6 +1486,10 @@ export default function Home() {
 											src={expert.avatar}
 											alt={expert.name}
 											className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 shadow-md group-hover:border-purple-400 transition-colors"
+											onError={(e) => {
+												(e.currentTarget as HTMLImageElement).src =
+													"https://ext.same-assets.com/1836270417/1435009301.png";
+											}}
 										/>
 										<div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
 									</div>
@@ -1484,7 +1546,7 @@ export default function Home() {
 								<button
 									onClick={() => handleViewExpert(expert)}
 									{...getElementAttributes('book-consultation-button', i)}
-									className="w-full mt-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+									className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
 								>
 									{getText('book-consultation-button-label', 'Consult an expert')}
 								</button>

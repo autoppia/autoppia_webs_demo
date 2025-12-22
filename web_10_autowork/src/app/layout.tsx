@@ -4,10 +4,9 @@ import { Suspense } from "react";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import Script from "next/script";
-import { SeedLink } from "@/components/ui/SeedLink";
-import { Briefcase, Users, Sparkles, Heart, User } from "lucide-react";
 import { SeedProvider } from "@/context/SeedContext";
 import UserDropdown from "./components/UserDropdown";
+import NavLinks from "./components/NavLinks";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,33 +18,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const sidebarLinks = [
-  {
-    label: "Jobs",
-    href: "/jobs",
-    icon: Briefcase,
-  },
-  {
-    label: "Hires",
-    href: "/hires",
-    icon: Users,
-  },
-  {
-    label: "Experts",
-    href: "/experts",
-    icon: Sparkles,
-  },
-  {
-    label: "Favorites",
-    href: "/favorites",
-    icon: Heart,
-  },
-  {
-    label: "Profile",
-    href: "/profile/alexsmith",
-    icon: User,
-  },
-];
 export const metadata: Metadata = {
   title: "Autowork - Hire Freelancers",
   description: "Hire skilled freelancers on Autowork for web development, design, marketing, and more.",
@@ -82,19 +54,7 @@ export default function RootLayout({
                 
                 {/* Navigation Links */}
                 <nav className="flex flex-col gap-2 flex-1">
-                  {sidebarLinks.map((link) => {
-                    const Icon = link.icon;
-                    return (
-                      <SeedLink
-                        key={link.label}
-                        href={link.href}
-                        className="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 bg-transparent hover:bg-gradient-to-r hover:from-[#e6f9fb] hover:to-[#f0fdfa] text-base font-medium hover:text-[#08b4ce] hover:shadow-sm group"
-                      >
-                        <Icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                        <span>{link.label}</span>
-                      </SeedLink>
-                    );
-                  })}
+                  <NavLinks />
                 </nav>
 
                 {/* Bottom Section */}
