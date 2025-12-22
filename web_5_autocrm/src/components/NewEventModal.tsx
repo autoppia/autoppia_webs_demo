@@ -4,7 +4,7 @@ import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP } from "@/dynamic/v3";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
 
 type EventColor = "forest" | "indigo" | "blue" | "zinc";
 
@@ -89,7 +89,11 @@ export function NewEventModal({
               onChange={(e) => setLabel(e.target.value)} 
               placeholder={dyn.v3.getVariant("event_label_placeholder", undefined, "Event label")} 
               required 
-              className="border px-3 py-2 rounded" 
+              className={dyn.v3.getVariant(
+                "input",
+                CLASS_VARIANTS_MAP,
+                "border px-3 py-2 rounded"
+              )}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -101,7 +105,11 @@ export function NewEventModal({
               type="time" 
               value={time} 
               onChange={(e) => setTime(e.target.value)} 
-              className="border px-3 py-2 rounded" 
+              className={dyn.v3.getVariant(
+                "input",
+                CLASS_VARIANTS_MAP,
+                "border px-3 py-2 rounded"
+              )}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -112,7 +120,11 @@ export function NewEventModal({
               id={colorSelectId}
               value={color} 
               onChange={(e) => setColor(e.target.value)} 
-              className="border px-3 py-2 rounded"
+              className={dyn.v3.getVariant(
+                "input",
+                CLASS_VARIANTS_MAP,
+                "border px-3 py-2 rounded"
+              )}
             >
             <option value="Matter/Event">Matter/Event</option>
             <option value="Internal">Internal</option>
@@ -128,11 +140,24 @@ export function NewEventModal({
               type="button"
               variant="outline"
               onClick={onClose}
-              className="text-sm text-zinc-700 border-zinc-200 bg-white hover:bg-neutral-bg-dark"
+              className={dyn.v3.getVariant(
+                "button-secondary",
+                CLASS_VARIANTS_MAP,
+                "text-sm text-zinc-700 border-zinc-200 bg-white hover:bg-neutral-bg-dark"
+              )}
             >
               {dyn.v3.getVariant("cancel_button", undefined, "Cancel")}
             </DynamicButton>
-            <DynamicButton eventType="NEW_CALENDAR_EVENT_ADDED" index={1} type="submit" className="bg-accent-forest text-white px-4 py-2 rounded text-sm font-semibold">
+            <DynamicButton
+              eventType="NEW_CALENDAR_EVENT_ADDED"
+              index={1}
+              type="submit"
+              className={dyn.v3.getVariant(
+                "button-primary",
+                CLASS_VARIANTS_MAP,
+                "bg-accent-forest text-white px-4 py-2 rounded text-sm font-semibold"
+              )}
+            >
               {dyn.v3.getVariant("save_button", undefined, "Save")}
             </DynamicButton>
           </div>

@@ -4,6 +4,7 @@ import { Timer, PlayCircle, PauseCircle, Plus, Trash2, Pencil } from "lucide-rea
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
 import { CalendarDays, Search } from "lucide-react";
@@ -29,6 +30,13 @@ const LoadingNotice = ({ message }: { message: string }) => (
 export default function BillingPage() {
   const { getText, getId } = useDynamicStructure();
   const dyn = useDynamicSystem();
+  const searchInputBase = "w-full h-10 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm";
+  const selectBase = "h-10 rounded-xl border border-zinc-200 px-3 text-sm";
+  const buttonPrimaryBase =
+    "rounded-2xl px-5 py-3 bg-accent-forest text-white font-semibold hover:bg-accent-forest/90 transition text-lg";
+  const buttonSecondaryBase =
+    "h-10 px-4 rounded-xl border border-zinc-200 text-sm";
+  const formInputBase = "rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium";
   const { resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const { data, isLoading, error } = useProjectData<any>({
@@ -232,7 +240,7 @@ export default function BillingPage() {
                 <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-3" />
                 <input
                   id={getId("billing_search")}
-                  className="w-full h-10 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm"
+                  className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, searchInputBase)}
                   placeholder={dyn.v3.getVariant("billing_search_placeholder", undefined, "Search logs by matter, client, or description")}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
@@ -246,7 +254,7 @@ export default function BillingPage() {
                 </label>
                 <select
                   id={getId("date_filter")}
-                  className="h-10 rounded-xl border border-zinc-200 px-3 text-sm"
+                  className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, selectBase)}
                   value={dateFilter}
                   onChange={(e) => setDateFilter(e.target.value)}
                 >
@@ -260,14 +268,14 @@ export default function BillingPage() {
                 {dateFilter === "custom" && (
                   <input
                     type="date"
-                    className="h-10 rounded-xl border border-zinc-200 px-3 text-sm"
+                  className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, selectBase)}
                     value={customDate}
                     onChange={(e) => setCustomDate(e.target.value)}
                   />
                 )}
                 <button
                   id={getId("reset_filters_button")}
-                  className="h-10 px-4 rounded-xl border border-zinc-200 text-sm"
+                  className={dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, buttonSecondaryBase)}
                   onClick={() => {
                     setQuery("");
                     setDateFilter("all");
@@ -355,7 +363,7 @@ export default function BillingPage() {
                 </label>
                 <input
                   id={getId("manual_matter_input")}
-                  className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium"
+                  className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, formInputBase)}
                   value={manual.matter}
                   onChange={(e) =>
                     setManual((m) => ({ ...m, matter: e.target.value }))
@@ -370,7 +378,7 @@ export default function BillingPage() {
                 </label>
                 <input
                   id={getId("manual_description_input")}
-                  className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium"
+                  className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, formInputBase)}
                   value={manual.description}
                   onChange={(e) =>
                     setManual((m) => ({ ...m, description: e.target.value }))
@@ -387,7 +395,11 @@ export default function BillingPage() {
                   step=".1"
                   min="0.1"
                   max="24"
-                  className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium w-32"
+                  className={dyn.v3.getVariant(
+                    "input",
+                    CLASS_VARIANTS_MAP,
+                    `${formInputBase} w-32`
+                  )}
                   value={manual.hours}
                   onChange={(e) =>
                     setManual((m) => ({ ...m, hours: +e.target.value }))
@@ -398,7 +410,7 @@ export default function BillingPage() {
               <button
                 id={getId("add_entry_button")}
                 type="submit"
-                className="rounded-2xl px-5 py-3 bg-accent-forest text-white font-semibold hover:bg-accent-forest/90 transition text-lg"
+                className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, buttonPrimaryBase)}
                 aria-label={getText("add_time_entry", "Add Time Entry")}
               >
                 {getText("add_time_entry", "Add Time Entry")}

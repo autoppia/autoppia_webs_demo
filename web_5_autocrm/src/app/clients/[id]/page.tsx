@@ -8,7 +8,7 @@ import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useSeed } from "@/context/SeedContext";
 import { useProjectData } from "@/shared/universal-loader";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP } from "@/dynamic/v3";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
 
 function getInitials(name: string) {
   return name
@@ -265,7 +265,11 @@ function ClientProfilePageContent() {
               <h3 className="font-semibold text-zinc-800 mb-3">{dyn.v3.getVariant("send_message_label", undefined, "Send a message")}</h3>
               <textarea
                 id={dyn.v3.getVariant("client_message_input", ID_VARIANTS_MAP, `client-message-${client.id}`)}
-                className="w-full border border-zinc-200 rounded-xl p-3 text-sm focus:outline-accent-forest"
+                className={dyn.v3.getVariant(
+                  "input",
+                  CLASS_VARIANTS_MAP,
+                  "w-full border border-zinc-200 rounded-xl p-3 text-sm focus:outline-accent-forest"
+                )}
                 rows={3}
                 placeholder={dyn.v3.getVariant("client_message_placeholder", undefined, "Type a quick note to this client...")}
                 value={message}
@@ -273,7 +277,11 @@ function ClientProfilePageContent() {
               />
               <button
                 id={dyn.v3.getVariant("send_message_button", ID_VARIANTS_MAP, "send-message-button")}
-                className="mt-3 px-4 py-2 rounded-xl bg-accent-forest text-white font-semibold disabled:opacity-50"
+                className={dyn.v3.getVariant(
+                  "button-primary",
+                  CLASS_VARIANTS_MAP,
+                  "mt-3 px-4 py-2 rounded-xl bg-accent-forest text-white font-semibold disabled:opacity-50"
+                )}
                 disabled={!message.trim()}
                 onClick={() => {
                   logEvent(EVENT_TYPES.NEW_LOG_ADDED, {
@@ -358,14 +366,22 @@ function ClientProfilePageContent() {
       <div className="flex items-center justify-between">
           <button
             id={dyn.v3.getVariant("back_to_clients_button", ID_VARIANTS_MAP, "back-to-clients-button")}
-            className="text-sm text-zinc-500 underline"
+            className={dyn.v3.getVariant(
+              "button-secondary",
+              CLASS_VARIANTS_MAP,
+              "text-sm text-zinc-500 underline"
+            )}
             onClick={() => seedRouter.push("/clients")}
           >
             {dyn.v3.getVariant("back_to_clients", undefined, "Back to clients")}
           </button>
           <button
             id={dyn.v3.getVariant("delete_client_button", ID_VARIANTS_MAP, "delete-client-button")}
-            className="px-4 py-2 rounded-xl bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition"
+            className={dyn.v3.getVariant(
+              "button-secondary",
+              CLASS_VARIANTS_MAP,
+              "px-4 py-2 rounded-xl bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition"
+            )}
             onClick={() => {
             if (isDeleting) return;
             setIsDeleting(true);

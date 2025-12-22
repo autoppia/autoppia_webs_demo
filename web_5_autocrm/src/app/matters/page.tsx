@@ -21,6 +21,8 @@ import { initializeMatters, initializeClients } from "@/data/crm-enhanced";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
 
@@ -81,7 +83,10 @@ function statusPill(status: string) {
 }
 
 function MattersListPageContent() {
+  const dyn = useDynamicSystem();
   const { getText, getId } = useDynamicStructure();
+  const baseInputClass = "w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm";
+  const baseSelectClass = "rounded-lg border border-zinc-200 px-3 py-2 text-sm";
   const { resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const [searchQuery, setSearchQuery] = useState("");
@@ -331,7 +336,11 @@ function MattersListPageContent() {
           <DynamicButton
             eventType="ADD_NEW_MATTER"
             onClick={() => setOpenNew(true)}
-            className="bg-accent-forest text-white hover:bg-accent-forest/90"
+            className={dyn.v3.getVariant(
+              "button-primary",
+              CLASS_VARIANTS_MAP,
+              "bg-accent-forest text-white hover:bg-accent-forest/90"
+            )}
             id={getId("add_matter_button")}
             aria-label={getText("add_new_matter", "Add New Matter")}
           >
@@ -344,7 +353,7 @@ function MattersListPageContent() {
             <Search className="w-4 h-4 text-zinc-400" />
             <input
               id={getId("matter_search_input")}
-              className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
+              className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, baseInputClass)}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={getText("search_matters", "Search matters...")}
@@ -354,7 +363,7 @@ function MattersListPageContent() {
             <Filter className="w-4 h-4 text-zinc-400" />
             <select
               id={getId("matter_status_filter")}
-              className="rounded-lg border border-zinc-200 px-3 py-2 text-sm"
+              className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, baseSelectClass)}
               value={statusFilter}
               onChange={(e) => handleFilterChange(e.target.value)}
             >
@@ -368,7 +377,7 @@ function MattersListPageContent() {
             <ArrowUpDown className="w-4 h-4 text-zinc-400" />
             <select
               id={getId("matter_sort_select")}
-              className="rounded-lg border border-zinc-200 px-3 py-2 text-sm"
+              className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, baseSelectClass)}
               value={sortDirection}
               onChange={(e) =>
                 handleSortChange(e.target.value === "asc" ? "asc" : "desc")

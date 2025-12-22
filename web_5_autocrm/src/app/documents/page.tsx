@@ -8,6 +8,7 @@ import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
 
@@ -198,10 +199,14 @@ export default function DocumentsPage() {
                   autoFocus
                 />
               ) : (
-                <span
-                  id={`document-name-${file.id}`}
-                  className="font-semibold text-zinc-900 truncate"
-                >
+              <span
+                id={`document-name-${file.id}`}
+                className={dyn.v3.getVariant(
+                  "badge",
+                  CLASS_VARIANTS_MAP,
+                  "font-semibold text-zinc-900 truncate"
+                )}
+              >
                   {file.name}
                 </span>
               )}

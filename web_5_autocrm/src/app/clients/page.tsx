@@ -10,6 +10,7 @@ import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeed } from "@/context/SeedContext";
 
 
@@ -36,6 +37,10 @@ function ClientsDirectoryContent() {
   const dyn = useDynamicSystem();
   const { resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const searchInputBase =
+    "w-full h-12 pl-12 pr-4 rounded-2xl bg-neutral-bg-dark border border-zinc-200 text-md focus:outline-accent-forest focus:border-accent-forest placeholder-zinc-400 font-medium";
+  const filterSelectBase =
+    "h-12 rounded-2xl border border-zinc-200 px-3 text-sm font-medium text-zinc-700 bg-white";
   // console.log("[ClientsPage] current v2Seed", v2Seed);
 
   const { data, isLoading, error } = useProjectData<any>({
@@ -186,7 +191,7 @@ function ClientsDirectoryContent() {
           </span>
           <input
             id={getId("search_input")}
-            className="w-full h-12 pl-12 pr-4 rounded-2xl bg-neutral-bg-dark border border-zinc-200 text-md focus:outline-accent-forest focus:border-accent-forest placeholder-zinc-400 font-medium"
+            className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, searchInputBase)}
             placeholder={getText("search_placeholder", "Search Placeholder")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -199,7 +204,7 @@ function ClientsDirectoryContent() {
             <label className="text-sm text-zinc-600">Status</label>
             <select
               id={getId("status_filter")}
-              className="h-12 rounded-2xl border border-zinc-200 px-3 text-sm font-medium text-zinc-700 bg-white"
+              className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, filterSelectBase)}
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
@@ -215,7 +220,7 @@ function ClientsDirectoryContent() {
             <label className="text-sm text-zinc-600">Matters</label>
             <select
               id={getId("matters_filter")}
-              className="h-12 rounded-2xl border border-zinc-200 px-3 text-sm font-medium text-zinc-700 bg-white"
+              className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, filterSelectBase)}
               value={matterFilter}
               onChange={(e) => setMatterFilter(e.target.value)}
             >
