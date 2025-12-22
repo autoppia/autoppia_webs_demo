@@ -67,14 +67,20 @@ const CartContext = createContext<{
 });
 
 // Calculate total amount from items
-const calculateTotals = (items: CartItem[]): { totalItems: number; totalAmount: number } => {
+const calculateTotals = (
+  items: CartItem[]
+): { totalItems: number; totalAmount: number } => {
   return items.reduce(
     (total, item) => {
-      // Convert price from string format (e.g. "$120.99") to number
-      const priceNum = Number.parseFloat(item.price.replace(/[^0-9.]/g, ""));
+      // Convert price (e.g. "$120.99") to number; be defensive in case upstream data is missing/invalid.
+      const priceRaw =
+        typeof item.price === "string" ? item.price : String(item.price ?? "");
+      const parsed = Number.parseFloat(priceRaw.replace(/[^0-9.]/g, ""));
+      const priceNum = Number.isFinite(parsed) ? parsed : 0;
+      const qty = Number.isFinite(item.quantity) && item.quantity > 0 ? item.quantity : 1;
       return {
-        totalItems: total.totalItems + item.quantity,
-        totalAmount: total.totalAmount + priceNum * item.quantity,
+        totalItems: total.totalItems + qty,
+        totalAmount: total.totalAmount + priceNum * qty,
       };
     },
     { totalItems: 0, totalAmount: 0 }
@@ -97,7 +103,18 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         };
       } else {
         // Add new item
-        updatedItems = [...state.items, { ...action.payload, quantity: 1 }];
+        updatedItems = [
+          ...state.items,
+          {
+            ...action.payload,
+            // Ensure price is always a string to avoid downstream calculations crashing.
+            price:
+              typeof action.payload.price === "string"
+                ? action.payload.price
+                : "$0.00",
+            quantity: 1,
+          },
+        ];
       }
 
       const { totalItems, totalAmount } = calculateTotals(updatedItems);
@@ -130,20 +147,20 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
 
 // Cart provider component
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  const [state, dispatch] = useReducer(cartReducer, initialCartState);
-
-  // Load cart from localStorage on initial load
-  useEffect(() => {
+  // Hydrate cart synchronously on first client render to avoid races where UI actions
+  // (e.g. "Quick add") happen before the effect-based hydration finishes and overwrites state.
+  const [state, dispatch] = useReducer(cartReducer, initialCartState, (initial) => {
     const parsedCart = readJson<CartState>("omnizonCart", null);
-    if (parsedCart?.items) {
-      dispatch({ type: "CLEAR_CART" });
-      for (const item of parsedCart.items) {
-        for (let i = 0; i < item.quantity; i++) {
-          dispatch({ type: "ADD_TO_CART", payload: item });
-        }
-      }
-    }
-  }, []);
+    if (!parsedCart?.items || parsedCart.items.length === 0) return initial;
+
+    const normalizedItems: CartItem[] = parsedCart.items.map((item) => ({
+      ...item,
+      quantity: Math.max(1, Number(item.quantity) || 1),
+    }));
+
+    const { totalItems, totalAmount } = calculateTotals(normalizedItems);
+    return { items: normalizedItems, totalItems, totalAmount };
+  });
 
   // Save cart to localStorage when it changes
   useEffect(() => {

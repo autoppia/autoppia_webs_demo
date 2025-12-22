@@ -34,8 +34,8 @@ export function SeedRedirect() {
 
     // Check if v1 is enabled
     const enabledFlags = getEnabledFlags();
-    if (!enabledFlags.v1) {
-      // v1 is not enabled, no need to redirect
+    if (!enabledFlags.v1 && !enabledFlags.v3) {
+      // Neither v1 nor v3 is enabled, no need to redirect
       return;
     }
 
@@ -43,25 +43,32 @@ export function SeedRedirect() {
     const seedParam = searchParams.get("seed");
     if (seedParam) {
       // Seed exists in URL, no need to redirect
+      hasRedirectedRef.current = true; // Mark as processed to prevent future checks
       return;
     }
 
-    // v1 is enabled but no seed in URL - redirect to add default seed
-    hasRedirectedRef.current = true;
+    // v1 or v3 is enabled but no seed in URL - redirect to add default seed
+    // Use a small delay to ensure this doesn't interfere with other navigation
+    const timeoutId = setTimeout(() => {
+      if (hasRedirectedRef.current) return;
+      hasRedirectedRef.current = true;
 
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("seed", DEFAULT_V1_SEED.toString());
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("seed", DEFAULT_V1_SEED.toString());
 
-    // Preserve enable_dynamic if it exists
-    const enableDynamic = searchParams.get("enable_dynamic");
-    if (enableDynamic) {
-      params.set("enable_dynamic", enableDynamic);
-    }
+      // Preserve enable_dynamic if it exists
+      const enableDynamic = searchParams.get("enable_dynamic");
+      if (enableDynamic) {
+        params.set("enable_dynamic", enableDynamic);
+      }
 
-    const newUrl = `${pathname}?${params.toString()}`;
+      const newUrl = `${pathname}?${params.toString()}`;
 
-    // Use replace instead of push to avoid adding to history
-    router.replace(newUrl);
+      // Use replace instead of push to avoid adding to history
+      router.replace(newUrl);
+    }, 100); // Small delay to prevent race conditions
+
+    return () => clearTimeout(timeoutId);
   }, [searchParams, pathname, router]);
 
   return null; // This component doesn't render anything

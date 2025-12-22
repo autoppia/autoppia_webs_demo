@@ -1,10 +1,11 @@
 import type { Product } from "@/context/CartContext";
-import { getEffectiveLayoutConfig, isDynamicEnabled } from "@/dynamic/v1-layouts";
 import { initializeProducts } from "@/data/products-enhanced";
+import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
-  return isDynamicEnabled();
+  // V2 data remains optional, but "dynamic HTML" should follow the unified V1/V3 flags.
+  return isV1Enabled() || isV3Enabled();
 };
 
 const isV2DbModeEnabled = (): boolean => {
@@ -159,7 +160,20 @@ export class DynamicDataProvider {
 
   // Get layout configuration based on seed
   public getLayoutConfig(seed?: number) {
-    return getEffectiveLayoutConfig(seed);
+    // Legacy v1-layouts was permanently disabled and always returned the default layout.
+    // Keep the same stable config here without depending on v1-layouts.
+    return {
+      headerOrder: ["logo", "search", "nav"],
+      searchPosition: "center",
+      navbarStyle: "top",
+      contentGrid: "default",
+      cardLayout: "grid",
+      buttonStyle: "default",
+      footerStyle: "default",
+      spacing: "normal",
+      borderRadius: "medium",
+      colorScheme: "default",
+    } as const;
   }
 
   // Static category data - always available
