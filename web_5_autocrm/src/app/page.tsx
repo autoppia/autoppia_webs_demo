@@ -5,10 +5,9 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { Briefcase, Users, Calendar, FileText, Clock, Settings2 } from "lucide-react";
 import { Suspense, useState, useEffect, useRef, useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
-// LAYOUT FIJO - Sin variaciones V1
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useDynamicSystem } from "@/dynamic";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { useProjectData } from "@/shared/universal-loader";
-// import { EVENT_TYPES, logEvent, EventType } from "@/library/events";
 import { initializeClients, initializeEvents, initializeFiles, initializeLogs, initializeMatters } from "@/data/crm-enhanced";
 import fallbackClientsJson from "@/data/original/clients_1.json";
 import fallbackMattersJson from "@/data/original/matters_1.json";
@@ -16,17 +15,10 @@ import fallbackEventsJson from "@/data/original/events_1.json";
 import fallbackFilesJson from "@/data/original/files_1.json";
 import fallbackLogsJson from "@/data/original/logs_1.json";
 
-// interface EventData {
-//   label: string;
-//   href: string;
-// }
-
 function DashboardContent() {
   const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
-  
-  // LAYOUT FIJO - Sin variaciones, siempre como seed 1
-  
+
   // Log v2 info when it changes (only once per unique v2 seed)
   const lastV2SeedRef = useRef<number | null>(null);
   useEffect(() => {
@@ -38,10 +30,8 @@ function DashboardContent() {
     }
   }, [resolvedSeeds.v2, resolvedSeeds.base, seed]);
   
-  // LAYOUT FIJO - Sin variaciones, siempre como seed 1
-  const { getText, getId } = useDynamicStructure();
-  const searchParams = useSearchParams();
-  
+  const dyn = useDynamicSystem();
+
   // Load dynamic counts for all entities (with cleanup to avoid duplicate loads)
   const lastV2SeedForDataRef = useRef<number | null>(null);
   const [dataSeed, setDataSeed] = useState<number | undefined>(v2Seed);
@@ -108,97 +98,103 @@ function DashboardContent() {
 
   return (
     <section>
-      <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">{getText("dashboard_title", "Dashboard")}</h1>
+      <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">Dashboard</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
         {/* Card 1: Matters */}
+        {dyn.v1.addWrapDecoy("matters-card", (
         <SeedLink
           href="/matters"
-          id={getId("matters_link")}
-          // onClick={handleClick(EVENT_TYPES.MATTERS_SIDEBAR_CLICKED, { label: "Active Matters", href: "/matters" })}
-          className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
+          id={dyn.v3.getVariant("matters_link", ID_VARIANTS_MAP, "matters_link")}
+          className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
         >
           <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{getText("matters_title", "Matters")}</span>
+            <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("matters_title", undefined, "Matters")}</span>
             <Briefcase className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.matters}</span>
-          <span className="text-sm text-zinc-400">{getText("total_matters", "Total Matters")}</span>
+          <span className="text-sm text-zinc-400">{dyn.v3.getVariant("total_matters", undefined, "Total Matters")}</span>
         </SeedLink>
+        ), "matters-card-wrap")}
 
         {/* Card 2: Clients */}
+        {dyn.v1.addWrapDecoy("clients-card", (
         <SeedLink
           href="/clients"
-          id={getId("clients_link")}
-          // onClick={handleClick(EVENT_TYPES.CLIENTS_SIDEBAR_CLICKED, { label: "Clients", href: "/clients" })}
-          className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
+          id={dyn.v3.getVariant("clients_link", ID_VARIANTS_MAP, "clients_link")}
+          className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
         >
           <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{getText("clients_title", "Clients")}</span>
+            <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("clients_title", undefined, "Clients")}</span>
             <Users className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.clients}</span>
-          <span className="text-sm text-zinc-400">{getText("total_clients", "Total Clients")}</span>
+          <span className="text-sm text-zinc-400">{dyn.v3.getVariant("total_clients", undefined, "Total Clients")}</span>
         </SeedLink>
+        ), "clients-card-wrap")}
 
         {/* Card 3: Calendar */}
+        {dyn.v1.addWrapDecoy("calendar-card", (
         <SeedLink
           href="/calendar"
-          id={getId("calendar_link")}
-          // onClick={handleClick(EVENT_TYPES.CALENDAR_SIDEBAR_CLICKED, { label: "Upcoming Events", href: "/calendar" })}
-          className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
+          id={dyn.v3.getVariant("calendar_link", ID_VARIANTS_MAP, "calendar_link")}
+          className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
         >
           <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{getText("upcoming_events", "Upcoming Events")}</span>
+            <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("upcoming_events", undefined, "Upcoming Events")}</span>
             <Calendar className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.events}</span>
-          <span className="text-sm text-zinc-400">{getText("event_date", "Event Date")}</span>
+          <span className="text-sm text-zinc-400">{dyn.v3.getVariant("event_date", undefined, "Event Date")}</span>
         </SeedLink>
+        ), "calendar-card-wrap")}
 
         {/* Card 4: Documents */}
+        {dyn.v1.addWrapDecoy("documents-card", (
         <SeedLink
           href="/documents"
-          id={getId("documents_link")}
-          // onClick={handleClick(EVENT_TYPES.DOCUMENTS_SIDEBAR_CLICKED, { label: "Documents", href: "/documents" })}
-          className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
+          id={dyn.v3.getVariant("documents_link", ID_VARIANTS_MAP, "documents_link")}
+          className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
         >
           <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{getText("documents_title", "Documents")}</span>
+            <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("documents_title", undefined, "Documents")}</span>
             <FileText className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.files}</span>
-          <span className="text-sm text-zinc-400">{getText("document_name", "Document Name")}</span>
+          <span className="text-sm text-zinc-400">{dyn.v3.getVariant("document_name", undefined, "Document Name")}</span>
         </SeedLink>
+        ), "documents-card-wrap")}
 
         {/* Card 5: Time Tracking */}
+        {dyn.v1.addWrapDecoy("billing-card", (
         <SeedLink
           href="/billing"
-          id={getId("billing_link")}
-          // onClick={handleClick(EVENT_TYPES.TIME_AND_BILLING_SIDEBAR_CLICKED, { label: "Time & Billing", href: "/billing" })}
-          className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
+          id={dyn.v3.getVariant("billing_link", ID_VARIANTS_MAP, "billing_link")}
+          className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
         >
           <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{getText("billing_title", "Billing Title")}</span>
+            <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("billing_title", undefined, "Billing")}</span>
             <Clock className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.logs}</span>
-          <span className="text-sm text-zinc-400">{getText("hours_logged", "Hours Logged")}</span>
+          <span className="text-sm text-zinc-400">{dyn.v3.getVariant("hours_logged", undefined, "Hours Logged")}</span>
         </SeedLink>
+        ), "billing-card-wrap")}
 
         {/* Card 6: Settings */}
+        {dyn.v1.addWrapDecoy("settings-card", (
         <SeedLink
           href="/settings"
-          id={getId("settings_link")}
-          // onClick={handleClick(EVENT_TYPES.SETTINGS_SIDEBAR_CLICKED, { label: "Settings", href: "/settings" })}
-          className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
+          id={dyn.v3.getVariant("settings_link", ID_VARIANTS_MAP, "settings_link")}
+          className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
         >
           <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{getText("settings_title", "Settings")}</span>
+            <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("settings_title", undefined, "Settings")}</span>
             <Settings2 className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-5xl font-bold tracking-tight text-[#1A1A1A] select-none">--</span>
-          <span className="text-sm text-zinc-400">{getText("notes", "Notes")}</span>
+          <span className="text-sm text-zinc-400">{dyn.v3.getVariant("notes", undefined, "Notes")}</span>
         </SeedLink>
+        ), "settings-card-wrap")}
       </div>
     </section>
   );

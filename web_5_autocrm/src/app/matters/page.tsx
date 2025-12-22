@@ -120,13 +120,13 @@ function MattersListPageContent() {
     return client?.avatar || "";
   };
   
-  console.log("[MattersPage] API response", {
-    seed: v2Seed,
-    count: data?.length ?? 0,
-    isLoading,
-    error,
-    sample: (data || []).slice(0, 3),
-  });
+  // console.log("[MattersPage] API response", {
+  //   seed: v2Seed,
+  //   count: data?.length ?? 0,
+  //   isLoading,
+  //   error,
+  //   sample: (data || []).slice(0, 3),
+  // });
   const [fallbackMatters, setFallbackMatters] = useState<Matter[]>([]);
   useEffect(() => {
     initializeMatters().then((rows) => {

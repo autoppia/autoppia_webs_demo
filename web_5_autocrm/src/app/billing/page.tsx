@@ -34,13 +34,13 @@ export default function BillingPage() {
     entityType: "logs",
     seedValue: v2Seed ?? undefined,
   });
-  console.log("[BillingPage] API response", {
-    seed: v2Seed ?? null,
-    count: data?.length ?? 0,
-    isLoading,
-    error,
-    sample: (data || []).slice(0, 3),
-  });
+  // console.log("[BillingPage] API response", {
+  //   seed: v2Seed ?? null,
+  //   count: data?.length ?? 0,
+  //   isLoading,
+  //   error,
+  //   sample: (data || []).slice(0, 3),
+  // });
   const [fallbackLogs, setFallbackLogs] = useState<any[]>([]);
   useEffect(() => {
     initializeLogs().then(setFallbackLogs);

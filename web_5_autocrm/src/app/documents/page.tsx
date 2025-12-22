@@ -35,13 +35,13 @@ export default function DocumentsPage() {
     entityType: "files",
     seedValue: v2Seed,
   });
-  console.log("[DocumentsPage] API response", {
-    seed: v2Seed,
-    count: data?.length ?? 0,
-    isLoading,
-    error,
-    sample: (data || []).slice(0, 3),
-  });
+  // console.log("[DocumentsPage] API response", {
+  //   seed: v2Seed,
+  //   count: data?.length ?? 0,
+  //   isLoading,
+  //   error,
+  //   sample: (data || []).slice(0, 3),
+  // });
   const [fallbackFiles, setFallbackFiles] = useState<any[]>([]);
   useEffect(() => {
     initializeFiles().then((rows) => setFallbackFiles(rows));

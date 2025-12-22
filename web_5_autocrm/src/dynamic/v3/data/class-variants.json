@@ -118,5 +118,17 @@
     "crm-status-pill-8",
     "crm-status-pill-9",
     "crm-status-pill-10"
+  ],
+  "heading-title": [
+    "text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight",
+    "text-3xl md:text-[2.25rem] font-bold mb-10 tracking-tight",
+    "text-3xl md:text-[2.25rem] font-extrabold mb-8 tracking-tight",
+    "text-3xl md:text-[2.25rem] font-bold mb-8 tracking-tight",
+    "text-3xl md:text-[2.25rem] font-extrabold mb-12 tracking-tight",
+    "text-3xl md:text-[2.25rem] font-semibold mb-10 tracking-tight",
+    "text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-normal",
+    "text-3xl md:text-[2.25rem] font-bold mb-10 tracking-normal",
+    "text-3xl md:text-[2.25rem] font-extrabold mb-8 tracking-normal",
+    "text-3xl md:text-[2.25rem] font-semibold mb-8 tracking-tight"
   ]
 }

@@ -34,7 +34,7 @@ function ClientsDirectoryContent() {
   const [query, setQuery] = useState("");
   const { resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
-  console.log("[ClientsPage] current v2Seed", v2Seed);
+  // console.log("[ClientsPage] current v2Seed", v2Seed);
 
   const { data, isLoading, error } = useProjectData<any>({
     projectKey: 'web_5_autocrm',
@@ -47,7 +47,7 @@ function ClientsDirectoryContent() {
   useEffect(() => {
     initializeClients().then(setFallbackClients);
   }, []);
-  console.log("[ClientsPage] useProjectData response", { count: data?.length ?? 0, isLoading, error });
+  // console.log("[ClientsPage] useProjectData response", { count: data?.length ?? 0, isLoading, error });
 
   const clients = useMemo(
     () =>

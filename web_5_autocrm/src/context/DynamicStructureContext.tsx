@@ -1,11 +1,14 @@
 "use client";
 
 import type React from "react";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP } from "@/dynamic/v3";
 
 /**
- * Legacy compatibility wrapper so existing code can keep calling
- * useDynamicStructure/getText/getId without a separate provider.
+ * Legacy compatibility wrapper for useDynamicStructure
+ * Migrates old code to use the new unified useDynamicSystem hook
+ * 
+ * @deprecated Use useDynamicSystem() directly instead
  */
 export function DynamicStructureProvider({
   children,
@@ -15,17 +18,22 @@ export function DynamicStructureProvider({
   return <>{children}</>;
 }
 
+/**
+ * @deprecated Use useDynamicSystem() directly instead
+ * This is a compatibility wrapper that maps old API to new API
+ */
 export function useDynamicStructure() {
-  const { getText, getId, getClass, v3Seed, isActive } =
-    useV3Attributes();
+  const dyn = useDynamicSystem();
 
   return {
-    getText,
-    getId,
-    currentVariation:
-      v3Seed !== undefined && v3Seed !== null ? ((v3Seed % 30) + 1) % 10 || 10 : 1,
-    seedStructure: v3Seed ?? null,
-    isEnabled: isActive,
-    getClass,
+    getText: (key: string, fallback: string) => 
+      dyn.v3.getVariant(key, undefined, fallback),
+    getId: (key: string) => 
+      dyn.v3.getVariant(key, ID_VARIANTS_MAP, key),
+    getClass: (key: string, fallback: string = "") => 
+      dyn.v3.getVariant(key, undefined, fallback),
+    currentVariation: dyn.seed % 10 || 10,
+    seedStructure: dyn.seed,
+    isEnabled: true,
   };
 }

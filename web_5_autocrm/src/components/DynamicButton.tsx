@@ -1,8 +1,10 @@
 // src/components/DynamicButton.tsx
+// @deprecated - Use useDynamicSystem() directly instead
 
-import { useState, useEffect, ButtonHTMLAttributes, useRef } from "react";
+import { ButtonHTMLAttributes } from "react";
 import { Button } from "@/components/ui/button";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
 import { EVENT_TYPES } from "@/library/events";
 
 interface DynamicButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -21,49 +23,20 @@ export function DynamicButton({
   index = 0,
   ...props
 }: DynamicButtonProps) {
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const {
-    getElementAttributes,
-    getLayoutClasses,
-    generateId,
-    generateSeedClass,
-    applyCSSVariables,
-    createDynamicStyles
-  } = useSeedLayout();
-
-  const [attributes, setAttributes] = useState<Record<string, string>>({});
-  const [dynamicStyles, setDynamicStyles] = useState<React.CSSProperties>({});
-
-  useEffect(() => {
-    // Generate dynamic attributes and styles based on seed
-    const elementAttrs = getElementAttributes(eventType, index);
-    const buttonClasses = getLayoutClasses('button');
-    const elementId = generateId(eventType, index);
-    const seedClass = generateSeedClass('dynamic-button');
-    
-    setAttributes({
-      ...elementAttrs,
-      id: elementId,
-      className: `${buttonClasses} ${seedClass} ${className}`.trim()
-    });
-    
-    setDynamicStyles(createDynamicStyles());
-  }, [eventType, index, className, getElementAttributes, getLayoutClasses, generateId, generateSeedClass, createDynamicStyles]);
-
-  useEffect(() => {
-    // Apply CSS variables to the button element
-    if (buttonRef.current) {
-      applyCSSVariables(buttonRef.current);
-    }
-  }, [dynamicStyles, applyCSSVariables]);
+  const dyn = useDynamicSystem();
+  
+  const buttonId = index > 0 
+    ? dyn.v3.getVariant(`${eventType}-button-${index}`, ID_VARIANTS_MAP, `${eventType}-button-${index}`)
+    : dyn.v3.getVariant(`${eventType}-button`, ID_VARIANTS_MAP, `${eventType}-button`);
+  
+  const buttonClass = dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, className || "btn-primary");
 
   return (
     <Button
-      ref={buttonRef}
-      {...attributes}
-      {...props}
+      id={buttonId}
+      className={`${buttonClass} ${className}`.trim()}
       variant={variant}
-      style={dynamicStyles}
+      {...props}
     >
       {children}
     </Button>

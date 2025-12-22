@@ -68,26 +68,3 @@ export function useProjectData<T>(params: Parameters<typeof loadDataOrGenerate<T
   })])
   return state
 }
-
-export async function loadManyDataOrGenerate(configs: Array<{ key: string } & Parameters<typeof loadDataOrGenerate<any>>[0]>): Promise<Record<string, any[]>> {
-  const results = await Promise.all(
-    configs.map(cfg => loadDataOrGenerate<any>({ ...cfg }).then(data => ({ key: cfg.key, data })).catch(() => ({ key: cfg.key, data: [] })))
-  )
-  return results.reduce<Record<string, any[]>>((acc, cur) => { acc[cur.key] = cur.data; return acc }, {})
-}
-
-export function useProjectDataMany(configs: Array<{ key: string } & Parameters<typeof loadDataOrGenerate<any>>[0]>) {
-  const [state, setState] = useState<{ data: Record<string, any[]>; isLoading: boolean; error: string|null }>({ data: {}, isLoading: true, error: null })
-  useEffect(() => {
-    let cancelled = false
-    loadManyDataOrGenerate(configs).then(
-      data => { if (!cancelled) setState({ data, isLoading: false, error: null }) },
-      err => { if (!cancelled) setState({ data: {}, isLoading: false, error: err?.message || 'Failed to load data' }) },
-    )
-    return () => { cancelled = true }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(configs)])
-  return state
-}
-
-
