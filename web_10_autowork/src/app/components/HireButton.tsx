@@ -20,8 +20,11 @@ export default function HireButton({
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    logEvent(EVENT_TYPES.BOOK_A_CONSULTATION, {
+    logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
       expertName: expert.name,
+      expertSlug: expert.slug,
+      country: expert.country,
+      role: expert.role,
       event: "hire_click",
       timestamp: Date.now(),
     });
