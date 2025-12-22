@@ -7,6 +7,7 @@ import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useDynamicSystem } from "@/dynamic/shared";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
 
@@ -28,6 +29,7 @@ const LoadingNotice = ({ message }: { message: string }) => (
 
 export default function DocumentsPage() {
   const { getText, getId } = useDynamicStructure();
+  const dyn = useDynamicSystem();
   const { resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const { data, isLoading, error } = useProjectData<any>({
@@ -260,9 +262,9 @@ export default function DocumentsPage() {
                   onClick={() => startRename(file.id, file.name)}
                   className="text-zinc-600 rounded-full hover:bg-zinc-100 px-3 py-1 text-sm border border-zinc-200"
                   id={`${getId("rename_document_button")}-${file.id}`}
-                  title="Rename document"
+                  title={dyn.v3.getVariant("rename_document_title", undefined, "Rename document")}
                 >
-                  Rename
+                  {dyn.v3.getVariant("rename_document_button", undefined, "Rename")}
                 </DynamicButton>
               )}
               <DynamicButton

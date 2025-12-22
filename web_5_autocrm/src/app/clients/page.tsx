@@ -9,6 +9,7 @@ import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useDynamicSystem } from "@/dynamic/shared";
 import { useSeed } from "@/context/SeedContext";
 
 
@@ -32,6 +33,7 @@ const STORAGE_KEY_PREFIX = "clients";
 
 function ClientsDirectoryContent() {
   const [query, setQuery] = useState("");
+  const dyn = useDynamicSystem();
   const { resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   // console.log("[ClientsPage] current v2Seed", v2Seed);
@@ -168,10 +170,11 @@ function ClientsDirectoryContent() {
         </h1>
         <div className="flex justify-end">
           <button
-            className="px-4 py-2 rounded-2xl bg-accent-forest text-white font-semibold shadow-sm"
+            id={getId("add_client_button")}
+            className={dyn.v3.getVariant("add_client_button_class", undefined, "px-4 py-2 rounded-2xl bg-accent-forest text-white font-semibold shadow-sm")}
             onClick={() => setShowAddModal(true)}
           >
-            Add client
+            {dyn.v3.getVariant("add_client_button", undefined, "Add client")}
           </button>
         </div>
       </DynamicElement>

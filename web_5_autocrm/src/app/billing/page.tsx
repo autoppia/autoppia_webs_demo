@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Timer, PlayCircle, PauseCircle, Plus, Trash2, Pencil } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useDynamicSystem } from "@/dynamic/shared";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
 import { CalendarDays, Search } from "lucide-react";
@@ -27,6 +28,7 @@ const LoadingNotice = ({ message }: { message: string }) => (
 
 export default function BillingPage() {
   const { getText, getId } = useDynamicStructure();
+  const dyn = useDynamicSystem();
   const { resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const { data, isLoading, error } = useProjectData<any>({
@@ -212,81 +214,92 @@ export default function BillingPage() {
     });
   }, [query, dateFilterLabel, customDate, filteredLogs.length]);
 
-  return (
+  return dyn.v1.addWrapDecoy("billing-page", (
     <section>
-      <h1 className="text-3xl font-extrabold mb-10 tracking-tight">
-        {getText("billing_title", "Billing")}
-      </h1>
+      {dyn.v1.addWrapDecoy("billing-header", (
+        <h1 className="text-3xl font-extrabold mb-10 tracking-tight">
+          {getText("billing_title", "Billing")}
+        </h1>
+      ))}
       {isLoading && (
         <LoadingNotice message={getText("loading_message", "Loading logs...")} />
       )}
-      <div className="flex flex-col gap-3 mb-6">
-        <div className="flex flex-col md:flex-row gap-3 md:items-center">
-          <div className="relative w-full md:w-80">
-            <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-3" />
-            <input
-              id={getId("billing_search")}
-              className="w-full h-10 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm"
-              placeholder="Search logs by matter, client, or description"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <label className="text-sm text-zinc-600 flex items-center gap-1">
-              <CalendarDays className="w-4 h-4" /> Date filter
-            </label>
-            <select
-              id={getId("date_filter")}
-              className="h-10 rounded-xl border border-zinc-200 px-3 text-sm"
-              value={dateFilter}
-              onChange={(e) => setDateFilter(e.target.value)}
-            >
-              <option value="all">All</option>
-              <option value="today">Today</option>
-              <option value="this_week">This week</option>
-              <option value="prev_two_weeks">Previous 2 weeks</option>
-              <option value="this_month">This month</option>
-              <option value="custom">Specific date</option>
-            </select>
-            {dateFilter === "custom" && (
-              <input
-                type="date"
-                className="h-10 rounded-xl border border-zinc-200 px-3 text-sm"
-                value={customDate}
-                onChange={(e) => setCustomDate(e.target.value)}
-              />
-            )}
-            <button
-              className="h-10 px-4 rounded-xl border border-zinc-200 text-sm"
-              onClick={() => {
-                setQuery("");
-                setDateFilter("all");
-                setCustomDate("");
-              }}
-            >
-              Reset
-            </button>
+      {dyn.v1.addWrapDecoy("billing-filters", (
+        <div className="flex flex-col gap-3 mb-6">
+          <div className="flex flex-col md:flex-row gap-3 md:items-center">
+            {dyn.v1.addWrapDecoy("billing-search-container", (
+              <div className="relative w-full md:w-80">
+                <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-3" />
+                <input
+                  id={getId("billing_search")}
+                  className="w-full h-10 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm"
+                  placeholder="Search logs by matter, client, or description"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+              </div>
+            ))}
+            {dyn.v1.addWrapDecoy("billing-date-filter-container", (
+              <div className="flex flex-wrap items-center gap-3">
+                <label className="text-sm text-zinc-600 flex items-center gap-1">
+                  <CalendarDays className="w-4 h-4" /> {dyn.v3.getVariant("date_filter_label", undefined, "Date filter")}
+                </label>
+                <select
+                  id={getId("date_filter")}
+                  className="h-10 rounded-xl border border-zinc-200 px-3 text-sm"
+                  value={dateFilter}
+                  onChange={(e) => setDateFilter(e.target.value)}
+                >
+                  <option value="all">All</option>
+                  <option value="today">Today</option>
+                  <option value="this_week">This week</option>
+                  <option value="prev_two_weeks">Previous 2 weeks</option>
+                  <option value="this_month">This month</option>
+                  <option value="custom">Specific date</option>
+                </select>
+                {dateFilter === "custom" && (
+                  <input
+                    type="date"
+                    className="h-10 rounded-xl border border-zinc-200 px-3 text-sm"
+                    value={customDate}
+                    onChange={(e) => setCustomDate(e.target.value)}
+                  />
+                )}
+                <button
+                  className="h-10 px-4 rounded-xl border border-zinc-200 text-sm"
+                  onClick={() => {
+                    setQuery("");
+                    setDateFilter("all");
+                    setCustomDate("");
+                  }}
+                >
+                  Reset
+                </button>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      ))}
 
-      <div className="flex gap-4 mb-8">
-        <button
-          onClick={() => setTab("Logs")}
-          className={`px-5 py-2 rounded-2xl font-semibold text-md ${
-            tab === "Logs"
-              ? "bg-accent-forest/10 text-accent-forest shadow"
-              : "text-zinc-700 hover:bg-zinc-100"
-          }`}
-          id={getId("logs_tab_button")}
-          aria-label={getText("time_entries", "Time Entries")}
-        >
-          {getText("time_entries", "Time Entries")}
-        </button>
-      </div>
+      {dyn.v1.addWrapDecoy("billing-tabs", (
+        <div className="flex gap-4 mb-8">
+          <button
+            onClick={() => setTab("Logs")}
+            className={`px-5 py-2 rounded-2xl font-semibold text-md ${
+              tab === "Logs"
+                ? "bg-accent-forest/10 text-accent-forest shadow"
+                : "text-zinc-700 hover:bg-zinc-100"
+            }`}
+            id={getId("logs_tab_button")}
+            aria-label={getText("time_entries", "Time Entries")}
+          >
+            {getText("time_entries", "Time Entries")}
+          </button>
+        </div>
+      ))}
       {tab === "Logs" && (
-        <div className="flex flex-col md:flex-row gap-12 mb-8">
+        dyn.v1.addWrapDecoy("billing-logs-content", (
+          <div className="flex flex-col md:flex-row gap-12 mb-8">
           <div className="bg-white rounded-2xl shadow-card p-7 flex flex-col gap-6 border border-zinc-100 w-full max-w-sm">
             <div className="flex items-center gap-3 mb-2">
               <Timer className="w-7 h-7 text-accent-forest" />
@@ -390,12 +403,14 @@ export default function BillingPage() {
                 {getText("add_time_entry", "Add Time Entry")}
               </button>
             </form>
-        </div>
+          </div>
+        ))
       )}
       {tab === "Logs" && (
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-5">{getText("recent_activity", "Recent Activity")}</h2>
-          <div className="flex flex-col gap-4">
+        dyn.v1.addWrapDecoy("billing-logs-list", (
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold mb-5">{getText("recent_activity", "Recent Activity")}</h2>
+            <div className="flex flex-col gap-4">
             {apiError && (
               <div className="text-red-600 px-4 py-2">Failed to load logs: {apiError}</div>
             )}
@@ -563,7 +578,8 @@ export default function BillingPage() {
             ))}
           </div>
         </div>
+        ))
       )}
     </section>
-  );
+  ), "billing-page-wrap");
 }

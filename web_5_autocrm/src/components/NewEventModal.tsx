@@ -3,6 +3,8 @@ import { useState } from "react";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP } from "@/dynamic/v3";
 
 type EventColor = "forest" | "indigo" | "blue" | "zinc";
 
@@ -34,11 +36,12 @@ export function NewEventModal({
   onSave,
   idPrefix = "new-event",
 }: NewEventModalProps) {
+  const dyn = useDynamicSystem();
   const rootId = `${idPrefix}-modal`;
   const titleId = `${idPrefix}-title`;
-  const labelInputId = `${idPrefix}-label`;
-  const timeInputId = `${idPrefix}-time`;
-  const colorSelectId = `${idPrefix}-color`;
+  const labelInputId = dyn.v3.getVariant("event_label_input", ID_VARIANTS_MAP, `${idPrefix}-label`);
+  const timeInputId = dyn.v3.getVariant("event_time_input", ID_VARIANTS_MAP, `${idPrefix}-time`);
+  const colorSelectId = dyn.v3.getVariant("event_color_select", ID_VARIANTS_MAP, `${idPrefix}-color`);
 
   const [label, setLabel] = useState("");
   const [time, setTime] = useState("09:00");
@@ -73,17 +76,50 @@ export function NewEventModal({
       <DynamicContainer index={0} className="bg-white rounded-2xl p-6 shadow-xl border w-full max-w-sm flex flex-col gap-4">
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <DynamicElement elementType="header" index={0}>
-            <h2 className="font-bold text-xl">New Event – {date}</h2>
+            <h2 className="font-bold text-xl">{dyn.v3.getVariant("new_event_title", undefined, "New Event")} – {date}</h2>
           </DynamicElement>
 
-          <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Event label" required className="border px-3 py-2 rounded" />
-          <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="border px-3 py-2 rounded" />
-          <select value={color} onChange={(e) => setColor(e.target.value)} className="border px-3 py-2 rounded">
+          <div className="flex flex-col gap-2">
+            <label htmlFor={labelInputId} className="text-sm font-medium text-zinc-700">
+              {dyn.v3.getVariant("event_label_label", undefined, "Event label")}
+            </label>
+            <input 
+              id={labelInputId}
+              value={label} 
+              onChange={(e) => setLabel(e.target.value)} 
+              placeholder={dyn.v3.getVariant("event_label_placeholder", undefined, "Event label")} 
+              required 
+              className="border px-3 py-2 rounded" 
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor={timeInputId} className="text-sm font-medium text-zinc-700">
+              {dyn.v3.getVariant("event_time_label", undefined, "Time")}
+            </label>
+            <input 
+              id={timeInputId}
+              type="time" 
+              value={time} 
+              onChange={(e) => setTime(e.target.value)} 
+              className="border px-3 py-2 rounded" 
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor={colorSelectId} className="text-sm font-medium text-zinc-700">
+              {dyn.v3.getVariant("event_color_label", undefined, "Category")}
+            </label>
+            <select 
+              id={colorSelectId}
+              value={color} 
+              onChange={(e) => setColor(e.target.value)} 
+              className="border px-3 py-2 rounded"
+            >
             <option value="Matter/Event">Matter/Event</option>
             <option value="Internal">Internal</option>
             <option value="Filing">Filing</option>
             <option value="Other">Other</option>
           </select>
+          </div>
 
           <div className="flex justify-end gap-3">
             <DynamicButton
@@ -94,9 +130,11 @@ export function NewEventModal({
               onClick={onClose}
               className="text-sm text-zinc-700 border-zinc-200 bg-white hover:bg-neutral-bg-dark"
             >
-              Cancel
+              {dyn.v3.getVariant("cancel_button", undefined, "Cancel")}
             </DynamicButton>
-            <DynamicButton eventType="NEW_CALENDAR_EVENT_ADDED" index={1} type="submit" className="bg-accent-forest text-white px-4 py-2 rounded text-sm font-semibold">Save</DynamicButton>
+            <DynamicButton eventType="NEW_CALENDAR_EVENT_ADDED" index={1} type="submit" className="bg-accent-forest text-white px-4 py-2 rounded text-sm font-semibold">
+              {dyn.v3.getVariant("save_button", undefined, "Save")}
+            </DynamicButton>
           </div>
         </form>
       </DynamicContainer>
