@@ -1,7 +1,7 @@
 "use client";
 
 import { useSeed } from "@/context/SeedContext";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
 import Navbar from "@/components/Navbar";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -10,10 +10,9 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export default function AboutPage() {
   const { seed, resolvedSeeds } = useSeed();
-  const { getText } = useV3Attributes();
+  const dyn = useDynamicSystem();
   const searchParams = useSearchParams();
   const hasSeedParam = Boolean(searchParams?.get("seed"));
-  const layoutSeed = hasSeedParam ? resolvedSeeds.v1 ?? seed : 8;
 
   const features = [
     {
@@ -50,10 +49,10 @@ export default function AboutPage() {
 
   useEffect(() => {
     logEvent(EVENT_TYPES.ABOUT_PAGE_VIEW, {
-      layoutSeed,
+      seed,
       fromSeedParam: hasSeedParam,
     });
-  }, [layoutSeed, hasSeedParam]);
+  }, [seed, hasSeedParam]);
 
   return (
     <main>
@@ -100,7 +99,7 @@ export default function AboutPage() {
                   onClick={() =>
                     logEvent(EVENT_TYPES.ABOUT_FEATURE_CLICK, {
                       feature: feature.title,
-                      layoutSeed,
+                      seed,
                     })
                   }
                 >

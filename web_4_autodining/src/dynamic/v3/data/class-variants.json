@@ -83,6 +83,30 @@
     "text-control",
     "field-control"
   ],
+  "textarea-text": [
+    "textarea-field",
+    "text-area",
+    "form-textarea",
+    "area-text",
+    "textarea-box",
+    "text-area-field",
+    "form-area",
+    "textarea-control",
+    "area-control",
+    "field-area"
+  ],
+  "select-dropdown": [
+    "select-field",
+    "dropdown-select",
+    "form-select",
+    "select-control",
+    "dropdown-field",
+    "select-box",
+    "form-dropdown",
+    "select-input",
+    "dropdown-control",
+    "field-select"
+  ],
   "grid-container": [
     "grid",
     "grid-layout",
