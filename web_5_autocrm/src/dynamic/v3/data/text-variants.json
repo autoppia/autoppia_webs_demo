@@ -1474,5 +1474,29 @@
     "Update document name",
     "Update file name",
     "Modify document name"
+  ],
+  "billing_search_placeholder": [
+    "Search logs by matter, client, or description",
+    "Search entries by matter, client, or description",
+    "Find logs by matter, client, or description",
+    "Search records by matter, client, or description",
+    "Filter logs by matter, client, or description",
+    "Look up logs by matter, client, or description",
+    "Search time entries by matter, client, or description",
+    "Find entries by matter, client, or description",
+    "Search activities by matter, client, or description",
+    "Filter entries by matter, client, or description"
+  ],
+  "reset_button": [
+    "Reset",
+    "Clear",
+    "Clear filters",
+    "Reset filters",
+    "Clear all",
+    "Reset all",
+    "Clear search",
+    "Reset search",
+    "Clear filters",
+    "Reset form"
   ]
 }

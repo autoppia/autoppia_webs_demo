@@ -982,5 +982,17 @@
     "help-explanation-3",
     "support-explanation-3",
     "faq-detail-3"
+  ],
+  "reset_filters_button": [
+    "reset-filters-button",
+    "clear-filters-button",
+    "reset-button",
+    "clear-button",
+    "reset-all-button",
+    "clear-all-button",
+    "reset-search-button",
+    "clear-search-button",
+    "reset-form-button",
+    "clear-form-button"
   ]
 }

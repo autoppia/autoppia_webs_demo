@@ -233,7 +233,7 @@ export default function BillingPage() {
                 <input
                   id={getId("billing_search")}
                   className="w-full h-10 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm"
-                  placeholder="Search logs by matter, client, or description"
+                  placeholder={dyn.v3.getVariant("billing_search_placeholder", undefined, "Search logs by matter, client, or description")}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />
@@ -266,6 +266,7 @@ export default function BillingPage() {
                   />
                 )}
                 <button
+                  id={getId("reset_filters_button")}
                   className="h-10 px-4 rounded-xl border border-zinc-200 text-sm"
                   onClick={() => {
                     setQuery("");
@@ -273,7 +274,7 @@ export default function BillingPage() {
                     setCustomDate("");
                   }}
                 >
-                  Reset
+                  {dyn.v3.getVariant("reset_button", undefined, "Reset")}
                 </button>
               </div>
             ))}
