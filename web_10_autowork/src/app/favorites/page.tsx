@@ -37,21 +37,30 @@ export default function FavoritesPage() {
     }
   };
 
-  const toggleFavorite = (expertName: string, e: React.MouseEvent) => {
+  const toggleFavorite = (expertName: string, e: React.MouseEvent, expert?: any) => {
     e.preventDefault();
     e.stopPropagation();
+    const slug =
+      expert?.slug ??
+      expertName.toLowerCase().replace(/\s+/g, "-").replace(/\./g, "");
     const newFavorites = new Set(favorites);
     if (newFavorites.has(expertName)) {
       newFavorites.delete(expertName);
-      logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
-        action: "unfavorite_expert",
+      logEvent(EVENT_TYPES.FAVORITE_EXPERT_REMOVED, {
         expertName,
+        source: "favorites_page",
+        role: expert?.role,
+        country: expert?.country,
+        expertSlug: slug,
       });
     } else {
       newFavorites.add(expertName);
-      logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
-        action: "favorite_expert",
+      logEvent(EVENT_TYPES.FAVORITE_EXPERT_SELECTED, {
         expertName,
+        source: "favorites_page",
+        role: expert?.role,
+        country: expert?.country,
+        expertSlug: slug,
       });
     }
     saveFavorites(newFavorites);
@@ -96,7 +105,12 @@ export default function FavoritesPage() {
             Start exploring experts and click the heart icon to save them to your favorites.
           </p>
           <button
-            onClick={() => router.push("/experts")}
+            onClick={() => {
+              logEvent(EVENT_TYPES.BROWSE_FAVORITE_EXPERT, {
+                source: "favorites_empty_state",
+              });
+              router.push("/experts");
+            }}
             className="mt-6 px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
           >
             Browse Experts
@@ -126,7 +140,7 @@ export default function FavoritesPage() {
               {/* Favorite Button */}
               <button
                 type="button"
-                onClick={(e) => toggleFavorite(expert.name, e)}
+                onClick={(e) => toggleFavorite(expert.name, e, expert)}
                 className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors z-10"
                 title={isFavorite ? "Remove from favorites" : "Add to favorites"}
               >
@@ -149,11 +163,15 @@ export default function FavoritesPage() {
 
               <div className="flex items-start gap-4 mb-4 pr-8">
                 <div className="relative flex-shrink-0">
-                  <img
-                    src={expert.avatar}
-                    alt={expert.name}
-                    className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 shadow-md group-hover:border-purple-400 transition-colors"
-                  />
+                <img
+                  src={expert.avatar}
+                  alt={expert.name}
+                  className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 shadow-md group-hover:border-purple-400 transition-colors"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src =
+                      "https://ext.same-assets.com/1836270417/1435009301.png";
+                  }}
+                />
                   <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
                 </div>
                 <div className="flex-1 min-w-0">
@@ -219,4 +237,3 @@ export default function FavoritesPage() {
     </main>
   );
 }
-
