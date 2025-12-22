@@ -149,7 +149,7 @@ function ClientProfilePageContent() {
     );
   }
 
-  return dyn.v1.addWrapDecoy("client-profile-page", (
+  return (
     <section className="max-w-4xl mx-auto flex flex-col gap-10 px-4 md:px-0"> {/* Added padding for responsiveness */}
       {/* Profile Card */}
       {dyn.v1.addWrapDecoy("client-profile-card", (
@@ -217,8 +217,7 @@ function ClientProfilePageContent() {
       ))}
 
       {/* Timeline + Related matters row */}
-      {dyn.v1.addWrapDecoy("client-content-sections", (
-        <div id={dyn.v3.getVariant("client_content_sections", ID_VARIANTS_MAP, "client-content-sections")} className="flex flex-col lg:flex-row gap-10">
+      <div id={dyn.v3.getVariant("client_content_sections", ID_VARIANTS_MAP, "client-content-sections")} className="flex flex-col lg:flex-row gap-10">
         {/* Timeline */}
         {dyn.v1.addWrapDecoy("activity-timeline-section", (
           <section
@@ -356,9 +355,7 @@ function ClientProfilePageContent() {
         </section>
         ))}
       </div>
-      ))}
-      {dyn.v1.addWrapDecoy("client-actions", (
-        <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between">
           <button
             id={dyn.v3.getVariant("back_to_clients_button", ID_VARIANTS_MAP, "back-to-clients-button")}
             className="text-sm text-zinc-500 underline"
@@ -392,9 +389,8 @@ function ClientProfilePageContent() {
           {dyn.v3.getVariant("delete_client_button_text", undefined, "Delete client")}
         </button>
       </div>
-      ))}
     </section>
-  ), "client-profile-page-wrap");
+  );
 }
 
 export default function ClientProfilePage() {

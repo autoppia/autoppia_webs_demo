@@ -58,10 +58,20 @@ export function applyV1Wrapper(
   
   // Apply wrapper if necessary
   // Use div instead of span for elements that need to take full width
+  // Only use w-full h-full for containers that truly need it (forms, inputs, search)
+  // For cards and sections, use a more subtle wrapper without size constraints
   const useDivWrapper = 
     componentKey.includes("input-container") || 
     componentKey.includes("form") || 
-    componentKey.includes("search") ||
+    componentKey.includes("search");
+  
+  const useFullSizeWrapper = 
+    componentKey.includes("input-container") || 
+    componentKey.includes("form") || 
+    componentKey.includes("search");
+  
+  // Use div for cards and sections but without w-full h-full to avoid layout changes
+  const useDivForCards = 
     componentKey.includes("matter-card") ||
     componentKey.includes("client-card") ||
     componentKey.includes("document-card") ||
@@ -69,8 +79,12 @@ export function applyV1Wrapper(
     componentKey.includes("stats-card") ||
     componentKey.includes("time-log-entry") ||
     componentKey.includes("page-content") ||
-    componentKey.includes("section");
-  const WrapperElement = useDivWrapper ? "div" : "span";
+    componentKey.includes("section") ||
+    componentKey.includes("timeline") ||
+    componentKey.includes("matters");
+  
+  const WrapperElement = (useDivWrapper || useDivForCards) ? "div" : "span";
+  const wrapperClassName = useFullSizeWrapper ? "w-full h-full" : undefined;
   
   const core = shouldWrap
     ? React.createElement(
@@ -79,7 +93,7 @@ export function applyV1Wrapper(
           "data-dyn-wrap": componentKey,
           "data-v1": "true",
           "data-wrapper-variant": wrapperVariant,
-          className: useDivWrapper ? "w-full h-full" : undefined,
+          className: wrapperClassName,
         },
         children
       )
