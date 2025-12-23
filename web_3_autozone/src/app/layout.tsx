@@ -9,6 +9,7 @@ import "./globals.css";
 import { BodyWrapper } from "@/layout/BodyWrapper";
 import { DataReadyGate } from "@/layout/DataReadyGate";
 import { SeedRedirect } from "@/components/layout/SeedRedirect";
+import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -32,7 +33,6 @@ export default function RootLayout({
             <Suspense fallback={null}>
               <SeedRedirect />
             </Suspense>
-            {/* <NotificationBanner /> */}
             <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
               <Header />
             </Suspense>
@@ -41,6 +41,7 @@ export default function RootLayout({
                 {children}
               </BodyWrapper>
             </DataReadyGate>
+            <DynamicDebug />
             <Footer />
           </CartProvider>
         </SeedProvider>

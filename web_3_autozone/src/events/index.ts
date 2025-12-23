@@ -49,7 +49,14 @@ export function logEvent(eventType: EventType, data: Record<string, unknown> = {
     data: eventData,
   };
 
-  console.log("🛒 Logging Event:", backendPayload);
+  // Keep console clean by default; opt-in with ?debug_events=1 or localStorage.debug_events="1"
+  const debugEvents =
+    process.env.NODE_ENV === "development" &&
+    (new URLSearchParams(window.location.search).get("debug_events") === "1" ||
+      localStorage.getItem("debug_events") === "1");
+  if (debugEvents) {
+    console.log("🛒 Logging Event:", backendPayload);
+  }
 
   fetch("/api/log-event", {
     method: "POST",

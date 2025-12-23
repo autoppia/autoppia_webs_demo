@@ -38,7 +38,7 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
 
 const normalizeImageUrl = (image?: string, category?: string): string => {
   const DEFAULT = "/images/homepage_categories/coffee_machine.jpg";
-  if (!image) return getCategoryFallback(category, DEFAULT);
+  if (!image) return getCategoryFallback(category);
 
   if (image.startsWith("/images/")) {
     return image;
@@ -50,7 +50,7 @@ const normalizeImageUrl = (image?: string, category?: string): string => {
     return `${image}${sep}w=150&h=150&fit=crop&crop=entropy&auto=format&q=60`;
   }
 
-  return getCategoryFallback(category, DEFAULT);
+  return getCategoryFallback(category);
 };
 
 export const categoryFallbacks: Record<string, string> = {
