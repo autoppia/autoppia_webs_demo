@@ -19,24 +19,3 @@ export function writeJson<T>(key: string, value: T): void {
     // ignore
   }
 }
-
-export function readString(key: string, defaultValue: string | null = null): string | null {
-  if (!isBrowser()) return defaultValue;
-  try {
-    const raw = window.localStorage.getItem(key);
-    return raw ?? defaultValue;
-  } catch {
-    return defaultValue;
-  }
-}
-
-export function writeString(key: string, value: string): void {
-  if (!isBrowser()) return;
-  try {
-    window.localStorage.setItem(key, value);
-  } catch {
-    // ignore
-  }
-}
-
-

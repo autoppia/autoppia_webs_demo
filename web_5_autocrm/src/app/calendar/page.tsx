@@ -75,13 +75,13 @@ export default function CalendarPage() {
     entityType: "events",
     seedValue: v2Seed ?? undefined,
   });
-  console.log("[CalendarPage] API response", {
-    seed: v2Seed ?? null,
-    count: data?.length ?? 0,
-    isLoading,
-    error,
-    sample: (data || []).slice(0, 3),
-  });
+  // console.log("[CalendarPage] API response", {
+  //   seed: v2Seed ?? null,
+  //   count: data?.length ?? 0,
+  //   isLoading,
+  //   error,
+  //   sample: (data || []).slice(0, 3),
+  // });
   const today = useMemo(() => new Date(), []);
   const todayStr = useMemo(() => today.toISOString().slice(0, 10), [today]);
   const todayTimestamp = useMemo(() => Date.parse(todayStr), [todayStr]);

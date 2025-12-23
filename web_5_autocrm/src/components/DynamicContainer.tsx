@@ -1,7 +1,8 @@
 // src/components/DynamicContainer.tsx
+// @deprecated - Use useDynamicSystem() directly instead
 
-import { useState, useEffect, useRef } from "react";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface DynamicContainerProps extends React.HTMLAttributes<HTMLDivElement> {
 	children: React.ReactNode;
@@ -15,44 +16,21 @@ export function DynamicContainer({
 	index = 0,
 	...rest
 }: DynamicContainerProps) {
-	const containerRef = useRef<HTMLDivElement>(null);
-	const {
-		getLayoutClasses,
-		generateId,
-		generateSeedClass,
-		applyCSSVariables,
-		createDynamicStyles
-	} = useSeedLayout();
+	const dyn = useDynamicSystem();
+	
+	const containerId = index > 0
+		? dyn.v3.getVariant(`container-${index}`, ID_VARIANTS_MAP, `container-${index}`)
+		: dyn.v3.getVariant("container", ID_VARIANTS_MAP, "container");
 
-	const [containerClasses, setContainerClasses] = useState("");
-	const [dynamicStyles, setDynamicStyles] = useState<React.CSSProperties>({});
-
-	useEffect(() => {
-		const layoutClasses = getLayoutClasses('container');
-		const elementId = generateId('container', index);
-		const seedClass = generateSeedClass('dynamic-container');
-		
-		setContainerClasses(`${layoutClasses} ${seedClass} ${className}`.trim());
-		setDynamicStyles(createDynamicStyles());
-	}, [className, index, getLayoutClasses, generateId, generateSeedClass, createDynamicStyles]);
-
-	useEffect(() => {
-		if (containerRef.current) {
-			applyCSSVariables(containerRef.current);
-		}
-	}, [dynamicStyles, applyCSSVariables]);
-
-	return (
+	return dyn.v1.addWrapDecoy("container", (
 		<div 
-			ref={containerRef}
-			id={generateId('container', index)}
-			className={containerClasses}
-			style={dynamicStyles}
+			id={containerId}
+			className={className}
 			{...rest}
 		>
 			{children}
 		</div>
-	);
+	), `container-wrap-${index}`);
 }
 
 interface DynamicItemProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -67,42 +45,19 @@ export function DynamicItem({
 	index = 0,
 	...rest
 }: DynamicItemProps) {
-	const itemRef = useRef<HTMLDivElement>(null);
-	const {
-		getLayoutClasses,
-		generateId,
-		generateSeedClass,
-		applyCSSVariables,
-		createDynamicStyles
-	} = useSeedLayout();
+	const dyn = useDynamicSystem();
+	
+	const itemId = index > 0
+		? dyn.v3.getVariant(`item-${index}`, ID_VARIANTS_MAP, `item-${index}`)
+		: dyn.v3.getVariant("item", ID_VARIANTS_MAP, "item");
 
-	const [itemClasses, setItemClasses] = useState("");
-	const [dynamicStyles, setDynamicStyles] = useState<React.CSSProperties>({});
-
-	useEffect(() => {
-		const layoutClasses = getLayoutClasses('item');
-		const elementId = generateId('item', index);
-		const seedClass = generateSeedClass('dynamic-item');
-		
-		setItemClasses(`${layoutClasses} ${seedClass} ${className}`.trim());
-		setDynamicStyles(createDynamicStyles());
-	}, [className, index, getLayoutClasses, generateId, generateSeedClass, createDynamicStyles]);
-
-	useEffect(() => {
-		if (itemRef.current) {
-			applyCSSVariables(itemRef.current);
-		}
-	}, [dynamicStyles, applyCSSVariables]);
-
-	return (
+	return dyn.v1.addWrapDecoy("item", (
 		<div 
-			ref={itemRef}
-			id={generateId('item', index)}
-			className={itemClasses}
-			style={dynamicStyles}
+			id={itemId}
+			className={className}
 			{...rest}
 		>
 			{children}
 		</div>
-	);
+	), `item-wrap-${index}`);
 }

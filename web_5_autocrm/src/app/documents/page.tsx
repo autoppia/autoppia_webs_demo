@@ -7,6 +7,8 @@ import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
 
@@ -28,6 +30,7 @@ const LoadingNotice = ({ message }: { message: string }) => (
 
 export default function DocumentsPage() {
   const { getText, getId } = useDynamicStructure();
+  const dyn = useDynamicSystem();
   const { resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const { data, isLoading, error } = useProjectData<any>({
@@ -35,13 +38,13 @@ export default function DocumentsPage() {
     entityType: "files",
     seedValue: v2Seed,
   });
-  console.log("[DocumentsPage] API response", {
-    seed: v2Seed,
-    count: data?.length ?? 0,
-    isLoading,
-    error,
-    sample: (data || []).slice(0, 3),
-  });
+  // console.log("[DocumentsPage] API response", {
+  //   seed: v2Seed,
+  //   count: data?.length ?? 0,
+  //   isLoading,
+  //   error,
+  //   sample: (data || []).slice(0, 3),
+  // });
   const [fallbackFiles, setFallbackFiles] = useState<any[]>([]);
   useEffect(() => {
     initializeFiles().then((rows) => setFallbackFiles(rows));
@@ -196,10 +199,14 @@ export default function DocumentsPage() {
                   autoFocus
                 />
               ) : (
-                <span
-                  id={`document-name-${file.id}`}
-                  className="font-semibold text-zinc-900 truncate"
-                >
+              <span
+                id={`document-name-${file.id}`}
+                className={dyn.v3.getVariant(
+                  "badge",
+                  CLASS_VARIANTS_MAP,
+                  "font-semibold text-zinc-900 truncate"
+                )}
+              >
                   {file.name}
                 </span>
               )}
@@ -247,29 +254,41 @@ export default function DocumentsPage() {
                   eventType="DOCUMENT_RENAMED"
                   index={index}
                   onClick={() => saveRename(file.id)}
-                  className="text-emerald-600 rounded-full hover:bg-emerald-50 px-3 py-1 text-sm border border-emerald-100"
+                  className={dyn.v3.getVariant(
+                    "button-secondary",
+                    CLASS_VARIANTS_MAP,
+                    "text-emerald-600 rounded-full hover:bg-emerald-50 px-3 py-1 text-sm border border-emerald-100"
+                  )}
                   id={`${getId("save_document_name")}-${file.id}`}
                   title="Save name"
                 >
-                  Save
+                  {dyn.v3.getVariant("save_document_name", undefined, "Save")}
                 </DynamicButton>
               ) : (
                 <DynamicButton
                   eventType="DOCUMENT_RENAMED"
                   index={index}
                   onClick={() => startRename(file.id, file.name)}
-                  className="text-zinc-600 rounded-full hover:bg-zinc-100 px-3 py-1 text-sm border border-zinc-200"
+                  className={dyn.v3.getVariant(
+                    "button-secondary",
+                    CLASS_VARIANTS_MAP,
+                    "text-zinc-600 rounded-full hover:bg-zinc-100 px-3 py-1 text-sm border border-zinc-200"
+                  )}
                   id={`${getId("rename_document_button")}-${file.id}`}
-                  title="Rename document"
+                  title={dyn.v3.getVariant("rename_document_title", undefined, "Rename document")}
                 >
-                  Rename
+                  {dyn.v3.getVariant("rename_document_button", undefined, "Rename")}
                 </DynamicButton>
               )}
               <DynamicButton
                 eventType="DOCUMENT_DELETED"
                 index={index}
                 onClick={() => deleteFile(file.id)}
-                className="text-zinc-400 rounded-full hover:bg-red-50 hover:text-red-600 p-2 border border-transparent"
+                className={dyn.v3.getVariant(
+                  "button-secondary",
+                  CLASS_VARIANTS_MAP,
+                  "text-zinc-400 rounded-full hover:bg-red-50 hover:text-red-600 p-2 border border-transparent"
+                )}
                 id={`${getId("delete_document_button")}-${file.id}`}
                 title={getText("delete_button", "Delete Button")}
                 aria-label={`${getText("delete_button", "Delete Button")} ${file.name}`}
