@@ -6,7 +6,7 @@
  * It counts REAL USAGE in code, not just keys in JSON files.
  * 
  * USAGE:
- *   1. From Node.js: node src/dynamic/test-dynamic-system.js
+ *   1. From Node.js: node tests/test-dynamic-system.js
  *   2. From the browser: copy the contents into the console (F12) and run testDynamicSystem()
  * 
  * CONFIGURATION:
@@ -274,7 +274,96 @@ function testDeterminism() {
 }
 
 // ============================================================================
-// TEST 4: DOM usage (browser only)
+// TEST 4: Seed Variation (different seeds = different results)
+// ============================================================================
+
+function testSeedVariation() {
+  console.log('\n🎯 TEST 4: Variación de Seeds (diferentes seeds = diferentes resultados)');
+  console.log('─'.repeat(60));
+  
+  const results = { passed: 0, failed: 0, errors: [], stats: {} };
+  
+  // Hash function (must match the code)
+  function hashString(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    return Math.abs(hash);
+  }
+  
+  function selectVariantIndex(seed, key, count) {
+    if (count <= 1) return 0;
+    const combined = `${key}:${seed}`;
+    const hash = hashString(combined);
+    return Math.abs(hash) % count;
+  }
+  
+  // Test with multiple seeds and keys
+  const testSeeds = [1, 2, 3, 5, 10, 25, 50, 100, 250, 500, 999];
+  const testKeys = ['button', 'input', 'card', 'container'];
+  const variantCount = 10; // Simulate 10 variants available
+  
+  let totalTests = 0;
+  let uniqueVariations = 0;
+  let totalVariations = 0;
+  
+  testKeys.forEach(key => {
+    const seedResults = {};
+    testSeeds.forEach(seed => {
+      const variantIndex = selectVariantIndex(seed, key, variantCount);
+      seedResults[seed] = variantIndex;
+      totalTests++;
+    });
+    
+    // Check variation for this key
+    const uniqueIndices = new Set(Object.values(seedResults));
+    const variationRatio = uniqueIndices.size / testSeeds.length;
+    totalVariations += uniqueIndices.size;
+    
+    if (variationRatio >= 0.5) {
+      uniqueVariations++;
+      console.log(`   ✅ "${key}": ${uniqueIndices.size}/${testSeeds.length} variantes únicas (${(variationRatio * 100).toFixed(0)}%)`);
+    } else {
+      console.log(`   ⚠️  "${key}": ${uniqueIndices.size}/${testSeeds.length} variantes únicas (${(variationRatio * 100).toFixed(0)}%) - poca variación`);
+    }
+  });
+  
+  results.stats.totalTests = totalTests;
+  results.stats.totalVariations = totalVariations;
+  results.stats.averageVariation = (totalVariations / (testKeys.length * testSeeds.length)) * 100;
+  
+  const overallVariationRatio = totalVariations / totalTests;
+  console.log(`\n   📊 Variación promedio: ${(overallVariationRatio * 100).toFixed(1)}%`);
+  
+  // Pass if at least 50% of seeds produce unique variants (good distribution)
+  // This means different seeds should produce different results most of the time
+  if (overallVariationRatio >= 0.5) {
+    console.log(`   ✅ Variación de seeds: ${(overallVariationRatio * 100).toFixed(1)}% >= 50% (buena distribución)`);
+    results.passed++;
+  } else {
+    console.log(`   ❌ Variación de seeds: ${(overallVariationRatio * 100).toFixed(1)}% < 50% (poca variación)`);
+    results.failed++;
+    results.errors.push(`La variación entre seeds es insuficiente (${(overallVariationRatio * 100).toFixed(1)}% < 50%)`);
+  }
+  
+  // Also check that at least 3 out of 4 keys have good variation
+  if (uniqueVariations >= 3) {
+    console.log(`   ✅ ${uniqueVariations}/${testKeys.length} keys tienen buena variación`);
+    results.passed++;
+  } else {
+    console.log(`   ⚠️  Solo ${uniqueVariations}/${testKeys.length} keys tienen buena variación`);
+    results.failed++;
+    results.errors.push(`Solo ${uniqueVariations}/${testKeys.length} keys tienen buena variación`);
+  }
+  
+  return results;
+}
+
+// ============================================================================
+// TEST 5: DOM usage (browser only)
 // ============================================================================
 
 function testDOMUsage() {
@@ -328,7 +417,7 @@ function testDOMUsage() {
 }
 
 // ============================================================================
-// TEST 5: REAL USAGE IN CODE (NEW!)
+// TEST 6: REAL USAGE IN CODE (NEW!)
 // ============================================================================
 
 function testRealUsage() {
@@ -440,6 +529,190 @@ function testRealUsage() {
 }
 
 // ============================================================================
+// TEST 7: EVENT COVERAGE
+// ============================================================================
+
+function testEventCoverage() {
+  console.log('\n📡 TEST 7: COBERTURA DE EVENTOS');
+  console.log('─'.repeat(60));
+  
+  const results = {
+    passed: 0,
+    failed: 0,
+    errors: [],
+    stats: {
+      totalEvents: 0,
+      usedEvents: 0,
+      unusedEvents: [],
+      eventUsages: {}
+    }
+  };
+  
+  if (isBrowser()) {
+    console.log('   ⚠️  Este test solo funciona en Node.js');
+    return results;
+  }
+  
+  const fs = require('fs');
+  const pathModule = require('path');
+  
+  // Try to find events.ts file in common locations
+  const possiblePaths = [
+    'src/library/events.ts',
+    'src/lib/events.ts',
+    'src/library/event.ts',
+    'src/lib/event.ts'
+  ];
+  
+  let eventsFilePath = null;
+  let eventsContent = '';
+  
+  for (const relPath of possiblePaths) {
+    const fullPath = pathModule.join(process.cwd(), relPath);
+    if (fs.existsSync(fullPath)) {
+      eventsFilePath = fullPath;
+      eventsContent = readFileContent(fullPath);
+      console.log(`   📄 Archivo de eventos encontrado: ${relPath}`);
+      break;
+    }
+  }
+  
+  if (!eventsFilePath) {
+    console.log('   ❌ No se encontró el archivo events.ts');
+    results.failed++;
+    results.errors.push('Archivo events.ts no encontrado en ubicaciones comunes');
+    return results;
+  }
+  
+  // Extract EVENT_TYPES from the file
+  // Look for: EVENT_TYPES = { ... } or export const EVENT_TYPES = { ... }
+  const eventTypesMatch = eventsContent.match(/export\s+const\s+EVENT_TYPES\s*=\s*\{([^}]+)\}/s);
+  if (!eventTypesMatch) {
+    console.log('   ❌ No se pudo extraer EVENT_TYPES del archivo');
+    results.failed++;
+    results.errors.push('No se encontró EVENT_TYPES en el archivo de eventos');
+    return results;
+  }
+  
+  const eventTypesBlock = eventTypesMatch[1];
+  
+  // Extract event names (KEY: "VALUE" or KEY: 'VALUE')
+  const eventNamePattern = /(\w+)\s*:\s*["']([^"']+)["']/g;
+  const eventNames = [];
+  let match;
+  
+  while ((match = eventNamePattern.exec(eventTypesBlock)) !== null) {
+    const eventKey = match[1];
+    const eventValue = match[2];
+    eventNames.push({ key: eventKey, value: eventValue });
+  }
+  
+  // Also try to match commented out events (// EVENT_NAME: "EVENT_NAME")
+  const commentedPattern = /\/\/\s*(\w+)\s*:\s*["']([^"']+)["']/g;
+  while ((match = commentedPattern.exec(eventTypesBlock)) !== null) {
+    const eventKey = match[1];
+    const eventValue = match[2];
+    // Only add if not already in the list
+    if (!eventNames.find(e => e.key === eventKey)) {
+      eventNames.push({ key: eventKey, value: eventValue });
+    }
+  }
+  
+  results.stats.totalEvents = eventNames.length;
+  console.log(`   📊 Total de eventos definidos: ${results.stats.totalEvents}`);
+  
+  if (eventNames.length === 0) {
+    console.log('   ⚠️  No se encontraron eventos en EVENT_TYPES');
+    results.failed++;
+    results.errors.push('No se pudieron extraer eventos de EVENT_TYPES');
+    return results;
+  }
+  
+  // Get all source files
+  const sourceFiles = getAllSourceFiles();
+  
+  // Check usage of each event
+  eventNames.forEach(({ key, value }) => {
+    // Look for: logEvent(EVENT_TYPES.KEY, ...) or logEvent(EVENT_TYPES['KEY'], ...)
+    // Also look for: EVENT_TYPES.KEY or EVENT_TYPES['KEY'] (direct reference)
+    const pattern1 = new RegExp(`logEvent\\([^)]*EVENT_TYPES\\.${key}[^)]*\\)`, 'g');
+    const pattern2 = new RegExp(`logEvent\\([^)]*EVENT_TYPES\\['${key}'\\][^)]*\\)`, 'g');
+    const pattern3 = new RegExp(`EVENT_TYPES\\.${key}`, 'g');
+    const pattern4 = new RegExp(`EVENT_TYPES\\['${key}'\\]`, 'g');
+    const pattern5 = new RegExp(`["']${value}["']`, 'g'); // Direct string usage
+    
+    let usageCount = 0;
+    sourceFiles.forEach(file => {
+      const content = readFileContent(file);
+      // Don't count the events.ts file itself
+      if (file === eventsFilePath) return;
+      
+      const matches1 = content.match(pattern1);
+      const matches2 = content.match(pattern2);
+      const matches3 = content.match(pattern3);
+      const matches4 = content.match(pattern4);
+      const matches5 = content.match(pattern5);
+      
+      usageCount += (matches1 ? matches1.length : 0);
+      usageCount += (matches2 ? matches2.length : 0);
+      // For pattern3 and pattern4, only count if not in events.ts
+      if (file !== eventsFilePath) {
+        usageCount += (matches3 ? matches3.length : 0);
+        usageCount += (matches4 ? matches4.length : 0);
+      }
+      // For pattern5, be more careful - only count if it's in a logEvent call context
+      if (matches5) {
+        // Check if it's in a logEvent call
+        const logEventContext = content.match(new RegExp(`logEvent\\([^)]*["']${value}["'][^)]*\\)`, 'g'));
+        if (logEventContext) {
+          usageCount += logEventContext.length;
+        }
+      }
+    });
+    
+    results.stats.eventUsages[key] = usageCount;
+    
+    if (usageCount > 0) {
+      results.stats.usedEvents++;
+    } else {
+      results.stats.unusedEvents.push(key);
+    }
+  });
+  
+  console.log(`   📊 Eventos usados: ${results.stats.usedEvents} / ${results.stats.totalEvents}`);
+  
+  // Show unused events (if any)
+  if (results.stats.unusedEvents.length > 0) {
+    console.log(`   ⚠️  Eventos sin uso (${results.stats.unusedEvents.length}):`);
+    results.stats.unusedEvents.slice(0, 5).forEach(eventKey => {
+      console.log(`      - ${eventKey}`);
+    });
+    if (results.stats.unusedEvents.length > 5) {
+      console.log(`      ... y ${results.stats.unusedEvents.length - 5} más`);
+    }
+  }
+  
+  // Calculate coverage percentage
+  const coveragePercent = results.stats.totalEvents > 0 
+    ? ((results.stats.usedEvents / results.stats.totalEvents) * 100).toFixed(1)
+    : 0;
+  
+  console.log(`   📈 Cobertura: ${coveragePercent}%`);
+  
+  // Pass only if 100% of events are used
+  if (results.stats.usedEvents === results.stats.totalEvents) {
+    console.log(`   ✅ Cobertura de eventos: ${results.stats.usedEvents}/${results.stats.totalEvents} = 100%`);
+    results.passed++;
+  } else {
+    console.log(`   ❌ Cobertura de eventos: ${results.stats.usedEvents}/${results.stats.totalEvents} < 100%`);
+    results.failed++;
+    results.errors.push(`Faltan ${results.stats.totalEvents - results.stats.usedEvents} eventos sin usar (deben estar todos en uso: 100%)`);
+  }
+  
+  return results;
+}
+
+// ============================================================================
 // FINAL REPORT
 // ============================================================================
 
@@ -455,6 +728,10 @@ function generateReport(allResults) {
   // Get stats from TEST 5 (real usage)
   const usageTest = allResults.find(r => r.stats && r.stats.v1AddWrapDecoy !== undefined);
   const usageStats = usageTest ? usageTest.stats : {};
+  
+  // Get stats from TEST 6 (event coverage)
+  const eventTest = allResults.find(r => r.stats && r.stats.totalEvents !== undefined);
+  const eventStats = eventTest ? eventTest.stats : {};
   
   console.log(`\n✅ Tests pasados: ${totalPassed}`);
   console.log(`❌ Tests fallidos: ${totalFailed}`);
@@ -475,6 +752,22 @@ function generateReport(allResults) {
     console.log(`   🔹 V3 Texts (getVariant): ${usageStats.v3Texts} usos`);
     console.log(`   🔹 TOTAL V1: ${usageStats.v1AddWrapDecoy + usageStats.v1ChangeOrder} usos`);
     console.log(`   🔹 TOTAL V3: ${usageStats.v3Ids + usageStats.v3Classes + usageStats.v3Texts} usos`);
+  }
+  
+  // Show event coverage stats
+  if (eventStats.totalEvents !== undefined) {
+    const coveragePercent = eventStats.totalEvents > 0 
+      ? ((eventStats.usedEvents / eventStats.totalEvents) * 100).toFixed(1)
+      : 0;
+    console.log('\n📡 ESTADÍSTICAS DE EVENTOS:');
+    console.log('─'.repeat(60));
+    console.log(`   🔹 Total de eventos definidos: ${eventStats.totalEvents}`);
+    console.log(`   🔹 Eventos en uso: ${eventStats.usedEvents}`);
+    console.log(`   🔹 Eventos sin uso: ${eventStats.unusedEvents ? eventStats.unusedEvents.length : 0}`);
+    console.log(`   🔹 Cobertura: ${coveragePercent}%`);
+    if (eventStats.unusedEvents && eventStats.unusedEvents.length > 0) {
+      console.log(`   ⚠️  Eventos sin uso: ${eventStats.unusedEvents.slice(0, 3).join(', ')}${eventStats.unusedEvents.length > 3 ? '...' : ''}`);
+    }
   }
   
   if (allErrors.length > 0) {
@@ -528,7 +821,9 @@ function runAllTests() {
   results.push(testFileStructure());
   results.push(testVariantFiles());
   results.push(testDeterminism());
+  results.push(testSeedVariation()); // NEW!
   results.push(testRealUsage()); // NEW!
+  results.push(testEventCoverage()); // NEW!
   
   if (isBrowser()) {
     results.push(testDOMUsage());
