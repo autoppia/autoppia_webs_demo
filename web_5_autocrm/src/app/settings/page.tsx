@@ -7,9 +7,15 @@ import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 
 export default function SettingsPage() {
   const { getText, getId } = useDynamicStructure();
+  const dyn = useDynamicSystem();
+  const inputBase = "rounded-xl border px-4 py-3 font-medium bg-white";
+  const saveButtonBase =
+    "ml-auto rounded-2xl text-accent-forest bg-accent-forest/10 border border-accent-forest px-4 py-2 font-medium hover:bg-accent-forest/20 transition";
   const [name, setName] = useState("Jennifer Doe");
 
   useEffect(() => {
@@ -40,7 +46,7 @@ export default function SettingsPage() {
               <input
                 id={getId("user_name_input")}
                 data-testid="user-name-input"
-                className="rounded-xl border px-4 py-3 font-medium bg-white"
+                className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, inputBase)}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 onBlur={saveName}
@@ -64,7 +70,11 @@ export default function SettingsPage() {
                 eventType="CHANGE_USER_NAME"
                 index={0}
                 onClick={saveName}
-                className="ml-auto rounded-2xl text-accent-forest bg-accent-forest/10 border border-accent-forest px-4 py-2 font-medium hover:bg-accent-forest/20 transition"
+                className={dyn.v3.getVariant(
+                  "button-secondary",
+                  CLASS_VARIANTS_MAP,
+                  saveButtonBase
+                )}
                 id={getId("save_name_button")}
                 aria-label={getText("save_profile", "Save Profile")}
               >

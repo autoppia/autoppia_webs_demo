@@ -9,6 +9,8 @@ import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeed } from "@/context/SeedContext";
 
 
@@ -32,9 +34,14 @@ const STORAGE_KEY_PREFIX = "clients";
 
 function ClientsDirectoryContent() {
   const [query, setQuery] = useState("");
+  const dyn = useDynamicSystem();
   const { resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
-  console.log("[ClientsPage] current v2Seed", v2Seed);
+  const searchInputBase =
+    "w-full h-12 pl-12 pr-4 rounded-2xl bg-neutral-bg-dark border border-zinc-200 text-md focus:outline-accent-forest focus:border-accent-forest placeholder-zinc-400 font-medium";
+  const filterSelectBase =
+    "h-12 rounded-2xl border border-zinc-200 px-3 text-sm font-medium text-zinc-700 bg-white";
+  // console.log("[ClientsPage] current v2Seed", v2Seed);
 
   const { data, isLoading, error } = useProjectData<any>({
     projectKey: 'web_5_autocrm',
@@ -47,7 +54,7 @@ function ClientsDirectoryContent() {
   useEffect(() => {
     initializeClients().then(setFallbackClients);
   }, []);
-  console.log("[ClientsPage] useProjectData response", { count: data?.length ?? 0, isLoading, error });
+  // console.log("[ClientsPage] useProjectData response", { count: data?.length ?? 0, isLoading, error });
 
   const clients = useMemo(
     () =>
@@ -168,10 +175,11 @@ function ClientsDirectoryContent() {
         </h1>
         <div className="flex justify-end">
           <button
-            className="px-4 py-2 rounded-2xl bg-accent-forest text-white font-semibold shadow-sm"
+            id={getId("add_client_button")}
+            className={dyn.v3.getVariant("add_client_button_class", undefined, "px-4 py-2 rounded-2xl bg-accent-forest text-white font-semibold shadow-sm")}
             onClick={() => setShowAddModal(true)}
           >
-            Add client
+            {dyn.v3.getVariant("add_client_button", undefined, "Add client")}
           </button>
         </div>
       </DynamicElement>
@@ -183,7 +191,7 @@ function ClientsDirectoryContent() {
           </span>
           <input
             id={getId("search_input")}
-            className="w-full h-12 pl-12 pr-4 rounded-2xl bg-neutral-bg-dark border border-zinc-200 text-md focus:outline-accent-forest focus:border-accent-forest placeholder-zinc-400 font-medium"
+            className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, searchInputBase)}
             placeholder={getText("search_placeholder", "Search Placeholder")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -196,7 +204,7 @@ function ClientsDirectoryContent() {
             <label className="text-sm text-zinc-600">Status</label>
             <select
               id={getId("status_filter")}
-              className="h-12 rounded-2xl border border-zinc-200 px-3 text-sm font-medium text-zinc-700 bg-white"
+              className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, filterSelectBase)}
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
@@ -212,7 +220,7 @@ function ClientsDirectoryContent() {
             <label className="text-sm text-zinc-600">Matters</label>
             <select
               id={getId("matters_filter")}
-              className="h-12 rounded-2xl border border-zinc-200 px-3 text-sm font-medium text-zinc-700 bg-white"
+              className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, filterSelectBase)}
               value={matterFilter}
               onChange={(e) => setMatterFilter(e.target.value)}
             >

@@ -87,18 +87,3 @@ export function logEvent(
     throw error;
   });
 }
-
-// Helper function to get active events
-export function getActiveEvents(): string[] {
-  return SeedVariationManager.getActiveEvents();
-}
-
-// Helper function to clear all events
-export function clearEvents(): void {
-  SeedVariationManager.clearEvents();
-}
-
-// Helper function to register an event manually
-export function registerEvent(eventType: string): void {
-  SeedVariationManager.registerEvent(eventType);
-}

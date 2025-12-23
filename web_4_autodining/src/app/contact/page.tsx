@@ -1,7 +1,8 @@
 "use client";
 
 import { useSeed } from "@/context/SeedContext";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import Navbar from "@/components/Navbar";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
@@ -11,10 +12,9 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export default function ContactPage() {
   const { seed, resolvedSeeds } = useSeed();
-  const { getText, getId } = useV3Attributes();
+  const dyn = useDynamicSystem();
   const searchParams = useSearchParams();
   const hasSeedParam = Boolean(searchParams?.get("seed"));
-  const layoutSeed = hasSeedParam ? resolvedSeeds.v1 ?? seed : 8;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -34,7 +34,7 @@ export default function ContactPage() {
 
     logEvent(EVENT_TYPES.CONTACT_FORM_SUBMIT, {
       ...formData,
-      layoutSeed,
+      seed,
     });
   };
 
@@ -78,25 +78,28 @@ export default function ContactPage() {
 
   useEffect(() => {
     logEvent(EVENT_TYPES.CONTACT_PAGE_VIEW, {
-      layoutSeed,
+      seed,
       fromSeedParam: hasSeedParam,
     });
-  }, [layoutSeed, hasSeedParam]);
+  }, [seed, hasSeedParam]);
 
   return (
-    <main>
-      <Navbar />
-      <div className="max-w-6xl mx-auto px-4 py-8">
+    dyn.v1.addWrapDecoy("contact-page", (
+      <main id={dyn.v3.getVariant("contact-page", ID_VARIANTS_MAP, "contact-page")}>
+        <Navbar />
+        {dyn.v1.addWrapDecoy("contact-content", (
+          <div className="max-w-6xl mx-auto px-4 py-8" id={dyn.v3.getVariant("contact-content", ID_VARIANTS_MAP, "contact-content")}>
         {/* Hero Section */}
-        <div className="mb-12 text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            Get in Touch
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Have questions or feedback? We'd love to hear from you! Reach out to
-            us and we'll get back to you as soon as possible.
-          </p>
-        </div>
+        {dyn.v1.addWrapDecoy("contact-hero", (
+          <div className="mb-12 text-center" id={dyn.v3.getVariant("contact-hero", ID_VARIANTS_MAP, "contact-hero")}>
+            <h1 className="text-5xl font-bold text-gray-900 mb-4" id={dyn.v3.getVariant("contact-title", ID_VARIANTS_MAP, "contact-title")}>
+              {dyn.v3.getVariant("get_in_touch", TEXT_VARIANTS_MAP, "Get in Touch")}
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto" id={dyn.v3.getVariant("contact-subtitle", ID_VARIANTS_MAP, "contact-subtitle")}>
+              {dyn.v3.getVariant("contact_description", TEXT_VARIANTS_MAP, "Have questions or feedback? We'd love to hear from you! Reach out to us and we'll get back to you as soon as possible.")}
+            </p>
+          </div>
+        ), "contact-hero-wrap")}
 
         {/* Main Content: Contact Info + Form */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
@@ -118,7 +121,7 @@ export default function ContactPage() {
                   onClick={() =>
                     logEvent(EVENT_TYPES.CONTACT_CARD_CLICK, {
                       type: info.title,
-                      layoutSeed,
+                      seed,
                     })
                   }
                 >
@@ -165,7 +168,7 @@ export default function ContactPage() {
                     value={formData.name}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
-                    placeholder="Your full name"
+                    placeholder={dyn.v3.getVariant("name_placeholder", TEXT_VARIANTS_MAP, "Your full name")}
                   />
                 </div>
 
@@ -185,7 +188,7 @@ export default function ContactPage() {
                     value={formData.email}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
-                    placeholder="your.email@example.com"
+                    placeholder={dyn.v3.getVariant("email_placeholder", TEXT_VARIANTS_MAP, "your.email@example.com")}
                   />
                 </div>
 
@@ -205,7 +208,7 @@ export default function ContactPage() {
                     value={formData.subject}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
-                    placeholder="What's this about?"
+                    placeholder={dyn.v3.getVariant("subject_placeholder", TEXT_VARIANTS_MAP, "What's this about?")}
                   />
                 </div>
 
@@ -225,19 +228,22 @@ export default function ContactPage() {
                     onChange={handleChange}
                     rows={6}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none resize-none transition-colors"
-                    placeholder="Tell us more about your inquiry..."
+                    placeholder={dyn.v3.getVariant("message_placeholder", TEXT_VARIANTS_MAP, "Tell us more about your inquiry...")}
                   />
                 </div>
 
                 {/* Submit Button */}
                 <div className="pt-2">
-                  <Button
-                    type="submit"
-                    className="w-full bg-[#46a758] hover:bg-[#3d8f4e] text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors"
-                  >
-                    <Send className="w-5 h-5" />
-                    Send Message
-                  </Button>
+                  {dyn.v1.addWrapDecoy("send-message-button", (
+                    <Button
+                      type="submit"
+                      id={dyn.v3.getVariant("send-message-button", ID_VARIANTS_MAP, "send-message-button")}
+                      className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "w-full bg-[#46a758] hover:bg-[#3d8f4e] text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors")}
+                    >
+                      <Send className="w-5 h-5" />
+                      {dyn.v3.getVariant("send_message", TEXT_VARIANTS_MAP, "Send Message")}
+                    </Button>
+                  ), "send-message-button-wrap")}
                 </div>
               </form>
             </div>
@@ -279,7 +285,9 @@ export default function ContactPage() {
             ))}
           </div>
         </div>
-      </div>
-    </main>
+        </div>
+        ), "contact-content-wrap")}
+      </main>
+    ), "contact-page-wrap")
   );
 }

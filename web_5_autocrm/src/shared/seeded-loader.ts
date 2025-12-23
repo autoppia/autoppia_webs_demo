@@ -77,20 +77,3 @@ export async function fetchSeededSelection<T = any>(options: SeededLoadOptions):
 }
 
 
-export async function fetchPoolInfo(projectKey: string, entityType: string): Promise<{ pool_size: number } | null> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/pool/info?project_key=${encodeURIComponent(projectKey)}&entity_type=${encodeURIComponent(entityType)}`;
-  try {
-    const resp = await fetch(url, { method: "GET" });
-    if (!resp.ok) return null;
-    const json = await resp.json();
-    if (json && typeof json.pool_size === "number") {
-      return { pool_size: json.pool_size as number };
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
-
-

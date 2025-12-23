@@ -1,5 +1,9 @@
-import { getEffectiveLayoutConfig, isDynamicEnabled } from "@/dynamic/v1-layouts";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
+
+// Legacy function - always return false since v1-layouts is removed
+const isDynamicEnabled = (): boolean => {
+  return false;
+};
 import {
   initializeClients,
   initializeMatters,

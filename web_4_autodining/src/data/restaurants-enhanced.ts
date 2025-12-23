@@ -9,7 +9,6 @@ import {
   fetchSeededSelection,
   isDbLoadModeEnabled,
 } from "@/shared/seeded-loader";
-import { RestaurantsData } from "@/library/dataset";
 import fallbackRestaurants from "./original/restaurants_1.json";
 
 export interface RestaurantGenerated {
