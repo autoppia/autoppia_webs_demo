@@ -7,6 +7,8 @@ import { initializeClients } from "@/data/crm-enhanced";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useSeed } from "@/context/SeedContext";
 import { useProjectData } from "@/shared/universal-loader";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
 
 function getInitials(name: string) {
   return name
@@ -47,6 +49,7 @@ function ClientProfilePageContent() {
   const [isResolving, setIsResolving] = useState(true);
   const [message, setMessage] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const dyn = useDynamicSystem();
   const params = useParams();
   const clientId = params?.id as string;
   const seedRouter = useSeedRouter();
@@ -149,10 +152,11 @@ function ClientProfilePageContent() {
   return (
     <section className="max-w-4xl mx-auto flex flex-col gap-10 px-4 md:px-0"> {/* Added padding for responsiveness */}
       {/* Profile Card */}
-      <div
-        id="client-profile-card"
-        className="rounded-2xl bg-white shadow-card p-8 flex flex-col md:flex-row items-center md:items-start gap-7 border border-zinc-100"
-      >
+      {dyn.v1.addWrapDecoy("client-profile-card", (
+        <div
+          id={dyn.v3.getVariant("client_profile_card", ID_VARIANTS_MAP, "client-profile-card")}
+          className="rounded-2xl bg-white shadow-card p-8 flex flex-col md:flex-row items-center md:items-start gap-7 border border-zinc-100"
+        >
         {client.avatar ? (
           <img
             id={`client-avatar-${client.id}`}
@@ -210,20 +214,22 @@ function ClientProfilePageContent() {
           </div>
         </div>
       </div>
+      ))}
 
       {/* Timeline + Related matters row */}
-      <div id="client-content-sections" className="flex flex-col lg:flex-row gap-10">
+      <div id={dyn.v3.getVariant("client_content_sections", ID_VARIANTS_MAP, "client-content-sections")} className="flex flex-col lg:flex-row gap-10">
         {/* Timeline */}
-        <section
-          id="activity-timeline-section"
-          className="flex-1 min-w-0 rounded-2xl bg-white shadow-card p-6 md:p-8 border border-zinc-100"
-        >
-          <h2
-            id="activity-timeline-heading"
-            className="font-semibold text-lg mb-5"
+        {dyn.v1.addWrapDecoy("activity-timeline-section", (
+          <section
+            id={dyn.v3.getVariant("activity_timeline_section", ID_VARIANTS_MAP, "activity-timeline-section")}
+            className="flex-1 min-w-0 rounded-2xl bg-white shadow-card p-6 md:p-8 border border-zinc-100"
           >
-            Activity Timeline
-          </h2>
+            <h2
+              id={dyn.v3.getVariant("activity_timeline_heading", ID_VARIANTS_MAP, "activity-timeline-heading")}
+              className="font-semibold text-lg mb-5"
+            >
+              {dyn.v3.getVariant("activity_timeline", undefined, "Activity Timeline")}
+            </h2>
           <ul id="activity-timeline-list" className="flex flex-col gap-6">
             {activity.map((item, i) => (
               <li
@@ -255,44 +261,55 @@ function ClientProfilePageContent() {
               </li>
             ))}
           </ul>
-          <div className="mt-8 border-t border-zinc-100 pt-5">
-            <h3 className="font-semibold text-zinc-800 mb-3">Send a message</h3>
-            <textarea
-              id={`client-message-${client.id}`}
-              className="w-full border border-zinc-200 rounded-xl p-3 text-sm focus:outline-accent-forest"
-              rows={3}
-              placeholder="Type a quick note to this client..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
-            <button
-              className="mt-3 px-4 py-2 rounded-xl bg-accent-forest text-white font-semibold disabled:opacity-50"
-              disabled={!message.trim()}
-              onClick={() => {
-                logEvent(EVENT_TYPES.NEW_LOG_ADDED, {
-                  clientId: client.id,
-                  message: message.trim(),
-                  to: client.email,
-                });
-                setMessage("");
-              }}
-            >
-              Send message
-            </button>
-          </div>
-        </section>
+            <div className="mt-8 border-t border-zinc-100 pt-5">
+              <h3 className="font-semibold text-zinc-800 mb-3">{dyn.v3.getVariant("send_message_label", undefined, "Send a message")}</h3>
+              <textarea
+                id={dyn.v3.getVariant("client_message_input", ID_VARIANTS_MAP, `client-message-${client.id}`)}
+                className={dyn.v3.getVariant(
+                  "input",
+                  CLASS_VARIANTS_MAP,
+                  "w-full border border-zinc-200 rounded-xl p-3 text-sm focus:outline-accent-forest"
+                )}
+                rows={3}
+                placeholder={dyn.v3.getVariant("client_message_placeholder", undefined, "Type a quick note to this client...")}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+              <button
+                id={dyn.v3.getVariant("send_message_button", ID_VARIANTS_MAP, "send-message-button")}
+                className={dyn.v3.getVariant(
+                  "button-primary",
+                  CLASS_VARIANTS_MAP,
+                  "mt-3 px-4 py-2 rounded-xl bg-accent-forest text-white font-semibold disabled:opacity-50"
+                )}
+                disabled={!message.trim()}
+                onClick={() => {
+                  logEvent(EVENT_TYPES.NEW_LOG_ADDED, {
+                    clientId: client.id,
+                    message: message.trim(),
+                    to: client.email,
+                  });
+                  setMessage("");
+                }}
+              >
+                {dyn.v3.getVariant("send_message_button_text", undefined, "Send message")}
+              </button>
+            </div>
+          </section>
+        ))}
 
         {/* Related matters */}
-        <section
-          id="related-matters-section"
-          className="w-full lg:w-80 flex-shrink-0"
-        >
-          <h2
-            id="related-matters-heading"
-            className="font-semibold text-lg mb-5"
+        {dyn.v1.addWrapDecoy("related-matters-section", (
+          <section
+            id={dyn.v3.getVariant("related_matters_section", ID_VARIANTS_MAP, "related-matters-section")}
+            className="w-full lg:w-80 flex-shrink-0"
           >
-            Related Matters
-          </h2>
+            <h2
+              id={dyn.v3.getVariant("related_matters_heading", ID_VARIANTS_MAP, "related-matters-heading")}
+              className="font-semibold text-lg mb-5"
+            >
+              {dyn.v3.getVariant("related_matters", undefined, "Related Matters")}
+            </h2>
           <div id="related-matters-list" className="flex flex-col gap-4">
             {matters.length === 0 ? (
               <div
@@ -344,17 +361,28 @@ function ClientProfilePageContent() {
             )}
           </div>
         </section>
+        ))}
       </div>
       <div className="flex items-center justify-between">
-        <button
-          className="text-sm text-zinc-500 underline"
-          onClick={() => seedRouter.push("/clients")}
-        >
-          Back to clients
-        </button>
-        <button
-          className="px-4 py-2 rounded-xl bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition"
-          onClick={() => {
+          <button
+            id={dyn.v3.getVariant("back_to_clients_button", ID_VARIANTS_MAP, "back-to-clients-button")}
+            className={dyn.v3.getVariant(
+              "button-secondary",
+              CLASS_VARIANTS_MAP,
+              "text-sm text-zinc-500 underline"
+            )}
+            onClick={() => seedRouter.push("/clients")}
+          >
+            {dyn.v3.getVariant("back_to_clients", undefined, "Back to clients")}
+          </button>
+          <button
+            id={dyn.v3.getVariant("delete_client_button", ID_VARIANTS_MAP, "delete-client-button")}
+            className={dyn.v3.getVariant(
+              "button-secondary",
+              CLASS_VARIANTS_MAP,
+              "px-4 py-2 rounded-xl bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition"
+            )}
+            onClick={() => {
             if (isDeleting) return;
             setIsDeleting(true);
             logEvent(EVENT_TYPES.DELETE_CLIENT, client);
@@ -374,7 +402,7 @@ function ClientProfilePageContent() {
             seedRouter.push("/clients");
           }}
         >
-          Delete client
+          {dyn.v3.getVariant("delete_client_button_text", undefined, "Delete client")}
         </button>
       </div>
     </section>

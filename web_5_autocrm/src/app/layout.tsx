@@ -6,9 +6,9 @@ import React, { Suspense } from "react";
 import Sidebar from "@/components/Sidebar";
 import UserNameBadge from "@/components/UserNameBadge";
 import { SeedProvider } from "@/context/SeedContext";
-// LAYOUT FIJO - Sin variaciones V1
 import ClientProviders from "./ClientProviders";
 import { SeedRedirect } from "@/components/layout/SeedRedirect";
+import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +34,25 @@ export default function RootLayout({
   // LAYOUT FIJO - Sin variaciones
 
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Inject seed from URL before React mounts */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const params = new URLSearchParams(window.location.search);
+                  const seed = params.get('seed');
+                  if (seed) {
+                    window.__INITIAL_SEED__ = parseInt(seed, 10);
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
         className="font-sans bg-neutral text-[#1A1A1A] min-h-screen"
         suppressHydrationWarning
@@ -83,6 +101,7 @@ export default function RootLayout({
             </main>
           </div>
           </ClientProviders>
+          <DynamicDebug />
         </SeedProvider>
       </body>
     </html>
