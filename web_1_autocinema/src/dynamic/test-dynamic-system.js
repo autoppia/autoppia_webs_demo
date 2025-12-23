@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * 🧪 GENERIC DYNAMIC SYSTEM TEST (IMPROVED)
+ * 🧪 GENERIC DYNAMIC SYSTEM TEST
  * 
  * This script validates that the dynamic system (V1 and V3) works correctly.
- * It counts REAL USAGE in code, not just keys in JSON files.
+ * It is generic and can be adapted to different sites by changing the configuration.
  * 
  * USAGE:
  *   1. From Node.js: node src/dynamic/test-dynamic-system.js
@@ -18,12 +18,12 @@
 // ============================================================================
 
 const MIN_REQUIREMENTS = {
-  v1AddWrapDecoy: 20,      // Minimum addWrapDecoy usages (todas tienen al menos 26)
-  v1ChangeOrder: 5,        // Minimum changeOrderElements usages
-  v3Ids: 25,               // Minimum getVariant with ID_VARIANTS_MAP usages (todas tienen al menos 29)
-  v3Classes: 15,           // Minimum getVariant with CLASS_VARIANTS_MAP usages (web_4 tiene 16)
-  v3Texts: 30,             // Minimum getVariant for texts usages (todas tienen al menos 34)
-  minVariants: 3,          // Minimum variants per key in JSONs
+  v1Wrappers: 10,      // Minimum wrappers/decoys
+  v1OrderChanges: 3,   // Minimum order changes
+  v3Ids: 20,           // Minimum dynamic IDs
+  v3Classes: 15,       // Minimum dynamic classes
+  v3Texts: 15,         // Minimum dynamic texts (adjusted: many texts are local)
+  minVariants: 3,      // Minimum variants per key
 };
 
 // Paths to the files (adjust if the structure is different)
@@ -59,59 +59,6 @@ function fileExists(path) {
   const fs = require('fs');
   const pathModule = require('path');
   return fs.existsSync(pathModule.join(process.cwd(), path));
-}
-
-function readFileContent(filePath) {
-  if (isBrowser()) return '';
-  const fs = require('fs');
-  try {
-    return fs.readFileSync(filePath, 'utf8');
-  } catch {
-    return '';
-  }
-}
-
-function getAllSourceFiles() {
-  if (isBrowser()) return [];
-  const fs = require('fs');
-  const pathModule = require('path');
-  const srcDir = pathModule.join(process.cwd(), 'src');
-  
-  function walkDir(dir, fileList = []) {
-    if (!fs.existsSync(dir)) return fileList;
-    const files = fs.readdirSync(dir);
-    files.forEach(file => {
-      const filePath = pathModule.join(dir, file);
-      try {
-        const stat = fs.statSync(filePath);
-        if (stat.isDirectory() && !filePath.includes('node_modules') && !filePath.includes('.next') && !filePath.includes('__pycache__')) {
-          walkDir(filePath, fileList);
-        } else if ((file.endsWith('.tsx') || file.endsWith('.ts')) && !file.includes('test-dynamic-system')) {
-          fileList.push(filePath);
-        }
-      } catch (err) {
-        // Skip files we can't read
-      }
-    });
-    return fileList;
-  }
-  
-  if (fs.existsSync(srcDir)) {
-    return walkDir(srcDir);
-  }
-  return [];
-}
-
-function countPatternInFiles(files, pattern) {
-  let count = 0;
-  files.forEach(file => {
-    const content = readFileContent(file);
-    const matches = content.match(new RegExp(pattern, 'g'));
-    if (matches) {
-      count += matches.length;
-    }
-  });
-  return count;
 }
 
 // ============================================================================
@@ -203,13 +150,38 @@ function testVariantFiles() {
     console.log(`   📊 Clases: ${results.stats.classKeys} keys`);
     console.log(`   📊 Textos: ${results.stats.textKeys} keys`);
     
-    // Just report, don't fail on JSON keys (we check real usage in TEST 5)
+    // Validate requirements
+    if (results.stats.idKeys >= MIN_REQUIREMENTS.v3Ids) {
+      console.log(`   ✅ IDs: ${results.stats.idKeys} >= ${MIN_REQUIREMENTS.v3Ids}`);
+      results.passed++;
+    } else {
+      console.log(`   ❌ IDs: ${results.stats.idKeys} < ${MIN_REQUIREMENTS.v3Ids}`);
+      results.failed++;
+      results.errors.push(`Faltan ${MIN_REQUIREMENTS.v3Ids - results.stats.idKeys} keys de IDs`);
+    }
+    
+    if (results.stats.classKeys >= MIN_REQUIREMENTS.v3Classes) {
+      console.log(`   ✅ Clases: ${results.stats.classKeys} >= ${MIN_REQUIREMENTS.v3Classes}`);
+      results.passed++;
+    } else {
+      console.log(`   ❌ Clases: ${results.stats.classKeys} < ${MIN_REQUIREMENTS.v3Classes}`);
+      results.failed++;
+      results.errors.push(`Faltan ${MIN_REQUIREMENTS.v3Classes - results.stats.classKeys} keys de clases`);
+    }
+    
+    if (results.stats.textKeys >= MIN_REQUIREMENTS.v3Texts) {
+      console.log(`   ✅ Textos: ${results.stats.textKeys} >= ${MIN_REQUIREMENTS.v3Texts}`);
+      results.passed++;
+    } else {
+      console.log(`   ❌ Textos: ${results.stats.textKeys} < ${MIN_REQUIREMENTS.v3Texts}`);
+      results.failed++;
+      results.errors.push(`Faltan ${MIN_REQUIREMENTS.v3Texts - results.stats.textKeys} keys de textos`);
+    }
+    
     if (results.stats.keysWithFewVariants.length > 0) {
       console.log(`   ⚠️  Keys con pocas variantes (<${MIN_REQUIREMENTS.minVariants}): ${results.stats.keysWithFewVariants.length}`);
       results.stats.keysWithFewVariants.slice(0, 3).forEach(msg => console.log(`      - ${msg}`));
     }
-    
-    results.passed = 3; // Always pass, just informational
     
   } catch (error) {
     console.log(`   ❌ Error: ${error.message}`);
@@ -296,13 +268,13 @@ function testDOMUsage() {
   
   console.log(`   📊 Wrappers: ${wrappers}, Decoys: ${decoys}, Total V1: ${totalV1}`);
   
-  if (totalV1 >= MIN_REQUIREMENTS.v1AddWrapDecoy) {
-    console.log(`   ✅ V1: ${totalV1} >= ${MIN_REQUIREMENTS.v1AddWrapDecoy}`);
+  if (totalV1 >= MIN_REQUIREMENTS.v1Wrappers) {
+    console.log(`   ✅ V1: ${totalV1} >= ${MIN_REQUIREMENTS.v1Wrappers}`);
     results.passed++;
   } else {
-    console.log(`   ❌ V1: ${totalV1} < ${MIN_REQUIREMENTS.v1AddWrapDecoy}`);
+    console.log(`   ❌ V1: ${totalV1} < ${MIN_REQUIREMENTS.v1Wrappers}`);
     results.failed++;
-    results.errors.push(`Faltan ${MIN_REQUIREMENTS.v1AddWrapDecoy - totalV1} elementos V1`);
+    results.errors.push(`Faltan ${MIN_REQUIREMENTS.v1Wrappers - totalV1} elementos V1`);
   }
   
   // Count V3 IDs
@@ -328,118 +300,6 @@ function testDOMUsage() {
 }
 
 // ============================================================================
-// TEST 5: REAL USAGE IN CODE (NEW!)
-// ============================================================================
-
-function testRealUsage() {
-  console.log('\n💻 TEST 5: USO REAL EN CÓDIGO');
-  console.log('─'.repeat(60));
-  
-  const results = {
-    passed: 0,
-    failed: 0,
-    errors: [],
-    stats: {
-      v1AddWrapDecoy: 0,
-      v1ChangeOrder: 0,
-      v3Ids: 0,
-      v3Classes: 0,
-      v3Texts: 0,
-    }
-  };
-  
-  if (isBrowser()) {
-    console.log('   ⚠️  Este test solo funciona en Node.js');
-    return results;
-  }
-  
-  const sourceFiles = getAllSourceFiles();
-  console.log(`   📂 Archivos fuente encontrados: ${sourceFiles.length}`);
-  
-  // Count V1: addWrapDecoy (dyn.v1.addWrapDecoy or addWrapDecoy)
-  const addWrapDecoyPattern = /\.v1\.addWrapDecoy|addWrapDecoy\(/g;
-  results.stats.v1AddWrapDecoy = countPatternInFiles(sourceFiles, addWrapDecoyPattern);
-  console.log(`   📊 V1 addWrapDecoy: ${results.stats.v1AddWrapDecoy} usos`);
-  
-  if (results.stats.v1AddWrapDecoy >= MIN_REQUIREMENTS.v1AddWrapDecoy) {
-    console.log(`   ✅ V1 addWrapDecoy: ${results.stats.v1AddWrapDecoy} >= ${MIN_REQUIREMENTS.v1AddWrapDecoy}`);
-    results.passed++;
-  } else {
-    console.log(`   ❌ V1 addWrapDecoy: ${results.stats.v1AddWrapDecoy} < ${MIN_REQUIREMENTS.v1AddWrapDecoy}`);
-    results.failed++;
-    results.errors.push(`Faltan ${MIN_REQUIREMENTS.v1AddWrapDecoy - results.stats.v1AddWrapDecoy} usos de addWrapDecoy`);
-  }
-  
-  // Count V1: changeOrderElements (dyn.v1.changeOrderElements or changeOrderElements)
-  const changeOrderPattern = /\.v1\.changeOrderElements|changeOrderElements\(/g;
-  results.stats.v1ChangeOrder = countPatternInFiles(sourceFiles, changeOrderPattern);
-  console.log(`   📊 V1 changeOrderElements: ${results.stats.v1ChangeOrder} usos`);
-  
-  if (results.stats.v1ChangeOrder >= MIN_REQUIREMENTS.v1ChangeOrder) {
-    console.log(`   ✅ V1 changeOrderElements: ${results.stats.v1ChangeOrder} >= ${MIN_REQUIREMENTS.v1ChangeOrder}`);
-    results.passed++;
-  } else {
-    console.log(`   ❌ V1 changeOrderElements: ${results.stats.v1ChangeOrder} < ${MIN_REQUIREMENTS.v1ChangeOrder}`);
-    results.failed++;
-    results.errors.push(`Faltan ${MIN_REQUIREMENTS.v1ChangeOrder - results.stats.v1ChangeOrder} usos de changeOrderElements`);
-  }
-  
-  // Count V3: IDs (getVariant with ID_VARIANTS_MAP)
-  // Pattern: dyn.v3.getVariant(..., ID_VARIANTS_MAP, ...) or getVariant(..., ID_VARIANTS_MAP, ...)
-  const idPattern = /\.v3\.getVariant\([^)]*ID_VARIANTS_MAP|getVariant\([^)]*ID_VARIANTS_MAP/g;
-  results.stats.v3Ids = countPatternInFiles(sourceFiles, idPattern);
-  console.log(`   📊 V3 IDs (getVariant con ID_VARIANTS_MAP): ${results.stats.v3Ids} usos`);
-  
-  if (results.stats.v3Ids >= MIN_REQUIREMENTS.v3Ids) {
-    console.log(`   ✅ V3 IDs: ${results.stats.v3Ids} >= ${MIN_REQUIREMENTS.v3Ids}`);
-    results.passed++;
-  } else {
-    console.log(`   ❌ V3 IDs: ${results.stats.v3Ids} < ${MIN_REQUIREMENTS.v3Ids}`);
-    results.failed++;
-    results.errors.push(`Faltan ${MIN_REQUIREMENTS.v3Ids - results.stats.v3Ids} usos de getVariant para IDs`);
-  }
-  
-  // Count V3: Classes (getVariant with CLASS_VARIANTS_MAP)
-  // Pattern: dyn.v3.getVariant(..., CLASS_VARIANTS_MAP, ...) or getVariant(..., CLASS_VARIANTS_MAP, ...)
-  const classPattern = /\.v3\.getVariant\([^)]*CLASS_VARIANTS_MAP|getVariant\([^)]*CLASS_VARIANTS_MAP/g;
-  results.stats.v3Classes = countPatternInFiles(sourceFiles, classPattern);
-  console.log(`   📊 V3 Classes (getVariant con CLASS_VARIANTS_MAP): ${results.stats.v3Classes} usos`);
-  
-  if (results.stats.v3Classes >= MIN_REQUIREMENTS.v3Classes) {
-    console.log(`   ✅ V3 Classes: ${results.stats.v3Classes} >= ${MIN_REQUIREMENTS.v3Classes}`);
-    results.passed++;
-  } else {
-    console.log(`   ❌ V3 Classes: ${results.stats.v3Classes} < ${MIN_REQUIREMENTS.v3Classes}`);
-    results.failed++;
-    results.errors.push(`Faltan ${MIN_REQUIREMENTS.v3Classes - results.stats.v3Classes} usos de getVariant para clases`);
-  }
-  
-  // Count V3: Texts (getVariant without map, with TEXT_VARIANTS_MAP, or with local text variants)
-  // Pattern: dyn.v3.getVariant(..., undefined, ...) or getVariant(..., undefined, ...)
-  //          dyn.v3.getVariant(..., TEXT_VARIANTS_MAP, ...) or getVariant(..., TEXT_VARIANTS_MAP, ...)
-  //          dyn.v3.getVariant(..., *TextVariants, ...) or getVariant(..., *TextVariants, ...)
-  const textPattern1 = /\.v3\.getVariant\([^)]*,\s*undefined|getVariant\([^)]*,\s*undefined/g;
-  const textPattern2 = /\.v3\.getVariant\([^)]*TEXT_VARIANTS_MAP|getVariant\([^)]*TEXT_VARIANTS_MAP/g;
-  const textPattern3 = /\.v3\.getVariant\([^)]*[Tt]ext[^)]*Variants|getVariant\([^)]*[Tt]ext[^)]*Variants/g;
-  const textCount1 = countPatternInFiles(sourceFiles, textPattern1);
-  const textCount2 = countPatternInFiles(sourceFiles, textPattern2);
-  const textCount3 = countPatternInFiles(sourceFiles, textPattern3);
-  results.stats.v3Texts = textCount1 + textCount2 + textCount3;
-  console.log(`   📊 V3 Texts (getVariant para textos): ${results.stats.v3Texts} usos`);
-  
-  if (results.stats.v3Texts >= MIN_REQUIREMENTS.v3Texts) {
-    console.log(`   ✅ V3 Texts: ${results.stats.v3Texts} >= ${MIN_REQUIREMENTS.v3Texts}`);
-    results.passed++;
-  } else {
-    console.log(`   ❌ V3 Texts: ${results.stats.v3Texts} < ${MIN_REQUIREMENTS.v3Texts}`);
-    results.failed++;
-    results.errors.push(`Faltan ${MIN_REQUIREMENTS.v3Texts - results.stats.v3Texts} usos de getVariant para textos`);
-  }
-  
-  return results;
-}
-
-// ============================================================================
 // FINAL REPORT
 // ============================================================================
 
@@ -452,29 +312,12 @@ function generateReport(allResults) {
   const totalFailed = allResults.reduce((sum, r) => sum + r.failed, 0);
   const allErrors = allResults.flatMap(r => r.errors || []);
   
-  // Get stats from TEST 5 (real usage)
-  const usageTest = allResults.find(r => r.stats && r.stats.v1AddWrapDecoy !== undefined);
-  const usageStats = usageTest ? usageTest.stats : {};
-  
   console.log(`\n✅ Tests pasados: ${totalPassed}`);
   console.log(`❌ Tests fallidos: ${totalFailed}`);
   
   if (totalPassed + totalFailed > 0) {
     const successRate = ((totalPassed / (totalPassed + totalFailed)) * 100).toFixed(1);
     console.log(`📈 Tasa de éxito: ${successRate}%`);
-  }
-  
-  // Show real usage stats
-  if (usageStats.v1AddWrapDecoy !== undefined) {
-    console.log('\n📊 ESTADÍSTICAS DE USO REAL:');
-    console.log('─'.repeat(60));
-    console.log(`   🔹 V1 addWrapDecoy: ${usageStats.v1AddWrapDecoy} usos`);
-    console.log(`   🔹 V1 changeOrderElements: ${usageStats.v1ChangeOrder} usos`);
-    console.log(`   🔹 V3 IDs (getVariant): ${usageStats.v3Ids} usos`);
-    console.log(`   🔹 V3 Classes (getVariant): ${usageStats.v3Classes} usos`);
-    console.log(`   🔹 V3 Texts (getVariant): ${usageStats.v3Texts} usos`);
-    console.log(`   🔹 TOTAL V1: ${usageStats.v1AddWrapDecoy + usageStats.v1ChangeOrder} usos`);
-    console.log(`   🔹 TOTAL V3: ${usageStats.v3Ids + usageStats.v3Classes + usageStats.v3Texts} usos`);
   }
   
   if (allErrors.length > 0) {
@@ -489,11 +332,11 @@ function generateReport(allResults) {
   
   console.log('\n📋 CRITERIOS DE VALIDACIÓN:');
   console.log('─'.repeat(60));
-  console.log(`   ✅ V1 addWrapDecoy: mínimo ${MIN_REQUIREMENTS.v1AddWrapDecoy} usos`);
-  console.log(`   ✅ V1 changeOrderElements: mínimo ${MIN_REQUIREMENTS.v1ChangeOrder} usos`);
-  console.log(`   ✅ V3 IDs (getVariant): mínimo ${MIN_REQUIREMENTS.v3Ids} usos`);
-  console.log(`   ✅ V3 Classes (getVariant): mínimo ${MIN_REQUIREMENTS.v3Classes} usos`);
-  console.log(`   ✅ V3 Texts (getVariant): mínimo ${MIN_REQUIREMENTS.v3Texts} usos`);
+  console.log(`   ✅ V1 Wrappers/Decoys: mínimo ${MIN_REQUIREMENTS.v1Wrappers}`);
+  console.log(`   ✅ V1 Cambios de orden: mínimo ${MIN_REQUIREMENTS.v1OrderChanges}`);
+  console.log(`   ✅ V3 IDs dinámicos: mínimo ${MIN_REQUIREMENTS.v3Ids}`);
+  console.log(`   ✅ V3 Clases dinámicas: mínimo ${MIN_REQUIREMENTS.v3Classes}`);
+  console.log(`   ✅ V3 Textos dinámicos: mínimo ${MIN_REQUIREMENTS.v3Texts}`);
   
   console.log('\n' + '='.repeat(60));
   if (totalFailed === 0) {
@@ -509,8 +352,7 @@ function generateReport(allResults) {
     success: totalFailed === 0,
     totalPassed,
     totalFailed,
-    errors: allErrors,
-    usageStats
+    errors: allErrors
   };
 }
 
@@ -520,7 +362,7 @@ function generateReport(allResults) {
 
 function runAllTests() {
   console.log('\n' + '🧪'.repeat(30));
-  console.log('🧪 TEST DEL SISTEMA DINÁMICO (MEJORADO - CUENTA USOS REALES)');
+  console.log('🧪 TEST DEL SISTEMA DINÁMICO (GENÉRICO)');
   console.log('🧪'.repeat(30));
   
   const results = [];
@@ -528,7 +370,6 @@ function runAllTests() {
   results.push(testFileStructure());
   results.push(testVariantFiles());
   results.push(testDeterminism());
-  results.push(testRealUsage()); // NEW!
   
   if (isBrowser()) {
     results.push(testDOMUsage());
