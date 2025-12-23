@@ -9,6 +9,7 @@ import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
 import { CalendarDays, Search } from "lucide-react";
 import { initializeLogs } from "@/data/crm-enhanced";
+import { DynamicButton } from "@/components/DynamicButton";
 
 const normalizeLog = (log: any, index: number) => ({
   id: log?.id ?? Date.now() + index,
@@ -506,20 +507,28 @@ export default function BillingPage() {
                       />
                     </div>
                     <div className="flex gap-2 justify-end">
-                      <button
+                      <DynamicButton
                         type="button"
-                        className="px-4 py-2 rounded-xl border border-zinc-200 text-sm"
+                        className={dyn.v3.getVariant(
+                          "button-secondary",
+                          CLASS_VARIANTS_MAP,
+                          buttonSecondaryBase
+                        )}
                         onClick={() => setEditingLogId(null)}
                       >
                         {getText("cancel_button", "Cancel")}
-                      </button>
-                      <button
+                      </DynamicButton>
+                      <DynamicButton
                         type="button"
-                        className="px-4 py-2 rounded-xl bg-accent-forest text-white text-sm flex items-center gap-2"
+                        className={dyn.v3.getVariant(
+                          "button-primary",
+                          CLASS_VARIANTS_MAP,
+                          buttonPrimaryBase
+                        )}
                         onClick={() => saveEdit(l.id)}
                       >
                         {getText("save_changes", "Save changes")}
-                      </button>
+                      </DynamicButton>
                     </div>
                   </div>
                 ) : (
