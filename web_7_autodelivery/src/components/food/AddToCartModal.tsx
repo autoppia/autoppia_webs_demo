@@ -21,7 +21,8 @@ import {
 } from "@/data/restaurants";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { SafeImage } from "@/components/ui/SafeImage";
 
 export type AddToCartModalProps = {
@@ -58,7 +59,7 @@ export function AddToCartModal({
   const [qty, setQty] = React.useState(1);
   const layout = useSeedLayout();
   const seedStructure = layout.seed;
-  const { getText, getPlaceholder, getId, getAria } = useV3Attributes();
+  const dyn = useDynamicSystem();
 
   React.useEffect(() => {
     setSize(initialSelection?.size ?? item.sizes?.[0]);
@@ -98,31 +99,32 @@ export function AddToCartModal({
     onOpenChange(false);
   }
 
-  const modalTitleId = getId("add-to-cart-modal-title", `add-to-cart-modal-title-${seedStructure}`);
+  const modalTitleId = dyn.v3.getVariant("add-to-cart-modal-title", ID_VARIANTS_MAP, `add-to-cart-modal-title-${seedStructure}`);
   const modalSubtitleId = `${modalTitleId}-item`;
-  const sizeHeadingText = getText("select-size-heading", "Select Size");
-  const sizeHeadingId = getId("select-size-heading", `select-size-heading-${seedStructure}`);
-  const optionsHeadingText = getText("select-options-heading", "Select Options");
-  const optionsHeadingId = getId("select-options-heading", `select-options-heading-${seedStructure}`);
-  const preferencesHeadingText = getText("preferences-heading", "Preferences (Optional)");
-  const preferencesHeadingId = getId("preferences-heading", `preferences-heading-${seedStructure}`);
-  const preferencesPlaceholder = getPlaceholder("preferences_input", "Add special instructions");
-  const preferencesTextareaId = getId("preferences-textarea", `preferences-textarea-${seedStructure}`);
-  const quantityLabel = getText("quantity-label", "Quantity");
-  const addToCartLabel = getText("add-to-cart-btn", "Add to cart");
+  const sizeHeadingText = dyn.v3.getVariant("select-size-heading", TEXT_VARIANTS_MAP, "Select Size");
+  const sizeHeadingId = dyn.v3.getVariant("select-size-heading", ID_VARIANTS_MAP, `select-size-heading-${seedStructure}`);
+  const optionsHeadingText = dyn.v3.getVariant("select-options-heading", TEXT_VARIANTS_MAP, "Select Options");
+  const optionsHeadingId = dyn.v3.getVariant("select-options-heading", ID_VARIANTS_MAP, `select-options-heading-${seedStructure}`);
+  const preferencesHeadingText = dyn.v3.getVariant("preferences-heading", TEXT_VARIANTS_MAP, "Preferences (Optional)");
+  const preferencesHeadingId = dyn.v3.getVariant("preferences-heading", ID_VARIANTS_MAP, `preferences-heading-${seedStructure}`);
+  const preferencesPlaceholder = dyn.v3.getVariant("preferences_input", TEXT_VARIANTS_MAP, "Add special instructions");
+  const preferencesTextareaId = dyn.v3.getVariant("preferences-textarea", ID_VARIANTS_MAP, `preferences-textarea-${seedStructure}`);
+  const quantityLabel = dyn.v3.getVariant("quantity-label", TEXT_VARIANTS_MAP, "Quantity");
+  const addToCartLabel = dyn.v3.getVariant("add-to-cart-btn", TEXT_VARIANTS_MAP, "Add to cart");
   const addButtonAttributes = layout.getElementAttributes("ADD_TO_CART_MENU_ITEM", 0);
-  const addButtonId = getId("add-to-cart-btn", `${addButtonAttributes.id ?? "add-to-cart-btn"}-${seedStructure}`);
-  const addButtonAria = getAria("add-to-cart-btn", "Add item to cart");
+  const addButtonId = dyn.v3.getVariant("add-to-cart-btn", ID_VARIANTS_MAP, `${addButtonAttributes.id ?? "add-to-cart-btn"}-${seedStructure}`);
+  const addButtonAria = dyn.v3.getVariant("add-to-cart-btn", TEXT_VARIANTS_MAP, "Add item to cart");
   const decrementAttributes = layout.getElementAttributes("ITEM_DECREMENTED", 0);
-  const decrementButtonId = getId("quantity-decrease-button", `${decrementAttributes.id ?? "quantity-decrease"}-${seedStructure}`);
-  const decrementAria = getAria("quantity-decrease-button", "Decrease quantity");
+  const decrementButtonId = dyn.v3.getVariant("quantity-decrease-button", ID_VARIANTS_MAP, `${decrementAttributes.id ?? "quantity-decrease"}-${seedStructure}`);
+  const decrementAria = dyn.v3.getVariant("quantity-decrease-button", TEXT_VARIANTS_MAP, "Decrease quantity");
   const incrementAttributes = layout.getElementAttributes("ITEM_INCREMENTED", 0);
-  const incrementButtonId = getId("quantity-increase-button", `${incrementAttributes.id ?? "quantity-increase"}-${seedStructure}`);
-  const incrementAria = getAria("quantity-increase-button", "Increase quantity");
+  const incrementButtonId = dyn.v3.getVariant("quantity-increase-button", ID_VARIANTS_MAP, `${incrementAttributes.id ?? "quantity-increase"}-${seedStructure}`);
+  const incrementAria = dyn.v3.getVariant("quantity-increase-button", TEXT_VARIANTS_MAP, "Increase quantity");
 
   return (
+    dyn.v1.addWrapDecoy("add-to-cart-modal", (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={`max-w-xl rounded-2xl px-0 sm:px-0 p-0 ${layout.modal.containerClass}`}>
+      <DialogContent className={`max-w-xl rounded-2xl px-0 sm:px-0 p-0 ${layout.modal.containerClass} ${dyn.v3.getVariant("modal", CLASS_VARIANTS_MAP, "")}`}>
         <div className={`max-h-[90vh] overflow-y-auto ${layout.modal.contentClass}`}>
           <DialogHeader className={`px-6 pt-6 pb-0 ${layout.modal.headerClass}`}>
             <DialogTitle
@@ -130,7 +132,7 @@ export function AddToCartModal({
               id={modalTitleId}
             >
               <span className="block text-base md:text-lg font-semibold">
-                {getText("add-to-cart-modal-title", "Customize your order")}
+                {dyn.v3.getVariant("add-to-cart-modal-title", TEXT_VARIANTS_MAP, "Customize your order")}
               </span>
               <span
                 id={modalSubtitleId}
@@ -275,7 +277,7 @@ export function AddToCartModal({
                 </Button>
               </div>
               <Button
-                className="ml-auto px-6 py-2.5 text-lg rounded-full font-bold bg-orange-500 hover:bg-orange-600"
+                className={`ml-auto px-6 py-2.5 text-lg rounded-full font-bold bg-orange-500 hover:bg-orange-600 ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`}
                 onClick={handleAdd}
                 {...addButtonAttributes}
                 id={addButtonId}
@@ -288,5 +290,6 @@ export function AddToCartModal({
         </div>
       </DialogContent>
     </Dialog>
+    ))
   );
 }

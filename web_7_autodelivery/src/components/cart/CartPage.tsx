@@ -77,7 +77,8 @@ import {
 } from "@/components/ui/dialog";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { AddToCartModal } from "../food/AddToCartModal";
 import type { CartItem } from "@/store/cart-store";
 import type { MenuItem } from "@/data/restaurants";
@@ -91,7 +92,7 @@ export default function CartPage() {
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const layout = useSeedLayout();
   const seedStructure = layout.seed;
-  const { getText, getPlaceholder, getId, getAria } = useV3Attributes();
+  const dyn = useDynamicSystem();
   const predefinedAddresses = [
     "710 Portofino Ln, Foster City, CA 94004",
     "450 Townsend St, San Francisco, CA 94107",
@@ -192,9 +193,10 @@ export default function CartPage() {
 
   if (items.length === 0 && !orderSuccess) {
     const emptyStateAttributes = layout.getElementAttributes("cart-empty-state", 0);
-    const emptyMessage = getText("cart-empty-message", "Your cart is empty.");
-    const emptyMessageId = getId(
+    const emptyMessage = dyn.v3.getVariant("cart-empty-message", TEXT_VARIANTS_MAP, "Your cart is empty.");
+    const emptyMessageId = dyn.v3.getVariant(
       "cart-empty-message",
+      ID_VARIANTS_MAP,
       `${emptyStateAttributes.id ?? "cart-empty-message"}-${seedStructure}`
     );
 
@@ -257,31 +259,34 @@ export default function CartPage() {
     setTimeout(() => setOrderSuccess(false), 7000);
   };
 
-  const quantityLabel = getText("quantity-label", "Quantity");
+  const quantityLabel = dyn.v3.getVariant("quantity-label", TEXT_VARIANTS_MAP, "Quantity");
   const deliveryInformationTitle = mode === "pickup"
-    ? getText("delivery-information-title", "Pickup Details")
-    : getText("delivery-information-title", "Delivery Information");
+    ? dyn.v3.getVariant("delivery-information-title", TEXT_VARIANTS_MAP, "Pickup Details")
+    : dyn.v3.getVariant("delivery-information-title", TEXT_VARIANTS_MAP, "Delivery Information");
   const deliveryInfoAttributes = layout.getElementAttributes("delivery-information-title", 0);
-  const deliveryInformationId = getId(
+  const deliveryInformationId = dyn.v3.getVariant(
     "delivery-information-title",
+    ID_VARIANTS_MAP,
     `${deliveryInfoAttributes.id ?? "delivery-information-title"}-${seedStructure}`
   );
-  const customerNamePlaceholder = getPlaceholder("customer_name_input", "Your Name");
-  const customerAddressPlaceholder = getPlaceholder("delivery_address_input", "Delivery Address");
-  const customerPhonePlaceholder = getPlaceholder("contact_phone_input", "Contact Number");
-  const customerNameId = getId("customer-name-input", `customer-name-${seedStructure}`);
-  const customerAddressId = getId("delivery-address-input", `delivery-address-${seedStructure}`);
-  const customerPhoneId = getId("contact-phone-input", `contact-phone-${seedStructure}`);
+  const customerNamePlaceholder = dyn.v3.getVariant("customer_name_input", TEXT_VARIANTS_MAP, "Your Name");
+  const customerAddressPlaceholder = dyn.v3.getVariant("delivery_address_input", TEXT_VARIANTS_MAP, "Delivery Address");
+  const customerPhonePlaceholder = dyn.v3.getVariant("contact_phone_input", TEXT_VARIANTS_MAP, "Contact Number");
+  const customerNameId = dyn.v3.getVariant("customer-name-input", ID_VARIANTS_MAP, `customer-name-${seedStructure}`);
+  const customerAddressId = dyn.v3.getVariant("delivery-address-input", ID_VARIANTS_MAP, `delivery-address-${seedStructure}`);
+  const customerPhoneId = dyn.v3.getVariant("contact-phone-input", ID_VARIANTS_MAP, `contact-phone-${seedStructure}`);
   const placeOrderAttributes = layout.getElementAttributes("PLACE_ORDER", 0);
-  const placeOrderId = getId(
+  const placeOrderId = dyn.v3.getVariant(
     "place-order-button",
+    ID_VARIANTS_MAP,
     `${placeOrderAttributes.id ?? "place-order-button"}-${seedStructure}`
   );
-  const placeOrderLabel = getText("place-order-button", "Place Order");
-  const placeOrderAria = getAria("place-order-button", "Place order");
+  const placeOrderLabel = dyn.v3.getVariant("place-order-button", TEXT_VARIANTS_MAP, "Place Order");
+  const placeOrderAria = dyn.v3.getVariant("place-order-button", TEXT_VARIANTS_MAP, "Place order");
 
   return (
-    <div id="cart-page-container" className={`max-w-4xl mx-auto mt-8 px-4 ${layout.cart.pageContainerClass}`}>
+    dyn.v1.addWrapDecoy("cart-page", (
+    <div id="cart-page-container" className={`max-w-4xl mx-auto mt-8 px-4 ${layout.cart.pageContainerClass} ${dyn.v3.getVariant("container", CLASS_VARIANTS_MAP, "")}`}>
       <div id="delivery-mode-selector" className="flex justify-center mb-7 mt-2">
         <div className="flex gap-0 bg-zinc-100 rounded-full shadow-inner p-1 w-fit">
           <button
@@ -292,7 +297,7 @@ export default function CartPage() {
                 mode: "delivery",
               });
             }}
-            className={`px-6 py-2 rounded-full font-bold text-base flex flex-col items-center transition-all ${
+            className={`px-6 py-2 rounded-full font-bold text-base flex flex-col items-center transition-all ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")} ${
               mode === "delivery"
                 ? "bg-black text-white shadow"
                 : "bg-transparent text-zinc-900 hover:bg-zinc-200"
@@ -787,16 +792,19 @@ export default function CartPage() {
               const decrementAttributes = layout.getElementAttributes("ITEM_DECREMENTED", idx);
               const incrementAttributes = layout.getElementAttributes("ITEM_INCREMENTED", idx);
               const removeAttributes = layout.getElementAttributes("EMPTY_CART", idx);
-              const decrementId = getId(
+              const decrementId = dyn.v3.getVariant(
                 "quantity-decrease-button",
+                ID_VARIANTS_MAP,
                 `${decrementAttributes.id ?? "quantity-decrease"}-${seedStructure}-${idx}`
               );
-              const incrementId = getId(
+              const incrementId = dyn.v3.getVariant(
                 "quantity-increase-button",
+                ID_VARIANTS_MAP,
                 `${incrementAttributes.id ?? "quantity-increase"}-${seedStructure}-${idx}`
               );
-              const removeId = getId(
+              const removeId = dyn.v3.getVariant(
                 "empty-cart-button",
+                ID_VARIANTS_MAP,
                 `${removeAttributes.id ?? "empty-cart-button"}-${seedStructure}-${idx}`
               );
               return (
@@ -836,8 +844,8 @@ export default function CartPage() {
                       disabled={item.quantity === 1}
                       {...decrementAttributes}
                       id={decrementId}
-                      aria-label={getAria("quantity-decrease-button", "Decrease quantity")}
-                      title={getAria("quantity-decrease-button", "Decrease quantity")}
+                      aria-label={dyn.v3.getVariant("quantity-decrease-button", TEXT_VARIANTS_MAP, "Decrease quantity")}
+                      title={dyn.v3.getVariant("quantity-decrease-button", TEXT_VARIANTS_MAP, "Decrease quantity")}
                     >
                       -
                     </Button>
@@ -856,8 +864,8 @@ export default function CartPage() {
                       }}
                       {...incrementAttributes}
                       id={incrementId}
-                      aria-label={getAria("quantity-increase-button", "Increase quantity")}
-                      title={getAria("quantity-increase-button", "Increase quantity")}
+                      aria-label={dyn.v3.getVariant("quantity-increase-button", TEXT_VARIANTS_MAP, "Increase quantity")}
+                      title={dyn.v3.getVariant("quantity-increase-button", TEXT_VARIANTS_MAP, "Increase quantity")}
                     >
                       +
                     </Button>
@@ -898,8 +906,8 @@ export default function CartPage() {
                     }}
                     {...removeAttributes}
                     id={removeId}
-                    aria-label={getAria("empty-cart-button", "Remove item from cart")}
-                    title={getAria("empty-cart-button", "Remove item from cart")}
+                    aria-label={dyn.v3.getVariant("empty-cart-button", TEXT_VARIANTS_MAP, "Remove item from cart")}
+                    title={dyn.v3.getVariant("empty-cart-button", TEXT_VARIANTS_MAP, "Remove item from cart")}
                   >
                     ×
                   </Button>
@@ -1025,5 +1033,6 @@ export default function CartPage() {
         />
       )}
     </div>
+    ))
   );
 }

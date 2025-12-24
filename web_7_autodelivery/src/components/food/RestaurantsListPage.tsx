@@ -10,11 +10,12 @@ import { Loader2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { useEffect, useState } from "react";
 import QuickOrderModal from "./QuickOrderModal";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 export default function RestaurantsListPage() {
   const layout = useLayout();
-  const { getText, getId, getAria } = useV3Attributes();
+  const dyn = useDynamicSystem();
   const search = useSearchStore(s => s.search);
   const setSearch = useSearchStore(s => s.setSearch);
   const cuisine = useSearchStore(s => s.cuisine);
@@ -60,6 +61,23 @@ export default function RestaurantsListPage() {
 
   const isFiltered = !!search || cuisine || rating;
 
+  // Log SEARCH_RESTAURANT event when user searches
+  useEffect(() => {
+    if (!restaurants.length) return;
+    if (!search.trim()) return;
+    
+    const timeoutId = setTimeout(() => {
+      logEvent(EVENT_TYPES.SEARCH_RESTAURANT, {
+        query: search.trim(),
+        total_results: filtered.length,
+        has_cuisine_filter: !!cuisine,
+        has_rating_filter: !!rating,
+      });
+    }, 500); // Debounce 500ms
+
+    return () => clearTimeout(timeoutId);
+  }, [search, restaurants.length, filtered.length, cuisine, rating]);
+
   useEffect(() => {
     if (!restaurants.length) return;
     if (!search && !cuisine && !rating) return;
@@ -93,27 +111,40 @@ export default function RestaurantsListPage() {
   }
 
   return (
+    dyn.v1.addWrapDecoy("restaurants-list-page", (
     <section 
       className={layout.generateSeedClass('restaurants-section')}
       {...layout.getElementAttributes('restaurants-section', 0)}
     >
+      {dyn.v1.addWrapDecoy("search-filters", (
       <div 
-        className={`mb-8 bg-white/80 backdrop-blur border border-zinc-200/70 shadow-sm rounded-xl px-4 py-3 flex flex-col gap-3 ${layout.searchBar.containerClass}`}
+        className={`mb-8 bg-white/80 backdrop-blur border border-zinc-200/70 shadow-sm rounded-xl px-4 py-3 flex flex-col gap-3 ${layout.searchBar.containerClass} ${dyn.v3.getVariant('search-filters-container', CLASS_VARIANTS_MAP, '')}`}
+        id={dyn.v3.getVariant('search-filters', ID_VARIANTS_MAP, 'search-filters')}
         {...layout.getElementAttributes('search-filters', 0)}
       >
         <div className="flex flex-col md:flex-row md:items-center gap-3">
           <Input
             type="text"
-            placeholder="Search by name, cuisine, or menu..."
+            placeholder={dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search by name, cuisine, or menu...")}
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className={`flex-1 rounded-lg border-zinc-200 shadow-xs focus:ring-2 focus:ring-emerald-500 ${layout.searchBar.inputClass}`}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && search.trim()) {
+                logEvent(EVENT_TYPES.SEARCH_RESTAURANT, {
+                  query: search.trim(),
+                  total_results: filtered.length,
+                  trigger: 'enter_key',
+                });
+              }
+            }}
+            className={`flex-1 rounded-lg border-zinc-200 shadow-xs focus:ring-2 focus:ring-emerald-500 ${layout.searchBar.inputClass} ${dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP, "")}`}
+            id={dyn.v3.getVariant('search-input', ID_VARIANTS_MAP, 'search-input')}
             {...layout.getElementAttributes('search-input', 0)}
           />
           <div className="flex flex-row gap-3 shrink-0">
             <Select value={cuisine || "all"} onValueChange={v => setCuisine(v === "all" ? "" : v)}>
               <SelectTrigger 
-                className={`w-44 rounded-lg border-zinc-200 shadow-xs ${layout.generateSeedClass('cuisine-select')}`}
+                className={`w-44 rounded-lg border-zinc-200 shadow-xs ${layout.generateSeedClass('cuisine-select')} ${dyn.v3.getVariant("select", CLASS_VARIANTS_MAP, "")}`}
                 {...layout.getElementAttributes('cuisine-select', 0)}
               >
                 <SelectValue placeholder="All cuisines" />
@@ -127,7 +158,7 @@ export default function RestaurantsListPage() {
             </Select>
             <Select value={rating || "all"} onValueChange={v => setRating(v === "all" ? "" : v)}>
               <SelectTrigger 
-                className={`w-36 rounded-lg border-zinc-200 shadow-xs ${layout.generateSeedClass('rating-select')}`}
+                className={`w-36 rounded-lg border-zinc-200 shadow-xs ${layout.generateSeedClass('rating-select')} ${dyn.v3.getVariant("select", CLASS_VARIANTS_MAP, "")}`}
                 {...layout.getElementAttributes('rating-select', 0)}
               >
                 <SelectValue placeholder="All ratings" />
@@ -146,7 +177,8 @@ export default function RestaurantsListPage() {
             <Button
               type="button"
               variant="ghost"
-              className={`text-emerald-700 hover:text-emerald-800 ${layout.generateSeedClass('reset-filters-btn')}`}
+              className={`text-emerald-700 hover:text-emerald-800 ${layout.generateSeedClass('reset-filters-btn')} ${dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "")} ${dyn.v3.getVariant('reset-filters-btn-class', CLASS_VARIANTS_MAP, '')}`}
+              id={dyn.v3.getVariant('reset-filters-btn', ID_VARIANTS_MAP, 'reset-filters-btn')}
               onClick={() => {
                 setSearch("");
                 setCuisine("");
@@ -154,20 +186,29 @@ export default function RestaurantsListPage() {
               }}
               {...layout.getElementAttributes('reset-filters-btn', 0)}
             >
-              Reset filters
+              {dyn.v3.getVariant('reset-filters-btn-text', TEXT_VARIANTS_MAP, 'Reset filters')}
             </Button>
           </div>
         )}
       </div>
+      ))}
+      {dyn.v1.addWrapDecoy("restaurants-grid", (
       <div 
-        className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 ${layout.grid.containerClass}`}
+        className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 ${layout.grid.containerClass} ${dyn.v3.getVariant('restaurants-grid-class', CLASS_VARIANTS_MAP, '')}`}
+        id={dyn.v3.getVariant('restaurants-grid', ID_VARIANTS_MAP, 'restaurants-grid')}
         {...layout.getElementAttributes('restaurants-grid', 0)}
       >
         {paginated.length > 0 ? (
-          paginated.map((r, index) => (
+          (() => {
+            const ordered = dyn.v1.changeOrderElements("restaurants-grid", paginated.length);
+            return ordered.map((orderIndex) => {
+              const r = paginated[orderIndex];
+              const index = orderIndex;
+              return (
             <div
               key={r.id}
-              className={layout.grid.itemClass}
+              className={`${layout.grid.itemClass} ${dyn.v3.getVariant('restaurant-grid-item-class', CLASS_VARIANTS_MAP, '')}`}
+              id={dyn.v3.getVariant(`restaurant-grid-item-${index}`, ID_VARIANTS_MAP, `restaurant-grid-item-${index}`)}
               {...layout.getElementAttributes('restaurant-grid-item', index)}
             >
               <RestaurantCard
@@ -179,23 +220,27 @@ export default function RestaurantsListPage() {
                 description={r.description}
               />
             </div>
-          ))
+              );
+            });
+          })()
         ) : (
           <div 
-            className={`text-zinc-400 text-center col-span-full py-16 text-lg ${layout.generateSeedClass('no-restaurants-message')}`}
+            className={`text-zinc-400 text-center col-span-full py-16 text-lg ${layout.generateSeedClass('no-restaurants-message')} ${dyn.v3.getVariant('no-restaurants-message-class', CLASS_VARIANTS_MAP, '')}`}
+            id={dyn.v3.getVariant('no-restaurants-message', ID_VARIANTS_MAP, 'no-restaurants-message')}
             {...layout.getElementAttributes('no-restaurants-message', 0)}
           >
-            No restaurants found.
+            {dyn.v3.getVariant('no-restaurants-message-text', TEXT_VARIANTS_MAP, 'No restaurants found.')}
           </div>
         )}
       </div>
+      ))}
 
       {filtered.length > itemsPerPage && (
-        <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-sm text-muted-foreground">
-            Showing {startIndex + 1}–{Math.min(endIndex, filtered.length)} of {filtered.length}
+        <div className={`mt-8 flex flex-col md:flex-row items-center justify-between gap-4 ${dyn.v3.getVariant('pagination-container-class', CLASS_VARIANTS_MAP, '')}`} id={dyn.v3.getVariant('pagination-container', ID_VARIANTS_MAP, 'pagination-container')}>
+          <div className={dyn.v3.getVariant('pagination-info-class', CLASS_VARIANTS_MAP, 'text-sm text-muted-foreground')}>
+            {dyn.v3.getVariant('pagination-info-text', TEXT_VARIANTS_MAP, `Showing ${startIndex + 1}–${Math.min(endIndex, filtered.length)} of ${filtered.length}`)}
           </div>
-          <div className="flex items-center gap-2">
+          <div className={`flex items-center gap-2 ${dyn.v3.getVariant('pagination-buttons-wrapper-class', CLASS_VARIANTS_MAP, '')}`}>
             <Button
               variant="outline"
               size="sm"
@@ -210,12 +255,14 @@ export default function RestaurantsListPage() {
                 });
                 setPage((p) => Math.max(1, p - 1));
               }}
+              id={dyn.v3.getVariant('pagination-prev', ID_VARIANTS_MAP, 'pagination-prev')}
+              className={dyn.v3.getVariant('pagination-prev-class', CLASS_VARIANTS_MAP, '')}
               {...layout.getElementAttributes('pagination-prev', 0)}
             >
-              Prev
+              {dyn.v3.getVariant('pagination-prev-text', TEXT_VARIANTS_MAP, 'Prev')}
             </Button>
-            <div className="text-sm font-medium">
-              Page {page} of {totalPages}
+            <div className={dyn.v3.getVariant('pagination-page-info-class', CLASS_VARIANTS_MAP, 'text-sm font-medium')}>
+              {dyn.v3.getVariant('pagination-page-info-text', TEXT_VARIANTS_MAP, `Page ${page} of ${totalPages}`)}
             </div>
             <Button
               variant="outline"
@@ -231,14 +278,17 @@ export default function RestaurantsListPage() {
                 });
                 setPage((p) => Math.min(totalPages, p + 1));
               }}
+              id={dyn.v3.getVariant('pagination-next', ID_VARIANTS_MAP, 'pagination-next')}
+              className={dyn.v3.getVariant('pagination-next-class', CLASS_VARIANTS_MAP, '')}
               {...layout.getElementAttributes('pagination-next', 0)}
             >
-              Next
+              {dyn.v3.getVariant('pagination-next-text', TEXT_VARIANTS_MAP, 'Next')}
             </Button>
           </div>
         </div>
       )}
       <QuickOrderModal open={quickOrderOpen} onOpenChange={setQuickOrderOpen} />
     </section>
+    ))
   );
 }
