@@ -5,35 +5,27 @@ const isDockerBuild =
   process.env.DOCKER_BUILD === "true" || process.env.NODE_ENV === "production";
 const isLocalDev = process.env.NODE_ENV !== "production" && !process.env.DOCKER_BUILD;
 
-// For local development, always default to true unless explicitly set to false
+// Default dynamic layers to ON unless explicitly disabled
 if (!process.env.ENABLE_DYNAMIC_V1) {
-  process.env.ENABLE_DYNAMIC_V1 = isLocalDev ? "true" : "false";
+  process.env.ENABLE_DYNAMIC_V1 = "true";
 }
-// For local development, always force NEXT_PUBLIC_ENABLE_DYNAMIC_V1 to true
-if (isLocalDev) {
+if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = "true";
-} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = "false";
 }
 
-// For local development, always force NEXT_PUBLIC_ENABLE_DYNAMIC_V3 to true
 if (!process.env.ENABLE_DYNAMIC_V3) {
-  process.env.ENABLE_DYNAMIC_V3 = isLocalDev ? "true" : "false";
+  process.env.ENABLE_DYNAMIC_V3 = "true";
 }
-if (isLocalDev) {
+if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = "true";
-} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = "false";
 }
 
 // Handle ENABLE_DYNAMIC_V1_STRUCTURE (separate from layout control)
 if (!process.env.ENABLE_DYNAMIC_V1_STRUCTURE) {
-  process.env.ENABLE_DYNAMIC_V1_STRUCTURE = isLocalDev ? "true" : "false";
+  process.env.ENABLE_DYNAMIC_V1_STRUCTURE = "true";
 }
-if (isLocalDev) {
+if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE = "true";
-} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE = "false";
 }
 
 // Debug: Print environment variables
