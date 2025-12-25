@@ -290,13 +290,14 @@ export default function CartPage() {
       <div id="delivery-mode-selector" className="flex justify-center mb-7 mt-2">
         <div className="flex gap-0 bg-zinc-100 rounded-full shadow-inner p-1 w-fit">
           <button
+            id={dyn.v3.getVariant("delivery-mode-button", ID_VARIANTS_MAP, "delivery-mode-button")}
             onClick={() => {
               setMode("delivery");
               logEvent(EVENT_TYPES.DELIVERY_MODE, {
                 mode: "delivery",
               });
             }}
-            className={`px-6 py-2 rounded-full font-bold text-base flex flex-col items-center transition-all ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")} ${
+            className={`px-6 py-2 rounded-full font-bold text-base flex flex-col items-center transition-all ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")} ${dyn.v3.getVariant("mode-toggle", CLASS_VARIANTS_MAP, "")} ${
               mode === "delivery"
                 ? "bg-black text-white shadow"
                 : "bg-transparent text-zinc-900 hover:bg-zinc-200"
@@ -304,16 +305,17 @@ export default function CartPage() {
             aria-pressed={mode === "delivery"}
             {...layout.getElementAttributes('DELIVERY_MODE', 0)}
           >
-            Delivery
+            {dyn.v3.getVariant("delivery-mode-label", TEXT_VARIANTS_MAP, "Delivery")}
           </button>
           <button
+            id={dyn.v3.getVariant("pickup-mode-button", ID_VARIANTS_MAP, "pickup-mode-button")}
             onClick={() => {
               setMode("pickup");
               logEvent(EVENT_TYPES.PICKUP_MODE, {
                 mode: "pickup",
               });
             }}
-            className={`px-6 py-2 rounded-full font-bold text-base flex flex-col items-center transition-all ${
+            className={`px-6 py-2 rounded-full font-bold text-base flex flex-col items-center transition-all ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")} ${dyn.v3.getVariant("mode-toggle", CLASS_VARIANTS_MAP, "")} ${
               mode === "pickup"
                 ? "bg-black text-white shadow"
                 : "bg-transparent text-zinc-900 hover:bg-zinc-200"
@@ -321,7 +323,7 @@ export default function CartPage() {
             aria-pressed={mode === "pickup"}
             {...layout.getElementAttributes('PICKUP_MODE', 0)}
           >
-            Pickup
+            {dyn.v3.getVariant("pickup-mode-label", TEXT_VARIANTS_MAP, "Pickup")}
           </button>
         </div>
       </div>
@@ -871,7 +873,8 @@ export default function CartPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="text-xs"
+                    className={`text-xs ${dyn.v3.getVariant("edit-cart-button", CLASS_VARIANTS_MAP, "")}`}
+                    id={dyn.v3.getVariant("edit-cart-button", ID_VARIANTS_MAP, `edit-cart-button-${item.id}`)}
                     onClick={() => {
                         handleEditItem(item);
                         logEvent(EVENT_TYPES.EDIT_CART_ITEM, {
@@ -885,7 +888,7 @@ export default function CartPage() {
                       });
                     }}
                   >
-                    Edit
+                    {dyn.v3.getVariant("edit-cart-button", TEXT_VARIANTS_MAP, "Edit")}
                   </Button>
                   <Button
                     size="icon"
@@ -939,6 +942,7 @@ export default function CartPage() {
               placeholder={customerNamePlaceholder}
               value={form.name}
               onChange={handleChange}
+              className={dyn.v3.getVariant("delivery-input", CLASS_VARIANTS_MAP, "")}
             />
             {mode === "delivery" && (
               <Input
@@ -948,6 +952,7 @@ export default function CartPage() {
                 placeholder={customerAddressPlaceholder}
                 value={form.address}
                 onChange={handleChange}
+                className={dyn.v3.getVariant("delivery-input", CLASS_VARIANTS_MAP, "")}
               />
             )}
             <Input
@@ -957,12 +962,13 @@ export default function CartPage() {
               placeholder={customerPhonePlaceholder}
               value={form.phone}
               onChange={handleChange}
+              className={dyn.v3.getVariant("delivery-input", CLASS_VARIANTS_MAP, "")}
             />
             <Button
               {...placeOrderAttributes}
               id={placeOrderId}
               size="lg"
-              className={`mt-3 ${layout.cart.buttonClass}`}
+              className={`mt-3 ${layout.cart.buttonClass} ${dyn.v3.getVariant("place-order-button", CLASS_VARIANTS_MAP, "")}`}
               type="submit"
               disabled={items.length === 0}
               aria-label={placeOrderAria}

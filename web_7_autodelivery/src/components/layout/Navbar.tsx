@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 export default function Navbar() {
   const layout = useSeedLayout();
@@ -35,7 +35,8 @@ export default function Navbar() {
               <div className="hidden md:block w-px h-6 bg-zinc-200" />
               <CartNavIcon />
               <Button
-                className="bg-green-600 hover:bg-green-700 text-white"
+                id={dyn.v3.getVariant("quick-order-header", ID_VARIANTS_MAP, "quick-order-header")}
+                className={`bg-green-600 hover:bg-green-700 text-white ${dyn.v3.getVariant("quick-order-button", CLASS_VARIANTS_MAP, "")}`}
                 onClick={() => {
                   logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, { source: "navbar" });
                   if (typeof window !== "undefined") {

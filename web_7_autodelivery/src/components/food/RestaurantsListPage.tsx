@@ -144,7 +144,7 @@ export default function RestaurantsListPage() {
           <div className="flex flex-row gap-3 shrink-0">
             <Select value={cuisine || "all"} onValueChange={v => setCuisine(v === "all" ? "" : v)}>
               <SelectTrigger 
-                className={`w-44 rounded-lg border-zinc-200 shadow-xs ${layout.generateSeedClass('cuisine-select')} ${dyn.v3.getVariant("select", CLASS_VARIANTS_MAP, "")}`}
+                className={`w-44 rounded-lg border-zinc-200 shadow-xs ${layout.generateSeedClass('cuisine-select')} ${dyn.v3.getVariant("cuisine-select", CLASS_VARIANTS_MAP, "")}`}
                 {...layout.getElementAttributes('cuisine-select', 0)}
               >
                 <SelectValue placeholder="All cuisines" />
@@ -158,7 +158,7 @@ export default function RestaurantsListPage() {
             </Select>
             <Select value={rating || "all"} onValueChange={v => setRating(v === "all" ? "" : v)}>
               <SelectTrigger 
-                className={`w-36 rounded-lg border-zinc-200 shadow-xs ${layout.generateSeedClass('rating-select')} ${dyn.v3.getVariant("select", CLASS_VARIANTS_MAP, "")}`}
+                className={`w-36 rounded-lg border-zinc-200 shadow-xs ${layout.generateSeedClass('rating-select')} ${dyn.v3.getVariant("rating-select", CLASS_VARIANTS_MAP, "")}`}
                 {...layout.getElementAttributes('rating-select', 0)}
               >
                 <SelectValue placeholder="All ratings" />

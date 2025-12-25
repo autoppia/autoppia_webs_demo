@@ -223,6 +223,7 @@ export default function RestaurantDetailPage({
       aria-label={dyn.v3.getVariant('restaurant-detail-page', TEXT_VARIANTS_MAP, 'Restaurant detail page')}
     >
       {/* Header */}
+      {dyn.v1.addWrapDecoy("restaurant-header", (
       <div 
         className={`flex flex-col md:flex-row gap-6 md:items-center mt-6 mb-8 ${layout.restaurantDetail.headerClass} ds-${seedStructure}`}
         {...layout.getElementAttributes('restaurant-header', 0)}
@@ -270,7 +271,7 @@ export default function RestaurantDetailPage({
           <Button
             variant="outline"
             size="sm"
-            className={`${layout.generateSeedClass('back-button')} ds-${seedStructure}`}
+            className={`${layout.generateSeedClass('back-button')} ds-${seedStructure} ${dyn.v3.getVariant('back-button', CLASS_VARIANTS_MAP, '')}`}
             id={dyn.v3.getVariant('back-button', ID_VARIANTS_MAP, `back-button-${seedStructure}`)}
             onClick={() => {
               logEvent(EVENT_TYPES.BACK_TO_ALL_RESTAURANTS, {
@@ -285,6 +286,7 @@ export default function RestaurantDetailPage({
           </Button>
         </div>
       </div>
+      ))}
 
       {/* Menu */}
       <div>
@@ -483,26 +485,36 @@ function AddReviewForm({
 
   return (
     <Card className="mt-10 p-6 bg-white shadow-sm border border-zinc-200">
-      <h3 className="text-lg font-semibold mb-4">Leave a review</h3>
+      <h3 className="text-lg font-semibold mb-4">
+        {dyn.v3.getVariant("review-title", TEXT_VARIANTS_MAP, "Leave a review")}
+      </h3>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor={dyn.v3.getVariant("reviewer-name", ID_VARIANTS_MAP, "reviewer-name-input")}>Name</Label>
+            <Label htmlFor={dyn.v3.getVariant("reviewer-name", ID_VARIANTS_MAP, "reviewer-name-input")}>
+              {dyn.v3.getVariant("reviewer-name-label", TEXT_VARIANTS_MAP, "Name")}
+            </Label>
             <Input
               id={dyn.v3.getVariant("reviewer-name", ID_VARIANTS_MAP, "reviewer-name-input")}
-              placeholder="Your name"
+              className={dyn.v3.getVariant("review-input", CLASS_VARIANTS_MAP, "")}
+              placeholder={dyn.v3.getVariant("reviewer-name-placeholder", TEXT_VARIANTS_MAP, "Your name")}
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor={dyn.v3.getVariant("review-rating", ID_VARIANTS_MAP, "review-rating-input")}>Rating</Label>
+            <Label htmlFor={dyn.v3.getVariant("review-rating", ID_VARIANTS_MAP, "review-rating-input")}>
+              {dyn.v3.getVariant("review-rating-label", TEXT_VARIANTS_MAP, "Rating")}
+            </Label>
             <Select
               value={String(rating)}
               onValueChange={(v) => setRating(Number(v))}
             >
-              <SelectTrigger id={dyn.v3.getVariant("review-rating", ID_VARIANTS_MAP, "review-rating-input")}>
-                <SelectValue placeholder="Select rating" />
+              <SelectTrigger
+                id={dyn.v3.getVariant("review-rating", ID_VARIANTS_MAP, "review-rating-input")}
+                className={dyn.v3.getVariant("select-trigger", CLASS_VARIANTS_MAP, "")}
+              >
+                <SelectValue placeholder={dyn.v3.getVariant("review-rating-placeholder", TEXT_VARIANTS_MAP, "Select rating")} />
               </SelectTrigger>
               <SelectContent>
                 {[5, 4, 3, 2, 1].map((val) => (
@@ -515,17 +527,23 @@ function AddReviewForm({
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor={dyn.v3.getVariant("review-comment", ID_VARIANTS_MAP, "review-comment-input")}>Comment</Label>
+          <Label htmlFor={dyn.v3.getVariant("review-comment", ID_VARIANTS_MAP, "review-comment-input")}>
+            {dyn.v3.getVariant("review-comment-label", TEXT_VARIANTS_MAP, "Comment")}
+          </Label>
           <Textarea
             id={dyn.v3.getVariant("review-comment", ID_VARIANTS_MAP, "review-comment-input")}
             placeholder={dyn.v3.getVariant("review-placeholder", TEXT_VARIANTS_MAP, `Share your experience at ${restaurant.name}`)}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             rows={4}
+            className={dyn.v3.getVariant("review-textarea", CLASS_VARIANTS_MAP, "")}
           />
         </div>
-        <Button type="submit" className="bg-green-600 hover:bg-green-700 text-white">
-          Submit review
+        <Button
+          type="submit"
+          className={`bg-green-600 hover:bg-green-700 text-white ${dyn.v3.getVariant("submit-review", CLASS_VARIANTS_MAP, "")}`}
+        >
+          {dyn.v3.getVariant("submit-review", TEXT_VARIANTS_MAP, "Submit review")}
         </Button>
       </form>
     </Card>
