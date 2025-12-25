@@ -14,8 +14,15 @@ export function DynamicDebug() {
       console.log("Seed:", dyn.seed);
       console.log("V1 enabled:", isV1Enabled());
       console.log("V3 enabled:", isV3Enabled());
-      console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V1:", typeof window !== "undefined" ? (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 : "SSR");
-      console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V3:", typeof window !== "undefined" ? (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 : "SSR");
+      interface NextData {
+        env?: {
+          NEXT_PUBLIC_ENABLE_DYNAMIC_V1?: string;
+          NEXT_PUBLIC_ENABLE_DYNAMIC_V3?: string;
+        };
+      }
+      const nextData = typeof window !== "undefined" ? (window as Window & { __NEXT_DATA__?: NextData }).__NEXT_DATA__ : undefined;
+      console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V1:", nextData?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ?? "SSR");
+      console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V3:", nextData?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 ?? "SSR");
       
       // Check elements in the DOM
       const v1Elements = document.querySelectorAll('[data-v1="true"]');

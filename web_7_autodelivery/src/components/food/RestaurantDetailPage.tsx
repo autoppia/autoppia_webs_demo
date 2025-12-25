@@ -159,6 +159,7 @@ export default function RestaurantDetailPage({
     if (restaurant?.reviews) {
       setReviews(restaurant.reviews);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restaurant?.id]);
 
   useEffect(() => {

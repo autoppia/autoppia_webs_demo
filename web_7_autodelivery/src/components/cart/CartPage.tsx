@@ -290,7 +290,6 @@ export default function CartPage() {
       <div id="delivery-mode-selector" className="flex justify-center mb-7 mt-2">
         <div className="flex gap-0 bg-zinc-100 rounded-full shadow-inner p-1 w-fit">
           <button
-            id="delivery-mode-button"
             onClick={() => {
               setMode("delivery");
               logEvent(EVENT_TYPES.DELIVERY_MODE, {
@@ -308,7 +307,6 @@ export default function CartPage() {
             Delivery
           </button>
           <button
-            id="pickup-mode-button"
             onClick={() => {
               setMode("pickup");
               logEvent(EVENT_TYPES.PICKUP_MODE, {
