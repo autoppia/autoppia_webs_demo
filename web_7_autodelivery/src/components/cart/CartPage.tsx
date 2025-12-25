@@ -283,6 +283,8 @@ export default function CartPage() {
   );
   const placeOrderLabel = dyn.v3.getVariant("place-order-button", TEXT_VARIANTS_MAP, "Place Order");
   const placeOrderAria = dyn.v3.getVariant("place-order-button", TEXT_VARIANTS_MAP, "Place order");
+  const { id: _deliveryId, ...deliveryModeAttrs } = layout.getElementAttributes('DELIVERY_MODE', 0);
+  const { id: _pickupId, ...pickupModeAttrs } = layout.getElementAttributes('PICKUP_MODE', 0);
 
   return (
     dyn.v1.addWrapDecoy("cart-page", (
@@ -303,7 +305,7 @@ export default function CartPage() {
                 : "bg-transparent text-zinc-900 hover:bg-zinc-200"
             }`}
             aria-pressed={mode === "delivery"}
-            {...layout.getElementAttributes('DELIVERY_MODE', 0)}
+            {...deliveryModeAttrs}
           >
             {dyn.v3.getVariant("delivery-mode-label", TEXT_VARIANTS_MAP, "Delivery")}
           </button>
@@ -321,7 +323,7 @@ export default function CartPage() {
                 : "bg-transparent text-zinc-900 hover:bg-zinc-200"
             }`}
             aria-pressed={mode === "pickup"}
-            {...layout.getElementAttributes('PICKUP_MODE', 0)}
+            {...pickupModeAttrs}
           >
             {dyn.v3.getVariant("pickup-mode-label", TEXT_VARIANTS_MAP, "Pickup")}
           </button>

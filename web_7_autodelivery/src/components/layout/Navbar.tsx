@@ -44,7 +44,6 @@ export default function Navbar() {
                   }
                 }}
                 aria-label={dyn.v3.getVariant("quick_order_header", undefined, dyn.v3.getVariant("quick_order_button", TEXT_VARIANTS_MAP, "Quick Order"))}
-                {...layout.getElementAttributes('quick-order-header', 0)}
               >
                 {dyn.v3.getVariant("quick_order_button", TEXT_VARIANTS_MAP, "Quick Order")}
               </Button>
