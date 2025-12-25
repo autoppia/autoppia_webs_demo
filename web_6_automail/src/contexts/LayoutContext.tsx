@@ -1,7 +1,6 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { getLayoutVariant, type LayoutVariant } from '@/dynamic/v1-layouts';
 import { getEffectiveSeed } from '@/dynamic/v2-data';
 import { useSeed } from '@/context/SeedContext';
 
@@ -23,6 +22,30 @@ interface LayoutContextType {
   v2Seed: number | null;
 }
 
+interface LayoutVariant {
+  id: number;
+  name: string;
+  styles: {
+    container: string;
+    sidebar: string;
+    toolbar: string;
+    emailList: string;
+    emailView: string;
+  };
+}
+
+const DEFAULT_LAYOUT_VARIANT: LayoutVariant = {
+  id: 1,
+  name: 'Fixed',
+  styles: {
+    container: '',
+    sidebar: '',
+    toolbar: '',
+    emailList: '',
+    emailView: '',
+  },
+};
+
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
 export function LayoutProvider({ children }: { children: React.ReactNode }) {
@@ -32,12 +55,11 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   
   const [seed, setSeed] = useState(baseSeed);
-  const [currentVariant, setCurrentVariant] = useState<LayoutVariant>(getLayoutVariant(1));
+  const [currentVariant] = useState<LayoutVariant>(DEFAULT_LAYOUT_VARIANT);
   
   // Sync with SeedContext - la seed se mantiene pero el layout siempre es seed=1
   useEffect(() => {
     setSeed(baseSeed);
-    setCurrentVariant(getLayoutVariant(1)); // Siempre usar layout de seed=1
   }, [baseSeed]);
 
   // Sync v2Seed to window for backward compatibility
