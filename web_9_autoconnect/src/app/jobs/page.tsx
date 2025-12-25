@@ -6,9 +6,7 @@ import { useSeed } from "@/context/SeedContext";
 import {
   getEffectiveLayoutConfig,
   getLayoutClasses,
-  getShuffledItems,
 } from "@/dynamic/v1-layouts";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import type { Job } from "@/library/dataset";
@@ -18,6 +16,8 @@ import {
   type StoredAppliedJob,
 } from "@/library/localState";
 import Link from "next/link";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface Filters {
   search: string;
@@ -29,9 +29,9 @@ interface Filters {
 
 function JobsContent() {
   const { seed, resolvedSeeds } = useSeed();
-  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
+  const layoutSeed = resolvedSeeds.base ?? seed;
   const layout = getEffectiveLayoutConfig(layoutSeed);
-  const { getText } = useV3Attributes();
+  const dyn = useDynamicSystem();
   const [filters, setFilters] = useState<Filters>({
     search: "",
     experience: "",
@@ -144,6 +144,10 @@ function JobsContent() {
     () => filterJobsBy(filters),
     [filters, mockJobs]
   );
+  const orderedJobs = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("jobs-list", filteredJobs.length);
+    return order.map((idx) => filteredJobs[idx]);
+  }, [filteredJobs, dyn.seed]);
 
   function triggerSearchEvent() {
     const query = filters.search.trim();
@@ -222,7 +226,7 @@ function JobsContent() {
     });
   };
 
-  const shuffledJobs = getShuffledItems(filteredJobs, layoutSeed);
+  const shuffledJobs = orderedJobs;
   const jobCardsClasses = getLayoutClasses(layout, "jobCardsLayout");
   const filtersClasses = getLayoutClasses(layout, "filtersPosition");
 
@@ -230,7 +234,7 @@ function JobsContent() {
     <section>
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-bold text-2xl">
-          {getText("jobs_title", "Job Search")}
+          {dyn.v3.getVariant("jobs_title", TEXT_VARIANTS_MAP, "Job Search")}
         </h1>
         <Link
           href="/jobs/applied"
@@ -243,11 +247,13 @@ function JobsContent() {
       {/* Search Bar */}
       <div className="mb-6">
         <input
+          id={dyn.v3.getVariant("jobs_search_input", ID_VARIANTS_MAP, "jobs_search_input")}
           className="w-full rounded-full border border-gray-300 px-4 py-2 outline-blue-500"
           value={filters.search}
           onChange={handleSearchInput}
-          placeholder={getText(
+          placeholder={dyn.v3.getVariant(
             "jobs_search_placeholder",
+            TEXT_VARIANTS_MAP,
             "Search jobs by title or company..."
           )}
         />
@@ -257,14 +263,14 @@ function JobsContent() {
       <div className="mb-3">
         <div className="flex items-center justify-between">
           <h2 className="font-bold text-base text-gray-900">
-            {getText("jobs_filters_title", "Filters")}
+            {dyn.v3.getVariant("jobs_filters_title", TEXT_VARIANTS_MAP, "Filters")}
           </h2>
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
               className="text-blue-600 hover:text-blue-800 text-sm font-medium"
             >
-              {getText("jobs_clear_filters", "Clear all filters")}
+              {dyn.v3.getVariant("jobs_clear_filters", TEXT_VARIANTS_MAP, "Clear all filters")}
             </button>
           )}
         </div>
@@ -273,12 +279,13 @@ function JobsContent() {
       {/* Filters Card */}
       <div
         className={`bg-white rounded-lg shadow border border-gray-200 p-6 mb-6 ${filtersClasses}`}
+        id={dyn.v3.getVariant("jobs_filters_card", ID_VARIANTS_MAP, "jobs_filters_card")}
       >
         <div className="flex flex-wrap items-end gap-4">
           {/* Experience Filter */}
           <div className="flex-1 min-w-[160px]">
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              {getText("jobs_experience_label", "Experience Level")}
+              {dyn.v3.getVariant("jobs_experience_label", TEXT_VARIANTS_MAP, "Experience Level")}
             </label>
             <select
               value={filters.experience}
@@ -286,7 +293,7 @@ function JobsContent() {
               className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">
-                {getText("jobs_experience_any", "Any Experience")}
+                {dyn.v3.getVariant("jobs_experience_any", TEXT_VARIANTS_MAP, "Any Experience")}
               </option>
               {uniqueExperiences.map((experience) => (
                 <option key={experience} value={experience}>
@@ -299,7 +306,7 @@ function JobsContent() {
           {/* Salary Filter */}
           <div className="flex-1 min-w-[160px]">
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              {getText("jobs_salary_label", "Salary Range")}
+              {dyn.v3.getVariant("jobs_salary_label", TEXT_VARIANTS_MAP, "Salary Range")}
             </label>
             <select
               value={filters.salary}
@@ -309,7 +316,7 @@ function JobsContent() {
               {salaryRanges.map((range) => (
                 <option key={range.value} value={range.value}>
                   {range.value === ""
-                    ? getText("jobs_salary_any", "Any Salary")
+                    ? dyn.v3.getVariant("jobs_salary_any", TEXT_VARIANTS_MAP, "Any Salary")
                     : range.label}
                 </option>
               ))}
@@ -319,7 +326,7 @@ function JobsContent() {
           {/* Location Filter */}
           <div className="flex-1 min-w-[160px]">
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              {getText("jobs_location_label", "Location")}
+              {dyn.v3.getVariant("jobs_location_label", TEXT_VARIANTS_MAP, "Location")}
             </label>
             <select
               value={filters.location}
@@ -327,7 +334,7 @@ function JobsContent() {
               className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">
-                {getText("jobs_location_any", "Any Location")}
+                {dyn.v3.getVariant("jobs_location_any", TEXT_VARIANTS_MAP, "Any Location")}
               </option>
               {uniqueLocations.map((location) => (
                 <option key={location} value={location}>
@@ -347,7 +354,7 @@ function JobsContent() {
                 className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
               />
               <span className="ml-2 text-sm font-medium text-gray-700 whitespace-nowrap">
-                {getText("jobs_remote_only", "Remote Only")}
+                {dyn.v3.getVariant("jobs_remote_only", TEXT_VARIANTS_MAP, "Remote Only")}
               </span>
             </label>
           </div>
@@ -358,7 +365,7 @@ function JobsContent() {
             onClick={triggerSearchEvent}
             className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors text-sm font-medium mb-1.5"
           >
-            {getText("jobs_search_button", "Search")}
+            {dyn.v3.getVariant("jobs_search_button", TEXT_VARIANTS_MAP, "Search")}
           </button>
         </div>
       </div>
@@ -370,7 +377,10 @@ function JobsContent() {
       </div>
 
       {/* Job Listings */}
-      <div className={jobCardsClasses}>
+      <div
+        className={jobCardsClasses}
+        id={dyn.v3.getVariant("jobs_list_container", ID_VARIANTS_MAP, "jobs_list_container")}
+      >
         {shuffledJobs.length === 0 ? (
           <div className="text-center py-8">
             <div className="text-gray-500 italic mb-2">No jobs found.</div>

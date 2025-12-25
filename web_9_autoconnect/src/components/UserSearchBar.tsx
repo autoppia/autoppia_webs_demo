@@ -4,32 +4,31 @@ import Image from "next/image";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 export default function UserSearchBar() {
   const [q, setQ] = useState("");
   const [focus, setFocus] = useState(false);
-  const { getText, getClass, getId } = useV3Attributes();
-  const withVariant = (type: string, base: string) => {
-    const variant = getClass(type, "");
-    return variant ? `${variant} ${base}` : base;
-  };
-  const matches =
-    q.length === 0
-      ? []
-      : dynamicDataProvider.searchUsers(q);
+  const dyn = useDynamicSystem();
+  const matches = q.length === 0 ? [] : dynamicDataProvider.searchUsers(q);
   const router = useSeedRouter();
+
+  const withClass = (key: string, base: string) =>
+    cn(base, dyn.v3.getVariant(key, CLASS_VARIANTS_MAP, ""));
+
   return (
     <div className="relative flex-1 max-w-lg">
       <input
-        id={getId("search_field")}
+        id={dyn.v3.getVariant("search_field", ID_VARIANTS_MAP, "search_field")}
         type="text"
-        aria-label={getText("search_aria_label", "Search users")}
-        className={withVariant(
+        aria-label={dyn.v3.getVariant("search_aria_label", TEXT_VARIANTS_MAP, "Search users")}
+        className={withClass(
           "input-text",
           "w-full rounded-full border border-gray-300 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
         )}
-        placeholder={getText("search_placeholder", "Search users")}
+        placeholder={dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search users")}
         value={q}
         onChange={(e) => {
           const val = e.target.value;
@@ -56,34 +55,46 @@ export default function UserSearchBar() {
       {/* Results Dropdown */}
       {focus && matches.length > 0 && (
         <div
-          id={getId("search_results_panel")}
+          id={dyn.v3.getVariant("search_results_panel", ID_VARIANTS_MAP, "search_results_panel")}
           className="absolute left-0 top-12 w-full bg-white border z-30 rounded-lg shadow p-2"
         >
           {matches.map((u, idx) => (
-            <button
-              key={u.username}
-              id={getId("search_result_item", idx)}
-              className={withVariant(
-                "card",
-                "flex items-center gap-3 w-full px-2 py-2 hover:bg-blue-50 rounded text-left"
+            <div key={u.username}>
+              {dyn.v1.addWrapDecoy(
+                "user-search-result",
+                <button
+                  id={dyn.v3.getVariant(
+                    `search_result_item_${idx}`,
+                    ID_VARIANTS_MAP,
+                    `search_result_item_${idx}`
+                  )}
+                  className={withClass(
+                    "card",
+                    "flex items-center gap-3 w-full px-2 py-2 hover:bg-blue-50 rounded text-left"
+                  )}
+                  onMouseDown={() => {
+                    router.push(`/profile/${u.username}`);
+                    setQ("");
+                  }}
+                >
+                  <Image
+                    src={u.avatar}
+                    alt={u.name}
+                    width={32}
+                    height={32}
+                    className="rounded-full object-cover"
+                  />
+                  <span className="flex flex-col">
+                    <span className="font-medium">
+                      {dyn.v3.getVariant("search_result_name", undefined, u.name)}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {dyn.v3.getVariant("search_result_title", undefined, u.title)}
+                    </span>
+                  </span>
+                </button>
               )}
-              onMouseDown={() => {
-                router.push(`/profile/${u.username}`);
-                setQ("");
-              }}
-            >
-              <Image
-                src={u.avatar}
-                alt={u.name}
-                width={32}
-                height={32}
-                className="rounded-full object-cover"
-              />
-              <span className="flex flex-col">
-                <span className="font-medium">{u.name}</span>
-                <span className="text-xs text-gray-500">{u.title}</span>
-              </span>
-            </button>
+            </div>
           ))}
         </div>
       )}

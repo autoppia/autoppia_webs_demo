@@ -4,12 +4,10 @@ import { type User, type Post } from "@/library/dataset";
 import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeed } from "@/context/SeedContext";
 import {
   getEffectiveLayoutConfig,
   getLayoutClasses,
-  getShuffledItems,
 } from "@/dynamic/v1-layouts";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
@@ -21,11 +19,13 @@ import {
   persistHiddenPosts,
   persistSavedPosts,
 } from "@/library/localState";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 function ProfileContent({ username }: { username: string }) {
   type ExperienceEntry = NonNullable<User["experience"]>[number];
   const { resolvedSeeds, seed } = useSeed();
-  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
+  const layoutSeed = resolvedSeeds.base ?? seed;
   const layout = getEffectiveLayoutConfig(layoutSeed);
 
   // Get data from dynamic provider
@@ -34,7 +34,7 @@ function ProfileContent({ username }: { username: string }) {
 
   const user = users.find((u) => u.username === username);
   const currentUser = users[2] || users[0];
-  const { getText } = useV3Attributes();
+  const dyn = useDynamicSystem();
   const isSelf = user?.username === currentUser.username;
   const [connectState, setConnectState] = useState<
     "connect" | "pending" | "connected"
@@ -154,7 +154,7 @@ function ProfileContent({ username }: { username: string }) {
   if (!user)
     return (
       <div className="text-center text-red-600 mt-8">
-        {getText("profile_not_found", "User not found.")}
+        {dyn.v3.getVariant("profile_not_found", TEXT_VARIANTS_MAP, "User not found.")}
       </div>
     );
 
@@ -178,9 +178,10 @@ function ProfileContent({ username }: { username: string }) {
   }, [allPosts, postsState]);
   
   const visiblePosts = useMemo(() => {
-    const shuffled = getShuffledItems(postsWithState, layoutSeed);
-    return shuffled.filter((p) => !hiddenPostIds.has(p.id));
-  }, [postsWithState, layoutSeed, hiddenPostIds]);
+    const order = dyn.v1.changeOrderElements("profile-posts", postsWithState.length);
+    const orderedPosts = order.map((idx) => postsWithState[idx]);
+    return orderedPosts.filter((p) => !hiddenPostIds.has(p.id));
+  }, [postsWithState, dyn.seed, hiddenPostIds]);
   const profileClasses = getLayoutClasses(layout, "profileLayout");
 
   const handleConnect = () => {
@@ -489,18 +490,18 @@ function ProfileContent({ username }: { username: string }) {
                 className="ml-2 px-6 py-2 rounded-full font-medium transition-colors text-white bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg"
                 onClick={handleConnect}
               >
-                {getText("profile_connect", "Connect")}
+                {dyn.v3.getVariant("profile_connect", TEXT_VARIANTS_MAP, "Connect")}
               </button>
             ) : connectState === "pending" ? (
               <button
                 className="ml-2 px-6 py-2 rounded-full font-medium transition-colors text-white bg-gray-400 cursor-wait"
                 disabled
               >
-                {getText("profile_pending", "Pending...")}
+                {dyn.v3.getVariant("profile_pending", TEXT_VARIANTS_MAP, "Pending...")}
               </button>
             ) : (
               <span className="ml-2 px-6 py-2 rounded-full font-medium transition-colors text-white bg-green-600 cursor-default select-none">
-                {getText("profile_message", "Message")}
+                {dyn.v3.getVariant("profile_message", TEXT_VARIANTS_MAP, "Message")}
               </span>
             ))}
         </div>
@@ -544,7 +545,7 @@ function ProfileContent({ username }: { username: string }) {
       <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-bold text-xl text-gray-900">
-            {getText("profile_about", "About")}
+            {dyn.v3.getVariant("profile_about", TEXT_VARIANTS_MAP, "About")}
           </h3>
           {isSelf && (
             <button
@@ -582,7 +583,7 @@ function ProfileContent({ username }: { username: string }) {
     <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-bold text-xl text-gray-900">
-          {getText("profile_experience", "Experience")}
+          {dyn.v3.getVariant("profile_experience", TEXT_VARIANTS_MAP, "Experience")}
         </h3>
         {isSelf && (
           <button
@@ -602,7 +603,7 @@ function ProfileContent({ username }: { username: string }) {
       </div>
       {experience.length === 0 && !isEditingExperience ? (
         <div className="text-gray-600 text-sm">
-          {getText("profile_no_experience", "No experience added yet.")}
+          {dyn.v3.getVariant("profile_no_experience", TEXT_VARIANTS_MAP, "No experience added yet.")}
         </div>
       ) : (
         <div className="flex flex-col gap-6">
@@ -729,7 +730,7 @@ function ProfileContent({ username }: { username: string }) {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-bold text-xl text-gray-900">
-          {getText("profile_posts_by", "Posts by")} {user.name}
+          {dyn.v3.getVariant("profile_posts_by", TEXT_VARIANTS_MAP, "Posts by")} {user.name}
         </h2>
       </div>
 
@@ -770,7 +771,7 @@ function ProfileContent({ username }: { username: string }) {
         {visiblePosts.length === 0 ? (
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
             <div className="text-gray-500 italic text-lg">
-              {getText("profile_no_posts", "No posts yet.")}
+              {dyn.v3.getVariant("profile_no_posts", TEXT_VARIANTS_MAP, "No posts yet.")}
             </div>
           </div>
         ) : (

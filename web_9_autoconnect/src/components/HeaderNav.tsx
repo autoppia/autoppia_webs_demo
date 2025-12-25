@@ -10,14 +10,15 @@ import {
   getLayoutClasses,
 } from "@/dynamic/v1-layouts";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 export default function HeaderNav() {
   const pathname = usePathname();
   const { seed, resolvedSeeds } = useSeed();
-  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
+  const layoutSeed = resolvedSeeds.base ?? seed;
   const layout = getEffectiveLayoutConfig(layoutSeed);
-  const { getId, getClass } = useV3Attributes();
+  const dyn = useDynamicSystem();
   
   // Fix hydration error: use state to get user only on client side
   const [profileUsername, setProfileUsername] = useState<string>("alexsmith");
@@ -28,11 +29,6 @@ export default function HeaderNav() {
     const username = users[2]?.username || users[0]?.username || "alexsmith";
     setProfileUsername(username);
   }, []);
-
-  const applyVariant = (type: string, base: string) => {
-    const variant = getClass(type, "");
-    return variant ? `${variant} ${base}` : base;
-  };
 
   const linkClass = (href: string) =>
     `px-3 py-2 text-sm font-medium rounded ${
@@ -71,6 +67,8 @@ export default function HeaderNav() {
       idKey: "nav_profile_link",
     }
   ];
+  const navOrder = dyn.v1.changeOrderElements("nav-items", navItems.length);
+  const orderedNavItems = navOrder.map((index) => navItems[index]);
 
   const getHeaderClasses = () => {
     const baseClasses = "flex items-center border-b bg-white shadow-sm";
@@ -110,42 +108,72 @@ export default function HeaderNav() {
   };
 
   return (
-    <header className={getHeaderClasses()}>
-      <div className={getHeaderContentClasses()}>
-        <div className="flex items-center w-[300px]">
-          <div className="text-white bg-blue-600 px-4 py-2 rounded">
-            <SeedLink
-              href="/"
-              id={getId("logo_link")}
-              className={applyVariant("nav-link", "flex items-center gap-2")}
-            >
-              <span className="font-bold text-xl tracking-tight text-white">
-                AutoConnect
-              </span>
-            </SeedLink>
+    <>
+      {dyn.v1.addWrapDecoy(
+        "header-nav",
+        <header
+          className={dyn.v3.getVariant(
+            "header_classes",
+            CLASS_VARIANTS_MAP,
+            getHeaderClasses()
+          )}
+          id={dyn.v3.getVariant("header_nav_id", ID_VARIANTS_MAP, "header-nav")}
+        >
+          <div className={getHeaderContentClasses()}>
+            {dyn.v1.addWrapDecoy(
+              "header-brand",
+              <div className="flex items-center w-[300px]">
+                <div className="text-white bg-blue-600 px-4 py-2 rounded">
+                  <SeedLink
+                    href="/"
+                    id={dyn.v3.getVariant("logo_link", ID_VARIANTS_MAP, "logo_link")}
+                    className={dyn.v3.getVariant(
+                      "nav-link",
+                      CLASS_VARIANTS_MAP,
+                      "flex items-center gap-2"
+                    )}
+                  >
+                    <span className="font-bold text-xl tracking-tight text-white">
+                      {dyn.v3.getVariant("app_title", TEXT_VARIANTS_MAP, "AutoConnect")}
+                    </span>
+                  </SeedLink>
+                </div>
+              </div>
+            )}
+            <div className="flex-1"></div>
+            {dyn.v1.addWrapDecoy(
+              "header-nav-links",
+              <div className="flex items-center justify-end w-[300px]">
+                <nav className={getNavClasses()}>
+                  {orderedNavItems.map((item, idx) => (
+                    <SeedLink
+                      key={item.href}
+                      href={item.href}
+                      id={dyn.v3.getVariant(item.idKey, ID_VARIANTS_MAP, item.idKey)}
+                      className={dyn.v3.getVariant(
+                        "nav-link",
+                        CLASS_VARIANTS_MAP,
+                        linkClass(item.href)
+                      )}
+                      onClick={() => {
+                        if (item.eventType) {
+                          logEvent(item.eventType, item.eventData || {});
+                        }
+                      }}
+                    >
+                      {dyn.v3.getVariant(
+                        `nav_label_${idx}`,
+                        TEXT_VARIANTS_MAP,
+                        item.label
+                      )}
+                    </SeedLink>
+                  ))}
+                </nav>
+              </div>
+            )}
           </div>
-        </div>
-        <div className="flex-1"></div>
-        <div className="flex items-center justify-end w-[300px]">
-          <nav className={getNavClasses()}>
-            {navItems.map((item) => (
-              <SeedLink
-                key={item.href}
-                href={item.href}
-                id={getId(item.idKey)}
-                className={applyVariant("nav-link", linkClass(item.href))}
-                onClick={() => {
-                  if (item.eventType) {
-                    logEvent(item.eventType, item.eventData || {});
-                  }
-                }}
-              >
-                {item.label}
-              </SeedLink>
-            ))}
-          </nav>
-        </div>
-      </div>
-    </header>
+        </header>
+      )}
+    </>
   );
 }

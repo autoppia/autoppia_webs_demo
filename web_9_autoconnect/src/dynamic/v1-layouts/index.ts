@@ -1,15 +1,10 @@
-/**
- * V1 Layout Variations System
- * 
- * Changes HTML structure and layout based on v1 seed.
- */
-
 export {
   getSeedLayout,
   getEffectiveLayoutConfig,
   getLayoutClasses,
   getShuffledItems,
-  shuffleArray,
+  generateUrlWithSeed,
+  generateElementAttributes,
   isDynamicEnabled,
 } from "./layouts";
-export type { SeedLayoutConfig, LayoutVariant } from "./layouts";
+export type { LayoutConfig, MainLayout } from "./layouts";

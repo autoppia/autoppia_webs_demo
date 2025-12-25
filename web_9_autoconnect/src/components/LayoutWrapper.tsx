@@ -10,7 +10,7 @@ interface LayoutWrapperProps {
 
 export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   const { seed, resolvedSeeds } = useSeed();
-  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
+  const layoutSeed = resolvedSeeds.base ?? seed;
   const layout = getEffectiveLayoutConfig(layoutSeed);
 
   const bodyClasses =

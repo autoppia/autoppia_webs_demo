@@ -13,9 +13,7 @@ import { useSeed } from "@/context/SeedContext";
 import {
   getEffectiveLayoutConfig,
   getLayoutClasses,
-  getShuffledItems,
 } from "@/dynamic/v1-layouts";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import {
@@ -27,12 +25,15 @@ import {
   persistSavedPosts,
 } from "@/library/localState";
 import Link from "next/link";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 function HomeContent() {
   const { seed, resolvedSeeds } = useSeed();
-  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
+  const layoutSeed = resolvedSeeds.base ?? seed;
   const layout = getEffectiveLayoutConfig(layoutSeed);
-  const { getText, getClass } = useV3Attributes();
+  const dyn = useDynamicSystem();
 
   // Get data from dynamic provider
   const users = dynamicDataProvider.getUsers();
@@ -144,10 +145,11 @@ function HomeContent() {
     });
   }
 
-  const shuffledPosts = useMemo(
-    () => getShuffledItems(posts, layoutSeed),
-    [posts, layoutSeed]
-  );
+  const shuffledPosts = useMemo(() => {
+    if (posts.length === 0) return [];
+    const order = dyn.v1.changeOrderElements("home-posts", posts.length);
+    return order.map((idx) => posts[idx]);
+  }, [posts, dyn.seed]);
   const visiblePosts = useMemo(
     () => shuffledPosts.filter((p) => !hiddenPostIds.has(p.id)),
     [shuffledPosts, hiddenPostIds]
@@ -224,23 +226,45 @@ function HomeContent() {
   const sidebarClasses = getLayoutClasses(layout, 'sidebarPosition');
   const postBoxClasses = getLayoutClasses(layout, 'postBoxPosition');
 
-  const renderSidebar = (position: 'left' | 'right' | 'top' | 'bottom') => {
+  const renderSidebar = (position: 'left' | 'right') => {
     if (position === 'left') {
       return (
-        <aside className="w-[300px] flex-shrink-0 hidden lg:block">
+        <aside className="w-[300px] flex-shrink-0">
           <LeftSidebar />
         </aside>
       );
     }
     if (position === 'right') {
       return (
-        <aside className="w-[300px] flex-shrink-0 hidden lg:block">
+        <aside className="w-[300px] flex-shrink-0">
           <RightSidebar />
         </aside>
       );
     }
     return null;
   };
+
+  const renderTopSidebars = () => (
+    <div className="w-full flex flex-col lg:flex-row lg:gap-4 mb-4">
+      <div className="w-full lg:w-[300px]">
+        <LeftSidebar />
+      </div>
+      <div className="w-full lg:w-[300px] lg:ml-auto">
+        <RightSidebar />
+      </div>
+    </div>
+  );
+
+  const renderBottomSidebars = () => (
+    <div className="w-full flex flex-col lg:flex-row lg:gap-4 mt-4">
+      <div className="w-full lg:w-[300px]">
+        <LeftSidebar />
+      </div>
+      <div className="w-full lg:w-[300px] lg:ml-auto">
+        <RightSidebar />
+      </div>
+    </div>
+  );
 
   const renderPostBox = () => {
     if (layout.postBoxPosition === 'left' || layout.postBoxPosition === 'right') {
@@ -253,18 +277,24 @@ function HomeContent() {
             <Avatar src={currentUser.avatar} alt={currentUser.name} size={44} />
             <input
               type="text"
-              className={getClass("post_input", "w-full border border-gray-200 rounded-full px-4 py-2 focus:outline-blue-500")}
+              className={cn(
+                "w-full border border-gray-200 rounded-full px-4 py-2 focus:outline-blue-500",
+                dyn.v3.getVariant("post_input", CLASS_VARIANTS_MAP, "")
+              )}
               value={newPost}
               onChange={(e) => setNewPost(e.target.value)}
-              placeholder={getText("post_placeholder", "Share something...")}
+              placeholder={dyn.v3.getVariant("post_placeholder", TEXT_VARIANTS_MAP, "Share something...")}
               maxLength={300}
             />
             <button
               type="submit"
-              className={getClass("post_button", "w-full bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4 py-2 font-medium disabled:bg-blue-200")}
+              className={cn(
+                "w-full bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4 py-2 font-medium disabled:bg-blue-200",
+                dyn.v3.getVariant("post_button_class", CLASS_VARIANTS_MAP, "")
+              )}
               disabled={!newPost.trim()}
             >
-              {getText("post_button", "Post")}
+              {dyn.v3.getVariant("post_button", TEXT_VARIANTS_MAP, "Post")}
             </button>
           </form>
         </div>
@@ -279,18 +309,24 @@ function HomeContent() {
         <Avatar src={currentUser.avatar} alt={currentUser.name} size={44} />
         <input
           type="text"
-          className={getClass("post_input", "flex-1 border border-gray-200 rounded-full px-4 py-2 focus:outline-blue-500")}
+          className={cn(
+            "flex-1 border border-gray-200 rounded-full px-4 py-2 focus:outline-blue-500",
+            dyn.v3.getVariant("post_input", CLASS_VARIANTS_MAP, "")
+          )}
           value={newPost}
           onChange={(e) => setNewPost(e.target.value)}
-          placeholder={getText("post_placeholder", "Share something...")}
+          placeholder={dyn.v3.getVariant("post_placeholder", TEXT_VARIANTS_MAP, "Share something...")}
           maxLength={300}
         />
         <button
           type="submit"
-          className={getClass("post_button", "bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4 py-2 font-medium disabled:bg-blue-200")}
+          className={cn(
+            "bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4 py-2 font-medium disabled:bg-blue-200",
+            dyn.v3.getVariant("post_button_class", CLASS_VARIANTS_MAP, "")
+          )}
           disabled={!newPost.trim()}
         >
-          {getText("post_button", "Post")}
+          {dyn.v3.getVariant("post_button", TEXT_VARIANTS_MAP, "Post")}
         </button>
       </form>
     );
@@ -324,37 +360,52 @@ function HomeContent() {
   };
 
   const renderMainContent = () => {
+    const main = (
+      <main className="w-full max-w-[950px] mx-auto flex-1 px-6">
+        <section>
+          {renderPostBox()}
+          {renderPostsBlock()}
+        </section>
+      </main>
+    );
+
+    if (layout.sidebarPosition === 'top') {
+      return (
+        <>
+          {renderTopSidebars()}
+          {main}
+        </>
+      );
+    }
+
+    if (layout.sidebarPosition === 'bottom') {
+      return (
+        <>
+          {main}
+          {renderBottomSidebars()}
+        </>
+      );
+    }
+
     if (layout.mainLayout === 'grid' || layout.mainLayout === 'split-view') {
       return (
         <>
-          {renderSidebar('left')}
-          <main className="w-full max-w-[950px] mx-auto flex-1 px-6">
-            <section>
-              {renderPostBox()}
-              {renderPostsBlock()}
-            </section>
-          </main>
-          {renderSidebar('right')}
+          {layout.sidebarPosition === 'left' && renderSidebar('left')}
+          {main}
+          {layout.sidebarPosition === 'right' && renderSidebar('right')}
         </>
       );
     }
 
     if (layout.mainLayout === 'masonry') {
-      return (
-        <div className="space-y-4">{renderPostsBlock()}</div>
-      );
+      return <div className="space-y-4">{renderPostsBlock()}</div>;
     }
 
     if (layout.mainLayout === 'sidebar-top') {
       return (
         <>
-          {renderSidebar('top')}
-          <main className="w-full max-w-[950px] mx-auto flex-1 px-6">
-            <section>
-              {renderPostBox()}
-              {renderPostsBlock()}
-            </section>
-          </main>
+          {renderTopSidebars()}
+          {main}
         </>
       );
     }
@@ -362,27 +413,17 @@ function HomeContent() {
     if (layout.mainLayout === 'sidebar-bottom') {
       return (
         <>
-          <main className="w-full max-w-[950px] mx-auto flex-1 px-6">
-            <section>
-              {renderPostBox()}
-              {renderPostsBlock()}
-            </section>
-          </main>
-          {renderSidebar('bottom')}
+          {main}
+          {renderBottomSidebars()}
         </>
       );
     }
 
     return (
       <>
-        {renderSidebar('left')}
-        <main className="w-full max-w-[950px] mx-auto flex-1 px-6">
-          <section>
-            {renderPostBox()}
-            {renderPostsBlock()}
-          </section>
-        </main>
-        {renderSidebar('right')}
+        {layout.sidebarPosition === 'left' && renderSidebar('left')}
+        {main}
+        {layout.sidebarPosition === 'right' && renderSidebar('right')}
       </>
     );
   };

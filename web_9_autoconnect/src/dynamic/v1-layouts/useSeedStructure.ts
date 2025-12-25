@@ -1,46 +1,24 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useSeed } from "@/context/SeedContext";
 
-export function useSeedStructure(): {
-  seedStructure?: number;
-  getNavigationUrlWithStructure: (path: string) => string;
-} {
-  const searchParams = useSearchParams();
-  const [persisted, setPersisted] = useState<number | undefined>(undefined);
-
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem("autoconnect-seed-structure");
-      if (stored) {
-        const n = parseInt(stored, 10);
-        if (!isNaN(n) && n >= 1 && n <= 300) setPersisted(n);
-      }
-    } catch {}
-  }, []);
-
-  const seedStructure = useMemo(() => {
-    const param = searchParams?.get("seed-structure");
-    if (param) {
-      const n = parseInt(param, 10);
-      if (!isNaN(n) && n >= 1 && n <= 300) {
-        try { localStorage.setItem("autoconnect-seed-structure", n.toString()); } catch {}
-        return n;
-      }
-    }
-    return persisted;
-  }, [searchParams, persisted]);
+/**
+ * Preserves seed structure navigation parameters when building URLs.
+ * Keeps parity with previous seed-structure behavior without breaking existing links.
+ */
+export function useSeedStructure() {
+  const { seed } = useSeed();
 
   const getNavigationUrlWithStructure = (path: string): string => {
-    if (!seedStructure) return path;
-    const hasQuery = path.includes("?");
-    const hasParam = path.includes("seed-structure=");
-    if (hasParam) return path;
-    return `${path}${hasQuery ? "&" : "?"}seed-structure=${seedStructure}`;
+    if (!path || path.startsWith("http")) return path;
+    const [base, query] = path.split("?");
+    const params = new URLSearchParams(query || "");
+    if (!params.has("seed_structure")) {
+      params.set("seed_structure", seed.toString());
+    }
+    const next = params.toString();
+    return next ? `${base}?${next}` : base;
   };
 
-  return { seedStructure, getNavigationUrlWithStructure };
+  return { getNavigationUrlWithStructure };
 }
-
-
