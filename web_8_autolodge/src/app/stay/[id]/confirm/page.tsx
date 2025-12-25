@@ -7,7 +7,8 @@ import type { DateRange } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeedStructureNavigation } from "../../../../hooks/useSeedStructureNavigation";
 
 function parseLocalDate(dateString: string | undefined) {
@@ -36,7 +37,46 @@ function toStartOfDay(date: Date): Date {
 
 
 function ConfirmPageContent() {
-  const { getText, getId } = useV3Attributes();
+  const dyn = useDynamicSystem();
+  const dynamicV3TextVariants: Record<string, string[]> = {
+    back_to_hotels: ["Back to all hotels", "Back to stays", "Return to listings"],
+    confirm_and_pay_title: ["Confirm and pay", "Confirm payment", "Finish booking"],
+    your_trip: ["Your trip", "Trip details", "Stay details"],
+    dates: ["Dates", "Stay dates", "Booking dates"],
+    edit: ["Edit", "Change", "Update"],
+    pay_with: ["Pay with", "Payment method", "Choose payment"],
+    card_method: ["Credit or debit card", "Card payment", "Pay with card"],
+    card_number: ["Card number", "Card number"],
+    card_number_placeholder: ["0000 0000 0000 0000", "1234 5678 9012 3456", "1111 2222 3333 4444"],
+    card_number_required: ["Card number is required", "Enter your card number", "Card number missing"],
+    expiration: ["Expiration", "Expiry date", "Expires"],
+    expiration_placeholder: ["MM / YY", "MM/YY", "MM-YY"],
+    expiration_required: ["Expiration is required", "Add expiry date", "Enter expiration"],
+    cvv: ["CVV", "Security code", "CVC"],
+    cvv_placeholder: ["123", "345", "999"],
+    cvv_required: ["CVV is required", "Enter CVV", "Add security code"],
+    zip_code: ["ZIP code", "Postal code", "ZIP / Postal"],
+    zip_placeholder: ["ZIP code", "12345", "90210"],
+    zip_required: ["ZIP code is required", "Enter ZIP", "Postal code needed"],
+    country_region: ["Country/region", "Country or region", "Location"],
+    message_host_title: ["Message the Host", "Message host", "Contact host"],
+    message_host_hint: [
+      "Share why you're traveling, who's coming with you, and what you love about the space.",
+      "Tell the host why you're visiting and who's joining.",
+      "Share your travel plans with the host.",
+    ],
+    host_message_placeholder: ["Hi there, I'll be staying...", "Hello! I'm visiting because...", "Hi! My trip details..."],
+    message_sent: ["✅ Message sent.", "Message delivered.", "Sent to host."],
+    send: ["Send", "Submit", "Deliver"],
+    price_details: ["Price details", "Cost breakdown", "Pricing"],
+    cleaning_fee: ["Cleaning fee", "Cleaning", "Service cleaning"],
+    service_fee: ["Service fee", "Platform fee", "Service charge"],
+    total_usd: ["Total (USD)", "Total cost", "Grand total"],
+    reservation_complete: ["✅ Reservation complete! Thank you! 🙏", "Booking confirmed! Thank you!", "Reservation finished!"],
+    confirm_and_pay_button: ["Confirm and pay", "Confirm booking", "Pay now"],
+  };
+  const t = (key: string, fallback: string) => dyn.v3.getVariant(key, dynamicV3TextVariants, fallback);
+  const idVariant = (key: string, fallback?: string) => dyn.v3.getVariant(key, ID_VARIANTS_MAP, fallback ?? key);
   const { navigateWithSeedStructure } = useSeedStructureNavigation();
   const router = useSeedRouter();
   const params = useParams<{ id: string }>();
@@ -218,19 +258,19 @@ function ConfirmPageContent() {
             strokeLinejoin="round"
           />
         </svg>
-        {getText("back_to_hotels", "Back to all hotels")}
+        {t("back_to_hotels", "Back to all hotels")}
       </button>
       <div className="w-full py-1 grid grid-cols-1 md:grid-cols-[1fr_390px] gap-9">
         {/* LEFT COLUMN */}
         <div className="min-w-0">
-          <h1 className="font-bold text-2xl mb-8">{getText("confirm_and_pay_title", "Confirm and pay")}</h1>
+          <h1 className="font-bold text-2xl mb-8">{t("confirm_and_pay_title", "Confirm and pay")}</h1>
           <section className="mb-9">
-            <div className="font-semibold text-xl mb-5 mt-1">{getText("your_trip", "Your trip")}</div>
+            <div className="font-semibold text-xl mb-5 mt-1">{t("your_trip", "Your trip")}</div>
             {/* Trip rows */}
             <div className="flex flex-col gap-3 mb-2">
               <div className="flex items-center gap-5 text-[16.5px] w-full relative">
                 <div className="font-medium min-w-[56px] text-neutral-900">
-                  {getText("dates", "Dates")}
+                  {t("dates", "Dates")}
                 </div>
                 <div className="flex-1 text-neutral-800 tracking-wide">
                   {dateRange.from && format(dateRange.from, "MMM d")} –{" "}
@@ -249,10 +289,10 @@ function ConfirmPageContent() {
                       return willOpen;
                     });
                   }}
-                  id={getId("edit_dates_button")}
+                  id={idVariant("edit_dates_button")}
                   className="ml-2 text-[#ff5a5f] text-base font-medium hover:underline focus:underline focus:outline-none px-1"
                 >
-                  {getText("edit", "Edit")}
+                  {t("edit", "Edit")}
                 </button>
                 {dateOpen && (
                   <div
@@ -307,7 +347,7 @@ function ConfirmPageContent() {
             <hr className="my-6" />
           </section>
           <section className="mb-12">
-            <div className="font-semibold text-[19px] mb-4 flex items-center justify-between">{getText("pay_with", "Pay with")}</div>
+            <div className="font-semibold text-[19px] mb-4 flex items-center justify-between">{t("pay_with", "Pay with")}</div>
             <div className="flex flex-col gap-3 mb-4">
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
@@ -337,7 +377,7 @@ function ConfirmPageContent() {
                   }}
                 />
                 <span className="text-base font-medium">
-                  {getText("card_method", "Credit or debit card")}
+                  {t("card_method", "Credit or debit card")}
                 </span>
               </label>
               <label className="flex items-center gap-3 cursor-pointer">
@@ -388,7 +428,7 @@ function ConfirmPageContent() {
                     />
                   </svg>
                 </svg>
-                {getText("card_method", "Credit or debit card")}
+                {t("card_method", "Credit or debit card")}
                 <svg
                   width="24"
                   viewBox="0 0 24 24"
@@ -400,13 +440,13 @@ function ConfirmPageContent() {
               </div>
               <div className={`border-t px-0.5 pb-2 pt-3 ${paymentMethod !== "card" ? "opacity-60 pointer-events-none" : ""}`}>
                 <div className="px-3">
-                  <label className="block text-xs mb-1 font-semibold text-neutral-600">{getText("card_number", "Card number")}</label>
+                  <label className="block text-xs mb-1 font-semibold text-neutral-600">{t("card_number", "Card number")}</label>
                   <input
-                    id={getId("card_number_input")}
+                    id={idVariant("card_number_input")}
                     type="text"
                     value={cardNumber}
                     onChange={(e) => setCardNumber(e.target.value)}
-                    placeholder={getText("card_number_placeholder", "0000 0000 0000 0000")}
+                    placeholder={t("card_number_placeholder", "0000 0000 0000 0000")}
                     className={`w-full border rounded-md px-3 py-2 text-[16px] tracking-wider bg-white focus:ring-2 ring-neutral-200 ${
                       showCardError ? "border-red-500 ring-red-200" : ""
                     }`}
@@ -414,17 +454,17 @@ function ConfirmPageContent() {
                     disabled={paymentMethod !== "card"}
                   />
                   {showCardError && (
-                    <p className="text-red-500 text-sm mt-1">{getText("card_number_required", "Card number is required")}</p>
+                    <p className="text-red-500 text-sm mt-1">{t("card_number_required", "Card number is required")}</p>
                   )}
                 </div>
                 <div className="flex gap-2 mt-2 px-3">
                   <div className="flex-1">
-                    <label className="block text-xs mb-1 font-semibold text-neutral-600">{getText("expiration", "Expiration")}</label>
+                    <label className="block text-xs mb-1 font-semibold text-neutral-600">{t("expiration", "Expiration")}</label>
                     <input
-                      id={getId("card_exp_input")}
+                      id={idVariant("card_exp_input")}
                       type="text"
                       value={exp}
-                      placeholder={getText("expiration_placeholder", "MM / YY")}
+                      placeholder={t("expiration_placeholder", "MM / YY")}
                       onChange={(e) => setExp(e.target.value)}
                       className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
                         showExpError ? "border-red-500 ring-red-200" : ""
@@ -432,48 +472,48 @@ function ConfirmPageContent() {
                       disabled={paymentMethod !== "card"}
                     />
                     {showExpError && (
-                      <p className="text-red-500 text-sm mt-1">{getText("expiration_required", "Expiration is required")}</p>
+                      <p className="text-red-500 text-sm mt-1">{t("expiration_required", "Expiration is required")}</p>
                     )}
                   </div>
                   <div className="flex-1">
-                    <label className="block text-xs mb-1 font-semibold text-neutral-600">{getText("cvv", "CVV")}</label>
+                    <label className="block text-xs mb-1 font-semibold text-neutral-600">{t("cvv", "CVV")}</label>
                     <input
-                      id={getId("card_cvv_input")}
+                      id={idVariant("card_cvv_input")}
                       type="text"
                       value={cvv}
                       onChange={(e) => setCvv(e.target.value)}
-                      placeholder={getText("cvv_placeholder", "123")}
+                      placeholder={t("cvv_placeholder", "123")}
                       className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
                         showCvvError ? "border-red-500 ring-red-200" : ""
                       }`}
                       disabled={paymentMethod !== "card"}
                     />
                     {showCvvError && (
-                      <p className="text-red-500 text-sm mt-1">{getText("cvv_required", "CVV is required")}</p>
+                      <p className="text-red-500 text-sm mt-1">{t("cvv_required", "CVV is required")}</p>
                     )}
                   </div>
                 </div>
                 <div className="mt-2 px-3">
-                  <label className="block text-xs mb-1 font-semibold text-neutral-600">{getText("zip_code", "ZIP code")}</label>
+                  <label className="block text-xs mb-1 font-semibold text-neutral-600">{t("zip_code", "ZIP code")}</label>
                   <input
-                    id={getId("zip_input")}
+                    id={idVariant("zip_input")}
                     type="text"
                     value={zip}
                     onChange={(e) => setZip(e.target.value)}
-                    placeholder={getText("zip_placeholder", "ZIP code")}
+                    placeholder={t("zip_placeholder", "ZIP code")}
                     className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
                       showZipError ? "border-red-500 ring-red-200" : ""
                     }`}
                     disabled={paymentMethod !== "card"}
                   />
                   {showZipError && (
-                    <p className="text-red-500 text-sm mt-1">{getText("zip_required", "ZIP code is required")}</p>
+                    <p className="text-red-500 text-sm mt-1">{t("zip_required", "ZIP code is required")}</p>
                   )}
                 </div>
                 <div className="mt-2 px-3 mb-4">
-                  <label className="block text-xs mb-1 font-semibold text-neutral-600">{getText("country_region", "Country/region")}</label>
+                  <label className="block text-xs mb-1 font-semibold text-neutral-600">{t("country_region", "Country/region")}</label>
                   <select
-                    id={getId("country_select")}
+                    id={idVariant("country_select")}
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
                     className="w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200"
@@ -498,9 +538,9 @@ function ConfirmPageContent() {
             )}
           </section>
           <section className="mb-12 pt-2 border-t border-neutral-200">
-            <div className="font-bold text-[20px] mb-1 mt-5">{getText("message_host_title", "Message the Host")}</div>
+            <div className="font-bold text-[20px] mb-1 mt-5">{t("message_host_title", "Message the Host")}</div>
             <div className="text-neutral-600 text-sm mb-4">
-              {getText("message_host_hint", "Share why you're traveling, who's coming with you, and what you love about the space.")}
+              {t("message_host_hint", "Share why you're traveling, who's coming with you, and what you love about the space.")}
             </div>
             <div className="flex items-center gap-4 mb-2 bg-neutral-100 rounded-lg p-3 w-fit">
               <img
@@ -520,15 +560,15 @@ function ConfirmPageContent() {
               </div>
             </div>
             <textarea
-              id={getId("host_message_input")}
+              id={idVariant("host_message_input")}
               value={hostMessage}
               onChange={(e) => setHostMessage(e.target.value)}
               rows={4}
-              placeholder={getText("host_message_placeholder", `Hi ${prop.host.name} I'll be staying...`)}
+              placeholder={t("host_message_placeholder", `Hi ${prop.host.name} I'll be staying...`)}
               className="w-full border rounded-lg px-3 py-3 text-[16px] bg-white mb-3 resize-none"
             />
             <button
-              id={getId("send_host_message_button")}
+              id={idVariant("send_host_message_button")}
               onClick={() => {
                 if (hostMessage.trim() !== "") {
                   logEvent(EVENT_TYPES.MESSAGE_HOST, {
@@ -538,14 +578,14 @@ function ConfirmPageContent() {
                     hotel: prop,
                   });
 
-                  showToast(getText("message_sent", " ✅ Message sent."));
+                  showToast(t("message_sent", " ✅ Message sent."));
                   setHostMessage("");
                 }
               }}
               className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition disabled:opacity-50 disabled:pointer-events-none"
               disabled={!hostMessage.trim()}
             >
-              {getText("send", "Send")}
+              {t("send", "Send")}
             </button>
           </section>
           {toast && (
@@ -591,7 +631,7 @@ function ConfirmPageContent() {
             </div>
           </div>
           <hr className="my-3 mt-0.5" />
-          <div className="font-bold mb-3">{getText("price_details", "Price details")}</div>
+          <div className="font-bold mb-3">{t("price_details", "Price details")}</div>
           <div className="flex flex-col gap-2 text-[15px]">
             <div className="flex items-center justify-between">
               <span className="underline">
@@ -600,21 +640,21 @@ function ConfirmPageContent() {
               <span>${priceSubtotal.toFixed(2)} USD</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="underline">{getText("cleaning_fee", "Cleaning fee")}</span>{" "}
+              <span className="underline">{t("cleaning_fee", "Cleaning fee")}</span>{" "}
               <span>${cleaningFee} USD</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="underline">{getText("service_fee", "Service fee")}</span>{" "}
+              <span className="underline">{t("service_fee", "Service fee")}</span>{" "}
               <span>${serviceFee} USD</span>
             </div>
             <hr />
             <div className="flex items-center justify-between font-bold text-neutral-900">
-              <span>{getText("total_usd", "Total (USD)")}</span> <span>${total.toFixed(2)} USD</span>
+              <span>{t("total_usd", "Total (USD)")}</span> <span>${total.toFixed(2)} USD</span>
             </div>
           </div>
           <button
             className="mt-7 rounded-lg w-full py-4 text-white font-semibold text-[18px] bg-[#616882] hover:bg-[#7d87aa] transition shadow focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-            id={getId("confirm_and_pay_button")}
+            id={idVariant("confirm_and_pay_button")}
             onClick={() => {
               setHasTriedSubmit(true);
 
@@ -638,7 +678,7 @@ function ConfirmPageContent() {
                 hotel: prop,
               });
 
-              showToast(getText("reservation_complete", "✅ Reservation complete! Thank you! 🙏"));
+              showToast(t("reservation_complete", "✅ Reservation complete! Thank you! 🙏"));
               // Reset form fields
               if (paymentMethod === "card") {
                 setCardNumber("");
@@ -650,7 +690,7 @@ function ConfirmPageContent() {
               setHasTriedSubmit(false);
             }}
           >
-            {getText("confirm_and_pay_button", "Confirm and pay")}
+            {t("confirm_and_pay_button", "Confirm and pay")}
           </button>
         </div>
       </div>

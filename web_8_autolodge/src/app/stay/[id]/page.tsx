@@ -13,7 +13,8 @@ import {
 } from "date-fns";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import type { Hotel } from "@/types/hotel";
@@ -57,7 +58,29 @@ function getFallbackHotel(): Hotel {
 }
 
 function PropertyDetailContent() {
-  const { getText, getId, getClass } = useV3Attributes();
+  const dyn = useDynamicSystem();
+  const dynamicV3TextVariants: Record<string, string[]> = {
+    share_title: ["Share this property", "Share stay", "Share listing"],
+    invalid_email: ["Invalid email address", "Email looks incorrect", "Please enter a valid email"],
+    cancel: ["Cancel", "Close", "Dismiss"],
+    share_link_sent: ["Link sent!", "Share link delivered", "Link shared"],
+    send: ["Send", "Share", "Deliver"],
+    reviews: ["reviews", "ratings", "guest reviews"],
+    added_to_wishlist: ["Added to wishlist ❤️", "Saved to wishlist ❤️", "Wishlist updated ❤️"],
+    removed_from_wishlist: ["Removed from wishlist 💔", "Wishlist item removed 💔", "Removed from list 💔"],
+    share: ["Share", "Send", "Copy link"],
+    select_dates: ["Select your stay", "Choose dates", "Pick dates"],
+    check_in: ["CHECK-IN", "ARRIVAL", "START"],
+    check_out: ["CHECK-OUT", "DEPARTURE", "END"],
+    guests: ["GUESTS", "TRAVELERS", "PEOPLE"],
+    reserve: ["Reserve", "Book", "Hold"],
+    check_availability: ["Check Availability", "Verify availability", "See availability"],
+    no_charge_yet: ["You won't be charged yet", "No charge yet", "Payment not charged yet"],
+    night: ["night", "per night", "nightly"],
+    nights: ["nights", "night stays", "nights total"],
+    cleaning_fee: ["Cleaning fee", "Service fee", "Cleaning"],
+    total: ["Total", "Total cost", "Overall"],
+  };
   const router = useSeedRouter();
   const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
@@ -300,13 +323,14 @@ function PropertyDetailContent() {
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl p-6 w-[90%] max-w-md animate-fade-in">
             <h2 className="text-xl font-semibold mb-3 text-neutral-800">
-              📤 {getText("share_title", "Share this property")}
+              📤 {dyn.v3.getVariant("share_title", dynamicV3TextVariants, "Share this property")}
             </h2>
 
             <input
               type="email"
-              placeholder={getText(
+              placeholder={dyn.v3.getVariant(
                 "share_email_placeholder",
+                TEXT_VARIANTS_MAP,
                 "Receiver's email"
               )}
               value={receiverEmail}
@@ -318,7 +342,7 @@ function PropertyDetailContent() {
                 setEmailError(
                   isValidEmail || value === ""
                     ? ""
-                    : getText("invalid_email", "Invalid email address")
+                    : dyn.v3.getVariant("invalid_email", dynamicV3TextVariants, "Invalid email address")
                 );
               }}
               className="w-full border px-4 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-300"
@@ -329,7 +353,7 @@ function PropertyDetailContent() {
 
             <div className="mt-5 flex justify-end gap-3">
               <button
-                id={getId("share_cancel_button")}
+                id={dyn.v3.getVariant("share_cancel_button", ID_VARIANTS_MAP, "share-cancel-button")}
                 onClick={() => {
                   setShowShareModal(false);
                   setReceiverEmail("");
@@ -337,15 +361,15 @@ function PropertyDetailContent() {
                 }}
                 className="px-4 py-1.5 rounded-full text-sm bg-neutral-200 hover:bg-neutral-300"
               >
-                {getText("cancel", "Cancel")}
+                {dyn.v3.getVariant("cancel", dynamicV3TextVariants, "Cancel")}
               </button>
               <button
-                id={getId("share_send_button")}
+                id={dyn.v3.getVariant("share_send_button", ID_VARIANTS_MAP, "share-send-button")}
                 disabled={!!emailError || !receiverEmail}
                 onClick={() => {
                   setShowShareModal(false);
                   setToastMessage(
-                    getText("share_link_sent", `Link sent to ${receiverEmail}`)
+                    dyn.v3.getVariant("share_link_sent", dynamicV3TextVariants, `Link sent to ${receiverEmail}`)
                   );
                   logEvent("SHARE_HOTEL", {
                     title: prop.title,
@@ -365,7 +389,7 @@ function PropertyDetailContent() {
                 }}
                 className="px-4 py-1.5 rounded-full text-sm text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {getText("send", "Send")}
+                {dyn.v3.getVariant("send", dynamicV3TextVariants, "Send")}
               </button>
             </div>
           </div>
@@ -397,7 +421,7 @@ function PropertyDetailContent() {
             {prop.rating.toFixed(2)}
           </span>
           <span className="text-neutral-600">
-            · {prop.reviews ?? 30} {getText("reviews", "reviews")}
+            · {prop.reviews ?? 30} {dyn.v3.getVariant("reviews", dynamicV3TextVariants, "reviews")}
           </span>
           <button
             onClick={() => {
@@ -436,8 +460,8 @@ function PropertyDetailContent() {
 
               setToastMessage(
                 newState
-                  ? getText("added_to_wishlist", "Added to wishlist ❤️")
-                  : getText("removed_from_wishlist", "Removed from wishlist 💔")
+                  ? dyn.v3.getVariant("added_to_wishlist", dynamicV3TextVariants, "Added to wishlist ❤️")
+                  : dyn.v3.getVariant("removed_from_wishlist", dynamicV3TextVariants, "Removed from wishlist 💔")
               );
             }}
             className="p-2 bg-white border border-neutral-200 rounded-full hover:shadow transition"
@@ -462,11 +486,11 @@ function PropertyDetailContent() {
             </svg>
           </button>
           <button
-            id={getId("share_button")}
+            id={dyn.v3.getVariant("share_button", ID_VARIANTS_MAP, "share-button")}
             onClick={() => setShowShareModal(true)}
             className="px-4 py-2 text-sm rounded-full bg-blue-600 text-white hover:bg-blue-700 transition"
           >
-            {getText("share", "Share")}
+            {dyn.v3.getVariant("share", dynamicV3TextVariants, "Share")}
           </button>
         </div>
         <hr className="my-4" />
@@ -623,7 +647,7 @@ function PropertyDetailContent() {
 
         <div className="mt-8 border rounded-2xl p-4 bg-white shadow-sm">
           <h2 className="font-semibold text-lg mb-3">
-            {getText("select_dates", "Select your stay")}
+            {dyn.v3.getVariant("select_dates", dynamicV3TextVariants, "Select your stay")}
           </h2>
           <Calendar
             numberOfMonths={2}
@@ -641,13 +665,13 @@ function PropertyDetailContent() {
         <div id="pricePerNight" className="text-2xl font-bold mb-1">
           ${prop.price.toFixed(2)}{" "}
           <span className="text-base text-neutral-600 font-medium">
-            USD <span className="font-normal">night</span>
+            USD <span className="font-normal">{dyn.v3.getVariant("night", dynamicV3TextVariants, "night")}</span>
           </span>
         </div>
         <div className="flex gap-3 mt-3 mb-4">
           <div id="checkIn" className="flex-1 border rounded-md px-3 py-2">
             <div className="text-xs text-neutral-500 font-semibold">
-              {getText("check_in", "CHECK-IN")}
+              {dyn.v3.getVariant("check_in", dynamicV3TextVariants, "CHECK-IN")}
             </div>
             <div className="tracking-wide text-[15px]">
               {selectedRange?.from ? format(selectedRange.from, "MM/dd/yyyy") : "–"}
@@ -655,7 +679,7 @@ function PropertyDetailContent() {
           </div>
           <div id="checkOut" className="flex-1 border rounded-md px-3 py-2">
             <div className="text-xs text-neutral-500 font-semibold">
-              {getText("check_out", "CHECK-OUT")}
+              {dyn.v3.getVariant("check_out", dynamicV3TextVariants, "CHECK-OUT")}
             </div>
             <div className="tracking-wide text-[15px]">
               {selectedRange?.to ? format(selectedRange.to, "MM/dd/yyyy") : "–"}
@@ -664,10 +688,10 @@ function PropertyDetailContent() {
         </div>
         <div className="border rounded-md px-3 py-2 mb-3">
           <div className="text-xs text-neutral-500 font-semibold">
-            {getText("guests", "GUESTS")}
+            {dyn.v3.getVariant("guests", dynamicV3TextVariants, "GUESTS")}
           </div>
           <input
-            id={getId("guests_count")}
+            id={dyn.v3.getVariant("guests_count", ID_VARIANTS_MAP, "guests-count")}
             className="bg-transparent text-[15px] w-full p-0 border-none outline-none"
             value={guests}
             type="number"
@@ -695,41 +719,41 @@ function PropertyDetailContent() {
         </div>
         {hasValidSelection ? (
           <button
-            id={getId("reserve_button")}
-            className={`${getClass("button-primary", "")} rounded-lg w-full py-3 text-white font-semibold text-base bg-[#616882] hover:bg-[#8692bd] transition mb-3 shadow focus:outline-none`}
+            id={dyn.v3.getVariant("reserve_button", ID_VARIANTS_MAP, "reserve-button")}
+            className={`${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")} rounded-lg w-full py-3 text-white font-semibold text-base bg-[#616882] hover:bg-[#8692bd] transition mb-3 shadow focus:outline-none`}
             onClick={handleReserve}
           >
-            {getText("reserve", "Reserve")}
+            {dyn.v3.getVariant("reserve", dynamicV3TextVariants, "Reserve")}
           </button>
         ) : (
           <button
-            id={getId("check_availability_button")}
+            id={dyn.v3.getVariant("check_availability_button", ID_VARIANTS_MAP, "check-availability-button")}
             disabled
             className="rounded-lg w-full py-3 text-neutral-400 font-semibold text-base bg-neutral-100 mb-3 shadow cursor-not-allowed"
           >
-            {getText("check_availability", "Check Availability")}
+            {dyn.v3.getVariant("check_availability", dynamicV3TextVariants, "Check Availability")}
           </button>
         )}
         <div className="text-center text-neutral-400 text-sm mb-4">
-          {getText("no_charge_yet", "You won't be charged yet")}
+          {dyn.v3.getVariant("no_charge_yet", dynamicV3TextVariants, "You won't be charged yet")}
         </div>
         <div className="flex flex-col gap-2 text-[15px]">
           <div className="flex items-center justify-between">
             <span className="underline">
               ${prop.price.toFixed(2)} USD x {nights}{" "}
-              {nights === 1 ? getText("night", "night") : getText("nights", "nights")}
+              {nights === 1 ? dyn.v3.getVariant("night", dynamicV3TextVariants, "night") : dyn.v3.getVariant("nights", dynamicV3TextVariants, "nights")}
             </span>
             <span>${priceSubtotal.toFixed(2)} USD</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="underline">
-              {getText("cleaning_fee", "Cleaning fee")}
+              {dyn.v3.getVariant("cleaning_fee", dynamicV3TextVariants, "Cleaning fee")}
             </span>
             <span>${cleaningFee} USD</span>
           </div>
           <hr />
           <div className="flex items-center justify-between font-bold text-neutral-900">
-            <span>{getText("total", "Total")}</span>{" "}
+            <span>{dyn.v3.getVariant("total", dynamicV3TextVariants, "Total")}</span>{" "}
             <span>${total.toFixed(2)} USD</span>
           </div>
         </div>

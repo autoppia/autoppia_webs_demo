@@ -4,8 +4,9 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import Image from "next/image";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useMemo } from "react";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
 
 // Example static data
 const RECENT_SEARCHES = [
@@ -57,7 +58,24 @@ export function WherePopover({
 }) {
   const [open, setOpen] = React.useState(false);
   const [input, setInput] = React.useState(searchTerm);
-  const { getText, getId } = useV3Attributes();
+  const dyn = useDynamicSystem();
+  const dynamicV3TextVariants: Record<string, string[]> = {
+    where_placeholder: ["Search destinations", "Search cities", "Search regions"],
+    recent_searches: ["Recent searches", "Latest searches", "Recent picks"],
+    search_by_region: ["Search by region", "Browse by area", "Pick a region"],
+  };
+
+  const recentOrder = useMemo(
+    () => dyn.v1.changeOrderElements("where-recent", RECENT_SEARCHES.length),
+    [dyn.seed]
+  );
+  const orderedRecents = recentOrder.map((idx) => RECENT_SEARCHES[idx]);
+
+  const regionOrder = useMemo(
+    () => dyn.v1.changeOrderElements("where-regions", REGIONS.length),
+    [dyn.seed]
+  );
+  const orderedRegions = regionOrder.map((idx) => REGIONS[idx]);
 
   // sync with parent
   React.useEffect(() => setInput(searchTerm), [searchTerm]);
@@ -71,16 +89,17 @@ export function WherePopover({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent
-        id={getId("where_popover_content")}
+        id={dyn.v3.getVariant("where_popover_content", ID_VARIANTS_MAP, "where-popover-content")}
         sideOffset={12}
         align="start"
-        className="min-w-[650px] shadow-xl px-0 py-4 rounded-3xl border bg-white"
+        className={`min-w-[650px] shadow-xl px-0 py-4 rounded-3xl border bg-white ${dyn.v3.getVariant("popover_content", CLASS_VARIANTS_MAP, "")}`}
       >
         <div className="flex flex-row gap-16 px-8">
           <div className="min-w-[220px]">
             <input
-              className="mb-5 w-full px-3 py-2 border rounded-xl text-[15px] focus:outline-none focus:ring-2 ring-neutral-200 transition"
-              placeholder={getText("where_placeholder", "Search destinations")}
+              id={dyn.v3.getVariant("where_input", ID_VARIANTS_MAP, "where-input")}
+              className={`mb-5 w-full px-3 py-2 border rounded-xl text-[15px] focus:outline-none focus:ring-2 ring-neutral-200 transition ${dyn.v3.getVariant("input_field", CLASS_VARIANTS_MAP, "")}`}
+              placeholder={dyn.v3.getVariant("where_placeholder", dynamicV3TextVariants, "Search destinations")}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
@@ -88,10 +107,10 @@ export function WherePopover({
               }}
             />
             <h3 className="font-semibold mb-3 text-neutral-800">
-              {getText("recent_searches", "Recent searches")}
+              {dyn.v3.getVariant("recent_searches", dynamicV3TextVariants, "Recent searches")}
             </h3>
             <div className="flex flex-col gap-2">
-              {RECENT_SEARCHES.map((r) => (
+              {orderedRecents.map((r) => dyn.v1.addWrapDecoy(`recent-${r.country}`, (
                 <div
                   key={r.country}
                   className="flex gap-3 items-center px-2 py-2 rounded-xl hover:bg-neutral-100 cursor-pointer"
@@ -111,15 +130,15 @@ export function WherePopover({
                     </div>
                   </div>
                 </div>
-              ))}
+              )))}
             </div>
           </div>
           <div>
             <h3 className="font-semibold mb-3 text-neutral-800">
-              {getText("search_by_region", "Search by region")}
+              {dyn.v3.getVariant("search_by_region", dynamicV3TextVariants, "Search by region")}
             </h3>
             <div className="grid grid-cols-3 gap-5">
-              {REGIONS.map((r) => (
+              {orderedRegions.map((r) => dyn.v1.addWrapDecoy(`region-${r.label}`, (
                 <div
                   key={r.label}
                   className="flex flex-col gap-2 items-center p-2 rounded-2xl hover:bg-neutral-100 cursor-pointer transition border border-neutral-200 shadow-sm w-[100px] h-[110px]"
@@ -134,7 +153,7 @@ export function WherePopover({
                     {r.label}
                   </span>
                 </div>
-              ))}
+              )))}
             </div>
           </div>
         </div>
