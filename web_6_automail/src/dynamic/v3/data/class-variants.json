@@ -78,5 +78,20 @@
     "inline-flex items-center gap-2 px-3 py-1 rounded-md bg-muted",
     "inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10",
     "inline-flex items-center gap-2 px-3 py-1 rounded-md border border-border"
+  ],
+  "email-action-button": [
+    "inline-flex items-center gap-2 px-3 py-2 rounded-md bg-muted/50 hover:bg-muted",
+    "inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-border hover:bg-muted/60",
+    "inline-flex items-center gap-2 px-3 py-2 rounded-full bg-accent/10 hover:bg-accent/20"
+  ],
+  "sidebar-link": [
+    "w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-lg sidebar-item-hover",
+    "w-full justify-start gap-3 h-10 px-3 text-sm font-medium rounded-md border border-transparent hover:border-border",
+    "w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-full hover:bg-accent/20"
+  ],
+  "template-field": [
+    "border rounded-md px-3 py-2",
+    "border border-border rounded-lg px-3 py-2 bg-muted/40",
+    "border border-border rounded-md px-3 py-2 shadow-inner bg-background"
   ]
 }

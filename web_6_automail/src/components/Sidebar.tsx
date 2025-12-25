@@ -16,6 +16,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Inbox, Star, Clock, Send, AlertTriangle, Trash2, Mail, Settings, Users, MessageSquare, PenTool, FileText } from "lucide-react";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
+import { useSeed } from "@/context/SeedContext";
 
 interface NavigationItem {
   id: EmailFolder | string;
@@ -33,6 +34,7 @@ interface SidebarProps {
 export function Sidebar({ textStructure }: SidebarProps) {
   const { currentVariant } = useLayout();
   const dyn = useDynamicSystem();
+  const { getNavigationUrl } = useSeed();
   const router = useRouter();
   const pathname = usePathname();
   const {
@@ -62,7 +64,7 @@ export function Sidebar({ textStructure }: SidebarProps) {
 
   const navigationItems: NavigationItem[] = [
     { id: "inbox", label: textStructure?.inbox_label || dyn.v3.getVariant("inbox_label", TEXT_VARIANTS_MAP, "Inbox"), icon: Inbox, count: counts.inbox, type: "folder" },
-    { id: "templates", label: "Templates", icon: FileText, type: "route", route: "/templates" },
+    { id: "templates", label: dyn.v3.getVariant("templates_nav", TEXT_VARIANTS_MAP, "Templates"), icon: FileText, type: "route", route: "/templates" },
     { id: "starred", label: textStructure?.starred_label || dyn.v3.getVariant("starred_label", TEXT_VARIANTS_MAP, "Starred"), icon: Star, count: counts.starred, type: "folder" },
     { id: "snoozed", label: dyn.v3.getVariant("snoozed_label", TEXT_VARIANTS_MAP, "Snoozed"), icon: Clock, count: counts.snoozed, type: "folder" },
     { id: "sent", label: textStructure?.sent_label || dyn.v3.getVariant("sent_label", TEXT_VARIANTS_MAP, "Sent"), icon: Send, count: counts.sent, type: "folder" },
@@ -92,7 +94,7 @@ export function Sidebar({ textStructure }: SidebarProps) {
       logEvent(EVENT_TYPES.NAVIGATION_CLICKED, { id: item.id, label: item.label });
     } else if (item.type === "route" && item.route) {
       logEvent(EVENT_TYPES.VIEW_TEMPLATES, { source: "sidebar" });
-      router.push(item.route);
+      router.push(getNavigationUrl(item.route));
     } else {
       setFilter({ folder: "inbox", label: item.id });
     }
@@ -120,9 +122,9 @@ export function Sidebar({ textStructure }: SidebarProps) {
           {orderedNavigation.map((item, index) => {
             const Icon = item.icon;
             const active = isActive(item);
-            const buttonId = dyn.v3.getVariant(`sidebar-folder-${item.id}`, ID_VARIANTS_MAP, String(item.id));
+            const buttonId = dyn.v3.getVariant(`sidebar-${item.id}`, ID_VARIANTS_MAP, String(item.id));
             const buttonClass = cn(
-              dyn.v3.getVariant("sidebar-folder", CLASS_VARIANTS_MAP, "w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-lg"),
+              dyn.v3.getVariant("sidebar-link", CLASS_VARIANTS_MAP, dyn.v3.getVariant("sidebar-folder", CLASS_VARIANTS_MAP, "w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-lg")),
               active && "sidebar-item-active"
             );
             return dyn.v1.addWrapDecoy(`nav-${item.id}-${index}`, (
