@@ -35,7 +35,6 @@ export default function Navbar() {
               <div className="hidden md:block w-px h-6 bg-zinc-200" />
               <CartNavIcon />
               <Button
-                id={dyn.v3.getVariant("quick_order_header", ID_VARIANTS_MAP, "quick-order-header")}
                 className="bg-green-600 hover:bg-green-700 text-white"
                 onClick={() => {
                   logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, { source: "navbar" });
