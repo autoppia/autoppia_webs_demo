@@ -6,10 +6,8 @@ import {
   DialogTitle,
   DialogHeader,
   DialogFooter,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -17,7 +15,6 @@ import { Minus, Plus } from "lucide-react";
 import {
   type MenuItem,
   type MenuItemSize,
-  type MenuItemOption,
 } from "@/data/restaurants";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";

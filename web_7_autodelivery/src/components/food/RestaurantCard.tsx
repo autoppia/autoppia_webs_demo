@@ -4,7 +4,7 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { useLayout } from "@/contexts/LayoutProvider";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface RestaurantCardProps {
   id: string;
