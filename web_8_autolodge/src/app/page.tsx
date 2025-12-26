@@ -526,7 +526,7 @@ function HomeContent() {
     return order.map((idx) => paginatedResults[idx]).filter(Boolean);
   }, [dyn.seed, paginatedResults]);
 
-  return (
+  return dyn.v1.addWrapDecoy("home-page-root", (
     <div className="flex flex-col w-full items-center mt-4 pb-12">
       {dyn.v1.addWrapDecoy("search-bar-container", (
       <SearchWrapperTag
@@ -586,7 +586,7 @@ function HomeContent() {
             <div className="flex items-center gap-2 sm:justify-end">
               <button
                 type="button"
-                className="h-10 px-4 rounded-full border border-neutral-300 text-sm font-semibold text-neutral-700 hover:bg-neutral-100 transition"
+                className={`h-10 px-4 rounded-full border border-neutral-300 text-sm font-semibold text-neutral-700 hover:bg-neutral-100 transition ${dyn.v3.getVariant("filter_reset_button", CLASS_VARIANTS_MAP, "")}`}
                 onClick={() => {
                   setMinRating(0);
                   setRegion("all");
@@ -596,7 +596,7 @@ function HomeContent() {
               </button>
               <button
                 type="button"
-                className={`h-10 px-4 rounded-full bg-[#616882] text-white font-semibold hover:bg-[#7b86aa] transition shadow-sm ${dyn.v3.getVariant("apply_button", CLASS_VARIANTS_MAP, "")}`}
+                className={`h-10 px-4 rounded-full bg-[#616882] text-white font-semibold hover:bg-[#7b86aa] transition shadow-sm ${dyn.v3.getVariant("filter_apply_button", CLASS_VARIANTS_MAP, "")}`}
                 onClick={handleApplyFilters}
               >
                 {dyn.v3.getVariant("apply_filters", dynamicV3TextVariants, "Apply")}
@@ -656,7 +656,7 @@ function HomeContent() {
         </div>
       )}
     </div>
-  );
+  ));
 }
 
 export default function Home() {

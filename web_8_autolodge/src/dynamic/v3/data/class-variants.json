@@ -434,5 +434,70 @@
     "benefit-box",
     "feature-panel",
     "benefit-panel"
+  ],
+  "filter_reset_button": [
+    "reset-button",
+    "filter-reset",
+    "button-reset"
+  ],
+  "filter_apply_button": [
+    "apply-button",
+    "filter-apply",
+    "confirm-apply"
+  ],
+  "share_button_class": [
+    "share-button",
+    "share-action",
+    "share-control"
+  ],
+  "review_input": [
+    "review-input",
+    "feedback-input",
+    "commenter-input"
+  ],
+  "review_select": [
+    "review-select",
+    "rating-select",
+    "feedback-select"
+  ],
+  "review_textarea": [
+    "review-textarea",
+    "feedback-textarea",
+    "comment-box"
+  ],
+  "review_button": [
+    "review-button",
+    "feedback-button",
+    "comment-button"
+  ],
+  "confirm_edit_button_class": [
+    "edit-button",
+    "change-button",
+    "link-button"
+  ],
+  "card_input_class": [
+    "card-input",
+    "payment-input",
+    "checkout-input"
+  ],
+  "card_select_class": [
+    "card-select",
+    "payment-select",
+    "checkout-select"
+  ],
+  "confirm_pay_button_class": [
+    "confirm-button",
+    "pay-button",
+    "checkout-button"
+  ],
+  "host_message_textarea_class": [
+    "host-textarea",
+    "message-textarea",
+    "contact-textarea"
+  ],
+  "host_send_button_class": [
+    "host-send",
+    "message-send",
+    "contact-send"
   ]
 }

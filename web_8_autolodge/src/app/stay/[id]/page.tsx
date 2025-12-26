@@ -60,6 +60,9 @@ function getFallbackHotel(): Hotel {
 function PropertyDetailContent() {
   const dyn = useDynamicSystem();
   const dynamicV3TextVariants: Record<string, string[]> = {
+    submit_review: ["Submit review", "Send review", "Post review"],
+    review_name_placeholder: ["Your name (optional)", "Name (optional)", "Add your name"],
+    review_comment_placeholder: ["Share your experience...", "Tell us about your stay...", "Write your review..."],
     share_title: ["Share this property", "Share stay", "Share listing"],
     invalid_email: ["Invalid email address", "Email looks incorrect", "Please enter a valid email"],
     cancel: ["Cancel", "Close", "Dismiss"],
@@ -311,7 +314,7 @@ function PropertyDetailContent() {
     );
   };
 
-  return (
+  return dyn.v1.addWrapDecoy("stay-page-root", (
     <div className="relative flex flex-row gap-10 w-full max-w-6xl mx-auto mt-7">
       {toastMessage && (
         <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-black text-white px-4 py-2 rounded text-sm shadow-lg z-50">
@@ -395,7 +398,6 @@ function PropertyDetailContent() {
           </div>
         </div>
       )}
-
       <div className="flex-1 min-w-0 pr-6">
         <h1 className="text-2xl font-bold mb-2 leading-7">
           Entire Rental Unit in {prop.location}
@@ -488,7 +490,7 @@ function PropertyDetailContent() {
           <button
             id={dyn.v3.getVariant("share_button", ID_VARIANTS_MAP, "share-button")}
             onClick={() => setShowShareModal(true)}
-            className="px-4 py-2 text-sm rounded-full bg-blue-600 text-white hover:bg-blue-700 transition"
+            className={`px-4 py-2 text-sm rounded-full bg-blue-600 text-white hover:bg-blue-700 transition ${dyn.v3.getVariant("share_button_class", CLASS_VARIANTS_MAP, "")}`}
           >
             {dyn.v3.getVariant("share", dynamicV3TextVariants, "Share")}
           </button>
@@ -561,88 +563,90 @@ function PropertyDetailContent() {
               </p>
             )}
           </div>
-          <form
-            className="flex flex-col gap-3"
-            onSubmit={(event) => {
-              event.preventDefault();
-              if (!reviewForm.comment.trim()) {
-                return;
-              }
-              const nextReview = {
-                id: `${prop.id}-${Date.now()}`,
-                name: reviewForm.name.trim() || "Guest",
-                rating: reviewForm.rating,
-                comment: reviewForm.comment.trim(),
-                date: new Date().toISOString().slice(0, 10),
-              };
-              setUserReviews((prev) => [nextReview, ...prev]);
-              logEvent(EVENT_TYPES.SUBMIT_REVIEW, {
-                hotel: {
-                  id: prop.id,
-                  title: prop.title,
-                  location: prop.location,
-                  price: prop.price,
-                  rating: prop.rating,
-                  reviews: prop.reviews,
-                  datesFrom: prop.datesFrom,
-                  datesTo: prop.datesTo,
-                  guests: prop.guests,
-                  maxGuests: prop.maxGuests,
-                  amenities: prop.amenities?.map((a) => a.title),
-                  host: prop.host,
-                },
-                review: nextReview,
-                rating: reviewForm.rating,
-                commentLength: reviewForm.comment.trim().length,
-                name: nextReview.name,
-              });
-              setToastMessage("Thanks for sharing your review!");
-              setReviewForm({ name: "", rating: 5, comment: "" });
-            }}
-          >
-            <div className="flex gap-2">
-              <input
-                className="flex-1 border rounded-lg px-3 py-2 text-sm"
-                placeholder="Your name (optional)"
-                value={reviewForm.name}
+          {dyn.v1.addWrapDecoy("reviews-form", (
+            <form
+              className="flex flex-col gap-3"
+              onSubmit={(event) => {
+                event.preventDefault();
+                if (!reviewForm.comment.trim()) {
+                  return;
+                }
+                const nextReview = {
+                  id: `${prop.id}-${Date.now()}`,
+                  name: reviewForm.name.trim() || "Guest",
+                  rating: reviewForm.rating,
+                  comment: reviewForm.comment.trim(),
+                  date: new Date().toISOString().slice(0, 10),
+                };
+                setUserReviews((prev) => [nextReview, ...prev]);
+                logEvent(EVENT_TYPES.SUBMIT_REVIEW, {
+                  hotel: {
+                    id: prop.id,
+                    title: prop.title,
+                    location: prop.location,
+                    price: prop.price,
+                    rating: prop.rating,
+                    reviews: prop.reviews,
+                    datesFrom: prop.datesFrom,
+                    datesTo: prop.datesTo,
+                    guests: prop.guests,
+                    maxGuests: prop.maxGuests,
+                    amenities: prop.amenities?.map((a) => a.title),
+                    host: prop.host,
+                  },
+                  review: nextReview,
+                  rating: reviewForm.rating,
+                  commentLength: reviewForm.comment.trim().length,
+                  name: nextReview.name,
+                });
+                setToastMessage("Thanks for sharing your review!");
+                setReviewForm({ name: "", rating: 5, comment: "" });
+              }}
+            >
+              <div className="flex gap-2">
+                <input
+                  className={`flex-1 border rounded-lg px-3 py-2 text-sm ${dyn.v3.getVariant("review_input", CLASS_VARIANTS_MAP, "")}`}
+                  placeholder={dyn.v3.getVariant("review_name_placeholder", dynamicV3TextVariants, "Your name (optional)")}
+                  value={reviewForm.name}
+                  onChange={(event) =>
+                    setReviewForm((prev) => ({ ...prev, name: event.target.value }))
+                  }
+                />
+                <select
+                  className={`w-[120px] border rounded-lg px-3 py-2 text-sm ${dyn.v3.getVariant("review_select", CLASS_VARIANTS_MAP, "")}`}
+                  value={reviewForm.rating}
+                  onChange={(event) =>
+                    setReviewForm((prev) => ({
+                      ...prev,
+                      rating: Number(event.target.value),
+                    }))
+                  }
+                >
+                  {[5, 4.5, 4, 3.5, 3].map((value) => (
+                    <option key={value} value={value}>
+                      {value} ★
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <textarea
+                className={`border rounded-lg px-3 py-2 text-sm resize-none ${dyn.v3.getVariant("review_textarea", CLASS_VARIANTS_MAP, "")}`}
+                rows={3}
+                placeholder={dyn.v3.getVariant("review_comment_placeholder", dynamicV3TextVariants, "Share your experience...")}
+                value={reviewForm.comment}
                 onChange={(event) =>
-                  setReviewForm((prev) => ({ ...prev, name: event.target.value }))
+                  setReviewForm((prev) => ({ ...prev, comment: event.target.value }))
                 }
               />
-              <select
-                className="w-[120px] border rounded-lg px-3 py-2 text-sm"
-                value={reviewForm.rating}
-                onChange={(event) =>
-                  setReviewForm((prev) => ({
-                    ...prev,
-                    rating: Number(event.target.value),
-                  }))
-                }
+              <button
+                type="submit"
+                className={`self-start px-4 py-2 rounded-full bg-[#616882] text-white text-sm font-semibold hover:bg-[#7b86aa] transition disabled:opacity-50 ${dyn.v3.getVariant("review_button", CLASS_VARIANTS_MAP, "")}`}
+                disabled={!reviewForm.comment.trim()}
               >
-                {[5, 4.5, 4, 3.5, 3].map((value) => (
-                  <option key={value} value={value}>
-                    {value} ★
-                  </option>
-                ))}
-              </select>
-            </div>
-            <textarea
-              className="border rounded-lg px-3 py-2 text-sm resize-none"
-              rows={3}
-              placeholder="Share your experience..."
-              value={reviewForm.comment}
-              onChange={(event) =>
-                setReviewForm((prev) => ({ ...prev, comment: event.target.value }))
-              }
-            />
-            <button
-              type="submit"
-              className="self-start px-4 py-2 rounded-full bg-[#616882] text-white text-sm font-semibold hover:bg-[#7b86aa] transition disabled:opacity-50"
-              disabled={!reviewForm.comment.trim()}
-            >
-              Submit review
-            </button>
-          </form>
+                {dyn.v3.getVariant("submit_review", dynamicV3TextVariants, "Submit review")}
+              </button>
+            </form>
+          ))}
         </div>
 
         <div className="mt-8 border rounded-2xl p-4 bg-white shadow-sm">
@@ -759,7 +763,7 @@ function PropertyDetailContent() {
         </div>
       </div>
     </div>
-  );
+  ));
 }
 
 export default function PropertyDetail() {

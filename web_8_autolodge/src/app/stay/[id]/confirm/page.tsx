@@ -8,7 +8,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP } from "@/dynamic/v3";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeedStructureNavigation } from "../../../../hooks/useSeedStructureNavigation";
 
 function parseLocalDate(dateString: string | undefined) {
@@ -239,7 +239,7 @@ function ConfirmPageContent() {
     };
   }, [dateRange.from, dateRange.to, guests, params.id, prop]);
 
-  return (
+  return dyn.v1.addWrapDecoy("confirm-page-root", (
     <div className="w-full" style={{ marginTop: "38px" }}>
       <button
         className="flex items-center gap-2 text-neutral-700 text-base font-medium hover:underline focus:underline focus:outline-none transition cursor-pointer mb-7 px-0 py-0"
@@ -268,11 +268,11 @@ function ConfirmPageContent() {
             <div className="font-semibold text-xl mb-5 mt-1">{t("your_trip", "Your trip")}</div>
             {/* Trip rows */}
             <div className="flex flex-col gap-3 mb-2">
-              <div className="flex items-center gap-5 text-[16.5px] w-full relative">
-                <div className="font-medium min-w-[56px] text-neutral-900">
-                  {t("dates", "Dates")}
-                </div>
-                <div className="flex-1 text-neutral-800 tracking-wide">
+                <div className="flex items-center gap-5 text-[16.5px] w-full relative">
+                  <div className="font-medium min-w-[56px] text-neutral-900">
+                    {t("dates", "Dates")}
+                  </div>
+                  <div className="flex-1 text-neutral-800 tracking-wide">
                   {dateRange.from && format(dateRange.from, "MMM d")} –{" "}
                   {dateRange.to && format(dateRange.to, "MMM d")} {/* Display actual checkout date */}
                 </div>
@@ -290,7 +290,7 @@ function ConfirmPageContent() {
                     });
                   }}
                   id={idVariant("edit_dates_button")}
-                  className="ml-2 text-[#ff5a5f] text-base font-medium hover:underline focus:underline focus:outline-none px-1"
+                  className={`ml-2 text-[#ff5a5f] text-base font-medium hover:underline focus:underline focus:outline-none px-1 ${dyn.v3.getVariant("confirm_edit_button_class", CLASS_VARIANTS_MAP, "")}`}
                 >
                   {t("edit", "Edit")}
                 </button>
@@ -447,7 +447,7 @@ function ConfirmPageContent() {
                     value={cardNumber}
                     onChange={(e) => setCardNumber(e.target.value)}
                     placeholder={t("card_number_placeholder", "0000 0000 0000 0000")}
-                    className={`w-full border rounded-md px-3 py-2 text-[16px] tracking-wider bg-white focus:ring-2 ring-neutral-200 ${
+                    className={`w-full border rounded-md px-3 py-2 text-[16px] tracking-wider bg-white focus:ring-2 ring-neutral-200 ${dyn.v3.getVariant("card_input_class", CLASS_VARIANTS_MAP, "")} ${
                       showCardError ? "border-red-500 ring-red-200" : ""
                     }`}
                     maxLength={19}
@@ -466,7 +466,7 @@ function ConfirmPageContent() {
                       value={exp}
                       placeholder={t("expiration_placeholder", "MM / YY")}
                       onChange={(e) => setExp(e.target.value)}
-                      className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
+                      className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${dyn.v3.getVariant("card_input_class", CLASS_VARIANTS_MAP, "")} ${
                         showExpError ? "border-red-500 ring-red-200" : ""
                       }`}
                       disabled={paymentMethod !== "card"}
@@ -483,7 +483,7 @@ function ConfirmPageContent() {
                       value={cvv}
                       onChange={(e) => setCvv(e.target.value)}
                       placeholder={t("cvv_placeholder", "123")}
-                      className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
+                      className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${dyn.v3.getVariant("card_input_class", CLASS_VARIANTS_MAP, "")} ${
                         showCvvError ? "border-red-500 ring-red-200" : ""
                       }`}
                       disabled={paymentMethod !== "card"}
@@ -501,7 +501,7 @@ function ConfirmPageContent() {
                     value={zip}
                     onChange={(e) => setZip(e.target.value)}
                     placeholder={t("zip_placeholder", "ZIP code")}
-                    className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
+                    className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${dyn.v3.getVariant("card_input_class", CLASS_VARIANTS_MAP, "")} ${
                       showZipError ? "border-red-500 ring-red-200" : ""
                     }`}
                     disabled={paymentMethod !== "card"}
@@ -516,7 +516,7 @@ function ConfirmPageContent() {
                     id={idVariant("country_select")}
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    className="w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200"
+                    className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${dyn.v3.getVariant("card_select_class", CLASS_VARIANTS_MAP, "")}`}
                     disabled={paymentMethod !== "card"}
                   >
                     <option>United States</option>
@@ -559,34 +559,38 @@ function ConfirmPageContent() {
                 </div>
               </div>
             </div>
-            <textarea
-              id={idVariant("host_message_input")}
-              value={hostMessage}
-              onChange={(e) => setHostMessage(e.target.value)}
-              rows={4}
-              placeholder={t("host_message_placeholder", `Hi ${prop.host.name} I'll be staying...`)}
-              className="w-full border rounded-lg px-3 py-3 text-[16px] bg-white mb-3 resize-none"
-            />
-            <button
-              id={idVariant("send_host_message_button")}
-              onClick={() => {
-                if (hostMessage.trim() !== "") {
-                  logEvent(EVENT_TYPES.MESSAGE_HOST, {
-                    message: hostMessage.trim(),
-                    hostName: prop.host.name,
-                    source: "message_host_section",
-                    hotel: prop,
-                  });
+            {dyn.v1.addWrapDecoy("host-message-form", (
+              <>
+                <textarea
+                  id={idVariant("host_message_input")}
+                  value={hostMessage}
+                  onChange={(e) => setHostMessage(e.target.value)}
+                  rows={4}
+                  placeholder={t("host_message_placeholder", `Hi ${prop.host.name} I'll be staying...`)}
+                  className={`w-full border rounded-lg px-3 py-3 text-[16px] bg-white mb-3 resize-none ${dyn.v3.getVariant("host_message_textarea_class", CLASS_VARIANTS_MAP, "")}`}
+                />
+                <button
+                  id={idVariant("send_host_message_button")}
+                  onClick={() => {
+                    if (hostMessage.trim() !== "") {
+                      logEvent(EVENT_TYPES.MESSAGE_HOST, {
+                        message: hostMessage.trim(),
+                        hostName: prop.host.name,
+                        source: "message_host_section",
+                        hotel: prop,
+                      });
 
-                  showToast(t("message_sent", " ✅ Message sent."));
-                  setHostMessage("");
-                }
-              }}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition disabled:opacity-50 disabled:pointer-events-none"
-              disabled={!hostMessage.trim()}
-            >
-              {t("send", "Send")}
-            </button>
+                      showToast(t("message_sent", " ✅ Message sent."));
+                      setHostMessage("");
+                    }
+                  }}
+                  className={`bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition disabled:opacity-50 disabled:pointer-events-none ${dyn.v3.getVariant("host_send_button_class", CLASS_VARIANTS_MAP, "")}`}
+                  disabled={!hostMessage.trim()}
+                >
+                  {t("send", "Send")}
+                </button>
+              </>
+            ))}
           </section>
           {toast && (
             <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-green-50 border border-green-800 text-green-800 rounded-lg p-5 text-center text-xl font-semibold shadow">
@@ -653,7 +657,7 @@ function ConfirmPageContent() {
             </div>
           </div>
           <button
-            className="mt-7 rounded-lg w-full py-4 text-white font-semibold text-[18px] bg-[#616882] hover:bg-[#7d87aa] transition shadow focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+            className={`mt-7 rounded-lg w-full py-4 text-white font-semibold text-[18px] bg-[#616882] hover:bg-[#7d87aa] transition shadow focus:outline-none disabled:opacity-50 disabled:pointer-events-none ${dyn.v3.getVariant("confirm_pay_button_class", CLASS_VARIANTS_MAP, "")}`}
             id={idVariant("confirm_and_pay_button")}
             onClick={() => {
               setHasTriedSubmit(true);
@@ -695,7 +699,7 @@ function ConfirmPageContent() {
         </div>
       </div>
     </div>
-  );
+  ));
 }
 
 export default function ConfirmPage() {

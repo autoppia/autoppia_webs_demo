@@ -19,6 +19,41 @@
     "Saved",
     "Favorites"
   ],
+  "reset_filters": [
+    "Reset",
+    "Clear filters",
+    "Reset filters"
+  ],
+  "apply_filters": [
+    "Apply",
+    "Apply filters",
+    "Run filters"
+  ],
+  "submit_review": [
+    "Submit review",
+    "Send review",
+    "Post review"
+  ],
+  "review_name_placeholder": [
+    "Your name (optional)",
+    "Name (optional)",
+    "Add your name"
+  ],
+  "review_comment_placeholder": [
+    "Share your experience...",
+    "Tell us about your stay...",
+    "Write your review..."
+  ],
+  "share": [
+    "Share",
+    "Send",
+    "Copy link"
+  ],
+  "message_sent": [
+    "✅ Message sent.",
+    "Message delivered.",
+    "Sent to host."
+  ],
   "share_email_placeholder": [
     "Receiver's email",
     "Friend's email",
