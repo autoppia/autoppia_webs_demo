@@ -342,7 +342,7 @@ function HomeContent() {
     <DateRangePopover selectedRange={dateRange} setSelectedRange={setDateRange}>
       <div
         id={dyn.v3.getVariant("check_in_field", ID_VARIANTS_MAP, "check_in_field")}
-        className="flex-1 min-w-[190px] min-h-[96px] flex flex-col justify-center px-3 py-2 rounded-[20px] cursor-pointer hover:bg-neutral-100 transition-all relative"
+        className="flex-1 min-w-[170px] min-h-[96px] flex flex-col justify-center px-3 py-2 rounded-[20px] cursor-pointer hover:bg-neutral-100 transition-all relative"
       >
         <span className="text-xs font-semibold text-neutral-500 pb-0.5">
           {dyn.v3.getVariant("check_in", dynamicV3TextVariants, "Check in")}
@@ -375,7 +375,7 @@ function HomeContent() {
     <DateRangePopover selectedRange={dateRange} setSelectedRange={setDateRange}>
       <div
         id={dyn.v3.getVariant("check_out_field", ID_VARIANTS_MAP, "check_out_field")}
-        className="flex-1 min-w-[190px] min-h-[96px] flex flex-col justify-center px-3 py-2 rounded-[20px] cursor-pointer hover:bg-neutral-100 transition-all relative"
+        className="flex-1 min-w-[170px] min-h-[96px] flex flex-col justify-center px-3 py-2 rounded-[20px] cursor-pointer hover:bg-neutral-100 transition-all relative"
       >
         <span className="text-xs font-semibold text-neutral-500 pb-0.5">
           {dyn.v3.getVariant("check_out", dynamicV3TextVariants, "Check out")}
@@ -474,8 +474,13 @@ function HomeContent() {
     baseEventOrder.map((key) => {
       const node = eventComponents[key];
       if (!node) return null;
+      const spanClass =
+        key === "dates" ? "sm:col-span-2 lg:col-span-2" : "sm:col-span-1";
       return (
-        <div key={key} className="h-full w-full flex items-stretch justify-start">
+        <div
+          key={key}
+          className={`h-full w-full flex items-stretch justify-start ${spanClass}`}
+        >
           {node}
         </div>
       );
