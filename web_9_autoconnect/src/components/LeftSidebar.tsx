@@ -14,6 +14,17 @@ import { cn } from "@/library/utils";
 export default function LeftSidebar() {
   useSeed();
   const dyn = useDynamicSystem();
+  const localTextVariants: Record<string, string[]> = {
+    saved_items: ["Saved items", "Bookmarks", "My saves"],
+    hidden_posts: ["Hidden posts", "Hidden", "Muted posts"],
+  };
+  const localClassVariants: Record<string, string[]> = {
+    sidebar_link: [
+      "mt-3 inline-flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:text-blue-600",
+      "mt-3 inline-flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:text-indigo-600",
+      "mt-3 inline-flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:text-blue-500",
+    ],
+  };
   
   // Get current user inside component to avoid undefined error
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -100,23 +111,29 @@ export default function LeftSidebar() {
 
       <Link
         href="/saved"
-        className="mt-3 inline-flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:text-blue-600"
+        className={cn(
+          "mt-3 inline-flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:text-blue-600",
+          dyn.v3.getVariant("sidebar_link", localClassVariants, "")
+        )}
         onClick={() =>
           logEvent(EVENT_TYPES.VIEW_SAVED_POSTS, { source: "left_sidebar" })
         }
       >
         <span className="text-yellow-500">&#9734;</span>
-        <span>Saved items</span>
+        <span>{dyn.v3.getVariant("saved_items", localTextVariants, "Saved items")}</span>
       </Link>
       <Link
         href="/hidden"
-        className="mt-2 inline-flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:text-blue-600"
+        className={cn(
+          "mt-2 inline-flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:text-blue-600",
+          dyn.v3.getVariant("sidebar_link", localClassVariants, "")
+        )}
         onClick={() =>
           logEvent(EVENT_TYPES.VIEW_HIDDEN_POSTS, { source: "left_sidebar" })
         }
       >
         <span className="text-gray-500">👁‍🗨</span>
-        <span>Hidden posts</span>
+        <span>{dyn.v3.getVariant("hidden_posts", localTextVariants, "Hidden posts")}</span>
       </Link>
 
       {/* Curioso: Estadísticas divertidas */}

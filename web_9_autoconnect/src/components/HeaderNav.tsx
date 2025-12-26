@@ -16,6 +16,18 @@ export default function HeaderNav() {
   
   // Fix hydration error: use state to get user only on client side
   const [profileUsername, setProfileUsername] = useState<string>("alexsmith");
+  const navTextVariants: Record<string, string[]> = {
+    nav_home: ["Home", "Feed", "Dashboard"],
+    nav_jobs: ["Jobs", "Careers", "Openings"],
+    nav_recommendations: ["Recommendations", "For you", "Suggestions"],
+    nav_profile: ["Profile", "Me", "My profile"],
+  };
+  const navIdVariants: Record<string, string[]> = {
+    nav_home_link: ["nav_home_link", "nav_home", "nav-feed"],
+    nav_jobs_link: ["nav_jobs_link", "nav_jobs", "nav-careers"],
+    nav_recommendations_link: ["nav_recs_link", "nav_recommendations", "nav-suggestions"],
+    nav_profile_link: ["nav_profile_link", "nav_profile", "nav-me"],
+  };
   
   useEffect(() => {
     // Only get user on client side to avoid hydration mismatch
@@ -106,7 +118,7 @@ export default function HeaderNav() {
                     <SeedLink
                       key={item.href}
                       href={item.href}
-                      id={dyn.v3.getVariant(item.idKey, ID_VARIANTS_MAP, item.idKey)}
+                      id={dyn.v3.getVariant(item.idKey, navIdVariants, item.idKey)}
                       className={dyn.v3.getVariant(
                         "nav-link",
                         CLASS_VARIANTS_MAP,
@@ -118,11 +130,7 @@ export default function HeaderNav() {
                         }
                       }}
                     >
-                      {dyn.v3.getVariant(
-                        `nav_label_${idx}`,
-                        TEXT_VARIANTS_MAP,
-                        item.label
-                      )}
+                      {dyn.v3.getVariant(item.idKey.replace("_link", ""), navTextVariants, item.label)}
                     </SeedLink>
                   ))}
                 </nav>

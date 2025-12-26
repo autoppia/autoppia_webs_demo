@@ -29,6 +29,26 @@ function HomeContent() {
   resolvedSeeds;
   const dyn = useDynamicSystem();
 
+  const homeTextVariants: Record<string, string[]> = {
+    post_placeholder: ["Share something...", "What's on your mind?", "Write an update..."],
+    post_button: ["Post", "Share", "Publish"],
+    comment_placeholder: ["Add a comment...", "Write a reply...", "Comment here..."],
+    save_post: ["Save", "Bookmark", "Keep"],
+    hide_post: ["Hide", "Remove", "Dismiss"],
+  };
+
+  const homeClassVariants: Record<string, string[]> = {
+    post_input: [
+      "flex-1 border border-gray-200 rounded-full px-4 py-2 focus:outline-blue-500",
+      "flex-1 border border-gray-200 rounded-full px-4 py-2 focus:outline-indigo-500",
+      "flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-blue-600",
+    ],
+    post_button_class: [
+      "bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4 py-2 font-medium disabled:bg-blue-200",
+      "bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-4 py-2 font-medium disabled:bg-indigo-200",
+      "bg-blue-500 hover:bg-blue-600 text-white rounded-full px-4 py-2 font-medium disabled:bg-blue-200",
+    ],
+  };
   // Get data from dynamic provider
   const users = dynamicDataProvider.getUsers();
   const defaultPosts = dynamicDataProvider.getPosts();
@@ -266,23 +286,23 @@ function HomeContent() {
       <input
         type="text"
         className={cn(
-          "flex-1 border border-gray-200 rounded-full px-4 py-2 focus:outline-blue-500",
+          dyn.v3.getVariant("post_input", homeClassVariants, ""),
           dyn.v3.getVariant("post_input", CLASS_VARIANTS_MAP, "")
         )}
         value={newPost}
         onChange={(e) => setNewPost(e.target.value)}
-        placeholder={dyn.v3.getVariant("post_placeholder", TEXT_VARIANTS_MAP, "Share something...")}
+        placeholder={dyn.v3.getVariant("post_placeholder", homeTextVariants, "Share something...")}
         maxLength={300}
       />
       <button
         type="submit"
         className={cn(
-          "bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4 py-2 font-medium disabled:bg-blue-200",
+          dyn.v3.getVariant("post_button_class", homeClassVariants, ""),
           dyn.v3.getVariant("post_button_class", CLASS_VARIANTS_MAP, "")
         )}
         disabled={!newPost.trim()}
       >
-        {dyn.v3.getVariant("post_button", TEXT_VARIANTS_MAP, "Post")}
+        {dyn.v3.getVariant("post_button", homeTextVariants, "Post")}
       </button>
     </form>
   );

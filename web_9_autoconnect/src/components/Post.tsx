@@ -26,8 +26,41 @@ export default function Post({
 }) {
   const [comment, setComment] = useState("");
   const dyn = useDynamicSystem();
+  const localTextVariants: Record<string, string[]> = {
+    comments_label: ["Comments", "Replies", "Responses"],
+    comment_placeholder: ["Add a comment...", "Write a reply...", "Comment here..."],
+    comment_button: ["Post", "Send", "Comment"],
+    save_post: ["Save", "Bookmark", "Keep"],
+    hide_post: ["Hide", "Remove", "Dismiss"],
+  };
+  const localClassVariants: Record<string, string[]> = {
+    post_like_button: [
+      "flex items-center gap-1 group rounded-full px-3 py-1",
+      "flex items-center gap-1 group rounded-full px-3 py-1 bg-gray-50",
+      "flex items-center gap-1 group rounded-full px-3 py-1 border border-gray-200",
+    ],
+    comment_input: [
+      "flex-1 rounded-full border border-gray-200 px-3 py-1 text-sm",
+      "flex-1 rounded-full border border-gray-300 px-3 py-1 text-sm",
+      "flex-1 rounded-full border border-gray-200 px-3 py-1 text-sm bg-gray-50",
+    ],
+    comment_button: [
+      "px-3 py-1 text-sm rounded-full bg-blue-50 hover:bg-blue-100 font-medium",
+      "px-3 py-1 text-sm rounded-full bg-indigo-50 hover:bg-indigo-100 font-medium",
+      "px-3 py-1 text-sm rounded-full bg-blue-100 hover:bg-blue-200 font-medium",
+    ],
+    action_button: [
+      "px-2 py-1 rounded border border-gray-200 hover:bg-gray-50",
+      "px-2 py-1 rounded border border-gray-300 hover:bg-gray-100",
+      "px-2 py-1 rounded border border-gray-200 hover:bg-blue-50",
+    ],
+  };
   const withVariant = (type: string, base: string) =>
-    cn(base, dyn.v3.getVariant(type, CLASS_VARIANTS_MAP, ""));
+    cn(
+      base,
+      dyn.v3.getVariant(type, CLASS_VARIANTS_MAP, ""),
+      dyn.v3.getVariant(type, localClassVariants, "")
+    );
 
   function timeAgo(dateString: string) {
     const seconds = Math.floor(
@@ -86,7 +119,7 @@ export default function Post({
         </div>
         <div className="ml-auto flex items-center gap-2 text-xs text-gray-500">
           <button
-            className="px-2 py-1 rounded border border-gray-200 hover:bg-gray-50"
+            className={withVariant("action_button", "px-2 py-1 rounded border border-gray-200 hover:bg-gray-50")}
             onClick={() => {
               onSave(post);
               logEvent(EVENT_TYPES.SAVE_POST, {
@@ -96,10 +129,10 @@ export default function Post({
               })
             }}
           >
-            Save
+            {dyn.v3.getVariant("save_post", localTextVariants, "Save")}
           </button>
           <button
-            className="px-2 py-1 rounded border border-gray-200 hover:bg-gray-50"
+            className={withVariant("action_button", "px-2 py-1 rounded border border-gray-200 hover:bg-gray-50")}
             onClick={() => {
               onHide(post.id);
               logEvent(EVENT_TYPES.HIDE_POST, {
@@ -110,7 +143,7 @@ export default function Post({
               })
             }}
           >
-            Hide
+            {dyn.v3.getVariant("hide_post", localTextVariants, "Hide")}
           </button>
           {onDelete && (
             <button
@@ -167,7 +200,7 @@ export default function Post({
           {post.likes}
         </button>
         <span>
-          {dyn.v3.getVariant("comments_label", TEXT_VARIANTS_MAP, "Comments")}:{" "}
+          {dyn.v3.getVariant("comments_label", localTextVariants, "Comments")}:{" "}
           {post.comments.length}
         </span>
       </div>
@@ -205,11 +238,7 @@ export default function Post({
             "comment_input",
             "flex-1 rounded-full border border-gray-200 px-3 py-1 text-sm"
           )}
-          placeholder={dyn.v3.getVariant(
-            "comment_placeholder",
-            TEXT_VARIANTS_MAP,
-            "Add a comment..."
-          )}
+          placeholder={dyn.v3.getVariant("comment_placeholder", localTextVariants, "Add a comment...")}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
@@ -226,7 +255,7 @@ export default function Post({
           )}
           disabled={!comment.trim()}
         >
-          {dyn.v3.getVariant("comment_button", TEXT_VARIANTS_MAP, "Post")}
+          {dyn.v3.getVariant("comment_button", localTextVariants, "Post")}
         </button>
       </form>
     </article>
