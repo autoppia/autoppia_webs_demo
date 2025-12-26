@@ -151,7 +151,6 @@ export function useSeedLayout() {
   // Function to get element attributes with seed
   const getElementAttributes = useCallback((elementType: string, index: number = 0) => {
     return {
-      id: `${elementType}-${index}`,
       "data-element-type": elementType,
     };
   }, []);

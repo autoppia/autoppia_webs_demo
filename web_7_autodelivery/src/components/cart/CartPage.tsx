@@ -329,6 +329,7 @@ export default function CartPage() {
           </button>
         </div>
       </div>
+      {dyn.v1.addWrapDecoy("delivery-options", (
       <div id="delivery-options-container" className="bg-white rounded-2xl shadow-lg py-6 px-4 mb-8">
         <div className="flex items-center gap-2 mb-5">
           <Clock className="w-5 h-5 text-zinc-500" />
@@ -781,6 +782,7 @@ export default function CartPage() {
           )}
         </div>
       </div>
+      ))}
       {orderSuccess ? (
         <div id="order-success-message" className="bg-green-50 border border-green-200 text-green-800 rounded-lg p-8 text-center text-xl font-semibold shadow">
           ✅ Order placed! Thank you for ordering 🙏
@@ -924,6 +926,7 @@ export default function CartPage() {
               </span>
             </div>
           </div>
+          {dyn.v1.addWrapDecoy("order-form", (
           <form
             id="order-form"
             ref={formRef}
@@ -978,6 +981,7 @@ export default function CartPage() {
               {placeOrderLabel}
             </Button>
           </form>
+          ))}
           <QuickOrderModal open={quickOrderOpen} onOpenChange={setQuickOrderOpen} />
           <Dialog open={isContactModalOpen} onOpenChange={setIsContactModalOpen}>
             <DialogContent className="max-w-sm">

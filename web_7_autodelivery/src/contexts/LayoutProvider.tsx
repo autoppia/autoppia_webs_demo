@@ -176,7 +176,6 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
 
   const getElementAttributes = (elementType: string, index: number = 0): Record<string, string> => ({
-    id: `${elementType}-${index}`,
     "data-element-type": elementType,
   });
 

@@ -289,6 +289,7 @@ export default function RestaurantDetailPage({
       ))}
 
       {/* Menu */}
+      {dyn.v1.addWrapDecoy("menu-section", (
       <div>
         <h2 
           className={`text-xl font-bold mb-4 ${layout.generateSeedClass('menu-title')} ds-${seedStructure}`}
@@ -374,6 +375,7 @@ export default function RestaurantDetailPage({
           })()}
         </div>
       </div>
+      ))}
 
       {/* Reviews */}
       <ReviewsSection 
@@ -385,28 +387,30 @@ export default function RestaurantDetailPage({
         }}
       />
 
-      <AddReviewForm
-        restaurant={restaurant}
-        onSubmit={(payload) => {
-          setReviews((prev) => [
-            {
-              avatar: "/media/avatars/default-avatar.jpg",
-              author: payload.author || "Guest",
-              rating: payload.rating,
-              comment: payload.comment,
-              date: new Date().toLocaleDateString(),
-            },
-            ...prev,
-          ]);
-          logEvent(EVENT_TYPES.REVIEW_SUBMITTED, {
-            ...payload,
-            restaurantId: restaurant.id,
-            restaurantName: restaurant.name,
-            cuisine: restaurant.cuisine,
-            restaurantRating: restaurant.rating,
-          });
-        }}
-      />
+      {dyn.v1.addWrapDecoy("add-review-section", (
+        <AddReviewForm
+          restaurant={restaurant}
+          onSubmit={(payload) => {
+            setReviews((prev) => [
+              {
+                avatar: "/media/avatars/default-avatar.jpg",
+                author: payload.author || "Guest",
+                rating: payload.rating,
+                comment: payload.comment,
+                date: new Date().toLocaleDateString(),
+              },
+              ...prev,
+            ]);
+            logEvent(EVENT_TYPES.REVIEW_SUBMITTED, {
+              ...payload,
+              restaurantId: restaurant.id,
+              restaurantName: restaurant.name,
+              cuisine: restaurant.cuisine,
+              restaurantRating: restaurant.rating,
+            });
+          }}
+        />
+      ))}
       
       {/* Modal for item customizations */}
       {modalOpen && modalItem && (
@@ -488,6 +492,7 @@ function AddReviewForm({
       <h3 className="text-lg font-semibold mb-4">
         {dyn.v3.getVariant("review-title", TEXT_VARIANTS_MAP, "Leave a review")}
       </h3>
+      {dyn.v1.addWrapDecoy("review-form", (
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -546,6 +551,7 @@ function AddReviewForm({
           {dyn.v3.getVariant("submit-review", TEXT_VARIANTS_MAP, "Submit review")}
         </Button>
       </form>
+      ))}
     </Card>
   );
 }

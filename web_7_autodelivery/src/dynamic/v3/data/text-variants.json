@@ -311,6 +311,18 @@
     "Tell your story",
     "Share thoughts"
   ],
+  "review-placeholder": [
+    "Share your experience",
+    "Tell us how it went",
+    "Write your review",
+    "Share details about your meal",
+    "Leave your thoughts",
+    "Describe your experience",
+    "Add your feedback",
+    "Share comments",
+    "Tell your story",
+    "Write a quick review"
+  ],
   "submit-review": [
     "Submit review",
     "Send review",
@@ -370,6 +382,42 @@
     "Shipping Details",
     "Delivery section",
     "Delivery data"
+  ],
+  "customer_name_input": [
+    "Your Name",
+    "Full Name",
+    "Contact Name",
+    "Recipient Name",
+    "Order Name",
+    "Customer Name",
+    "Name for order",
+    "Primary Contact",
+    "Checkout Name",
+    "Delivery Name"
+  ],
+  "delivery_address_input": [
+    "Delivery Address",
+    "Address",
+    "Your Address",
+    "Dropoff Address",
+    "Shipping Address",
+    "Street Address",
+    "Enter address",
+    "Where should we deliver?",
+    "Location",
+    "Destination"
+  ],
+  "contact_phone_input": [
+    "Contact Number",
+    "Phone Number",
+    "Mobile Number",
+    "Add phone",
+    "Call number",
+    "Your phone",
+    "Contact phone",
+    "Recipient phone",
+    "Phone for delivery",
+    "Phone to reach you"
   ],
   "place-order-button": [
     "Place Order",
