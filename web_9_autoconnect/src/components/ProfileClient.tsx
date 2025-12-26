@@ -5,10 +5,6 @@ import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
-import {
-  getEffectiveLayoutConfig,
-  getLayoutClasses,
-} from "@/dynamic/v1-layouts";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import {
@@ -25,8 +21,8 @@ import { TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 function ProfileContent({ username }: { username: string }) {
   type ExperienceEntry = NonNullable<User["experience"]>[number];
   const { resolvedSeeds, seed } = useSeed();
-  const layoutSeed = resolvedSeeds.base ?? seed;
-  const layout = getEffectiveLayoutConfig(layoutSeed);
+  resolvedSeeds;
+  const layoutSeed = seed;
 
   // Get data from dynamic provider
   const users = dynamicDataProvider.getUsers();
@@ -182,7 +178,7 @@ function ProfileContent({ username }: { username: string }) {
     const orderedPosts = order.map((idx) => postsWithState[idx]);
     return orderedPosts.filter((p) => !hiddenPostIds.has(p.id));
   }, [postsWithState, dyn.seed, hiddenPostIds]);
-  const profileClasses = getLayoutClasses(layout, "profileLayout");
+  const profileClasses = "max-w-5xl";
 
   const handleConnect = () => {
     logEvent(EVENT_TYPES.CONNECT_WITH_USER, {

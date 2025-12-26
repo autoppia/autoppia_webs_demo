@@ -3,10 +3,6 @@ import { useState, useEffect } from "react";
 import Avatar from "@/components/Avatar";
 import UserSearchBar from "./UserSearchBar";
 import { useSeed } from "@/context/SeedContext";
-import {
-  getEffectiveLayoutConfig,
-  getLayoutClasses,
-} from "@/dynamic/v1-layouts";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import type { User } from "@/library/dataset";
 import Link from "next/link";
@@ -16,10 +12,7 @@ import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynami
 import { cn } from "@/library/utils";
 
 export default function LeftSidebar() {
-  const { seed, resolvedSeeds } = useSeed();
-  const layoutSeed = resolvedSeeds.base ?? seed;
-  const layout = getEffectiveLayoutConfig(layoutSeed);
-  const searchClasses = getLayoutClasses(layout, "searchPosition");
+  useSeed();
   const dyn = useDynamicSystem();
   
   // Get current user inside component to avoid undefined error
@@ -63,7 +56,7 @@ export default function LeftSidebar() {
       {/* Always show SearchBar at top */}
       {dyn.v1.addWrapDecoy(
         "sidebar-search",
-        <div className={`${searchClasses} mb-4`}>
+        <div className="mb-4">
           <UserSearchBar />
         </div>
       )}

@@ -10,10 +10,6 @@ import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
-import {
-  getEffectiveLayoutConfig,
-  getLayoutClasses,
-} from "@/dynamic/v1-layouts";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import {
@@ -31,8 +27,7 @@ import { cn } from "@/library/utils";
 
 function HomeContent() {
   const { seed, resolvedSeeds } = useSeed();
-  const layoutSeed = resolvedSeeds.base ?? seed;
-  const layout = getEffectiveLayoutConfig(layoutSeed);
+  resolvedSeeds;
   const dyn = useDynamicSystem();
 
   // Get data from dynamic provider
@@ -223,20 +218,17 @@ function HomeContent() {
           </div>
         </>
   );
-  const sidebarClasses = getLayoutClasses(layout, 'sidebarPosition');
-  const postBoxClasses = getLayoutClasses(layout, 'postBoxPosition');
-
   const renderSidebar = (position: 'left' | 'right') => {
     if (position === 'left') {
       return (
-        <aside className="w-[300px] flex-shrink-0">
+        <aside className="w-[280px] flex-shrink-0 hidden lg:block">
           <LeftSidebar />
         </aside>
       );
     }
     if (position === 'right') {
       return (
-        <aside className="w-[300px] flex-shrink-0">
+        <aside className="w-[280px] flex-shrink-0 hidden lg:block">
           <RightSidebar />
         </aside>
       );
@@ -246,10 +238,10 @@ function HomeContent() {
 
   const renderTopSidebars = () => (
     <div className="w-full flex flex-col lg:flex-row lg:gap-4 mb-4">
-      <div className="w-full lg:w-[300px]">
+      <div className="w-full lg:w-[280px]">
         <LeftSidebar />
       </div>
-      <div className="w-full lg:w-[300px] lg:ml-auto">
+      <div className="w-full lg:w-[280px] lg:ml-auto">
         <RightSidebar />
       </div>
     </div>
@@ -266,98 +258,37 @@ function HomeContent() {
     </div>
   );
 
-  const renderPostBox = () => {
-    if (layout.postBoxPosition === 'left' || layout.postBoxPosition === 'right') {
-      return (
-        <div className={`${layout.postBoxPosition === 'left' ? 'w-[220px]' : 'w-[280px]'} flex-shrink-0 ${postBoxClasses}`}>
-          <form
-            onSubmit={handleSubmitPost}
-            className="bg-white rounded-lg shadow p-4 flex flex-col gap-3 items-center mb-6"
-          >
-            <Avatar src={currentUser.avatar} alt={currentUser.name} size={44} />
-            <input
-              type="text"
-              className={cn(
-                "w-full border border-gray-200 rounded-full px-4 py-2 focus:outline-blue-500",
-                dyn.v3.getVariant("post_input", CLASS_VARIANTS_MAP, "")
-              )}
-              value={newPost}
-              onChange={(e) => setNewPost(e.target.value)}
-              placeholder={dyn.v3.getVariant("post_placeholder", TEXT_VARIANTS_MAP, "Share something...")}
-              maxLength={300}
-            />
-            <button
-              type="submit"
-              className={cn(
-                "w-full bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4 py-2 font-medium disabled:bg-blue-200",
-                dyn.v3.getVariant("post_button_class", CLASS_VARIANTS_MAP, "")
-              )}
-              disabled={!newPost.trim()}
-            >
-              {dyn.v3.getVariant("post_button", TEXT_VARIANTS_MAP, "Post")}
-            </button>
-          </form>
-        </div>
-      );
-    }
-
-    return (
-      <form
-        onSubmit={handleSubmitPost}
-        className="bg-white rounded-lg shadow p-4 flex gap-3 items-center mb-6"
+  const renderPostBox = () => (
+    <form
+      onSubmit={handleSubmitPost}
+      className="bg-white rounded-lg shadow p-4 flex gap-3 items-center mb-6"
+    >
+      <Avatar src={currentUser.avatar} alt={currentUser.name} size={44} />
+      <input
+        type="text"
+        className={cn(
+          "flex-1 border border-gray-200 rounded-full px-4 py-2 focus:outline-blue-500",
+          dyn.v3.getVariant("post_input", CLASS_VARIANTS_MAP, "")
+        )}
+        value={newPost}
+        onChange={(e) => setNewPost(e.target.value)}
+        placeholder={dyn.v3.getVariant("post_placeholder", TEXT_VARIANTS_MAP, "Share something...")}
+        maxLength={300}
+      />
+      <button
+        type="submit"
+        className={cn(
+          "bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4 py-2 font-medium disabled:bg-blue-200",
+          dyn.v3.getVariant("post_button_class", CLASS_VARIANTS_MAP, "")
+        )}
+        disabled={!newPost.trim()}
       >
-        <Avatar src={currentUser.avatar} alt={currentUser.name} size={44} />
-        <input
-          type="text"
-          className={cn(
-            "flex-1 border border-gray-200 rounded-full px-4 py-2 focus:outline-blue-500",
-            dyn.v3.getVariant("post_input", CLASS_VARIANTS_MAP, "")
-          )}
-          value={newPost}
-          onChange={(e) => setNewPost(e.target.value)}
-          placeholder={dyn.v3.getVariant("post_placeholder", TEXT_VARIANTS_MAP, "Share something...")}
-          maxLength={300}
-        />
-        <button
-          type="submit"
-          className={cn(
-            "bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4 py-2 font-medium disabled:bg-blue-200",
-            dyn.v3.getVariant("post_button_class", CLASS_VARIANTS_MAP, "")
-          )}
-          disabled={!newPost.trim()}
-        >
-          {dyn.v3.getVariant("post_button", TEXT_VARIANTS_MAP, "Post")}
-        </button>
-      </form>
-    );
-  };
+        {dyn.v3.getVariant("post_button", TEXT_VARIANTS_MAP, "Post")}
+      </button>
+    </form>
+  );
 
-  const getMainLayoutClasses = () => {
-    switch (layout.mainLayout) {
-      case 'default':
-        return 'w-full flex gap-2 justify-center min-h-screen';
-      case 'reverse':
-        return 'w-full flex gap-2 justify-center min-h-screen flex-row-reverse';
-      case 'vertical':
-        return 'w-full flex flex-col gap-2 justify-center min-h-screen';
-      case 'horizontal':
-        return 'w-full flex flex-row gap-2 justify-center min-h-screen';
-      case 'grid':
-        return 'w-full grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-screen';
-      case 'sidebar-top':
-        return 'w-full flex flex-col gap-2 justify-center min-h-screen';
-      case 'sidebar-bottom':
-        return 'w-full flex flex-col gap-2 justify-center min-h-screen';
-      case 'center-focus':
-        return 'w-full flex gap-2 justify-center min-h-screen';
-      case 'split-view':
-        return 'w-full grid grid-cols-1 lg:grid-cols-2 gap-4 min-h-screen';
-      case 'masonry':
-        return 'w-full columns-1 md:columns-2 lg:columns-3 gap-4 min-h-screen';
-      default:
-        return 'w-full flex gap-2 justify-center min-h-screen';
-    }
-  };
+  const getMainLayoutClasses = () => 'w-full flex gap-4 justify-center min-h-screen';
 
   const renderMainContent = () => {
     const main = (
@@ -369,66 +300,16 @@ function HomeContent() {
       </main>
     );
 
-    if (layout.sidebarPosition === 'top') {
-      return (
-        <>
-          {renderTopSidebars()}
-          {main}
-        </>
-      );
-    }
-
-    if (layout.sidebarPosition === 'bottom') {
-      return (
-        <>
-          {main}
-          {renderBottomSidebars()}
-        </>
-      );
-    }
-
-    if (layout.mainLayout === 'grid' || layout.mainLayout === 'split-view') {
-      return (
-        <>
-          {layout.sidebarPosition === 'left' && renderSidebar('left')}
-          {main}
-          {layout.sidebarPosition === 'right' && renderSidebar('right')}
-        </>
-      );
-    }
-
-    if (layout.mainLayout === 'masonry') {
-      return <div className="space-y-4">{renderPostsBlock()}</div>;
-    }
-
-    if (layout.mainLayout === 'sidebar-top') {
-      return (
-        <>
-          {renderTopSidebars()}
-          {main}
-        </>
-      );
-    }
-
-    if (layout.mainLayout === 'sidebar-bottom') {
-      return (
-        <>
-          {main}
-          {renderBottomSidebars()}
-        </>
-      );
-    }
-
     return (
       <>
-        {layout.sidebarPosition === 'left' && renderSidebar('left')}
+        {renderSidebar('left')}
         {main}
-        {layout.sidebarPosition === 'right' && renderSidebar('right')}
+        {renderSidebar('right')}
       </>
     );
   };
 
-  const wrapperPadding = layout.headerPosition === 'left' ? 'pl-56' : layout.headerPosition === 'right' ? 'pr-56' : '';
+  const wrapperPadding = '';
 
   return (
     <div className={`${getMainLayoutClasses()} ${wrapperPadding}`}>

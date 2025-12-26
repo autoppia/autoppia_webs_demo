@@ -7,16 +7,12 @@ import type { Recommendation } from "@/library/dataset";
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
 import { useSeed } from "@/context/SeedContext";
-import {
-  getEffectiveLayoutConfig,
-} from "@/dynamic/v1-layouts";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 function RecommendationsContent() {
   const { seed, resolvedSeeds } = useSeed();
-  const layoutSeed = resolvedSeeds.base ?? seed;
-  const layout = getEffectiveLayoutConfig(layoutSeed);
+  resolvedSeeds;
   const [following, setFollowing] = useState<Record<string, boolean>>({});
   const recommendations = dynamicDataProvider.getRecommendations();
   const dyn = useDynamicSystem();
@@ -97,7 +93,7 @@ function RecommendationsContent() {
     return null;
   };
 
-  const wrapperPadding = layout.headerPosition === 'left' ? 'pl-56' : layout.headerPosition === 'right' ? 'pr-56' : '';
+  const wrapperPadding = '';
 
   return (
     <div className={`w-full flex gap-2 justify-center min-h-screen ${wrapperPadding}`}>

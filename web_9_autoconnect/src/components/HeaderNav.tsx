@@ -5,10 +5,6 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { usePathname } from "next/navigation";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
-import {
-  getEffectiveLayoutConfig,
-  getLayoutClasses,
-} from "@/dynamic/v1-layouts";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
@@ -16,8 +12,6 @@ import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynami
 export default function HeaderNav() {
   const pathname = usePathname();
   const { seed, resolvedSeeds } = useSeed();
-  const layoutSeed = resolvedSeeds.base ?? seed;
-  const layout = getEffectiveLayoutConfig(layoutSeed);
   const dyn = useDynamicSystem();
   
   // Fix hydration error: use state to get user only on client side
@@ -70,43 +64,6 @@ export default function HeaderNav() {
   const navOrder = dyn.v1.changeOrderElements("nav-items", navItems.length);
   const orderedNavItems = navOrder.map((index) => navItems[index]);
 
-  const getHeaderClasses = () => {
-    const baseClasses = "flex items-center border-b bg-white shadow-sm";
-    
-    switch (layout.headerPosition) {
-      case 'top':
-        return `${baseClasses} sticky top-0 z-30 h-16 w-full`;
-      case 'bottom':
-        return `${baseClasses} sticky bottom-0 z-30 h-16 w-full`;
-      case 'left':
-        return `fixed left-0 top-0 h-full w-56 z-30 flex flex-col border-r bg-white shadow-sm`;
-      case 'right':
-        return `fixed right-0 top-0 h-full w-56 z-30 flex flex-col border-l bg-white shadow-sm`;
-      default:
-        return `${baseClasses} sticky top-0 z-30 h-16 w-full`;
-    }
-  };
-
-  const getHeaderContentClasses = () => {
-    switch (layout.headerPosition) {
-      case 'left':
-      case 'right':
-        return "flex flex-col items-start gap-4 h-full py-4 px-3";
-      default:
-        return "flex items-center w-full max-w-[1570px] mx-auto px-6 gap-2";
-    }
-  };
-
-  const getNavClasses = () => {
-    switch (layout.headerPosition) {
-      case 'left':
-      case 'right':
-        return "flex flex-col gap-2";
-      default:
-        return "flex gap-2";
-    }
-  };
-
   return (
     <>
       {dyn.v1.addWrapDecoy(
@@ -115,11 +72,11 @@ export default function HeaderNav() {
           className={dyn.v3.getVariant(
             "header_classes",
             CLASS_VARIANTS_MAP,
-            getHeaderClasses()
+            "flex items-center border-b bg-white shadow-sm sticky top-0 z-30 h-16 w-full"
           )}
           id={dyn.v3.getVariant("header_nav_id", ID_VARIANTS_MAP, "header-nav")}
         >
-          <div className={getHeaderContentClasses()}>
+          <div className="flex items-center w-full max-w-[1570px] mx-auto px-6 gap-2">
             {dyn.v1.addWrapDecoy(
               "header-brand",
               <div className="flex items-center w-[300px]">
@@ -144,7 +101,7 @@ export default function HeaderNav() {
             {dyn.v1.addWrapDecoy(
               "header-nav-links",
               <div className="flex items-center justify-end w-[300px]">
-                <nav className={getNavClasses()}>
+                <nav className="flex gap-2">
                   {orderedNavItems.map((item, idx) => (
                     <SeedLink
                       key={item.href}

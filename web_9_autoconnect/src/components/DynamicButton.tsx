@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState, type ButtonHTMLAttributes } from 'react';
 import { useSeed } from '@/context/SeedContext';
-import { getSeedLayout } from '@/dynamic/v1-layouts';
 
 interface DynamicButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   eventType: string;
@@ -20,7 +19,6 @@ export function DynamicButton({
 }: DynamicButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const { seed } = useSeed();
-  const layout = getSeedLayout(seed);
 
   const [attributes, setAttributes] = useState<Record<string, string>>({});
 

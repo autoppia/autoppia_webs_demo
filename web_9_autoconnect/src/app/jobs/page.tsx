@@ -3,10 +3,6 @@ import { useState, useMemo, useEffect } from "react";
 import JobCard from "@/components/JobCard";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
-import {
-  getEffectiveLayoutConfig,
-  getLayoutClasses,
-} from "@/dynamic/v1-layouts";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import type { Job } from "@/library/dataset";
@@ -29,8 +25,8 @@ interface Filters {
 
 function JobsContent() {
   const { seed, resolvedSeeds } = useSeed();
-  const layoutSeed = resolvedSeeds.base ?? seed;
-  const layout = getEffectiveLayoutConfig(layoutSeed);
+  resolvedSeeds;
+  const layoutSeed = seed;
   const dyn = useDynamicSystem();
   const [filters, setFilters] = useState<Filters>({
     search: "",
@@ -227,8 +223,8 @@ function JobsContent() {
   };
 
   const shuffledJobs = orderedJobs;
-  const jobCardsClasses = getLayoutClasses(layout, "jobCardsLayout");
-  const filtersClasses = getLayoutClasses(layout, "filtersPosition");
+  const jobCardsClasses = "grid grid-cols-1 md:grid-cols-2 gap-4";
+  const filtersClasses = "";
 
   return (
     <section>
