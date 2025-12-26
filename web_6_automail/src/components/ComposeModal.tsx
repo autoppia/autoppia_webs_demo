@@ -16,7 +16,7 @@ import { TextStructureConfig } from "@/utils/textStructureProvider";
 import { Send, Paperclip, Smile, X, Minus, Square, Bold, Italic, Underline, Link, List, Save } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface ComposeModalProps {
   textStructure?: TextStructureConfig;
@@ -99,10 +99,13 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
   };
 
   const canSend = composeData.to.length > 0 || toInput.trim();
-  const composeTitle = dyn.v3.getVariant("compose_cta", TEXT_VARIANTS_MAP, textStructure?.email_content?.new_message || "New message");
+  const composeTitle = dyn.v3.getVariant("compose_email", TEXT_VARIANTS_MAP, textStructure?.email_content?.new_message || "New message");
 
   const fieldLabel = (key: string, fallback: string) => dyn.v3.getVariant(key, TEXT_VARIANTS_MAP, fallback);
   const inputId = (key: string, fallback: string) => dyn.v3.getVariant(key, ID_VARIANTS_MAP, fallback);
+  const toPlaceholder = dyn.v3.getVariant("compose_to_placeholder", TEXT_VARIANTS_MAP, textStructure?.email_content.compose_to || "To");
+  const subjectPlaceholder = dyn.v3.getVariant("compose_subject_placeholder", TEXT_VARIANTS_MAP, textStructure?.email_content.subject_placeholder || "Subject");
+  const bodyPlaceholder = dyn.v3.getVariant("compose_body_placeholder", TEXT_VARIANTS_MAP, textStructure?.email_content.message_placeholder || "Type your message...");
 
   const containerClass = cn(
     dyn.v3.getVariant("compose-modal", CLASS_VARIANTS_MAP, "rounded-xl border border-border shadow-xl bg-background"),
