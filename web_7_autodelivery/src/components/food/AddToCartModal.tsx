@@ -109,13 +109,13 @@ export function AddToCartModal({
   const quantityLabel = dyn.v3.getVariant("quantity-label", TEXT_VARIANTS_MAP, "Quantity");
   const addToCartLabel = dyn.v3.getVariant("add-to-cart-btn", TEXT_VARIANTS_MAP, "Add to cart");
   const addButtonAttributes = layout.getElementAttributes("ADD_TO_CART_MENU_ITEM", 0);
-  const addButtonId = dyn.v3.getVariant("add-to-cart-btn", ID_VARIANTS_MAP, `${addButtonAttributes.id ?? "add-to-cart-btn"}-${seedStructure}`);
+  const addButtonId = dyn.v3.getVariant("add-to-cart-btn", ID_VARIANTS_MAP, `add-to-cart-btn-${seedStructure}`);
   const addButtonAria = dyn.v3.getVariant("add-to-cart-btn", TEXT_VARIANTS_MAP, "Add item to cart");
   const decrementAttributes = layout.getElementAttributes("ITEM_DECREMENTED", 0);
-  const decrementButtonId = dyn.v3.getVariant("quantity-decrease-button", ID_VARIANTS_MAP, `${decrementAttributes.id ?? "quantity-decrease"}-${seedStructure}`);
+  const decrementButtonId = dyn.v3.getVariant("quantity-decrease-button", ID_VARIANTS_MAP, `quantity-decrease-${seedStructure}`);
   const decrementAria = dyn.v3.getVariant("quantity-decrease-button", TEXT_VARIANTS_MAP, "Decrease quantity");
   const incrementAttributes = layout.getElementAttributes("ITEM_INCREMENTED", 0);
-  const incrementButtonId = dyn.v3.getVariant("quantity-increase-button", ID_VARIANTS_MAP, `${incrementAttributes.id ?? "quantity-increase"}-${seedStructure}`);
+  const incrementButtonId = dyn.v3.getVariant("quantity-increase-button", ID_VARIANTS_MAP, `quantity-increase-${seedStructure}`);
   const incrementAria = dyn.v3.getVariant("quantity-increase-button", TEXT_VARIANTS_MAP, "Increase quantity");
 
   return (

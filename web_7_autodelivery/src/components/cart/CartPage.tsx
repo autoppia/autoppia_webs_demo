@@ -197,7 +197,7 @@ export default function CartPage() {
     const emptyMessageId = dyn.v3.getVariant(
       "cart-empty-message",
       ID_VARIANTS_MAP,
-      `${emptyStateAttributes.id ?? "cart-empty-message"}-${seedStructure}`
+      `cart-empty-message-${seedStructure}`
     );
 
     return (
@@ -267,7 +267,7 @@ export default function CartPage() {
   const deliveryInformationId = dyn.v3.getVariant(
     "delivery-information-title",
     ID_VARIANTS_MAP,
-    `${deliveryInfoAttributes.id ?? "delivery-information-title"}-${seedStructure}`
+    `delivery-information-title-${seedStructure}`
   );
   const customerNamePlaceholder = dyn.v3.getVariant("customer_name_input", TEXT_VARIANTS_MAP, "Your Name");
   const customerAddressPlaceholder = dyn.v3.getVariant("delivery_address_input", TEXT_VARIANTS_MAP, "Delivery Address");
@@ -279,12 +279,12 @@ export default function CartPage() {
   const placeOrderId = dyn.v3.getVariant(
     "place-order-button",
     ID_VARIANTS_MAP,
-    `${placeOrderAttributes.id ?? "place-order-button"}-${seedStructure}`
+    `place-order-button-${seedStructure}`
   );
   const placeOrderLabel = dyn.v3.getVariant("place-order-button", TEXT_VARIANTS_MAP, "Place Order");
   const placeOrderAria = dyn.v3.getVariant("place-order-button", TEXT_VARIANTS_MAP, "Place order");
-  const { id: _deliveryId, ...deliveryModeAttrs } = layout.getElementAttributes('DELIVERY_MODE', 0);
-  const { id: _pickupId, ...pickupModeAttrs } = layout.getElementAttributes('PICKUP_MODE', 0);
+  const deliveryModeAttrs = layout.getElementAttributes('DELIVERY_MODE', 0);
+  const pickupModeAttrs = layout.getElementAttributes('PICKUP_MODE', 0);
 
   return (
     dyn.v1.addWrapDecoy("cart-page", (
@@ -799,17 +799,17 @@ export default function CartPage() {
               const decrementId = dyn.v3.getVariant(
                 "quantity-decrease-button",
                 ID_VARIANTS_MAP,
-                `${decrementAttributes.id ?? "quantity-decrease"}-${seedStructure}-${idx}`
+                `quantity-decrease-${seedStructure}-${idx}`
               );
               const incrementId = dyn.v3.getVariant(
                 "quantity-increase-button",
                 ID_VARIANTS_MAP,
-                `${incrementAttributes.id ?? "quantity-increase"}-${seedStructure}-${idx}`
+                `quantity-increase-${seedStructure}-${idx}`
               );
               const removeId = dyn.v3.getVariant(
                 "empty-cart-button",
                 ID_VARIANTS_MAP,
-                `${removeAttributes.id ?? "empty-cart-button"}-${seedStructure}-${idx}`
+                `empty-cart-button-${seedStructure}-${idx}`
               );
               return (
                 <div
