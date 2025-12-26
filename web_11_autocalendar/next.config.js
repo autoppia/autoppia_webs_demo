@@ -15,6 +15,26 @@ if (isLocalDev) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'false';
 }
 
+// For local development, always force NEXT_PUBLIC_ENABLE_DYNAMIC_V3 to true
+if (!process.env.ENABLE_DYNAMIC_V3) {
+  process.env.ENABLE_DYNAMIC_V3 = isLocalDev ? 'true' : 'false';
+}
+if (isLocalDev) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = 'true';
+} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = 'false';
+}
+
+// Handle ENABLE_DYNAMIC_V1_STRUCTURE (separate from layout control)
+if (!process.env.ENABLE_DYNAMIC_V1_STRUCTURE) {
+  process.env.ENABLE_DYNAMIC_V1_STRUCTURE = isLocalDev ? 'true' : 'false';
+}
+if (isLocalDev) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE = 'true';
+} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE = 'false';
+}
+
 console.log('🔍 Next.js config - Environment variables:');
 console.log('  NODE_ENV:', process.env.NODE_ENV);
 console.log('  isLocalDev:', isLocalDev);
@@ -23,6 +43,10 @@ console.log('  API_URL:', process.env.API_URL);
 console.log('  ENABLE_DYNAMIC_V1:', process.env.ENABLE_DYNAMIC_V1);
 console.log('  ENABLE_DATA_GENERATION:', process.env.ENABLE_DYNAMIC_V2_AI_GENERATE);
 console.log('  NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+console.log('  ENABLE_DYNAMIC_V3:', process.env.ENABLE_DYNAMIC_V3);
+console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V3:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3);
+console.log('  ENABLE_DYNAMIC_V1_STRUCTURE:', process.env.ENABLE_DYNAMIC_V1_STRUCTURE);
+console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -91,6 +115,8 @@ const nextConfig = {
     NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE,
     ENABLE_DYNAMIC_V3: process.env.ENABLE_DYNAMIC_V3,
     NEXT_PUBLIC_ENABLE_DYNAMIC_V3: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3,
+    ENABLE_DYNAMIC_V1_STRUCTURE: process.env.ENABLE_DYNAMIC_V1_STRUCTURE,
+    NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE,
     ENABLE_DYNAMIC_V4: process.env.ENABLE_DYNAMIC_V4,
     NEXT_PUBLIC_ENABLE_DYNAMIC_V4: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V4,
   },
