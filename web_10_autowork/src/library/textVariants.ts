@@ -42,7 +42,7 @@ type TextVariantMap = Record<ElementKey, string>;
 import jsonVariants from './textVariants.json';
 
 const VARIANTS: Record<number, TextVariantMap> = Object.fromEntries(
-  Object.entries(jsonVariants as Record<string, TextVariantMap>).map(([k, v]) => [parseInt(k, 10), v])
+  Object.entries(jsonVariants as Record<string, TextVariantMap>).map(([k, v]) => [Number.parseInt(k, 10), v])
 );
 
 function mapSeedToRange(seed: number): number {

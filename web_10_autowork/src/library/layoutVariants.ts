@@ -532,7 +532,7 @@ export function getSeedFromUrl(): number {
   const seedParam = urlParams.get('seed');
   
   if (seedParam) {
-    const seed = parseInt(seedParam, 10);
+    const seed = Number.parseInt(seedParam, 10);
     if (seed >= 1 && seed <= 300) {
       return seed;
     }

@@ -1,0 +1,252 @@
+{
+  "search_placeholder": [
+    "Search directors, titles, or moods",
+    "Find films, directors...",
+    "Look for movies, titles...",
+    "Discover films, directors...",
+    "Type movie name, genre...",
+    "Search catalog, films...",
+    "Find titles, movies...",
+    "Query movies, titles...",
+    "Share films, discover...",
+    "Search titles, films..."
+  ],
+  "search_button": [
+    "Search",
+    "Buscar",
+    "Find",
+    "Discover",
+    "Go Search",
+    "Search",
+    "Find",
+    "Query",
+    "Lookup",
+    "Search"
+  ],
+  "featured_title": [
+    "Featured This Week",
+    "Destacadas Esta Semana",
+    "This Week's Highlights",
+    "Weekly Spotlight",
+    "Featured Selection",
+    "Curated Picks",
+    "Recommended This Week",
+    "Must Watch",
+    "Editor's Picks",
+    "Staff Recommendations"
+  ],
+  "view_details": [
+    "View Details",
+    "Ver Detalles",
+    "See More",
+    "View Details",
+    "More Info",
+    "View More",
+    "View Details",
+    "See Details",
+    "More Info",
+    "View More"
+  ],
+  "stats_movies_label": [
+    "Movies",
+    "Películas",
+    "Movies",
+    "Movies",
+    "Movies",
+    "Movies",
+    "Movies",
+    "Movies",
+    "Movies",
+    "Movies"
+  ],
+  "stats_genres_label": [
+    "Genres",
+    "Géneros",
+    "Genres",
+    "Genres",
+    "Genres",
+    "Genres",
+    "Genres",
+    "Genres",
+    "Genres",
+    "Genres"
+  ],
+  "stats_rating_label": [
+    "Avg Rating",
+    "Rating Promedio",
+    "Avg Rating",
+    "Avg Rating",
+    "Avg Rating",
+    "Avg Rating",
+    "Avg Rating",
+    "Avg Rating",
+    "Avg Rating",
+    "Avg Rating"
+  ],
+  "stats_duration_label": [
+    "Avg Duration",
+    "Duración Promedio",
+    "Avg Duration",
+    "Avg Duration",
+    "Avg Duration",
+    "Avg Duration",
+    "Avg Duration",
+    "Avg Duration",
+    "Avg Duration",
+    "Avg Duration"
+  ],
+  "browse_genres": [
+    "Browse by Genre",
+    "Explorar por Género",
+    "Browse Genres",
+    "Genre Browser",
+    "By Genre",
+    "Genre Explorer",
+    "Browse Categories",
+    "Genre Browser",
+    "By Genre",
+    "Genre Search"
+  ],
+  "genres_description": [
+    "Explore movies by your favorite genre",
+    "Explora películas de tu género favorito",
+    "Find movies by your preferred genre",
+    "Browse films by genre category",
+    "Explore our genre collection",
+    "Discover movies by genre",
+    "Find films in your favorite genres",
+    "Browse by movie genre",
+    "Explore genre collections",
+    "Find movies by genre"
+  ],
+  "view_all": [
+    "View All",
+    "Ver Todas",
+    "See All",
+    "Show All",
+    "All Items",
+    "View All",
+    "All",
+    "Show All",
+    "All",
+    "View All"
+  ],
+  "movies_label": [
+    "movies",
+    "películas",
+    "films",
+    "movies",
+    "items",
+    "items",
+    "movies",
+    "films",
+    "titles",
+    "movies"
+  ],
+  "search_stats_rating_label": [
+    "Avg Rating",
+    "Rating Promedio",
+    "Average Rating",
+    "Score Avg",
+    "Avg Score",
+    "Avg Rating",
+    "Score",
+    "Avg Rating",
+    "Avg Rating",
+    "Avg Rating"
+  ],
+  "search_stats_duration_label": [
+    "Avg Duration",
+    "Duración Promedio",
+    "Average Duration",
+    "Time Avg",
+    "Avg Time",
+    "Duration",
+    "Runtime",
+    "Avg Time",
+    "Duration",
+    "Duration"
+  ],
+  "search_stats_year_range_label": [
+    "Year Range",
+    "Rango de Años",
+    "Year Range",
+    "Years",
+    "Years Range",
+    "Year Span",
+    "Years",
+    "Year Range",
+    "Year Range",
+    "Year Range"
+  ],
+  "debug_title": [
+    "Dynamic Debug",
+    "Variant Monitor",
+    "Seed Inspector",
+    "Anti-scrape Debug",
+    "Dynamic Console"
+  ],
+  "debug_seed_label": [
+    "Seed",
+    "Base Seed",
+    "Seed Value",
+    "Seed Number",
+    "Seed Code"
+  ],
+  "debug_resolved_label": [
+    "Resolved",
+    "Derived Seed",
+    "Resolved Seed",
+    "Effective Seed",
+    "Computed Seed"
+  ],
+  "debug_flags_label": [
+    "Flags",
+    "Features",
+    "Dynamic Flags",
+    "Enablement",
+    "Feature Flags"
+  ],
+  "debug_v1": [
+    "V1 on",
+    "Wrappers active",
+    "Structure enabled",
+    "V1 enabled",
+    "V1 live"
+  ],
+  "debug_v3": [
+    "V3 on",
+    "Variants active",
+    "Attributes enabled",
+    "V3 enabled",
+    "V3 live"
+  ],
+  "debug_order_label": [
+    "Order keys",
+    "Variant keys",
+    "Ordering keys",
+    "Permutation keys",
+    "Sequence keys"
+  ],
+  "debug_info": [
+    "Anti-scraping active",
+    "Dynamic shield ready",
+    "Variants protecting UI",
+    "Dynamic system running",
+    "Scraper shield online"
+  ],
+  "debug_section_label": [
+    "Tracked sections",
+    "Observed blocks",
+    "Section variants",
+    "Sections watched",
+    "Variant sections"
+  ],
+  "debug_ids_label": [
+    "Variants",
+    "IDs & classes",
+    "Variant set",
+    "Dynamic set",
+    "Variant group"
+  ]
+}

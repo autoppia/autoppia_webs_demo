@@ -337,7 +337,7 @@ export function getSeedLayout(seed?: number): LayoutConfig {
   };
 
   const layoutKeys = Object.keys(layouts)
-    .map((key) => parseInt(key, 10))
+    .map((key) => Number.parseInt(key, 10))
     .filter((num) => !Number.isNaN(num))
     .sort((a, b) => a - b);
 
@@ -359,7 +359,7 @@ export function getSeedFromURL(): number | undefined {
   const seedParam = urlParams.get('seed');
   
   if (seedParam) {
-    const seed = parseInt(seedParam, 10);
+    const seed = Number.parseInt(seedParam, 10);
     if (seed >= 1 && seed <= 300) {
       return seed;
     }

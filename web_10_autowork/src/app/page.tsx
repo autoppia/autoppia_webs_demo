@@ -4,9 +4,7 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { title } from "process";
 import { ToastContainer, toast } from "react-toastify";
-// import { jobs,hires, experts  } from "@/library/dataset";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { useAutoworkData } from "@/hooks/useAutoworkData";
 import { writeJson } from "@/shared/storage";
@@ -52,7 +50,7 @@ function PostJobWizard({
   onClose: () => void;
   onJobCreated?: (job: any) => void;
 }) {
-  const { layout, getElementAttributes, getText, shuffleList } = useSeedLayout();
+  const { layout, getElementAttributes, getText, shuffleList, dyn } = useSeedLayout();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     title: "",
@@ -232,42 +230,48 @@ function PostJobWizard({
   return open ? (
     <>
       <ToastContainer />
-      <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4" onClick={close}>
-        <div 
-          className="bg-white rounded-2xl shadow-2xl w-[900px] h-[700px] flex flex-col overflow-hidden"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <header className="h-16 flex items-center justify-between px-8 border-b border-gray-200 bg-white shrink-0">
-            <span className="font-bold text-lg tracking-wide text-[#253037]">
-              Create Job
-            </span>
-            <button
-              onClick={() => {
-                logEvent(EVENT_TYPES.CLOSE_POST_A_JOB_WINDOW, {
-                  step,
-                  title: form.title,
-                  skills: form.skills,
-                  scope: form.scope,
-                  duration: form.duration,
-                  budgetType: form.budgetType,
-                  rateFrom: form.rateFrom,
-                  rateTo: form.rateTo,
-                  description: form.description,
-                });
-                close();
-              }}
-              className="text-2xl text-[#253037] font-bold hover:text-gray-600 transition w-8 h-8 flex items-center justify-center"
+      {dyn.v1.addWrapDecoy("postjob-overlay", (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4" onClick={close}>
+          {dyn.v1.addWrapDecoy("postjob-surface", (
+            <div 
+              className="bg-white rounded-2xl shadow-2xl w-[900px] h-[700px] flex flex-col overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
             >
-              ×
-            </button>
-          </header>
-          <form
-            className="flex-1 flex flex-col xl:flex-row xl:items-start overflow-y-auto px-10 py-10"
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (step < totalSteps) next();
-          }}
-        >
+              {dyn.v1.addWrapDecoy("postjob-header", (
+                <header className="h-16 flex items-center justify-between px-8 border-b border-gray-200 bg-white shrink-0">
+                  <span className="font-bold text-lg tracking-wide text-[#253037]">
+                    Create Job
+                  </span>
+                  <button
+                    onClick={() => {
+                      logEvent(EVENT_TYPES.CLOSE_POST_A_JOB_WINDOW, {
+                        step,
+                        title: form.title,
+                        skills: form.skills,
+                        scope: form.scope,
+                        duration: form.duration,
+                        budgetType: form.budgetType,
+                        rateFrom: form.rateFrom,
+                        rateTo: form.rateTo,
+                        description: form.description,
+                      });
+                      close();
+                    }}
+                    className="text-2xl text-[#253037] font-bold hover:text-gray-600 transition w-8 h-8 flex items-center justify-center"
+                  >
+                    ×
+                  </button>
+                </header>
+              ))}
+              {dyn.v1.addWrapDecoy("postjob-form-shell", (
+                <>
+                <form
+                  className="flex-1 flex flex-col xl:flex-row xl:items-start overflow-y-auto px-10 py-10"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (step < totalSteps) next();
+                  }}
+                >
           {/* Left: Step title & description */}
           <div className="flex-1 mb-12 xl:mb-0 xl:max-w-xl xl:pr-12">
             <div className="flex items-center gap-4 mb-4 text-[#7b858b] font-medium text-base">
@@ -909,8 +913,12 @@ function PostJobWizard({
             </button>
           )}
         </div>
-        </div>
+        </>
+      ))}
+          </div>
+        ))}
       </div>
+    ))}
     </>
   ) : null;
 }
@@ -920,7 +928,7 @@ export default function Home() {
 	const [showPostJob, setShowPostJob] = useState(false);
 	const [hasSeenInitialLoad, setHasSeenInitialLoad] = useState(false);
 	const [userJobs, setUserJobs] = useState<any[]>([]);
-	const { layout, getElementAttributes, getText } = useSeedLayout();
+	const { layout, getElementAttributes, getText, dyn } = useSeedLayout();
 
 	const jobsState = useAutoworkData<any>("web_10_autowork_jobs", 6);
 	const hiresState = useAutoworkData<any>("web_10_autowork_hires", 6);
@@ -1037,7 +1045,7 @@ export default function Home() {
 			}
 		};
 
-		return (
+		return dyn.v1.addWrapDecoy("jobs-section", (
 			<section id="jobs" className="px-10 mt-14 px-4">
 				{/* Header with Stats */}
 				<div className="mb-8">
@@ -1168,7 +1176,7 @@ export default function Home() {
 					})}
 				</div>
 			</section>
-		);
+		));
 	};
 
 	const HiresSection = () => {
@@ -1191,10 +1199,10 @@ export default function Home() {
 		const totalHires = hiresState.data.length;
 		const availableHires = hiresState.data.filter((h: any) => h.rehire).length;
 		const avgRating = hiresState.data.length > 0
-			? (hiresState.data.reduce((acc: number, h: any) => acc + parseFloat(h.rating || 0), 0) / hiresState.data.length).toFixed(1)
+			? (hiresState.data.reduce((acc: number, h: any) => acc + Number.parseFloat(h.rating || 0), 0) / hiresState.data.length).toFixed(1)
 			: "0.0";
 
-		return (
+		return dyn.v1.addWrapDecoy("hires-section", (
 			<section id="hires" className="px-10 mt-14 px-4">
 				{/* Header with Stats */}
 				<div className="mb-8">
@@ -1327,7 +1335,7 @@ export default function Home() {
 					))}
 				</div>
 			</section>
-		);
+		));
 	};
 
 	const ExpertsSection = () => {
@@ -1396,7 +1404,7 @@ export default function Home() {
 		
 		const totalExperts = expertsState.data.length;
 		const avgRating = expertsState.data.length > 0
-			? (expertsState.data.reduce((acc: number, e: any) => acc + parseFloat(e.rating || 0), 0) / expertsState.data.length).toFixed(1)
+			? (expertsState.data.reduce((acc: number, e: any) => acc + Number.parseFloat(e.rating || 0), 0) / expertsState.data.length).toFixed(1)
 			: "0.0";
 
 		const handleViewExpert = (expert: any) => {
@@ -1404,7 +1412,7 @@ export default function Home() {
 			router.push(`/expert/${slug}`);
 		};
 
-		return (
+		return dyn.v1.addWrapDecoy("experts-section", (
 			<section id="experts" className="px-10 mt-16 px-4">
 				{/* Header with Stats */}
 				<div className="mb-8">
@@ -1555,7 +1563,7 @@ export default function Home() {
 					})}
 				</div>
 			</section>
-		);
+		));
 	};
 
 	// Create section map for dynamic ordering
@@ -1577,7 +1585,7 @@ export default function Home() {
 			.filter(Boolean);
 	};
 
-	return (
+	return dyn.v1.addWrapDecoy("home-root", (
 		<main className="px-10 mt-12 pb-16 text-[#253037]">
 			{showInitialLoading && (
 				<div className="fixed inset-0 z-[9999] bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center text-center p-6">
@@ -1605,5 +1613,5 @@ export default function Home() {
 				}}
 			/>
 		</main>
-	);
+	));
 }

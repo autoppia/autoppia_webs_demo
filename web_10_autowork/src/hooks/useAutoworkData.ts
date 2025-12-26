@@ -98,7 +98,7 @@ export type UseAutoworkDataResult<T> = {
   reload: () => void;
 };
 
-export function useAutoworkData<T = any>(projectKey: string, count: number = 12): UseAutoworkDataResult<T> {
+export function useAutoworkData<T = any>(projectKey: string, count = 12): UseAutoworkDataResult<T> {
   const [data, setData] = useState<T[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);

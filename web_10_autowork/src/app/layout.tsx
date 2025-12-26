@@ -7,6 +7,7 @@ import Script from "next/script";
 import { SeedProvider } from "@/context/SeedContext";
 import UserDropdown from "./components/UserDropdown";
 import NavLinks from "./components/NavLinks";
+import DynamicDebug from "./components/DynamicDebug";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -91,6 +92,7 @@ export default function RootLayout({
                 </main>
               </div>
             </div>
+            <DynamicDebug />
           </SeedProvider>
         </Suspense>
       </body>
