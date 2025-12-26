@@ -1,5 +1,8 @@
 import type { Job, Post, Recommendation, User } from "@/library/dataset";
-import { users, posts, jobs, recommendations } from "@/data/autoconnect-data";
+import usersData from "@/data/original/users_1.json";
+import postsData from "@/data/original/posts_1.json";
+import jobsData from "@/data/original/jobs_1.json";
+import recommendationsData from "@/data/original/recommendations_1.json";
 import { clampBaseSeed } from "@/shared/seed-resolver";
 
 export class DynamicDataProvider {
@@ -23,11 +26,11 @@ export class DynamicDataProvider {
   }
 
   private async initialize(): Promise<void> {
-    // V2 (DB mode) is disabled by default. Use original data immediately.
-    this.users = users;
-    this.posts = posts;
-    this.jobs = jobs;
-    this.recommendations = recommendations;
+    // V2 (DB mode) is disabled by default. Use original seed=1 data copied from webs_server.
+    this.users = usersData as User[];
+    this.posts = (postsData as Post[]).map((p) => ({ ...p, comments: p.comments || [] }));
+    this.jobs = jobsData as Job[];
+    this.recommendations = recommendationsData as Recommendation[];
     this.ready = true;
   }
 

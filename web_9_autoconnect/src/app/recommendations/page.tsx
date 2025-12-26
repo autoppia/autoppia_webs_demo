@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
-import type { Recommendation } from "@/library/dataset";
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
 import { useSeed } from "@/context/SeedContext";

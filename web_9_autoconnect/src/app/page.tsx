@@ -2,7 +2,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   type Post as PostType,
-  type User as UserType,
 } from "@/library/dataset";
 import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
@@ -22,7 +21,7 @@ import {
 } from "@/library/localState";
 import Link from "next/link";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
 
 function HomeContent() {
