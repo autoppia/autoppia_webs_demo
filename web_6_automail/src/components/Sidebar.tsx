@@ -15,7 +15,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import { usePathname, useRouter } from "next/navigation";
 import { Inbox, Star, Clock, Send, AlertTriangle, Trash2, Mail, Settings, Users, MessageSquare, PenTool, FileText } from "lucide-react";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeed } from "@/context/SeedContext";
 
 interface NavigationItem {
@@ -63,16 +63,16 @@ export function Sidebar({ textStructure }: SidebarProps) {
   }, {} as Record<string, number>);
 
   const navigationItems: NavigationItem[] = [
-    { id: "inbox", label: textStructure?.inbox_label || dyn.v3.getVariant("inbox_label", TEXT_VARIANTS_MAP, "Inbox"), icon: Inbox, count: counts.inbox, type: "folder" },
+    { id: "inbox", label: dyn.v3.getVariant("inbox_label", TEXT_VARIANTS_MAP, textStructure?.inbox_label || "Inbox"), icon: Inbox, count: counts.inbox, type: "folder" },
     { id: "templates", label: dyn.v3.getVariant("templates_nav", TEXT_VARIANTS_MAP, "Templates"), icon: FileText, type: "route", route: "/templates" },
-    { id: "starred", label: textStructure?.starred_label || dyn.v3.getVariant("starred_label", TEXT_VARIANTS_MAP, "Starred"), icon: Star, count: counts.starred, type: "folder" },
+    { id: "starred", label: dyn.v3.getVariant("starred_label", TEXT_VARIANTS_MAP, textStructure?.starred_label || "Starred"), icon: Star, count: counts.starred, type: "folder" },
     { id: "snoozed", label: dyn.v3.getVariant("snoozed_label", TEXT_VARIANTS_MAP, "Snoozed"), icon: Clock, count: counts.snoozed, type: "folder" },
-    { id: "sent", label: textStructure?.sent_label || dyn.v3.getVariant("sent_label", TEXT_VARIANTS_MAP, "Sent"), icon: Send, count: counts.sent, type: "folder" },
-    { id: "drafts", label: textStructure?.drafts_label || dyn.v3.getVariant("drafts_label", TEXT_VARIANTS_MAP, "Drafts"), icon: FileText, count: counts.drafts, type: "folder" },
+    { id: "sent", label: dyn.v3.getVariant("sent_label", TEXT_VARIANTS_MAP, textStructure?.sent_label || "Sent"), icon: Send, count: counts.sent, type: "folder" },
+    { id: "drafts", label: dyn.v3.getVariant("drafts_label", TEXT_VARIANTS_MAP, textStructure?.drafts_label || "Drafts"), icon: FileText, count: counts.drafts, type: "folder" },
     { id: "important", label: dyn.v3.getVariant("important_label", TEXT_VARIANTS_MAP, "Important"), icon: AlertTriangle, count: counts.important, type: "folder" },
     { id: "archive", label: dyn.v3.getVariant("archive_label", TEXT_VARIANTS_MAP, "Archive"), icon: PenTool, count: counts.archive, type: "folder" },
     { id: "spam", label: dyn.v3.getVariant("spam_label", TEXT_VARIANTS_MAP, "Spam"), icon: Mail, count: counts.spam, type: "folder" },
-    { id: "trash", label: textStructure?.trash_label || dyn.v3.getVariant("trash_label", TEXT_VARIANTS_MAP, "Trash"), icon: Trash2, count: counts.trash, type: "folder" },
+    { id: "trash", label: dyn.v3.getVariant("trash_label", TEXT_VARIANTS_MAP, textStructure?.trash_label || "Trash"), icon: Trash2, count: counts.trash, type: "folder" },
   ];
 
   const orderedNavigation = dyn.v1.changeOrderElements("sidebar-nav-order", navigationItems.length).map((idx) => navigationItems[idx]);

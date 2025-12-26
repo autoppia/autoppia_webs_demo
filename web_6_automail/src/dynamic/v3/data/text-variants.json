@@ -35,11 +35,14 @@
   "snooze_action": ["Snooze", "Later", "Remind me"],
   "label_selector_action": ["Labels", "Tags", "Organize"],
   "templates_nav": ["Templates", "Saved replies", "Snippets"],
+  "templates_header": ["Email templates", "Message templates", "Saved templates"],
   "template_to_label": ["To", "Recipient", "Destination"],
   "template_from_label": ["From", "Sender", "Origin"],
   "template_body_label": ["Body", "Message", "Content"],
-  "templates_header": ["Email templates", "Message templates", "Saved templates"],
-  "theme_toggle": ["Theme", "Appearance", "Mode"],
-  "debug_title": ["Dynamic Debug", "Variant Inspector", "Seed Monitor"],
-  "debug_seed": ["Seed", "Variant seed", "Dynamic seed"]
+  "compose_to_placeholder": ["Recipient", "Add address", "Who to?"],
+  "compose_subject_placeholder": ["Subject", "Add subject", "Topic"],
+  "compose_body_placeholder": ["Type your message...", "Write email", "Compose note"],
+  "reply": ["Reply", "Respond", "Answer"],
+  "reply_all": ["Reply all", "Respond all", "Answer all"],
+  "forward": ["Forward", "Share", "Send onward"]
 }

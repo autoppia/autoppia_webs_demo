@@ -96,7 +96,7 @@ export function Toolbar({ onMenuClick, textStructure }: ToolbarProps) {
     setIsSearching(false);
   };
 
-  const toolbarId = dyn.v3.getVariant('header-toolbar', ID_VARIANTS_MAP, 'toolbar');
+  const toolbarId = dyn.v3.getVariant('toolbar', ID_VARIANTS_MAP, 'toolbar');
   const toolbarClass = cn(
     dyn.v3.getVariant('toolbar-row', CLASS_VARIANTS_MAP, 'flex items-center gap-3 px-4 py-3'),
     'h-16 toolbar-glass',
@@ -111,20 +111,8 @@ export function Toolbar({ onMenuClick, textStructure }: ToolbarProps) {
     currentVariant.id === 10 && 'magazine-header'
   );
 
-  const searchInputId = dyn.v3.getVariant('toolbar-search', ID_VARIANTS_MAP, 'search-input');
-  const searchInputClass = cn(
-    dyn.v3.getVariant('toolbar-search', CLASS_VARIANTS_MAP, 'w-full'),
-    'pl-10 pr-12 h-12 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-ring',
-    currentVariant.id === 2 && 'search-field',
-    currentVariant.id === 3 && 'header-search',
-    currentVariant.id === 4 && 'search-element',
-    currentVariant.id === 5 && 'search-field',
-    currentVariant.id === 6 && 'bottom-search',
-    currentVariant.id === 7 && 'header-search',
-    currentVariant.id === 8 && 'header-search',
-    currentVariant.id === 9 && 'header-search',
-    currentVariant.id === 10 && 'header-search'
-  );
+  const searchInputId = dyn.v3.getVariant('search_input', ID_VARIANTS_MAP, 'search-input');
+  const searchInputClass = dyn.v3.getVariant('toolbar-search-input', CLASS_VARIANTS_MAP, 'pl-10 pr-12 h-12 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-ring');
 
   const placeholderText = dyn.v3.getVariant(
     'search_placeholder',
