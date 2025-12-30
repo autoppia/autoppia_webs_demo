@@ -1,12 +1,11 @@
 import type { Email, EmailFolder } from "@/types/email";
-import { getEffectiveLayoutConfig, isDynamicEnabled } from "@/dynamic/v1-layouts";
 import { emails, initializeEmails, loadEmailsFromDb, writeCachedEmails, readCachedEmails } from "@/data/emails-enhanced";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
-  return isDynamicEnabled();
+  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === "true" || process.env.ENABLE_DYNAMIC_V1 === "true";
 };
 
 // Dynamic data provider that returns either seed data or empty arrays based on config
@@ -152,7 +151,7 @@ export class DynamicDataProvider {
 
   // Get layout configuration based on seed
   public getLayoutConfig(seed?: number) {
-    return getEffectiveLayoutConfig(seed);
+    return { layoutType: "fixed", seed: seed ?? 1 };
   }
 
   // Static Email data - always available

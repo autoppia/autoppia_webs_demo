@@ -1,18 +1,31 @@
 import { initializeHotels } from "@/data/hotels-enhanced";
-import { Hotel } from "@/types/hotel";
+import { DASHBOARD_HOTELS } from "@/library/dataset";
+import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { clampBaseSeed } from "@/shared/seed-resolver";
+import type { Hotel } from "@/types/hotel";
 
-/**
- * Dynamic Data Provider for Autolodge
- * Manages hotel data loading with caching and fallback support
- */
-class DynamicDataProvider {
+export interface HotelSearchFilters {
+  region?: string;
+  minRating?: number;
+}
+
+const BASE_SEED_STORAGE_KEY = "autolodge_seed_base";
+
+export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
-  private hotels: Hotel[] = [];
+  private hotels: Hotel[] = [...DASHBOARD_HOTELS];
   private ready = false;
   private readyPromise: Promise<void>;
 
   private constructor() {
-    this.readyPromise = this.initialize();
+    if (typeof window === "undefined") {
+      this.ready = true;
+      this.readyPromise = Promise.resolve();
+      return;
+    }
+
+    this.readyPromise = this.loadHotels();
+    window.addEventListener("autolodge:v2SeedChange", this.handleSeedChange);
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -22,177 +35,121 @@ class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  /**
-   * Get v2 seed from window (synchronized by SeedContext)
-   */
-  private getRuntimeV2Seed(): number | null {
-    if (typeof window === "undefined") return null;
-    const value = (window as any).__autolodgeV2Seed;
-    if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
-      return value;
-    }
-    return null;
-  }
-
-  /**
-   * Initialize the data provider
-   */
-  async initialize(): Promise<void> {
+  private getBaseSeed(): number {
     try {
-      // Wait a bit for SeedContext to sync v2Seed to window
-      await new Promise(resolve => setTimeout(resolve, 100));
-      const v2Seed = this.getRuntimeV2Seed();
-      this.hotels = await initializeHotels(v2Seed ?? undefined);
-      this.ready = true;
-      console.log('🎯 DynamicDataProvider initialized with', this.hotels.length, 'hotels, seed:', v2Seed ?? 1);
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get("seed");
+      if (raw) {
+        const parsed = clampBaseSeed(Number.parseInt(raw, 10));
+        window.localStorage.setItem(BASE_SEED_STORAGE_KEY, parsed.toString());
+        return parsed;
+      }
+      const stored = window.localStorage.getItem(BASE_SEED_STORAGE_KEY);
+      if (stored) {
+        return clampBaseSeed(Number.parseInt(stored, 10));
+      }
     } catch (error) {
-      console.error('❌ Failed to initialize DynamicDataProvider:', error);
-      this.ready = true; // Mark as ready even if failed to prevent infinite loading
+      console.warn("[autolodge] Failed to resolve base seed from URL/localStorage", error);
+    }
+    return clampBaseSeed(1);
+  }
+
+  private handleSeedChange = (event: Event) => {
+    const customEvent = event as CustomEvent<{ seed: number | null }>;
+    const nextSeed = customEvent.detail?.seed ?? null;
+    if (nextSeed) {
+      this.loadHotels(nextSeed).catch((error) =>
+        console.warn("[autolodge] Failed to reload hotels for v2 seed change", error)
+      );
+    }
+  };
+
+  private async loadHotels(seed?: number | null): Promise<void> {
+    try {
+      const resolvedSeed = seed ?? this.getBaseSeed();
+      const loadedHotels = await initializeHotels(resolvedSeed);
+      this.hotels = Array.isArray(loadedHotels) ? loadedHotels : [];
+    } catch (error) {
+      console.error("[autolodge] Failed to initialize hotels", error);
+      this.hotels = [...DASHBOARD_HOTELS];
+    } finally {
+      this.ready = true;
     }
   }
 
-  /**
-   * Get all hotels
-   */
-  getHotels(): Hotel[] {
-    return this.hotels;
-  }
-
-  /**
-   * Get hotels filtered by location
-   */
-  getHotelsByLocation(location: string): Hotel[] {
-    return this.hotels.filter(hotel => 
-      hotel.location.toLowerCase().includes(location.toLowerCase())
-    );
-  }
-
-  /**
-   * Get hotel by ID
-   */
-  getHotelById(id: number): Hotel | undefined {
-    return this.hotels.find(hotel => hotel.id === id);
-  }
-
-  /**
-   * Get hotels filtered by price range
-   */
-  getHotelsByPriceRange(minPrice: number, maxPrice: number): Hotel[] {
-    return this.hotels.filter(hotel => 
-      hotel.price >= minPrice && hotel.price <= maxPrice
-    );
-  }
-
-  /**
-   * Get hotels filtered by rating
-   */
-  getHotelsByRating(minRating: number): Hotel[] {
-    return this.hotels.filter(hotel => hotel.rating >= minRating);
-  }
-
-  /**
-   * Search hotels by title or location
-   */
-  searchHotels(query: string): Hotel[] {
-    const searchTerm = query.toLowerCase();
-    return this.hotels.filter(hotel => 
-      hotel.title.toLowerCase().includes(searchTerm) ||
-      hotel.location.toLowerCase().includes(searchTerm)
-    );
-  }
-
-  /**
-   * Check if data is ready
-   */
-  isReady(): boolean {
+  public isReady(): boolean {
     return this.ready;
   }
 
-  /**
-   * Wait for data to be ready
-   */
-  async whenReady(): Promise<void> {
-    await this.readyPromise;
+  public whenReady(): Promise<void> {
+    return this.readyPromise;
   }
 
-  /**
-   * Get data loading status
-   */
-  getStatus(): { ready: boolean; count: number } {
-    return {
-      ready: this.ready,
-      count: this.hotels.length
-    };
+  public getHotels(): Hotel[] {
+    return Array.isArray(this.hotels) ? this.hotels : [];
   }
 
-  /**
-   * Refresh data when v2-seed changes
-   */
-  async refreshDataForSeed(seedOverride?: number | null): Promise<void> {
-    try {
-      const v2Seed = typeof seedOverride === "number" ? seedOverride : this.getRuntimeV2Seed();
-      console.log('[DynamicDataProvider] Refreshing data for v2-seed:', v2Seed ?? 1);
-      
-      const newHotels = await initializeHotels(v2Seed ?? undefined);
-      this.hotels = newHotels;
-      
-      console.log('✅ Data refreshed:', newHotels.length, 'hotels for seed:', v2Seed ?? 1);
-    } catch (error) {
-      console.error('[DynamicDataProvider] Failed to refresh data:', error);
+  public getHotelById(id: number): Hotel | undefined {
+    return this.getHotels().find((hotel) => hotel.id === id);
+  }
+
+  public getFeaturedHotels(count = 6): Hotel[] {
+    return this.getHotels().slice(0, count);
+  }
+
+  public findRelatedHotels(hotelId: number, limit = 4): Hotel[] {
+    const current = this.getHotelById(hotelId);
+    const pool = this.getHotels().filter((hotel) => hotel.id !== hotelId);
+
+    if (current && current.location) {
+      const [, country] = current.location.split(",").map((part) => part.trim());
+      const sameRegion = pool.filter((hotel) => hotel.location.includes(country ?? ""));
+      if (sameRegion.length >= limit) {
+        return sameRegion.slice(0, limit);
+      }
     }
+
+    return pool.slice(0, limit);
+  }
+
+  public searchHotels(query: string, filters?: HotelSearchFilters): Hotel[] {
+    const normalizedQuery = query.trim().toLowerCase();
+    return this.getHotels().filter((hotel) => {
+      const matchesQuery =
+        normalizedQuery.length === 0 ||
+        hotel.title.toLowerCase().includes(normalizedQuery) ||
+        hotel.location.toLowerCase().includes(normalizedQuery);
+
+      const matchesRegion =
+        !filters?.region ||
+        hotel.location.toLowerCase().includes(filters.region.toLowerCase());
+      const matchesRating =
+        !filters?.minRating || hotel.rating >= filters.minRating;
+
+      return matchesQuery && matchesRegion && matchesRating;
+    });
+  }
+
+  public getAvailableRegions(): string[] {
+    const regions = new Set<string>();
+    this.getHotels().forEach((hotel) => {
+      const [, country] = hotel.location.split(",").map((part) => part.trim());
+      if (country) regions.add(country);
+    });
+    return Array.from(regions).sort((a, b) => a.localeCompare(b));
+  }
+
+  public isDynamicModeEnabled(): boolean {
+    return isDbLoadModeEnabled();
   }
 }
 
-// Export singleton instance
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
-// Listen for v2-seed changes
-if (typeof window !== "undefined") {
-  window.addEventListener("autolodge:v2SeedChange", (event: any) => {
-    const newSeed = event.detail?.seed ?? null;
-    console.log('[DynamicDataProvider] v2-seed changed to:', newSeed);
-    dynamicDataProvider.refreshDataForSeed(newSeed);
-  });
-}
-
-/**
- * Check if dynamic mode is enabled
- */
-export function isDynamicModeEnabled(): boolean {
-  if (typeof window === 'undefined') return false;
-  
-  const val = (
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ??
-    process.env.ENABLE_DYNAMIC_V1 ??
-    ''
-  ).toString().toLowerCase();
-
-  return ['true', '1', 'yes', 'on'].includes(val);
-}
-
-/**
- * Get effective seed value (1-300 range)
- */
-export function getEffectiveSeed(seed: number): number {
-  if (isNaN(seed) || seed < 1) return 1;
-  return ((seed - 1) % 300) + 1;
-}
-
-/**
- * Get layout configuration
- */
-export function getLayoutConfig(seed?: number, pageType: 'stay' | 'confirm' = 'stay') {
-  // This would typically import from utils, but to avoid circular imports,
-  // we'll return a basic config here
-  return {
-    searchBar: { position: 'top', wrapper: 'div', className: 'w-full flex justify-center mb-6' },
-    propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-4xl mx-auto px-4 py-8' },
-    eventElements: { 
-      order: pageType === 'confirm' 
-        ? ['search', 'view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'confirm']
-        : ['search', 'view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'reserve'], 
-      wrapper: 'div', 
-      className: 'flex flex-col gap-6' 
-    }
-  };
-}
+export const getHotels = () => dynamicDataProvider.getHotels();
+export const getHotelById = (id: number) => dynamicDataProvider.getHotelById(id);
+export const getFeaturedHotels = (count?: number) => dynamicDataProvider.getFeaturedHotels(count);
+export const getRelatedHotels = (hotelId: number, limit?: number) => dynamicDataProvider.findRelatedHotels(hotelId, limit);
+export const searchHotels = (query: string, filters?: HotelSearchFilters) => dynamicDataProvider.searchHotels(query, filters);
+export const getAvailableRegions = () => dynamicDataProvider.getAvailableRegions();
+export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();

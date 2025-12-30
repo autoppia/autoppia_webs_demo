@@ -8,7 +8,8 @@ import { Loader2 } from "lucide-react";
 import { AddToCartModal } from "./AddToCartModal";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useLayout } from "@/contexts/LayoutProvider";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { Input } from "@/components/ui/input";
@@ -46,32 +47,37 @@ type Review = {
 function ReviewsSection({
   reviews,
   restaurant,
+  onDeleteReview,
 }: {
   reviews: Review[];
   restaurant: Restaurant;
+  onDeleteReview?: (index: number) => void;
 }) {
   const layout = useLayout();
   const seedStructure = layout.seed;
-  const { getText, getId, getAria } = useV3Attributes();
+  const dyn = useDynamicSystem();
   if (!reviews?.length) return null;
 
   const reviewsTitleAttributes = layout.getElementAttributes("reviews-title", 0);
-  const reviewsTitleId = getId(
+  const reviewsTitleId = dyn.v3.getVariant(
     "reviews-title",
+    ID_VARIANTS_MAP,
     `${reviewsTitleAttributes.id ?? "reviews-title"}-${seedStructure}`
   );
-  const reviewsTitleText = getText("reviews-title", "Customer Reviews");
+  const reviewsTitleText = dyn.v3.getVariant("reviews-title", TEXT_VARIANTS_MAP, "Customer Reviews");
 
   return (
+    dyn.v1.addWrapDecoy("reviews-section", (
     <section
-      className={`mt-12 ${layout.restaurantDetail.reviewsClass}`}
+      className={`mt-12 ${layout.restaurantDetail.reviewsClass} ${dyn.v3.getVariant('reviews-section-class', CLASS_VARIANTS_MAP, '')}`}
+      id={dyn.v3.getVariant('reviews-section', ID_VARIANTS_MAP, 'reviews-section')}
       {...layout.getElementAttributes("reviews-section", 0)}
     >
       <h3
         className={`text-xl font-bold mb-4 ${layout.generateSeedClass("reviews-title")}`}
         {...reviewsTitleAttributes}
         id={reviewsTitleId}
-        aria-label={getAria("reviews-title", reviewsTitleText)}
+        aria-label={dyn.v3.getVariant("reviews-title", TEXT_VARIANTS_MAP, reviewsTitleText)}
       >
         {reviewsTitleText}
       </h3>
@@ -82,7 +88,8 @@ function ReviewsSection({
         {reviews.map((r, i) => (
           <div
             key={i}
-            className="bg-white rounded-xl shadow p-5 flex items-start gap-4 group relative"
+            className={`bg-white rounded-xl shadow p-5 flex items-start gap-4 group relative ${dyn.v3.getVariant('review-item-class', CLASS_VARIANTS_MAP, '')}`}
+            id={dyn.v3.getVariant(`review-item-${i}`, ID_VARIANTS_MAP, `review-item-${i}`)}
           >
             <SafeImage
               src={r.avatar}
@@ -93,16 +100,38 @@ function ReviewsSection({
             />
             <div className="flex-1">
               <div className="flex items-center gap-4 mb-1">
-                <span className="font-semibold">{r.author}</span>
+                <span className={`font-semibold ${dyn.v3.getVariant('review-author-class', CLASS_VARIANTS_MAP, '')}`}>{r.author}</span>
                 <Stars rating={r.rating} />
               </div>
-              <div className="text-zinc-700 text-base">{r.comment}</div>
-              <span className="text-xs text-zinc-400 ">{r.date}</span>
+              <div className={`text-zinc-700 text-base ${dyn.v3.getVariant('review-comment-class', CLASS_VARIANTS_MAP, '')}`}>{r.comment}</div>
+              <span className={`text-xs text-zinc-400 ${dyn.v3.getVariant('review-date-class', CLASS_VARIANTS_MAP, '')}`}>{r.date}</span>
             </div>
+            {onDeleteReview && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`opacity-0 group-hover:opacity-100 transition-opacity text-red-600 hover:text-red-700 hover:bg-red-50 ${dyn.v3.getVariant('delete-review-btn-class', CLASS_VARIANTS_MAP, '')}`}
+                id={dyn.v3.getVariant(`delete-review-btn-${i}`, ID_VARIANTS_MAP, `delete-review-btn-${i}`)}
+                onClick={() => {
+                  onDeleteReview(i);
+                  logEvent(EVENT_TYPES.DELETE_REVIEW, {
+                    reviewIndex: i,
+                    author: r.author,
+                    rating: r.rating,
+                    restaurantId: restaurant.id,
+                    restaurantName: restaurant.name,
+                  });
+                }}
+                aria-label={dyn.v3.getVariant('delete-review-btn', TEXT_VARIANTS_MAP, 'Delete review')}
+              >
+                {dyn.v3.getVariant('delete-review-btn-text', TEXT_VARIANTS_MAP, 'Delete')}
+              </Button>
+            )}
           </div>
         ))}
       </div>
     </section>
+    ), 'reviews-section-wrapper')
   );
 }
 
@@ -113,7 +142,7 @@ export default function RestaurantDetailPage({
 }) {
   const layout = useLayout();
   const seedStructure = layout.seed;
-  const { getText, getId, getAria } = useV3Attributes();
+  const dyn = useDynamicSystem();
   const router = useSeedRouter();
   const { restaurants, isLoading } = useRestaurants();
   const restaurant = useMemo(() => {
@@ -130,6 +159,7 @@ export default function RestaurantDetailPage({
     if (restaurant?.reviews) {
       setReviews(restaurant.reviews);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restaurant?.id]);
 
   useEffect(() => {
@@ -186,12 +216,14 @@ export default function RestaurantDetailPage({
   }
 
   return (
+    dyn.v1.addWrapDecoy("restaurant-detail-page", (
     <div 
-      className={`max-w-5xl mx-auto px-2 sm:px-0 ${layout.restaurantDetail.containerClass} ds-${seedStructure}`}
-      id={getId('restaurant-detail-page', `restaurant-detail-page-${seedStructure}`)}
-      aria-label={getAria('restaurant-detail-page', 'Restaurant detail page')}
+      className={`max-w-5xl mx-auto px-2 sm:px-0 ${layout.restaurantDetail.containerClass} ${dyn.v3.getVariant("container", CLASS_VARIANTS_MAP, "")} ds-${seedStructure}`}
+      id={dyn.v3.getVariant('restaurant-detail-page', ID_VARIANTS_MAP, `restaurant-detail-page-${seedStructure}`)}
+      aria-label={dyn.v3.getVariant('restaurant-detail-page', TEXT_VARIANTS_MAP, 'Restaurant detail page')}
     >
       {/* Header */}
+      {dyn.v1.addWrapDecoy("restaurant-header", (
       <div 
         className={`flex flex-col md:flex-row gap-6 md:items-center mt-6 mb-8 ${layout.restaurantDetail.headerClass} ds-${seedStructure}`}
         {...layout.getElementAttributes('restaurant-header', 0)}
@@ -209,10 +241,10 @@ export default function RestaurantDetailPage({
           <div className="flex items-center gap-3">
             <h1 
               className={`text-3xl font-bold ${layout.generateSeedClass('restaurant-name')} ds-${seedStructure}`}
-              id={getId('restaurant-name', `restaurant-name-${seedStructure}`)}
-              aria-label={getAria('restaurant-name', restaurant.name)}
+              id={dyn.v3.getVariant('restaurant-name', ID_VARIANTS_MAP, `restaurant-name-${seedStructure}`)}
+              aria-label={dyn.v3.getVariant('restaurant-name', TEXT_VARIANTS_MAP, restaurant.name)}
             >
-              {getText('restaurant-name', restaurant.name)}
+              {dyn.v3.getVariant('restaurant-name', TEXT_VARIANTS_MAP, restaurant.name)}
             </h1>
             <span className="inline-flex items-center gap-1 text-sm font-semibold text-green-700 bg-green-50 border border-green-100 px-2 py-1 rounded-full">
               ★ {restaurant.rating.toFixed(1)}
@@ -220,17 +252,17 @@ export default function RestaurantDetailPage({
           </div>
           <div 
             className={`text-zinc-600 ${layout.generateSeedClass('restaurant-meta')} ds-${seedStructure}`}
-            id={getId('restaurant-meta', `restaurant-meta-${seedStructure}`)}
-            aria-label={getAria('restaurant-meta', `${restaurant.cuisine} · ${restaurant.rating}`)}
+            id={dyn.v3.getVariant('restaurant-meta', ID_VARIANTS_MAP, `restaurant-meta-${seedStructure}`)}
+            aria-label={dyn.v3.getVariant('restaurant-meta', TEXT_VARIANTS_MAP, `${restaurant.cuisine} · ${restaurant.rating}`)}
           >
-            {getText('restaurant-meta', `${restaurant.cuisine} · ${restaurant.menu.length} dishes`)}
+            {dyn.v3.getVariant('restaurant-meta', TEXT_VARIANTS_MAP, `${restaurant.cuisine} · ${restaurant.menu.length} dishes`)}
           </div>
           <p 
             className={`text-zinc-600 ${layout.generateSeedClass('restaurant-description')} ds-${seedStructure}`}
-            id={getId('restaurant-description', `restaurant-description-${seedStructure}`)}
-            aria-label={getAria('restaurant-description', restaurant.description)}
+            id={dyn.v3.getVariant('restaurant-description', ID_VARIANTS_MAP, `restaurant-description-${seedStructure}`)}
+            aria-label={dyn.v3.getVariant('restaurant-description', TEXT_VARIANTS_MAP, restaurant.description)}
           >
-            {getText('restaurant-description', restaurant.description)}
+            {dyn.v3.getVariant('restaurant-description', TEXT_VARIANTS_MAP, restaurant.description)}
           </p>
           <div className="flex gap-3 pt-1">
             <span className="text-sm text-zinc-500">Delivery {restaurant.deliveryTime || "30-45 min"}</span>
@@ -239,8 +271,8 @@ export default function RestaurantDetailPage({
           <Button
             variant="outline"
             size="sm"
-            className={`${layout.generateSeedClass('back-button')} ds-${seedStructure}`}
-            id={getId('back-button', `back-button-${seedStructure}`)}
+            className={`${layout.generateSeedClass('back-button')} ds-${seedStructure} ${dyn.v3.getVariant('back-button', CLASS_VARIANTS_MAP, '')}`}
+            id={dyn.v3.getVariant('back-button', ID_VARIANTS_MAP, `back-button-${seedStructure}`)}
             onClick={() => {
               logEvent(EVENT_TYPES.BACK_TO_ALL_RESTAURANTS, {
                 fromRestaurantId: restaurant.id,
@@ -248,66 +280,73 @@ export default function RestaurantDetailPage({
               });
               router.push('/restaurants');
             }}
-            aria-label={getAria('back-button', 'Back to all restaurants')}
+            aria-label={dyn.v3.getVariant('back-button', TEXT_VARIANTS_MAP, 'Back to all restaurants')}
           >
-            {getText('back-button', '← Back to all restaurants')}
+            {dyn.v3.getVariant('back-button', TEXT_VARIANTS_MAP, '← Back to all restaurants')}
           </Button>
         </div>
       </div>
+      ))}
 
       {/* Menu */}
+      {dyn.v1.addWrapDecoy("menu-section", (
       <div>
         <h2 
           className={`text-xl font-bold mb-4 ${layout.generateSeedClass('menu-title')} ds-${seedStructure}`}
-          id={getId('menu-title', `menu-title-${seedStructure}`)}
-          aria-label={getAria('menu-title', 'Menu')}
+          id={dyn.v3.getVariant('menu-title', ID_VARIANTS_MAP, `menu-title-${seedStructure}`)}
+          aria-label={dyn.v3.getVariant('menu-title', TEXT_VARIANTS_MAP, 'Menu')}
         >
-          {getText('menu-title', 'Menu')}
+          {dyn.v3.getVariant('menu-title', TEXT_VARIANTS_MAP, 'Menu')}
         </h2>
         <div 
           className={`grid grid-cols-1 sm:grid-cols-2 gap-6 ${layout.restaurantDetail.menuClass}`}
           {...layout.getElementAttributes('menu-grid', 0)}
         >
-          {restaurant.menu.map((item, index) => (
+          {(() => {
+            const ordered = dyn.v1.changeOrderElements("menu-items", restaurant.menu.length);
+            return ordered.map((orderIndex) => {
+              const item = restaurant.menu[orderIndex];
+              const index = orderIndex;
+              return (
             <div
               key={item.id}
-              className={`bg-white rounded-lg shadow p-4 flex flex-col ${layout.generateSeedClass('menu-item')} ds-${seedStructure}`}
-              id={getId(`menu-item-${index}`, `menu-item-${seedStructure}-${index}`)}
+              className={`bg-white rounded-lg shadow p-4 flex flex-col ${layout.generateSeedClass('menu-item')} ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")} ds-${seedStructure}`}
+              id={dyn.v3.getVariant(`menu-item-${index}`, ID_VARIANTS_MAP, `menu-item-${seedStructure}-${index}`)}
             >
               <div className="relative w-full h-32 mb-3 rounded-md overflow-hidden">
                 <SafeImage
                   src={item.image}
-                  alt={getText(`menu-item-name-${index}`, item.name)}
+                  alt={dyn.v3.getVariant(`menu-item-name-${index}`, TEXT_VARIANTS_MAP, item.name)}
                   fill
                   className="object-cover"
                 />
               </div>
               <div 
                 className={`font-bold text-lg mb-1 ${layout.generateSeedClass('menu-item-name')} ds-${seedStructure}`}
-                id={getId(`menu-item-name-${index}`, `menu-item-name-${seedStructure}-${index}`)}
-                aria-label={getAria(`menu-item-name-${index}`, item.name)}
+                id={dyn.v3.getVariant(`menu-item-name-${index}`, ID_VARIANTS_MAP, `menu-item-name-${seedStructure}-${index}`)}
+                aria-label={dyn.v3.getVariant(`menu-item-name-${index}`, TEXT_VARIANTS_MAP, item.name)}
               >
-                {getText(`menu-item-name-${index}`, item.name)}
+                {dyn.v3.getVariant(`menu-item-name-${index}`, TEXT_VARIANTS_MAP, item.name)}
               </div>
               <div 
                 className={`text-zinc-500 text-sm mb-2 flex-1 ${layout.generateSeedClass('menu-item-description')} ds-${seedStructure}`}
-                id={getId(`menu-item-description-${index}`, `menu-item-description-${seedStructure}-${index}`)}
-                aria-label={getAria(`menu-item-description-${index}`, item.description)}
+                id={dyn.v3.getVariant(`menu-item-description-${index}`, ID_VARIANTS_MAP, `menu-item-description-${seedStructure}-${index}`)}
+                aria-label={dyn.v3.getVariant(`menu-item-description-${index}`, TEXT_VARIANTS_MAP, item.description)}
               >
-                {getText(`menu-item-description-${index}`, item.description)}
+                {dyn.v3.getVariant(`menu-item-description-${index}`, TEXT_VARIANTS_MAP, item.description)}
               </div>
               <div className="flex items-center justify-between mt-auto">
                 <span 
                   className={`font-semibold text-green-700 text-base ${layout.generateSeedClass('menu-item-price')} ds-${seedStructure}`}
-                  id={getId(`menu-item-price-${index}`, `menu-item-price-${seedStructure}-${index}`)}
-                  aria-label={getAria(`menu-item-price-${index}`, `$${item.price.toFixed(2)}`)}
+                  id={dyn.v3.getVariant(`menu-item-price-${index}`, ID_VARIANTS_MAP, `menu-item-price-${seedStructure}-${index}`)}
+                  aria-label={dyn.v3.getVariant(`menu-item-price-${index}`, TEXT_VARIANTS_MAP, `$${item.price.toFixed(2)}`)}
                 >
                   ${item.price.toFixed(2)}
                 </span>
                 <Button
                   size="sm"
-                  id={getId('add-to-cart-btn', `add-to-cart-btn-${seedStructure}-${index}`)}
-                  className={`${layout.generateSeedClass('add-to-cart-btn')} ds-${seedStructure}`}
+                  id={dyn.v3.getVariant('add-to-cart-btn', ID_VARIANTS_MAP, `add-to-cart-btn-${seedStructure}-${index}`)}
+                  className={`${layout.generateSeedClass('add-to-cart-btn')} ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")} ds-${seedStructure}`}
                   onClick={() => {
                     logEvent(EVENT_TYPES.ADD_TO_CART_MODAL_OPEN, {
                       restaurantId: restaurant.id,
@@ -325,45 +364,53 @@ export default function RestaurantDetailPage({
                     setModalOpen(true);
                     setModalItem(itemWithRestaurant);
                   }}
-                  aria-label={getAria('add-to-cart-btn', 'Add to Cart')}
+                  aria-label={dyn.v3.getVariant('add-to-cart-btn', TEXT_VARIANTS_MAP, 'Add to Cart')}
                 >
-                  {getText('add-to-cart-btn', 'Add to Cart')}
+                  {dyn.v3.getVariant('add-to-cart-btn', TEXT_VARIANTS_MAP, 'Add to Cart')}
                 </Button>
               </div>
             </div>
-          ))}
+              );
+            });
+          })()}
         </div>
       </div>
+      ))}
 
       {/* Reviews */}
       <ReviewsSection 
         key="reviews"
         reviews={reviews} 
         restaurant={restaurant}
-      />
-
-      <AddReviewForm
-        restaurant={restaurant}
-        onSubmit={(payload) => {
-          setReviews((prev) => [
-            {
-              avatar: "/media/avatars/default-avatar.jpg",
-              author: payload.author || "Guest",
-              rating: payload.rating,
-              comment: payload.comment,
-              date: new Date().toLocaleDateString(),
-            },
-            ...prev,
-          ]);
-          logEvent(EVENT_TYPES.REVIEW_SUBMITTED, {
-            ...payload,
-            restaurantId: restaurant.id,
-            restaurantName: restaurant.name,
-            cuisine: restaurant.cuisine,
-            restaurantRating: restaurant.rating,
-          });
+        onDeleteReview={(index) => {
+          setReviews((prev) => prev.filter((_, i) => i !== index));
         }}
       />
+
+      {dyn.v1.addWrapDecoy("add-review-section", (
+        <AddReviewForm
+          restaurant={restaurant}
+          onSubmit={(payload) => {
+            setReviews((prev) => [
+              {
+                avatar: "/media/avatars/default-avatar.jpg",
+                author: payload.author || "Guest",
+                rating: payload.rating,
+                comment: payload.comment,
+                date: new Date().toLocaleDateString(),
+              },
+              ...prev,
+            ]);
+            logEvent(EVENT_TYPES.REVIEW_SUBMITTED, {
+              ...payload,
+              restaurantId: restaurant.id,
+              restaurantName: restaurant.name,
+              cuisine: restaurant.cuisine,
+              restaurantRating: restaurant.rating,
+            });
+          }}
+        />
+      ))}
       
       {/* Modal for item customizations */}
       {modalOpen && modalItem && (
@@ -380,6 +427,7 @@ export default function RestaurantDetailPage({
       {/* Floating Cart Access here! */}
       <CartFab />
     </div>
+    ))
   );
 }
 
@@ -423,7 +471,7 @@ function AddReviewForm({
   restaurant: Restaurant;
   onSubmit: (payload: { author: string; rating: number; comment: string }) => void;
 }) {
-  const { getId, getText } = useV3Attributes();
+  const dyn = useDynamicSystem();
   const [author, setAuthor] = useState("");
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
@@ -441,26 +489,37 @@ function AddReviewForm({
 
   return (
     <Card className="mt-10 p-6 bg-white shadow-sm border border-zinc-200">
-      <h3 className="text-lg font-semibold mb-4">Leave a review</h3>
+      <h3 className="text-lg font-semibold mb-4">
+        {dyn.v3.getVariant("review-title", TEXT_VARIANTS_MAP, "Leave a review")}
+      </h3>
+      {dyn.v1.addWrapDecoy("review-form", (
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor={getId("reviewer-name", "reviewer-name-input")}>Name</Label>
+            <Label htmlFor={dyn.v3.getVariant("reviewer-name", ID_VARIANTS_MAP, "reviewer-name-input")}>
+              {dyn.v3.getVariant("reviewer-name-label", TEXT_VARIANTS_MAP, "Name")}
+            </Label>
             <Input
-              id={getId("reviewer-name", "reviewer-name-input")}
-              placeholder="Your name"
+              id={dyn.v3.getVariant("reviewer-name", ID_VARIANTS_MAP, "reviewer-name-input")}
+              className={dyn.v3.getVariant("review-input", CLASS_VARIANTS_MAP, "")}
+              placeholder={dyn.v3.getVariant("reviewer-name-placeholder", TEXT_VARIANTS_MAP, "Your name")}
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor={getId("review-rating", "review-rating-input")}>Rating</Label>
+            <Label htmlFor={dyn.v3.getVariant("review-rating", ID_VARIANTS_MAP, "review-rating-input")}>
+              {dyn.v3.getVariant("review-rating-label", TEXT_VARIANTS_MAP, "Rating")}
+            </Label>
             <Select
               value={String(rating)}
               onValueChange={(v) => setRating(Number(v))}
             >
-              <SelectTrigger id={getId("review-rating", "review-rating-input")}>
-                <SelectValue placeholder="Select rating" />
+              <SelectTrigger
+                id={dyn.v3.getVariant("review-rating", ID_VARIANTS_MAP, "review-rating-input")}
+                className={dyn.v3.getVariant("select-trigger", CLASS_VARIANTS_MAP, "")}
+              >
+                <SelectValue placeholder={dyn.v3.getVariant("review-rating-placeholder", TEXT_VARIANTS_MAP, "Select rating")} />
               </SelectTrigger>
               <SelectContent>
                 {[5, 4, 3, 2, 1].map((val) => (
@@ -473,19 +532,26 @@ function AddReviewForm({
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor={getId("review-comment", "review-comment-input")}>Comment</Label>
+          <Label htmlFor={dyn.v3.getVariant("review-comment", ID_VARIANTS_MAP, "review-comment-input")}>
+            {dyn.v3.getVariant("review-comment-label", TEXT_VARIANTS_MAP, "Comment")}
+          </Label>
           <Textarea
-            id={getId("review-comment", "review-comment-input")}
-            placeholder={getText("review-placeholder", `Share your experience at ${restaurant.name}`)}
+            id={dyn.v3.getVariant("review-comment", ID_VARIANTS_MAP, "review-comment-input")}
+            placeholder={dyn.v3.getVariant("review-placeholder", TEXT_VARIANTS_MAP, `Share your experience at ${restaurant.name}`)}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             rows={4}
+            className={dyn.v3.getVariant("review-textarea", CLASS_VARIANTS_MAP, "")}
           />
         </div>
-        <Button type="submit" className="bg-green-600 hover:bg-green-700 text-white">
-          Submit review
+        <Button
+          type="submit"
+          className={`bg-green-600 hover:bg-green-700 text-white ${dyn.v3.getVariant("submit-review", CLASS_VARIANTS_MAP, "")}`}
+        >
+          {dyn.v3.getVariant("submit-review", TEXT_VARIANTS_MAP, "Submit review")}
         </Button>
       </form>
+      ))}
     </Card>
   );
 }

@@ -1,7 +1,10 @@
 import * as React from "react";
 import Image from "next/image";
 import { SeedLink } from "./ui/SeedLink";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
 import type { Hotel } from "@/types/hotel";
+import { cn } from "@/library/utils";
 
 function parseLocalDate(dateString: string | undefined) {
   if (!dateString) {
@@ -81,13 +84,24 @@ export function PropertyCard({
   onToggleWishlist?: (hotelId: number) => void;
   wishlisted?: boolean;
 } & Partial<Hotel>) {
-  return (
+  const dyn = useDynamicSystem();
+  const dynamicV3TextVariants: Record<string, string[]> = {
+    price_night: ["night", "per night", "each night"],
+  };
+
+  return dyn.v1.addWrapDecoy("property-card", (
     <SeedLink
       href={href ?? `/stay/${id}`}
+      id={dyn.v3.getVariant("property_card_link", ID_VARIANTS_MAP, `property-card-${id}`)}
       className="group relative block overflow-hidden rounded-xl border border-neutral-200 bg-white transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
       aria-label={`View details for ${title}`}
     >
-      <div className="bg-white max-w-[275px] rounded-3xl shadow-md border border-neutral-200 flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer">
+      <div
+        className={cn(
+          "bg-white max-w-[275px] rounded-3xl shadow-md border border-neutral-200 flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer",
+          dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")
+        )}
+      >
         <div className="relative aspect-[1.25/1] overflow-hidden">
           <Image
             src={image}
@@ -99,6 +113,7 @@ export function PropertyCard({
           />
           {onToggleWishlist && (
             <button
+              id={dyn.v3.getVariant("wishlist_button", ID_VARIANTS_MAP, `wishlist-${id}`)}
               aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
               className="absolute top-3 right-3 p-2 bg-white/80 rounded-full z-10 border border-neutral-200 hover:bg-white"
               onClick={(event) => {
@@ -152,10 +167,12 @@ export function PropertyCard({
           </div>
           <div className="flex items-center gap-1 mt-1">
             <span className="font-semibold text-neutral-800">${price}</span>
-            <span className="text-xs text-neutral-500">night</span>
+            <span className="text-xs text-neutral-500">
+              {dyn.v3.getVariant("price_night", dynamicV3TextVariants, "night")}
+            </span>
           </div>
         </div>
       </div>
       </SeedLink>
-  );
+  ));
 }

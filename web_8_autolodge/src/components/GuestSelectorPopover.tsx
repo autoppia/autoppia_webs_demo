@@ -1,7 +1,10 @@
 "use client";
 import * as React from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useMemo } from "react";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 
 const DEFAULTS = [
   { key: "adults", labelKey: "adults_label", subKey: "adults_sub", min: 0, max: 10 },
@@ -22,33 +25,52 @@ export function GuestSelectorPopover({
   children: React.ReactNode,
 }) {
   const [open, setOpen] = React.useState(false);
-  const { getText } = useV3Attributes();
+  const dyn = useDynamicSystem();
+  const dynamicV3TextVariants: Record<string, string[]> = {
+    adults_label: ["Adults", "Grown-ups", "Primary guests"],
+    adults_sub: ["Ages 13 or above", "13+ years", "Teens & adults"],
+    children_label: ["Children", "Kids", "Young guests"],
+    children_sub: ["Ages 2 – 12", "2 to 12 years", "Young travelers"],
+    infants_label: ["Infants", "Babies", "Little ones"],
+    infants_sub: ["Under 2", "0-2 years", "Tiny travelers"],
+    pets_label: ["Pets", "Animals", "Companions"],
+    pets_sub: ["Bringing a service animal?", "Service animals?", "Traveling with pets?"],
+    decrease: ["Decrease", "Reduce", "Minus"],
+    increase: ["Increase", "Add", "Plus"],
+  };
+
+  const rowOrder = useMemo(
+    () => dyn.v1.changeOrderElements("guest-rows", DEFAULTS.length),
+    [dyn.seed]
+  );
 
   const changeCount = (key: keyof GuestCounts, delta: number) => {
-    setCounts({ ...counts, [key]: Math.max(0, counts[key] + delta) });
+    const nextValue = Math.max(0, counts[key] + delta);
+    setCounts({ ...counts, [key]: nextValue });
+    if (delta > 0) {
+      logEvent(EVENT_TYPES.INCREASE_NUMBER_OF_GUESTS, {
+        guestType: key,
+        from: counts[key],
+        to: nextValue,
+      });
+    }
   };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <PopoverContent sideOffset={12} align="end" className="min-w-[370px] p-0 pt-2 bg-white rounded-3xl border shadow-xl">
+      <PopoverContent
+        sideOffset={12}
+        align="end"
+        id={dyn.v3.getVariant("guests_popover", ID_VARIANTS_MAP, "guests-popover")}
+        className={`min-w-[370px] p-0 pt-2 bg-white rounded-3xl border shadow-xl ${dyn.v3.getVariant("popover_content", CLASS_VARIANTS_MAP, "")}`}
+      >
         <div className="p-6 w-full flex flex-col gap-1">
-          {DEFAULTS.map((row) => {
-            const labelFallbacks: Record<string, string> = {
-              adults_label: "Adults",
-              children_label: "Children",
-              infants_label: "Infants",
-              pets_label: "Pets",
-            };
-            const subFallbacks: Record<string, string> = {
-              adults_sub: "Ages 13 or above",
-              children_sub: "Ages 2 – 12",
-              infants_sub: "Under 2",
-              pets_sub: "Bringing a service animal?",
-            };
-            const labelText = getText(row.labelKey, labelFallbacks[row.labelKey] || row.key);
-            const subText = getText(row.subKey, subFallbacks[row.subKey] || "");
-            return (
+          {rowOrder.map((rowIndex) => {
+            const row = DEFAULTS[rowIndex];
+            const labelText = dyn.v3.getVariant(row.labelKey, dynamicV3TextVariants, row.key);
+            const subText = dyn.v3.getVariant(row.subKey, dynamicV3TextVariants, "");
+            return dyn.v1.addWrapDecoy(`guest-row-${row.key}`, (
               <div className="flex items-center justify-between py-3" key={row.key}>
                 <div className="flex flex-col">
                   <span className="font-semibold text-[17px]">{labelText}</span>
@@ -59,18 +81,18 @@ export function GuestSelectorPopover({
                     className="w-8 h-8 flex items-center justify-center rounded-full border text-xl bg-white disabled:opacity-40"
                     onClick={() => changeCount(row.key as keyof GuestCounts, -1)}
                     disabled={counts[row.key as keyof GuestCounts] <= row.min}
-                    aria-label={`${getText("decrease", "Decrease")} ${labelText}`}
+                    aria-label={`${dyn.v3.getVariant("decrease", dynamicV3TextVariants, "Decrease")} ${labelText}`}
                   >–</button>
                   <span className="min-w-[16px] text-neutral-700 tabular-nums text-lg text-center">{counts[row.key as keyof GuestCounts]}</span>
                   <button
                     className="w-8 h-8 flex items-center justify-center rounded-full border text-xl bg-white disabled:opacity-40"
                     onClick={() => changeCount(row.key as keyof GuestCounts, 1)}
                     disabled={counts[row.key as keyof GuestCounts] >= row.max}
-                    aria-label={`${getText("increase", "Increase")} ${labelText}`}
+                    aria-label={`${dyn.v3.getVariant("increase", dynamicV3TextVariants, "Increase")} ${labelText}`}
                   >+</button>
                 </div>
               </div>
-            );
+            ));
           })}
         </div>
       </PopoverContent>

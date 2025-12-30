@@ -1,10 +1,11 @@
 "use client";
 
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useRouter } from "next/navigation";
+import { useSeed } from "@/context/SeedContext";
 
 export function useSeedStructureNavigation() {
-  const { v3Seed } = useV3Attributes();
+  const { resolvedSeeds } = useSeed();
+  const v3Seed = resolvedSeeds.v3 ?? resolvedSeeds.base ?? 1;
   const router = useRouter();
 
   const navigateWithSeedStructure = (href: string) => {

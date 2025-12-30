@@ -5,47 +5,51 @@ import CartNavIcon from "@/components/cart/CartNavIcon";
 import { Button } from "@/components/ui/button";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 export default function Navbar() {
   const layout = useSeedLayout();
-  const { getText, getId, getAria } = useV3Attributes();
+  const dyn = useDynamicSystem();
 
   return (
-    <nav className={`sticky top-0 z-30 bg-white border-b border-zinc-200 shadow-sm h-20 ${layout.navbar?.containerClass || ''}`}>
-      <div className="max-w-7xl mx-auto h-full px-6 flex items-center gap-6 justify-between">
-        <SeedLink
-          href="/"
-          className="font-extrabold text-xl text-zinc-800 tracking-tight flex items-center"
-        >
-          {getText("brand_name", "Auto")}<span className="text-green-600">{getText("brand_suffix", "Delivery")}</span>
-        </SeedLink>
+    <>
+      {dyn.v1.addWrapDecoy("navbar", (
+        <nav className={`sticky top-0 z-30 bg-white border-b border-zinc-200 shadow-sm h-20 ${layout.navbar?.containerClass || ''}`}>
+          <div className="max-w-7xl mx-auto h-full px-6 flex items-center gap-6 justify-between">
+            <SeedLink
+              href="/"
+              className="font-extrabold text-xl text-zinc-800 tracking-tight flex items-center"
+            >Auto<span className="text-green-600">Delivery</span>
+            </SeedLink>
 
-        <div className="flex items-center gap-4">
-          <h1
-            className="text-zinc-700 hover:text-green-600 font-medium px-3 py-1"
-            aria-label={getAria("nav_menu", "Main navigation")}
-          >
-            {getText("menu_restaurants", "Restaurants")}
-          </h1>
-          <div className="hidden md:block w-px h-6 bg-zinc-200" />
-          <CartNavIcon />
-          <Button
-            className="bg-green-600 hover:bg-green-700 text-white"
-            onClick={() => {
-              logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, { source: "navbar" });
-              if (typeof window !== "undefined") {
-                window.dispatchEvent(new CustomEvent("autodelivery:openQuickOrder"));
-              }
-            }}
-            id={getId("quick_order_header", "quick-order-header")}
-            aria-label={getAria("quick_order_header", getText("quick_order_button", "Quick Order"))}
-            {...layout.getElementAttributes('quick-order-header', 0)}
-          >
-            {getText("quick_order_button", "Quick Order")}
-          </Button>
-        </div>
-      </div>
-    </nav>
+            <div className="flex items-center gap-4">
+              <h1
+                id={dyn.v3.getVariant("nav-link", ID_VARIANTS_MAP, "nav-link")}
+                className="text-zinc-700 hover:text-green-600 font-medium px-3 py-1"
+                aria-label={dyn.v3.getVariant("nav_menu", undefined, "Main navigation")}
+              >
+                {dyn.v3.getVariant("menu_restaurants", TEXT_VARIANTS_MAP, "Restaurants")}
+              </h1>
+              <div className="hidden md:block w-px h-6 bg-zinc-200" />
+              <CartNavIcon />
+              <Button
+                id={dyn.v3.getVariant("quick-order-header", ID_VARIANTS_MAP, "quick-order-header")}
+                className={`bg-green-600 hover:bg-green-700 text-white ${dyn.v3.getVariant("quick-order-button", CLASS_VARIANTS_MAP, "")}`}
+                onClick={() => {
+                  logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, { source: "navbar" });
+                  if (typeof window !== "undefined") {
+                    window.dispatchEvent(new CustomEvent("autodelivery:openQuickOrder"));
+                  }
+                }}
+                aria-label={dyn.v3.getVariant("quick_order_header", undefined, dyn.v3.getVariant("quick_order_button", TEXT_VARIANTS_MAP, "Quick Order"))}
+              >
+                {dyn.v3.getVariant("quick_order_button", TEXT_VARIANTS_MAP, "Quick Order")}
+              </Button>
+            </div>
+          </div>
+        </nav>
+      ))}
+    </>
   );
 }

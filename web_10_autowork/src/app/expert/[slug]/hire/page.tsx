@@ -2,6 +2,11 @@ import HireFormWrapperClient from "./HireFormWrapperClient";
 
 export const dynamicParams = true;
 
-export default function HireExpertPage({ params }: { params: { slug: string } }) {
-  return <HireFormWrapperClient slug={params.slug} />;
+export default async function HireExpertPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  return <HireFormWrapperClient slug={slug} />;
 }

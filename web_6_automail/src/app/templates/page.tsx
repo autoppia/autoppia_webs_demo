@@ -10,6 +10,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { cn } from "@/library/utils";
+import { useSeed } from "@/context/SeedContext";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
 
 type TemplateState = Record<
   string,
@@ -24,6 +27,8 @@ const DEFAULT_FROM = "me@gmail.com";
 
 export default function TemplatesPage() {
   const router = useRouter();
+  const { getNavigationUrl } = useSeed();
+  const dyn = useDynamicSystem();
   const [activeTemplateId, setActiveTemplateId] = useState<string>(
     MAIL_TEMPLATES[0]?.id ?? ""
   );
@@ -113,26 +118,40 @@ export default function TemplatesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div
+      className={cn("min-h-screen bg-background", dyn.v3.getVariant("app-shell", CLASS_VARIANTS_MAP, ""))}
+      id={dyn.v3.getVariant("app-shell", ID_VARIANTS_MAP, "templates-shell")}
+    >
       <div className="border-b border-border bg-card/60 backdrop-blur px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" className="px-3" onClick={() => router.push("/")}>
-            ← Back to inbox
+          <Button
+            variant="ghost"
+            className="px-3"
+            onClick={() => router.push(getNavigationUrl("/"))}
+            id={dyn.v3.getVariant("templates-nav", ID_VARIANTS_MAP, "back-to-inbox")}
+          >
+            ← {dyn.v3.getVariant("inbox_label", TEXT_VARIANTS_MAP, "Back to inbox")}
           </Button>
           <Badge variant="outline" className="text-xs">
-            Templates Lab
+            {dyn.v3.getVariant("templates_header", TEXT_VARIANTS_MAP, "Templates")}
           </Badge>
-          <h1 className="text-xl font-semibold text-foreground">Email templates</h1>
+          <h1 className="text-xl font-semibold text-foreground">
+            {dyn.v3.getVariant("templates_header", TEXT_VARIANTS_MAP, "Email templates")}
+          </h1>
         </div>
-        <Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition">
-          Return to mail
+        <Link
+          href={getNavigationUrl("/")}
+          className="text-sm text-muted-foreground hover:text-foreground transition"
+          id={dyn.v3.getVariant("templates-nav", ID_VARIANTS_MAP, "return-mail-link")}
+        >
+          {dyn.v3.getVariant("inbox_label", TEXT_VARIANTS_MAP, "Return to mail")}
         </Link>
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1 space-y-3">
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-            Templates
+            {dyn.v3.getVariant("templates_header", TEXT_VARIANTS_MAP, "Templates")}
           </h2>
           <div className="space-y-2">
             {MAIL_TEMPLATES.map((template) => (
@@ -170,40 +189,53 @@ export default function TemplatesPage() {
 
               <div className="space-y-4">
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm text-muted-foreground">To</label>
+                  <label className="text-sm text-muted-foreground">
+                    {dyn.v3.getVariant("template_to_label", TEXT_VARIANTS_MAP, "To")}
+                  </label>
                   <Input
-                    placeholder="recipient@email.com"
+                    placeholder={dyn.v3.getVariant("template_to_label", TEXT_VARIANTS_MAP, "recipient@email.com")}
                     value={templatesState[activeTemplate.id]?.to || ""}
                     onChange={(e) => updateTemplateState(activeTemplate.id, { to: e.target.value })}
+                    id={dyn.v3.getVariant("template-to", ID_VARIANTS_MAP, "template-to")}
+                    className={dyn.v3.getVariant("template-field", CLASS_VARIANTS_MAP, "")}
                   />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm text-muted-foreground">From</label>
+                  <label className="text-sm text-muted-foreground">
+                    {dyn.v3.getVariant("template_from_label", TEXT_VARIANTS_MAP, "From")}
+                  </label>
                   <Input
                     value={templatesState[activeTemplate.id]?.from || DEFAULT_FROM}
                     onChange={(e) => updateTemplateState(activeTemplate.id, { from: e.target.value })}
+                    id={dyn.v3.getVariant("template-from", ID_VARIANTS_MAP, "template-from")}
+                    className={dyn.v3.getVariant("template-field", CLASS_VARIANTS_MAP, "")}
                   />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm text-muted-foreground">Body</label>
+                  <label className="text-sm text-muted-foreground">
+                    {dyn.v3.getVariant("template_body_label", TEXT_VARIANTS_MAP, "Body")}
+                  </label>
                   <Textarea
                     rows={12}
                     value={templatesState[activeTemplate.id]?.body || ""}
                     onChange={(e) => handleBodyChange(activeTemplate, e.target.value)}
-                    className="font-mono text-sm"
+                    className={cn("font-mono text-sm", dyn.v3.getVariant("template-field", CLASS_VARIANTS_MAP, ""))}
+                    id={dyn.v3.getVariant("template-body", ID_VARIANTS_MAP, "template-body")}
                   />
                 </div>
               </div>
 
               <div className="flex flex-wrap gap-3 mt-6">
-                <Button onClick={() => handleSend(activeTemplate)}>Send</Button>
-                <Button variant="secondary" onClick={() => handleSaveDraft(activeTemplate)}>
-                  Save draft
+                <Button onClick={() => handleSend(activeTemplate)} id={dyn.v3.getVariant("send-button", ID_VARIANTS_MAP, "template-send")} className={dyn.v3.getVariant("send-button", CLASS_VARIANTS_MAP, "")}>
+                  {dyn.v3.getVariant("send_action", TEXT_VARIANTS_MAP, "Send")}
                 </Button>
-                <Button variant="ghost" onClick={() => handleCancel(activeTemplate)}>
-                  Cancel
+                <Button variant="secondary" onClick={() => handleSaveDraft(activeTemplate)} id={dyn.v3.getVariant("save-draft-button", ID_VARIANTS_MAP, "template-save")} className={dyn.v3.getVariant("save-draft-button", CLASS_VARIANTS_MAP, "")}>
+                  {dyn.v3.getVariant("save_draft", TEXT_VARIANTS_MAP, "Save draft")}
+                </Button>
+                <Button variant="ghost" onClick={() => handleCancel(activeTemplate)} id={dyn.v3.getVariant("quick-action", ID_VARIANTS_MAP, "template-cancel")}>
+                  {dyn.v3.getVariant("delete_action", TEXT_VARIANTS_MAP, "Cancel")}
                 </Button>
               </div>
             </div>

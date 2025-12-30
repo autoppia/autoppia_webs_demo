@@ -4,12 +4,10 @@ import { useEffect, useState, useMemo } from "react";
 import { useAutoworkData } from "@/hooks/useAutoworkData";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
 
 export default function FavoritesPage() {
   const router = useSeedRouter();
   const expertsState = useAutoworkData<any>("web_10_autowork_experts", 6);
-  const { getElementAttributes, getText } = useSeedLayout();
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   
   // Load favorites from localStorage

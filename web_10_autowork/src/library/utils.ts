@@ -337,7 +337,7 @@ export function getSeedLayout(seed?: number): LayoutConfig {
   };
 
   const layoutKeys = Object.keys(layouts)
-    .map((key) => parseInt(key, 10))
+    .map((key) => Number.parseInt(key, 10))
     .filter((num) => !Number.isNaN(num))
     .sort((a, b) => a - b);
 
@@ -349,41 +349,4 @@ export function getSeedLayout(seed?: number): LayoutConfig {
   const mappedKey = layoutKeys[(normalizedSeed - 1) % layoutKeys.length];
 
   return layouts[mappedKey] || defaultLayout;
-}
-
-// Helper function to get URL search params
-export function getSeedFromURL(): number | undefined {
-  if (typeof window === 'undefined') return undefined;
-  
-  const urlParams = new URLSearchParams(window.location.search);
-  const seedParam = urlParams.get('seed');
-  
-  if (seedParam) {
-    const seed = parseInt(seedParam, 10);
-    if (seed >= 1 && seed <= 300) {
-      return seed;
-    }
-  }
-  
-  return undefined;
-}
-
-// Helper function to reorder array based on layout config
-export function reorderArray<T>(array: T[], order: string[], keyMap: Record<string, T>): T[] {
-  const result: T[] = [];
-  
-  for (const key of order) {
-    if (keyMap[key] !== undefined) {
-      result.push(keyMap[key]);
-    }
-  }
-  
-  // Add any remaining items that weren't in the order
-  for (const item of array) {
-    if (!result.includes(item)) {
-      result.push(item);
-    }
-  }
-  
-  return result;
 }

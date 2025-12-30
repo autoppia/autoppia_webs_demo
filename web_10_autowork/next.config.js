@@ -15,6 +15,16 @@ if (isLocalDev) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'false';
 }
 
+// Ensure V3 is enabled by default in local environments
+if (!process.env.ENABLE_DYNAMIC_V3) {
+  process.env.ENABLE_DYNAMIC_V3 = isLocalDev ? 'true' : 'false';
+}
+if (isLocalDev) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = 'true';
+} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = 'false';
+}
+
 // Default NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE to true in local dev (unless explicitly disabled)
 if (isLocalDev && !process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE = 'true';
@@ -33,6 +43,8 @@ console.log('  ENABLE_DYNAMIC_V1:', process.env.ENABLE_DYNAMIC_V1);
 console.log('  ENABLE_DYNAMIC_V2_AI_GENERATE:', process.env.ENABLE_DYNAMIC_V2_AI_GENERATE);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE);
 console.log('  NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+console.log('  ENABLE_DYNAMIC_V3:', process.env.ENABLE_DYNAMIC_V3);
+console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V3:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

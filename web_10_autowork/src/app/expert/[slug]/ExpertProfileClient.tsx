@@ -45,7 +45,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
   const { resolvedSeeds } = useSeed();
   const seed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? 1;
   const layout = getSeedLayout(seed);
-  const { getElementAttributes, getText } = useSeedLayout();
+  const { getElementAttributes, getText, dyn } = useSeedLayout();
 
   useEffect(() => {
     try {
@@ -881,6 +881,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
   return (
     <>
       {expert && <BookConsultationLogger expert={expert} />}
+      {dyn.v1.addWrapDecoy("expert-profile-main", (
       <main className="max-w-6xl mx-auto px-5 py-5">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
@@ -909,6 +910,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
           </div>
         </div>
       </main>
+      ))}
       {contactOpen && expert && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center px-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6">
