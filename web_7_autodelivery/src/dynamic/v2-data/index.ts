@@ -11,7 +11,6 @@ export {
   initializeRestaurants,
   getTestimonials,
   isDynamicModeEnabled,
-  getLayoutConfig,
 } from "./data-provider";
 
 // Export whenReady function

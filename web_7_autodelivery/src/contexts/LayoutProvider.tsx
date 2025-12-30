@@ -2,7 +2,81 @@
 
 import React, { createContext, useContext, useCallback } from "react";
 import { useSeed } from "@/context/SeedContext";
-import type { SeedLayout } from "@/dynamic/v1-layouts";
+
+// SeedLayout type definition (previously from v1-layouts)
+export type SeedLayout = {
+  seed: number;
+  layoutId: number;
+  searchBar: {
+    position: string;
+    containerClass: string;
+    inputClass: string;
+    wrapperClass: string;
+    xpath: string;
+  };
+  navbar: {
+    logoPosition: string;
+    cartPosition: string;
+    menuPosition: string;
+    containerClass: string;
+    xpath: string;
+  };
+  navigation: {
+    logoPosition: string;
+    cartPosition: string;
+    menuPosition: string;
+    containerClass: string;
+    logoClass: string;
+    cartClass: string;
+    menuClass: string;
+    xpath: string;
+  };
+  hero: {
+    buttonPosition: string;
+    buttonClass: string;
+    containerClass: string;
+    xpath: string;
+  };
+  restaurantCard: {
+    containerClass: string;
+    imageClass: string;
+    titleClass: string;
+    descriptionClass: string;
+    buttonClass: string;
+    xpath: string;
+  };
+  cart: {
+    iconClass: string;
+    badgeClass: string;
+    pageContainerClass: string;
+    itemClass: string;
+    buttonClass: string;
+    xpath: string;
+  };
+  modal: {
+    containerClass: string;
+    contentClass: string;
+    headerClass: string;
+    bodyClass: string;
+    footerClass: string;
+    buttonClass: string;
+    xpath: string;
+  };
+  grid: {
+    containerClass: string;
+    itemClass: string;
+    paginationClass: string;
+    xpath: string;
+  };
+  restaurantDetail: {
+    elementOrder: string[];
+    containerClass: string;
+    headerClass: string;
+    menuClass: string;
+    reviewsClass: string;
+    xpath: string;
+  };
+};
 
 declare global {
   interface Window {
@@ -102,7 +176,6 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
 
   const getElementAttributes = (elementType: string, index: number = 0): Record<string, string> => ({
-    id: `${elementType}-${index}`,
     "data-element-type": elementType,
   });
 
