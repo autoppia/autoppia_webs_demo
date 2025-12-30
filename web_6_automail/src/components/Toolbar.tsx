@@ -172,7 +172,7 @@ export function Toolbar({ onMenuClick, textStructure }: ToolbarProps) {
               <span className="text-white font-bold text-sm">A</span>
             </div>
             <span className="font-bold text-xl text-foreground hidden sm:block bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              {dyn.v3.getVariant('app_title', TEXT_VARIANTS_MAP, textStructure?.app_name || 'AutoMail')}
+              {textStructure?.app_name || "AutoMail"}
             </span>
           </div>
         </div>
@@ -238,7 +238,7 @@ export function Toolbar({ onMenuClick, textStructure }: ToolbarProps) {
                   <span className="text-white font-medium">U</span>
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">{dyn.v3.getVariant('app_title', TEXT_VARIANTS_MAP, 'User Account')}</p>
+                  <p className="text-sm font-medium">User Account</p>
                   <p className="text-xs text-muted-foreground">user@gmail.com</p>
                 </div>
               </div>

@@ -1,5 +1,4 @@
 {
-  "app_title": ["AutoMail", "Mail Studio", "Inbox OS"],
   "search_placeholder": ["Search mail", "Find messages", "Lookup threads"],
   "compose_cta": ["Compose", "New message", "Start writing"],
   "inbox_label": ["Inbox", "Primary", "All mail"],

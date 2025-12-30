@@ -67,7 +67,7 @@ export function DynamicDebug() {
   ];
 
   const debugTexts = [
-    dyn.v3.getVariant("app_title", TEXT_VARIANTS_MAP, "AutoMail"),
+    "AutoMail",
     dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search mail"),
     dyn.v3.getVariant("compose_cta", TEXT_VARIANTS_MAP, "Compose"),
     dyn.v3.getVariant("inbox_label", TEXT_VARIANTS_MAP, "Inbox"),

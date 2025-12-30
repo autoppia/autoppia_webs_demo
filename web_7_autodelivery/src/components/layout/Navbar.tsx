@@ -20,8 +20,7 @@ export default function Navbar() {
             <SeedLink
               href="/"
               className="font-extrabold text-xl text-zinc-800 tracking-tight flex items-center"
-            >
-              {dyn.v3.getVariant("brand_name", undefined, "Auto")}<span className="text-green-600">{dyn.v3.getVariant("brand_suffix", undefined, "Delivery")}</span>
+            >Auto<span className="text-green-600">Delivery</span>
             </SeedLink>
 
             <div className="flex items-center gap-4">
