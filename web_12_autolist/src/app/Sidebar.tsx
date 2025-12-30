@@ -279,7 +279,10 @@ export default function Sidebar({
                   className="text-[#d1453b]"
                   type="text"
                   icon={<PlusOutlined />}
-                  onClick={() => setTeamModalOpen(true)}
+                  onClick={() => {
+                    logEvent(EVENT_TYPES.ADD_TEAM_CLICKED, { timestamp: Date.now() });
+                    setTeamModalOpen(true);
+                  }}
                 >
                   {dyn.v3.getVariant("save_task", TEXT_VARIANTS_MAP, "Add")}
                 </Button>

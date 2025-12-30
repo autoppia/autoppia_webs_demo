@@ -1293,6 +1293,10 @@ function renderChatPlaceholder(chatId: string) {
           {wrap(
             "layout-main",
             <main className="flex-1 flex flex-col min-h-screen ml-[280px]">
+              {dyn.v1.addWrapDecoy(
+                "alignment-sentinel",
+                <div className="hidden" data-dyn-key="alignment-sentinel" aria-hidden="true" />
+              )}
               {wrap(
                 "variant-sentinels",
                 <div
