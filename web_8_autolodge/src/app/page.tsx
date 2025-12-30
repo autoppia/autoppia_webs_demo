@@ -306,7 +306,7 @@ function HomeContent() {
 
   const searchButtonVariant = dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "");
 
-  const searchFieldNode = dyn.v1.addWrapDecoy("search-field", (
+  const searchFieldNode = (
     <WherePopover searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
       <div
         id={dyn.v3.getVariant("search-input", ID_VARIANTS_MAP, "search_field")}
@@ -336,9 +336,9 @@ function HomeContent() {
         )}
       </div>
     </WherePopover>
-  ));
+  );
 
-  const checkInNode = dyn.v1.addWrapDecoy("check-in-field", (
+  const checkInNode = (
     <DateRangePopover selectedRange={dateRange} setSelectedRange={setDateRange}>
       <div
         id={dyn.v3.getVariant("check_in_field", ID_VARIANTS_MAP, "check_in_field")}
@@ -369,9 +369,9 @@ function HomeContent() {
         )}
       </div>
     </DateRangePopover>
-  ));
+  );
 
-  const checkOutNode = dyn.v1.addWrapDecoy("check-out-field", (
+  const checkOutNode = (
     <DateRangePopover selectedRange={dateRange} setSelectedRange={setDateRange}>
       <div
         id={dyn.v3.getVariant("check_out_field", ID_VARIANTS_MAP, "check_out_field")}
@@ -402,9 +402,9 @@ function HomeContent() {
         )}
       </div>
     </DateRangePopover>
-  ));
+  );
 
-  const guestsNode = dyn.v1.addWrapDecoy("guests-field", (
+  const guestsNode = (
     <GuestSelectorPopover counts={guests} setCounts={setGuests}>
       <div
         id={dyn.v3.getVariant("guests_field", ID_VARIANTS_MAP, "guests_field")}
@@ -434,7 +434,7 @@ function HomeContent() {
         )}
       </div>
     </GuestSelectorPopover>
-  ));
+  );
 
   const reserveNode = dyn.v1.addWrapDecoy("search-button", (
     <div className="w-full h-full flex items-center justify-start lg:justify-end">
@@ -526,8 +526,7 @@ function HomeContent() {
     return order.map((idx) => paginatedResults[idx]).filter(Boolean);
   }, [dyn.seed, paginatedResults]);
 
-  return dyn.v1.addWrapDecoy("home-page-root", (
-    <div className="flex flex-col w-full items-center mt-4 pb-12">
+  return <div className="flex flex-col w-full items-center mt-4 pb-12">
       {dyn.v1.addWrapDecoy("search-bar-container", (
       <SearchWrapperTag
         id={dyn.v3.getVariant("search-form", ID_VARIANTS_MAP, "search-bar")}
@@ -615,7 +614,6 @@ function HomeContent() {
             {dyn.v3.getVariant("no_results", dynamicV3TextVariants, "No results")}
           </div>
         ) : (
-          dyn.v1.addWrapDecoy("home-grid", (
             <div className="grid gap-7 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
               {orderedPaginatedResults.map((hotel, index) => (
                 <PropertyCard
@@ -626,7 +624,6 @@ function HomeContent() {
                 />
               ))}
             </div>
-          ))
         )}
       </section>
 
@@ -655,8 +652,7 @@ function HomeContent() {
           </button>
         </div>
       )}
-    </div>
-  ));
+    </div>;
 }
 
 export default function Home() {
