@@ -247,10 +247,7 @@ function JobsContent() {
           className="w-full rounded-full border border-gray-300 px-4 py-2 outline-blue-500"
           value={filters.search}
           onChange={handleSearchInput}
-          placeholder={dyn.v3.getVariant(
-            "jobs_search_placeholder",
-            TEXT_VARIANTS_MAP,
-            "Search jobs by title or company..."
+          placeholder={dyn.v3.getVariant("jobs_search_placeholder",TEXT_VARIANTS_MAP,"Search jobs by title or company..."
           )}
         />
       </div>

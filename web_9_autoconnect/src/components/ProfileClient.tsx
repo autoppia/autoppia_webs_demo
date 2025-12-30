@@ -23,6 +23,8 @@ function ProfileContent({ username }: { username: string }) {
   const { resolvedSeeds, seed } = useSeed();
   resolvedSeeds;
   const layoutSeed = seed;
+  // Default layout config (no v1 layout variations in this build)
+  const layout = { profileLayout: "full" as const };
 
   // Get data from dynamic provider
   const users = dynamicDataProvider.getUsers();

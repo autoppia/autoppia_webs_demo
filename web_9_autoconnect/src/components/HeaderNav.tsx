@@ -11,7 +11,6 @@ import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynami
 
 export default function HeaderNav() {
   const pathname = usePathname();
-  const { seed, resolvedSeeds } = useSeed();
   const dyn = useDynamicSystem();
   
   // Fix hydration error: use state to get user only on client side
@@ -95,9 +94,7 @@ export default function HeaderNav() {
               "flex items-center gap-2"
             )}
           >
-            <span className="font-bold text-xl tracking-tight text-white bg-blue-600 px-3 py-1.5 rounded">
-              {dyn.v3.getVariant("app_title", TEXT_VARIANTS_MAP, "AutoConnect")}
-            </span>
+            <span className="font-bold text-xl tracking-tight text-white bg-blue-600 px-3 py-1.5 rounded">AutoConnect</span>
           </SeedLink>
         </div>
 

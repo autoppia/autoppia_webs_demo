@@ -62,10 +62,11 @@ export default function UserSearchBar() {
           const val = e.target.value;
           setQ(val);
 
-          if (val.trim().length >= 2) {
+          const term = val.trim();
+          if (term.length >= 2) {
             logEvent(EVENT_TYPES.SEARCH_USERS, {
-              query: val.trim(),
-              resultCount: matches.length,
+              query: term,
+              resultCount: dynamicDataProvider.searchUsers(term).length,
             });
           }
         }}
@@ -81,47 +82,40 @@ export default function UserSearchBar() {
         </svg>
       </span>
       {/* Results Dropdown */}
-      {focus && matches.length > 0 && (
+      {focus && q.trim().length >= 2 && matches.length > 0 && (
         <div
           id={dyn.v3.getVariant("search-results", localIdVariants, "search-results")}
           className="absolute left-0 top-12 w-full bg-white border z-30 rounded-lg shadow p-2"
         >
           {matches.map((u, idx) => (
             <div key={u.username}>
-              {dyn.v1.addWrapDecoy(
-                "user-search-result",
-                <button
-                  id={dyn.v3.getVariant(
-                    `search_result_item_${idx}`,
-                    localIdVariants,
-                    `search_result_item_${idx}`
-                  )}
-                  className={withClass(
-                    "search-result-item",
-                    "flex items-center gap-3 w-full px-2 py-2 hover:bg-blue-50 rounded text-left"
-                  )}
-                  onMouseDown={() => {
-                    router.push(`/profile/${u.username}`);
-                    setQ("");
-                  }}
-                >
-                  <Image
-                    src={u.avatar}
-                    alt={u.name}
-                    width={32}
-                    height={32}
-                    className="rounded-full object-cover"
-                  />
-                  <span className="flex flex-col">
-                    <span className="font-medium">
-                      {dyn.v3.getVariant("search_result_name", localTextVariants, u.name)}
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      {dyn.v3.getVariant("search_result_title", localTextVariants, u.title)}
-                    </span>
-                  </span>
-                </button>
-              )}
+              <button
+                id={dyn.v3.getVariant(
+                  `search_result_item_${idx}`,
+                  localIdVariants,
+                  `search_result_item_${idx}`
+                )}
+                className={withClass(
+                  "search-result-item",
+                  "flex items-center gap-3 w-full px-2 py-2 hover:bg-blue-50 rounded text-left"
+                )}
+                onMouseDown={() => {
+                  router.push(`/profile/${u.username}`);
+                  setQ("");
+                }}
+              >
+                <Image
+                  src={u.avatar}
+                  alt={u.name}
+                  width={32}
+                  height={32}
+                  className="rounded-full object-cover"
+                />
+                <span className="flex flex-col">
+                  <span className="font-medium">{u.name}</span>
+                  <span className="text-xs text-gray-500">{u.title}</span>
+                </span>
+              </button>
             </div>
           ))}
         </div>
