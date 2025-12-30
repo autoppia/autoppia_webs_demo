@@ -73,72 +73,68 @@ export default function HeaderNav() {
       idKey: "nav_profile_link",
     }
   ];
-  const navOrder = dyn.v1.changeOrderElements("nav-items", navItems.length);
-  const orderedNavItems = navOrder.map((index) => navItems[index]);
+  const orderedNavItems = navItems;
 
   return (
-    <>
-      {dyn.v1.addWrapDecoy(
-        "header-nav",
-        <header
-          className={dyn.v3.getVariant(
-            "header_classes",
-            CLASS_VARIANTS_MAP,
-            "flex items-center border-b bg-white shadow-sm sticky top-0 z-30 h-16 w-full"
-          )}
-          id={dyn.v3.getVariant("header_nav_id", ID_VARIANTS_MAP, "header-nav")}
-        >
-          <div className="flex items-center w-full max-w-[1570px] mx-auto px-6 gap-2">
-            {dyn.v1.addWrapDecoy(
-              "header-brand",
-              <div className="flex items-center w-[300px]">
-                <div className="text-white bg-blue-600 px-4 py-2 rounded">
-                  <SeedLink
-                    href="/"
-                    id={dyn.v3.getVariant("logo_link", ID_VARIANTS_MAP, "logo_link")}
-                    className={dyn.v3.getVariant(
-                      "nav-link",
-                      CLASS_VARIANTS_MAP,
-                      "flex items-center gap-2"
-                    )}
-                  >
-                    <span className="font-bold text-xl tracking-tight text-white">
-                      {dyn.v3.getVariant("app_title", TEXT_VARIANTS_MAP, "AutoConnect")}
-                    </span>
-                  </SeedLink>
-                </div>
-              </div>
-            )}
-            <div className="flex-1"></div>
-            {dyn.v1.addWrapDecoy(
-              "header-nav-links",
-              <div className="flex items-center justify-end w-[300px]">
-                <nav className="flex gap-2">
-                  {orderedNavItems.map((item, idx) => (
-                    <SeedLink
-                      key={item.href}
-                      href={item.href}
-                      id={dyn.v3.getVariant(item.idKey, navIdVariants, item.idKey)}
-                      className={dyn.v3.getVariant(
-                        "nav-link",
-                        CLASS_VARIANTS_MAP,
-                        linkClass(item.href)
-                      )}
-                      onClick={() => {
-                        if (item.eventType) {
-                          logEvent(item.eventType, item.eventData || {});
-                        }
-                      }}
-                    >
-                      {dyn.v3.getVariant(item.idKey.replace("_link", ""), navTextVariants, item.label)}
-                    </SeedLink>
-                  ))}
-                </nav>
-              </div>
-            )}
-          </div>
-        </header>
+    <header
+      className={dyn.v3.getVariant(
+        "header_classes",
+        CLASS_VARIANTS_MAP,
+        "flex items-center border-b bg-white shadow-sm sticky top-0 z-30 h-16 w-full"
       )}
-    </>
+      id={dyn.v3.getVariant("header_nav_id", ID_VARIANTS_MAP, "header-nav")}
+    >
+      <div className="flex items-center w-full max-w-[1200px] mx-auto px-4 gap-4">
+        <div className="flex items-center">
+          <SeedLink
+            href="/"
+            id={dyn.v3.getVariant("logo_link", ID_VARIANTS_MAP, "logo_link")}
+            className={dyn.v3.getVariant(
+              "nav-link",
+              CLASS_VARIANTS_MAP,
+              "flex items-center gap-2"
+            )}
+          >
+            <span className="font-bold text-xl tracking-tight text-white bg-blue-600 px-3 py-1.5 rounded">
+              {dyn.v3.getVariant("app_title", TEXT_VARIANTS_MAP, "AutoConnect")}
+            </span>
+          </SeedLink>
+        </div>
+
+        <div className="flex-1 flex justify-center">
+          <nav className="flex items-center gap-3">
+            {orderedNavItems.map((item) => {
+              const isActive = pathname === item.href || (item.href === "/" && pathname === "/");
+              return (
+                <SeedLink
+                  key={item.href}
+                  href={item.href}
+                  id={dyn.v3.getVariant(item.idKey, navIdVariants, item.idKey)}
+                  className={dyn.v3.getVariant(
+                    "nav-link",
+                    CLASS_VARIANTS_MAP,
+                    linkClass(item.href)
+                  )}
+                  onClick={() => {
+                    if (item.eventType) {
+                      logEvent(item.eventType, item.eventData || {});
+                    }
+                  }}
+                  style={
+                    isActive
+                      ? { fontWeight: 700 }
+                      : { fontWeight: 500 }
+                  }
+                >
+                  {dyn.v3.getVariant(item.idKey.replace("_link", ""), navTextVariants, item.label)}
+                </SeedLink>
+              );
+            })}
+          </nav>
+        </div>
+
+        <div className="min-w-[140px] flex justify-end" />
+      </div>
+    </header>
   );
 }
