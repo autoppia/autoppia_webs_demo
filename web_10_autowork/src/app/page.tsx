@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-import { SeedLink } from "@/components/ui/SeedLink";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { EVENT_TYPES, logEvent } from "@/library/events";
