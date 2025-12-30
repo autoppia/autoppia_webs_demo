@@ -13,7 +13,7 @@ interface DynamicElementProps extends React.HTMLAttributes<HTMLElement> {
 
 export function DynamicElement({ elementType, as: Component = 'div', index = 0, className = '', ...rest }: DynamicElementProps) {
   const ref = useRef<HTMLElement>(null);
-  const { getElementAttributes, generateId, generateSeedClass, createDynamicStyles, applyCSSVariables } = useSeedLayout();
+  const { wrapWithV1, getElementAttributes, generateId, generateSeedClass, createDynamicStyles, applyCSSVariables } = useSeedLayout();
   const [attrs, setAttrs] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export function DynamicElement({ elementType, as: Component = 'div', index = 0, 
     if (ref.current) applyCSSVariables(ref.current);
   }, [applyCSSVariables, style]);
 
-  return React.createElement(Component, { ref, ...attrs, ...rest, style });
+  const core = React.createElement(Component, { ref, ...attrs, ...rest, style });
+  return wrapWithV1(elementType, core, `dyn-element-${elementType}-${index}`);
 }
-
 
