@@ -1,0 +1,32 @@
+/**
+ * FLAGS - Enablement control for V1 and V3
+ *
+ * V1: DOM structure (wrappers, decoys) - Breaks XPath
+ * V3: Attributes and text (IDs, classes, texts) - Anti-memorization
+ */
+
+export function isV1Enabled(): boolean {
+  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1;
+  const enabled = value === undefined ? true : value === "true" || value === "1";
+
+  if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
+    if (!enabled) {
+      console.warn("[dynamic] V1 está deshabilitado. Configura NEXT_PUBLIC_ENABLE_DYNAMIC_V1=true para activarlo");
+    }
+  }
+
+  return enabled;
+}
+
+export function isV3Enabled(): boolean {
+  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3;
+  const enabled = value === undefined ? true : value === "true" || value === "1";
+
+  if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
+    if (!enabled) {
+      console.warn("[dynamic] V3 está deshabilitado. Configura NEXT_PUBLIC_ENABLE_DYNAMIC_V3=true para activarlo");
+    }
+  }
+
+  return enabled;
+}

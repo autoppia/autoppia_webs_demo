@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Modal, Form, Input, Select, Space } from "antd";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface TeamMember {
   id: string;
@@ -24,8 +26,11 @@ interface CreateTeamModalProps {
 export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModalProps) {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState<string>();
   const [selectedMembers, setSelectedMembers] = useState<TeamMember[]>([]);
+  const dyn = useDynamicSystem();
+  const modalClass = dyn.v3.getVariant("card-surface", CLASS_VARIANTS_MAP, "");
+  const titleText = dyn.v3.getVariant("teams_heading", TEXT_VARIANTS_MAP, "Create New Team");
+  const modalId = dyn.v3.getVariant("sidebar-teams", ID_VARIANTS_MAP, "team-modal");
 
   const memberOptions = [
     { value: 'john@example.com', label: 'John Doe' },
@@ -87,111 +92,118 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
     }
   };
 
-  return (
+  return dyn.v1.addWrapDecoy(
+    "team-modal",
     <Modal
-      title="Create New Team"
+      title={titleText}
       open={open}
       onCancel={() => {
         form.resetFields();
-        setAvatarUrl(undefined);
         setSelectedMembers([]);
         onCancel();
       }}
       onOk={handleSubmit}
       okButtonProps={{ loading }}
-      okText="Create Team"
+      okText={dyn.v3.getVariant("save_task", TEXT_VARIANTS_MAP, "Create Team")}
+      cancelText={dyn.v3.getVariant("cancel_action", TEXT_VARIANTS_MAP, "Cancel")}
+      className={modalClass}
     >
-      <Form
-        form={form}
-        layout="vertical"
-        className="mt-4"
-      >
-        <Space direction="vertical" size="large" className="w-full">
+      {dyn.v1.addWrapDecoy(
+        "team-modal-body",
+        <Form form={form} layout="vertical" className="mt-4" id={modalId}>
+          <Space direction="vertical" size="large" className="w-full">
+            {dyn.v1.addWrapDecoy(
+              "team-name",
+              <Form.Item
+                name="name"
+                label={dyn.v3.getVariant("teams_heading", TEXT_VARIANTS_MAP, "Team Name")}
+                rules={[
+                  { required: true, message: "Please enter a team name" },
+                  { min: 3, message: "Team name must be at least 3 characters" },
+                  { max: 50, message: "Team name cannot exceed 50 characters" },
+                ]}
+                validateTrigger="onBlur"
+              >
+                <Input
+                  placeholder={dyn.v3.getVariant("teams_heading", TEXT_VARIANTS_MAP, "Enter team name")}
+                  id={dyn.v3.getVariant("task-form", ID_VARIANTS_MAP, "team-name-input")}
+                />
+              </Form.Item>
+            )}
 
-          {/* Team Name */}
-          <Form.Item
-            name="name"
-            label="Team Name"
-            rules={[
-              { required: true, message: "Please enter a team name" },
-              { min: 3, message: "Team name must be at least 3 characters" },
-              { max: 50, message: "Team name cannot exceed 50 characters" }
-            ]}
-            validateTrigger="onBlur"
-          >
-            <Input placeholder="Enter team name"/>
-          </Form.Item>
+            {dyn.v1.addWrapDecoy(
+              "team-description",
+              <Form.Item
+                name="description"
+                label={dyn.v3.getVariant("teams_heading", TEXT_VARIANTS_MAP, "Description")}
+                rules={[
+                  { required: true, message: "Please enter a team description" },
+                  { max: 500, message: "Description cannot exceed 500 characters" },
+                ]}
+                validateTrigger="onBlur"
+              >
+                <Input.TextArea
+                  placeholder={dyn.v3.getVariant("empty_state_description", TEXT_VARIANTS_MAP, "Enter team description")}
+                  rows={4}
+                  id={dyn.v3.getVariant("task-description-input", ID_VARIANTS_MAP, "team-description-input")}
+                />
+              </Form.Item>
+            )}
 
-          {/* Team Description */}
-          <Form.Item
-            name="description"
-            label="Description"
-            rules={[
-              { required: true, message: "Please enter a team description" },
-              { max: 500, message: "Description cannot exceed 500 characters" }
-            ]}
-            validateTrigger="onBlur"
-          >
-            <Input.TextArea
-              placeholder="Enter team description"
-              rows={4}
-            />
-          </Form.Item>
+            {dyn.v1.addWrapDecoy(
+              "team-members",
+              <Form.Item
+                name="members"
+                label={dyn.v3.getVariant("teams_heading", TEXT_VARIANTS_MAP, "Team Members")}
+                rules={[{ required: true, message: "Please add at least one team member" }]}
+              >
+                <Select
+                  mode="multiple"
+                  placeholder={dyn.v3.getVariant("search_tasks_placeholder", TEXT_VARIANTS_MAP, "Select team members")}
+                  style={{ width: "100%" }}
+                  onChange={(values: string[]) => {
+                    const memberNames = values.map((v) => memberOptions.find((opt) => opt.value === v)?.label || v);
+                    setSelectedMembers(
+                      values.map((v) => ({
+                        id: v,
+                        name: memberOptions.find((opt) => opt.value === v)?.label || v,
+                        role: "member",
+                      }))
+                    );
+                    logEvent(EVENT_TYPES.TEAM_MEMBERS_ADDED, {
+                      timestamp: Date.now(),
+                      memberCount: values.length,
+                      members: memberNames,
+                    });
+                  }}
+                  options={memberOptions}
+                />
+              </Form.Item>
+            )}
 
-          {/* Team Members */}
-          <Form.Item
-            name="members"
-            label="Team Members"
-            rules={[{ required: true, message: "Please add at least one team member" }]}
-          >
-            <Select
-              mode="multiple"
-              placeholder="Select team members"
-              style={{ width: '100%' }}
-              onChange={(values: string[]) => {
-                const memberNames = values.map(
-                  v => memberOptions.find(opt => opt.value === v)?.label || v
-                );
-                setSelectedMembers(values.map(v => ({
-                  id: v,
-                  name: memberOptions.find(opt => opt.value === v)?.label || v,
-                  role: 'member'
-                })));
-                logEvent(EVENT_TYPES.TEAM_MEMBERS_ADDED, {
-                  timestamp: Date.now(),
-                  memberCount: values.length,
-                  members: memberNames
-                });
-              }}
-              options={memberOptions}
-            />
-          </Form.Item>
-
-          {/* Member Roles */}
-          {selectedMembers.map((member) => (
-            <Form.Item
-              key={member.id}
-              label={`Role for ${member.name}`}
-              name={['roles', member.id]}
-              initialValue="member"
-            >
-              <Select
-                options={roleOptions}
-                onChange={(value) => {
-                  const option = roleOptions.find(opt => opt.value === value);
-                  const label = option ? option.label : value;
-                  form.setFieldValue(['roles', member.id], label);
-                  logEvent(EVENT_TYPES.TEAM_ROLE_ASSIGNED, {
-                    timestamp: Date.now(),
-                    memberId: member.name,
-                    role: label
-                  });
-                }}
-              />
-            </Form.Item>
-          ))}
-        </Space>
-      </Form>
+            {selectedMembers.map((member) =>
+              dyn.v1.addWrapDecoy(
+                `team-member-role-${member.id}`,
+                <Form.Item key={member.id} label={`Role for ${member.name}`} name={["roles", member.id]} initialValue="member">
+                  <Select
+                    options={roleOptions}
+                    onChange={(value) => {
+                      const option = roleOptions.find((opt) => opt.value === value);
+                      const label = option ? option.label : value;
+                      form.setFieldValue(["roles", member.id], label);
+                      logEvent(EVENT_TYPES.TEAM_ROLE_ASSIGNED, {
+                        timestamp: Date.now(),
+                        memberId: member.name,
+                        role: label,
+                      });
+                    }}
+                  />
+                </Form.Item>
+              )
+            )}
+          </Space>
+        </Form>
+      )}
     </Modal>
   );
 }

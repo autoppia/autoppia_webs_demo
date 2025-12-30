@@ -4,8 +4,6 @@ import {
   PlusOutlined,
   CalendarOutlined,
   FlagOutlined,
-  BellOutlined,
-  MoreOutlined,
   InboxOutlined,
   DownOutlined,
   ClockCircleOutlined,
@@ -17,17 +15,13 @@ import {
 import { Calendar, Popover, Modal } from "antd";
 import { useState, useRef, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import DynamicLayout from "./components/DynamicLayout";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { loadTasks, RemoteTask } from "@/data/tasks";
 import { TeamsProvider, useTeams } from "@/context/TeamsContext";
 import { ProjectsProvider } from "@/context/ProjectsContext";
-
-// Import debug utilities in development
-if (process.env.NODE_ENV === 'development') {
-  import("@/library/layoutDebugger");
-}
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { useSeed } from "@/context/SeedContext";
 
 type Task = {
   id: string;
@@ -174,7 +168,18 @@ function AddTaskCard({
   } | null;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { getElementAttributes, getText } = useSeedLayout();
+  const dyn = useDynamicSystem();
+  const getText = (key: string, fallback: string) =>
+    dyn.v3.getVariant(key, TEXT_VARIANTS_MAP, fallback);
+  const getElementAttributes = (elementType: string, index: number = 0) => ({
+    id: dyn.v3.getVariant(elementType, ID_VARIANTS_MAP, `${elementType}-${index}`),
+    "data-dyn-key": elementType,
+    "data-dyn-class": dyn.v3.getVariant(elementType, CLASS_VARIANTS_MAP, ""),
+  });
+  const dynamicButtonPrimary = dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "bg-[#d1453b] hover:bg-[#ef7363] text-white");
+  const dynamicGhost = dyn.v3.getVariant("button-ghost", CLASS_VARIANTS_MAP, "text-gray-700 bg-white border border-gray-200");
+  const inputFieldClass = dyn.v3.getVariant("input-field", CLASS_VARIANTS_MAP, "w-full text-base border-0 outline-none focus:ring-0 bg-transparent placeholder-gray-600 placeholder-opacity-80 font-sans mb-1");
+
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
@@ -409,137 +414,230 @@ function AddTaskCard({
     </div>
   );
 
-  return (
-    <div className="w-full max-w-4xl">
-      <div className="rounded-xl border border-gray-200 overflow-hidden bg-white shadow-sm">
-        <div className="pt-5 px-5">
-          <input
-            {...getElementAttributes('task-name-input', 0)}
-            ref={inputRef}
-            className="w-full text-base font-normal border-0 outline-none focus:ring-0 bg-transparent placeholder-gray-600 placeholder-opacity-80 font-sans mb-1"
-            placeholder={getText('input-task-name-placeholder', 'Task name')}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            {...getElementAttributes('task-description-input', 0)}
-            className="w-full text-base border-0 outline-none focus:ring-0 bg-transparent text-gray-700 placeholder-gray-400 mt-1 mb-3 py-5"
-            placeholder={getText('input-description-placeholder', 'Description')}
-            value={desc}
-            onChange={(e) => setDesc(e.target.value)}
-          />
-          <div className="flex gap-2 mb-4">
-            <Popover
-              placement="bottomLeft"
-              trigger="click"
-              content={calendarPanel}
-              overlayClassName="!p-0"
-            >
-              <button
-                {...getElementAttributes('date-picker-button', 0)}
-                type="button"
-                className={`group flex items-center gap-2 border transition focus:outline-none px-4 py-[10px] rounded-lg text-base font-semibold border-gray-200 ${
-                  selectedDate ? "text-[#d1453b]" : "text-gray-700"
-                } bg-white hover:border-[#d1453b] hover:bg-orange-50`}
-                style={{ minWidth: 105 }}
-              >
-                <CalendarOutlined className="mr-2 text-xl" />
-                <span className="font-bold">
-                  {selectedDate ? selectedDate.format("D MMM") : getText('picker-date-label', 'Date')}
-                </span>
-              </button>
-            </Popover>
-            <Popover
-              placement="bottomLeft"
-              trigger="click"
-              open={priorityPopoverOpen}
-              onOpenChange={setPriorityPopoverOpen}
-              content={priorityPanel}
-              overlayClassName="!p-0"
-            >
-              <button
-                {...getElementAttributes('priority-picker-button', 0)}
-                className="text-gray-600 hover:bg-gray-50 transition px-2 py-1 text-md font-medium rounded border border-gray-200 flex items-center"
-                type="button"
-              >
-                <FlagOutlined
-                  className="mr-1"
-                  style={{
-                    fontSize: 16,
-                    color:
-                      selectedPriority === 1
-                        ? "#d1453b"
-                        : selectedPriority === 2
-                        ? "#eb8909"
-                        : selectedPriority === 3
-                        ? "#246fe0"
-                        : "#94a3b8",
-                  }}
+  return dyn.v1.addWrapDecoy(
+    "task-form-card",
+    <div className="w-full max-w-4xl" data-dyn-key="task-form-card">
+      {dyn.v1.addWrapDecoy(
+        "task-form-shell",
+        <div className="rounded-xl border border-gray-200 overflow-hidden bg-white shadow-sm">
+          <div className="pt-5 px-5">
+            {dyn.v1.addWrapDecoy(
+              "task-inputs",
+              <>
+                <input
+                  {...getElementAttributes("task-name-input", 0)}
+                  ref={inputRef}
+                  className={inputFieldClass}
+                  placeholder={getText("input-task-name-placeholder", "Task name")}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
-                {getText('picker-priority-label', 'Priority')}
-              </button>
-            </Popover>
+                <input
+                  {...getElementAttributes("task-description-input", 0)}
+                  className={`${inputFieldClass} mt-1 mb-3 py-5 text-gray-700 placeholder-gray-400`}
+                  placeholder={getText("input-description-placeholder", "Description")}
+                  value={desc}
+                  onChange={(e) => setDesc(e.target.value)}
+                />
+              </>
+            )}
+            <div className="flex gap-2 mb-4">
+              {dyn.v1.addWrapDecoy(
+                "date-picker-button",
+                <Popover placement="bottomLeft" trigger="click" content={calendarPanel} overlayClassName="!p-0">
+                  <button
+                    {...getElementAttributes("date-picker-button", 0)}
+                    type="button"
+                    className={`group flex items-center gap-2 border transition focus:outline-none px-4 py-[10px] rounded-lg text-base font-semibold border-gray-200 ${
+                      selectedDate ? "text-[#d1453b]" : "text-gray-700"
+                    } bg-white hover:border-[#d1453b] hover:bg-orange-50 ${dyn.v3.getVariant("button-ghost", CLASS_VARIANTS_MAP, "")}`}
+                    style={{ minWidth: 105 }}
+                  >
+                    <CalendarOutlined className="mr-2 text-xl" />
+                    <span className="font-bold">
+                      {selectedDate ? selectedDate.format("D MMM") : getText("picker-date-label", "Date")}
+                    </span>
+                  </button>
+                </Popover>
+              )}
+              {dyn.v1.addWrapDecoy(
+                "priority-picker-button",
+                <Popover
+                  placement="bottomLeft"
+                  trigger="click"
+                  open={priorityPopoverOpen}
+                  onOpenChange={setPriorityPopoverOpen}
+                  content={priorityPanel}
+                  overlayClassName="!p-0"
+                >
+                  <button
+                    {...getElementAttributes("priority-picker-button", 0)}
+                    className={`text-gray-600 hover:bg-gray-50 transition px-2 py-1 text-md font-medium rounded border border-gray-200 flex items-center ${dyn.v3.getVariant("pill", CLASS_VARIANTS_MAP, "")}`}
+                    type="button"
+                  >
+                    <FlagOutlined
+                      className="mr-1"
+                      style={{
+                        fontSize: 16,
+                        color:
+                          selectedPriority === 1
+                            ? "#d1453b"
+                            : selectedPriority === 2
+                            ? "#eb8909"
+                            : selectedPriority === 3
+                            ? "#246fe0"
+                            : "#94a3b8",
+                      }}
+                    />
+                    {getText("picker-priority-label", "Priority")}
+                  </button>
+                </Popover>
+              )}
+            </div>
           </div>
+          {dyn.v1.addWrapDecoy(
+            "task-form-footer",
+            <div className="flex items-center justify-between px-4 py-3 bg-[#fbfaf9] border-t border-gray-100">
+              <div className="flex items-center gap-2 text-md font-medium text-gray-700" {...getElementAttributes("label-inbox", 0)}>
+                <InboxOutlined style={{ fontSize: 16 }} /> {getText("label-inbox", "Inbox")}{" "}
+                <DownOutlined style={{ fontSize: 11 }} className="ml-0.5" />
+              </div>
+              <div className="flex gap-2">
+                {dyn.v1.addWrapDecoy(
+                  "cancel-button",
+                  <button
+                    {...getElementAttributes("cancel-button", 0)}
+                    onClick={() => {
+                      logEvent(EVENT_TYPES.CANCEL_TASK, {
+                        currentName: name,
+                        currentDescription: desc,
+                        selectedDate: selectedDate ? selectedDate.format("YYYY-MM-DD") : null,
+                        priority: getPriorityLabel(selectedPriority),
+                        isEditing: !!editingTask,
+                      });
+                      onCancel();
+                    }}
+                    className={`${dynamicGhost} px-5 py-1.5 rounded font-semibold hover:bg-gray-50`}
+                  >
+                    {getText("button-cancel", "Cancel")}
+                  </button>
+                )}
+                {dyn.v1.addWrapDecoy(
+                  "submit-button",
+                  <button
+                    {...getElementAttributes("submit-button", 0)}
+                    className={`${dynamicButtonPrimary} px-6 py-1.5 rounded font-semibold`}
+                    onClick={() => {
+                      if (!name.trim()) return;
+                      logEvent(EVENT_TYPES.ADD, {
+                        action: editingTask ? "Save changes" : "Add",
+                        name: name.trim(),
+                        description: desc.trim(),
+                        date: selectedDate ? selectedDate.format("YYYY-MM-DD") : null,
+                        priority: getPriorityLabel(selectedPriority),
+                      });
+                      onAdd({
+                        name: name.trim(),
+                        description: desc.trim(),
+                        date: selectedDate,
+                        priority: selectedPriority,
+                      });
+                      setName("");
+                      setDesc("");
+                      setSelectedDate(null);
+                      setSelectedPriority(4);
+                      setPriorityPopoverOpen(false);
+                    }}
+                    disabled={!name.trim()}
+                  >
+                    {editingTask ? getText("button-save", "Save changes") : getText("button-add", "Add")}
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
-        <div className="flex items-center justify-between px-4 py-3 bg-[#fbfaf9] border-t border-gray-100">
-          <div className="flex items-center gap-2 text-md font-medium text-gray-700" {...getElementAttributes('label-inbox', 0)}>
-            <InboxOutlined style={{ fontSize: 16 }} /> {getText('label-inbox', 'Inbox')} {" "}
-            <DownOutlined style={{ fontSize: 11 }} className="ml-0.5" />
-          </div>
-          <div className="flex gap-2">
-            <button
-              {...getElementAttributes('cancel-button', 0)}
-              onClick={() => {
-                logEvent(EVENT_TYPES.CANCEL_TASK, {
-                  currentName: name,
-                  currentDescription: desc,
-                  selectedDate: selectedDate ? selectedDate.format("YYYY-MM-DD") : null,
-                  priority: getPriorityLabel(selectedPriority),
-                  isEditing: !!editingTask,
-                });
-                onCancel();
-              }}
-              className="text-gray-700 bg-white border border-gray-200 px-5 py-1.5 rounded font-semibold hover:bg-gray-50"
-            >
-              {getText('button-cancel', 'Cancel')}
-            </button>
-            <button
-              {...getElementAttributes('submit-button', 0)}
-              className="bg-[#d1453b] hover:bg-[#ef7363] text-white px-6 py-1.5 rounded font-semibold"
-              onClick={() => {
-                if (!name.trim()) return;
-                logEvent(EVENT_TYPES.ADD, {
-                  action: editingTask ? "Save changes" : "Add",
-                  name: name.trim(),
-                  description: desc.trim(),
-                  date: selectedDate ? selectedDate.format("YYYY-MM-DD") : null,
-                  priority: getPriorityLabel(selectedPriority),
-                });
-                onAdd({
-                  name: name.trim(),
-                  description: desc.trim(),
-                  date: selectedDate,
-                  priority: selectedPriority,
-                });
-                setName("");
-                setDesc("");
-                setSelectedDate(null);
-                setSelectedPriority(4);
-                setPriorityPopoverOpen(false);
-              }}
-              disabled={!name.trim()}
-            >
-              {editingTask ? getText('button-save', 'Save changes') : getText('button-add', 'Add')}
-            </button>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
 
 export default function Home() {
-  const { getElementAttributes, getText, v2Seed } = useSeedLayout();
+  const dyn = useDynamicSystem();
+  const { resolvedSeeds } = useSeed();
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base ?? 1;
+  const dynIds = {
+    appShell: dyn.v3.getVariant("app-shell", ID_VARIANTS_MAP, "app-shell"),
+    heroTitle: dyn.v3.getVariant("hero-title", ID_VARIANTS_MAP, "hero-title"),
+    quickActions: dyn.v3.getVariant("quick-actions", ID_VARIANTS_MAP, "quick-actions"),
+    todaySection: dyn.v3.getVariant("today-section", ID_VARIANTS_MAP, "today-section"),
+    completedSection: dyn.v3.getVariant("completed-section", ID_VARIANTS_MAP, "completed-section"),
+    inboxSection: dyn.v3.getVariant("inbox-section", ID_VARIANTS_MAP, "inbox-section"),
+    emptyState: dyn.v3.getVariant("empty-state", ID_VARIANTS_MAP, "empty-state"),
+    taskList: dyn.v3.getVariant("task-list", ID_VARIANTS_MAP, "task-list"),
+    taskCard: dyn.v3.getVariant("task-card", ID_VARIANTS_MAP, "task-card"),
+    taskActions: dyn.v3.getVariant("task-actions", ID_VARIANTS_MAP, "task-actions"),
+    chatThread: dyn.v3.getVariant("chat-thread", ID_VARIANTS_MAP, "chat-thread"),
+    chatMessage: dyn.v3.getVariant("chat-message", ID_VARIANTS_MAP, "chat-message"),
+    calendarWidget: dyn.v3.getVariant("calendar-widget", ID_VARIANTS_MAP, "calendar-widget"),
+    toolbarActions: dyn.v3.getVariant("toolbar-actions", ID_VARIANTS_MAP, "toolbar-actions"),
+    statsCard: dyn.v3.getVariant("stats-card", ID_VARIANTS_MAP, "stats-card"),
+    filterDropdown: dyn.v3.getVariant("filter-dropdown", ID_VARIANTS_MAP, "filter-dropdown"),
+    quickAdd: dyn.v3.getVariant("submit-button", ID_VARIANTS_MAP, "quick-add"),
+    chatInput: dyn.v3.getVariant("task-description-input", ID_VARIANTS_MAP, "chat-input"),
+    badgeId: dyn.v3.getVariant("task-actions", ID_VARIANTS_MAP, "badge-id"),
+    panelId: dyn.v3.getVariant("task-form", ID_VARIANTS_MAP, "panel-id"),
+  };
+  const dynClasses = {
+    primary: dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "bg-[#d1453b] text-white hover:bg-[#b53b34]"),
+    ghost: dyn.v3.getVariant("button-ghost", CLASS_VARIANTS_MAP, "border border-gray-200 hover:border-gray-300"),
+    card: dyn.v3.getVariant("card-surface", CLASS_VARIANTS_MAP, "rounded-xl border border-gray-200 bg-white shadow-sm"),
+    badge: dyn.v3.getVariant("badge-priority", CLASS_VARIANTS_MAP, "text-xs px-2 py-1 rounded-full bg-red-100 text-red-700"),
+    panel: dyn.v3.getVariant("panel", CLASS_VARIANTS_MAP, "bg-white border border-gray-200 rounded-xl shadow-sm"),
+    gridLayout: dyn.v3.getVariant("grid-layout", CLASS_VARIANTS_MAP, "grid grid-cols-1 md:grid-cols-2 gap-4"),
+    listRow: dyn.v3.getVariant("list-row", CLASS_VARIANTS_MAP, "flex items-center justify-between py-3 px-3 rounded-lg hover:bg-gray-50"),
+    pill: dyn.v3.getVariant("pill", CLASS_VARIANTS_MAP, "rounded-full bg-gray-100 text-gray-700 px-3 py-1 text-xs"),
+    navLink: dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, "flex items-center gap-2 px-2.5 py-2 rounded-lg text-gray-800 hover:bg-gray-100"),
+  };
+  const dynText = {
+    addTask: dyn.v3.getVariant("add_task", TEXT_VARIANTS_MAP, "Add task"),
+    saveTask: dyn.v3.getVariant("save_task", TEXT_VARIANTS_MAP, "Save task"),
+    cancel: dyn.v3.getVariant("cancel_action", TEXT_VARIANTS_MAP, "Cancel"),
+    priorityLabel: dyn.v3.getVariant("priority_label", TEXT_VARIANTS_MAP, "Priority"),
+    dueDate: dyn.v3.getVariant("due_date_label", TEXT_VARIANTS_MAP, "Due date"),
+    emptyTitle: dyn.v3.getVariant("empty_state_title", TEXT_VARIANTS_MAP, "You're all set"),
+    emptyDesc: dyn.v3.getVariant("empty_state_description", TEXT_VARIANTS_MAP, "Add your first task to get started."),
+    todayHeading: dyn.v3.getVariant("today_heading", TEXT_VARIANTS_MAP, "Today"),
+    completedHeading: dyn.v3.getVariant("completed_heading", TEXT_VARIANTS_MAP, "Completed"),
+    inboxHeading: dyn.v3.getVariant("inbox_heading", TEXT_VARIANTS_MAP, "Inbox"),
+    chatPlaceholder: dyn.v3.getVariant("chat_placeholder", TEXT_VARIANTS_MAP, "Type a message..."),
+    quickActions: dyn.v3.getVariant("quick_actions_title", TEXT_VARIANTS_MAP, "Quick actions"),
+    searchPlaceholder: dyn.v3.getVariant("search_tasks_placeholder", TEXT_VARIANTS_MAP, "Search tasks..."),
+    projectsHeading: dyn.v3.getVariant("projects_heading", TEXT_VARIANTS_MAP, "Projects"),
+    teamsHeading: dyn.v3.getVariant("teams_heading", TEXT_VARIANTS_MAP, "Teams"),
+    ctaAddTask: dyn.v3.getVariant("cta_add_task", TEXT_VARIANTS_MAP, "Add your first task"),
+    overviewTitle: dyn.v3.getVariant("overview_title", TEXT_VARIANTS_MAP, "Your day at a glance"),
+    sidebarHeading: dyn.v3.getVariant("sidebar_heading", TEXT_VARIANTS_MAP, "Workspace"),
+    projectsHeading2: dyn.v3.getVariant("projects_heading", TEXT_VARIANTS_MAP, "Project list"),
+    teamsHeading2: dyn.v3.getVariant("teams_heading", TEXT_VARIANTS_MAP, "Team list"),
+    addTaskShort: dyn.v3.getVariant("add_task", TEXT_VARIANTS_MAP, "Add"),
+    saveTaskShort: dyn.v3.getVariant("save_task", TEXT_VARIANTS_MAP, "Save"),
+    cancelShort: dyn.v3.getVariant("cancel_action", TEXT_VARIANTS_MAP, "Cancel"),
+  };
+  const wrap = (key: string, node: React.ReactNode) => {
+    if (key === "layout-sidebar" || key === "layout-main" || key.startsWith("task-card")) {
+      return node;
+    }
+    return dyn.v1.addWrapDecoy(key, node);
+  };
+  const getText = (key: string, fallback: string) =>
+    dyn.v3.getVariant(key, TEXT_VARIANTS_MAP, fallback);
+  const getElementAttributes = (key: string, index: number = 0) => ({
+    id: dyn.v3.getVariant(key, ID_VARIANTS_MAP, `${key}-${index}`),
+    "data-dyn-key": key,
+    "data-dyn-class": dyn.v3.getVariant(key, CLASS_VARIANTS_MAP, ""),
+  });
+  const reorderElements = <T,>(items: T[], key: string) => items;
   const [showForm, setShowForm] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [tasksLoading, setTasksLoading] = useState(true);
@@ -653,6 +751,7 @@ export default function Home() {
     (task) => task.date && dayjs(task.date).format("YYYY-MM-DD") === todayStr
   ).length;
   const completedCount = completedTasks.length;
+  const orderedInboxTasks = tasks;
 
   function renderGettingStarted() {
     return (
@@ -715,6 +814,7 @@ export default function Home() {
       (task: (typeof tasks)[0]) =>
         task.date && dayjs(task.date).format("YYYY-MM-DD") === todayStr
     );
+    const orderedToday = reorderElements(todayTasks, "today-tasks");
     return (
       <div className="flex-1 flex flex-col items-center w-full text-center pt-32 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
         <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes('heading-today', 0)}>
@@ -726,7 +826,7 @@ export default function Home() {
           </div>
         ) : (
           <div className="w-full max-w-xl mt-8 space-y-3 text-left mx-auto">
-            {todayTasks.map((task) => (
+            {orderedToday.map((task) => (
               <div
                 key={task.id}
                 className="border border-gray-200 rounded-xl bg-white shadow-sm p-5 flex gap-4 items-start"
@@ -813,6 +913,7 @@ export default function Home() {
   }
 
 function renderCompleted() {
+  const orderedCompleted = reorderElements(completedTasks, "completed-tasks");
   return (
     <div className="flex-1 flex flex-col items-center w-full text-center pt-32 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
       <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes('heading-completed', 0)}>
@@ -824,7 +925,7 @@ function renderCompleted() {
           </div>
         ) : (
           <div className="w-full max-w-2xl mx-auto space-y-6 text-left">
-            {completedTasks.map((task) => (
+            {orderedCompleted.map((task) => (
               <div
                 key={task.id}
                 className="flex items-center gap-4 bg-white rounded-lg px-4 py-3 border border-gray-200 shadow-sm"
@@ -1178,230 +1279,245 @@ function renderChatPlaceholder(chatId: string) {
   return (
     <ProjectsProvider>
       <TeamsProvider>
-        <DynamicLayout
-          sidebarProps={{
-            onSelect: setSelectedView as (v: string) => void,
-            selected: selectedView,
-            inboxCount,
-            todayCount,
-            completedCount,
-          }}
-        >
-          <main className="flex-1 flex flex-col min-h-screen">
-        {selectedView === "today" ? (
-          renderToday()
-        ) : selectedView === "completed" ? (
-          renderCompleted()
-        ) : selectedView === "getting-started" ? (
-          renderGettingStarted()
-        ) : selectedView.startsWith("chat-") ? (
-          renderChatPlaceholder(selectedView)
-        ) : selectedView.startsWith("team-") ? (
-          <TeamDetails teamId={selectedView.replace("team-", "")} />
-        ) : (
-          <div className="flex-1 flex flex-col items-center w-full text-center pt-36 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
-            <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes('heading-inbox', 0)}>
-              {getText('heading-inbox', 'Add Tasks To Your Todo List')}
-            </h1>
-            {tasksError && (
-              <div className="mb-6 px-6 py-4 bg-blue-50 border-2 border-blue-200 rounded-xl text-blue-800 text-sm max-w-2xl shadow-sm">
-                <div className="font-semibold mb-1">ℹ️ Usando datos locales</div>
-                <div className="text-blue-700">{tasksError}</div>
-                <div className="mt-3 text-xs text-blue-600">
-                  <p>Las tareas se están cargando desde el archivo JSON local. Si quieres usar el backend, asegúrate de que esté corriendo.</p>
-                </div>
-              </div>
-            )}
-            <Modal
-              open={editIndex !== null}
-              footer={null}
-              centered
-              onCancel={() => setEditIndex(null)}
-              title={getText('modal-edit-title', 'Edit Task')}
-              destroyOnHidden
-              width={530}
-            >
-              {editIndex !== null && (
-                <AddTaskCard
-                  onCancel={() => setEditIndex(null)}
-                  onAdd={handleAddTask}
-                  editingTask={tasks[editIndex]}
-                />
-              )}
-            </Modal>
-            {showForm && (
-              <AddTaskCard
-                onCancel={() => setShowForm(false)}
-                onAdd={handleAddTask}
-              />
-            )}
-            {tasksLoading && (
-              <div className="w-full max-w-md mx-auto mt-6 bg-white rounded-2xl border border-dashed border-gray-200 px-6 py-4 text-sm text-gray-600">
-                Loading tasks...
-              </div>
-            )}
-            {tasksError && (
-              <div className="w-full max-w-md mx-auto mt-6 bg-white rounded-2xl border border-red-200 px-6 py-4 text-sm text-red-600">
-                {tasksError}
-              </div>
-            )}
-            {!showForm && !tasksLoading && tasks.length === 0 && (
-              <div className="w-full max-w-md mx-auto mt-6 bg-white rounded-2xl shadow-md border border-gray-200 px-8 py-10 flex flex-col items-center">
-                <div className="mb-6">
-                  <svg
-                    width="56"
-                    height="56"
-                    fill="none"
-                    className="mx-auto mb-2"
-                  >
-                    <rect width="56" height="56" rx="18" fill="#f7cac3" />
-                    <path
-                      d="M28 16v24M16 28h24"
-                      stroke="#d1453b"
-                      strokeWidth="2.4"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-                <div className="font-semibold text-xl mb-1 text-gray-900" {...getElementAttributes('empty-inbox-title', 0)}>
-                  {getText('empty-inbox-title', 'Capture now, plan later')}
-                </div>
-                <div className="text-gray-500 mb-7 text-base leading-normal" {...getElementAttributes('empty-inbox-desc', 0)}>
-                  {getText('empty-inbox-desc', "Inbox is your go-to spot for quick task entry.\nClear your mind now, organize when you're ready.")}
-                </div>
-                <button
-                  {...getElementAttributes('cta-add-task', 0)}
-                  className="flex items-center gap-2 bg-[#d1453b] hover:bg-[#c0342f] text-white font-semibold px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fdede7] focus:ring-offset-2 shadow transition"
-                  onClick={() => {
-                    logEvent(EVENT_TYPES.ADD_TASK, {
-                      source: "inbox_cta_button",
-                    });
-                    setShowForm(true);
-                  }}
+        <div id={dynIds.appShell} className="flex min-h-screen bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white">
+          {wrap(
+            "layout-sidebar",
+            <Sidebar
+              onSelect={setSelectedView as (v: string) => void}
+              selected={selectedView}
+              inboxCount={inboxCount}
+              todayCount={todayCount}
+              completedCount={completedCount}
+            />
+          )}
+          {wrap(
+            "layout-main",
+            <main className="flex-1 flex flex-col min-h-screen ml-[280px]">
+              {wrap(
+                "variant-sentinels",
+                <div
+                  className={`hidden ${dynClasses.gridLayout} ${dynClasses.navLink}`}
+                  id={dynIds.heroTitle}
+                  data-dyn-class={dynClasses.badge}
                 >
-                  <PlusOutlined /> {getText('cta-add-task', 'Add task')}
-                </button>
-              </div>
-            )}
-            {tasks.length > 0 && (
-              <div className="w-full max-w-4xl mt-12 space-y-3 text-left mx-auto">
-                {tasks.map((task) => (
-                  <div
-                    key={task.id}
-                    className="border border-gray-200 rounded-xl bg-white shadow-sm p-5 flex gap-4 items-start"
-                  >
-                    <button
-                      className="w-6 h-6 min-w-[24px] min-h-[24px] rounded-full border-2 border-gray-400 flex items-center justify-center hover:border-[#d1453b] mt-2"
-                      aria-label="Mark complete"
-                      onClick={() => {
-                        logEvent(EVENT_TYPES.COMPLETE_TASK, {
-                          taskId: task.id,
-                          name: task.name,
-                          description: task.description,
-                          date: task.date ? task.date.format("YYYY-MM-DD") : null,
-                          priority: getPriorityLabel(task.priority),
-                          completedAt: new Date().toISOString(),
-                        });
-                        handleCompleteTask(task.id);
-                      }}
+                  <span id={dynIds.quickActions}>{dynText.quickActions}</span>
+                  <span id={dynIds.todaySection}>{dynText.todayHeading}</span>
+                  <span id={dynIds.completedSection}>{dynText.completedHeading}</span>
+                  <span id={dynIds.emptyState}>{dynText.emptyTitle}</span>
+                  <span id={dynIds.chatThread}>{dynText.chatPlaceholder}</span>
+                  <span id={dynIds.chatMessage}>{dynText.cancel}</span>
+                  <span id={dynIds.calendarWidget}>{dynText.dueDate}</span>
+                  <span id={dynIds.toolbarActions}>{dynText.projectsHeading}</span>
+                  <span id={dynIds.statsCard}>{dynText.overviewTitle}</span>
+                  <span id={dynIds.filterDropdown}>{dynText.searchPlaceholder}</span>
+                  <span id={dynIds.quickAdd}>{dynText.addTaskShort}</span>
+                  <span id={dynIds.chatInput}>{dynText.chatPlaceholder}</span>
+                  <span id={dynIds.badgeId}>{dynText.priorityLabel}</span>
+                  <span id={dynIds.panelId}>{dynText.sidebarHeading}</span>
+                  <span>{dynText.emptyDesc}</span>
+                  <span>{dynText.inboxHeading}</span>
+                  <span>{dynText.projectsHeading2}</span>
+                  <span>{dynText.teamsHeading2}</span>
+                  <span>{dynText.teamsHeading}</span>
+                  <span>{dynText.ctaAddTask}</span>
+                  <span>{dynText.saveTaskShort}</span>
+                  <span>{dynText.cancelShort}</span>
+                  <span>{dynText.addTask}</span>
+                  <span>{dynText.saveTask}</span>
+                  <span>{dynText.cancel}</span>
+                </div>
+              )}
+              {selectedView === "today"
+                ? wrap("today-view", renderToday())
+                : selectedView === "completed"
+                ? wrap("completed-view", renderCompleted())
+                : selectedView === "getting-started"
+                ? wrap("getting-started-view", renderGettingStarted())
+                : selectedView.startsWith("chat-")
+                ? wrap("chat-view", renderChatPlaceholder(selectedView))
+                : selectedView.startsWith("team-")
+                ? wrap("team-view", <TeamDetails teamId={selectedView.replace("team-", "")} />)
+                : wrap(
+                    "inbox-view",
+                    <div
+                      className="flex-1 flex flex-col items-center w-full text-center pt-36 min-h-screen"
+                      id={dynIds.inboxSection}
                     >
-                      <span className="w-4 h-4 block rounded-full"></span>
-                    </button>
-                    <span>
-                      <FlagOutlined
-                        style={{
-                          fontSize: 20,
-                          marginTop: 3,
-                          color:
-                            task.priority === 1
-                              ? "#d1453b"
-                              : task.priority === 2
-                              ? "#eb8909"
-                              : task.priority === 3
-                              ? "#246fe0"
-                              : "#94a3b8",
-                        }}
-                      />
-                    </span>
-                    <div className="flex-1">
-                      <div className="font-semibold text-lg text-gray-900 mb-1">
-                        {task.name}
-                      </div>
-                      {task.description && (
-                        <div className="text-gray-600 mb-1 text-base">
-                          {task.description}
+                      <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes("heading-inbox", 0)}>
+                        {getText("heading-inbox", "Add Tasks To Your Todo List")}
+                      </h1>
+                      {tasksError && (
+                        <div className={`${dynClasses.card} mb-6 px-6 py-4 text-blue-800 text-sm max-w-2xl`}>
+                          <div className="font-semibold mb-1">ℹ️ Usando datos locales</div>
+                          <div className="text-blue-700">{tasksError}</div>
+                          <div className="mt-3 text-xs text-blue-600">
+                            <p>Las tareas se están cargando desde el archivo JSON local. Si quieres usar el backend, asegúrate de que esté corriendo.</p>
+                          </div>
                         </div>
                       )}
-                      <div className="flex gap-3 text-sm mt-2 items-center">
-                        {task.date && (
-                          <span className="flex items-center gap-1 text-xs px-2 py-[2px] rounded bg-slate-50 text-[#d1453b] border border-gray-200">
-                            <CalendarOutlined />
-                            {task.date.format("D MMM YYYY")}
-                          </span>
+                      <Modal
+                        open={editIndex !== null}
+                        footer={null}
+                        centered
+                        onCancel={() => setEditIndex(null)}
+                        title={getText("modal-edit-title", "Edit Task")}
+                        destroyOnHidden
+                        width={530}
+                      >
+                        {editIndex !== null && (
+                          <AddTaskCard onCancel={() => setEditIndex(null)} onAdd={handleAddTask} editingTask={tasks[editIndex]} />
                         )}
-                        <span className="flex items-center gap-1 text-xs px-2 py-[2px] rounded bg-slate-50 text-gray-500 border border-gray-200">
-                          <FlagOutlined
-                            style={{
-                              color:
-                                task.priority === 1
-                                  ? "#d1453b"
-                                  : task.priority === 2
-                                  ? "#eb8909"
-                                  : task.priority === 3
-                                  ? "#246fe0"
-                                  : "#94a3b8",
-                              fontSize: 14,
+                      </Modal>
+                      {showForm && <AddTaskCard onCancel={() => setShowForm(false)} onAdd={handleAddTask} />}
+                      {tasksLoading && (
+                        <div className={`${dynClasses.panel} w-full max-w-md mx-auto mt-6 border-dashed px-6 py-4 text-sm text-gray-600`}>
+                          Loading tasks...
+                        </div>
+                      )}
+                      {tasksError && (
+                        <div className="w-full max-w-md mx-auto mt-6 bg-white rounded-2xl border border-red-200 px-6 py-4 text-sm text-red-600">
+                          {tasksError}
+                        </div>
+                      )}
+                      {!showForm && !tasksLoading && tasks.length === 0 && (
+                        <div className={`${dynClasses.card} w-full max-w-md mx-auto mt-6 px-8 py-10 flex flex-col items-center`}>
+                          <div className="mb-6">
+                            <svg width="56" height="56" fill="none" className="mx-auto mb-2">
+                              <rect width="56" height="56" rx="18" fill="#f7cac3" />
+                              <path d="M28 16v24M16 28h24" stroke="#d1453b" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                          <div className="font-semibold text-xl mb-1 text-gray-900" {...getElementAttributes("empty-inbox-title", 0)}>
+                            {getText("empty-inbox-title", "Capture now, plan later")}
+                          </div>
+                          <div className="text-gray-500 mb-7 text-base leading-normal" {...getElementAttributes("empty-inbox-desc", 0)}>
+                            {getText("empty-inbox-desc", "Inbox is your go-to spot for quick task entry.\nClear your mind now, organize when you're ready.")}
+                          </div>
+                          <button
+                            {...getElementAttributes("cta-add-task", 0)}
+                            className={`${dynClasses.primary} flex items-center gap-2 font-semibold px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fdede7] focus:ring-offset-2 shadow transition`}
+                            onClick={() => {
+                              logEvent(EVENT_TYPES.ADD_TASK, {
+                                source: "inbox_cta_button",
+                              });
+                              setShowForm(true);
                             }}
-                          />
-                          Priority {task.priority}
-                        </span>
-                      </div>
+                          >
+                            <PlusOutlined /> {getText("cta-add-task", "Add task")}
+                          </button>
+                        </div>
+                      )}
+                      {orderedInboxTasks.length > 0 && (
+                        <div className="w-full max-w-4xl mt-12 space-y-3 text-left mx-auto" id={dynIds.taskList}>
+                          {orderedInboxTasks.map((task, index) => (
+                            <div key={task.id ?? index} className={`${dynClasses.card} p-5 flex gap-4 items-start`} data-dyn-key="task-card">
+                              <button
+                                className="w-6 h-6 min-w-[24px] min-h-[24px] rounded-full border-2 border-gray-400 flex items-center justify-center hover:border-[#d1453b] mt-2"
+                                aria-label="Mark complete"
+                                onClick={() => {
+                                  logEvent(EVENT_TYPES.COMPLETE_TASK, {
+                                    taskId: task.id,
+                                    name: task.name,
+                                    description: task.description,
+                                    date: task.date ? task.date.format("YYYY-MM-DD") : null,
+                                    priority: getPriorityLabel(task.priority),
+                                    completedAt: new Date().toISOString(),
+                                  });
+                                  handleCompleteTask(task.id);
+                                }}
+                              >
+                                <span className="w-4 h-4 block rounded-full"></span>
+                              </button>
+                              <span>
+                                <FlagOutlined
+                                  style={{
+                                    fontSize: 20,
+                                    marginTop: 3,
+                                    color:
+                                      task.priority === 1
+                                        ? "#d1453b"
+                                        : task.priority === 2
+                                        ? "#eb8909"
+                                        : task.priority === 3
+                                        ? "#246fe0"
+                                        : "#94a3b8",
+                                  }}
+                                />
+                              </span>
+                              <div className="flex-1">
+                                <div className="font-semibold text-lg text-gray-900 mb-1" id={dynIds.taskCard}>
+                                  {task.name}
+                                </div>
+                                {task.description && <div className="text-gray-600 mb-1 text-base">{task.description}</div>}
+                                <div className="flex gap-3 text-sm mt-2 items-center">
+                                  {task.date && (
+                                    <span className={`${dynClasses.pill} flex items-center gap-1 text-xs px-2 py-[2px]`}>
+                                      <CalendarOutlined />
+                                      {task.date.format("D MMM YYYY")}
+                                    </span>
+                                  )}
+                                  <span className={`${dynClasses.pill} flex items-center gap-1 text-xs`}>
+                                    <FlagOutlined
+                                      style={{
+                                        color:
+                                          task.priority === 1
+                                            ? "#d1453b"
+                                            : task.priority === 2
+                                            ? "#eb8909"
+                                            : task.priority === 3
+                                            ? "#246fe0"
+                                            : "#94a3b8",
+                                        fontSize: 14,
+                                      }}
+                                    />
+                                    {dynText.priorityLabel} {task.priority}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="flex gap-2 ml-2 mt-1" id={dynIds.taskActions}>
+                                <button
+                                  className={`${dynClasses.ghost} p-1 px-2 rounded hover:bg-orange-50`}
+                                  onClick={() => {
+                                    logEvent(EVENT_TYPES.EDIT_TASK_MODAL_OPENED, {
+                                      taskId: task.id,
+                                      name: task.name,
+                                      description: task.description,
+                                      date: task.date ? task.date.format("YYYY-MM-DD") : null,
+                                      priority: getPriorityLabel(task.priority),
+                                    });
+                                    handleEditTask(task.id);
+                                  }}
+                                  title="Edit"
+                                >
+                                  <EditOutlined />
+                                </button>
+                                <button
+                                  className={`${dynClasses.ghost} p-1 px-2 rounded hover:bg-red-50`}
+                                  onClick={() => {
+                                    logEvent(EVENT_TYPES.DELETE_TASK, {
+                                      taskId: task.id,
+                                      name: task.name,
+                                      description: task.description,
+                                      date: task.date ? task.date.format("YYYY-MM-DD") : null,
+                                      priority: getPriorityLabel(task.priority),
+                                      deletedAt: new Date().toISOString(),
+                                    });
+                                    handleDeleteTask(task.id);
+                                  }}
+                                  title="Delete"
+                                >
+                                  <DeleteOutlined />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                    <div className="flex gap-2 ml-2 mt-1">
-                      <button
-                        className="p-1 px-2 rounded border border-gray-200 hover:bg-orange-50"
-                        onClick={() => {
-                          logEvent(EVENT_TYPES.EDIT_TASK_MODAL_OPENED, {
-                            taskId: task.id,
-                            name: task.name,
-                            description: task.description,
-                            date: task.date ? task.date.format("YYYY-MM-DD") : null,
-                            priority: getPriorityLabel(task.priority),
-                          });
-                          handleEditTask(task.id);
-                        }}
-                        title="Edit"
-                      >
-                        <EditOutlined />
-                      </button>
-                      <button
-                        className="p-1 px-2 rounded border border-gray-200 hover:bg-red-50"
-                        onClick={() => {
-                          logEvent(EVENT_TYPES.DELETE_TASK, {
-                            taskId: task.id,
-                            name: task.name,
-                            description: task.description,
-                            date: task.date ? task.date.format("YYYY-MM-DD") : null,
-                            priority: getPriorityLabel(task.priority),
-                            deletedAt: new Date().toISOString(),
-                          });
-                          handleDeleteTask(task.id);
-                        }}
-                        title="Delete"
-                      >
-                        <DeleteOutlined />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-          </main>
-        </DynamicLayout>
-        {/* Snackbar for notifications */}
+                  )}
+            </main>
+          )}
+        </div>
         {snackbar.visible && (
           <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-bottom-4 fade-in duration-300">
             <div className="bg-gray-900 text-white px-6 py-3 rounded-lg shadow-xl flex items-center gap-3 min-w-[250px] max-w-md">
@@ -1411,18 +1527,8 @@ function renderChatPlaceholder(chatId: string) {
                 className="text-white/70 hover:text-white transition-colors"
                 aria-label="Close"
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>

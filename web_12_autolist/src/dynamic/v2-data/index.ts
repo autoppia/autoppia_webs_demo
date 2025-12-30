@@ -1,10 +1,8 @@
 export {
+  DynamicDataProvider,
   isDynamicModeEnabled,
-  getEffectiveSeed,
-  getLayoutConfig,
-  getStaticTasks,
-  getStaticCalendarEvents,
-  getStaticProjects,
-  getStaticTeams,
-  whenReady,
+  getTasks,
+  searchTasks,
+  getTaskById,
+  getFeaturedTasks,
 } from "./data-provider";

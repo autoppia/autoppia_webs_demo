@@ -1,22 +1,21 @@
 "use client";
-import { useMemo, useState } from "react";
+
+import { useMemo, useState, type ReactNode } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import {
   UserOutlined,
   PlusOutlined,
-  SearchOutlined,
   InboxOutlined,
   CalendarOutlined,
   CheckCircleOutlined,
   MenuOutlined,
-  ProjectOutlined,
   TeamOutlined,
-  QuestionCircleOutlined,
   DownOutlined,
   NumberOutlined,
 } from "@ant-design/icons";
 import { Button } from "antd";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { useTeams } from "@/context/TeamsContext";
 import { useProjects } from "@/context/ProjectsContext";
 import { CreateProjectModal } from "./components/CreateProjectModal";
@@ -25,7 +24,7 @@ import CreateTeamModal from "./components/CreateTeamModal";
 type SidebarItem = {
   id: string;
   label: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   count?: number;
   onClick?: () => void;
   className?: string;
@@ -46,77 +45,102 @@ export default function Sidebar({
   completedCount?: number;
   className?: string;
 }) {
+  const dyn = useDynamicSystem();
+  const wrap = (_key: string, node: ReactNode) => node;
   const [projectModalOpen, setProjectModalOpen] = useState(false);
   const [teamModalOpen, setTeamModalOpen] = useState(false);
   const [chatsOpen, setChatsOpen] = useState(true);
-  const { reorderElements, getElementAttributes, getElementXPath, isDynamicEnabled } = useSeedLayout();
   const { teams, addTeam } = useTeams();
-  const { projects, addProject } = useProjects();
+  const { projects } = useProjects();
 
-  // Define all sidebar navigation items
-  const navItems: SidebarItem[] = useMemo(() => [
-    {
-      id: "tasks-header",
-      label: "Tasks",
-      icon: null,
-      className: "flex items-center text-xs font-semibold text-gray-500 uppercase tracking-wide px-2.5 py-2"
-    },
-    {
-      id: "backlog",
-      label: "Backlog",
-      icon: <InboxOutlined />,
-      count: inboxCount,
-      onClick: () => onSelect?.("inbox"),
-      className: `flex items-center gap-2 text-[16px] px-2.5 py-2 cursor-pointer rounded-lg ${
-        selected === "inbox"
-          ? "bg-[#faece5] text-[#d1453b] font-bold"
-          : "text-black hover:bg-gray-100"
-      }`,
-    },
-    {
-      id: "today",
-      label: "Today",
-      icon: <CalendarOutlined />,
-      count: todayCount,
-      onClick: () => onSelect?.("today"),
-      className: `flex items-center gap-2 text-[16px] px-2.5 py-2 cursor-pointer rounded-lg ${
-        selected === "today"
-          ? "bg-[#faece5] text-[#d1453b] font-bold"
-          : "text-black hover:bg-gray-100"
-      }`,
-    },
-    {
-      id: "completed",
-      label: "Completed",
-      icon: <CheckCircleOutlined />,
-      count: completedCount,
-      onClick: () => onSelect?.("completed"),
-      className: `flex items-center gap-2 text-[16px] px-2.5 py-2 cursor-pointer rounded-lg ${
-        selected === "completed"
-          ? "bg-[#faece5] text-[#d1453b] font-bold"
-          : "text-black hover:bg-gray-100"
-      }`,
-    },
-    {
-      id: "more",
-      label: "More",
-      icon: <MenuOutlined />,
-      className: "flex items-center gap-2 text-[15px] px-2.5 py-2 rounded-lg text-gray-600 mt-1 cursor-default",
-    },
-  ], [selected, inboxCount, todayCount, completedCount, onSelect]);
+  const sidebarText = {
+    workspace: dyn.v3.getVariant("sidebar_heading", TEXT_VARIANTS_MAP, "Workspace"),
+    projects: dyn.v3.getVariant("projects_heading", TEXT_VARIANTS_MAP, "Projects"),
+    teams: dyn.v3.getVariant("teams_heading", TEXT_VARIANTS_MAP, "Teams"),
+    quick: dyn.v3.getVariant("quick_actions_title", TEXT_VARIANTS_MAP, "Quick actions"),
+  };
 
-  // Define project items
+  const sidebarIds = {
+    sidebar: dyn.v3.getVariant("sidebar", ID_VARIANTS_MAP, "sidebar"),
+    navList: dyn.v3.getVariant("sidebar-nav-item", ID_VARIANTS_MAP, "sidebar-nav-list"),
+    projects: dyn.v3.getVariant("sidebar-projects", ID_VARIANTS_MAP, "sidebar-projects"),
+    projectItem: dyn.v3.getVariant("sidebar-projects", ID_VARIANTS_MAP, "sidebar-project-item"),
+    teams: dyn.v3.getVariant("sidebar-teams", ID_VARIANTS_MAP, "sidebar-teams"),
+    teamItem: dyn.v3.getVariant("sidebar-teams", ID_VARIANTS_MAP, "sidebar-team-item"),
+    chats: dyn.v3.getVariant("chat-thread", ID_VARIANTS_MAP, "chat-thread"),
+  };
+
+  const sidebarClasses = {
+    navLink: dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, "flex items-center gap-2 px-2.5 py-2 rounded-lg text-gray-800 hover:bg-gray-100"),
+    buttonPrimary: dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "bg-[#d1453b] text-white hover:bg-[#b53b34]"),
+    card: dyn.v3.getVariant("card-surface", CLASS_VARIANTS_MAP, "rounded-xl border border-gray-200 bg-white shadow-sm"),
+    badge: dyn.v3.getVariant("badge-priority", CLASS_VARIANTS_MAP, "text-xs px-2 py-1 rounded-full bg-red-100 text-red-700"),
+  };
+
+  const navItems: SidebarItem[] = useMemo(
+    () => [
+      {
+        id: "tasks-header",
+        label: dyn.v3.getVariant("sidebar_heading", TEXT_VARIANTS_MAP, "Tasks"),
+        icon: null,
+        className: "flex items-center text-xs font-semibold text-gray-500 uppercase tracking-wide px-2.5 py-2",
+      },
+      {
+        id: "backlog",
+        label: dyn.v3.getVariant("inbox_heading", TEXT_VARIANTS_MAP, "Backlog"),
+        icon: <InboxOutlined />,
+        count: inboxCount,
+        onClick: () => onSelect?.("inbox"),
+        className: `flex items-center gap-2 text-[16px] px-2.5 py-2 cursor-pointer rounded-lg ${
+          selected === "inbox"
+            ? "bg-[#faece5] text-[#d1453b] font-bold"
+            : sidebarClasses.navLink
+        }`,
+      },
+      {
+        id: "today",
+        label: dyn.v3.getVariant("today_heading", TEXT_VARIANTS_MAP, "Today"),
+        icon: <CalendarOutlined />,
+        count: todayCount,
+        onClick: () => onSelect?.("today"),
+        className: `flex items-center gap-2 text-[16px] px-2.5 py-2 cursor-pointer rounded-lg ${
+          selected === "today"
+            ? "bg-[#faece5] text-[#d1453b] font-bold"
+            : sidebarClasses.navLink
+        }`,
+      },
+      {
+        id: "completed",
+        label: dyn.v3.getVariant("completed_heading", TEXT_VARIANTS_MAP, "Completed"),
+        icon: <CheckCircleOutlined />,
+        count: completedCount,
+        onClick: () => onSelect?.("completed"),
+        className: `flex items-center gap-2 text-[16px] px-2.5 py-2 cursor-pointer rounded-lg ${
+          selected === "completed"
+            ? "bg-[#faece5] text-[#d1453b] font-bold"
+            : sidebarClasses.navLink
+        }`,
+      },
+      {
+        id: "more",
+        label: dyn.v3.getVariant("quick_actions_title", TEXT_VARIANTS_MAP, "More"),
+        icon: <MenuOutlined />,
+        className: "flex items-center gap-2 text-[15px] px-2.5 py-2 rounded-lg text-gray-600 mt-1 cursor-default",
+      },
+    ],
+    [completedCount, inboxCount, onSelect, selected, sidebarClasses.navLink, todayCount, dyn.v3]
+  );
+
   const projectItems: SidebarItem[] = useMemo(() => {
-    if (!projects || projects.length === 0) return [];
     return projects.map((project) => ({
       id: project.id,
       label: project.name,
       icon: <NumberOutlined className="text-lg mr-2" />,
       count: project.badge ? Number(project.badge) : undefined,
       onClick: () => onSelect?.("getting-started"),
-      className: "flex items-center gap-2 py-2 text-[15px] text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg",
+      className: `${sidebarClasses.navLink} text-[15px]`,
     }));
-  }, [projects, onSelect]);
+  }, [projects, onSelect, sidebarClasses.navLink]);
 
   const teamItems: SidebarItem[] = useMemo(() => {
     return teams.map((team) => ({
@@ -124,9 +148,9 @@ export default function Sidebar({
       label: team.name,
       icon: <TeamOutlined className="text-lg mr-2" />,
       onClick: () => onSelect?.(`team-${team.id}`),
-      className: "flex items-center gap-2 py-2 text-[15px] text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg",
+      className: `${sidebarClasses.navLink} text-[15px]`,
     }));
-  }, [teams, onSelect]);
+  }, [teams, onSelect, sidebarClasses.navLink]);
 
   const chatUsers = useMemo(
     () => [
@@ -137,239 +161,223 @@ export default function Sidebar({
     ],
     []
   );
+
+  const orderedNavItems = dyn.v1.changeOrderElements("sidebar-nav-items", navItems.length).map((idx) => navItems[idx]);
+  const orderedProjectItems = dyn.v1.changeOrderElements("sidebar-project-items", projectItems.length || 1).map((idx) => projectItems[idx]);
+  const orderedTeamItems = dyn.v1.changeOrderElements("sidebar-team-items", teamItems.length || 1).map((idx) => teamItems[idx]);
+  const orderedChatUsers = dyn.v1.changeOrderElements("sidebar-chats", chatUsers.length).map((idx) => chatUsers[idx]);
+
   const handleChatSelect = (userId: string) => {
+    logEvent(EVENT_TYPES.CHAT_OPEN, { userId, seed: dyn.seed });
     onSelect?.(`chat-${userId}`);
   };
 
-  // Define bottom section items
-  const bottomItems: SidebarItem[] = useMemo(() => [], []);
-
-  // Shuffle items based on seed when v1 is enabled
-  const shuffledNavItems = isDynamicEnabled ? reorderElements(navItems) : navItems;
-  const shuffledProjectItems = isDynamicEnabled ? reorderElements(projectItems) : projectItems;
-  const shuffledTeamItems = isDynamicEnabled ? reorderElements(teamItems) : teamItems;
-  const shuffledBottomItems = isDynamicEnabled ? reorderElements(bottomItems) : bottomItems;
-
-  const sidebarAttributes = getElementAttributes("sidebar", 0);
-  const sidebarXPath = getElementXPath("sidebar");
-
-  return (
-    <aside 
-      {...sidebarAttributes}
-      data-xpath={sidebarXPath}
-      className={className || "w-[280px] bg-[#f8f6f2] border-r border-gray-200 min-h-screen flex flex-col justify-start items-start gap-3 fixed top-0 left-0 h-full px-4 pb-4 pt-2 z-30"}
+  return wrap(
+    "sidebar-panel",
+    <aside
+      id={sidebarIds.sidebar}
+      data-dyn-key="sidebar-panel"
+      className={
+        className ||
+        "w-[280px] bg-[#f8f6f2] border-r border-gray-200 min-h-screen flex flex-col justify-start items-start gap-3 fixed top-0 left-0 h-full px-4 pb-4 pt-2 z-30"
+      }
     >
-      <div
-        {...getElementAttributes("sidebar_top_section", 0)}
-        data-xpath={getElementXPath("sidebar_top_section")}
-      >
-        {/* Profile */}
-        <div 
-          {...getElementAttributes("sidebar_profile", 0)}
-          data-xpath={getElementXPath("sidebar_profile")}
-          className="flex items-center mb-6 px-1 gap-2"
-        >
-          <div className="bg-[#d1453b] px-6 py-4 rounded-lg flex items-center justify-center h-14 w-full shadow-sm">
-            <span className="font-bold text-white text-lg w-full text-center">
-              AutoList
-            </span>
-          </div>
-        </div>
-        {/* Navigation */}
-        <ul 
-          {...getElementAttributes("sidebar_nav_list", 0)}
-          data-xpath={getElementXPath("sidebar_nav_list")}
-          className="mb-4"
-        >
-          {shuffledNavItems.map((item, index) => {
-            const attributes = getElementAttributes("sidebar_nav_item", index);
-            const xpath = getElementXPath("sidebar_nav_item");
-            return (
-              <li
-                key={item.id}
-                {...attributes}
-                data-xpath={xpath}
-                onClick={item.onClick}
-                className={item.className}
+      {wrap(
+        "sidebar-top-section",
+        <div className="w-full">
+          <div className="flex items-center mb-6 px-1 gap-2">
+            <div className={`${sidebarClasses.card} flex items-center justify-center h-14 w-full bg-[#d1453b] text-white`}>
+              <span
+                id={dyn.v3.getVariant("hero-title", ID_VARIANTS_MAP, "autolist-title")}
+                className="font-bold text-lg w-full text-center"
               >
-                {item.icon}
-                <span className="flex-1">{item.label}</span>
-                {item.count !== undefined && (
-                  <span className="text-xs bg-gray-200 rounded-full px-2 py-0.5 font-medium">
-                    {item.count}
-                  </span>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-        {/* Projects */}
-        <div
-          {...getElementAttributes("sidebar_projects", 0)}
-          data-xpath={getElementXPath("sidebar_projects")}
-        >
-        <div className="flex items-center justify-between mb-2 mt-5">
-          <div 
-            {...getElementAttributes("sidebar_projects_header", 0)}
-            data-xpath={getElementXPath("sidebar_projects_header")}
-            className="flex items-center text-md font-bold text-gray-700 cursor-pointer select-none"
-          >
-            <DownOutlined className="mr-2 text-xs" style={{ fontSize: 15 }} />{" "}
-            My Projects
+                {dyn.v3.getVariant("app-shell", TEXT_VARIANTS_MAP, "AutoList")}
+              </span>
+            </div>
           </div>
-        </div>
-        <ul 
-          {...getElementAttributes("sidebar_project_list", 0)}
-          data-xpath={getElementXPath("sidebar_project_list")}
-          className="ml-2"
-          >
-            {shuffledProjectItems.length === 0 ? (
-              <li className="text-sm text-gray-500 py-1 px-1">No projects yet</li>
-            ) : (
-              shuffledProjectItems.map((item, index) => {
-                const attributes = getElementAttributes("sidebar_project_item", index);
-                const xpath = getElementXPath("sidebar_project_item");
-                return (
+          {wrap(
+            "sidebar-nav-block",
+            <ul id={sidebarIds.navList} className="mb-4">
+              {orderedNavItems.map((item, index) =>
+                wrap(
+                  `sidebar-nav-item-${item.id}`,
                   <li
                     key={item.id}
-                    {...attributes}
-                    data-xpath={xpath}
-                    className={item.className}
-                    onClick={item.onClick}
-                  >
-                    {item.icon}
-                    <span className="flex-1">
-                      {item.label} {item.id === "getting-started" && <span className="ml-1 text-base">👋</span>}
-                    </span>
-                    {item.count !== undefined && (
-                      <span className="bg-gray-200 text-xs py-0.5 px-2 rounded-full">
-                        {item.count}
-                      </span>
-                    )}
-                  </li>
-                );
-              })
-            )}
-          </ul>
-          <div className="mt-2">
-            <Button
-              size="small"
-              className="w-full text-left text-[#d1453b]"
-              type="text"
-              icon={<PlusOutlined />}
-              onClick={() => setProjectModalOpen(true)}
-            >
-              Add project
-            </Button>
-          </div>
-
-          <div 
-            {...getElementAttributes("sidebar_teams_header", 0)}
-            data-xpath={getElementXPath("sidebar_teams_header")}
-            className="flex items-center mb-2 mt-6 text-md font-bold text-gray-700 cursor-pointer select-none"
-          >
-            <TeamOutlined className="mr-2 text-sm" /> My Teams
-          </div>
-          <ul
-            {...getElementAttributes("sidebar_team_list", 0)}
-            data-xpath={getElementXPath("sidebar_team_list")}
-            className="ml-2"
-          >
-            {shuffledTeamItems.length === 0 ? (
-              <li className="text-sm text-gray-500 py-1 px-1 flex items-center gap-2">
-                <TeamOutlined className="text-sm" /> No teams yet
-              </li>
-            ) : (
-              shuffledTeamItems.map((item, index) => {
-                const attributes = getElementAttributes("sidebar_team_item", index);
-                const xpath = getElementXPath("sidebar_team_item");
-                return (
-                  <li
-                    key={item.id}
-                    {...attributes}
-                    data-xpath={xpath}
+                    id={dyn.v3.getVariant("sidebar-nav-item", ID_VARIANTS_MAP, `nav-${item.id}`)}
+                    data-dyn-key="sidebar-nav-item"
                     className={item.className}
                     onClick={item.onClick}
                   >
                     {item.icon}
                     <span className="flex-1">{item.label}</span>
+                    {item.count !== undefined && (
+                      <span className={sidebarClasses.badge}>{item.count}</span>
+                    )}
                   </li>
-                );
-              })
-            )}
-          </ul>
-          <div className="mt-2">
+                )
+              )}
+            </ul>
+          )}
+          {wrap(
+            "sidebar-projects",
+            <div id={sidebarIds.projects}>
+              <div className="flex items-center justify-between mb-2 mt-5">
+                <div
+                  id={dyn.v3.getVariant("sidebar-projects", ID_VARIANTS_MAP, "sidebar-projects-header")}
+                  className="flex items-center text-md font-bold text-gray-700 cursor-pointer select-none"
+                >
+                  <DownOutlined className="mr-2 text-xs" style={{ fontSize: 15 }} /> {sidebarText.projects}
+                </div>
+                <Button
+                  size="small"
+                  className="text-[#d1453b]"
+                  type="text"
+                  icon={<PlusOutlined />}
+                  onClick={() => setProjectModalOpen(true)}
+                >
+                  {dyn.v3.getVariant("cta_add_task", TEXT_VARIANTS_MAP, "Add")}
+                </Button>
+              </div>
+              <ul className="ml-2">
+                {orderedProjectItems.length === 0 ? (
+                  <li className="text-sm text-gray-500 py-1 px-1">
+                    {dyn.v3.getVariant("empty_state_title", TEXT_VARIANTS_MAP, "No projects yet")}
+                  </li>
+                ) : (
+                  orderedProjectItems.map((item, index) =>
+                    wrap(
+                      `sidebar-project-item-${index}`,
+                      <li
+                        key={item.id}
+                        id={dyn.v3.getVariant("sidebar-projects", ID_VARIANTS_MAP, `project-${index}`)}
+                        className={item.className}
+                        onClick={item.onClick}
+                      >
+                        {item.icon}
+                        <span className="flex-1">
+                          {item.label} {item.id === "getting-started" && <span className="ml-1 text-base">👋</span>}
+                        </span>
+                        {item.count !== undefined && (
+                          <span className="bg-gray-200 text-xs py-0.5 px-2 rounded-full">{item.count}</span>
+                        )}
+                      </li>
+                    )
+                  )
+                )}
+              </ul>
+            </div>
+          )}
+          {wrap(
+            "sidebar-teams",
+            <div id={sidebarIds.teams}>
+              <div className="flex items-center justify-between mb-2 mt-6">
+                <div className="flex items-center text-md font-bold text-gray-700 cursor-pointer select-none">
+                  <TeamOutlined className="mr-2 text-sm" /> {sidebarText.teams}
+                </div>
+                <Button
+                  size="small"
+                  className="text-[#d1453b]"
+                  type="text"
+                  icon={<PlusOutlined />}
+                  onClick={() => setTeamModalOpen(true)}
+                >
+                  {dyn.v3.getVariant("save_task", TEXT_VARIANTS_MAP, "Add")}
+                </Button>
+              </div>
+              <ul className="ml-2">
+                {orderedTeamItems.length === 0 ? (
+                  <li className="text-sm text-gray-500 py-1 px-1 flex items-center gap-2">
+                    <TeamOutlined className="text-sm" /> {dyn.v3.getVariant("empty_state_description", TEXT_VARIANTS_MAP, "No teams yet")}
+                  </li>
+                ) : (
+                  orderedTeamItems.map((item, index) =>
+                    wrap(
+                      `sidebar-team-item-${index}`,
+                      <li
+                        key={item.id}
+                        id={dyn.v3.getVariant("sidebar-teams", ID_VARIANTS_MAP, `team-${index}`)}
+                        className={item.className}
+                        onClick={item.onClick}
+                      >
+                        {item.icon}
+                        <span className="flex-1">{item.label}</span>
+                      </li>
+                    )
+                  )
+                )}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+
+      {wrap(
+        "sidebar-chats",
+        <div className="mt-3 px-1 w-full" id={sidebarIds.chats}>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center font-bold text-gray-700 text-md">
+              <DownOutlined className="mr-2 text-xs" /> Chats
+            </div>
             <Button
               size="small"
-              className="w-full text-left text-[#d1453b]"
-              type="text"
-              icon={<PlusOutlined />}
-              onClick={() => setTeamModalOpen(true)}
+              type="link"
+              className="p-0 h-auto text-[#d1453b]"
+              onClick={() => setChatsOpen((v) => !v)}
             >
-              Add a team
+              {chatsOpen ? dyn.v3.getVariant("cancel_action", TEXT_VARIANTS_MAP, "Hide") : dyn.v3.getVariant("save_task", TEXT_VARIANTS_MAP, "Show")}
             </Button>
           </div>
+          {chatsOpen && (
+            <div className="space-y-2">
+              {orderedChatUsers.map((user, index) =>
+                wrap(
+                  `chat-user-${index}`,
+                  <div
+                    key={user.id}
+                    className={`${sidebarClasses.card} flex items-center gap-2 p-2 cursor-pointer hover:bg-gray-50`}
+                    onClick={() => handleChatSelect(user.id)}
+                    data-dyn-key="chat-user-row"
+                  >
+                    <img
+                      src={user.avatar}
+                      alt={user.name}
+                      className="w-9 h-9 rounded-full object-cover border"
+                    />
+                    <div className="flex-1">
+                      <div className="text-sm font-semibold text-gray-800">{user.name}</div>
+                      <div className="text-xs text-gray-500">{user.role}</div>
+                    </div>
+                    <span
+                      className={`w-2.5 h-2.5 rounded-full ${
+                        user.status === "online"
+                          ? "bg-green-500"
+                          : user.status === "away"
+                          ? "bg-yellow-400"
+                          : "bg-gray-400"
+                      }`}
+                      title={user.status}
+                    />
+                  </div>
+                )
+              )}
+            </div>
+          )}
         </div>
-      </div>
-      <div className="mt-3 px-1">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center font-bold text-gray-700 text-md">
-            <DownOutlined className="mr-2 text-xs" /> Chats
-          </div>
-          <Button
-            size="small"
-            type="link"
-            className="p-0 h-auto text-[#d1453b]"
-            onClick={() => setChatsOpen((v) => !v)}
-          >
-            {chatsOpen ? "Hide" : "Show"}
-          </Button>
-        </div>
-        {chatsOpen && (
-          <div className="space-y-2">
-            {chatUsers.map((user) => (
-              <div
-                key={user.id}
-                className="flex items-center gap-2 p-2 rounded-lg border border-gray-200 bg-white shadow-sm cursor-pointer hover:bg-gray-50"
-                onClick={() => handleChatSelect(user.id)}
-              >
-                <img
-                  src={user.avatar}
-                  alt={user.name}
-                  className="w-9 h-9 rounded-full object-cover border"
-                />
-                <div className="flex-1">
-                  <div className="text-sm font-semibold text-gray-800">{user.name}</div>
-                  <div className="text-xs text-gray-500">{user.role}</div>
-                </div>
-                <span
-                  className={`w-2.5 h-2.5 rounded-full ${
-                    user.status === "online"
-                      ? "bg-green-500"
-                      : user.status === "away"
-                      ? "bg-yellow-400"
-                      : "bg-gray-400"
-                  }`}
-                  title={user.status}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      <div className="mt-4 px-1">
-        <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white shadow-sm p-3">
-          <img
-            src="https://randomuser.me/api/portraits/men/1.jpg"
-            alt="John Wick"
-            className="w-10 h-10 rounded-full object-cover border"
-          />
-          <div>
-            <div className="font-semibold text-gray-900">John Wick</div>
-            <div className="text-xs text-gray-500">Tech Lead</div>
+      )}
+
+      {wrap(
+        "sidebar-profile",
+        <div className="mt-4 px-1 w-full">
+          <div className={`${sidebarClasses.card} flex items-center gap-3 p-3`}>
+            <UserOutlined className="text-xl" />
+            <div>
+              <div className="font-semibold text-gray-900">Autoppia PM</div>
+              <div className="text-xs text-gray-500">Tech Lead</div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
       <CreateProjectModal open={projectModalOpen} onClose={() => setProjectModalOpen(false)} />
       <CreateTeamModal
         open={teamModalOpen}
