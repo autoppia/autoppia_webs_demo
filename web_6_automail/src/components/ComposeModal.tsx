@@ -2,12 +2,7 @@
 
 import type React from "react";
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,24 +11,12 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useEmail } from "@/contexts/EmailContext";
 import { useLayout } from "@/contexts/LayoutContext";
-import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
 import { cn } from "@/library/utils";
 import { TextStructureConfig } from "@/utils/textStructureProvider";
-import {
-  Send,
-  Paperclip,
-  Smile,
-  X,
-  Minus,
-  Square,
-  Bold,
-  Italic,
-  Underline,
-  Link,
-  List,
-  Save,
-} from "lucide-react";
+import { Send, Paperclip, Smile, X, Minus, Square, Bold, Italic, Underline, Link, List, Save } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface ComposeModalProps {
   textStructure?: TextStructureConfig;
@@ -41,15 +24,8 @@ interface ComposeModalProps {
 
 export function ComposeModal({ textStructure }: ComposeModalProps) {
   const { currentVariant } = useLayout();
-  const { getText, getId } = useDynamicStructure();
-  const {
-    isComposeOpen,
-    composeData,
-    toggleCompose,
-    updateComposeData,
-    sendEmail,
-    saveDraft,
-  } = useEmail();
+  const dyn = useDynamicSystem();
+  const { isComposeOpen, composeData, toggleCompose, updateComposeData, sendEmail, saveDraft } = useEmail();
 
   const [showCc, setShowCc] = useState(false);
   const [showBcc, setShowBcc] = useState(false);
@@ -79,15 +55,9 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
       return;
     }
 
-    const allTo = toInput.trim()
-      ? [...composeData.to, toInput.trim()]
-      : composeData.to;
-    const allCc = ccInput.trim()
-      ? [...(composeData.cc || []), ccInput.trim()]
-      : composeData.cc || [];
-    const allBcc = bccInput.trim()
-      ? [...(composeData.bcc || []), bccInput.trim()]
-      : composeData.bcc || [];
+    const allTo = toInput.trim() ? [...composeData.to, toInput.trim()] : composeData.to;
+    const allCc = ccInput.trim() ? [...(composeData.cc || []), ccInput.trim()] : composeData.cc || [];
+    const allBcc = bccInput.trim() ? [...(composeData.bcc || []), bccInput.trim()] : composeData.bcc || [];
 
     updateComposeData({ to: allTo, cc: allCc, bcc: allBcc });
 
@@ -115,16 +85,9 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
   };
 
   const handleSaveDraft = () => {
-    // Only include the uncommitted toInput, ccInput, and bccInput in the event, do not update composeData arrays
-    const allTo = toInput.trim()
-      ? [...composeData.to, toInput.trim()]
-      : composeData.to;
-    const allCc = ccInput.trim()
-      ? [...(composeData.cc || []), ccInput.trim()]
-      : composeData.cc || [];
-    const allBcc = bccInput.trim()
-      ? [...(composeData.bcc || []), bccInput.trim()]
-      : composeData.bcc || [];
+    const allTo = toInput.trim() ? [...composeData.to, toInput.trim()] : composeData.to;
+    const allCc = ccInput.trim() ? [...(composeData.cc || []), ccInput.trim()] : composeData.cc || [];
+    const allBcc = bccInput.trim() ? [...(composeData.bcc || []), bccInput.trim()] : composeData.bcc || [];
     logEvent(EVENT_TYPES.EMAIL_SAVE_AS_DRAFT, {
       to: allTo,
       cc: allCc,
@@ -136,21 +99,29 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
   };
 
   const canSend = composeData.to.length > 0 || toInput.trim();
+  const composeTitle = dyn.v3.getVariant("compose_email", TEXT_VARIANTS_MAP, textStructure?.email_content?.new_message || "New message");
 
-  return (
-    <Dialog
-      open={isComposeOpen}
-      onOpenChange={(open: boolean) => toggleCompose(open)}
-    >
-      <DialogContent className="max-w-2xl max-h-[80vh] p-0 gap-0 compose-modal">
-        {/* Header */}
+  const fieldLabel = (key: string, fallback: string) => dyn.v3.getVariant(key, TEXT_VARIANTS_MAP, fallback);
+  const inputId = (key: string, fallback: string) => dyn.v3.getVariant(key, ID_VARIANTS_MAP, fallback);
+  const toPlaceholder = dyn.v3.getVariant("compose_to_placeholder", TEXT_VARIANTS_MAP, textStructure?.email_content.compose_to || "To");
+  const subjectPlaceholder = dyn.v3.getVariant("compose_subject_placeholder", TEXT_VARIANTS_MAP, textStructure?.email_content.subject_placeholder || "Subject");
+  const bodyPlaceholder = dyn.v3.getVariant("compose_body_placeholder", TEXT_VARIANTS_MAP, textStructure?.email_content.message_placeholder || "Type your message...");
+
+  const containerClass = cn(
+    dyn.v3.getVariant("compose-modal", CLASS_VARIANTS_MAP, "rounded-xl border border-border shadow-xl bg-background"),
+    "max-w-2xl max-h-[80vh] p-0 gap-0 compose-modal"
+  );
+
+  return dyn.v1.addWrapDecoy("compose-modal-shell", (
+    <Dialog open={isComposeOpen} onOpenChange={(open: boolean) => toggleCompose(open)}>
+      <DialogContent className={containerClass} id={dyn.v3.getVariant("compose-modal", ID_VARIANTS_MAP, "compose-modal")}>
         <DialogHeader className="flex flex-row items-center justify-between p-3 pb-2 border-b border-border/50">
           <DialogTitle className="text-base font-semibold text-foreground">
-            {getText("new_message")}
+            {composeTitle}
           </DialogTitle>
           <div className="flex items-center gap-1">
             <Button
-              id={getId("compose_close_button")}
+              id={dyn.v3.getVariant("compose-modal", ID_VARIANTS_MAP, "compose-close-button")}
               variant="ghost"
               size="icon"
               className="h-8 w-8 rounded-full text-muted-foreground hover:bg-muted border border-border/50"
@@ -163,174 +134,129 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
         </DialogHeader>
 
         <div className="flex flex-col flex-1 overflow-hidden">
-          {/* Recipients Section */}
           <div className="px-4 py-3 space-y-3">
-            {/* To Field */}
             <div className="flex items-start gap-3">
-              <Label className="text-xs font-medium text-muted-foreground w-4 pt-2">
-                {getText("to")}
+              <Label className="text-xs font-medium text-muted-foreground w-16 text-right pt-2">
+                {fieldLabel("compose-to", textStructure?.email_content?.to || "To")}
               </Label>
               <div className="flex-1 min-h-[36px] border border-border rounded-md p-2 focus-within:ring-1 focus-within:ring-primary/50 bg-background">
                 <div className="flex flex-wrap gap-1 items-center">
                   {composeData.to.map((email, index) => (
-                    <Badge
-                      key={`to-${email}`}
-                      variant="secondary"
-                      className="gap-1 px-1.5 py-0.5 text-xs"
-                    >
+                    <Badge key={`to-${email}`} variant="secondary" className="gap-1 px-1.5 py-0.5 text-xs">
                       {email}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-3 w-3 p-0 hover:bg-transparent"
-                        onClick={() => removeToEmail(index)}
-                      >
+                      <Button variant="ghost" size="icon" className="h-3 w-3 p-0 hover:bg-transparent" onClick={() => removeToEmail(index)}>
                         <X className="h-2 w-2" />
                       </Button>
                     </Badge>
                   ))}
-                  <Input
-                    id={textStructure?.email_ids.to_input || getId("to_input")}
-                    value={toInput}
-                    onChange={(e) => setToInput(e.target.value)}
-                    onKeyDown={handleToKeyDown}
-                    placeholder={
-                      composeData.to.length === 0 ? (textStructure?.email_content.compose_to || getText("to")) : ""
-                    }
-                    aria-label={textStructure?.email_aria_labels.to_input || "Recipient email address"}
-                    className="border-0 shadow-none focus-visible:ring-0 h-auto p-0 flex-1 min-w-[120px] bg-transparent"
-                  />
+                  {dyn.v1.addWrapDecoy("compose-to-input", (
+                    <Input
+                      id={inputId("compose-to", textStructure?.email_ids.to_input || "to-input")}
+                      value={toInput}
+                      onChange={(e) => setToInput(e.target.value)}
+                      onKeyDown={handleToKeyDown}
+                      placeholder={composeData.to.length === 0 ? (textStructure?.email_content.compose_to || fieldLabel("compose-to", "To")) : ""}
+                      aria-label={textStructure?.email_aria_labels.to_input || "Recipient email address"}
+                      className={dyn.v3.getVariant("label-selector", CLASS_VARIANTS_MAP, "border-none focus-visible:ring-0")}
+                    />
+                  ))}
                 </div>
               </div>
-              <div className="flex items-center gap-1 pt-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-6 text-xs text-primary hover:text-primary/80 px-2"
-                  onClick={() => setShowCc(!showCc)}
-                >
-                  Cc
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-6 text-xs text-primary hover:text-primary/80 px-2"
-                  onClick={() => setShowBcc(!showBcc)}
-                >
-                  Bcc
-                </Button>
-              </div>
             </div>
 
-            {/* Subject */}
-            <div className="flex items-center gap-3">
-              <Label className="text-xs font-medium text-muted-foreground w-10">
-                {textStructure?.email_content.compose_subject || getText("subject")}
+            <div className="flex items-start gap-3">
+              <Label className="text-xs font-medium text-muted-foreground w-16 text-right pt-2">
+                {fieldLabel("compose-subject", textStructure?.email_content?.subject || "Subject")}
               </Label>
-              <Input
-                id={textStructure?.email_ids.subject_input || getId("subject_input")}
-                value={composeData.subject}
-                onChange={(e) => updateComposeData({ subject: e.target.value })}
-                placeholder={textStructure?.email_content.compose_subject || getText("subject")}
-                aria-label={textStructure?.email_aria_labels.subject_input || "Email subject"}
-                className="flex-1 h-9 border-border focus-visible:ring-1 focus-visible:ring-primary/50"
-              />
+              {dyn.v1.addWrapDecoy("compose-subject", (
+                <Input
+                  id={inputId("compose-subject", textStructure?.email_ids.subject_input || "subject-input")}
+                  value={composeData.subject || ""}
+                  onChange={(e) => updateComposeData({ subject: e.target.value })}
+                  placeholder={textStructure?.email_content.subject_placeholder || "Subject"}
+                  aria-label="Subject"
+                />
+              ))}
+            </div>
+
+            <div className="flex items-start gap-3">
+              <Label className="text-xs font-medium text-muted-foreground w-16 text-right pt-2">
+                {fieldLabel("compose-body", textStructure?.email_content?.message || "Message")}
+              </Label>
+              {dyn.v1.addWrapDecoy("compose-body", (
+                <Textarea
+                  id={inputId("compose-body", textStructure?.email_ids.body_input || "body-input")}
+                  value={composeData.body || ""}
+                  onChange={(e) => updateComposeData({ body: e.target.value })}
+                  placeholder={textStructure?.email_content.message_placeholder || "Type your message..."}
+                  className="min-h-[240px]"
+                />
+              ))}
+            </div>
+
+            <div className="flex flex-wrap gap-2 text-muted-foreground">
+              {[Bold, Italic, Underline, Link, List, Smile].map((Icon, idx) => (
+                dyn.v1.addWrapDecoy(`compose-toolbar-${idx}`, (
+                  <Button key={idx} variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <Icon className="h-4 w-4" />
+                  </Button>
+                ))
+              ))}
             </div>
           </div>
 
-          <Separator className="mx-4" />
+          <Separator />
 
-          {/* Formatting Toolbar */}
-          <div className="px-4 py-2 border-b border-border/50">
-            <div className="flex items-center gap-1 text-muted-foreground">
-              <Button variant="ghost" size="icon" className="h-6 w-6">
-                <Bold className="h-3 w-3" />
-              </Button>
-              <Button variant="ghost" size="icon" className="h-6 w-6">
-                <Italic className="h-3 w-3" />
-              </Button>
-              <Button variant="ghost" size="icon" className="h-6 w-6">
-                <Underline className="h-3 w-3" />
-              </Button>
-              <Separator orientation="vertical" className="h-4" />
-              <Button variant="ghost" size="icon" className="h-6 w-6">
-                <List className="h-3 w-3" />
-              </Button>
-              <Button variant="ghost" size="icon" className="h-6 w-6">
-                <Link className="h-3 w-3" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Message Body */}
-          <div className="flex-1 px-4 py-3">
-            <Textarea
-              id={textStructure?.email_ids.message_textarea || "body-content"}
-              value={composeData.body}
-              onChange={(e) => updateComposeData({ body: e.target.value })}
-              placeholder={getText("message")}
-              className="min-h-[200px] resize-none border-0 shadow-none focus-visible:ring-0 text-sm leading-relaxed bg-transparent"
-            />
-          </div>
-
-          {/* Footer */}
-          <div className="flex items-center justify-between px-4 py-3 border-t border-border/50 bg-muted/20">
+          <div className="flex items-center justify-between px-4 py-3 gap-3">
             <div className="flex items-center gap-2">
               <Button
-                id={textStructure?.email_ids.send_btn || getId("send_button")}
                 onClick={handleSend}
                 disabled={!canSend}
-                aria-label={textStructure?.email_aria_labels.send_btn || "Send email"}
-                className={cn(
-                  "btn-primary-gradient h-8 px-4",
-                  currentVariant.id === 2 && "compose-actions",
-                  currentVariant.id === 3 && "compose-footer",
-                  currentVariant.id === 4 && "compose-panel",
-                  currentVariant.id === 5 && "modal-actions",
-                  currentVariant.id === 6 && "compose-controls",
-                  currentVariant.id === 7 && "compose-widget",
-                  currentVariant.id === 8 && "mobile-compose",
-                  currentVariant.id === 9 && "terminal-compose",
-                  currentVariant.id === 10 && "magazine-compose"
-                )}
+                className={dyn.v3.getVariant("send-button", CLASS_VARIANTS_MAP, "")}
+                id={dyn.v3.getVariant("send-button", ID_VARIANTS_MAP, "send-button")}
               >
-                <Send className="h-3 w-3 mr-2" />
-                {textStructure?.email_content.send_button || getText("send")}
+                <Send className="h-4 w-4 mr-2" />
+                {fieldLabel("send_action", "Send")}
               </Button>
 
-              <div className="flex items-center gap-1">
-                <Button variant="outline" size="icon" className="h-8 w-8">
-                  <Paperclip className="h-3 w-3" />
-                </Button>
-                <Button variant="outline" size="icon" className="h-8 w-8">
-                  <Smile className="h-3 w-3" />
-                </Button>
-              </div>
+              <Button
+                variant="secondary"
+                onClick={handleSaveDraft}
+                className={dyn.v3.getVariant("save-draft-button", CLASS_VARIANTS_MAP, "")}
+                id={dyn.v3.getVariant("save-draft-button", ID_VARIANTS_MAP, "save-draft-button")}
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {fieldLabel("save_draft", "Save draft")}
+              </Button>
+
+              <Button variant="ghost" size="icon">
+                <Paperclip className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="icon">
+                <Smile className="h-4 w-4" />
+              </Button>
             </div>
 
-            <Button
-              id={textStructure?.email_ids.save_btn || "draft-button"}
-              variant="ghost"
-              onClick={handleSaveDraft}
-              className={cn(
-                "h-8 px-3 text-sm",
-                currentVariant.id === 2 && "compose-actions",
-                currentVariant.id === 3 && "compose-footer",
-                currentVariant.id === 4 && "compose-panel",
-                currentVariant.id === 5 && "modal-actions",
-                currentVariant.id === 6 && "compose-controls",
-                currentVariant.id === 7 && "compose-widget",
-                currentVariant.id === 8 && "mobile-compose",
-                currentVariant.id === 9 && "terminal-compose",
-                currentVariant.id === 10 && "magazine-compose"
-              )}
-            >
-              <Save className="h-3 w-3 mr-1" />
-              {getText("save_draft")}
-            </Button>
+            <div className="flex items-center gap-1">
+              <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Minimize">
+                <Minus className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Resize">
+                <Square className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => toggleCompose(false)}
+                aria-label="Close"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </DialogContent>
     </Dialog>
-  );
+  ));
 }

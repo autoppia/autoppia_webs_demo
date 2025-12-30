@@ -9,6 +9,8 @@ import { Label } from '@/components/ui/label';
 import { useEmail } from '@/contexts/EmailContext';
 import { Plus } from 'lucide-react';
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { TEXT_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
 
 const LABEL_COLORS = [
   '#4285f4', // Blue
@@ -28,6 +30,7 @@ interface CreateLabelDialogProps {
 }
 
 export function CreateLabelDialog({ trigger }: CreateLabelDialogProps) {
+  const dyn = useDynamicSystem();
   const { createLabel } = useEmail();
   const [open, setOpen] = useState(false);
   const [labelName, setLabelName] = useState('');
@@ -46,31 +49,37 @@ export function CreateLabelDialog({ trigger }: CreateLabelDialogProps) {
     }
   };
 
-  const defaultTrigger = (
-    <Button variant="ghost" size="sm" className="h-7 w-full justify-start gap-2 text-xs">
+  const defaultTrigger = dyn.v1.addWrapDecoy("create-label-trigger", (
+    <Button
+      variant="ghost"
+      size="sm"
+      className="h-7 w-full justify-start gap-2 text-xs"
+      id={dyn.v3.getVariant("label-selector-trigger", ID_VARIANTS_MAP, "create-label-btn")}
+      onClick={() => setOpen(true)}
+    >
       <Plus className="h-3 w-3" />
-      Create label
+      {dyn.v3.getVariant("create_label", TEXT_VARIANTS_MAP, "Create label")}
     </Button>
-  );
+  ));
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger || defaultTrigger}
       </DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md" id={dyn.v3.getVariant("label-selector-menu", ID_VARIANTS_MAP, "create-label-dialog")}>
         <DialogHeader>
-          <DialogTitle>Create New Label</DialogTitle>
+          <DialogTitle>{dyn.v3.getVariant("create_label", TEXT_VARIANTS_MAP, "Create New Label")}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="label-name">Label name</Label>
+            <Label htmlFor="label-name">{dyn.v3.getVariant("label_section", TEXT_VARIANTS_MAP, "Label name")}</Label>
             <Input
-              id="label-name"
+              id={dyn.v3.getVariant("label-selector-trigger", ID_VARIANTS_MAP, "label-name")}
               value={labelName}
               onChange={(e) => setLabelName(e.target.value)}
-              placeholder="Enter label name..."
+              placeholder={dyn.v3.getVariant("create_label", TEXT_VARIANTS_MAP, "Enter label name...")}
               onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
             />
           </div>

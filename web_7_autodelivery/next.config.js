@@ -1,31 +1,69 @@
-// Set default environment variables for local development similar to web_3_autozone
-const isDockerBuild = process.env.DOCKER_BUILD === 'true' || process.env.NODE_ENV === 'production';
-const isLocalDev = process.env.NODE_ENV !== 'production' && !process.env.DOCKER_BUILD;
+const path = require("path");
 
+// Set default environment variables for local development
+const isDockerBuild =
+  process.env.DOCKER_BUILD === "true" || process.env.NODE_ENV === "production";
+const isLocalDev = process.env.NODE_ENV !== "production" && !process.env.DOCKER_BUILD;
+
+// Default dynamic layers to ON unless explicitly disabled
+if (!process.env.ENABLE_DYNAMIC_V1) {
+  process.env.ENABLE_DYNAMIC_V1 = "true";
+}
+if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = "true";
+}
+
+if (!process.env.ENABLE_DYNAMIC_V3) {
+  process.env.ENABLE_DYNAMIC_V3 = "true";
+}
+if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = "true";
+}
+
+// Handle ENABLE_DYNAMIC_V1_STRUCTURE (separate from layout control)
 if (!process.env.ENABLE_DYNAMIC_V1_STRUCTURE) {
-  process.env.ENABLE_DYNAMIC_V1_STRUCTURE = isLocalDev ? 'true' : 'false';
+  process.env.ENABLE_DYNAMIC_V1_STRUCTURE = "true";
 }
-if (isLocalDev) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE = 'true';
-} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE = 'false';
+if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE = "true";
 }
+
+// Debug: Print environment variables
+console.log("🔍 Next.js config - Environment variables:");
+console.log("  NODE_ENV:", process.env.NODE_ENV);
+console.log("  isLocalDev:", isLocalDev);
+console.log("  isDockerBuild:", isDockerBuild);
+console.log("  API_URL:", process.env.API_URL);
+console.log("  ENABLE_DYNAMIC_V1:", process.env.ENABLE_DYNAMIC_V1);
+console.log("  NEXT_PUBLIC_ENABLE_DYNAMIC_V1:", process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1);
+console.log("  ENABLE_DYNAMIC_V1_STRUCTURE:", process.env.ENABLE_DYNAMIC_V1_STRUCTURE);
+console.log("  NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE:", process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE);
+console.log("  ENABLE_DYNAMIC_V3:", process.env.ENABLE_DYNAMIC_V3);
+console.log("  NEXT_PUBLIC_ENABLE_DYNAMIC_V3:", process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3);
+console.log("  ENABLE_DYNAMIC_V2_AI_GENERATE:", process.env.ENABLE_DYNAMIC_V2_AI_GENERATE);
+console.log("  NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE:", process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE);
+console.log("  NEXT_PUBLIC_API_URL:", process.env.NEXT_PUBLIC_API_URL);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  turbopack: {
+    root: path.join(__dirname),
+  },
+
   async rewrites() {
-    const destination = process.env.INTERNAL_API_URL || 
-      (process.env.NODE_ENV === 'development' && !process.env.DOCKER_BUILD 
-        ? 'http://localhost:8090' 
-        : 'http://app:8090');
-    
+    const destination =
+      process.env.INTERNAL_API_URL ||
+      (process.env.NODE_ENV === "development" && !process.env.DOCKER_BUILD
+        ? "http://localhost:8090"
+        : "http://app:8090");
+
     return [
       {
-        source: '/api/log-event',
+        source: "/api/log-event",
         destination: `${destination}/save_events/`,
       },
       {
-        source: '/api/:path*',
+        source: "/api/:path*",
         destination: `${destination}/:path*`,
       },
     ];
@@ -42,31 +80,11 @@ const nextConfig = {
       "randomuser.me",
     ],
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "source.unsplash.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "ext.same-assets.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "ugc.same-assets.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "randomuser.me",
-        pathname: "/**",
-      },
+      { protocol: "https", hostname: "source.unsplash.com", pathname: "/**" },
+      { protocol: "https", hostname: "images.unsplash.com", pathname: "/**" },
+      { protocol: "https", hostname: "ext.same-assets.com", pathname: "/**" },
+      { protocol: "https", hostname: "ugc.same-assets.com", pathname: "/**" },
+      { protocol: "https", hostname: "randomuser.me", pathname: "/**" },
     ],
   },
   env: {
