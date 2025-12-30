@@ -59,18 +59,6 @@
     "content-title",
     "heading-main"
   ],
-  "card-body": [
-    "card-body",
-    "tile-content",
-    "panel-body",
-    "box-content",
-    "item-body",
-    "content-area",
-    "card-content",
-    "item-details",
-    "body-content",
-    "content-wrapper"
-  ],
   "nav-link": [
     "nav-link",
     "menu-item",
@@ -95,6 +83,30 @@
     "text-control",
     "field-control"
   ],
+  "textarea-text": [
+    "textarea-field",
+    "text-area",
+    "form-textarea",
+    "area-text",
+    "textarea-box",
+    "text-area-field",
+    "form-area",
+    "textarea-control",
+    "area-control",
+    "field-area"
+  ],
+  "select-dropdown": [
+    "select-field",
+    "dropdown-select",
+    "form-select",
+    "select-control",
+    "dropdown-field",
+    "select-box",
+    "form-dropdown",
+    "select-input",
+    "dropdown-control",
+    "field-select"
+  ],
   "grid-container": [
     "grid",
     "grid-layout",
@@ -106,18 +118,6 @@
     "layout-container",
     "container-grid",
     "grid-box"
-  ],
-  "price-tag": [
-    "price",
-    "cost",
-    "price-label",
-    "cost-label",
-    "price-value",
-    "cost-value",
-    "amount",
-    "price-text",
-    "cost-text",
-    "value-price"
   ],
   "badge": [
     "badge",
@@ -142,6 +142,30 @@
     "icon-element",
     "visual-icon",
     "icon-symbol"
+  ],
+  "rating": [
+    "rating",
+    "stars",
+    "rating-display",
+    "star-rating",
+    "review-rating",
+    "rating-stars",
+    "star-display",
+    "rating-indicator",
+    "stars-display",
+    "review-stars"
+  ],
+  "time-slot-button": [
+    "time-btn",
+    "slot-btn",
+    "time-option",
+    "slot-option",
+    "time-select-btn",
+    "slot-select-btn",
+    "time-choice",
+    "slot-choice",
+    "time-picker-btn",
+    "slot-picker-btn"
   ]
 }
 

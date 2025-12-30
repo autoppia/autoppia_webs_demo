@@ -1,8 +1,8 @@
 "use client";
 
-import { getSeedLayout, getLayoutClasses, LayoutConfig } from "@/dynamic/v1-layouts";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
-import { ReactNode, Suspense } from "react";
+import { ReactNode, Suspense, useMemo } from "react";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface DynamicLayoutProps {
   children?: ReactNode;
@@ -11,150 +11,66 @@ interface DynamicLayoutProps {
   footer?: ReactNode;
 }
 
-function DynamicLayoutContent({ 
-  children, 
-  header, 
-  main, 
-  footer 
-}: DynamicLayoutProps) {
-  const { layout, isDynamicEnabled } = useSeedLayout();
-  const classes = getLayoutClasses(layout);
+function DynamicLayoutContent({ children, header, main, footer }: DynamicLayoutProps) {
+  const dyn = useDynamicSystem();
+  const hasFooter = Boolean(footer);
+  const sections = useMemo(() => (hasFooter ? ["header", "main", "footer"] : ["header", "main"]), [hasFooter]);
+  const orderedSections = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("layout-sections", sections.length);
+    return order.map((idx) => sections[idx]);
+  }, [dyn.seed, sections]);
 
-  // Render different layouts based on seed
-  switch (layout.structure.main.layout) {
-    case 'sidebar':
-      return (
-        <div className={`${classes.container} ${layout.className}`}>
-          {layout.structure.header.position === 'left' && (
-            <div className={classes.header}>
+  return dyn.v1.addWrapDecoy(
+    "layout-shell",
+    <div
+      id={dyn.v3.getVariant("layout-container", ID_VARIANTS_MAP, "layout-container")}
+      className={`min-h-screen flex flex-col ${dyn.v3.getVariant("grid-container", CLASS_VARIANTS_MAP, "")}`}
+    >
+      {orderedSections.map((section) => {
+        if (section === "header") {
+          return dyn.v1.addWrapDecoy(
+            "layout-header",
+            <div
+              key="layout-header"
+              id={dyn.v3.getVariant("layout-header", ID_VARIANTS_MAP, "layout-header")}
+              className={`w-full ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")}`}
+            >
               {header}
             </div>
-          )}
-          {layout.structure.header.position === 'top' && (
-            <div className={classes.header}>
-              {header}
-            </div>
-          )}
-          <div className={classes.main}>
-            {layout.structure.footer.position === 'left' && (
-              <div className={classes.footer}>
-                {footer}
-              </div>
-            )}
-            <div className="flex-1">
+          );
+        }
+        if (section === "main") {
+          return dyn.v1.addWrapDecoy(
+            "layout-main",
+            <main
+              key="layout-main"
+              id={dyn.v3.getVariant("layout-main", ID_VARIANTS_MAP, "layout-main")}
+              className={`flex-1 ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")}`}
+            >
               {main}
-            </div>
-          </div>
-          {layout.structure.footer.position === 'bottom' && (
-            <div className={classes.footer}>
+              {children}
+            </main>
+          );
+        }
+        if (section === "footer" && footer) {
+          return dyn.v1.addWrapDecoy(
+            "layout-footer",
+            <footer
+              key="layout-footer"
+              id={dyn.v3.getVariant("layout-footer", ID_VARIANTS_MAP, "layout-footer")}
+              className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")}
+            >
               {footer}
-            </div>
-          )}
-        </div>
-      );
-
-    case 'split':
-      return (
-        <div className={`${classes.container} ${layout.className}`}>
-          {layout.structure.header.position === 'top' && (
-            <div className={classes.header}>
-              {header}
-            </div>
-          )}
-          {layout.structure.footer.position === 'top' && (
-            <div className={classes.footer}>
-              {footer}
-            </div>
-          )}
-          <div className={classes.main}>
-            {main}
-          </div>
-          {layout.structure.header.position === 'bottom' && (
-            <div className={classes.header}>
-              {header}
-            </div>
-          )}
-          {layout.structure.footer.position === 'bottom' && (
-            <div className={classes.footer}>
-              {footer}
-            </div>
-          )}
-        </div>
-      );
-
-    case 'columns':
-      return (
-        <div className={`${classes.container} ${layout.className}`}>
-          {layout.structure.header.position === 'top' && (
-            <div className={classes.header}>
-              {header}
-            </div>
-          )}
-          <div className={classes.main}>
-            {main}
-          </div>
-          {layout.structure.footer.position === 'bottom' && (
-            <div className={classes.footer}>
-              {footer}
-            </div>
-          )}
-        </div>
-      );
-
-    case 'masonry':
-      return (
-        <div className={`${classes.container} ${layout.className}`}>
-          {layout.structure.header.position === 'top' && (
-            <div className={classes.header}>
-              {header}
-            </div>
-          )}
-          <div className={classes.main}>
-            {main}
-          </div>
-          {layout.structure.footer.position === 'bottom' && (
-            <div className={classes.footer}>
-              {footer}
-            </div>
-          )}
-        </div>
-      );
-
-    case 'stacked':
-      return (
-        <div className={`${classes.container} ${layout.className}`}>
-          {layout.structure.header.position === 'top' && (
-            <div className={classes.header}>
-              {header}
-            </div>
-          )}
-          <div className={classes.main}>
-            {main}
-          </div>
-          {layout.structure.footer.position === 'bottom' && (
-            <div className={classes.footer}>
-              {footer}
-            </div>
-          )}
-        </div>
-      );
-
-    default:
-      // Default layout
-      return (
-        <div className={`${classes.container} ${layout.className}`}>
-          <div className={classes.header}>
-            {header}
-          </div>
-          <div className={classes.main}>
-            {main}
-          </div>
-          <div className={classes.footer}>
-            {footer}
-          </div>
-        </div>
-      );
-  }
+              <span className="sr-only">
+                {dyn.v3.getVariant("layout_footer_sr", TEXT_VARIANTS_MAP, "Footer section")}
+              </span>
+            </footer>
+          );
+        }
+        return null;
+      })}
+    </div>
+  );
 }
 
 export default function DynamicLayout(props: DynamicLayoutProps) {

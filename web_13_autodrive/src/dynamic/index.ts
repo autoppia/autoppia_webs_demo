@@ -1,15 +1,15 @@
 /**
  * Dynamic System - Central Export
- * 
- * All dynamic functionality (v1, v2, v3) for web_13_autodrive
+ *
+ * V1: Wrappers y decoys (estructura DOM)
+ * V2: Data loading
+ * V3: Atributos y textos (IDs, clases, textos)
  */
 
-// V1: Layout variations (common across all webs)
-export * from './v1-layouts';
+// V2: Data loading
+export * from "./v2-data";
 
-// V2: Data loading (specific to this web)
-export * from './v2-data';
-
-// V3: Anti-scraping attributes (specific to this web)
-export * from './v3-dynamic';
-
+// V1, V3 y Shared (incluye useDynamic hook)
+export * from "./v1";
+export * from "./v3";
+export * from "./shared";

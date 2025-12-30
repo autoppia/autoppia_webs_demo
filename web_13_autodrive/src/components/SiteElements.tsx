@@ -1,8 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { ReactNode } from "react";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface SiteElementsProps {
   children: {
@@ -16,51 +17,91 @@ interface SiteElementsProps {
 }
 
 export default function SiteElements({ children }: SiteElementsProps) {
-  const { layout } = useSeedLayout();
+  const dyn = useDynamicSystem();
 
-  const sections = useMemo(
-    () => layout?.structure?.main?.sections ?? ["hero", "booking", "map", "rides"],
-    [layout?.structure?.main?.sections]
-  );
+  const baseSections = useMemo(() => ["hero", "booking", "map", "rides", "footer"], []);
+  const sections = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("site-sections", baseSections.length);
+    return order.map((idx) => baseSections[idx]);
+  }, [dyn.seed, baseSections]);
 
   return (
-    <>
+    dyn.v1.addWrapDecoy(
+      "site-elements",
+      <>
       {sections.map((section) => {
         switch (section) {
           case "hero":
             return (
-              <div key="hero" className="hero-section">
-                {children.hero}
-              </div>
+              dyn.v1.addWrapDecoy(
+                "hero-section",
+                <div
+                  key="hero"
+                  id={dyn.v3.getVariant("hero-section", ID_VARIANTS_MAP, "hero-section")}
+                  className={`hero-section ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")}`}
+                >
+                  {children.hero}
+                </div>
+              )
             );
           case "booking":
             return (
-              <div key="booking" className="booking-section">
-                {children.booking}
-              </div>
+              dyn.v1.addWrapDecoy(
+                "booking-section",
+                <div
+                  key="booking"
+                  id={dyn.v3.getVariant("booking-section", ID_VARIANTS_MAP, "booking-section")}
+                  className={`booking-section ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")}`}
+                >
+                  {children.booking}
+                </div>
+              )
             );
           case "map":
             return (
-              <div key="map" className="map-section">
-                {children.map}
-              </div>
+              dyn.v1.addWrapDecoy(
+                "map-section",
+                <div
+                  key="map"
+                  id={dyn.v3.getVariant("map-section", ID_VARIANTS_MAP, "map-section")}
+                  className={`map-section ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")}`}
+                >
+                  {children.map}
+                </div>
+              )
             );
           case "rides":
             return (
-              <div key="rides" className="rides-section">
-                {children.rides}
-              </div>
+              dyn.v1.addWrapDecoy(
+                "rides-section",
+                <div
+                  key="rides"
+                  id={dyn.v3.getVariant("rides-section", ID_VARIANTS_MAP, "rides-section")}
+                  className={`rides-section ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")}`}
+                >
+                  {children.rides}
+                </div>
+              )
             );
           case "footer":
             return children.footer ? (
-              <div key="footer" className="footer-section">
-                {children.footer}
-              </div>
+                dyn.v1.addWrapDecoy(
+                  "footer-section",
+                  <div
+                    key="footer"
+                    id={dyn.v3.getVariant("footer-section", ID_VARIANTS_MAP, "footer-section")}
+                    className={`footer-section ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")}`}
+                  >
+                    {children.footer}
+                    <span className="sr-only">{dyn.v3.getVariant("footer_label", TEXT_VARIANTS_MAP, "Footer section")}</span>
+                  </div>
+                )
             ) : null;
           default:
             return null;
         }
       })}
-    </>
+      </>
+    )
   );
 }

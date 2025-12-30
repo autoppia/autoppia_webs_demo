@@ -6,31 +6,6 @@ import GlobalHeader from "@/components/GlobalHeader";
 import { EVENT_TYPES, logEvent } from "@/library/event";
 import DynamicLayout from "../../../components/DynamicLayout";
 import SiteElements from "../../../components/SiteElements";
-
-// const PLACES = [
-//   {
-//     label: "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
-//     main: "1 Hotel San Francisco",
-//     sub: "8 Mission St, San Francisco, CA 94105, USA",
-//   },
-//   {
-//     label: "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
-//     main: "100 Van Ness",
-//     sub: "100 Van Ness Ave, San Francisco, CA 94102, USA",
-//   },
-//   {
-//     label:
-//       "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
-//     main: "1000 Chestnut Street Apartments",
-//     sub: "1000 Chestnut St, San Francisco, CA 94109, USA",
-//   },
-//   {
-//     label:
-//       "1030 Post Street Apartments - 1030 Post St #112, San Francisco, CA 94109, USA",
-//     main: "1030 Post Street Apartments",
-//     sub: "1030 Post St #112, San Francisco, CA 94109, USA",
-//   },
-// ];
 const PLACES = [
     {
         "label": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",

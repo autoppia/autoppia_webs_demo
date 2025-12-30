@@ -1,16 +1,14 @@
 // Set default environment variables for local development
 // For local development (non-Docker), always enable dynamic HTML
 // Docker builds will override these values via build args
-const isDockerBuild = process.env.DOCKER_BUILD === 'true' || process.env.NODE_ENV === 'production';
-const isLocalDev = process.env.NODE_ENV !== 'production' && !process.env.DOCKER_BUILD;
+const isDockerBuild = process.env.DOCKER_BUILD === "true" || process.env.NODE_ENV === "production";
+const isLocalDev = process.env.NODE_ENV !== "production" && !process.env.DOCKER_BUILD;
 
-// Disable dynamic layout/HTML by default
-if (!process.env.ENABLE_DYNAMIC_V1) {
-  process.env.ENABLE_DYNAMIC_V1 = 'false';
-}
-if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'false';
-}
+// Enable dynamic HTML/attributes by default so V1/V3 run in tests and local dev
+process.env.ENABLE_DYNAMIC_V1 = process.env.ENABLE_DYNAMIC_V1 ?? "true";
+process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ?? "true";
+process.env.ENABLE_DYNAMIC_V3 = process.env.ENABLE_DYNAMIC_V3 ?? "true";
+process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 ?? "true";
 
 console.log('🔍 Next.js config - Environment variables:');
 console.log('  NODE_ENV:', process.env.NODE_ENV);

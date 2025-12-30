@@ -1,36 +1,14 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import GlobalHeader from "@/components/GlobalHeader";
 import { EVENT_TYPES, logEvent } from "@/library/event";
 import DynamicLayout from "@/components/DynamicLayout";
 import SiteElements from "@/components/SiteElements";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { useSeed } from "@/context/SeedContext";
 
-// const PLACES = [
-//   {
-//     label: "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
-//     main: "1 Hotel San Francisco",
-//     sub: "8 Mission St, San Francisco, CA 94105, USA",
-//   },
-//   {
-//     label: "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
-//     main: "100 Van Ness",
-//     sub: "100 Van Ness Ave, San Francisco, CA 94102, USA",
-//   },
-//   {
-//     label:
-//       "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
-//     main: "1000 Chestnut Street Apartments",
-//     sub: "1000 Chestnut St, San Francisco, CA 94109, USA",
-//   },
-//   {
-//     label:
-//       "1030 Post Street Apartments - 1030 Post St #112, San Francisco, CA 94109, USA",
-//     main: "1030 Post Street Apartments",
-//     sub: "1030 Post St #112, San Francisco, CA 94109, USA",
-//   },
-// ];
 const PLACES = [
   {
     label: "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
@@ -207,6 +185,7 @@ function PlaceSelect({
   open: boolean;
   setOpen: (v: boolean) => void;
 }) {
+  const dyn = useDynamicSystem();
   const [searchValue, setSearchValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -286,6 +265,16 @@ function PlaceSelect({
               timestamp: new Date().toISOString(),
               page: "trip_form",
               action: "focus",
+            });
+            const rideEnterEvent =
+              placeholder.toLowerCase().includes("pickup")
+                ? EVENT_TYPES.RIDE_ENTER_LOCATION
+                : EVENT_TYPES.RIDE_ENTER_DESTINATION;
+            logEvent(rideEnterEvent, {
+              context: "home_page",
+              inputType: placeholder.toLowerCase().includes("pickup") ? "location" : "destination",
+              action: "focus",
+              seed: dyn.seed,
             });
           }}
           onBlur={() => {
@@ -798,7 +787,94 @@ function Spinner() {
 
 export default function Home() {
   const router = useSeedRouter();
-  const { getElementAttributes, getText, v2Seed } = useSeedLayout();
+  const dyn = useDynamicSystem();
+  const { resolvedSeeds } = useSeed();
+  const v2Seed = resolvedSeeds.v2 ?? dyn.seed;
+  const dynamicV3TextVariants: Record<string, string[]> = useMemo(() => ({
+    booking_heading: ["Book your ride", "Plan a trip", "Reserve your ride", "Schedule a drive", "Arrange pickup"],
+    booking_subtitle: [
+      "Enter your pickup and destination to get started",
+      "Share where you are going",
+      "Set pickup and dropoff to view rides",
+      "Tell us your trip details",
+      "Plan your journey"
+    ],
+    pickup_placeholder: ["Pickup location", "Where from?", "Enter pickup", "Start location", "Where are you?"],
+    dropoff_placeholder: ["Dropoff location", "Where to?", "Enter dropoff", "Destination", "Dropoff address"],
+    pickup_now_label: ["Pickup now", "Pickup ASAP", "Right now", "Immediate pickup", "Ride now"],
+    pickup_label: ["Pick up:", "Pickup at", "Scheduled pickup", "Your pickup time", "Pickup details"],
+    for_me_label: ["For me", "For myself", "Personal ride", "My ride", "Just me"],
+    searching_label: ["Searching...", "Loading rides...", "Finding options...", "Looking for drivers...", "Preparing routes..."],
+    search_button: ["Search", "Find rides", "See rides", "Get options", "Start search"],
+    choose_ride_title: ["Choose a ride", "Pick your ride", "Select a car", "Choose option", "Select your ride"],
+    recommended_label: ["Recommended", "Top pick", "Suggested", "Best match", "Popular choice"],
+    cash_label: ["Cash", "Pay cash", "Cash payment", "Cash option", "Pay with cash"],
+    reserve_cta: ["Reserve UberX", "Reserve ride", "Confirm ride", "Book now", "Reserve now"],
+    stats_total: ["Total Trips", "Completed trips", "All rides", "Trips done", "Finished rides"],
+    stats_active: ["Active Riders", "Active users", "Riders online", "People riding", "Current riders"],
+    stats_drivers: ["Available Drivers", "Drivers online", "Drivers ready", "Nearby drivers", "Active drivers"],
+    map_label: ["Live map", "Trip map", "Route map", "City map", "Map view"],
+    hero_label: ["AutoDriver smart ride booking", "Ride faster with AutoDriver", "Smooth trips with AutoDriver", "Plan trips easily", "Trusted rides"],
+    overlay_pay: ["Cash", "Wallet", "Pay now", "Payment", "Pay on ride"],
+    overlay_cta: ["Reserve UberX", "Reserve ride", "Book this ride", "Confirm selection", "Reserve now"],
+  }), []);
+  const dynamicIds = useMemo(
+    () => ({
+      bookingSection: dyn.v3.getVariant("booking-section", ID_VARIANTS_MAP, "booking-section"),
+      bookingImage: dyn.v3.getVariant("booking-image", ID_VARIANTS_MAP, "booking-image"),
+      pickupInput: dyn.v3.getVariant("pickup-input", ID_VARIANTS_MAP, "pickup-input"),
+      dropoffInput: dyn.v3.getVariant("dropoff-input", ID_VARIANTS_MAP, "dropoff-input"),
+      pickupNow: dyn.v3.getVariant("pickup-now", ID_VARIANTS_MAP, "pickup-now"),
+      searchButton: dyn.v3.getVariant("search-button", ID_VARIANTS_MAP, "search-button"),
+      statsCardTrips: dyn.v3.getVariant("stats-trips", ID_VARIANTS_MAP, "stats-trips"),
+      statsCardRiders: dyn.v3.getVariant("stats-riders", ID_VARIANTS_MAP, "stats-riders"),
+      statsCardDrivers: dyn.v3.getVariant("stats-drivers", ID_VARIANTS_MAP, "stats-drivers"),
+      ridesTitle: dyn.v3.getVariant("choose-ride-title", ID_VARIANTS_MAP, "choose-ride-title"),
+      ridesSubtitle: dyn.v3.getVariant("recommended-label", ID_VARIANTS_MAP, "recommended-label"),
+      rideCard: dyn.v3.getVariant("ride-card", ID_VARIANTS_MAP, "ride-card"),
+      ridePrice: dyn.v3.getVariant("ride-price", ID_VARIANTS_MAP, "ride-price"),
+      rideList: dyn.v3.getVariant("ride-list", ID_VARIANTS_MAP, "ride-list"),
+      mapContainer: dyn.v3.getVariant("map-container", ID_VARIANTS_MAP, "map-container"),
+      overlayCta: dyn.v3.getVariant("overlay-cta", ID_VARIANTS_MAP, "overlay-cta"),
+      overlayPayment: dyn.v3.getVariant("overlay-payment", ID_VARIANTS_MAP, "overlay-payment"),
+    }),
+    [dyn]
+  );
+  const dynamicClasses = useMemo(
+    () => ({
+      primaryButton: dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""),
+      secondaryButton: dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""),
+      card: dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, ""),
+      navLink: dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, ""),
+      gridContainer: dyn.v3.getVariant("grid-container", CLASS_VARIANTS_MAP, ""),
+    }),
+    [dyn]
+  );
+  const pageText = useMemo(
+    () => ({
+      bookingTitle: dyn.v3.getVariant("booking_heading", dynamicV3TextVariants, "Book your ride"),
+      bookingSubtitle: dyn.v3.getVariant("booking_subtitle", dynamicV3TextVariants, "Enter your pickup and destination to get started"),
+      pickupPlaceholder: dyn.v3.getVariant("pickup_placeholder", dynamicV3TextVariants, "Pickup location"),
+      dropoffPlaceholder: dyn.v3.getVariant("dropoff_placeholder", dynamicV3TextVariants, "Dropoff location"),
+      pickupNow: dyn.v3.getVariant("pickup_now_label", dynamicV3TextVariants, "Pickup now"),
+      pickupLabel: dyn.v3.getVariant("pickup_label", dynamicV3TextVariants, "Pick up:"),
+      forMe: dyn.v3.getVariant("for_me_label", dynamicV3TextVariants, "For me"),
+      searching: dyn.v3.getVariant("searching_label", dynamicV3TextVariants, "Searching..."),
+      searchCta: dyn.v3.getVariant("search_button", dynamicV3TextVariants, "Search"),
+      chooseRide: dyn.v3.getVariant("choose_ride_title", dynamicV3TextVariants, "Choose a ride"),
+      recommended: dyn.v3.getVariant("recommended_label", dynamicV3TextVariants, "Recommended"),
+      cash: dyn.v3.getVariant("cash_label", dynamicV3TextVariants, "Cash"),
+      reserve: dyn.v3.getVariant("reserve_cta", dynamicV3TextVariants, "Reserve UberX"),
+      statsTrips: dyn.v3.getVariant("stats_total", dynamicV3TextVariants, "Total Trips"),
+      statsActive: dyn.v3.getVariant("stats_active", dynamicV3TextVariants, "Active Riders"),
+      statsDrivers: dyn.v3.getVariant("stats_drivers", dynamicV3TextVariants, "Available Drivers"),
+      mapLabel: dyn.v3.getVariant("map_label", dynamicV3TextVariants, "Live map"),
+      heroCopy: dyn.v3.getVariant("hero_label", dynamicV3TextVariants, "AutoDriver smart ride booking"),
+      overlayPayment: dyn.v3.getVariant("overlay_pay", dynamicV3TextVariants, "Cash"),
+      overlayCta: dyn.v3.getVariant("overlay_cta", dynamicV3TextVariants, "Reserve UberX"),
+    }),
+    [dyn.seed, dynamicV3TextVariants]
+  );
   const [pickupOpen, setPickupOpen] = useState(false);
   const [dropoffOpen, setDropoffOpen] = useState(false);
   const [pickup, setPickup] = useState<string | null>(null);
@@ -862,6 +938,14 @@ export default function Home() {
     });
   }, [v2Seed]);
 
+  useEffect(() => {
+    logEvent(EVENT_TYPES.EXPLORE_FEATURES, {
+      page: "home",
+      seed: dyn.seed,
+      timestamp: new Date().toISOString(),
+    });
+  }, [dyn.seed]);
+
   function formatDateTime(date: string, time: string) {
     // MMM DD, HH:MM AM/PM
     const d = new Date(`${date}T${time}`);
@@ -895,6 +979,13 @@ export default function Home() {
       setTimeout(() => {
         setLoading(false);
         setShowRides(true);
+        logEvent(EVENT_TYPES.SEE_PRICES, {
+          pickup,
+          dropoff,
+          scheduled: pickupScheduled ? `${pickupScheduled.date} ${pickupScheduled.time}` : "now",
+          rideCount: rides.length,
+          timestamp: new Date().toISOString(),
+        });
       }, 20);
     }
   }
@@ -922,235 +1013,215 @@ export default function Home() {
     isTripsActive = currentPath === "/ride/trip/trips";
   }
 
+  const orderedRides = useMemo(() => {
+    if (!rides || rides.length === 0) return [];
+    const order = dyn.v1.changeOrderElements("home-rides", rides.length);
+    return order.map((idx) => rides[idx]).filter(Boolean);
+  }, [dyn.seed, rides]);
+
   // Header component
   const header = <GlobalHeader />;
 
   // Booking section component
-  const booking = (
-    <section className="w-[500px] bg-white rounded-xl shadow-lg p-8 flex flex-col gap-5 max-lg:w-full h-[calc(100vh-6rem)]">
+  const booking = dyn.v1.addWrapDecoy(
+    "booking-card",
+    <section
+      id={dynamicIds.bookingSection}
+      className={`w-[500px] bg-white rounded-xl shadow-lg p-8 flex flex-col gap-5 max-lg:w-full h-[calc(100vh-6rem)] ${dynamicClasses.card}`}
+    >
       <div className="mb-2">
-        <h2
-          className="text-xl font-bold mb-1"
-          {...getElementAttributes("trip-get-trip-heading", 0)}
-        >
-          {getText("trip-get-trip-heading", "Book your ride")}
+        <h2 className="text-xl font-bold mb-1" id={dyn.v3.getVariant("trip-get-trip-heading", ID_VARIANTS_MAP, "trip-get-trip-heading")}>
+          {pageText.bookingTitle}
         </h2>
-        <p className="text-sm text-gray-600">
-          Enter your pickup and destination to get started
-        </p>
+        <p className="text-sm text-gray-600">{pageText.bookingSubtitle}</p>
       </div>
       <div className="mb-4 flex-1 min-h-0">
         <img
           src="/dashboard.jpg"
           alt="Dashboard"
+          id={dynamicIds.bookingImage}
           className="w-full h-full rounded-lg object-cover shadow-sm"
         />
       </div>
       <PlaceSelect
         value={pickup}
         setValue={setPickup}
-        placeholder={getText("pickup-placeholder", "Pickup location")}
+        placeholder={pageText.pickupPlaceholder}
         open={pickupOpen}
         setOpen={setPickupOpen}
       />
       <PlaceSelect
         value={dropoff}
         setValue={setDropoff}
-        placeholder={getText("dropoff-placeholder", "Dropoff location")}
+        placeholder={pageText.dropoffPlaceholder}
         open={dropoffOpen}
         setOpen={setDropoffOpen}
       />
-      <div
-        className="flex items-center bg-gray-100 rounded-md px-4 py-3 mb-3 text-base font-[500] cursor-pointer border border-gray-200 h-12 select-none mt-0"
-        onClick={() => router.push("/ride/trip/pickupnow")}
-      >
-        <svg
-          width="18"
-          height="18"
-          fill="none"
-          className="mr-2"
-          viewBox="0 0 20 20"
+      {dyn.v1.addWrapDecoy(
+        "pickup-now-toggle",
+        <div
+          className="flex items-center bg-gray-100 rounded-md px-4 py-3 mb-3 text-base font-[500] cursor-pointer border border-gray-200 h-12 select-none mt-0"
+          onClick={() => router.push("/ride/trip/pickupnow")}
+          id={dynamicIds.pickupNow}
         >
-          <circle
-            cx="10"
-            cy="10"
-            r="8"
-            fill="#fff"
-            stroke="#2095d2"
-            strokeWidth="1.5"
-          />
-          <path
-            d="M6 10h4.2a2 2 0 0 1 2 2v2"
-            stroke="#2095d2"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-          />
-        </svg>
-        <span className="font-bold mr-1 text-[#2095d2]">
-          {pickupScheduled
-            ? getText("pickup-label", "Pick up:")
-            : getText("pickup-now-label", "Pickup now")}
-        </span>
-        {pickupScheduled ? (
-          <span className="ml-1 font-[500]">
-            {formatDateTime(pickupScheduled.date, pickupScheduled.time)}
+          <svg
+            width="18"
+            height="18"
+            fill="none"
+            className="mr-2"
+            viewBox="0 0 20 20"
+          >
+            <circle
+              cx="10"
+              cy="10"
+              r="8"
+              fill="#fff"
+              stroke="#2095d2"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M6 10h4.2a2 2 0 0 1 2 2v2"
+              stroke="#2095d2"
+              strokeWidth="1.4"
+              strokeLinecap="round"
+            />
+          </svg>
+          <span className="font-bold mr-1 text-[#2095d2]">
+            {pickupScheduled ? pageText.pickupLabel : pageText.pickupNow}
           </span>
-        ) : null}
-        <svg
-          width="16"
-          height="16"
-          fill="none"
-          className="ml-auto"
-          viewBox="0 0 16 16"
-        >
-          <path
-            d="M6 4l4 4-4 4"
-            stroke="#2095d2"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-          />
-        </svg>
-      </div>
-      <div className="flex items-center bg-gray-100 rounded-md px-3 py-2 text-sm font-medium mb-4">
-        <svg
-          width="15"
-          height="15"
-          fill="none"
-          viewBox="0 0 16 16"
-          className="mr-2"
-        >
-          <circle
-            cx="7.5"
-            cy="7.5"
-            r="6.5"
-            stroke="#2095d2"
-            strokeWidth="1.4"
-            fill="#e6f6fc"
-          />
-          <path
-            d="M6.9 6.9a1.2 1.2 0 1 1 2.2 0c0 .6-.5 1-1.1 1-.7 0-1.1-.4-1.1-1zM7.5 10.2c.9 0 2.1.2 2.5.6-.4.4-1.6.7-2.5.7s-2.1-.3-2.5-.7c.4-.4 1.6-.6 2.5-.6z"
-            fill="#2095d2"
-          />
-        </svg>
-        <span>{getText("for-me-label", "For me")}</span>
-        <svg
-          width="10"
-          height="10"
-          fill="none"
-          viewBox="0 0 10 10"
-          className="ml-auto"
-        >
-          <path d="M2 4l3 3 3-3" stroke="#2095d2" strokeWidth="1.3" />
-        </svg>
-      </div>
+          {pickupScheduled ? (
+            <span className="ml-1 font-[500]">
+              {formatDateTime(pickupScheduled.date, pickupScheduled.time)}
+            </span>
+          ) : null}
+          <svg
+            width="16"
+            height="16"
+            fill="none"
+            className="ml-auto"
+            viewBox="0 0 16 16"
+          >
+            <path d="M6 4l4 4-4 4" stroke="#2095d2" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+        </div>
+      )}
+      {dyn.v1.addWrapDecoy(
+        "passenger-toggle",
+        <div className="flex items-center bg-gray-100 rounded-md px-3 py-2 text-sm font-medium mb-4">
+          <svg
+            width="15"
+            height="15"
+            fill="none"
+            viewBox="0 0 16 16"
+            className="mr-2"
+          >
+            <circle
+              cx="7.5"
+              cy="7.5"
+              r="6.5"
+              stroke="#2095d2"
+              strokeWidth="1.4"
+              fill="#e6f6fc"
+            />
+            <path
+              d="M6.9 6.9a1.2 1.2 0 1 1 2.2 0c0 .6-.5 1-1.1 1-.7 0-1.1-.4-1.1-1zM7.5 10.2c.9 0 2.1.2 2.5.6-.4.4-1.6.7-2.5.7s-2.1-.3-2.5-.7c.4-.4 1.6-.6 2.5-.6z"
+              fill="#2095d2"
+            />
+          </svg>
+          <span>{pageText.forMe}</span>
+          <svg
+            width="10"
+            height="10"
+            fill="none"
+            viewBox="0 0 10 10"
+            className="ml-auto"
+          >
+            <path d="M2 4l3 3 3-3" stroke="#2095d2" strokeWidth="1.3" />
+          </svg>
+        </div>
+      )}
       <button
-        {...getElementAttributes("search-button", 0)}
+        id={dynamicIds.searchButton}
         onClick={handleSearch}
-        className={`rounded-md h-10 font-bold mb-2 transition ${
-          !pickup || !dropoff || loading
-            ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-            : "bg-[#2095d2] text-white hover:bg-[#1273a0]"
-        }`}
+        className={`rounded-md h-10 font-bold mb-2 transition ${!pickup || !dropoff || loading ? "bg-gray-200 text-gray-500 cursor-not-allowed" : `bg-[#2095d2] text-white hover:bg-[#1273a0] ${dynamicClasses.primaryButton}`}`}
         disabled={!pickup || !dropoff || loading}
       >
-        {loading
-          ? getText("searching-label", "Searching...")
-          : getText("search-button", "Search")}
+        {loading ? pageText.searching : pageText.searchCta}
       </button>
 
       {/* Stats Section */}
       <div className="mt-6 pt-6 border-t border-gray-200">
-        <div className="grid grid-cols-3 gap-4">
-          <div className="flex flex-col items-center text-center p-3 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100/50">
-            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#2095d2]/10 mb-2">
-              <svg
-                width="16"
-                height="16"
-                fill="none"
-                viewBox="0 0 20 20"
-                className="text-[#2095d2]"
-              >
-                <path
-                  d="M10 2L3 7v11h14V7l-7-5z"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  fill="none"
-                />
-                <path
-                  d="M7 10h6M7 14h6"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                />
-              </svg>
-            </div>
-            <div className="text-2xl font-bold text-[#2095d2]">
-              {stats.totalTrips}+
-            </div>
-            <div className="text-xs text-gray-600 mt-0.5">Total Trips</div>
-          </div>
-          <div className="flex flex-col items-center text-center p-3 rounded-lg bg-gradient-to-br from-green-50 to-green-100/50">
-            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/10 mb-2">
-              <svg
-                width="16"
-                height="16"
-                fill="none"
-                viewBox="0 0 20 20"
-                className="text-green-600"
-              >
-                <circle
-                  cx="10"
-                  cy="7"
-                  r="3"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  fill="none"
-                />
-                <path
-                  d="M4 17v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  fill="none"
-                />
-              </svg>
-            </div>
-            <div className="text-2xl font-bold text-green-600">
-              {stats.activeRiders.toLocaleString()}
-            </div>
-            <div className="text-xs text-gray-600 mt-0.5">Active Riders</div>
-          </div>
-          <div className="flex flex-col items-center text-center p-3 rounded-lg bg-gradient-to-br from-purple-50 to-purple-100/50">
-            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/10 mb-2">
-              <svg
-                width="16"
-                height="16"
-                fill="none"
-                viewBox="0 0 20 20"
-                className="text-purple-600"
-              >
-                <rect
-                  x="4"
-                  y="5"
-                  width="12"
-                  height="10"
-                  rx="2"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  fill="none"
-                />
-                <path
-                  d="M6 8h8M6 11h5"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                />
-              </svg>
-            </div>
-            <div className="text-2xl font-bold text-purple-600">
-              {stats.availableDrivers}
-            </div>
-            <div className="text-xs text-gray-600 mt-0.5">
-              Available Drivers
-            </div>
-          </div>
+        <div className="grid grid-cols-3 gap-4" id={dyn.v3.getVariant("stats-grid", ID_VARIANTS_MAP, "stats-grid")}>
+          {dyn.v1.changeOrderElements("stats-cards", 3).map((idx) => {
+            if (idx === 0) {
+              return (
+                <div key="stat-trips" id={dynamicIds.statsCardTrips} className="flex flex-col items-center text-center p-3 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100/50">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#2095d2]/10 mb-2">
+                    <svg
+                      width="16"
+                      height="16"
+                      fill="none"
+                      viewBox="0 0 20 20"
+                      className="text-[#2095d2]"
+                    >
+                      <path
+                        d="M10 2L3 7v11h14V7l-7-5z"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        fill="none"
+                      />
+                      <path d="M7 10h6M7 14h6" stroke="currentColor" strokeWidth="1.2" />
+                    </svg>
+                  </div>
+                  <div className="text-2xl font-bold text-[#2095d2]">{stats.totalTrips}+</div>
+                  <div className="text-xs text-gray-600 mt-0.5">{pageText.statsTrips}</div>
+                </div>
+              );
+            }
+            if (idx === 1) {
+              return (
+                <div key="stat-riders" id={dynamicIds.statsCardRiders} className="flex flex-col items-center text-center p-3 rounded-lg bg-gradient-to-br from-green-50 to-green-100/50">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/10 mb-2">
+                    <svg
+                      width="16"
+                      height="16"
+                      fill="none"
+                      viewBox="0 0 20 20"
+                      className="text-green-600"
+                    >
+                      <circle cx="10" cy="7" r="3" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                      <path
+                        d="M4 17v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        fill="none"
+                      />
+                    </svg>
+                  </div>
+                  <div className="text-2xl font-bold text-green-600">{stats.activeRiders.toLocaleString()}</div>
+                  <div className="text-xs text-gray-600 mt-0.5">{pageText.statsActive}</div>
+                </div>
+              );
+            }
+            return (
+              <div key="stat-drivers" id={dynamicIds.statsCardDrivers} className="flex flex-col items-center text-center p-3 rounded-lg bg-gradient-to-br from-purple-50 to-purple-100/50">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/10 mb-2">
+                  <svg
+                    width="16"
+                    height="16"
+                    fill="none"
+                    viewBox="0 0 20 20"
+                    className="text-purple-600"
+                  >
+                    <rect x="4" y="5" width="12" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                    <path d="M6 8h8M6 11h5" stroke="currentColor" strokeWidth="1.2" />
+                  </svg>
+                </div>
+                <div className="text-2xl font-bold text-purple-600">{stats.availableDrivers}</div>
+                <div className="text-xs text-gray-600 mt-0.5">{pageText.statsDrivers}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -1162,124 +1233,97 @@ export default function Home() {
       <Spinner />
     </section>
   ) : pickup && dropoff && showRides ? (
-    <section
-      className="flex-1"
-      style={{ width: "100%", maxWidth: "none", minWidth: 0 }}
-    >
-      <h1
-        className="text-3xl font-bold mb-2"
-        {...getElementAttributes("choose-ride-title", 0)}
+    dyn.v1.addWrapDecoy(
+      "ride-section",
+      <section
+        className="flex-1"
+        style={{ width: "100%", maxWidth: "none", minWidth: 0 }}
+        id={dynamicIds.rideList}
       >
-        {getText("choose-ride-title", "Choose a ride")}
-      </h1>
-      <div
-        className="text-lg font-semibold mb-6"
-        {...getElementAttributes("recommended-label", 0)}
-      >
-        {getText("recommended-label", "Recommended")}
-      </div>
-      <div className="space-y-5" style={{ width: "100%", maxWidth: "none" }}>
-        {rides.map((ride, idx) => (
-          <div
-            key={ride.name}
-            onClick={() => {
-              setSelectedRideIdx(idx);
-              // 🔹 log the SELECT_CAR event
-              logEvent(EVENT_TYPES.SELECT_CAR, {
-                rideId: idx,
-                rideName: ride.name,
-                rideType: ride.name,
-                price: ride.price,
-                oldPrice: ride.oldPrice,
-                seats: ride.seats,
-                eta: ride.eta,
-                pickup,
-                dropoff,
-                scheduled: pickupScheduled
-                  ? `${pickupScheduled.date} ${pickupScheduled.time}`
-                  : "now",
-                timestamp: new Date().toISOString(),
-                priceDifference: ride.oldPrice - ride.price,
-                discountPercentage: (
-                  ((ride.oldPrice - ride.price) / ride.oldPrice) *
-                  100
-                ).toFixed(2),
-                isRecommended: ride.recommended || false,
-              });
-            }}
-            className={
-              "flex items-center gap-8 rounded-2xl px-8 py-8 cursor-pointer transition" +
-              (selectedRideIdx === idx
-                ? " border-2 border-[#2095d2] bg-[#e6f6fc] shadow-xl"
-                : " border-2 border-gray-200 bg-white hover:bg-gray-50 shadow-md")
-            }
-            style={{
-              width: "100%",
-              maxWidth: "none",
-              minHeight: "240px",
-              outline: selectedRideIdx === idx ? "2px solid #2095d2" : "none",
-            }}
-            tabIndex={0}
-          >
-            <img
-              src={ride.image}
-              alt={ride.name}
-              className="rounded-xl w-80 h-64 object-cover bg-gray-200 flex-shrink-0 shadow-xl"
-            />
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-3 mb-3">
-                <span className="font-bold text-2xl">{ride.name}</span>
-                <svg width="24" height="24" fill="none" viewBox="0 0 16 16">
-                  <rect
-                    x="2"
-                    y="2"
-                    width="12"
-                    height="12"
-                    rx="6"
-                    stroke="#2095d2"
-                    strokeWidth="1.5"
-                    fill="#e6f6fc"
-                  />
-                  <text
-                    x="8"
-                    y="12"
-                    textAnchor="middle"
-                    fontSize="11"
-                    fill="#2095d2"
-                    fontWeight="bold"
-                  >
-                    {ride.seats}
-                  </text>
-                </svg>
+        <h1 className="text-3xl font-bold mb-2" id={dynamicIds.ridesTitle}>
+          {pageText.chooseRide}
+        </h1>
+        <div className="text-lg font-semibold mb-6" id={dynamicIds.ridesSubtitle}>
+          {pageText.recommended}
+        </div>
+        <div className="space-y-5" style={{ width: "100%", maxWidth: "none" }}>
+          {orderedRides.map((ride, idx) =>
+            dyn.v1.addWrapDecoy(
+              `ride-card-${idx}`,
+              <div
+                key={`${ride.name}-${idx}`}
+                onClick={() => {
+                  setSelectedRideIdx(idx);
+                  logEvent(EVENT_TYPES.SELECT_CAR, {
+                    rideId: idx,
+                    rideName: ride.name,
+                    rideType: ride.name,
+                    price: ride.price,
+                    oldPrice: ride.oldPrice,
+                    seats: ride.seats,
+                    eta: ride.eta,
+                    pickup,
+                    dropoff,
+                    scheduled: pickupScheduled ? `${pickupScheduled.date} ${pickupScheduled.time}` : "now",
+                    timestamp: new Date().toISOString(),
+                    priceDifference: ride.oldPrice - ride.price,
+                    discountPercentage: (((ride.oldPrice - ride.price) / ride.oldPrice) * 100).toFixed(2),
+                    isRecommended: ride.recommended || false,
+                  });
+                }}
+                className={
+                  "flex items-center gap-8 rounded-2xl px-8 py-8 cursor-pointer transition" +
+                  (selectedRideIdx === idx
+                    ? " border-2 border-[#2095d2] bg-[#e6f6fc] shadow-xl"
+                    : " border-2 border-gray-200 bg-white hover:bg-gray-50 shadow-md")
+                }
+                style={{
+                  width: "100%",
+                  maxWidth: "none",
+                  minHeight: "240px",
+                  outline: selectedRideIdx === idx ? "2px solid #2095d2" : "none",
+                }}
+                tabIndex={0}
+                id={`${dynamicIds.rideCard}-${idx}`}
+              >
+                <img
+                  src={ride.image}
+                  alt={ride.name}
+                  className="rounded-xl w-80 h-64 object-cover bg-gray-200 flex-shrink-0 shadow-xl"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="font-bold text-2xl">{ride.name}</span>
+                    <svg width="24" height="24" fill="none" viewBox="0 0 16 16">
+                      <rect x="2" y="2" width="12" height="12" rx="6" stroke="#2095d2" strokeWidth="1.5" fill="#e6f6fc" />
+                      <text x="8" y="12" textAnchor="middle" fontSize="11" fill="#2095d2" fontWeight="bold">
+                        {ride.seats}
+                      </text>
+                    </svg>
+                  </div>
+                  <div className="text-base text-gray-700 font-semibold mb-2">{ride.eta}</div>
+                  <div className="text-base text-gray-600">{ride.desc}</div>
+                </div>
+                <div className="text-right pr-2 flex-shrink-0">
+                  <div className="font-bold text-3xl text-[#2095d2] mb-1" id={`${dynamicIds.ridePrice}-${idx}`}>
+                    ${ride.price.toFixed(2)}
+                  </div>
+                  <div className="line-through text-base text-gray-400">${ride.oldPrice.toFixed(2)}</div>
+                </div>
               </div>
-              <div className="text-base text-gray-700 font-semibold mb-2">
-                {ride.eta}
-              </div>
-              <div className="text-base text-gray-600">{ride.desc}</div>
-            </div>
-            <div className="text-right pr-2 flex-shrink-0">
-              <div className="font-bold text-3xl text-[#2095d2] mb-1">
-                ${ride.price.toFixed(2)}
-              </div>
-              <div className="line-through text-base text-gray-400">
-                ${ride.oldPrice.toFixed(2)}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
+            )
+          )}
+        </div>
+      </section>
+    )
   ) : null;
 
   // Map section component
-  const map = (
-    <section className="flex-1 min-w-0">
+  const map = dyn.v1.addWrapDecoy(
+    "map-section",
+    <section className="flex-1 min-w-0" id={dynamicIds.mapContainer}>
       <div className="w-full h-[calc(100vh-6rem)] rounded-2xl border border-gray-200 overflow-hidden bg-gray-100 shadow-lg relative">
-        <img
-          src="/map2.png"
-          alt="Map"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        <img src="/map2.png" alt={pageText.mapLabel} className="absolute inset-0 w-full h-full object-cover" />
       </div>
     </section>
   );
@@ -1332,7 +1376,7 @@ export default function Home() {
                   strokeWidth="2"
                 />
               </svg>
-              <span className="text-[#2095d2] font-bold">Cash</span>
+              <span className="text-[#2095d2] font-bold">{pageText.overlayPayment}</span>
             </div>
             <button
               className={`flex-1 font-bold px-6 py-2 rounded-md text-lg shadow transition disabled:bg-gray-200 disabled:text-gray-400 ${
@@ -1392,8 +1436,8 @@ export default function Home() {
               }}
             >
               {selectedRideIdx === null
-                ? getText("select-ride-label", "Select a ride")
-                : getText("reserve-ride-label", "Reserve ride")}
+                ? dyn.v3.getVariant("select-ride-label", TEXT_VARIANTS_MAP, "Select a ride")
+                : pageText.reserve}
             </button>
           </div>
         </div>
