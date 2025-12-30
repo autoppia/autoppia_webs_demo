@@ -55,6 +55,7 @@ export function CreateLabelDialog({ trigger }: CreateLabelDialogProps) {
       size="sm"
       className="h-7 w-full justify-start gap-2 text-xs"
       id={dyn.v3.getVariant("label-selector-trigger", ID_VARIANTS_MAP, "create-label-btn")}
+      onClick={() => setOpen(true)}
     >
       <Plus className="h-3 w-3" />
       {dyn.v3.getVariant("create_label", TEXT_VARIANTS_MAP, "Create label")}
