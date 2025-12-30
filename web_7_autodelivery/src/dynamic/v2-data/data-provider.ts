@@ -6,7 +6,6 @@
 
 import { initializeRestaurants } from "@/data/restaurants-enhanced";
 import { getRandomTestimonials } from "@/data/testimonials-enhanced";
-import { getEffectiveLayoutConfig } from "@/dynamic/v1-layouts";
 import type { Restaurant } from "@/data/restaurants";
 import type { Testimonial } from "@/data/testimonials";
 
@@ -259,6 +258,3 @@ export const getRestaurants = () => dynamicDataProvider.getRestaurants();
 
 // Export helper functions
 export const isDynamicModeEnabled = () => dynamicDataProvider.isReady();
-export const getLayoutConfig = (seed?: number) => {
-  return getEffectiveLayoutConfig(seed);
-};

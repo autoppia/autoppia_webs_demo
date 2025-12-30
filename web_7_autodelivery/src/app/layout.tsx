@@ -3,12 +3,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
 import Navbar from "@/components/layout/Navbar";
 import { LayoutProvider } from "@/contexts/LayoutProvider";
-// DynamicStructureProvider removed - now using v3-dynamic
 import { RestaurantProvider } from "@/contexts/RestaurantContext";
 import { SeedProvider } from "@/context/SeedContext";
 import { DataReadyGate } from "@/components/layout/DataReadyGate";
 import { Suspense } from "react";
-// import DebugVariationBadge from "@/components/debug/DebugVariationBadge";
+import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +34,25 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} bg-zinc-50`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const params = new URLSearchParams(window.location.search);
+                  const seed = params.get('seed');
+                  if (seed) {
+                    window.__INITIAL_SEED__ = parseInt(seed, 10);
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-screen font-sans bg-zinc-50" suppressHydrationWarning>
         <SeedProvider>
           <LayoutProvider>
@@ -50,6 +67,7 @@ export default function RootLayout({
                   </div>
                 </DataReadyGate>
               </Suspense>
+              <DynamicDebug />
             </RestaurantProvider>
           </LayoutProvider>
         </SeedProvider>

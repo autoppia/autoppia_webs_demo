@@ -12,6 +12,8 @@ import { useSeedLayout } from "@/hooks/use-seed-layout";
 import { useRestaurants } from "@/contexts/RestaurantContext";
 import { useLayout } from "@/contexts/LayoutProvider";
 import { SafeImage } from "@/components/ui/SafeImage";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface QuickOrderModalProps {
   open: boolean;
@@ -25,6 +27,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
   const layout = useSeedLayout();
   const { getNavigationUrl } = useLayout();
   const { restaurants, isLoading } = useRestaurants();
+  const dyn = useDynamicSystem();
   
   // Get popular restaurants (those with high ratings or featured)
   const popularRestaurants = useMemo(
@@ -150,8 +153,9 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
   };
 
   return (
+    dyn.v1.addWrapDecoy("quick-order-modal", (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={`max-w-4xl max-h-[80vh] overflow-y-auto ${layout.modal.containerClass}`}>
+      <DialogContent className={`max-w-4xl max-h-[80vh] overflow-y-auto ${layout.modal.containerClass} ${dyn.v3.getVariant("modal", CLASS_VARIANTS_MAP, "")}`}>
         <div className={layout.modal.contentClass}>
           <DialogHeader className={layout.modal.headerClass}>
             <DialogTitle className="text-2xl font-bold text-center">
@@ -225,9 +229,14 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
         </div>
 
         {/* Popular Restaurants Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredRestaurants.map((restaurant) => (
-            <Card key={restaurant.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+        {dyn.v1.addWrapDecoy("quick-order-grid", (
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ${dyn.v3.getVariant("grid", CLASS_VARIANTS_MAP, "")}`}>
+          {(() => {
+            const ordered = dyn.v1.changeOrderElements("quick-order-restaurants", filteredRestaurants.length);
+            return ordered.map((orderIndex) => {
+              const restaurant = filteredRestaurants[orderIndex];
+              return (
+            <Card key={restaurant.id} className={`hover:shadow-lg transition-shadow cursor-pointer ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")}`}>
               <div className="relative h-32 rounded-t-lg overflow-hidden">
                 <SafeImage
                   src={restaurant.image}
@@ -298,8 +307,11 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
                 )}
               </CardContent>
             </Card>
-          ))}
+              );
+            });
+          })()}
         </div>
+        ))}
 
         {/* No Results */}
         {filteredRestaurants.length === 0 && (
@@ -363,5 +375,6 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
         </div>
       </DialogContent>
     </Dialog>
+    ))
   );
 } 

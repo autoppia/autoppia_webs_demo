@@ -26,6 +26,12 @@ export function SafeImage({
     }
   };
 
+  // Handle empty or invalid src
+  const src = rest.src;
+  const isEmptySrc = !src || src === "";
+  const shouldUseFallback = errored || isEmptySrc;
+  const imageSrc = shouldUseFallback ? fallbackSrc : src;
+
   const wrapperClasses = `${rest.fill ? "relative w-full h-full" : "relative inline-block"} ${
     wrapperClassName ?? ""
   }`.trim();
@@ -35,10 +41,10 @@ export function SafeImage({
       <Image
         {...rest}
         className={className}
-        src={errored ? fallbackSrc : rest.src}
+        src={imageSrc}
         onError={handleError}
       />
-      {errored && fallbackText && (
+      {shouldUseFallback && fallbackText && (
         <div className="absolute inset-0 flex items-center justify-center bg-zinc-100 text-zinc-500 text-sm font-semibold">
           {fallbackText}
         </div>

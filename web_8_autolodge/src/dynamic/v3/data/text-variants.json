@@ -1,0 +1,242 @@
+{
+  "nav_stays": [
+    "Stays",
+    "Homes",
+    "Stays & villas"
+  ],
+  "nav_popular": [
+    "Popular",
+    "Top picks",
+    "Trending"
+  ],
+  "nav_help": [
+    "Help",
+    "Support",
+    "Assistance"
+  ],
+  "nav_wishlist": [
+    "Wishlist",
+    "Saved",
+    "Favorites"
+  ],
+  "reset_filters": [
+    "Reset",
+    "Clear filters",
+    "Reset filters"
+  ],
+  "apply_filters": [
+    "Apply",
+    "Apply filters",
+    "Run filters"
+  ],
+  "submit_review": [
+    "Submit review",
+    "Send review",
+    "Post review"
+  ],
+  "review_name_placeholder": [
+    "Your name (optional)",
+    "Name (optional)",
+    "Add your name"
+  ],
+  "review_comment_placeholder": [
+    "Share your experience...",
+    "Tell us about your stay...",
+    "Write your review..."
+  ],
+  "share": [
+    "Share",
+    "Send",
+    "Copy link"
+  ],
+  "message_sent": [
+    "✅ Message sent.",
+    "Message delivered.",
+    "Sent to host."
+  ],
+  "share_email_placeholder": [
+    "Receiver's email",
+    "Friend's email",
+    "Enter email"
+  ],
+  "search_placeholder": [
+    "Search directors, titles, or moods",
+    "Find films, directors...",
+    "Look for movies, titles...",
+    "Discover films, directors...",
+    "Type movie name, genre...",
+    "Search catalog, films...",
+    "Find titles, movies...",
+    "Query movies, titles...",
+    "Share films, discover...",
+    "Search titles, films..."
+  ],
+  "search_button": [
+    "Search",
+    "Buscar",
+    "Find",
+    "Discover",
+    "Go Search",
+    "Search",
+    "Find",
+    "Query",
+    "Lookup",
+    "Search"
+  ],
+  "featured_title": [
+    "Featured This Week",
+    "Destacadas Esta Semana",
+    "This Week's Highlights",
+    "Weekly Spotlight",
+    "Featured Selection",
+    "Curated Picks",
+    "Recommended This Week",
+    "Must Watch",
+    "Editor's Picks",
+    "Staff Recommendations"
+  ],
+  "view_details": [
+    "View Details",
+    "Ver Detalles",
+    "See More",
+    "View Details",
+    "More Info",
+    "View More",
+    "View Details",
+    "See Details",
+    "More Info",
+    "View More"
+  ],
+  "stats_movies_label": [
+    "Movies",
+    "Películas",
+    "Movies",
+    "Movies",
+    "Movies",
+    "Movies",
+    "Movies",
+    "Movies",
+    "Movies",
+    "Movies"
+  ],
+  "stats_genres_label": [
+    "Genres",
+    "Géneros",
+    "Genres",
+    "Genres",
+    "Genres",
+    "Genres",
+    "Genres",
+    "Genres",
+    "Genres",
+    "Genres"
+  ],
+  "stats_rating_label": [
+    "Avg Rating",
+    "Rating Promedio",
+    "Avg Rating",
+    "Avg Rating",
+    "Avg Rating",
+    "Avg Rating",
+    "Avg Rating",
+    "Avg Rating",
+    "Avg Rating",
+    "Avg Rating"
+  ],
+  "stats_duration_label": [
+    "Avg Duration",
+    "Duración Promedio",
+    "Avg Duration",
+    "Avg Duration",
+    "Avg Duration",
+    "Avg Duration",
+    "Avg Duration",
+    "Avg Duration",
+    "Avg Duration",
+    "Avg Duration"
+  ],
+  "browse_genres": [
+    "Browse by Genre",
+    "Explorar por Género",
+    "Browse Genres",
+    "Genre Browser",
+    "By Genre",
+    "Genre Explorer",
+    "Browse Categories",
+    "Genre Browser",
+    "By Genre",
+    "Genre Search"
+  ],
+  "genres_description": [
+    "Explore movies by your favorite genre",
+    "Explora películas de tu género favorito",
+    "Find movies by your preferred genre",
+    "Browse films by genre category",
+    "Explore our genre collection",
+    "Discover movies by genre",
+    "Find films in your favorite genres",
+    "Browse by movie genre",
+    "Explore genre collections",
+    "Find movies by genre"
+  ],
+  "view_all": [
+    "View All",
+    "Ver Todas",
+    "See All",
+    "Show All",
+    "All Items",
+    "View All",
+    "All",
+    "Show All",
+    "All",
+    "View All"
+  ],
+  "movies_label": [
+    "movies",
+    "películas",
+    "films",
+    "movies",
+    "items",
+    "items",
+    "movies",
+    "films",
+    "titles",
+    "movies"
+  ],
+  "search_stats_rating_label": [
+    "Avg Rating",
+    "Rating Promedio",
+    "Average Rating",
+    "Score Avg",
+    "Avg Score",
+    "Avg Rating",
+    "Score",
+    "Avg Rating",
+    "Avg Rating",
+    "Avg Rating"
+  ],
+  "search_stats_duration_label": [
+    "Avg Duration",
+    "Duración Promedio",
+    "Average Duration",
+    "Time Avg",
+    "Avg Time",
+    "Duration",
+    "Runtime",
+    "Avg Time",
+    "Duration",
+    "Duration"
+  ],
+  "search_stats_year_range_label": [
+    "Year Range",
+    "Rango de Años",
+    "Year Range",
+    "Years",
+    "Years Range",
+    "Year Span",
+    "Years",
+    "Year Range",
+    "Year Range",
+    "Year Range"
+  ]
+}

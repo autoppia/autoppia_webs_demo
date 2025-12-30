@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useSeed } from '@/context/SeedContext';
-import { getSeedLayout } from '@/dynamic/v1-layouts';
 
 interface DynamicContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -18,7 +17,6 @@ export function DynamicContainer({
 }: DynamicContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { seed } = useSeed();
-  const layout = getSeedLayout(seed);
 
   const [attributes, setAttributes] = useState<Record<string, string>>({});
   const [dynamicStyles, setDynamicStyles] = useState<React.CSSProperties>({});
@@ -44,7 +42,7 @@ export function DynamicContainer({
   return (
     <div
       ref={containerRef}
-      className={`${className} ${layout.containerClass}`}
+      className={className}
       style={dynamicStyles}
       {...attributes}
       {...rest}

@@ -41,7 +41,6 @@ export function HomeContent() {
     feature_4_title: ["Trending Now", "Tendencias", "Popular Now", "What's Hot", "Hot Picks", "Trending Content", "Popular Now", "What's Trending", "Trending Now", "Hot Trends"],
     feature_4_description: ["Discover what's popular and trending", "Descubre lo que es popular y está de moda", "See what's trending and gaining popularity", "Explore trending and popular content", "Find what's currently trending and popular", "See what's popular and gaining attention", "Discover trending and popular content", "Explore popular and trending selections", "See what's popular and trending right now", "Explore what's popular and gaining momentum"],
     // Header section
-    app_title: ["Autobooks", "Autobooks", "Autobooks", "Autobooks", "Autobooks", "Autobooks", "Autobooks", "Autobooks", "Autobooks", "Autobooks"],
     app_description: [
       "Your intelligent book search engine. Discover thousands of books, explore by genre, and find your next reading adventure.",
       "Your smart book search. Browse thousands of books, filter by genre, and discover your next reading experience.",
@@ -189,7 +188,7 @@ export function HomeContent() {
                 {dyn.v1.addWrapDecoy("home-header", (
                   <div className="text-center mb-10">
                     <h2 id={dyn.v3.getVariant("home-title", ID_VARIANTS_MAP, "home-title")} className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4">
-                      {dyn.v3.getVariant("app_title", dynamicV3TextVariants, "Autobooks")}
+                      Autobooks
                     </h2>
                     <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
                       {dyn.v3.getVariant("app_description", dynamicV3TextVariants, "Your intelligent book search engine. Discover thousands of books, explore by genre, and find your next reading adventure.")}
@@ -544,7 +543,7 @@ export function HomeContent() {
                     <h2 id={dyn.v3.getVariant("features-title", ID_VARIANTS_MAP, "features-title")} className="text-4xl md:text-5xl font-bold text-white mb-4">
                       {dyn.v3.getVariant("why_choose", dynamicV3TextVariants, "Why Choose")}
                       <span className="block text-transparent bg-clip-text bg-gradient-to-r from-secondary to-yellow-400">
-                        {dyn.v3.getVariant("app_title", dynamicV3TextVariants, "Autobooks")}?
+                        Autobooks?
                       </span>
                     </h2>
                     <p className="text-lg text-white/70 max-w-2xl mx-auto">
