@@ -16,6 +16,8 @@ import { useEmail } from "@/contexts/EmailContext";
 import { Tag, Plus } from "lucide-react";
 import type { Email, Label } from "@/types/email";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
 
 interface LabelSelectorProps {
   email?: Email;
@@ -28,6 +30,7 @@ export function LabelSelector({
   emailIds,
   trigger,
 }: LabelSelectorProps) {
+  const dyn = useDynamicSystem();
   const {
     getAllLabels,
     addLabelToEmails,
@@ -123,7 +126,12 @@ export function LabelSelector({
   };
 
   const defaultTrigger = (
-    <Button variant="ghost" size="icon">
+    <Button
+      variant="ghost"
+      size="icon"
+      id={dyn.v3.getVariant("label-selector", ID_VARIANTS_MAP, "label-selector-trigger")}
+      className={dyn.v3.getVariant("label-selector", CLASS_VARIANTS_MAP, "")}
+    >
       <Tag className="h-5 w-5" />
     </Button>
   );
@@ -132,14 +140,18 @@ export function LabelSelector({
     return null;
   }
 
-  return (
+  return dyn.v1.addWrapDecoy("label-selector", (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         {trigger || defaultTrigger}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent
+        align="end"
+        className="w-56"
+        id={dyn.v3.getVariant("label-selector", ID_VARIANTS_MAP, "label-selector-menu")}
+      >
         <div className="px-2 py-1.5 text-sm font-medium">
-          {emailIds ? `Label ${emailIds.length} emails` : "Label email"}
+          {emailIds ? `Label ${emailIds.length} emails` : dyn.v3.getVariant("label_section", TEXT_VARIANTS_MAP, "Label email")}
         </div>
         <DropdownMenuSeparator />
 
@@ -174,12 +186,12 @@ export function LabelSelector({
                 className="w-full justify-start gap-2 h-auto p-0"
               >
                 <Plus className="h-3 w-3" />
-                Create new label
+                {dyn.v3.getVariant("label_section", TEXT_VARIANTS_MAP, "Create new label")}
               </Button>
             }
           />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  ));
 }
