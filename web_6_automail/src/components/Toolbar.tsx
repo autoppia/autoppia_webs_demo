@@ -285,14 +285,6 @@ export function Toolbar({ onMenuClick, textStructure }: ToolbarProps) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          <Button
-            variant="default"
-            className="hidden md:inline-flex"
-            id={dyn.v3.getVariant('sidebar-compose', ID_VARIANTS_MAP, 'compose-btn')}
-          >
-            {composeLabel}
-          </Button>
         </div>
       </div>
     </div>

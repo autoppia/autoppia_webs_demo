@@ -1,6 +1,6 @@
 "use client";
 
-import type React from "react";
+import  type React from "react";
 import { cn } from "@/library/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -106,12 +106,11 @@ export function Sidebar({ textStructure }: SidebarProps) {
         {dyn.v1.addWrapDecoy("sidebar-compose", (
           <Button
             onClick={() => toggleCompose(true)}
-            className={cn("w-full justify-start gap-3 h-12 text-sm font-medium btn-primary-gradient rounded-xl", dyn.v3.getVariant("sidebar-compose", CLASS_VARIANTS_MAP, ""))}
+            className={cn("w-full justify-center h-12 text-sm font-medium btn-primary-gradient rounded-xl", dyn.v3.getVariant("sidebar-compose", CLASS_VARIANTS_MAP, ""))}
             size="lg"
             id={composeId}
             aria-label={composeText}
           >
-            <PenTool className="h-4 w-4" />
             {composeText}
           </Button>
         ))}

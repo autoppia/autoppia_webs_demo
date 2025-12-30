@@ -136,7 +136,7 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
         <div className="flex flex-col flex-1 overflow-hidden">
           <div className="px-4 py-3 space-y-3">
             <div className="flex items-start gap-3">
-              <Label className="text-xs font-medium text-muted-foreground w-4 pt-2">
+              <Label className="text-xs font-medium text-muted-foreground w-16 text-right pt-2">
                 {fieldLabel("compose-to", textStructure?.email_content?.to || "To")}
               </Label>
               <div className="flex-1 min-h-[36px] border border-border rounded-md p-2 focus-within:ring-1 focus-within:ring-primary/50 bg-background">
@@ -165,7 +165,7 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
             </div>
 
             <div className="flex items-start gap-3">
-              <Label className="text-xs font-medium text-muted-foreground w-4 pt-2">
+              <Label className="text-xs font-medium text-muted-foreground w-16 text-right pt-2">
                 {fieldLabel("compose-subject", textStructure?.email_content?.subject || "Subject")}
               </Label>
               {dyn.v1.addWrapDecoy("compose-subject", (
@@ -180,7 +180,7 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
             </div>
 
             <div className="flex items-start gap-3">
-              <Label className="text-xs font-medium text-muted-foreground w-4 pt-2">
+              <Label className="text-xs font-medium text-muted-foreground w-16 text-right pt-2">
                 {fieldLabel("compose-body", textStructure?.email_content?.message || "Message")}
               </Label>
               {dyn.v1.addWrapDecoy("compose-body", (
