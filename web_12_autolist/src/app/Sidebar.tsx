@@ -18,8 +18,8 @@ import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { useTeams } from "@/context/TeamsContext";
 import { useProjects } from "@/context/ProjectsContext";
-import { CreateProjectModal } from "./components/CreateProjectModal";
-import CreateTeamModal from "./components/CreateTeamModal";
+import { CreateProjectModal } from "@/components/CreateProjectModal";
+import CreateTeamModal from "@/components/CreateTeamModal";
 
 type SidebarItem = {
   id: string;

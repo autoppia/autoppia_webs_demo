@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { Modal, Form, Input, Select, Space } from "antd";
 import { logEvent, EVENT_TYPES } from "@/library/events";
@@ -33,26 +35,26 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
   const modalId = dyn.v3.getVariant("sidebar-teams", ID_VARIANTS_MAP, "team-modal");
 
   const memberOptions = [
-    { value: 'john@example.com', label: 'John Doe' },
-    { value: 'jane@example.com', label: 'Jane Smith' },
-    { value: 'bob@example.com', label: 'Bob Johnson' },
-    { value: 'alice@example.com', label: 'Alice Williams' },
-    { value: 'michael@example.com', label: 'Michael Brown' },
-    { value: 'emily@example.com', label: 'Emily Davis' },
-    { value: 'david@example.com', label: 'David Wilson' },
-    { value: 'sophia@example.com', label: 'Sophia Martinez' },
-    { value: 'lie@example.com', label: 'Lie Wei' },
-    { value: 'fatima@example.com', label: 'Fatima Al-Farsi' },
+    { value: "john@example.com", label: "John Doe" },
+    { value: "jane@example.com", label: "Jane Smith" },
+    { value: "bob@example.com", label: "Bob Johnson" },
+    { value: "alice@example.com", label: "Alice Williams" },
+    { value: "michael@example.com", label: "Michael Brown" },
+    { value: "emily@example.com", label: "Emily Davis" },
+    { value: "david@example.com", label: "David Wilson" },
+    { value: "sophia@example.com", label: "Sophia Martinez" },
+    { value: "lie@example.com", label: "Lie Wei" },
+    { value: "fatima@example.com", label: "Fatima Al-Farsi" },
   ];
 
   const roleOptions = [
-    { value: 'admin', label: 'Admin' },
-    { value: 'member', label: 'Member' },
-    { value: 'viewer', label: 'Viewer' },
-    { value: 'developer', label: 'Developer' },
-    { value: 'designer', label: 'Designer' },
-    { value: 'tester', label: 'Tester' },
-    { value: 'product_manager', label: 'Product Manager' },
+    { value: "admin", label: "Admin" },
+    { value: "member", label: "Member" },
+    { value: "viewer", label: "Viewer" },
+    { value: "developer", label: "Developer" },
+    { value: "designer", label: "Designer" },
+    { value: "tester", label: "Tester" },
+    { value: "product_manager", label: "Product Manager" },
   ];
 
   const handleSubmit = async () => {
@@ -61,17 +63,16 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
 
       const values = await form.validateFields();
 
-      // Build members array with id, name, and role (label)
       const members = (values.members || []).map((memberId: string) => {
-        const option = memberOptions.find(opt => opt.value === memberId);
+        const option = memberOptions.find((opt) => opt.value === memberId);
         const name = option ? option.label : memberId;
-        const roleValue = values.roles && values.roles[memberId] ? values.roles[memberId] : 'member';
-        const roleObj = roleOptions.find(opt => opt.value === roleValue || opt.label === roleValue);
+        const roleValue = values.roles && values.roles[memberId] ? values.roles[memberId] : "member";
+        const roleObj = roleOptions.find((opt) => opt.value === roleValue || opt.label === roleValue);
         const role = roleObj ? roleObj.label : roleValue;
         return {
           id: memberId,
           name,
-          role
+          role,
         };
       });
 
@@ -84,7 +85,6 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
 
       onOk({ ...values, members });
       form.resetFields();
-
     } catch (error) {
       console.error("Form validation failed:", error);
     } finally {
