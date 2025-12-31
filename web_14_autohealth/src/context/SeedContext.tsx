@@ -45,11 +45,8 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => (
 
 function SeedProviderInner({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
-  const initialSeed = typeof window !== "undefined" && (window as any).__INITIAL_SEED__
-    ? clampBaseSeed(Number.parseInt((window as any).__INITIAL_SEED__, 10))
-    : DEFAULT_SEED;
-  const [seed, setSeedState] = useState(initialSeed);
-  const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() => resolveSeedsSync(initialSeed));
+  const [seed, setSeedState] = useState(DEFAULT_SEED);
+  const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() => resolveSeedsSync(DEFAULT_SEED));
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {

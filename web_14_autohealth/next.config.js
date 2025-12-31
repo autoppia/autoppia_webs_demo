@@ -15,23 +15,12 @@ if (isLocalDev) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'false';
 }
 
-// Enable V3 by default in local dev
-if (!process.env.ENABLE_DYNAMIC_V3) {
-  process.env.ENABLE_DYNAMIC_V3 = isLocalDev ? 'true' : 'false';
-}
-if (isLocalDev) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = 'true';
-} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = 'false';
-}
-
 console.log('🔍 Next.js config - Environment variables:');
 console.log('  NODE_ENV:', process.env.NODE_ENV);
 console.log('  isLocalDev:', isLocalDev);
 console.log('  isDockerBuild:', isDockerBuild);
 console.log('  API_URL:', process.env.API_URL);
 console.log('  ENABLE_DYNAMIC_V1:', process.env.ENABLE_DYNAMIC_V1);
-console.log('  ENABLE_DYNAMIC_V3:', process.env.ENABLE_DYNAMIC_V3);
 console.log('  ENABLE_DATA_GENERATION:', process.env.ENABLE_DYNAMIC_V2_AI_GENERATE);
 console.log('  NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
 

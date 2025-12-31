@@ -6,7 +6,6 @@ import Script from "next/script";
 import Navbar from "@/components/site/navbar";
 import Footer from "@/components/site/footer";
 import { SeedProvider } from "@/context/SeedContext";
-import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,23 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  const params = new URLSearchParams(window.location.search);
-                  const seed = params.get('seed');
-                  if (seed) {
-                    window.__INITIAL_SEED__ = parseInt(seed, 10);
-                  }
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
         <Script
           crossOrigin="anonymous"
           src="//unpkg.com/same-runtime/dist/index.global.js"
@@ -59,7 +43,6 @@ export default function RootLayout({
               <Navbar />
               <main className="flex-1">{children}</main>
               <Footer />
-              <DynamicDebug />
             </div>
           </ClientBody>
         </SeedProvider>
