@@ -1,12 +1,13 @@
 export {
   dynamicDataProvider,
-  isDynamicModeEnabled,
-  getEffectiveSeed,
-  getLayoutConfig,
+  getHotels,
+  getHotelById,
+  getFeaturedHotels,
+  getRelatedHotels,
+  getAvailableRegions,
+  searchHotels,
 } from "./data-provider";
+export type { HotelSearchFilters } from "./data-provider";
 
 // Export whenReady function
-export const whenReady = () => {
-  const { dynamicDataProvider } = require("./data-provider");
-  return dynamicDataProvider.whenReady();
-};
+export const whenReady = () => dynamicDataProvider.whenReady();

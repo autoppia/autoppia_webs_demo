@@ -1,8 +1,29 @@
-import { getEffectiveLayoutConfig, isDynamicEnabled } from "@/dynamic/v1-layouts";
+const boolFromEnv = (value?: string | boolean | null): boolean => {
+  if (value === true) return true;
+  if (value === false) return false;
+  if (!value) return false;
+  return String(value).toLowerCase() === "true";
+};
+
+const DEFAULT_LAYOUT_CONFIG = {
+  id: 1,
+  name: "Fixed Layout",
+  description: "Static layout used when dynamic HTML is disabled",
+  layout: {
+    sidebar: "left",
+    navigation: "top",
+    search: "top",
+    calendar: "center",
+    userProfile: "top",
+    createButton: "sidebar",
+    miniCalendar: "sidebar",
+    myCalendars: "sidebar",
+  },
+};
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
-  return isDynamicEnabled();
+  return boolFromEnv(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) || boolFromEnv(process.env.ENABLE_DYNAMIC_V1);
 };
 
 // Dynamic data provider that manages calendar data and dynamic HTML state
@@ -53,7 +74,7 @@ export class DynamicDataProvider {
 
   // Get layout configuration based on seed
   public getLayoutConfig(seed?: number) {
-    return getEffectiveLayoutConfig(seed);
+    return DEFAULT_LAYOUT_CONFIG;
   }
 
   // Static Calendar data - always available

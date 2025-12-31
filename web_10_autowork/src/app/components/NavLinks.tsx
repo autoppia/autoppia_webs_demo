@@ -1,6 +1,6 @@
 "use client";
 
-import { type ComponentType } from "react";
+import type { ComponentType } from "react";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Briefcase, Users, Sparkles, Heart, User, Clock3 } from "lucide-react";

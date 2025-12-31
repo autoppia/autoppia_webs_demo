@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useSeed } from '@/context/SeedContext';
-import { getSeedLayout } from '@/dynamic/v1-layouts';
 
 interface DynamicElementProps {
   children: React.ReactNode;
@@ -25,7 +24,6 @@ export function DynamicElement({
 }: DynamicElementProps) {
   const elementRef = useRef<HTMLElement>(null);
   const { seed } = useSeed();
-  const layout = getSeedLayout(seed);
 
   const [attributes, setAttributes] = useState<Record<string, string>>({});
 

@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useSeed } from "@/context/SeedContext";
-import { useSeedStructure } from "@/dynamic/v1-layouts/useSeedStructure";
 import type { ComponentProps } from "react";
 
 interface SeedLinkProps extends Omit<ComponentProps<typeof Link>, 'href'> {
@@ -15,15 +14,11 @@ interface SeedLinkProps extends Omit<ComponentProps<typeof Link>, 'href'> {
  */
 export function SeedLink({ href, preserveSeed = true, ...props }: SeedLinkProps) {
   const { getNavigationUrl } = useSeed();
-  const { getNavigationUrlWithStructure } = useSeedStructure();
 
   if (!preserveSeed || href.startsWith('http')) {
     return <Link href={href} {...props} />;
   }
 
-  // First add seed, then seed-structure
   const withSeed = getNavigationUrl(href);
-  const finalHref = getNavigationUrlWithStructure(withSeed);
-
-  return <Link href={finalHref} {...props} />;
+  return <Link href={withSeed} {...props} />;
 }

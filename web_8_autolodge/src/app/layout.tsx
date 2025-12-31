@@ -4,8 +4,8 @@ import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
-// DynamicStructureProvider removed - now using v3-dynamic
 import { SeedProvider } from "@/context/SeedContext";
+import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +31,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const params = new URLSearchParams(window.location.search);
+                  const seed = params.get('seed');
+                  if (seed) {
+                    window.__INITIAL_SEED__ = parseInt(seed, 10);
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="bg-neutral-50 min-h-screen font-sans" suppressHydrationWarning>
         <SeedProvider>
           <Suspense fallback={<div className="h-16" />}>
@@ -39,6 +56,7 @@ export default function RootLayout({
               <div className="w-full max-w-7xl">{children}</div>
             </main>
           </Suspense>
+          <DynamicDebug />
         </SeedProvider>
       </body>
     </html>

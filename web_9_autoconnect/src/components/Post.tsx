@@ -5,7 +5,9 @@ import { useState } from "react";
 import { SeedLink } from "@/components/ui/SeedLink";
 import Image from "next/image";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 export default function Post({
   post,
@@ -23,16 +25,48 @@ export default function Post({
   onDelete?: (postId: string) => void;
 }) {
   const [comment, setComment] = useState("");
-  const { getText, getClass, getId } = useV3Attributes();
-  const withVariant = (type: string, base: string) => {
-    const variant = getClass(type, "");
-    return variant ? `${variant} ${base}` : base;
+  const dyn = useDynamicSystem();
+  const localTextVariants: Record<string, string[]> = {
+    comments_label: ["Comments", "Replies", "Responses"],
+    comment_placeholder: ["Add a comment...", "Write a reply...", "Comment here..."],
+    comment_button: ["Post", "Send", "Comment"],
+    save_post: ["Save", "Bookmark", "Keep"],
+    hide_post: ["Hide", "Remove", "Dismiss"],
   };
+  const localClassVariants: Record<string, string[]> = {
+    post_like_button: [
+      "flex items-center gap-1 group rounded-full px-3 py-1",
+      "flex items-center gap-1 group rounded-full px-3 py-1 bg-gray-50",
+      "flex items-center gap-1 group rounded-full px-3 py-1 border border-gray-200",
+    ],
+    comment_input: [
+      "flex-1 rounded-full border border-gray-200 px-3 py-1 text-sm",
+      "flex-1 rounded-full border border-gray-300 px-3 py-1 text-sm",
+      "flex-1 rounded-full border border-gray-200 px-3 py-1 text-sm bg-gray-50",
+    ],
+    comment_button: [
+      "px-3 py-1 text-sm rounded-full bg-blue-50 hover:bg-blue-100 font-medium",
+      "px-3 py-1 text-sm rounded-full bg-indigo-50 hover:bg-indigo-100 font-medium",
+      "px-3 py-1 text-sm rounded-full bg-blue-100 hover:bg-blue-200 font-medium",
+    ],
+    action_button: [
+      "px-2 py-1 rounded border border-gray-200 hover:bg-gray-50",
+      "px-2 py-1 rounded border border-gray-300 hover:bg-gray-100",
+      "px-2 py-1 rounded border border-gray-200 hover:bg-blue-50",
+    ],
+  };
+  const withVariant = (type: string, base: string) =>
+    cn(
+      base,
+      dyn.v3.getVariant(type, CLASS_VARIANTS_MAP, ""),
+      dyn.v3.getVariant(type, localClassVariants, "")
+    );
+
   function timeAgo(dateString: string) {
     const seconds = Math.floor(
       (Date.now() - new Date(dateString).getTime()) / 1000
     );
-    const suffix = getText("time_ago_suffix", "ago");
+    const suffix = dyn.v3.getVariant("time_ago_suffix", TEXT_VARIANTS_MAP, "ago");
     if (seconds < 60) return `${seconds}s ${suffix}`;
     if (seconds < 3600) return `${Math.floor(seconds / 60)}m ${suffix}`;
     if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ${suffix}`;
@@ -40,43 +74,52 @@ export default function Post({
   }
   return (
     <article
-      id={getId("post_card", post.id)}
+      id={dyn.v3.getVariant(`post_card_${post.id}`, ID_VARIANTS_MAP, `post_card_${post.id}`)}
       className={withVariant("post_card", "bg-white rounded-lg shadow p-4")}
     >
       <div className="flex gap-3 items-start mb-2">
-        <SeedLink
-          href={`/profile/${post.user.username}`}
-          className="shrink-0"
-          onClick={() =>
-            logEvent(EVENT_TYPES.VIEW_USER_PROFILE, {
-              username: post.user.username,
-              name: post.user.name,
-              timestamp: new Date().toISOString(),
-              source: "post_header_avatar",
-            })
-          }
-        >
-          <Avatar src={post.user.avatar} alt={post.user.name} size={40} />
-        </SeedLink>
-        <div>
+        {dyn.v1.addWrapDecoy(
+          "post-author",
           <SeedLink
             href={`/profile/${post.user.username}`}
-            className="font-semibold text-sm hover:underline"
+            className="shrink-0"
             onClick={() =>
               logEvent(EVENT_TYPES.VIEW_USER_PROFILE, {
                 username: post.user.username,
                 name: post.user.name,
-                source: "post_header_name",
+                timestamp: new Date().toISOString(),
+                source: "post_header_avatar",
               })
             }
           >
-            {post.user.name}
+            <Avatar src={post.user.avatar} alt={post.user.name} size={40} />
           </SeedLink>
+        )}
+        <div>
+          {dyn.v1.addWrapDecoy(
+            "post-author-name",
+            <SeedLink
+              href={`/profile/${post.user.username}`}
+              className={cn(
+                "font-semibold text-sm hover:underline",
+                dyn.v3.getVariant("post_author_link", CLASS_VARIANTS_MAP, "")
+              )}
+              onClick={() =>
+                logEvent(EVENT_TYPES.VIEW_USER_PROFILE, {
+                  username: post.user.username,
+                  name: post.user.name,
+                  source: "post_header_name",
+                })
+              }
+            >
+              {dyn.v3.getVariant("post_author", TEXT_VARIANTS_MAP, post.user.name)}
+            </SeedLink>
+          )}
           <div className="text-xs text-gray-500">{timeAgo(post.timestamp)}</div>
         </div>
         <div className="ml-auto flex items-center gap-2 text-xs text-gray-500">
           <button
-            className="px-2 py-1 rounded border border-gray-200 hover:bg-gray-50"
+            className={withVariant("action_button", "px-2 py-1 rounded border border-gray-200 hover:bg-gray-50")}
             onClick={() => {
               onSave(post);
               logEvent(EVENT_TYPES.SAVE_POST, {
@@ -86,10 +129,10 @@ export default function Post({
               })
             }}
           >
-            Save
+            {dyn.v3.getVariant("save_post", localTextVariants, "Save")}
           </button>
           <button
-            className="px-2 py-1 rounded border border-gray-200 hover:bg-gray-50"
+            className={withVariant("action_button", "px-2 py-1 rounded border border-gray-200 hover:bg-gray-50")}
             onClick={() => {
               onHide(post.id);
               logEvent(EVENT_TYPES.HIDE_POST, {
@@ -100,7 +143,7 @@ export default function Post({
               })
             }}
           >
-            Hide
+            {dyn.v3.getVariant("hide_post", localTextVariants, "Hide")}
           </button>
           {onDelete && (
             <button
@@ -112,9 +155,12 @@ export default function Post({
           )}
         </div>
       </div>
-      <p className="mb-3 text-base whitespace-pre-line break-words">
-        {post.content}
-      </p>
+      {dyn.v1.addWrapDecoy(
+        "post-content",
+        <p className="mb-3 text-base whitespace-pre-line break-words">
+          {dyn.v3.getVariant("post_content", undefined, post.content)}
+        </p>
+      )}
       {post.image && (
         <div className="rounded-lg overflow-hidden w-full mb-3">
           <Image
@@ -131,7 +177,11 @@ export default function Post({
       )}
       <div className="flex gap-4 items-center text-gray-500 text-sm mb-2">
         <button
-          id={getId("post_like_button", post.id)}
+          id={dyn.v3.getVariant(
+            `post_like_button_${post.id}`,
+            ID_VARIANTS_MAP,
+            `post_like_button_${post.id}`
+          )}
           className={`${withVariant(
             "post_like_button",
             "flex items-center gap-1 group rounded-full px-3 py-1"
@@ -150,7 +200,8 @@ export default function Post({
           {post.likes}
         </button>
         <span>
-          {getText("comments_label", "Comments")}: {post.comments.length}
+          {dyn.v3.getVariant("comments_label", localTextVariants, "Comments")}:{" "}
+          {post.comments.length}
         </span>
       </div>
       <div className="pl-2 space-y-2">
@@ -178,25 +229,33 @@ export default function Post({
         className="flex gap-2 mt-2"
       >
         <input
-          id={getId("comment_input", post.id)}
+          id={dyn.v3.getVariant(
+            `comment_input_${post.id}`,
+            ID_VARIANTS_MAP,
+            `comment_input_${post.id}`
+          )}
           className={withVariant(
             "comment_input",
             "flex-1 rounded-full border border-gray-200 px-3 py-1 text-sm"
           )}
-          placeholder={getText("comment_placeholder", "Add a comment...")}
+          placeholder={dyn.v3.getVariant("comment_placeholder", localTextVariants, "Add a comment...")}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
         <button
           type="submit"
-          id={getId("comment_button", post.id)}
+          id={dyn.v3.getVariant(
+            `comment_button_${post.id}`,
+            ID_VARIANTS_MAP,
+            `comment_button_${post.id}`
+          )}
           className={withVariant(
             "comment_button",
             "px-3 py-1 text-sm rounded-full bg-blue-50 hover:bg-blue-100 font-medium"
           )}
           disabled={!comment.trim()}
         >
-          {getText("comment_button", "Post")}
+          {dyn.v3.getVariant("comment_button", localTextVariants, "Post")}
         </button>
       </form>
     </article>

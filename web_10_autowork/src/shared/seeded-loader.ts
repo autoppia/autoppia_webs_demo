@@ -28,7 +28,7 @@ export function isDbLoadModeEnabled(): boolean {
   return raw === "true";
 }
 
-export function getSeedValueFromEnv(defaultSeed: number = 1): number {
+export function getSeedValueFromEnv(defaultSeed = 1): number {
   // Always return default seed (v2-seed comes from URL parameter, not env vars)
   return defaultSeed;
 }

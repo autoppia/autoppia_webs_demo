@@ -4,7 +4,9 @@ import type { Job } from "@/library/dataset";
 import Image from "next/image";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 export default function JobCard({
   job,
@@ -16,7 +18,7 @@ export default function JobCard({
   isApplied?: boolean;
 }) {
   const [pending, setPending] = useState(false);
-  const { getText } = useV3Attributes();
+  const dyn = useDynamicSystem();
   const [avatarError, setAvatarError] = useState(false);
 
   // Generate a unique avatar based on job ID
@@ -58,46 +60,61 @@ export default function JobCard({
   return (
     <SeedLink
       href={`/jobs/${job.id}`}
-      className="flex items-center gap-4 bg-white rounded shadow p-4 w-full hover:shadow-md transition-shadow cursor-pointer"
+      className={cn(
+        "flex items-center gap-4 bg-white rounded shadow p-4 w-full hover:shadow-md transition-shadow cursor-pointer",
+        dyn.v3.getVariant("job_card", CLASS_VARIANTS_MAP, "")
+      )}
+      id={dyn.v3.getVariant(`job_card_${job.id}`, ID_VARIANTS_MAP, `job_card_${job.id}`)}
       onClick={handleViewJob}
     >
-      <Image
-        src={avatarError ? job.logo : getAvatarUrl()}
-        alt={job.company}
-        width={48}
-        height={48}
-        className="rounded-full object-cover bg-gray-100"
-        onError={() => setAvatarError(true)}
-      />
+      {dyn.v1.addWrapDecoy(
+        "job-card-media",
+        <Image
+          src={avatarError ? job.logo : getAvatarUrl()}
+          alt={job.company}
+          width={48}
+          height={48}
+          className="rounded-full object-cover bg-gray-100"
+          onError={() => setAvatarError(true)}
+        />
+      )}
       <div className="flex-1">
         <div className="font-bold text-blue-800 text-lg leading-tight hover:text-blue-600">
-          {job.title}
+          {dyn.v3.getVariant("job_title", TEXT_VARIANTS_MAP, job.title)}
         </div>
-        <div className="text-gray-700 font-medium">{job.company}</div>
-        <div className="text-sm text-gray-500">{job.location}</div>
+        <div className="text-gray-700 font-medium">
+          {dyn.v3.getVariant("job_company", TEXT_VARIANTS_MAP, job.company)}
+        </div>
+        <div className="text-sm text-gray-500">
+          {dyn.v3.getVariant("job_location", TEXT_VARIANTS_MAP, job.location)}
+        </div>
         {job.salary && (
           <div className="text-sm text-green-600 font-medium mt-1">
-            {job.salary}
+            {dyn.v3.getVariant("job_salary", TEXT_VARIANTS_MAP, job.salary)}
           </div>
         )}
       </div>
-      <button
-        className={`px-4 py-1.5 rounded-full font-semibold transition ${
-          isApplied
-            ? "bg-green-600 text-white cursor-default"
+      {dyn.v1.addWrapDecoy(
+        "job-card-cta",
+        <button
+          className={cn(
+            "px-4 py-1.5 rounded-full font-semibold transition",
+            isApplied
+              ? "bg-green-600 text-white cursor-default"
+              : pending
+              ? "bg-gray-400 text-white cursor-wait"
+              : "bg-blue-600 hover:bg-blue-700 text-white"
+          )}
+          onClick={handleApply}
+          disabled={isApplied || pending}
+        >
+          {isApplied
+            ? dyn.v3.getVariant("jobs_apply_done", TEXT_VARIANTS_MAP, "Applied")
             : pending
-            ? "bg-gray-400 text-white cursor-wait"
-            : "bg-blue-600 hover:bg-blue-700 text-white"
-        }`}
-        onClick={handleApply}
-        disabled={isApplied || pending}
-      >
-        {isApplied
-          ? getText("jobs_apply_done", "Applied")
-          : pending
-          ? getText("jobs_apply_pending", "Pending...")
-          : getText("jobs_apply_button", "Apply")}
-      </button>
+            ? dyn.v3.getVariant("jobs_apply_pending", TEXT_VARIANTS_MAP, "Pending...")
+            : dyn.v3.getVariant("jobs_apply_button", TEXT_VARIANTS_MAP, "Apply")}
+        </button>
+      )}
     </SeedLink>
   );
 }

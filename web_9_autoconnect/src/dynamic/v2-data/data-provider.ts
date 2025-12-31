@@ -1,55 +1,21 @@
-import {
-  initializeUsers,
-  initializePosts,
-  initializeJobs,
-  initializeRecommendations,
-  type User,
-  type Post,
-  type Job,
-  type Recommendation,
-} from "@/data/autoconnect-enhanced";
-import { getEffectiveLayoutConfig } from "@/dynamic/v1-layouts";
-
-const isV2Enabled = (): boolean => {
-  return (
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE === "true" ||
-    process.env.ENABLE_DYNAMIC_V2_DB_MODE === "true"
-  );
-};
+import type { Job, Post, Recommendation, User } from "@/library/dataset";
+import usersData from "@/data/original/users_1.json";
+import postsData from "@/data/original/posts_1.json";
+import jobsData from "@/data/original/jobs_1.json";
+import recommendationsData from "@/data/original/recommendations_1.json";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
-  private ready = false;
-  private readyPromise: Promise<void>;
-  private isEnabled = false;
-  private cleanup?: () => void;
-
   private users: User[] = [];
   private posts: Post[] = [];
   private jobs: Job[] = [];
   private recommendations: Recommendation[] = [];
+  private ready = false;
+  private readyPromise: Promise<void>;
 
   private constructor() {
-    this.isEnabled = isV2Enabled();
-
-    if (typeof window === "undefined") {
-      this.ready = true;
-      this.readyPromise = Promise.resolve();
-      return;
-    }
-
-    this.readyPromise = this.loadAll();
-
-    const handler = ((event: Event) => {
-      const custom = event as CustomEvent<{ seed: number | null }>;
-      const nextSeed = custom.detail?.seed ?? undefined;
-      this.loadAll(nextSeed).catch((err) =>
-        console.error("[DynamicDataProvider] Failed to reload data:", err)
-      );
-    }) as EventListener;
-
-    window.addEventListener("autoconnect:v2SeedChange", handler);
-    this.cleanup = () => window.removeEventListener("autoconnect:v2SeedChange", handler);
+    this.readyPromise = this.initialize();
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -59,58 +25,44 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  private getRuntimeV2Seed(): number | undefined {
-    if (typeof window === "undefined") return undefined;
-    const value = (window as any).__autoconnectV2Seed;
-    if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
-      return value;
-    }
-    return undefined;
-  }
-
-  private async loadAll(seedOverride?: number | null): Promise<void> {
-    try {
-      const v2Seed =
-        typeof seedOverride === "number" && Number.isFinite(seedOverride)
-          ? seedOverride
-          : this.getRuntimeV2Seed();
-
-      const [users, posts, jobs, recommendations] = await Promise.all([
-        initializeUsers(v2Seed ?? undefined),
-        initializePosts(v2Seed ?? undefined),
-        initializeJobs(v2Seed ?? undefined),
-        initializeRecommendations(v2Seed ?? undefined),
-      ]);
-
-      this.users = users ?? [];
-      this.posts = posts ?? [];
-      this.jobs = jobs ?? [];
-      this.recommendations = recommendations ?? [];
-    } catch (error) {
-      console.error("[DynamicDataProvider] Failed to load v2 data:", error);
-    } finally {
-      this.ready = true;
-    }
-  }
-
-  public async whenReady(): Promise<void> {
-    await this.readyPromise;
+  private async initialize(): Promise<void> {
+    // V2 (DB mode) is disabled by default. Use original seed=1 data copied from webs_server.
+    this.users = usersData as User[];
+    this.posts = (postsData as Post[]).map((p) => ({ ...p, comments: p.comments || [] }));
+    this.jobs = jobsData as Job[];
+    this.recommendations = recommendationsData as Recommendation[];
+    this.ready = true;
   }
 
   public isReady(): boolean {
     return this.ready;
   }
 
-  public isDynamicEnabled(): boolean {
-    return this.isEnabled;
+  public whenReady(): Promise<void> {
+    return this.readyPromise;
   }
 
   public getUsers(): User[] {
     return this.users;
   }
 
+  public searchUsers(query: string): User[] {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) return this.users;
+    return this.users.filter(
+      (user) =>
+        user.name.toLowerCase().includes(normalized) ||
+        user.username.toLowerCase().includes(normalized) ||
+        user.title.toLowerCase().includes(normalized) ||
+        user.bio.toLowerCase().includes(normalized)
+    );
+  }
+
   public getPosts(): Post[] {
-    return this.posts;
+    return this.posts.map((post) => ({
+      ...post,
+      comments: post.comments || [],
+    }));
   }
 
   public getJobs(): Job[] {
@@ -121,26 +73,39 @@ export class DynamicDataProvider {
     return this.jobs.find((job) => job.id === id);
   }
 
+  public searchJobs(query: string): Job[] {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) return this.jobs;
+    return this.jobs.filter(
+      (job) =>
+        job.title.toLowerCase().includes(normalized) ||
+        job.company.toLowerCase().includes(normalized) ||
+        (job.location && job.location.toLowerCase().includes(normalized))
+    );
+  }
+
   public getRecommendations(): Recommendation[] {
     return this.recommendations;
   }
 
-  public searchUsers(query: string): User[] {
-    const normalized = query.trim().toLowerCase();
-    if (!normalized) {
-      return this.users;
-    }
-    return this.users.filter((user) => {
-      return (
-        user.name.toLowerCase().includes(normalized) ||
-        user.username.toLowerCase().includes(normalized) ||
-        (user.title || "").toLowerCase().includes(normalized)
-      );
-    });
+  public isDynamicModeEnabled(): boolean {
+    // V2 is currently off (always uses original data)
+    return false;
+  }
+
+  public getLayoutConfig(seed?: number) {
+    return { seed: clampBaseSeed(seed ?? 1) };
   }
 }
 
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
-export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicEnabled();
-export const getLayoutConfig = (seed?: number) => getEffectiveLayoutConfig(seed);
+export const whenReady = () => dynamicDataProvider.whenReady();
+export const getUsers = () => dynamicDataProvider.getUsers();
+export const searchUsers = (query: string) => dynamicDataProvider.searchUsers(query);
+export const getPosts = () => dynamicDataProvider.getPosts();
+export const getJobs = () => dynamicDataProvider.getJobs();
+export const getJobById = (id: string) => dynamicDataProvider.getJobById(id);
+export const searchJobs = (query: string) => dynamicDataProvider.searchJobs(query);
+export const getRecommendations = () => dynamicDataProvider.getRecommendations();
+export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();

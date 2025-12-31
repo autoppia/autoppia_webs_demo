@@ -9,11 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useEmail } from "@/contexts/EmailContext";
 import { useLayout } from "@/contexts/LayoutContext";
-import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
 import { LabelSelector } from "@/components/LabelSelector";
 import type { Email } from "@/types/email";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { TextStructureConfig } from "@/utils/textStructureProvider";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
 import {
   Star,
   Archive,
@@ -34,7 +35,7 @@ interface EmailListProps {
 
 export function EmailList({ textStructure }: EmailListProps) {
   const { currentVariant } = useLayout();
-  const { getText, getId } = useDynamicStructure();
+  const dyn = useDynamicSystem();
   const {
     paginatedEmails,
     filteredEmails,
@@ -197,15 +198,15 @@ export function EmailList({ textStructure }: EmailListProps) {
 
     switch (currentFilter.folder) {
       case "inbox":
-        return getText("inbox");
+        return dyn.v3.getVariant("inbox_label", TEXT_VARIANTS_MAP, "Inbox");
       case "starred":
-        return getText("starred");
+        return dyn.v3.getVariant("starred_label", TEXT_VARIANTS_MAP, "Starred");
       case "snoozed":
         return "Snoozed";
       case "sent":
-        return getText("sent");
+        return dyn.v3.getVariant("sent_label", TEXT_VARIANTS_MAP, "Sent");
       case "drafts":
-        return getText("drafts");
+        return dyn.v3.getVariant("drafts_label", TEXT_VARIANTS_MAP, "Drafts");
       case "important":
         return "Important";
       case "archive":
@@ -213,9 +214,9 @@ export function EmailList({ textStructure }: EmailListProps) {
       case "spam":
         return "Spam";
       case "trash":
-        return getText("trash");
+        return dyn.v3.getVariant("trash_label", TEXT_VARIANTS_MAP, "Trash");
       default:
-        return getText("inbox");
+        return dyn.v3.getVariant("inbox_label", TEXT_VARIANTS_MAP, "Inbox");
     }
   };
 
@@ -250,11 +251,12 @@ export function EmailList({ textStructure }: EmailListProps) {
     });
   };
 
-  return (
+  return dyn.v1.addWrapDecoy("email-list-shell", (
     <div
-      className="flex flex-col h-full bg-background px-6"
+      className={cn("flex flex-col h-full bg-background px-6", dyn.v3.getVariant("email-list", CLASS_VARIANTS_MAP, ""))}
       data-testid="email-list"
       suppressHydrationWarning
+      id={dyn.v3.getVariant("email-list", ID_VARIANTS_MAP, "email-list")}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-border">
@@ -461,7 +463,7 @@ export function EmailList({ textStructure }: EmailListProps) {
         )}
       </ScrollArea>
     </div>
-  );
+  ));
 }
 
 interface EmailItemProps {
@@ -490,6 +492,14 @@ function EmailItem({
   searchQuery,
 }: EmailItemProps) {
   const { currentVariant } = useLayout();
+  const dyn = useDynamicSystem();
+  const emailRowId = dyn.v3.getVariant("email-card", ID_VARIANTS_MAP, email.id);
+  const emailRowClass = cn(
+    dyn.v3.getVariant("email-card", CLASS_VARIANTS_MAP, "group flex items-center gap-3 p-3 cursor-pointer email-item-hover"),
+    isActive && "bg-muted",
+    !email.isRead && "email-item-unread",
+    isSelected && "email-item-selected"
+  );
   
   // Get CSS classes based on layout variant
   const getEmailItemClasses = () => {
@@ -574,11 +584,13 @@ function EmailItem({
     }
   };
 
-  return (
+  return dyn.v1.addWrapDecoy(`email-card-${email.id}`, (
     <div
-      className={getEmailItemClasses()}
+      className={cn(getEmailItemClasses(), emailRowClass)}
       onClick={onClick}
       suppressHydrationWarning
+      id={emailRowId}
+      data-dyn-key="email-card"
     >
       {/* Selection Checkbox */}
       <div
@@ -722,5 +734,5 @@ function EmailItem({
         </div>
       </div>
     </div>
-  );
+  ));
 }

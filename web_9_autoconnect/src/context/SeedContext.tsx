@@ -40,7 +40,7 @@ const SeedContext = createContext<SeedContextType>({
   resolvedSeeds: resolveSeedsSync(1),
 });
 
-const DEFAULT_SEED = 2;
+const DEFAULT_SEED = 1;
 
 // Internal component that handles URL params
 function SeedInitializer({
@@ -208,4 +208,3 @@ export const useSeed = () => {
   }
   return context;
 };
-

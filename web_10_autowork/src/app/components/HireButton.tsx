@@ -15,7 +15,7 @@ export default function HireButton({
   };
 }) {
   const router = useSeedRouter();
-  const { getElementAttributes, getText } = useSeedLayout();
+  const { getElementAttributes, getText, dyn } = useSeedLayout();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -31,7 +31,7 @@ export default function HireButton({
     router.push(`/expert/${expert.slug}/hire`);
   };
 
-  return (
+  return dyn.v1.addWrapDecoy("expert-hire-button", (
     <button
       {...getElementAttributes('expert-hire-button', 0)}
       type="button"
@@ -40,5 +40,5 @@ export default function HireButton({
     >
       {getText('expert-hire-button-label', 'Start hire')}
     </button>
-  );
+  ));
 }

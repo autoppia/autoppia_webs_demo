@@ -17,6 +17,16 @@ if (isLocalDev) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = "false";
 }
 
+// Default V3 to enabled in local/dev unless explicitly disabled
+if (!process.env.ENABLE_DYNAMIC_V3) {
+  process.env.ENABLE_DYNAMIC_V3 = isLocalDev ? "true" : "false";
+}
+if (isLocalDev) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = "true";
+} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = "false";
+}
+
 console.log("🔍 Next.js config - Environment variables:");
 console.log("  NODE_ENV:", process.env.NODE_ENV);
 console.log("  isLocalDev:", isLocalDev);
@@ -36,6 +46,8 @@ console.log(
   "  NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE:",
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE
 );
+console.log("  ENABLE_DYNAMIC_V3:", process.env.ENABLE_DYNAMIC_V3);
+console.log("  NEXT_PUBLIC_ENABLE_DYNAMIC_V3:", process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
