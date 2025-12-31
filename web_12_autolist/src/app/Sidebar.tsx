@@ -186,13 +186,21 @@ export default function Sidebar({
         "sidebar-top-section",
         <div className="w-full">
           <div className="flex items-center mb-6 px-1 gap-2">
-            <div className={`${sidebarClasses.card} flex items-center justify-center h-14 w-full bg-[#d1453b] text-white`}>
-              <span
-                id={dyn.v3.getVariant("hero-title", ID_VARIANTS_MAP, "autolist-title")}
-                className="font-bold text-lg w-full text-center"
-              >
-                {dyn.v3.getVariant("app-shell", TEXT_VARIANTS_MAP, "AutoList")}
-              </span>
+            <div className="flex items-center justify-center h-16 w-full rounded-2xl bg-gradient-to-r from-[#d1453b] via-[#e85d4e] to-[#f59f8b] text-white shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-white/15 flex items-center justify-center font-semibold text-lg shadow-inner">
+                  A
+                </div>
+                <div className="flex flex-col leading-tight text-left">
+                  <span
+                    id={dyn.v3.getVariant("hero-title", ID_VARIANTS_MAP, "autolist-title")}
+                    className="font-bold text-xl tracking-tight"
+                  >
+                    AutoList
+                  </span>
+                  {/*<span className="text-xs text-white/80">Workspace</span>*/}
+                </div>
+              </div>
             </div>
           </div>
           {wrap(

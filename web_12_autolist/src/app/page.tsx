@@ -567,7 +567,7 @@ export default function Home() {
   const { resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base ?? 1;
   const dynIds = {
-    appShell: dyn.v3.getVariant("app-shell", ID_VARIANTS_MAP, "app-shell"),
+    appShell: "app-shell",
     heroTitle: dyn.v3.getVariant("hero-title", ID_VARIANTS_MAP, "hero-title"),
     quickActions: dyn.v3.getVariant("quick-actions", ID_VARIANTS_MAP, "quick-actions"),
     todaySection: dyn.v3.getVariant("today-section", ID_VARIANTS_MAP, "today-section"),
