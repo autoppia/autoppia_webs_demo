@@ -425,7 +425,7 @@ function AddTaskCard({
               "task-inputs",
               <>
                 <input
-                  {...getElementAttributes("task-name-input", 0)}
+                  id={editingTask ? dyn.v3.getVariant("edit-task-name-input", ID_VARIANTS_MAP, "edit-task-name-input") : dyn.v3.getVariant("task-name-input", ID_VARIANTS_MAP, "task-name-input")}
                   ref={inputRef}
                   className={inputFieldClass}
                   placeholder={getText("input-task-name-placeholder", "Task name")}
@@ -433,7 +433,7 @@ function AddTaskCard({
                   onChange={(e) => setName(e.target.value)}
                 />
                 <input
-                  {...getElementAttributes("task-description-input", 0)}
+                  id={editingTask ? dyn.v3.getVariant("edit-task-description-input", ID_VARIANTS_MAP, "edit-task-description-input") : dyn.v3.getVariant("task-description-input", ID_VARIANTS_MAP, "task-description-input")}
                   className={`${inputFieldClass} mt-1 mb-3 py-5 text-gray-700 placeholder-gray-400`}
                   placeholder={getText("input-description-placeholder", "Description")}
                   value={desc}
@@ -506,7 +506,7 @@ function AddTaskCard({
                 {dyn.v1.addWrapDecoy(
                   "cancel-button",
                   <button
-                    {...getElementAttributes("cancel-button", 0)}
+                    id={editingTask ? dyn.v3.getVariant("cancel-edit-button", ID_VARIANTS_MAP, "cancel-edit-button") : dyn.v3.getVariant("cancel-button", ID_VARIANTS_MAP, "cancel-button")}
                     onClick={() => {
                       logEvent(EVENT_TYPES.CANCEL_TASK, {
                         currentName: name,
@@ -525,8 +525,8 @@ function AddTaskCard({
                 {dyn.v1.addWrapDecoy(
                   "submit-button",
                   <button
-                    {...getElementAttributes("submit-button", 0)}
-                    className={`${dynamicButtonPrimary} px-6 py-1.5 rounded font-semibold`}
+                    id={editingTask ? dyn.v3.getVariant("save-changes-button", ID_VARIANTS_MAP, "save-changes-button") : dyn.v3.getVariant("submit-button", ID_VARIANTS_MAP, "submit-button")}
+                    className={`${editingTask ? dynamicButtonPrimary.replace(/text-white/g, "text-black") : dynamicButtonPrimary} px-6 py-1.5 rounded font-semibold`}
                     onClick={() => {
                       if (!name.trim()) return;
                       logEvent(EVENT_TYPES.ADD, {
@@ -1413,8 +1413,10 @@ function renderChatPlaceholder(chatId: string) {
                       )}
                       {orderedInboxTasks.length > 0 && (
                         <div className="w-full max-w-4xl mt-12 space-y-3 text-left mx-auto" id={dynIds.taskList}>
-                          {orderedInboxTasks.map((task, index) => (
-                            <div key={task.id ?? index} className={`${dynClasses.card} p-5 flex gap-4 items-start`} data-dyn-key="task-card">
+                          {orderedInboxTasks.map((task, index) =>
+                            dyn.v1.addWrapDecoy(
+                              `task-card-${index}`,
+                              <div key={task.id ?? index} className={`${dynClasses.card} p-5 flex gap-4 items-start`} data-dyn-key="task-card">
                               <button
                                 className="w-6 h-6 min-w-[24px] min-h-[24px] rounded-full border-2 border-gray-400 flex items-center justify-center hover:border-[#d1453b] mt-2"
                                 aria-label="Mark complete"
@@ -1514,7 +1516,8 @@ function renderChatPlaceholder(chatId: string) {
                                 </button>
                               </div>
                             </div>
-                          ))}
+                            )
+                          )}
                         </div>
                       )}
                     </div>

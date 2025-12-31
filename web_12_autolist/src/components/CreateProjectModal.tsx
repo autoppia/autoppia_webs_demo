@@ -18,7 +18,7 @@ export function CreateProjectModal({ open, onClose }: CreateProjectModalProps) {
   const dyn = useDynamicSystem();
   const modalId = dyn.v3.getVariant("sidebar-projects", ID_VARIANTS_MAP, "project-modal");
   const labelText = dyn.v3.getVariant("projects_heading", TEXT_VARIANTS_MAP, "Create new project");
-  const inputPlaceholder = dyn.v3.getVariant("projects_heading", TEXT_VARIANTS_MAP, "e.g. Website redesign");
+  const inputPlaceholder = dyn.v3.getVariant("input-task-name-placeholder", TEXT_VARIANTS_MAP, "e.g. Website redesign");
   const modalClass = dyn.v3.getVariant("card-surface", CLASS_VARIANTS_MAP, "");
 
   const handleOk = async () => {
@@ -48,6 +48,8 @@ export function CreateProjectModal({ open, onClose }: CreateProjectModalProps) {
       }}
       okText={dyn.v3.getVariant("save_task", TEXT_VARIANTS_MAP, "Create")}
       cancelText={dyn.v3.getVariant("cancel_action", TEXT_VARIANTS_MAP, "Cancel")}
+      okButtonProps={{ id: dyn.v3.getVariant("create-project-button", ID_VARIANTS_MAP, "create-project-button") }}
+      cancelButtonProps={{ id: dyn.v3.getVariant("cancel-project-button", ID_VARIANTS_MAP, "cancel-project-button") }}
       className={modalClass}
       rootClassName="project-modal"
     >
@@ -68,7 +70,7 @@ export function CreateProjectModal({ open, onClose }: CreateProjectModalProps) {
               >
                 <Input
                   placeholder={inputPlaceholder}
-                  id={dyn.v3.getVariant("task-form", ID_VARIANTS_MAP, "project-name-input")}
+                  id={dyn.v3.getVariant("project-name-input", ID_VARIANTS_MAP, "project-name-input")}
                 />
               </Form.Item>
             )}

@@ -25,5 +25,21 @@
   "toolbar-actions": ["toolbar-actions", "header-actions", "topbar-actions", "page-actions", "toolbar-buttons"],
   "stats-card": ["stats-card", "metrics-card", "insight-card", "numbers-card", "score-card"],
   "filter-dropdown": ["filter-dropdown", "filters-dropdown", "options-dropdown", "filter-menu", "filter-select"],
-  "hero-title": ["hero-title", "headline-title", "page-hero-title", "intro-title", "welcome-title"]
+  "hero-title": ["hero-title", "headline-title", "page-hero-title", "intro-title", "welcome-title"],
+  "backlog-nav-item": ["backlog-nav-item", "inbox-nav-item", "backlog-link", "inbox-link", "backlog-entry"],
+  "today-nav-item": ["today-nav-item", "today-link", "today-entry", "today-nav", "today-item"],
+  "add-project-button": ["add-project-button", "create-project-button", "new-project-button", "project-add-button", "add-project-btn"],
+  "add-team-button": ["add-team-button", "create-team-button", "new-team-button", "team-add-button", "add-team-btn"],
+  "hide-show-button": ["hide-show-button", "toggle-chats-button", "chats-toggle-button", "hide-chats-button", "show-chats-button"],
+  "edit-task-name-input": ["edit-task-name-input", "task-name-edit-input", "edit-name-input", "task-edit-name", "edit-name-field"],
+  "edit-task-description-input": ["edit-task-description-input", "task-description-edit-input", "edit-description-input", "task-edit-description", "edit-description-field"],
+  "save-changes-button": ["save-changes-button", "update-task-button", "confirm-edit-button", "save-edit-button", "apply-changes-button"],
+  "cancel-edit-button": ["cancel-edit-button", "dismiss-edit-button", "close-edit-button", "abort-edit-button", "cancel-edit-btn"],
+  "project-name-input": ["project-name-input", "new-project-name-input", "create-project-name-input", "project-name-field", "project-input-name"],
+  "create-project-button": ["create-project-button", "add-project-button", "new-project-button", "confirm-project-button", "submit-project-button"],
+  "cancel-project-button": ["cancel-project-button", "dismiss-project-button", "close-project-button", "abort-project-button", "cancel-project-btn"],
+  "team-name-input": ["team-name-input", "new-team-name-input", "create-team-name-input", "team-name-field", "team-input-name"],
+  "team-description-input": ["team-description-input", "new-team-description-input", "create-team-description-input", "team-description-field", "team-input-description"],
+  "create-team-button": ["create-team-button", "add-team-button", "new-team-button", "confirm-team-button", "submit-team-button"],
+  "cancel-team-button": ["cancel-team-button", "dismiss-team-button", "close-team-button", "abort-team-button", "cancel-team-btn"]
 }

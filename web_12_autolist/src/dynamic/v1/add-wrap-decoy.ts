@@ -38,11 +38,21 @@ export function applyV1Wrapper(
   const useDivWrapper =
     componentKey.includes("input-container") ||
     componentKey.includes("form") ||
-    componentKey.includes("search") ||
+    componentKey.includes("search");
+  
+  const useFullSizeWrapper =
+    componentKey.includes("input-container") ||
+    componentKey.includes("form") ||
+    componentKey.includes("search");
+  
+  // Use div for cards but without w-full h-full to avoid layout changes
+  const useDivForCards =
     componentKey.includes("feature-card") ||
     componentKey.includes("task-card") ||
     componentKey.includes("stats-card");
-  const WrapperElement = useDivWrapper ? "div" : "span";
+  
+  const WrapperElement = (useDivWrapper || useDivForCards) ? "div" : "span";
+  const wrapperClassName = useFullSizeWrapper ? "w-full h-full block" : undefined;
 
   const core = shouldWrap
     ? React.createElement(
@@ -51,7 +61,7 @@ export function applyV1Wrapper(
           "data-dyn-wrap": componentKey,
           "data-v1": "true",
           "data-wrapper-variant": wrapperVariant,
-          className: useDivWrapper ? "w-full h-full block" : "inline-block w-full align-top",
+          className: wrapperClassName,
         },
         children
       )

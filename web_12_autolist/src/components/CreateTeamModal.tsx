@@ -103,10 +103,11 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
         onCancel();
       }}
       onOk={handleSubmit}
-      okButtonProps={{ loading }}
-      okText={dyn.v3.getVariant("save_task", TEXT_VARIANTS_MAP, "Create Team")}
+      okText={dyn.v3.getVariant("save-team-button", TEXT_VARIANTS_MAP, "Save Team")}
       cancelText={dyn.v3.getVariant("cancel_action", TEXT_VARIANTS_MAP, "Cancel")}
       className={modalClass}
+      okButtonProps={{ id: dyn.v3.getVariant("create-team-button", ID_VARIANTS_MAP, "create-team-button"), loading }}
+      cancelButtonProps={{ id: dyn.v3.getVariant("cancel-team-button", ID_VARIANTS_MAP, "cancel-team-button") }}
     >
       {dyn.v1.addWrapDecoy(
         "team-modal-body",
@@ -116,7 +117,7 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
               "team-name",
               <Form.Item
                 name="name"
-                label={dyn.v3.getVariant("teams_heading", TEXT_VARIANTS_MAP, "Team Name")}
+                label={dyn.v3.getVariant("team-name-label", TEXT_VARIANTS_MAP, "Team Name")}
                 rules={[
                   { required: true, message: "Please enter a team name" },
                   { min: 3, message: "Team name must be at least 3 characters" },
@@ -125,8 +126,8 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
                 validateTrigger="onBlur"
               >
                 <Input
-                  placeholder={dyn.v3.getVariant("teams_heading", TEXT_VARIANTS_MAP, "Enter team name")}
-                  id={dyn.v3.getVariant("task-form", ID_VARIANTS_MAP, "team-name-input")}
+                  placeholder={dyn.v3.getVariant("enter-team-name-placeholder", TEXT_VARIANTS_MAP, "Enter team name")}
+                  id={dyn.v3.getVariant("team-name-input", ID_VARIANTS_MAP, "team-name-input")}
                 />
               </Form.Item>
             )}
@@ -135,7 +136,7 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
               "team-description",
               <Form.Item
                 name="description"
-                label={dyn.v3.getVariant("teams_heading", TEXT_VARIANTS_MAP, "Description")}
+                label={dyn.v3.getVariant("team-description-label", TEXT_VARIANTS_MAP, "Description")}
                 rules={[
                   { required: true, message: "Please enter a team description" },
                   { max: 500, message: "Description cannot exceed 500 characters" },
@@ -143,9 +144,9 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
                 validateTrigger="onBlur"
               >
                 <Input.TextArea
-                  placeholder={dyn.v3.getVariant("empty_state_description", TEXT_VARIANTS_MAP, "Enter team description")}
+                  placeholder={dyn.v3.getVariant("input-description-placeholder", TEXT_VARIANTS_MAP, "Enter team description")}
                   rows={4}
-                  id={dyn.v3.getVariant("task-description-input", ID_VARIANTS_MAP, "team-description-input")}
+                  id={dyn.v3.getVariant("team-description-input", ID_VARIANTS_MAP, "team-description-input")}
                 />
               </Form.Item>
             )}
@@ -154,12 +155,12 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
               "team-members",
               <Form.Item
                 name="members"
-                label={dyn.v3.getVariant("teams_heading", TEXT_VARIANTS_MAP, "Team Members")}
+                label={dyn.v3.getVariant("team-members-label", TEXT_VARIANTS_MAP, "Team Members")}
                 rules={[{ required: true, message: "Please add at least one team member" }]}
               >
                 <Select
                   mode="multiple"
-                  placeholder={dyn.v3.getVariant("search_tasks_placeholder", TEXT_VARIANTS_MAP, "Select team members")}
+                  placeholder={dyn.v3.getVariant("select-team-members-placeholder", TEXT_VARIANTS_MAP, "Select team members")}
                   style={{ width: "100%" }}
                   onChange={(values: string[]) => {
                     const memberNames = values.map((v) => memberOptions.find((opt) => opt.value === v)?.label || v);

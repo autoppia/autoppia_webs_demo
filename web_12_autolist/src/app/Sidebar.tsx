@@ -86,7 +86,7 @@ export default function Sidebar({
         className: "flex items-center text-xs font-semibold text-gray-500 uppercase tracking-wide px-2.5 py-2",
       },
       {
-        id: "backlog",
+        id: dyn.v3.getVariant("backlog-nav-item", ID_VARIANTS_MAP, "backlog"),
         label: dyn.v3.getVariant("inbox_heading", TEXT_VARIANTS_MAP, "Backlog"),
         icon: <InboxOutlined />,
         count: inboxCount,
@@ -98,7 +98,7 @@ export default function Sidebar({
         }`,
       },
       {
-        id: "today",
+        id: dyn.v3.getVariant("today-nav-item", ID_VARIANTS_MAP, "today"),
         label: dyn.v3.getVariant("today_heading", TEXT_VARIANTS_MAP, "Today"),
         icon: <CalendarOutlined />,
         count: todayCount,
@@ -242,6 +242,7 @@ export default function Sidebar({
                   type="text"
                   icon={<PlusOutlined />}
                   onClick={() => setProjectModalOpen(true)}
+                  id={dyn.v3.getVariant("add-project-button", ID_VARIANTS_MAP, "add-project-button")}
                 >
                   {dyn.v3.getVariant("cta_add_task", TEXT_VARIANTS_MAP, "Add")}
                 </Button>
@@ -291,8 +292,9 @@ export default function Sidebar({
                     logEvent(EVENT_TYPES.ADD_TEAM_CLICKED, { timestamp: Date.now() });
                     setTeamModalOpen(true);
                   }}
+                  id={dyn.v3.getVariant("add-team-button", ID_VARIANTS_MAP, "add-team-button")}
                 >
-                  {dyn.v3.getVariant("save_task", TEXT_VARIANTS_MAP, "Add")}
+                  {dyn.v3.getVariant("button-add", TEXT_VARIANTS_MAP, "Add")}
                 </Button>
               </div>
               <ul className="ml-2">
@@ -334,8 +336,9 @@ export default function Sidebar({
               type="link"
               className="p-0 h-auto text-[#d1453b]"
               onClick={() => setChatsOpen((v) => !v)}
+              id={dyn.v3.getVariant("hide-show-button", ID_VARIANTS_MAP, "hide-show-button")}
             >
-              {chatsOpen ? dyn.v3.getVariant("cancel_action", TEXT_VARIANTS_MAP, "Hide") : dyn.v3.getVariant("save_task", TEXT_VARIANTS_MAP, "Show")}
+              {chatsOpen ? dyn.v3.getVariant("hide_action", TEXT_VARIANTS_MAP, "Hide") : dyn.v3.getVariant("show_action", TEXT_VARIANTS_MAP, "Show")}
             </Button>
           </div>
           {chatsOpen && (

@@ -70,5 +70,19 @@
     "What to tackle",
     "Current priorities",
     "Today's summary"
-  ]
+  ],
+  "hide_action": ["Hide", "Secret", "Conceal", "Collapse", "Minimize"],
+  "show_action": ["Show", "Display", "Reveal", "Expand", "Unfold"],
+  "input-task-name-placeholder": ["Task name", "What needs to be done?", "Enter task name", "Task title", "Name your task"],
+  "input-description-placeholder": ["Description", "Add details...", "Notes", "Additional info", "Task description"],
+  "button-save": ["Save changes", "Update", "Apply changes", "Confirm", "Save"],
+  "button-add": ["Add", "Create", "Submit", "Add task", "Save"],
+  "button-cancel": ["Cancel", "Dismiss", "Close", "Back", "Nevermind"],
+  "modal-edit-title": ["Edit Task", "Modify Task", "Update Task", "Change Task", "Edit Item"],
+  "team-name-label": ["Team Name", "Team", "Name", "Team Title", "Team Label"],
+  "team-description-label": ["Description", "Details", "Team Description", "About", "Info"],
+  "team-members-label": ["Team Members", "Members", "People", "Team People", "Add Members"],
+  "enter-team-name-placeholder": ["Enter team name", "Team name", "Type team name", "Name your team", "Team name here"],
+  "select-team-members-placeholder": ["Select team members", "Choose members", "Add members", "Pick members", "Select people"],
+  "save-team-button": ["Save Team", "Save", "Create Team", "Confirm", "Add Team"]
 }
