@@ -793,7 +793,10 @@ export default function Home() {
           <div className="mt-6 flex justify-center gap-3">
             <button
               className="bg-[#d1453b] hover:bg-[#c0342f] text-white px-5 py-2 rounded font-semibold shadow"
-              onClick={() => setShowForm(true)}
+              onClick={() => {
+                setShowForm(true);
+                setSelectedView("inbox");
+              }}
             >
               {getText('getting-started-cta', 'Add your first task')}
             </button>
