@@ -34,7 +34,6 @@ export function HomeContent() {
     feature_4_title: ["Trending Now", "Tendencias", "Popular Now", "What's Hot", "Hot Picks", "Trending Content", "Popular Now", "What's Trending", "Trending Now", "Hot Trends"],
     feature_4_description: ["Discover what's popular and trending", "Descubre lo que es popular y está de moda", "See what's trending and gaining popularity", "Explore trending and popular content", "Find what's currently trending and popular", "See what's popular and gaining attention", "Discover trending and popular content", "Explore popular and trending selections", "See what's popular and trending right now", "Explore what's popular and gaining momentum"],
     // Header section
-    app_title: ["Autocinema", "Autocinema", "Autocinema", "Autocinema", "Autocinema", "Autocinema", "Autocinema", "Autocinema", "Autocinema", "Autocinema"],
     app_description: ["Your intelligent movie search engine. Discover thousands of films, explore by genre, and find your next cinematic adventure.", "Tu motor de búsqueda inteligente de películas. Descubre miles de films, explora por género y encuentra tu próxima aventura cinematográfica.", "Your smart cinema search. Browse thousands of films, filter by genre, and discover your next movie experience.", "Intelligent film discovery. Explore thousands of movies, search by genre, and find your perfect cinematic match.", "Smart movie search engine. Browse extensive film collections, filter by genre, and discover your ideal movie.", "Advanced film search. Navigate thousands of movies, explore genres, and find your perfect watch.", "Your cinema search companion. Explore vast movie libraries, filter by genre, and discover great films.", "Intelligent film finder. Search through thousands of movies, explore genres, and find your next watch.", "Smart cinema search. Browse extensive film collections, filter by genre, and discover perfect movies.", "Your film discovery engine. Explore thousands of movies, search by genre, and find amazing cinema."],
     // Features section header
     why_choose: ["Why Choose", "Por Qué Elegir", "Why Choose", "Why Us", "Why Choose Us", "Why Autocinema", "Why Choose", "Why Us", "Why Choose", "Why Choose"],
@@ -180,7 +179,7 @@ export function HomeContent() {
               {dyn.v1.addWrapDecoy("home-header", (
                 <div className="text-center mb-10">
                   <h2 id={dyn.v3.getVariant("home-title", ID_VARIANTS_MAP, "home-title")} className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4">
-                    {dyn.v3.getVariant("app_title", dynamicV3TextVariants)}
+                        Autocinema
                   </h2>
                   <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
                     {dyn.v3.getVariant("app_description", dynamicV3TextVariants)}
@@ -529,7 +528,7 @@ export function HomeContent() {
                     <h2 id={dyn.v3.getVariant("features-title", ID_VARIANTS_MAP, "features-title")} className="text-4xl md:text-5xl font-bold text-white mb-4">
                       {dyn.v3.getVariant("why_choose", dynamicV3TextVariants)}
                       <span className="block text-transparent bg-clip-text bg-gradient-to-r from-secondary to-yellow-400">
-                        {dyn.v3.getVariant("app_title", dynamicV3TextVariants)}?
+                        Autocinema?
                       </span>
                     </h2>
                     <p className="text-lg text-white/70 max-w-2xl mx-auto">

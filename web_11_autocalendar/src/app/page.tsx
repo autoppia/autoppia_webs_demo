@@ -3,7 +3,6 @@ import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogFooter,
@@ -17,25 +16,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { EVENTS_DATASET } from "@/library/dataset";
 import { initializeEvents } from "@/data/events-enhanced";
-import { getEffectiveLayoutConfig, SeedLayoutConfig } from "@/dynamic/v1-layouts";
-import { LayoutProvider, useLayout } from "@/contexts/LayoutContext";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { useSeed } from "@/context/SeedContext";
 import {
   addDays,
-  startOfWeek,
-  endOfWeek,
   isSameDay,
   isToday,
-  isSameMonth,
   format,
   subMonths,
   addMonths,
-  subYears,
-  addYears,
-  parseISO,
 } from "date-fns";
 
-const daysShort = ["S", "M", "T", "W", "T", "F", "S"];
+// const daysShort = ["S", "M", "T", "W", "T", "F", "S"];
 const weekDaysFull = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 const calendarColors = {
   Work: "#FB8C00",
@@ -53,6 +46,18 @@ const INIT_COLORS = [
 ];
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 const MINUTES = [0, 30];
+const DEFAULT_LAYOUT_CONFIG = {
+  layout: {
+    sidebar: "left",
+    navigation: "top",
+    search: "top",
+    calendar: "center",
+    userProfile: "top",
+    createButton: "sidebar",
+    miniCalendar: "sidebar",
+    myCalendars: "sidebar",
+  },
+} as const;
 
 interface Event {
   id: string;
@@ -434,8 +439,118 @@ function expandRecurringEvents(
 }
 
 function CalendarApp() {
-  const { currentVariant, seed, v2Seed, isDynamicHTMLEnabled } = useLayout();
-  const { getElementAttributes, getText } = useSeedLayout();
+  const dyn = useDynamicSystem();
+  const { seed: baseSeed, resolvedSeeds } = useSeed();
+  const currentVariant = useMemo(() => DEFAULT_LAYOUT_CONFIG, []);
+  const v2Seed = useMemo(
+    () => resolvedSeeds.v2 ?? resolvedSeeds.base ?? baseSeed,
+    [resolvedSeeds.v2, resolvedSeeds.base, baseSeed]
+  );
+  const dynamicTextVariants = useMemo(
+    () => ({
+      modal_heading: ["Event details", "Plan event", "Edit scheduling"],
+      mini_calendar_title: ["Mini calendar", "Quick calendar", "Tiny planner"],
+      quick_actions: ["Quick actions", "Shortcuts", "Fast controls"],
+      form_hint: ["All fields are required", "Complete the essentials", "Fill the key info"],
+      guests_helper: ["Invite colleagues", "Add teammates", "Loop in guests"],
+      meeting_link_label: ["Meeting link", "Conference link", "Call link"],
+      busy_label: ["Mark as busy", "Block time", "Set busy"],
+      visibility_label: ["Visibility", "Privacy level", "Sharing"],
+      add_reminder: ["Add reminder", "Create alert", "Add notification"]
+    }),
+    []
+  );
+  const getTextVariant = (key: string, fallback: string) =>
+    dyn.v3.getVariant(key, TEXT_VARIANTS_MAP, fallback);
+  const getLocalText = (key: string, fallback: string) =>
+    dyn.v3.getVariant(key, dynamicTextVariants, fallback);
+  const getIdVariant = (key: string, fallback?: string) =>
+    dyn.v3.getVariant(key, ID_VARIANTS_MAP, fallback ?? key);
+  const getClassVariant = (key: string, fallback = "") =>
+    dyn.v3.getVariant(key, CLASS_VARIANTS_MAP, fallback);
+  const addWrapDecoy = dyn.v1.addWrapDecoy;
+  const dynamicIds = useMemo(
+    () => ({
+      calendarShell: dyn.v3.getVariant("calendar-shell", ID_VARIANTS_MAP, "calendar-shell"),
+      navToday: dyn.v3.getVariant("nav-today-btn", ID_VARIANTS_MAP, "nav-today-btn"),
+      navPrev: dyn.v3.getVariant("nav-prev-btn", ID_VARIANTS_MAP, "nav-prev-btn"),
+      navNext: dyn.v3.getVariant("nav-next-btn", ID_VARIANTS_MAP, "nav-next-btn"),
+      navTitle: dyn.v3.getVariant("nav-title", ID_VARIANTS_MAP, "nav-title"),
+      searchInput: dyn.v3.getVariant("search-input", ID_VARIANTS_MAP, "search-input"),
+      searchDropdown: dyn.v3.getVariant("search-dropdown", ID_VARIANTS_MAP, "search-dropdown"),
+      viewDropdown: dyn.v3.getVariant("view-dropdown", ID_VARIANTS_MAP, "view-dropdown"),
+      miniCalendar: dyn.v3.getVariant("mini-calendar", ID_VARIANTS_MAP, "mini-calendar"),
+      miniCalendarCell: dyn.v3.getVariant("mini-calendar-cell", ID_VARIANTS_MAP, "mini-calendar-cell"),
+      calendarList: dyn.v3.getVariant("calendar-list", ID_VARIANTS_MAP, "calendar-list"),
+      calendarFilter: dyn.v3.getVariant("calendar-filter", ID_VARIANTS_MAP, "calendar-filter"),
+      sidebarCta: dyn.v3.getVariant("sidebar-cta", ID_VARIANTS_MAP, "sidebar-cta"),
+      createEventButton: dyn.v3.getVariant("create-event-button", ID_VARIANTS_MAP, "create-event-button"),
+      eventModal: dyn.v3.getVariant("event-modal", ID_VARIANTS_MAP, "event-modal"),
+      eventModalTitle: dyn.v3.getVariant("event-modal-title", ID_VARIANTS_MAP, "event-modal-title"),
+      eventModalSave: dyn.v3.getVariant("event-modal-save", ID_VARIANTS_MAP, "event-modal-save"),
+      eventModalCancel: dyn.v3.getVariant("event-modal-cancel", ID_VARIANTS_MAP, "event-modal-cancel"),
+      attendeeInput: dyn.v3.getVariant("attendee-input", ID_VARIANTS_MAP, "attendee-input"),
+      reminderPill: dyn.v3.getVariant("reminder-pill", ID_VARIANTS_MAP, "reminder-pill"),
+      addCalendarModal: dyn.v3.getVariant("add-calendar-modal", ID_VARIANTS_MAP, "add-calendar-modal"),
+      debugPanel: dyn.v3.getVariant("debug-panel", ID_VARIANTS_MAP, "debug-panel"),
+      calendarGrid: dyn.v3.getVariant("calendar-grid", ID_VARIANTS_MAP, "calendar-grid"),
+      calendarWeekSlot: dyn.v3.getVariant("calendar-week-slot", ID_VARIANTS_MAP, "calendar-week-slot")
+    }),
+    [dyn.seed]
+  );
+  const dynamicClasses = useMemo(
+    () => ({
+      panel: dyn.v3.getVariant("panel", CLASS_VARIANTS_MAP, "panel-surface"),
+      primaryButton: dyn.v3.getVariant("primary-button", CLASS_VARIANTS_MAP, "btn-primary"),
+      navButton: dyn.v3.getVariant("nav-button", CLASS_VARIANTS_MAP, "nav-button"),
+      input: dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "input-solid"),
+      dropdown: dyn.v3.getVariant("dropdown", CLASS_VARIANTS_MAP, "dropdown-surface"),
+      badge: dyn.v3.getVariant("badge", CLASS_VARIANTS_MAP, "badge-soft"),
+      secondaryButton: dyn.v3.getVariant("secondary-button", CLASS_VARIANTS_MAP, "btn-secondary"),
+      ghostButton: dyn.v3.getVariant("ghost-button", CLASS_VARIANTS_MAP, "btn-ghost"),
+      card: dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "card-outline"),
+      pill: dyn.v3.getVariant("pill", CLASS_VARIANTS_MAP, "pill-solid"),
+      modal: dyn.v3.getVariant("modal", CLASS_VARIANTS_MAP, "modal-shell"),
+      chip: dyn.v3.getVariant("chip", CLASS_VARIANTS_MAP, "chip-default"),
+      tag: dyn.v3.getVariant("tag", CLASS_VARIANTS_MAP, "tag-default"),
+      sectionTitle: dyn.v3.getVariant("section-title", CLASS_VARIANTS_MAP, "section-title"),
+      timelineRow: dyn.v3.getVariant("timeline-row", CLASS_VARIANTS_MAP, "timeline-row")
+    }),
+    [dyn.seed]
+  );
+  const dynamicTexts = useMemo(
+    () => ({
+      createEvent: dyn.v3.getVariant("create_event_label", TEXT_VARIANTS_MAP, "Create"),
+      today: dyn.v3.getVariant("today_label", TEXT_VARIANTS_MAP, "Today"),
+      searchPlaceholder: dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search events"),
+      viewDay: dyn.v3.getVariant("view_day", TEXT_VARIANTS_MAP, "Day"),
+      viewWeek: dyn.v3.getVariant("view_week", TEXT_VARIANTS_MAP, "Week"),
+      viewFiveDays: dyn.v3.getVariant("view_five_days", TEXT_VARIANTS_MAP, "5 days"),
+      viewMonth: dyn.v3.getVariant("view_month", TEXT_VARIANTS_MAP, "Month"),
+      sidebarHeading: dyn.v3.getVariant("sidebar_heading", TEXT_VARIANTS_MAP, "My calendars"),
+      addCalendarTitle: dyn.v3.getVariant("add_calendar_title", TEXT_VARIANTS_MAP, "Add new calendar"),
+      addCalendarButton: dyn.v3.getVariant("add_calendar_button", TEXT_VARIANTS_MAP, "Add calendar"),
+      reminderLabel: dyn.v3.getVariant("reminder_label", TEXT_VARIANTS_MAP, "Reminders"),
+      wizardDetails: dyn.v3.getVariant("wizard_details", TEXT_VARIANTS_MAP, "Details"),
+      wizardPeople: dyn.v3.getVariant("wizard_people", TEXT_VARIANTS_MAP, "People"),
+      wizardOptions: dyn.v3.getVariant("wizard_options", TEXT_VARIANTS_MAP, "Options"),
+      modalSave: dyn.v3.getVariant("modal_save", TEXT_VARIANTS_MAP, "Save"),
+      modalCancel: dyn.v3.getVariant("modal_cancel", TEXT_VARIANTS_MAP, "Cancel"),
+      modalDelete: dyn.v3.getVariant("modal_delete", TEXT_VARIANTS_MAP, "Delete"),
+      labelCalendar: dyn.v3.getVariant("label_calendar", TEXT_VARIANTS_MAP, "Calendar"),
+      labelTitle: dyn.v3.getVariant("label_title", TEXT_VARIANTS_MAP, "Title"),
+      labelDate: dyn.v3.getVariant("label_date", TEXT_VARIANTS_MAP, "Date"),
+      labelLocation: dyn.v3.getVariant("label_location", TEXT_VARIANTS_MAP, "Location"),
+      labelAllDay: dyn.v3.getVariant("label_all_day", TEXT_VARIANTS_MAP, "All day"),
+      labelStartTime: dyn.v3.getVariant("label_start_time", TEXT_VARIANTS_MAP, "Start Time"),
+      labelEndTime: dyn.v3.getVariant("label_end_time", TEXT_VARIANTS_MAP, "End Time"),
+      labelRepeat: dyn.v3.getVariant("label_repeat", TEXT_VARIANTS_MAP, "Repeat"),
+      labelRepeatUntil: dyn.v3.getVariant("label_repeat_until", TEXT_VARIANTS_MAP, "Repeat until"),
+      attendeeLabel: dyn.v3.getVariant("attendee_label", TEXT_VARIANTS_MAP, "Add attendee (email)"),
+      attendeePlaceholder: dyn.v3.getVariant("attendee_placeholder", TEXT_VARIANTS_MAP, "name@example.com")
+    }),
+    [dyn.seed]
+  );
   const [viewDate, setViewDate] = useState(() => {
     const now = new Date();
     const nowInPKT = new Date(
@@ -462,6 +577,12 @@ function CalendarApp() {
   const [myCalendars, setMyCalendars] = useState<Calendar[]>(
     uniqueCalendars.map(([name, color]) => ({ name, enabled: true, color }))
   );
+  const orderedCalendars = useMemo(() => {
+    const count = myCalendars.length;
+    if (count <= 1) return myCalendars;
+    const order = dyn.v1.changeOrderElements("my-calendars", count);
+    return order.map((idx) => myCalendars[idx]);
+  }, [dyn.seed, myCalendars]);
   const [eventModal, setEventModal] = useState<EventModalState>({
     open: false,
     editing: null,
@@ -573,9 +694,23 @@ function CalendarApp() {
       ),
     [events, myCalendars]
   );
+  const orderedDaysHeader = useMemo(
+    () => dyn.v1.changeOrderElements("days-header", DAYS.length).map((idx) => DAYS[idx]),
+    [dyn.seed]
+  );
 
   const VIEW_OPTIONS = ["Day", "5 days", "Week", "Month"];
+  const viewTextKeyMap: Record<string, string> = {
+    "Day": "view_day",
+    "5 days": "view_five_days",
+    "Week": "view_week",
+    "Month": "view_month",
+  };
   const [currentView, setCurrentView] = useState("5 days");
+  const orderedViewOptions = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("view-options", VIEW_OPTIONS.length);
+    return order.map((idx) => VIEW_OPTIONS[idx]);
+  }, [dyn.seed]);
 
   // Determine the visible date range
   const [rangeStart, rangeEnd] = useMemo(() => {
@@ -778,6 +913,10 @@ function CalendarApp() {
   }
 
   const REMINDER_OPTIONS = [5, 10, 15, 30, 60, 120, 1440];
+  const orderedReminderOptions = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("reminder-options", REMINDER_OPTIONS.length);
+    return order.map((idx) => REMINDER_OPTIONS[idx]);
+  }, [dyn.seed]);
 
   function addReminder() {
     const minutes = eventModal.reminderToAdd;
@@ -1051,119 +1190,157 @@ function CalendarApp() {
   const renderSidebarComponents = () => {
     const components = [];
 
-    if (currentVariant.layout.createButton === 'sidebar') {
+    if (currentVariant.layout.createButton === "sidebar") {
       components.push(
-        <div key="create-button" className={`${
-          currentVariant.layout.sidebar === 'top'
-            ? 'flex flex-row items-center mr-6'
-            : 'flex flex-row items-center px-4 mt-2 mb-4'
-        }`}>
-          <button
-            {...getElementAttributes('create-button', 0)}
-            className="bg-white shadow-md rounded-2xl h-[44px] w-full flex items-center px-4 font-semibold text-[#383e4d] text-base gap-3 border border-[#ececec] hover:shadow-lg transition"
-            onClick={() =>
-              openEventModal({
-                date: viewDate,
-                start: 9,
-                end: 9.5,
-                startMinutes: 0,
-                endMinutes: 30,
-              })
-            }
-            aria-label="Create new event"
-          >
-            <span className="text-[#1976d2] flex items-center">
-              <svg
-                width="24"
-                height="24"
-                fill="none"
-                stroke="#1976d2"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg>
-            </span>
-            <span className="ml-0.5">{getText('create-button-label', 'Create')}</span>
-            <svg
-              className="ml-auto"
-              width="20"
-              height="20"
-              fill="none"
-              stroke="#222"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              viewBox="0 0 24 24"
+        addWrapDecoy(
+          "create-button-sidebar",
+          (
+            <div
+              key="create-button"
+              className={`${
+                currentVariant.layout.sidebar === "top"
+                  ? "flex flex-row items-center mr-6"
+                  : "flex flex-row items-center px-4 mt-2 mb-4"
+              }`}
             >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </button>
-        </div>
+              {addWrapDecoy(
+                "create-button",
+                (
+                  <button
+                    id={getIdVariant("create-event-button")}
+                    data-dyn-key="create-button"
+                    className={`bg-white shadow-md rounded-2xl h-[44px] w-full flex items-center px-4 font-semibold text-[#383e4d] text-base gap-3 border border-[#ececec] hover:shadow-lg transition ${getClassVariant("primary-button")}`}
+                    onClick={() =>
+                      openEventModal({
+                        date: viewDate,
+                        start: 9,
+                        end: 9.5,
+                        startMinutes: 0,
+                        endMinutes: 30,
+                      })
+                    }
+                    aria-label="Create new event"
+                  >
+                    <span className="text-[#1976d2] flex items-center">
+                      <svg
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="#1976d2"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                      </svg>
+                    </span>
+                    <span className="ml-0.5">
+                      {getTextVariant("create_event_label", "Create")}
+                    </span>
+                    <svg
+                      className="ml-auto"
+                      width="20"
+                      height="20"
+                      fill="none"
+                      stroke="#222"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      viewBox="0 0 24 24"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </button>
+                ),
+                "create-button-primary"
+              )}
+            </div>
+          ),
+          "wrap-create-button-shell"
+        )
       );
     }
 
-    if (currentVariant.layout.miniCalendar === 'sidebar') {
+    if (currentVariant.layout.miniCalendar === "sidebar") {
       components.push(
-        <div key="mini-calendar" className={`${
-          currentVariant.layout.sidebar === 'top'
-            ? 'flex items-center mr-6'
-            : 'px-6 py-0 mb-0 mt-10'
-        }`}>
-          <div className="flex w-full justify-between text-[14px] items-center mb-1 mt-1 font-medium">
-            <button
-              onClick={() => setMiniCalYear((y) => y - 1)}
-              className="p-1 text-gray-500 hover:bg-gray-100 rounded"
-              aria-label="Previous year"
+        addWrapDecoy(
+          "mini-calendar-block",
+          (
+            <div
+              key="mini-calendar"
+              id={getIdVariant("mini-calendar")}
+              className={`${
+                currentVariant.layout.sidebar === "top"
+                  ? "flex items-center mr-6"
+                  : "px-6 py-0 mb-0 mt-10"
+              } ${getClassVariant("panel")}`}
             >
-              «
-            </button>
-            <button
-              onClick={() => handleMiniCalNav("prev")}
-              className="p-1 text-gray-500 hover:bg-gray-100 rounded"
-              aria-label="Previous month"
-            >
-              ‹
-            </button>
-            <span className="mx-2">
-              {MONTHS[miniCalMonth]} {miniCalYear}
-            </span>
-            <button
-              onClick={() => handleMiniCalNav("next")}
-              className="p-1 text-gray-500 hover:bg-gray-100 rounded"
-              aria-label="Next month"
-            >
-              ›
-            </button>
-            <button
-              onClick={() => setMiniCalYear((y) => y + 1)}
-              className="p-1 text-gray-500 hover:bg-gray-100 rounded"
-              aria-label="Next year"
-            >
-              »
-            </button>
-          </div>
-          <div className="grid grid-cols-7 text-xs text-center text-gray-400 mb-1">
-            {DAYS.map((d) => (
-              <span key={d} className="py-[2px]">
-                {d.slice(0, 1)}
-              </span>
-            ))}
-          </div>
-          <div>
-            {miniCalMatrix.map((week, wi) => (
-              <div key={wi} className="grid grid-cols-7 mb-0.5">
-                {week.map((d, di) => {
-                  const isSel = isSameDay(d, viewDate);
-                  const isTod = isToday(d);
-                  const inMonth = d.getMonth() === miniCalMonth;
-                  return (
+              {addWrapDecoy(
+                "mini-calendar-header",
+                (
+                  <div className="flex w-full justify-between text-[14px] items-center mb-1 mt-1 font-medium">
                     <button
-                      key={di}
-                      onClick={() => handleMiniCalDayClick(d)}
-                      className={`h-7 w-7 mx-auto flex items-center justify-center rounded-full text-base select-none border-none
+                      onClick={() => setMiniCalYear((y) => y - 1)}
+                      className={`p-1 text-gray-500 hover:bg-gray-100 rounded ${getClassVariant("nav-button")}`}
+                      aria-label="Previous year"
+                      id={getIdVariant("nav-prev-btn", "prev-year")}
+                    >
+                      «
+                    </button>
+                    <button
+                      onClick={() => handleMiniCalNav("prev")}
+                      className={`p-1 text-gray-500 hover:bg-gray-100 rounded ${getClassVariant("nav-button")}`}
+                      aria-label="Previous month"
+                      id={`${getIdVariant("nav-prev-btn")}-month`}
+                    >
+                      ‹
+                    </button>
+                    <span className="mx-2" id={getIdVariant("nav-title")}>
+                      {MONTHS[miniCalMonth]} {miniCalYear}
+                    </span>
+                    <button
+                      onClick={() => handleMiniCalNav("next")}
+                      className={`p-1 text-gray-500 hover:bg-gray-100 rounded ${getClassVariant("nav-button")}`}
+                      aria-label="Next month"
+                      id={`${getIdVariant("nav-next-btn")}-month`}
+                    >
+                      ›
+                    </button>
+                    <button
+                      onClick={() => setMiniCalYear((y) => y + 1)}
+                      className={`p-1 text-gray-500 hover:bg-gray-100 rounded ${getClassVariant("nav-button")}`}
+                      aria-label="Next year"
+                      id={`${getIdVariant("nav-next-btn")}-year`}
+                    >
+                      »
+                    </button>
+                  </div>
+                ),
+                "mini-calendar-nav"
+              )}
+              <div className="grid grid-cols-7 text-xs text-center text-gray-400 mb-1">
+                {orderedDaysHeader.map((d) => (
+                  <span key={d} className="py-[2px]" id={`${getIdVariant("mini-calendar-cell")}-${d}`}>
+                    {d.slice(0, 1)}
+                  </span>
+                ))}
+              </div>
+              <div>
+                {miniCalMatrix.map((week, wi) =>
+                  addWrapDecoy(
+                    `mini-calendar-week-${wi}`,
+                    <div key={wi} className="grid grid-cols-7 mb-0.5">
+                      {week.map((d, di) => {
+                        const isSel = isSameDay(d, viewDate);
+                        const isTod = isToday(d);
+                        const inMonth = d.getMonth() === miniCalMonth;
+                        return (
+                          <button
+                            key={di}
+                            id={`${getIdVariant("mini-calendar-cell")}-${wi}-${di}`}
+                            onClick={() => handleMiniCalDayClick(d)}
+                            className={`h-7 w-7 mx-auto flex items-center justify-center rounded-full text-base select-none border-none
                         ${
                           isSel
                             ? "bg-[#1976d2] text-white"
@@ -1173,327 +1350,359 @@ function CalendarApp() {
                             ? "text-[#383e4d] hover:bg-gray-100"
                             : "text-gray-300"
                         }`}
-                      aria-label={`Select ${format(d, "MMMM d, yyyy")}`}
-                    >
-                      {d.getDate() < 10 ? `0${d.getDate()}` : d.getDate()}
-                    </button>
-                  );
-                })}
+                            aria-label={`Select ${format(d, "MMMM d, yyyy")}`}
+                          >
+                            {d.getDate() < 10 ? `0${d.getDate()}` : d.getDate()}
+                          </button>
+                        );
+                      })}
+                    </div>,
+                    `mini-calendar-week-wrap-${wi}`
+                  )
+                )}
               </div>
-            ))}
-          </div>
-        </div>
-      );
-    }
-
-    if (currentVariant.layout.myCalendars === 'sidebar') {
-      components.push(
-        <div key="my-calendars" className={`${
-          currentVariant.layout.sidebar === 'top'
-            ? 'flex items-center mr-6'
-            : 'flex flex-col px-4 mt-10'
-        }`}>
-          <button
-            onClick={() => setMyCalExpanded((v) => !v)}
-            className={`${
-              currentVariant.layout.sidebar === 'top'
-                ? 'flex items-center text-[15px] font-bold text-[#383e4d] mb-1 gap-1 group px-2 py-1 rounded hover:bg-gray-100'
-                : 'flex items-center text-[15px] font-bold text-[#383e4d] mb-1 gap-1 group'
-            }`}
-            aria-expanded={myCalExpanded}
-            aria-label="Toggle my calendars"
-          >
-            <span>My calendars</span>
-            <svg
-              className={`transition ${
-                myCalExpanded ? "rotate-0" : "-rotate-90"
-              }`}
-              width="18"
-              height="18"
-              fill="none"
-              stroke="#383e4d"
-              strokeWidth="2"
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </button>
-          {myCalExpanded && (
-            <div className={`${
-              currentVariant.layout.sidebar === 'top'
-                ? 'flex flex-row gap-2 pl-1 mt-2 flex-wrap'
-                : 'flex flex-col gap-2 pl-1 mt-2'
-            }`}>
-              {myCalendars.map((cal, idx) => (
-                <label
-                  key={cal.name}
-                  className="flex items-center gap-2 cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    checked={cal.enabled}
-                    onChange={() => {
-                      logEvent(EVENT_TYPES.CHOOSE_CALENDAR, {
-                        calendarName: cal.name,
-                        selected: !cal.enabled,
-                        color: cal.color,
-                      });
-                      setMyCalendars((cals) =>
-                        cals.map((c, i) =>
-                          i === idx ? { ...c, enabled: !c.enabled } : c
-                        )
-                      );
-                    }}
-                    className="appearance-none w-4 h-4 rounded-sm cursor-pointer border-2"
-                    style={{
-                      borderColor: cal.color,
-                      background: cal.enabled ? cal.color : "#fff",
-                    }}
-                    aria-label={`Toggle ${cal.name} calendar`}
-                  />
-                  <span
-                    className="w-2 h-2 rounded-sm"
-                    style={{ background: cal.color }}
-                  />
-                  {cal.name}
-                </label>
-              ))}
             </div>
-          )}
-          <div className={`${
-            currentVariant.layout.sidebar === 'top'
-              ? 'flex items-center gap-2 mt-4 mb-1'
-              : 'flex items-center gap-2 mt-4 mb-1'
-          }`}>
-            <span className="text-[15px] text-[#2d2d36] font-medium select-none">
-              Add new calendar
-            </span>
-            <button
-              onClick={() => {
-                logEvent(EVENT_TYPES.ADD_NEW_CALENDAR, {
-                  source: "calendar-sidebar",
-                  action: "open_add_calendar_modal",
-                });
-                setAddCalOpen(true);
-              }}
-              type="button"
-              aria-label="Add new calendar"
-              className="flex items-center justify-center p-0 w-6 h-6 rounded-full border-[#222] text-[#222] hover:bg-gray-100 transition"
-            >
-              <svg
-                width="20"
-                height="20"
-                fill="none"
-                stroke="#222"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <circle cx="12" cy="12" r="9" />
-                <line x1="12" y1="8" x2="12" y2="16" />
-                <line x1="8" y1="12" x2="16" y2="12" />
-              </svg>
-            </button>
-          </div>
-        </div>
+          ),
+          "sidebar-mini-calendar"
+        )
       );
     }
 
-    return components.sort((a, b) => {
-      // Since the new layout doesn't use order, maintain original order
-      const aOrder = a.key === 'create-button' ? 1 :
-                    a.key === 'mini-calendar' ? 2 :
-                    3; // myCalendars
-      const bOrder = b.key === 'create-button' ? 1 :
-                    b.key === 'mini-calendar' ? 2 :
-                    3; // myCalendars
-      return aOrder - bOrder;
-    });
+    if (currentVariant.layout.myCalendars === "sidebar") {
+      components.push(
+        addWrapDecoy(
+          "sidebar-calendars",
+          (
+            <div
+              key="my-calendars"
+              className={`${
+                currentVariant.layout.sidebar === "top"
+                  ? "flex items-center mr-6"
+                  : "flex flex-col px-4 mt-10"
+              }`}
+              id={getIdVariant("calendar-list")}
+            >
+              <button
+                onClick={() => setMyCalExpanded((v) => !v)}
+                className={`${
+                  currentVariant.layout.sidebar === "top"
+                    ? "flex items-center text-[15px] font-bold text-[#383e4d] mb-1 gap-1 group px-2 py-1 rounded hover:bg-gray-100"
+                    : "flex items-center text-[15px] font-bold text-[#383e4d] mb-1 gap-1 group"
+                }`}
+                aria-expanded={myCalExpanded}
+                aria-label="Toggle my calendars"
+                id={getIdVariant("calendar-filter")}
+              >
+                <span>{getTextVariant("sidebar_heading", "My calendars")}</span>
+                <svg
+                  className={`transition ${myCalExpanded ? "rotate-0" : "-rotate-90"}`}
+                  width="18"
+                  height="18"
+                  fill="none"
+                  stroke="#383e4d"
+                  strokeWidth="2"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              {myCalExpanded && (
+                <div
+                  className={`${
+                    currentVariant.layout.sidebar === "top"
+                      ? "flex flex-row gap-2 pl-1 mt-2 flex-wrap"
+                      : "flex flex-col gap-2 pl-1 mt-2"
+                  }`}
+                >
+                  {orderedCalendars.map((cal, idx) =>
+                    addWrapDecoy(
+                      `calendar-filter-${cal.name}`,
+                      <label
+                        key={cal.name}
+                        className={`flex items-center gap-2 cursor-pointer ${getClassVariant("badge")}`}
+                        htmlFor={`${getIdVariant("calendar-filter")}-${idx}`}
+                      >
+                        <input
+                          id={`${getIdVariant("calendar-filter")}-${idx}`}
+                          type="checkbox"
+                          checked={cal.enabled}
+                          onChange={() => {
+                            logEvent(EVENT_TYPES.CHOOSE_CALENDAR, {
+                              calendarName: cal.name,
+                              selected: !cal.enabled,
+                              color: cal.color,
+                            });
+                            setMyCalendars((cals) =>
+                              cals.map((c, i) =>
+                                i === idx ? { ...c, enabled: !c.enabled } : c
+                              )
+                            );
+                          }}
+                          className="appearance-none w-4 h-4 rounded-sm cursor-pointer border-2"
+                          style={{
+                            borderColor: cal.color,
+                            background: cal.enabled ? cal.color : "#fff",
+                          }}
+                          aria-label={`Toggle ${cal.name} calendar`}
+                        />
+                        <span className="w-2 h-2 rounded-sm" style={{ background: cal.color }} />
+                        {cal.name}
+                      </label>,
+                      `calendar-filter-wrap-${cal.name}`
+                    )
+                  )}
+                </div>
+              )}
+              <div
+                className={`${
+                  currentVariant.layout.sidebar === "top"
+                    ? "flex items-center gap-2 mt-4 mb-1"
+                    : "flex items-center gap-2 mt-4 mb-1"
+                }`}
+              >
+                <span className="text-[15px] text-[#2d2d36] font-medium select-none">
+                  {getTextVariant("add_calendar_title", "Add new calendar")}
+                </span>
+                {addWrapDecoy(
+                  "add-calendar-button",
+                  (
+                    <button
+                      onClick={() => {
+                        logEvent(EVENT_TYPES.ADD_NEW_CALENDAR, {
+                          source: "calendar-sidebar",
+                          action: "open_add_calendar_modal",
+                        });
+                        setAddCalOpen(true);
+                      }}
+                      type="button"
+                      aria-label="Add new calendar"
+                      id={getIdVariant("sidebar-cta")}
+                      className={`flex items-center justify-center p-0 w-6 h-6 rounded-full border-[#222] text-[#222] hover:bg-gray-100 transition ${getClassVariant("ghost-button")}`}
+                    >
+                      <svg
+                        width="20"
+                        height="20"
+                        fill="none"
+                        stroke="#222"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle cx="12" cy="12" r="9" />
+                        <line x1="12" y1="8" x2="12" y2="16" />
+                        <line x1="8" y1="12" x2="16" y2="12" />
+                      </svg>
+                    </button>
+                  ),
+                  "sidebar-add-calendar-cta"
+                )}
+              </div>
+            </div>
+          )
+        )
+      );
+    }
+
+    return components;
   };
 
   // Helper function to render navigation components
   const renderNavigationComponents = () => {
     const components = [];
 
-    if (currentVariant.layout.createButton === 'navigation') {
+    if (currentVariant.layout.createButton === "navigation") {
       components.push(
-        <button
-          key="create-button"
-          {...getElementAttributes('create-button', 1)}
-          className="bg-white shadow-md rounded-2xl h-[44px] px-4 font-semibold text-[#383e4d] text-base gap-3 border border-[#ececec] hover:shadow-lg transition flex items-center"
-          onClick={() =>
-            openEventModal({
-              date: viewDate,
-              start: 9,
-              end: 9.5,
-              startMinutes: 0,
-              endMinutes: 30,
-            })
-          }
-          aria-label="Create new event"
-        >
-          <span className="text-[#1976d2] flex items-center">
-            <svg
-              width="24"
-              height="24"
-              fill="none"
-              stroke="#1976d2"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-          </span>
-          <span className="ml-0.5">{getText('create-button-label', 'Create')}</span>
-        </button>
-      );
-    }
-
-    if (currentVariant.layout.miniCalendar === 'navigation') {
-      components.push(
-        <div key="mini-calendar" className="flex items-center gap-2">
-          <div className="flex w-full justify-between text-[14px] items-center mb-1 mt-1 font-medium">
+        addWrapDecoy(
+          "create-button-nav",
+          (
             <button
-              onClick={() => setMiniCalYear((y) => y - 1)}
-              className="p-1 text-gray-500 hover:bg-gray-100 rounded"
-              aria-label="Previous year"
+              key="create-button"
+              id={`${getIdVariant("create-event-button")}-nav`}
+              className={`bg-white shadow-md rounded-2xl h-[44px] px-4 font-semibold text-[#383e4d] text-base gap-3 border border-[#ececec] hover:shadow-lg transition flex items-center ${getClassVariant("primary-button")}`}
+              onClick={() =>
+                openEventModal({
+                  date: viewDate,
+                  start: 9,
+                  end: 9.5,
+                  startMinutes: 0,
+                  endMinutes: 30,
+                })
+              }
+              aria-label="Create new event"
             >
-              «
-            </button>
-            <button
-              onClick={() => handleMiniCalNav("prev")}
-              className="p-1 text-gray-500 hover:bg-gray-100 rounded"
-              aria-label="Previous month"
-            >
-              ‹
-            </button>
-            <span className="mx-2">
-              {MONTHS[miniCalMonth]} {miniCalYear}
-            </span>
-            <button
-              onClick={() => handleMiniCalNav("next")}
-              className="p-1 text-gray-500 hover:bg-gray-100 rounded"
-              aria-label="Next month"
-            >
-              ›
-            </button>
-            <button
-              onClick={() => setMiniCalYear((y) => y + 1)}
-              className="p-1 text-gray-500 hover:bg-gray-100 rounded"
-              aria-label="Next year"
-            >
-              »
-            </button>
-          </div>
-        </div>
-      );
-    }
-
-    if (currentVariant.layout.myCalendars === 'navigation') {
-      components.push(
-        <div key="my-calendars" className="flex items-center gap-2">
-          <button
-            onClick={() => setMyCalExpanded((v) => !v)}
-            className="flex items-center text-[15px] font-bold text-[#383e4d] mb-1 gap-1 group px-2 py-1 rounded hover:bg-gray-100"
-            aria-expanded={myCalExpanded}
-            aria-label="Toggle my calendars"
-          >
-            <span>My calendars</span>
-            <svg
-              className={`transition ${
-                myCalExpanded ? "rotate-0" : "-rotate-90"
-              }`}
-              width="18"
-              height="18"
-              fill="none"
-              stroke="#383e4d"
-              strokeWidth="2"
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </button>
-          {myCalExpanded && (
-            <div className="flex flex-col gap-2 pl-1 mt-2">
-              {myCalendars.map((cal, idx) => (
-                <label
-                  key={cal.name}
-                  className="flex items-center gap-2 cursor-pointer"
+              <span className="text-[#1976d2] flex items-center">
+                <svg
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="#1976d2"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <input
-                    type="checkbox"
-                    checked={cal.enabled}
-                    onChange={() => {
-                      logEvent(EVENT_TYPES.CHOOSE_CALENDAR, {
-                        calendarName: cal.name,
-                        selected: !cal.enabled,
-                        color: cal.color,
-                      });
-                      setMyCalendars((cals) =>
-                        cals.map((c, i) =>
-                          i === idx ? { ...c, enabled: !c.enabled } : c
-                        )
-                      );
-                    }}
-                    className="appearance-none w-4 h-4 rounded-sm cursor-pointer border-2"
-                    style={{
-                      borderColor: cal.color,
-                      background: cal.enabled ? cal.color : "#fff",
-                    }}
-                    aria-label={`Toggle ${cal.name} calendar`}
-                  />
-                  <span
-                    className="w-2 h-2 rounded-sm"
-                    style={{ background: cal.color }}
-                  />
-                  {cal.name}
-                </label>
-              ))}
-            </div>
-          )}
-          <div className="flex items-center gap-2 mt-4 mb-1">
-            <span className="text-[15px] text-[#2d2d36] font-medium select-none">
-              Add new calendar
-            </span>
-            <button
-              onClick={() => {
-                logEvent(EVENT_TYPES.ADD_NEW_CALENDAR, {
-                  source: "calendar-navigation",
-                  action: "open_add_calendar_modal",
-                });
-                setAddCalOpen(true);
-              }}
-              type="button"
-              aria-label="Add new calendar"
-              className="flex items-center justify-center p-0 w-6 h-6 rounded-full border-[#222] text-[#222] hover:bg-gray-100 transition"
-            >
-              <svg
-                width="20"
-                height="20"
-                fill="none"
-                stroke="#222"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <circle cx="12" cy="12" r="9" />
-                <line x1="12" y1="8" x2="12" y2="16" />
-                <line x1="8" y1="12" x2="16" y2="12" />
-              </svg>
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </span>
+              <span className="ml-0.5">
+                {getTextVariant("create_event_label", "Create")}
+              </span>
             </button>
-          </div>
-        </div>
+          ),
+          "nav-create-button"
+        )
       );
     }
 
-    return components.sort((a, b) => {
-      // Since the new layout doesn't use order, maintain original order
-      const aOrder = a.key === 'create-button' ? 1 :
-                    a.key === 'mini-calendar' ? 2 :
-                    3; // myCalendars
-      const bOrder = b.key === 'create-button' ? 1 :
-                    b.key === 'mini-calendar' ? 2 :
-                    3; // myCalendars
-      return aOrder - bOrder;
-    });
+    if (currentVariant.layout.miniCalendar === "navigation") {
+      components.push(
+        addWrapDecoy(
+          "mini-calendar-nav-block",
+          (
+            <div key="mini-calendar" className="flex items-center gap-2" id={`${getIdVariant("mini-calendar")}-nav`}>
+              <div className="flex w-full justify-between text-[14px] items-center mb-1 mt-1 font-medium">
+                <button
+                  onClick={() => setMiniCalYear((y) => y - 1)}
+                  className={`p-1 text-gray-500 hover:bg-gray-100 rounded ${getClassVariant("nav-button")}`}
+                  aria-label="Previous year"
+                >
+                  «
+                </button>
+                <button
+                  onClick={() => handleMiniCalNav("prev")}
+                  className={`p-1 text-gray-500 hover:bg-gray-100 rounded ${getClassVariant("nav-button")}`}
+                  aria-label="Previous month"
+                >
+                  ‹
+                </button>
+                <span className="mx-2">{MONTHS[miniCalMonth]} {miniCalYear}</span>
+                <button
+                  onClick={() => handleMiniCalNav("next")}
+                  className={`p-1 text-gray-500 hover:bg-gray-100 rounded ${getClassVariant("nav-button")}`}
+                  aria-label="Next month"
+                >
+                  ›
+                </button>
+                <button
+                  onClick={() => setMiniCalYear((y) => y + 1)}
+                  className={`p-1 text-gray-500 hover:bg-gray-100 rounded ${getClassVariant("nav-button")}`}
+                  aria-label="Next year"
+                >
+                  »
+                </button>
+              </div>
+            </div>
+          )
+        )
+      );
+    }
+
+    if (currentVariant.layout.myCalendars === "navigation") {
+      components.push(
+        addWrapDecoy(
+          "nav-calendars",
+          (
+            <div key="my-calendars" className="flex items-center gap-2" id={`${getIdVariant("calendar-list")}-nav`}>
+              <button
+                onClick={() => setMyCalExpanded((v) => !v)}
+                className="flex items-center text-[15px] font-bold text-[#383e4d] mb-1 gap-1 group px-2 py-1 rounded hover:bg-gray-100"
+                aria-expanded={myCalExpanded}
+                aria-label="Toggle my calendars"
+              >
+                <span>{getTextVariant("sidebar_heading", "My calendars")}</span>
+                <svg
+                  className={`transition ${myCalExpanded ? "rotate-0" : "-rotate-90"}`}
+                  width="18"
+                  height="18"
+                  fill="none"
+                  stroke="#383e4d"
+                  strokeWidth="2"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              {myCalExpanded && (
+                <div className="flex flex-col gap-2 pl-1 mt-2">
+                  {orderedCalendars.map((cal, idx) =>
+                    addWrapDecoy(
+                      `nav-calendar-${cal.name}`,
+                      <label
+                        key={cal.name}
+                        className={`flex items-center gap-2 cursor-pointer ${getClassVariant("badge")}`}
+                        htmlFor={`${getIdVariant("calendar-filter")}-nav-${idx}`}
+                      >
+                        <input
+                          id={`${getIdVariant("calendar-filter")}-nav-${idx}`}
+                          type="checkbox"
+                          checked={cal.enabled}
+                          onChange={() => {
+                            logEvent(EVENT_TYPES.CHOOSE_CALENDAR, {
+                              calendarName: cal.name,
+                              selected: !cal.enabled,
+                              color: cal.color,
+                            });
+                            setMyCalendars((cals) =>
+                              cals.map((c, i) =>
+                                i === idx ? { ...c, enabled: !c.enabled } : c
+                              )
+                            );
+                          }}
+                          className="appearance-none w-4 h-4 rounded-sm cursor-pointer border-2"
+                          style={{
+                            borderColor: cal.color,
+                            background: cal.enabled ? cal.color : "#fff",
+                          }}
+                          aria-label={`Toggle ${cal.name} calendar`}
+                        />
+                        <span className="w-2 h-2 rounded-sm" style={{ background: cal.color }} />
+                        {cal.name}
+                      </label>,
+                      `nav-calendar-wrap-${cal.name}`
+                    )
+                  )}
+                </div>
+              )}
+              <div className="flex items-center gap-2 mt-4 mb-1">
+                <span className="text-[15px] text-[#2d2d36] font-medium select-none">
+                  {getTextVariant("add_calendar_title", "Add new calendar")}
+                </span>
+                {addWrapDecoy(
+                  "add-calendar-button-nav",
+                  (
+                    <button
+                      onClick={() => {
+                        logEvent(EVENT_TYPES.ADD_NEW_CALENDAR, {
+                          source: "calendar-navigation",
+                          action: "open_add_calendar_modal",
+                        });
+                        setAddCalOpen(true);
+                      }}
+                      type="button"
+                      aria-label="Add new calendar"
+                      className={`flex items-center justify-center p-0 w-6 h-6 rounded-full border-[#222] text-[#222] hover:bg-gray-100 transition ${getClassVariant("ghost-button")}`}
+                    >
+                      <svg
+                        width="20"
+                        height="20"
+                        fill="none"
+                        stroke="#222"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle cx="12" cy="12" r="9" />
+                        <line x1="12" y1="8" x2="12" y2="16" />
+                        <line x1="8" y1="12" x2="16" y2="12" />
+                      </svg>
+                    </button>
+                  ),
+                  "nav-add-calendar"
+                )}
+              </div>
+            </div>
+          )
+        )
+      );
+    }
+
+    return components;
   };
 
   // Layout configuration variables
@@ -1526,8 +1735,14 @@ function CalendarApp() {
   // Place at bottom; if right panel exists, anchor to left side instead of right
   const miniCalHorizontal = 'right-6'; // Siempre a la derecha porque relocateCalendar siempre es false
 
-  return (
-    <main className={`flex min-h-screen w-full bg-[#fbfafa] text-[#382f3f] ${layoutClasses.mainContainer}`}>
+  return addWrapDecoy(
+    "calendar-shell",
+    (
+      <main
+        id={dynamicIds.calendarShell}
+        data-dyn-key="calendar-shell"
+        className={`flex min-h-screen w-full bg-[#fbfafa] text-[#382f3f] ${layoutClasses.mainContainer} ${dynamicClasses.panel}`}
+      >
       {/* Sidebar - positioned based on layout config */}
       {currentVariant.layout.sidebar !== 'none' && (
         <aside className={`${
@@ -1560,139 +1775,214 @@ function CalendarApp() {
       )}
   <section className={`${layoutClasses.contentContainer} flex flex-col h-screen overflow-visible px-6 ${relocateCalendar ? 'pr-[560px]' : ''}`}>
         {/* Navigation - positioned based on layout config */}
-        {currentVariant.layout.navigation !== 'none' && (
-          <nav className={`w-full flex flex-wrap items-center justify-between ${layoutClasses.navHeight} px-6 border-b border-[#e5e5e5] bg-white sticky top-0 z-10 ${layoutClasses.navContainer} gap-2`}>
-            <div className={`flex items-center gap-2 flex-wrap ${isSidebarTop && isNavTop ? 'flex-row gap-2 flex-1 min-w-[280px]' : 'flex-1 min-w-[320px]'}`}>
-              <button
-                {...getElementAttributes('today-button', 0)}
-                className="border border-[#e5e5e5] bg-white rounded px-3 h-9 text-[15px] font-medium shadow-sm hover:bg-[#f5f5f5]"
-                onClick={handleSetToday}
-                aria-label="Go to today"
+        {currentVariant.layout.navigation !== "none" &&
+          addWrapDecoy(
+            "nav-bar",
+            (
+              <nav
+                className={`w-full flex flex-wrap items-center justify-between ${layoutClasses.navHeight} px-6 border-b border-[#e5e5e5] bg-white sticky top-0 z-10 ${layoutClasses.navContainer} gap-2 ${dynamicClasses.panel}`}
+                id={`${dynamicIds.calendarShell}-nav`}
               >
-                {getText('today-button-label', 'Today')}
-              </button>
-              <button
-                className="rounded-full hover:bg-gray-100 p-4 text-3xl text-black"
-                onClick={() => handleWeekNav("prev")}
-                aria-label="Previous week"
-              >
-                ‹
-              </button>
-              <button
-                className="rounded-full hover:bg-gray-100 p-4 text-3xl text-black"
-                onClick={() => handleWeekNav("next")}
-                aria-label="Next week"
-              >
-                ›
-              </button>
-              <span className="text-[22px] font-normal ml-3">{topLabel}</span>
-              {renderNavigationComponents()}
-            </div>
-            <div className={`flex items-center gap-2 flex-wrap ${isSidebarTop && isNavTop ? 'flex-col gap-2 flex-1 min-w-[260px]' : 'flex-1 min-w-[260px] justify-end'}`}>
-              {(currentVariant.layout.search === 'top') && (
-                <div className={`relative z-20 ${currentVariant.layout.sidebar === 'top' && currentVariant.layout.navigation === 'top' ? 'w-full flex-1 min-w-[200px]' : 'hidden md:block'} max-w-[360px]`}>
-                  <Input
-                    {...getElementAttributes('search-input', 0)}
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    onKeyDown={handleSearchKeyDown}
-                    placeholder={getText('search-placeholder', 'Search events')}
-                    className={`${currentVariant.layout.sidebar === 'top' && currentVariant.layout.navigation === 'top' ? 'w-full' : 'w-[240px]'} bg-white border border-[#e5e5e5] shadow-sm`}
-                    aria-label="Search events"
-                    onFocus={() => {
-                      if (!hasOpenedSearch) {
-                        setHasOpenedSearch(true);
-                      }
-                    }}
-                  />
-                  {/* Search Results Dropdown */}
-                  {searchDropdownOpen && searchResults.length > 0 && (
-                    <div id="select-event" className="absolute left-0 mt-1 w-full bg-white border border-gray-200 rounded shadow-lg z-[9999] max-h-64 overflow-auto">
-                      {searchResults.map((ev) => (
-                        <div
-                          key={ev.id}
-                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => {
-                            openEditEventModal(ev);
-                            setSearchDropdownOpen(false);
-                          }}
-                        >
-                          <div className="font-semibold text-sm">{ev.label}</div>
-                          <div className="text-xs text-gray-500">{ev.date} | {ev.location}</div>
-                        </div>
-                      ))}
+                {addWrapDecoy(
+                  "nav-left",
+                  (
+                    <div className={`flex items-center gap-2 flex-wrap ${isSidebarTop && isNavTop ? "flex-row gap-2 flex-1 min-w-[280px]" : "flex-1 min-w-[320px]"}`}>
+                      {addWrapDecoy(
+                        "today-button",
+                        (
+                          <button
+                            id={dynamicIds.navToday}
+                            className={`border border-[#e5e5e5] bg-white rounded px-3 h-9 text-[15px] font-medium shadow-sm hover:bg-[#f5f5f5] ${dynamicClasses.navButton}`}
+                            onClick={handleSetToday}
+                            aria-label="Go to today"
+                          >
+                            {dynamicTexts.today}
+                          </button>
+                        ),
+                        "today-button-wrap"
+                      )}
+                      {addWrapDecoy(
+                        "nav-prev",
+                        (
+                          <button
+                            id={dynamicIds.navPrev}
+                            className="rounded-full hover:bg-gray-100 p-4 text-3xl text-black"
+                            onClick={() => handleWeekNav("prev")}
+                            aria-label="Previous week"
+                          >
+                            ‹
+                          </button>
+                        ),
+                        "nav-prev-wrap"
+                      )}
+                      {addWrapDecoy(
+                        "nav-next",
+                        (
+                          <button
+                            id={dynamicIds.navNext}
+                            className="rounded-full hover:bg-gray-100 p-4 text-3xl text-black"
+                            onClick={() => handleWeekNav("next")}
+                            aria-label="Next week"
+                          >
+                            ›
+                          </button>
+                        ),
+                        "nav-next-wrap"
+                      )}
+                      <span className="text-[22px] font-normal ml-3" id={dynamicIds.navTitle}>
+                        {topLabel}
+                      </span>
+                      {renderNavigationComponents()}
                     </div>
-                  )}
-                </div>
-              )}
-              <div className="relative">
-                <button
-                  onClick={() => setViewDropdown((v) => !v)}
-                  className="border border-[#e5e5e5] bg-white rounded px-3 h-9 text-[15px] min-w-[68px] font-normal text-[#383e4d] shadow-sm hover:bg-[#f5f5f5] flex items-center gap-1"
-                  aria-expanded={viewDropdown}
-                  aria-label="Select calendar view"
-                >
-                  {currentView}
-                  <svg
-                    width="18"
-                    height="18"
-                    fill="none"
-                    stroke="#444"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
-                </button>
-                {viewDropdown && (
-                   <div className="absolute mt-1 right-0 z-[9999] bg-white shadow-lg border border-[#e5e5e5] rounded min-w-[130px]">
-                     {VIEW_OPTIONS.map((opt) => (
-                       <button
-                         key={opt}
-                         onClick={() => {
-                           logEvent(
-                             {
-                               Day: EVENT_TYPES.SELECT_DAY,
-                               "5 days": EVENT_TYPES.SELECT_FIVE_DAYS,
-                               Week: EVENT_TYPES.SELECT_WEEK,
-                               Month: EVENT_TYPES.SELECT_MONTH,
-                             }[opt],
-                             {
-                               source: "calendar-view-dropdown",
-                               selectedView: opt,
-                             }
-                           );
-                           setCurrentView(opt);
-                           setViewDropdown(false);
-                         }}
-                         className={`w-full text-left px-4 py-2 hover:bg-[#f3f7fa] text-[15px] ${
-                           opt === currentView ? "font-semibold bg-[#f3f7fa]" : ""
-                         }`}
-                         aria-label={`Select ${opt} view`}
-                       >
-                         {opt}
-                       </button>
-                     ))}
-                   </div>
-                 )}
-              </div>
-              {currentVariant.layout.userProfile === 'top' && (
-                <button
-                  className="rounded-full hover:ring-2 hover:ring-blue-200 ml-1"
-                  aria-label="User profile"
-                >
-                  <Image
-                    src="https://ui-avatars.com/api/?name=John+Doe&background=random&size=128"
-                    alt="Profile picture"
-                    width={36}
-                    height={36}
-                    className="rounded-full object-cover border border-[#dedede]"
-                  />
-                </button>
-              )}
-            </div>
-          </nav>
-        )}
+                  ),
+                  "nav-left-block"
+                )}
+                {addWrapDecoy(
+                  "nav-right",
+                  (
+                    <div className={`flex items-center gap-2 flex-wrap ${isSidebarTop && isNavTop ? "flex-col gap-2 flex-1 min-w-[260px]" : "flex-1 min-w-[260px] justify-end"}`}>
+                      {currentVariant.layout.search === "top" && (
+                        addWrapDecoy(
+                          "search-area",
+                          (
+                            <div className={`relative z-20 ${currentVariant.layout.sidebar === "top" && currentVariant.layout.navigation === "top" ? "w-full flex-1 min-w-[200px]" : "hidden md:block"} max-w-[360px]`}>
+                              <Input
+                                id={dynamicIds.searchInput}
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                                onKeyDown={handleSearchKeyDown}
+                                placeholder={dynamicTexts.searchPlaceholder}
+                                className={`${currentVariant.layout.sidebar === "top" && currentVariant.layout.navigation === "top" ? "w-full" : "w-[240px]"} bg-white border border-[#e5e5e5] shadow-sm ${dynamicClasses.input}`}
+                                aria-label="Search events"
+                                onFocus={() => {
+                                  if (!hasOpenedSearch) {
+                                    setHasOpenedSearch(true);
+                                  }
+                                }}
+                              />
+                              {/* Search Results Dropdown */}
+                              {searchDropdownOpen && searchResults.length > 0 && (
+                                <div
+                                  id={dynamicIds.searchDropdown}
+                                  className={`absolute left-0 mt-1 w-full bg-white border border-gray-200 rounded shadow-lg z-[9999] max-h-64 overflow-auto ${dynamicClasses.dropdown}`}
+                                >
+                                  {searchResults.map((ev) =>
+                                    addWrapDecoy(
+                                      `search-result-${ev.id}`,
+                                      <div
+                                        key={ev.id}
+                                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                        onClick={() => {
+                                          openEditEventModal(ev);
+                                          setSearchDropdownOpen(false);
+                                        }}
+                                      >
+                                        <div className="font-semibold text-sm">{ev.label}</div>
+                                        <div className="text-xs text-gray-500">{ev.date} | {ev.location}</div>
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          ),
+                          "search-area-wrap"
+                        )
+                      )}
+                      <div className="relative">
+                        <button
+                          id={dynamicIds.viewDropdown}
+                          onClick={() => setViewDropdown((v) => !v)}
+                          className={`border border-[#e5e5e5] bg-white rounded px-3 h-9 text-[15px] min-w-[68px] font-normal text-[#383e4d] shadow-sm hover:bg-[#f5f5f5] flex items-center gap-1 ${dynamicClasses.navButton}`}
+                          aria-expanded={viewDropdown}
+                          aria-label="Select calendar view"
+                        >
+                          {{
+                            Day: dynamicTexts.viewDay,
+                            "5 days": dynamicTexts.viewFiveDays,
+                            Week: dynamicTexts.viewWeek,
+                            Month: dynamicTexts.viewMonth,
+                          }[currentView] ?? currentView}
+                          <svg
+                            width="18"
+                            height="18"
+                            fill="none"
+                            stroke="#444"
+                            strokeWidth="2"
+                            viewBox="0 0 24 24"
+                          >
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </button>
+                        {viewDropdown && (
+                          <div
+                            className={`absolute mt-1 right-0 z-[9999] bg-white shadow-lg border border-[#e5e5e5] rounded min-w-[130px] ${dynamicClasses.dropdown}`}
+                            id={`${dynamicIds.viewDropdown}-menu`}
+                          >
+                            {orderedViewOptions.map((opt) => (
+                              <button
+                                key={opt}
+                                onClick={() => {
+                                  logEvent(
+                                    {
+                                      Day: EVENT_TYPES.SELECT_DAY,
+                                      "5 days": EVENT_TYPES.SELECT_FIVE_DAYS,
+                                      Week: EVENT_TYPES.SELECT_WEEK,
+                                      Month: EVENT_TYPES.SELECT_MONTH,
+                                    }[opt],
+                                    {
+                                      source: "calendar-view-dropdown",
+                                      selectedView: opt,
+                                    }
+                                  );
+                                  setCurrentView(opt);
+                                  setViewDropdown(false);
+                                }}
+                                className={`w-full text-left px-4 py-2 hover:bg-[#f3f7fa] text-[15px] ${
+                                  opt === currentView ? "font-semibold bg-[#f3f7fa]" : ""
+                                }`}
+                                aria-label={`Select ${opt} view`}
+                              >
+                                {{
+                                  Day: dynamicTexts.viewDay,
+                                  "5 days": dynamicTexts.viewFiveDays,
+                                  Week: dynamicTexts.viewWeek,
+                                  Month: dynamicTexts.viewMonth,
+                                }[opt] ?? opt}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      {currentVariant.layout.userProfile === "top" && (
+                        addWrapDecoy(
+                          "profile-avatar",
+                          (
+                            <button
+                              className="rounded-full hover:ring-2 hover:ring-blue-200 ml-1"
+                              aria-label="User profile"
+                              id={`${getIdVariant("debug-panel")}-avatar`}
+                            >
+                              <Image
+                                src="https://ui-avatars.com/api/?name=John+Doe&background=random&size=128"
+                                alt="Profile picture"
+                                width={36}
+                                height={36}
+                                className="rounded-full object-cover border border-[#dedede]"
+                              />
+                            </button>
+                          ),
+                          "profile-avatar-wrap"
+                        )
+                      )}
+                    </div>
+                  ),
+                  "nav-right-block"
+                )}
+              </nav>
+            ),
+            "nav-shell-wrap"
+          )}
         <div
           className={
             relocateCalendar
@@ -1704,7 +1994,7 @@ function CalendarApp() {
           {currentView === "Month" && (
             <div className="w-full">
               <div className="grid grid-cols-7 border-b border-[#e5e5e5] bg-white sticky top-0">
-                {DAYS.map((d) => (
+                {orderedDaysHeader.map((d) => (
                   <div
                     key={d}
                     className="py-2 px-1 text-center text-xs font-semibold text-gray-500"
@@ -2031,109 +2321,131 @@ function CalendarApp() {
 
       {/* Add Calendar Dialog */}
       <Dialog open={addCalOpen} onOpenChange={setAddCalOpen}>
-        <DialogContent className="max-w-md" {...getElementAttributes('add-calendar-modal', 0)}>
-            <DialogHeader>
-              <DialogTitle className="text-[#1b1a1a] font-normal text-xl mb-2">
-                {getText('add-calendar-title', 'Create new calendar')}
-              </DialogTitle>
-          </DialogHeader>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (addCalName.trim()) {
-                const color =
-                  INIT_COLORS[
-                    (myCalendars.length + addCalColorIdx) %
-                      INIT_COLORS.length
-                  ];
-                logEvent(EVENT_TYPES.CREATE_CALENDAR, {
-                  name: addCalName,
-                  description: addCalDesc,
-                  color,
-                });
-                setMyCalendars((cals) => [
-                  ...cals,
-                  { name: addCalName, enabled: true, color },
-                ]);
-                setAddCalColorIdx((idx) => idx + 1);
-                setAddCalName("");
-                setAddCalDesc("");
-                setAddCalOpen(false);
-              }
-            }}
-            className="flex flex-col gap-4"
-          >
-            <Input
-              {...getElementAttributes('add-calendar-name-input', 0)}
-              placeholder="Name"
-              required
-              value={addCalName}
-              onChange={(e) => setAddCalName(e.target.value)}
-              className="bg-[#eee] border-none text-base py-2"
-            />
-            <Textarea
-              {...getElementAttributes('add-calendar-description-input', 0)}
-              placeholder="Description"
-              value={addCalDesc}
-              onChange={(e) => setAddCalDesc(e.target.value)}
-              className="bg-[#eee] border-none min-h-[90px] text-base py-2"
-            />
-            <div>
-              <span className="text-xs text-gray-400">Owner</span>
-              <br />
-              <span className="text-sm mt-0.5 font-medium">
-                Tomas Abraham
-              </span>
-            </div>
-            <Button
-              {...getElementAttributes('add-calendar-submit-button', 0)}
-              className="mt-1 bg-[#1976d2] hover:bg-[#1660b2] px-6 py-2"
-              type="submit"
-            >
-              {getText('add-calendar-submit', 'Create calendar')}
-            </Button>
-          </form>
-        </DialogContent>
+        {addWrapDecoy(
+          "add-calendar-modal",
+          (
+            <DialogContent className={`max-w-md ${getClassVariant("modal")}`} id={getIdVariant("add-calendar-modal")}>
+              <DialogHeader>
+                <DialogTitle className="text-[#1b1a1a] font-normal text-xl mb-2">
+                  {getTextVariant("add_calendar_title", "Create new calendar")}
+                </DialogTitle>
+              </DialogHeader>
+              {addWrapDecoy(
+                "add-calendar-form",
+                (
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      if (addCalName.trim()) {
+                        const color =
+                          INIT_COLORS[
+                            (myCalendars.length + addCalColorIdx) %
+                              INIT_COLORS.length
+                          ];
+                        logEvent(EVENT_TYPES.CREATE_CALENDAR, {
+                          name: addCalName,
+                          description: addCalDesc,
+                          color,
+                        });
+                        setMyCalendars((cals) => [
+                          ...cals,
+                          { name: addCalName, enabled: true, color },
+                        ]);
+                        setAddCalColorIdx((idx) => idx + 1);
+                        setAddCalName("");
+                        setAddCalDesc("");
+                        setAddCalOpen(false);
+                      }
+                    }}
+                    className="flex flex-col gap-4"
+                  >
+                    <Input
+                      id={`${getIdVariant("add-calendar-modal")}-name`}
+                      placeholder="Name"
+                      required
+                      value={addCalName}
+                      onChange={(e) => setAddCalName(e.target.value)}
+                      className={`bg-[#eee] border-none text-base py-2 ${getClassVariant("input")}`}
+                    />
+                    <Textarea
+                      id={`${getIdVariant("add-calendar-modal")}-description`}
+                      placeholder="Description"
+                      value={addCalDesc}
+                      onChange={(e) => setAddCalDesc(e.target.value)}
+                      className={`bg-[#eee] border-none min-h-[90px] text-base py-2 ${getClassVariant("input")}`}
+                    />
+                    <div>
+                      <span className="text-xs text-gray-400">Owner</span>
+                      <br />
+                      <span className="text-sm mt-0.5 font-medium">
+                        Tomas Abraham
+                      </span>
+                    </div>
+                    {addWrapDecoy(
+                      "add-calendar-submit",
+                      (
+                        <Button
+                          className="mt-1 bg-[#1976d2] hover:bg-[#1660b2] px-6 py-2"
+                          type="submit"
+                          id={`${getIdVariant("add-calendar-modal")}-submit`}
+                        >
+                          {getTextVariant("add_calendar_button", "Create calendar")}
+                        </Button>
+                      ),
+                      "add-calendar-submit-wrap"
+                    )}
+                  </form>
+                )
+              )}
+            </DialogContent>
+          )
+        )}
       </Dialog>
 
       <Dialog open={eventModal.open} onOpenChange={onModalClose}>
-        <DialogContent className="max-w-xl" {...getElementAttributes('add-event-modal', 0)}>
-          <form onSubmit={handleModalSave} className="space-y-5">
-            <DialogHeader>
-              <DialogTitle>
-                {eventModal.editing ? getText('event-dialog-edit-title', 'Edit event') : getText('event-dialog-add-title', 'Add event')}
-              </DialogTitle>
-            </DialogHeader>
+        {addWrapDecoy(
+          "event-modal",
+          (
+            <DialogContent className={`max-w-xl ${getClassVariant("modal")}`} id={getIdVariant("event-modal")}>
+              <form onSubmit={handleModalSave} className="space-y-5" id={`${getIdVariant("event-modal")}-form`}>
+                <DialogHeader>
+                  <DialogTitle id={getIdVariant("event-modal-title")}>
+                    {eventModal.editing ? getLocalText("modal_heading", "Edit event") : getLocalText("modal_heading", "Add event")}
+                  </DialogTitle>
+                </DialogHeader>
 
             {/* Stepper */}
             <div className="flex items-center gap-2 text-sm">
               {[
-                { label: getText('wizard-step-details', 'Details'), idx: 0 },
-                { label: getText('wizard-step-people', 'People'), idx: 1 },
-                { label: getText('wizard-step-options', 'Options'), idx: 2 },
-              ].map((s) => (
-                <button
-                  type="button"
-                  key={s.idx}
-                  onClick={() => setEventModal((e) => ({ ...e, step: s.idx }))}
-                  className={`px-3 py-1 rounded border ${
-                    eventModal.step === s.idx
-                      ? "bg-[#1976d2] text-white border-[#1976d2]"
-                      : "bg-white text-[#383e4d] border-[#e5e5e5]"
-                  }`}
-                  {...getElementAttributes('event-wizard-step', s.idx)}
-                  aria-label={`Go to ${s.label} step`}
-                >
-                  {s.label}
-                </button>
-              ))}
+                { label: getTextVariant("wizard_details", "Details"), idx: 0 },
+                { label: getTextVariant("wizard_people", "People"), idx: 1 },
+                { label: getTextVariant("wizard_options", "Options"), idx: 2 },
+              ].map((s) =>
+                addWrapDecoy(
+                  `wizard-step-${s.idx}`,
+                  <button
+                    type="button"
+                    key={s.idx}
+                    onClick={() => setEventModal((e) => ({ ...e, step: s.idx }))}
+                    className={`px-3 py-1 rounded border ${
+                      eventModal.step === s.idx
+                        ? "bg-[#1976d2] text-white border-[#1976d2]"
+                        : "bg-white text-[#383e4d] border-[#e5e5e5]"
+                    }`}
+                    id={`${getIdVariant("event-modal-title")}-step-${s.idx}`}
+                    aria-label={`Go to ${s.label} step`}
+                  >
+                    {s.label}
+                  </button>
+                )
+              )}
             </div>
 
             {/* Step 0: Details */}
             {eventModal.step === 0 && (
               <div className="space-y-5">
                 <div className="flex flex-col mb-2">
-                  <Label htmlFor="calendar-select">{getText('label-calendar', 'Calendar')}</Label>
+                  <Label htmlFor="calendar-select">{getTextVariant("label_calendar", "Calendar")}</Label>
                   <select
                     id="calendar-select"
                     className="px-3 py-2 border rounded w-full mt-1"
@@ -2149,37 +2461,37 @@ function CalendarApp() {
                   </select>
                 </div>
                 <div>
-                  <Label htmlFor="event-title">{getText('label-title', 'Title')}</Label>
+                  <Label htmlFor="event-title">{getTextVariant("label_title", "Title")}</Label>
                   <Input
-                    {...getElementAttributes('event-title-input', 0)}
-                    id="event-title"
+                    id={getIdVariant("event-title-input")}
                     value={eventModal.label}
                     onChange={(e) => handleModalField("label", e.target.value)}
                     required
                     autoFocus
                     maxLength={80}
                     aria-required="true"
+                    className={getClassVariant("input")}
                   />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="event-date">{getText('label-date', 'Date')}</Label>
+                    <Label htmlFor="event-date">{getTextVariant("label_date", "Date")}</Label>
                     <Input
-                      {...getElementAttributes('event-date-input', 0)}
-                      id="event-date"
+                      id={getIdVariant("event-date-input")}
                       type="date"
                       value={eventModal.date ?? viewDate.toISOString().split("T")[0]}
                       onChange={(e) => handleModalField("date", e.target.value)}
                       required
+                      className={getClassVariant("input")}
                     />
                   </div>
                   <div>
-                    <Label htmlFor="event-location">{getText('label-location', 'Location')}</Label>
+                    <Label htmlFor="event-location">{getTextVariant("label_location", "Location")}</Label>
                     <Input
-                      {...getElementAttributes('event-location-input', 0)}
-                      id="event-location"
+                      id={getIdVariant("event-location-input")}
                       value={eventModal.location}
                       onChange={(e) => handleModalField("location", e.target.value)}
+                      className={getClassVariant("input")}
                     />
                   </div>
                 </div>
@@ -2190,11 +2502,11 @@ function CalendarApp() {
                     checked={eventModal.allDay}
                     onChange={(e) => handleModalField("allDay", e.target.checked)}
                   />
-                  <Label htmlFor="allday">{getText('label-all-day', 'All day')}</Label>
+                  <Label htmlFor="allday">{getTextVariant("label_all_day", "All day")}</Label>
                 </div>
                 <div className="flex gap-4">
                   <div className="flex-1 opacity-100">
-                    <Label htmlFor="start-time-hour">{getText('label-start-time', 'Start Time')}</Label>
+                    <Label htmlFor="start-time-hour">{getTextVariant("label_start_time", "Start Time")}</Label>
                     <div className="flex gap-2 mt-1">
                       <select
                         id="start-time-hour"
@@ -2242,7 +2554,7 @@ function CalendarApp() {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <Label htmlFor="end-time-hour">{getText('label-end-time', 'End Time')}</Label>
+                    <Label htmlFor="end-time-hour">{getTextVariant("label_end_time", "End Time")}</Label>
                     <div className="flex gap-2 mt-1">
                       <select
                         id="end-time-hour"
@@ -2292,7 +2604,7 @@ function CalendarApp() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="recurrence">{getText('label-repeat', 'Repeat')}</Label>
+                    <Label htmlFor="recurrence">{getTextVariant("label_repeat", "Repeat")}</Label>
                     <select
                       id="recurrence"
                       className="px-3 py-2 border rounded w-full mt-1"
@@ -2311,7 +2623,7 @@ function CalendarApp() {
                     </select>
                   </div>
                   <div>
-                    <Label htmlFor="recurrence-end">{getText('label-repeat-until', 'Repeat until')}</Label>
+                    <Label htmlFor="recurrence-end">{getTextVariant("label_repeat_until", "Repeat until")}</Label>
                     <Input
                       id="recurrence-end"
                       type="date"
@@ -2324,6 +2636,7 @@ function CalendarApp() {
                         handleModalField("recurrenceEndDate", e.target.value)
                       }
                       disabled={eventModal.recurrence === "none"}
+                      className={getClassVariant("input")}
                     />
                   </div>
                 </div>
@@ -2334,23 +2647,31 @@ function CalendarApp() {
             {eventModal.step === 1 && (
               <div className="space-y-5">
                 <div>
-                  <Label htmlFor="attendee">{getText('attendee-label', 'Add attendee (email)')}</Label>
+                  <Label htmlFor="attendee">{getTextVariant("attendee_label", "Add attendee (email)")}</Label>
                   <div className="flex gap-2 mt-1">
                     <Input
-                      id="attendee"
+                      id={getIdVariant("attendee-input")}
                       value={eventModal.attendeesInput}
                       onChange={(e) => handleModalField("attendeesInput", e.target.value)}
-                      placeholder={getText('attendee-placeholder', 'name@example.com')}
+                      placeholder={getTextVariant("attendee_placeholder", "name@example.com")}
+                      className={getClassVariant("input")}
                     />
-                    <Button type="button" onClick={addAttendee} {...getElementAttributes('attendee-add-button', 0)}>
-                      {getText('attendee-add', 'Add')}
-                    </Button>
+                    {addWrapDecoy(
+                      "attendee-add",
+                      (
+                        <Button type="button" onClick={addAttendee} id={`${getIdVariant("attendee-input")}-add`} className={getClassVariant("primary-button")}>
+                          {getTextVariant("attendee_label", "Add")}
+                        </Button>
+                      ),
+                      "attendee-add-wrap"
+                    )}
                   </div>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {eventModal.attendees.map((email) => (
                       <span
                         key={email}
                         className="inline-flex items-center gap-2 px-2 py-1 rounded bg-[#f3f7fa] border border-[#e5e5e5] text-sm"
+                        id={`${getIdVariant("attendee-input")}-pill`}
                       >
                         {email}
                         <button
@@ -2372,21 +2693,22 @@ function CalendarApp() {
             {eventModal.step === 2 && (
               <div className="space-y-5">
                 <div>
-                  <Label htmlFor="meeting-link">Meeting link</Label>
+                  <Label htmlFor="meeting-link">{getLocalText("meeting_link_label", "Meeting link")}</Label>
                   <Input
-                    id="meeting-link"
+                    id={`${getIdVariant("event-modal")}-meeting-link`}
                     value={eventModal.meetingLink}
                     onChange={(e) => handleModalField("meetingLink", e.target.value)}
                     placeholder="https://..."
+                    className={getClassVariant("input")}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="event-description">Description</Label>
+                  <Label htmlFor="event-description">{getLocalText("form_hint", "Description")}</Label>
                   <Textarea
-                    id="event-description"
+                    id={`${getIdVariant("event-modal")}-description`}
                     value={eventModal.description}
                     onChange={(e) => handleModalField("description", e.target.value)}
-                    className="min-h-[80px]"
+                    className={`min-h-[80px] ${getClassVariant("input")}`}
                   />
                 </div>
                 <div className="flex items-center gap-2">
@@ -2396,10 +2718,10 @@ function CalendarApp() {
                     checked={eventModal.busy}
                     onChange={(e) => handleModalField("busy", e.target.checked)}
                   />
-                  <Label htmlFor="busy">Mark as busy</Label>
+                  <Label htmlFor="busy">{getLocalText("busy_label", "Mark as busy")}</Label>
                 </div>
                 <div>
-                  <Label htmlFor="visibility">Visibility</Label>
+                  <Label htmlFor="visibility">{getLocalText("visibility_label", "Visibility")}</Label>
                   <select
                     id="visibility"
                     className="px-3 py-2 border rounded w-full mt-1"
@@ -2417,7 +2739,7 @@ function CalendarApp() {
                   </select>
                 </div>
                 <div>
-                  <Label>Reminders</Label>
+                  <Label>{getTextVariant("reminder_label", "Reminders")}</Label>
                   <div className="flex gap-2 mt-1">
                     <select id="select-minutes"
                       className="px-3 py-2 border rounded"
@@ -2426,7 +2748,7 @@ function CalendarApp() {
                         handleModalField("reminderToAdd", parseInt(e.target.value))
                       }
                     >
-                      {REMINDER_OPTIONS.map((m) => (
+                      {orderedReminderOptions.map((m) => (
                         <option key={m} value={m}>
                           {m >= 60
                             ? `${Math.round(m / 60)}h before`
@@ -2434,9 +2756,14 @@ function CalendarApp() {
                         </option>
                       ))}
                     </select>
-                    <Button type="button" onClick={addReminder}>
-                      Add reminder
-                    </Button>
+                    {addWrapDecoy(
+                      "add-reminder",
+                      (
+                        <Button type="button" onClick={addReminder} id={`${getIdVariant("reminder-pill")}-add`} className={getClassVariant("secondary-button")}>
+                          {getLocalText("add_reminder", "Add reminder")}
+                        </Button>
+                      )
+                    )}
                   </div>
                   <ul className="mt-2 space-y-2">
                     {eventModal.reminders.map((m, i) => (
@@ -2461,29 +2788,53 @@ function CalendarApp() {
             <DialogFooter>
               <div className="flex-1" />
               {eventModal.step > 0 && (
-                <Button type="button" variant="outline" onClick={goPrevStep} {...getElementAttributes('event-wizard-back', 0)}>
-                  {getText('wizard-back', 'Back')}
-                </Button>
+                addWrapDecoy(
+                  "wizard-back",
+                  (
+                    <Button type="button" variant="outline" onClick={goPrevStep} id={`${getIdVariant("event-modal")}-back`}>
+                      {getTextVariant("wizard_details", "Back")}
+                    </Button>
+                  ),
+                  "wizard-back-wrap"
+                )
               )}
               {eventModal.step < 2 && (
-                <Button type="button" onClick={goNextStep} {...getElementAttributes('event-wizard-next', 0)}>
-                  {getText('wizard-next', 'Next')}
-                </Button>
+                addWrapDecoy(
+                  "wizard-next",
+                  (
+                    <Button type="button" onClick={goNextStep} id={`${getIdVariant("event-modal")}-next`} className={getClassVariant("primary-button")}>
+                      {getTextVariant("wizard_people", "Next")}
+                    </Button>
+                  ),
+                  "wizard-next-wrap"
+                )
               )}
               {eventModal.step === 2 && (
-                <Button variant="default" type="submit" {...getElementAttributes('event-wizard-save', 0)}>
-                  {getText('wizard-save', 'Save')}
-                </Button>
+                addWrapDecoy(
+                  "wizard-save",
+                  (
+                    <Button variant="default" type="submit" id={getIdVariant("event-modal-save")}>
+                      {getTextVariant("modal_save", "Save")}
+                    </Button>
+                  ),
+                  "wizard-save-wrap"
+                )
               )}
               {eventModal.editing && eventModal.step === 2 && (
-                <Button
-                  variant="destructive"
-                  type="button"
-                  onClick={handleEventDelete}
-                  {...getElementAttributes('event-wizard-delete', 0)}
-                >
-                  {getText('wizard-delete', 'Delete')}
-                </Button>
+                addWrapDecoy(
+                  "wizard-delete",
+                  (
+                    <Button
+                      variant="destructive"
+                      type="button"
+                      onClick={handleEventDelete}
+                      id={getIdVariant("event-modal-cancel")}
+                    >
+                      {getTextVariant("modal_delete", "Delete")}
+                    </Button>
+                  ),
+                  "wizard-delete-wrap"
+                )
               )}
               <DialogClose asChild>
                 <Button
@@ -2513,23 +2864,24 @@ function CalendarApp() {
                     };
                     logEvent(EVENT_TYPES.CANCEL_ADD_EVENT, eventData);
                   }}
-                  {...getElementAttributes('event-modal-close', 0)}
                 >
-                  {getText('wizard-cancel', 'Cancel')}
+                  {getTextVariant("modal_cancel", "Cancel")}
                 </Button>
               </DialogClose>
             </DialogFooter>
           </form>
-        </DialogContent>
+            </DialogContent>
+          )
+        )}
       </Dialog>
-    </main>
+      </main>
+    ),
+    "main-shell"
   );
 }
 
 export default function Home() {
   return (
-    <LayoutProvider>
-      <CalendarApp />
-    </LayoutProvider>
+    <CalendarApp />
   );
 }

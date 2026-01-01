@@ -1,6 +1,5 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { EVENTS_DATASET, CalendarEvent } from "@/library/dataset";
-import { generateDeterministicEvents } from "@/data/seeded-events";
+import { CalendarEvent } from "@/library/dataset";
 import fallbackEvents from "./original/events_1.json";
 
 const PROJECT_KEY = "web_11_autocalendar";

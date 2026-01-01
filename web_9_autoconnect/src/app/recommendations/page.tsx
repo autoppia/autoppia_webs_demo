@@ -1,24 +1,24 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
-import type { Recommendation } from "@/library/dataset";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
 import { useSeed } from "@/context/SeedContext";
-import {
-  getEffectiveLayoutConfig,
-} from "@/dynamic/v1-layouts";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 function RecommendationsContent() {
   const { seed, resolvedSeeds } = useSeed();
-  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
-  const layout = getEffectiveLayoutConfig(layoutSeed);
+  resolvedSeeds;
   const [following, setFollowing] = useState<Record<string, boolean>>({});
   const recommendations = dynamicDataProvider.getRecommendations();
-  const { getText } = useV3Attributes();
+  const dyn = useDynamicSystem();
+  const orderedRecommendations = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("recommendations", recommendations.length);
+    return order.map((idx) => recommendations[idx]);
+  }, [recommendations, dyn.seed]);
 
   useEffect(() => {
     logEvent(EVENT_TYPES.VIEW_ALL_RECOMMENDATIONS, {
@@ -92,7 +92,7 @@ function RecommendationsContent() {
     return null;
   };
 
-  const wrapperPadding = layout.headerPosition === 'left' ? 'pl-56' : layout.headerPosition === 'right' ? 'pr-56' : '';
+  const wrapperPadding = '';
 
   return (
     <div className={`w-full flex gap-2 justify-center min-h-screen ${wrapperPadding}`}>
@@ -103,64 +103,67 @@ function RecommendationsContent() {
           <p className="text-gray-600 mb-6">Personalized recommendations powered by AI</p>
 
           <ul className="flex flex-col gap-4">
-            {recommendations.map((rec) => (
-              <li
-                key={rec.id}
-                className="bg-white shadow rounded-lg p-6 flex items-start gap-4"
-              >
-                <div className="flex-shrink-0">
-                  {rec.image ? (
-                    <img
-                      src={rec.image}
-                      alt={rec.title}
-                      className="w-16 h-16 rounded-full border bg-gray-100 object-cover"
-                    />
-                  ) : (
-                    <div className="w-16 h-16 rounded-full border bg-gray-100 flex items-center justify-center text-2xl">
-                      {getRecommendationIcon(rec.type)}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
-                      {rec.category}
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      {Math.round(rec.relevanceScore * 100)}% match
-                    </span>
-                  </div>
-
-                  <div className="font-semibold text-lg mb-1">{rec.title}</div>
-                  <div className="text-sm text-gray-600 mb-2">{rec.description}</div>
-                  <div className="text-sm text-gray-500 italic">"{rec.reason}"</div>
-
-                  {rec.metadata && (
-                    <div className="mt-2 text-xs text-gray-500">
-                      {rec.metadata.location && <span>📍 {rec.metadata.location}</span>}
-                      {rec.metadata.company && <span> • 🏢 {rec.metadata.company}</span>}
-                      {rec.metadata.salary && <span> • 💰 {rec.metadata.salary}</span>}
-                      {rec.metadata.skills && rec.metadata.skills.length > 0 && (
-                        <span> • 🎯 {rec.metadata.skills.join(', ')}</span>
+            {orderedRecommendations.map((rec) => (
+              <div key={rec.id}>
+                {dyn.v1.addWrapDecoy(
+                  "recommendation-card",
+                  <li className="bg-white shadow rounded-lg p-6 flex items-start gap-4">
+                    <div className="flex-shrink-0">
+                      {rec.image ? (
+                        <img
+                          src={rec.image}
+                          alt={rec.title}
+                          className="w-16 h-16 rounded-full border bg-gray-100 object-cover"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 rounded-full border bg-gray-100 flex items-center justify-center text-2xl">
+                          {getRecommendationIcon(rec.type)}
+                        </div>
                       )}
                     </div>
-                  )}
-                </div>
 
-                <button
-                  onClick={() => toggleFollow(rec.id, rec.title)}
-                  className={`px-4 py-2 text-sm font-medium rounded-full transition ${
-                    following[rec.id]
-                      ? "bg-green-500 text-white"
-                      : "bg-blue-600 hover:bg-blue-700 text-white"
-                  }`}
-                >
-                  {following[rec.id]
-                    ? getText("follow_following", "Following")
-                    : getText("follow_button", "+ Follow")}
-                </button>
-              </li>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-sm font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
+                          {rec.category}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          {Math.round(rec.relevanceScore * 100)}%{" "}
+                          {dyn.v3.getVariant("match_label", TEXT_VARIANTS_MAP, "match")}
+                        </span>
+                      </div>
+
+                      <div className="font-semibold text-lg mb-1">{rec.title}</div>
+                      <div className="text-sm text-gray-600 mb-2">{rec.description}</div>
+                      <div className="text-sm text-gray-500 italic">"{rec.reason}"</div>
+
+                      {rec.metadata && (
+                        <div className="mt-2 text-xs text-gray-500">
+                          {rec.metadata.location && <span>📍 {rec.metadata.location}</span>}
+                          {rec.metadata.company && <span> • 🏢 {rec.metadata.company}</span>}
+                          {rec.metadata.salary && <span> • 💰 {rec.metadata.salary}</span>}
+                          {rec.metadata.skills && rec.metadata.skills.length > 0 && (
+                            <span> • 🎯 {rec.metadata.skills.join(", ")}</span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    <button
+                      onClick={() => toggleFollow(rec.id, rec.title)}
+                      className={`px-4 py-2 text-sm font-medium rounded-full transition ${
+                        following[rec.id]
+                          ? "bg-green-500 text-white"
+                          : "bg-blue-600 hover:bg-blue-700 text-white"
+                      }`}
+                    >
+                      {following[rec.id]
+                        ? dyn.v3.getVariant("follow_following", TEXT_VARIANTS_MAP, "Following")
+                        : dyn.v3.getVariant("follow_button", TEXT_VARIANTS_MAP, "+ Follow")}
+                    </button>
+                  </li>
+                )}
+              </div>
             ))}
           </ul>
         </section>

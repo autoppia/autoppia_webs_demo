@@ -1,18 +1,22 @@
-import { getSeedLayout, isDynamicEnabled } from "@/dynamic/v1-layouts";
+import tasksJson from "@/data/original/tasks_1.json";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 
-const isDynamicHtmlEnabled = (): boolean => {
-  return isDynamicEnabled();
-};
+type TaskRecord = typeof tasksJson extends Array<infer T> ? T : never;
 
-class DynamicDataProvider {
+export interface TaskFilters {
+  query?: string;
+  priority?: number;
+}
+
+export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
-  private isEnabled = false;
-  private ready: boolean = true;
+  private tasks: TaskRecord[] = [];
   private readyPromise: Promise<void>;
+  private ready = false;
+  private isEnabled = false;
 
   private constructor() {
-    this.isEnabled = isDynamicHtmlEnabled();
-    this.readyPromise = Promise.resolve();
+    this.readyPromise = this.loadTasks();
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -22,8 +26,13 @@ class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  public isDynamicModeEnabled(): boolean {
-    return this.isEnabled;
+  private async loadTasks(): Promise<void> {
+    try {
+      this.tasks = Array.isArray(tasksJson) ? tasksJson : [];
+      this.isEnabled = this.tasks.length > 0;
+    } finally {
+      this.ready = true;
+    }
   }
 
   public isReady(): boolean {
@@ -34,177 +43,50 @@ class DynamicDataProvider {
     return this.readyPromise;
   }
 
-  public getEffectiveSeed(providedSeed: number = 1): number {
-    if (!this.isEnabled) {
-      return 1;
+  public isDynamicModeEnabled(): boolean {
+    return this.isEnabled;
+  }
+
+  public getTasks(limit?: number): TaskRecord[] {
+    const items = [...this.tasks];
+    if (limit && Number.isFinite(limit)) {
+      return items.slice(0, limit);
     }
-
-    if (providedSeed < 1 || providedSeed > 300) {
-      return 1;
-    }
-
-    return providedSeed;
+    return items;
   }
 
-  public getLayoutConfig(seed?: number) {
-    return getSeedLayout(seed);
+  public getTaskById(id: string): TaskRecord | undefined {
+    return this.tasks.find((task) => task.id === id);
   }
 
-  public getStaticTasks() {
-    return [
-      {
-        id: "1",
-        name: "Complete project proposal",
-        description: "Write and submit the quarterly project proposal",
-        priority: 1,
-        status: "pending",
-        createdAt: "2024-01-15",
-      },
-      {
-        id: "2",
-        name: "Review team performance",
-        description: "Analyze Q1 team metrics and prepare feedback",
-        priority: 2,
-        status: "pending",
-        createdAt: "2024-01-14",
-      },
-      {
-        id: "3",
-        name: "Update documentation",
-        description: "Refresh API documentation and user guides",
-        priority: 3,
-        status: "in_progress",
-        createdAt: "2024-01-13",
-      },
-      {
-        id: "4",
-        name: "Schedule team meeting",
-        description: "Plan next week's team retrospectives",
-        priority: 4,
-        status: "completed",
-        createdAt: "2024-01-12",
-      },
-    ];
+  public searchTasks(filters?: TaskFilters): TaskRecord[] {
+    if (!filters) return this.tasks;
+    const { query, priority } = filters;
+    const normalizedQuery = query?.trim().toLowerCase() || "";
+
+    return this.tasks.filter((task) => {
+      const matchesPriority = priority ? task.priority === priority : true;
+      const matchesQuery =
+        normalizedQuery.length === 0 ||
+        task.name?.toLowerCase().includes(normalizedQuery) ||
+        task.description?.toLowerCase().includes(normalizedQuery);
+      return matchesPriority && matchesQuery;
+    });
   }
 
-  public getStaticCalendarEvents() {
-    return [
-      {
-        id: "1",
-        title: "Daily Standup",
-        date: "2024-01-15",
-        time: "9:00 AM",
-        type: "meeting",
-        description: "Team daily sync",
-      },
-      {
-        id: "2",
-        title: "Client Presentation",
-        date: "2024-01-16",
-        time: "2:00 PM",
-        type: "presentation",
-      },
-      {
-        id: "3",
-        title: "Code Review Session",
-        date: "2024-01-17",
-        time: "10:30 AM",
-        type: "work",
-        description: "Review pending PRs",
-      },
-      {
-        id: "4",
-        title: "Team Retrospective",
-        date: "2024-01-18",
-        time: "4:00 PM",
-        type: "retrospective",
-      },
-    ];
-  }
-
-  public getStaticProjects() {
-    return [
-      {
-        id: "1",
-        name: "Product Redesign",
-        description: "Complete overhaul of user interface",
-        progress: 75,
-        teamSize: 8,
-        deadline: "2024-02-15",
-      },
-      {
-        id: "2",
-        name: "Mobile App Launch",
-        description: "iOS and Android app rollout",
-        progress: 45,
-        teamSize: 12,
-        deadline: "2024-03-01",
-      },
-      {
-        id: "3",
-        name: "Security Audit",
-        description: "Comprehensive security assessment",
-        progress: 90,
-        teamSize: 4,
-        deadline: "2024-01-30",
-      },
-      {
-        id: "4",
-        name: "Performance Optimization",
-        description: "Database and API performance tuning",
-        progress: 60,
-        teamSize: 6,
-        deadline: "2024-02-28",
-      },
-    ];
-  }
-
-  public getStaticTeams() {
-    return [
-      {
-        id: "1",
-        name: "Frontend Team",
-        members: ["Alice Johnson", "Bob Smith", "Carol Brown"],
-        role: "Development",
-        avatar: "👨‍💻",
-      },
-      {
-        id: "2",
-        name: "Backend Team",
-        members: ["David Wilson", "Emma Davis"],
-        role: "Development",
-        avatar: "⚙️",
-      },
-      {
-        id: "3",
-        name: "Design Team",
-        members: ["Frank Miller", "Grace Lee"],
-        role: "Design",
-        avatar: "🎨",
-      },
-      {
-        id: "4",
-        name: "QA Team",
-        members: ["Henry Taylor", "Ivy Chen", "Jack Wilson"],
-        role: "Quality Assurance",
-        avatar: "🧪",
-      },
-    ];
+  public getFeaturedTasks(count = 6, seed = 1): TaskRecord[] {
+    const safeSeed = clampBaseSeed(seed);
+    const startIndex = safeSeed % Math.max(this.tasks.length, 1);
+    const rotated = [...this.tasks.slice(startIndex), ...this.tasks.slice(0, startIndex)];
+    return rotated.slice(0, count);
   }
 }
 
 const dynamicDataProvider = DynamicDataProvider.getInstance();
 
-export const isDynamicModeEnabled = () =>
-  dynamicDataProvider.isDynamicModeEnabled();
-export const getEffectiveSeed = (providedSeed?: number) =>
-  dynamicDataProvider.getEffectiveSeed(providedSeed);
-export const getLayoutConfig = (seed?: number) =>
-  dynamicDataProvider.getLayoutConfig(seed);
-
-export const getStaticTasks = () => dynamicDataProvider.getStaticTasks();
-export const getStaticCalendarEvents = () =>
-  dynamicDataProvider.getStaticCalendarEvents();
-export const getStaticProjects = () => dynamicDataProvider.getStaticProjects();
-export const getStaticTeams = () => dynamicDataProvider.getStaticTeams();
-export const whenReady = () => dynamicDataProvider.whenReady();
+export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
+export const getTasks = (limit?: number) => dynamicDataProvider.getTasks(limit);
+export const searchTasks = (filters?: TaskFilters) => dynamicDataProvider.searchTasks(filters);
+export const getTaskById = (id: string) => dynamicDataProvider.getTaskById(id);
+export const getFeaturedTasks = (count?: number, seed?: number) =>
+  dynamicDataProvider.getFeaturedTasks(count, seed ?? 1);

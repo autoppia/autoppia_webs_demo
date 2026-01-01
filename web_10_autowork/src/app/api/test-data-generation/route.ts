@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { generateProjectData } from "@/shared/data-generator";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const projectKey = searchParams.get('project') || 'web_10_autowork_jobs';
-  const count = parseInt(searchParams.get('count') || '5');
+  const count = Number.parseInt(searchParams.get('count') || '5');
   
   try {
     const result = await generateProjectData(projectKey, count);

@@ -322,7 +322,7 @@ Experts must include slug, role, rate, rating, jobs, and valid avatar URLs. Rati
  */
 export async function generateProjectData(
   projectKey: string,
-  count: number = 10,
+  count = 10,
   categories?: string[]
 ): Promise<DataGenerationResponse> {
   const config = PROJECT_CONFIGS[projectKey];
@@ -577,7 +577,7 @@ function normalizeStatus(status: string): 'Open' | 'Assigned' | 'In progress' | 
 
 function parseMoneyToRange(value: string): { min: number; max: number } | null {
   if (!value) return null;
-  const nums = (value.match(/\d+(?:\.\d+)?/g) || []).map(n => parseFloat(n));
+  const nums = (value.match(/\d+(?:\.\d+)?/g) || []).map(n => Number.parseFloat(n));
   if (nums.length === 0) return null;
   if (nums.length === 1) return { min: nums[0], max: nums[0] };
   return { min: Math.min(nums[0], nums[1]), max: Math.max(nums[0], nums[1]) };
@@ -611,7 +611,7 @@ export function validateAutoworkData(projectKey: string, items: any[]): any[] {
         out.push(normalized);
       } else if (type === 'hires') {
         const rating = clamp(Number(item?.rating ?? 0), 1.0, 5.0);
-        const jobs = Math.max(0, parseInt(String(item?.jobs ?? 0), 10) || 0);
+        const jobs = Math.max(0, Number.parseInt(String(item?.jobs ?? 0), 10) || 0);
         const rate = typeof item?.rate === 'string' && item.rate.includes('$') ? item.rate : `$${Number(item?.rate ?? 0)}/hr`;
         const avatar = typeof item?.avatar === 'string' && isValidUrl(item.avatar) ? item.avatar : 'https://randomuser.me/api/portraits/men/1.jpg';
         if (!item?.name) { console.warn('[Autowork] Skipped invalid record: name missing'); continue; }
@@ -628,7 +628,7 @@ export function validateAutoworkData(projectKey: string, items: any[]): any[] {
           continue;
         }
         const rating = clamp(Number(item?.rating ?? 0), 1.0, 5.0);
-        const jobs = Math.max(0, parseInt(String(item?.jobs ?? 0), 10) || 0);
+        const jobs = Math.max(0, Number.parseInt(String(item?.jobs ?? 0), 10) || 0);
         const rate = typeof item?.rate === 'string' && item.rate.includes('$') ? item.rate : `$${Number(item?.rate ?? 0)}/hr`;
         const avatar = typeof item?.avatar === 'string' && isValidUrl(item.avatar) ? item.avatar : 'https://randomuser.me/api/portraits/men/2.jpg';
         out.push({ ...item, rating, jobs, rate, avatar });

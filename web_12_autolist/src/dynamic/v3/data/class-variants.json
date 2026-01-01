@@ -1,0 +1,77 @@
+{
+  "button-primary": [
+    "bg-[#d1453b] text-white hover:bg-[#b53b34]",
+    "bg-[#1f2937] text-white hover:bg-[#111827]",
+    "bg-[#2563eb] text-white hover:bg-[#1d4ed8]"
+  ],
+  "button-ghost": [
+    "border border-gray-200 hover:border-gray-300",
+    "bg-white shadow-sm hover:shadow",
+    "border border-dashed border-gray-300"
+  ],
+  "card-surface": [
+    "rounded-xl border border-gray-200 bg-white shadow-sm",
+    "rounded-lg border border-gray-100 bg-slate-50",
+    "rounded-2xl border border-gray-300 bg-white"
+  ],
+  "badge-priority": [
+    "text-xs px-2 py-1 rounded-full bg-red-100 text-red-700",
+    "text-xs px-2 py-1 rounded-full bg-orange-100 text-orange-700",
+    "text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-700"
+  ],
+  "input-field": [
+    "border border-gray-200 rounded-lg px-3 py-2 focus:border-[#d1453b]",
+    "border border-gray-300 rounded-md px-3 py-2 focus:border-[#2563eb]",
+    "border border-gray-100 rounded-lg px-4 py-2 shadow-inner focus:border-black"
+  ],
+  "panel": [
+    "bg-white border border-gray-200 rounded-xl shadow-sm",
+    "bg-slate-50 border border-gray-100 rounded-lg",
+    "bg-white border border-gray-300 rounded-2xl shadow"
+  ],
+  "section-title": [
+    "text-2xl font-bold text-gray-900",
+    "text-xl font-semibold text-gray-800",
+    "text-[22px] font-semibold text-gray-900"
+  ],
+  "list-row": [
+    "flex items-center justify-between py-3 px-3 rounded-lg hover:bg-gray-50",
+    "flex items-start gap-3 py-2 px-2 rounded-md hover:bg-gray-50",
+    "flex items-center gap-3 py-3 px-3 rounded-xl border border-transparent hover:border-gray-200"
+  ],
+  "pill": [
+    "rounded-full bg-gray-100 text-gray-700 px-3 py-1 text-xs",
+    "rounded-full bg-slate-100 text-slate-700 px-3 py-1 text-xs",
+    "rounded-full bg-amber-50 text-amber-700 px-3 py-1 text-xs"
+  ],
+  "cta": [
+    "inline-flex items-center gap-2 text-[#d1453b] font-semibold",
+    "inline-flex items-center gap-2 text-[#2563eb] font-semibold",
+    "inline-flex items-center gap-2 text-gray-900 font-semibold underline"
+  ],
+  "chip": [
+    "px-3 py-1 rounded-full bg-gray-100 text-gray-800 text-xs",
+    "px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 text-xs",
+    "px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs"
+  ],
+  "grid-layout": [
+    "grid grid-cols-1 md:grid-cols-2 gap-4",
+    "grid grid-cols-2 md:grid-cols-3 gap-3",
+    "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+  ],
+  "modal-body": [
+    "space-y-4",
+    "flex flex-col gap-4",
+    "space-y-3"
+  ],
+  "form-label": [
+    "text-sm font-medium text-gray-700",
+    "text-xs font-semibold text-gray-600 uppercase",
+    "text-sm font-semibold text-gray-800"
+  ],
+  "nav-link": [
+    "flex items-center gap-2 px-2.5 py-2 rounded-lg text-gray-800 hover:bg-gray-100",
+    "flex items-center gap-2 px-3 py-2 rounded-lg text-gray-900 hover:bg-gray-50",
+    "flex items-center gap-3 px-2.5 py-2 rounded-xl text-gray-900 border border-transparent hover:border-gray-200"
+  ]
+}

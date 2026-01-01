@@ -15,6 +15,16 @@ if (isLocalDev) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'false';
 }
 
+// Enable V3 (attributes/text) by default locally
+if (!process.env.ENABLE_DYNAMIC_V3) {
+  process.env.ENABLE_DYNAMIC_V3 = isLocalDev ? 'true' : 'false';
+}
+if (isLocalDev) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = 'true';
+} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = 'false';
+}
+
 // Handle ENABLE_DYNAMIC_V1_STRUCTURE (separate from layout control)
 if (!process.env.ENABLE_DYNAMIC_V1_STRUCTURE) {
   process.env.ENABLE_DYNAMIC_V1_STRUCTURE = isLocalDev ? 'true' : 'false';
@@ -33,6 +43,8 @@ console.log('  isDockerBuild:', isDockerBuild);
 console.log('  API_URL:', process.env.API_URL);
 console.log('  ENABLE_DYNAMIC_V1:', process.env.ENABLE_DYNAMIC_V1);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V1:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1);
+console.log('  ENABLE_DYNAMIC_V3:', process.env.ENABLE_DYNAMIC_V3);
+console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V3:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3);
 console.log('  ENABLE_DYNAMIC_V1_STRUCTURE:', process.env.ENABLE_DYNAMIC_V1_STRUCTURE);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE);
 

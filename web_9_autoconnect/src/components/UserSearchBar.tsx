@@ -4,41 +4,69 @@ import Image from "next/image";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 export default function UserSearchBar() {
   const [q, setQ] = useState("");
   const [focus, setFocus] = useState(false);
-  const { getText, getClass, getId } = useV3Attributes();
-  const withVariant = (type: string, base: string) => {
-    const variant = getClass(type, "");
-    return variant ? `${variant} ${base}` : base;
-  };
-  const matches =
-    q.length === 0
-      ? []
-      : dynamicDataProvider.searchUsers(q);
+  const dyn = useDynamicSystem();
+  const matches = q.length === 0 ? [] : dynamicDataProvider.searchUsers(q);
   const router = useSeedRouter();
+
+  const localIdVariants: Record<string, string[]> = {
+    "search-input": ["search-input", "user-search", "people-search"],
+    "search-results": ["search-results", "user-results", "results-panel"],
+  };
+
+  const localClassVariants: Record<string, string[]> = {
+    "search-input": [
+      "w-full rounded-full border border-gray-300 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50",
+      "w-full rounded-full border border-gray-200 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white",
+      "w-full rounded-full border border-gray-300 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-100",
+    ],
+    "search-result-item": [
+      "flex items-center gap-3 w-full px-2 py-2 hover:bg-blue-50 rounded text-left",
+      "flex items-center gap-3 w-full px-2 py-2 hover:bg-gray-50 rounded text-left",
+      "flex items-center gap-3 w-full px-2 py-2 hover:bg-indigo-50 rounded text-left",
+    ],
+  };
+
+  const localTextVariants: Record<string, string[]> = {
+    "search_placeholder": [
+      "Search users",
+      "Find people",
+      "Look up professionals",
+    ],
+    "search_result_name": ["Name", "Full name", "Profile name"],
+    "search_result_title": ["Title", "Role", "Position"],
+  };
+
+  const withClass = (key: string, base: string) =>
+    cn(base, dyn.v3.getVariant(key, CLASS_VARIANTS_MAP, ""), dyn.v3.getVariant(key, localClassVariants, ""));
+
   return (
     <div className="relative flex-1 max-w-lg">
       <input
-        id={getId("search_field")}
+        id={dyn.v3.getVariant("search-input", localIdVariants, "search-input")}
         type="text"
-        aria-label={getText("search_aria_label", "Search users")}
-        className={withVariant(
-          "input-text",
+        aria-label={dyn.v3.getVariant("search_placeholder", localTextVariants, "Search users")}
+        className={withClass(
+          "search-input",
           "w-full rounded-full border border-gray-300 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
         )}
-        placeholder={getText("search_placeholder", "Search users")}
+        placeholder={dyn.v3.getVariant("search_placeholder", localTextVariants, "Search users")}
         value={q}
         onChange={(e) => {
           const val = e.target.value;
           setQ(val);
 
-          if (val.trim().length >= 2) {
+          const term = val.trim();
+          if (term.length >= 2) {
             logEvent(EVENT_TYPES.SEARCH_USERS, {
-              query: val.trim(),
-              resultCount: matches.length,
+              query: term,
+              resultCount: dynamicDataProvider.searchUsers(term).length,
             });
           }
         }}
@@ -54,36 +82,41 @@ export default function UserSearchBar() {
         </svg>
       </span>
       {/* Results Dropdown */}
-      {focus && matches.length > 0 && (
+      {focus && q.trim().length >= 2 && matches.length > 0 && (
         <div
-          id={getId("search_results_panel")}
+          id={dyn.v3.getVariant("search-results", localIdVariants, "search-results")}
           className="absolute left-0 top-12 w-full bg-white border z-30 rounded-lg shadow p-2"
         >
           {matches.map((u, idx) => (
-            <button
-              key={u.username}
-              id={getId("search_result_item", idx)}
-              className={withVariant(
-                "card",
-                "flex items-center gap-3 w-full px-2 py-2 hover:bg-blue-50 rounded text-left"
-              )}
-              onMouseDown={() => {
-                router.push(`/profile/${u.username}`);
-                setQ("");
-              }}
-            >
-              <Image
-                src={u.avatar}
-                alt={u.name}
-                width={32}
-                height={32}
-                className="rounded-full object-cover"
-              />
-              <span className="flex flex-col">
-                <span className="font-medium">{u.name}</span>
-                <span className="text-xs text-gray-500">{u.title}</span>
-              </span>
-            </button>
+            <div key={u.username}>
+              <button
+                id={dyn.v3.getVariant(
+                  `search_result_item_${idx}`,
+                  localIdVariants,
+                  `search_result_item_${idx}`
+                )}
+                className={withClass(
+                  "search-result-item",
+                  "flex items-center gap-3 w-full px-2 py-2 hover:bg-blue-50 rounded text-left"
+                )}
+                onMouseDown={() => {
+                  router.push(`/profile/${u.username}`);
+                  setQ("");
+                }}
+              >
+                <Image
+                  src={u.avatar}
+                  alt={u.name}
+                  width={32}
+                  height={32}
+                  className="rounded-full object-cover"
+                />
+                <span className="flex flex-col">
+                  <span className="font-medium">{u.name}</span>
+                  <span className="text-xs text-gray-500">{u.title}</span>
+                </span>
+              </button>
+            </div>
           ))}
         </div>
       )}

@@ -1,0 +1,19 @@
+{
+  "primary-button": ["btn-primary", "action-solid", "cta-strong", "button-prominent"],
+  "secondary-button": ["btn-secondary", "action-ghost", "cta-quiet", "button-muted"],
+  "ghost-button": ["btn-ghost", "action-soft", "cta-ghost", "button-plain"],
+  "panel": ["panel-surface", "card-surface", "sheet-surface", "block-surface"],
+  "card": ["card-outline", "card-elevated", "card-flat", "card-bordered"],
+  "badge": ["badge-soft", "pill-soft", "tag-soft", "chip-soft"],
+  "input": ["input-solid", "field-solid", "control-solid", "entry-solid"],
+  "pill": ["pill-solid", "pill-outline", "pill-ghost", "pill-muted"],
+  "section-title": ["section-title", "block-title", "area-title", "panel-title"],
+  "nav-button": ["nav-button", "nav-control", "navigation-chip", "nav-pill"],
+  "sidebar-block": ["sidebar-block", "sidebar-panel", "aside-block", "rail-panel"],
+  "chip": ["chip-default", "chip-muted", "chip-ghost", "chip-solid"],
+  "tag": ["tag-default", "tag-quiet", "tag-accent", "tag-plain"],
+  "modal": ["modal-shell", "dialog-shell", "layer-shell", "sheet-shell"],
+  "dropdown": ["dropdown-surface", "menu-surface", "popover-surface", "list-surface"],
+  "calendar-cell": ["calendar-cell", "date-cell", "grid-cell", "planner-cell"],
+  "timeline-row": ["timeline-row", "week-row", "time-row", "track-row"]
+}

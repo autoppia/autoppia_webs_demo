@@ -47,7 +47,7 @@ export default function Navbar({
                     id={dyn.v3.getVariant("navbar-logo", ID_VARIANTS_MAP, "navbar-logo")}
                   >
                     <span className="font-bold text-white text-lg">
-                      {dyn.v3.getVariant("app_title", undefined, "AutoDining")}
+                      AutoDining
                     </span>
                   </div>
                 ))}

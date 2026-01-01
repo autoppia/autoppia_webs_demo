@@ -1,0 +1,88 @@
+{
+  "add_task": ["Add task", "New task", "Create task", "Add item", "Add todo"],
+  "save_task": ["Save task", "Create task", "Save item", "Confirm task", "Add task"],
+  "cancel_action": ["Cancel", "Dismiss", "Nevermind", "Close", "Back"],
+  "priority_label": ["Priority", "Importance", "Level", "Urgency", "Priority level"],
+  "due_date_label": ["Due date", "Deadline", "Schedule", "When", "Pick date"],
+  "empty_state_title": ["Inbox is clear", "No tasks yet", "Nothing here", "You're all set", "Empty list"],
+  "empty_state_description": [
+    "Add your first task to get started.",
+    "You're caught up. Add something new.",
+    "No tasks available right now.",
+    "Start by creating a task.",
+    "You're all done here."
+  ],
+  "today_heading": ["Today", "Today's focus", "Focus today", "Tasks today", "Today's list"],
+  "completed_heading": ["Completed", "Done", "Finished", "Completed tasks", "History"],
+  "inbox_heading": ["Inbox", "Backlog", "All tasks", "My tasks", "Inbox items"],
+  "chat_placeholder": [
+    "Type a message...",
+    "Send a quick note...",
+    "Write your reply...",
+    "Drop a message...",
+    "Start typing..."
+  ],
+  "quick_actions_title": [
+    "Quick actions",
+    "Shortcuts",
+    "Speedy actions",
+    "One-click actions",
+    "Instant actions"
+  ],
+  "search_tasks_placeholder": [
+    "Search tasks...",
+    "Find a task...",
+    "Filter tasks...",
+    "Look up tasks...",
+    "Search in tasks..."
+  ],
+  "sidebar_heading": [
+    "Workspace",
+    "Navigation",
+    "Menu",
+    "Dashboard",
+    "Task menu"
+  ],
+  "projects_heading": [
+    "Projects",
+    "My projects",
+    "Project list",
+    "Project space",
+    "Projects area"
+  ],
+  "teams_heading": [
+    "Teams",
+    "My teams",
+    "Team space",
+    "Team list",
+    "People"
+  ],
+  "cta_add_task": [
+    "Add your first task",
+    "Create a task",
+    "Start with a task",
+    "Add new task",
+    "Create todo"
+  ],
+  "overview_title": [
+    "Your day at a glance",
+    "Today's plan",
+    "What to tackle",
+    "Current priorities",
+    "Today's summary"
+  ],
+  "hide_action": ["Hide", "Secret", "Conceal", "Collapse", "Minimize"],
+  "show_action": ["Show", "Display", "Reveal", "Expand", "Unfold"],
+  "input-task-name-placeholder": ["Task name", "What needs to be done?", "Enter task name", "Task title", "Name your task"],
+  "input-description-placeholder": ["Description", "Add details...", "Notes", "Additional info", "Task description"],
+  "button-save": ["Save changes", "Update", "Apply changes", "Confirm", "Save"],
+  "button-add": ["Add", "Create", "Submit", "Add task", "Save"],
+  "button-cancel": ["Cancel", "Dismiss", "Close", "Back", "Nevermind"],
+  "modal-edit-title": ["Edit Task", "Modify Task", "Update Task", "Change Task", "Edit Item"],
+  "team-name-label": ["Team Name", "Team", "Name", "Team Title", "Team Label"],
+  "team-description-label": ["Description", "Details", "Team Description", "About", "Info"],
+  "team-members-label": ["Team Members", "Members", "People", "Team People", "Add Members"],
+  "enter-team-name-placeholder": ["Enter team name", "Team name", "Type team name", "Name your team", "Team name here"],
+  "select-team-members-placeholder": ["Select team members", "Choose members", "Add members", "Pick members", "Select people"],
+  "save-team-button": ["Save Team", "Save", "Create Team", "Confirm", "Add Team"]
+}

@@ -15,7 +15,7 @@ interface Expert {
 }
 
 export default function HireFormClient({ expert }: { expert: Expert }) {
-  const { layout, getElementAttributes, getText } = useSeedLayout();
+  const { layout, getElementAttributes, getText, dyn } = useSeedLayout();
   const [paymentType, setPaymentType] = useState("hourly");
   const [rate, setRate] = useState("50"); // demo value
   const [increaseWhen, setIncreaseWhen] = useState("Never");
@@ -32,6 +32,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
   return (
     <>
       <ToastContainer />
+      {dyn.v1.addWrapDecoy("hire-form-page", (
       <main className="px-40 py-12">
         <h1 className="text-5xl font-extrabold text-[#253037] mb-8" {...getElementAttributes('hire-heading', 0)}>
           Send an offer
@@ -322,6 +323,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
           </div>
         </div>
       </main>
+      ))}
     </>
   );
 }

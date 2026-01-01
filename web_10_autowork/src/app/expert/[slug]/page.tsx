@@ -2,6 +2,11 @@ import ExpertProfileClient from "./ExpertProfileClient";
 
 export const dynamicParams = true;
 
-export default function ExpertProfile({ params }: { params: { slug: string } }) {
-  return <ExpertProfileClient slug={params.slug} />;
+export default async function ExpertProfile({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  return <ExpertProfileClient slug={slug} />;
 }

@@ -1,39 +1,33 @@
-// Set default environment variables. Keep dynamic HTML OFF by default to avoid layout shuffling.
+// Set default environment variables for local development
 const isDockerBuild = process.env.DOCKER_BUILD === "true" || process.env.NODE_ENV === "production";
 const isLocalDev = process.env.NODE_ENV !== "production" && !process.env.DOCKER_BUILD;
 
-// Disable V1 dynamic layout/HTML unless explicitly enabled
 if (!process.env.ENABLE_DYNAMIC_V1) {
-  process.env.ENABLE_DYNAMIC_V1 = "false";
+  process.env.ENABLE_DYNAMIC_V1 = isLocalDev ? "true" : "false";
 }
-if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) {
+if (isLocalDev) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = "true";
+} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = "false";
 }
-// Dynamic HTML structure flag (controls seed-based structure)
-if (!process.env.DYNAMIC_HTML_STRUCTURE) {
-  process.env.DYNAMIC_HTML_STRUCTURE = "false";
-}
-if (!process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE) {
-  process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE = process.env.DYNAMIC_HTML_STRUCTURE;
-}
-// Keep V3 dynamic classes/IDs off unless explicitly enabled
+
 if (!process.env.ENABLE_DYNAMIC_V3) {
-  process.env.ENABLE_DYNAMIC_V3 = "false";
+  process.env.ENABLE_DYNAMIC_V3 = isLocalDev ? "true" : "false";
 }
-if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) {
+if (isLocalDev) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = "true";
+} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = "false";
 }
 
-// Debug: Print environment variables
-console.log('🔍 Next.js config - Environment variables:');
-console.log('  NODE_ENV:', process.env.NODE_ENV);
-console.log('  DOCKER_BUILD:', process.env.DOCKER_BUILD);
-console.log('  isLocalDev:', isLocalDev);
-console.log('  isDockerBuild:', isDockerBuild);
-console.log('  ENABLE_DYNAMIC_V1:', process.env.ENABLE_DYNAMIC_V1);
-console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V1:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1);
-console.log('  DYNAMIC_HTML_STRUCTURE:', process.env.DYNAMIC_HTML_STRUCTURE);
-console.log('  NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE:', process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE);
+console.log("🔍 Next.js config - Environment variables:");
+console.log("  NODE_ENV:", process.env.NODE_ENV);
+console.log("  isLocalDev:", isLocalDev);
+console.log("  isDockerBuild:", isDockerBuild);
+console.log("  ENABLE_DYNAMIC_V1:", process.env.ENABLE_DYNAMIC_V1);
+console.log("  NEXT_PUBLIC_ENABLE_DYNAMIC_V1:", process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1);
+console.log("  ENABLE_DYNAMIC_V3:", process.env.ENABLE_DYNAMIC_V3);
+console.log("  NEXT_PUBLIC_ENABLE_DYNAMIC_V3:", process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
