@@ -6,6 +6,8 @@ import GlobalHeader from "@/components/GlobalHeader";
 import { EVENT_TYPES, logEvent } from "@/library/event";
 import DynamicLayout from "../../../components/DynamicLayout";
 import SiteElements from "../../../components/SiteElements";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 const PLACES = [
     {
         "label": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
@@ -725,6 +727,7 @@ function Spinner() {
 export default function RideTripPage() {
   const router = useSeedRouter();
   const { getElementAttributes, getText, v2Seed } = useSeedLayout();
+  const dyn = useDynamicSystem();
   const [pickupOpen, setPickupOpen] = useState(false);
   const [dropoffOpen, setDropoffOpen] = useState(false);
   const [pickup, setPickup] = useState<string | null>(null);
@@ -908,9 +911,9 @@ export default function RideTripPage() {
             strokeLinecap="round"
           />
         </svg>
-        <span className="font-bold mr-1 text-[#2095d2]">
-          {pickupScheduled ? getText('pickup-label', 'Pick up:') : getText('pickup-now-label', 'Pickup now')}
-        </span>
+          <span className="font-bold mr-1 text-[#2095d2]">
+            {pickupScheduled ? dyn.v3.getVariant("pickup_label", TEXT_VARIANTS_MAP, "Pick up:") : dyn.v3.getVariant("pickup_now_label", TEXT_VARIANTS_MAP, "Pickup now")}
+          </span>
         {pickupScheduled ? (
           <span className="ml-1 font-[500]">
             {formatDateTime(pickupScheduled.date, pickupScheduled.time)}
@@ -964,13 +967,13 @@ export default function RideTripPage() {
         </svg>
       </div>
       <button
-        {...getElementAttributes('search-button', 0)}
+        id={dyn.v3.getVariant("search-button", ID_VARIANTS_MAP, "search-button")}
         onClick={handleSearch}
         className={`rounded-md h-10 font-bold mb-2 transition ${
           !pickup || !dropoff || loading
             ? "bg-gray-200 text-gray-500 cursor-not-allowed"
             : "bg-[#2095d2] text-white hover:bg-[#1273a0]"
-        }`}
+        } ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`}
         disabled={!pickup || !dropoff || loading}
       >
         {loading ? getText('searching-label', 'Searching...') : getText('search-button', 'Search')}
@@ -1186,7 +1189,7 @@ export default function RideTripPage() {
               className={`flex-1 font-bold px-6 py-2 rounded-md text-lg shadow transition disabled:bg-gray-200 disabled:text-gray-400 ${
                 selectedRideIdx === null
                   ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  : "bg-[#2095d2] text-white hover:bg-[#1273a0]"
+                  : `bg-[#2095d2] text-white hover:bg-[#1273a0] ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`
               }`}
               disabled={selectedRideIdx === null}
               onClick={() => {
@@ -1235,7 +1238,7 @@ export default function RideTripPage() {
                 }
               }}
             >
-              {selectedRideIdx === null ? getText('select-ride-label', 'Select a ride') : getText('reserve-ride-label', 'Reserve ride')}
+              {selectedRideIdx === null ? getText('select-ride-label', 'Select a ride') : dyn.v3.getVariant("reserve_ride", TEXT_VARIANTS_MAP, "Reserve ride")}
             </button>
           </div>
         </div>

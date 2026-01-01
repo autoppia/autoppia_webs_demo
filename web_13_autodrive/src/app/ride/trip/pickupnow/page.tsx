@@ -7,6 +7,8 @@ import { EVENT_TYPES, logEvent } from "@/library/event";
 import { DatePickerInput } from "../../../../components/DatePicker";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { getEffectiveSeed } from "@/dynamic/v2-data";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 
 function getTimeSlotsForDate(dateStr: string) {
   const results = [];
@@ -484,6 +486,7 @@ export default function PickupNowPage() {
   const [showSlotPanel, setShowSlotPanel] = useState(false);
   const slotPanelRef = useRef<HTMLDivElement>(null);
   const { seed, isDynamicEnabled, generateId } = useSeedLayout();
+  const dyn = useDynamicSystem();
   
   // Get seed-based variant
   const variant = getPickupPageVariant(seed);
@@ -567,20 +570,22 @@ export default function PickupNowPage() {
   };
 
   return (
-    <div 
-      className="min-h-screen" 
-      style={{ backgroundColor: variant.backgroundColor }}
-      data-seed={isDynamicEnabled ? seed : undefined}
-      data-variant={isDynamicEnabled ? `variant-${((seed % 30) + 1) % 10 || 10}` : undefined}
-    >
-      <RideNavbar activeTab="ride" />
-      <div className="flex gap-8 mt-8 px-8 pb-10 max-lg:flex-col max-lg:px-2 max-lg:gap-4">
-        <section 
-          className="bg-white rounded-2xl shadow-xl p-8 flex flex-col max-lg:w-full mx-auto mt-2 relative border border-gray-100"
-          style={{ width: variant.cardWidth, maxWidth: '100%' }}
-          id={generateId('pickup-card', 0)}
-          data-card-type="pickup-scheduler"
-        >
+    dyn.v1.addWrapDecoy(
+      "pickupnow-page",
+      <div 
+        className="min-h-screen" 
+        style={{ backgroundColor: variant.backgroundColor }}
+        data-seed={isDynamicEnabled ? seed : undefined}
+        data-variant={isDynamicEnabled ? `variant-${((seed % 30) + 1) % 10 || 10}` : undefined}
+      >
+        <RideNavbar activeTab="ride" />
+        <div className="flex gap-8 mt-8 px-8 pb-10 max-lg:flex-col max-lg:px-2 max-lg:gap-4">
+          <section 
+            className="bg-white rounded-2xl shadow-xl p-8 flex flex-col max-lg:w-full mx-auto mt-2 relative border border-gray-100"
+            style={{ width: variant.cardWidth, maxWidth: '100%' }}
+            id={generateId('pickup-card', 0)}
+            data-card-type="pickup-scheduler"
+          >
           <div className={`flex items-center mb-6 ${variant.headerLayout === 'stacked' ? 'flex-col gap-3' : variant.headerLayout === 'compact' ? 'justify-center gap-4' : 'justify-between'}`}>
             <button
               onClick={() => router.back()}
@@ -633,7 +638,7 @@ export default function PickupNowPage() {
           )}
           
           {/* Date picker row */}
-          <div className="mb-4">
+          <div className={`mb-4 ${dyn.v3.getVariant("date-picker-container", CLASS_VARIANTS_MAP, "")}`}>
             <DatePickerInput
               date={selectedDate}
               onDateChange={(newDate) => {
@@ -659,9 +664,9 @@ export default function PickupNowPage() {
             />
           </div>
           {/* Time picker row */}
-          <div className="mb-7 relative">
+          <div className={`mb-7 relative ${dyn.v3.getVariant("time-picker-container", CLASS_VARIANTS_MAP, "")}`}>
             <div
-              className="bg-gray-100 rounded-lg flex items-center px-4 py-3 cursor-pointer border border-gray-200 text-base group"
+              className={`bg-gray-100 rounded-lg flex items-center px-4 py-3 cursor-pointer border border-gray-200 text-base group ${dyn.v3.getVariant("time-picker-container", CLASS_VARIANTS_MAP, "")}`}
               id={generateId('time-picker', 0)}
               onClick={() => isMounted && setShowSlotPanel(!showSlotPanel)}
               tabIndex={0}
@@ -817,5 +822,6 @@ export default function PickupNowPage() {
         </section>
       </div>
     </div>
+    )
   );
 }

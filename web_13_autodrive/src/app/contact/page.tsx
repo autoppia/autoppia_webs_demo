@@ -4,10 +4,13 @@ import { useRouter } from "next/navigation";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useState } from "react";
 import GlobalHeader from "@/components/GlobalHeader";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 export default function ContactPage() {
   const router = useRouter();
   const [status, setStatus] = useState<"idle" | "sent">("idle");
+  const dyn = useDynamicSystem();
 
   const footer = (
     <footer className="bg-gray-100 py-8 px-4">
@@ -46,15 +49,17 @@ export default function ContactPage() {
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-semibold text-slate-700">Name</label>
                   <input
-                    className="border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-[#2095d2] bg-[#f7f9fb]"
-                    placeholder="John Wick"
+                    id={dyn.v3.getVariant("contact-name-input", ID_VARIANTS_MAP, "contact-name-input")}
+                    className={`border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-[#2095d2] bg-[#f7f9fb] ${dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "")}`}
+                    placeholder={dyn.v3.getVariant("name_placeholder", TEXT_VARIANTS_MAP, "John Wick")}
                   />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-semibold text-slate-700">Email</label>
                   <input
-                    className="border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-[#2095d2] bg-[#f7f9fb]"
-                    placeholder="you@example.com"
+                    id={dyn.v3.getVariant("contact-email-input", ID_VARIANTS_MAP, "contact-email-input")}
+                    className={`border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-[#2095d2] bg-[#f7f9fb] ${dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "")}`}
+                    placeholder={dyn.v3.getVariant("email_placeholder_contact", TEXT_VARIANTS_MAP, "you@example.com")}
                   />
                 </div>
               </div>
@@ -62,7 +67,7 @@ export default function ContactPage() {
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-semibold text-slate-700">Topic</label>
-                  <select className="border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-[#2095d2] bg-[#f7f9fb]">
+                  <select id={dyn.v3.getVariant("topic-selector", ID_VARIANTS_MAP, "topic-selector")} className={`border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-[#2095d2] bg-[#f7f9fb] ${dyn.v3.getVariant("select-dropdown", CLASS_VARIANTS_MAP, "")}`}>
                     <option>Pickups & map</option>
                     <option>Payments & fares</option>
                     <option>Trips & history</option>
@@ -72,7 +77,7 @@ export default function ContactPage() {
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-semibold text-slate-700">Priority</label>
-                  <select className="border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-[#2095d2] bg-[#f7f9fb]">
+                  <select id={dyn.v3.getVariant("priority-selector", ID_VARIANTS_MAP, "priority-selector")} className={`border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-[#2095d2] bg-[#f7f9fb] ${dyn.v3.getVariant("select-dropdown", CLASS_VARIANTS_MAP, "")}`}>
                     <option>Normal</option>
                     <option>High</option>
                     <option>Urgent</option>
@@ -83,9 +88,10 @@ export default function ContactPage() {
               <div className="flex flex-col gap-1">
                 <label className="text-sm font-semibold text-slate-700">How can we help?</label>
                 <textarea
+                  id={dyn.v3.getVariant("contact-message-textarea", ID_VARIANTS_MAP, "contact-message-textarea")}
                   rows={5}
-                  className="border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-[#2095d2] bg-[#f7f9fb] resize-none"
-                  placeholder="Share details so we can resolve this faster..."
+                  className={`border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-[#2095d2] bg-[#f7f9fb] resize-none ${dyn.v3.getVariant("textarea-text", CLASS_VARIANTS_MAP, "")}`}
+                  placeholder={dyn.v3.getVariant("message_placeholder", TEXT_VARIANTS_MAP, "Share details so we can resolve this faster...")}
                 />
               </div>
 
@@ -94,10 +100,11 @@ export default function ContactPage() {
                   We respond within a few hours. Your seed and layout stay preserved.
                 </div>
                 <button
+                  id={dyn.v3.getVariant("send-message-button", ID_VARIANTS_MAP, "send-message-button")}
                   onClick={() => setStatus("sent")}
-                  className="px-5 py-2 rounded-lg bg-[#2095d2] text-white font-semibold shadow hover:bg-[#177bab] transition"
+                  className={`px-5 py-2 rounded-lg bg-[#2095d2] text-white font-semibold shadow hover:bg-[#177bab] transition ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`}
                 >
-                  Send message
+                  {dyn.v3.getVariant("send_message", TEXT_VARIANTS_MAP, "Send message")}
                 </button>
               </div>
               {status === "sent" && (

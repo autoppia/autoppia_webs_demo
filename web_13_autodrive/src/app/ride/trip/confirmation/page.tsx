@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import GlobalHeader from "@/components/GlobalHeader";
 import { rides } from "@/data/trips-enhanced";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { TEXT_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 
 function formatDateTime(date: string, time: string) {
   if (!date || !time) return "";
@@ -28,6 +30,7 @@ export default function ConfirmationPage() {
   });
   const ride = rides[data.rideIdx] ?? rides[0];
   const router = useRouter();
+  const dyn = useDynamicSystem();
 
   useEffect(() => {
     // Get rideIdx, pickup, dropoff, etc from sessionStorage (simulate state persistence)
@@ -252,7 +255,7 @@ export default function ConfirmationPage() {
                   </div>
                 </div>
                 <button
-                  className="mt-4 w-full bg-[#2095d2] text-white font-bold rounded-md py-3 text-lg hover:bg-[#1273a0] transition"
+                  className={`mt-4 w-full bg-[#2095d2] text-white font-bold rounded-md py-3 text-lg hover:bg-[#1273a0] transition ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`}
                   onClick={() => {
                     setLoading(true);
                     setTimeout(() => {
@@ -260,7 +263,7 @@ export default function ConfirmationPage() {
                     }, 800);
                   }}
                 >
-                  View and track your trip
+                  {dyn.v3.getVariant("view_track_trip", TEXT_VARIANTS_MAP, "View and track your trip")}
                 </button>
                 <div className="text-xs text-gray-600 mt-4 text-center">
                   You'll see driver and car details shortly before your pickup.

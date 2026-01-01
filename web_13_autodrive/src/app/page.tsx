@@ -1020,7 +1020,7 @@ export default function Home() {
   }, [dyn.seed, rides]);
 
   // Header component
-  const header = <GlobalHeader />;
+  const header = <GlobalHeader excludeItems={["ride"]} />;
 
   // Booking section component
   const booking = dyn.v1.addWrapDecoy(

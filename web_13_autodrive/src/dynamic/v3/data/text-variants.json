@@ -526,5 +526,65 @@
     "Need help? Our support team is ready to assist.",
     "Can't find answers? Contact our support team.",
     "Still need help? Our support team is here to assist you."
-  ]
+  ],
+  "view_track_trip": [
+    "View and track your trip",
+    "Track your trip",
+    "View trip details",
+    "See your trip",
+    "Track ride",
+    "View ride status",
+    "Monitor your trip",
+    "Check trip status",
+    "View trip progress",
+    "Track your ride"
+  ],
+  "reserve_ride": [
+    "Reserve ride",
+    "Book ride",
+    "Reserve",
+    "Book now",
+    "Confirm ride",
+    "Reserve trip",
+    "Book trip",
+    "Confirm booking",
+    "Reserve now",
+    "Book ride now"
+  ],
+  "pickup_now_label": [
+    "Pickup now",
+    "Now",
+    "Immediate",
+    "ASAP",
+    "Right now",
+    "Instant pickup",
+    "Immediate pickup",
+    "Pick up now",
+    "Get ride now",
+    "Book now"
+  ],
+  "pickup_label": [
+    "Pick up:",
+    "Pickup:",
+    "Scheduled:",
+    "Time:",
+    "Pick up time:",
+    "Pickup time:",
+    "Scheduled pickup:",
+    "Pickup scheduled:",
+    "Time scheduled:",
+    "Pick up scheduled:"
+  ],
+  "search-button": [
+  "Search for ride",
+  "Search a ride",
+  "Find a ride",
+  "Look for ride",
+  "Look for a ride",
+  "Search your ride",
+  "Locate ride",
+  "Ride finder",
+  "Search car",
+  "Find your ride"
+]
 }

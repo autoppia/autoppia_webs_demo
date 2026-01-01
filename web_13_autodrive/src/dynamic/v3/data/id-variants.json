@@ -2039,5 +2039,89 @@
     "message-entry-contact",
     "contact-message-textbox",
     "message-textbox-contact"
+  ],
+  "topic-selector": [
+    "topic-selector",
+    "topic-select",
+    "topic-dropdown",
+    "subject-selector",
+    "topic-picker",
+    "subject-select",
+    "topic-field",
+    "subject-dropdown",
+    "topic-input",
+    "subject-picker"
+  ],
+  "priority-selector": [
+    "priority-selector",
+    "priority-select",
+    "priority-dropdown",
+    "urgency-selector",
+    "priority-picker",
+    "urgency-select",
+    "priority-field",
+    "urgency-dropdown",
+    "priority-input",
+    "urgency-picker"
+  ],
+  "nav-ride": [
+    "nav-ride",
+    "navigation-ride",
+    "nav-rides",
+    "nav-book-ride",
+    "navigation-rides",
+    "nav-trip",
+    "nav-book",
+    "nav-drive",
+    "navigation-trip",
+    "nav-ride-link"
+  ],
+  "nav-about": [
+    "nav-about",
+    "navigation-about",
+    "nav-about-us",
+    "nav-company",
+    "navigation-about-us",
+    "nav-info",
+    "nav-story",
+    "navigation-company",
+    "nav-about-link",
+    "navigation-info"
+  ],
+  "nav-help": [
+    "nav-help",
+    "navigation-help",
+    "nav-support",
+    "nav-assistance",
+    "navigation-support",
+    "nav-guide",
+    "nav-help-center",
+    "navigation-assistance",
+    "nav-help-link",
+    "navigation-guide"
+  ],
+  "nav-contact": [
+    "nav-contact",
+    "navigation-contact",
+    "nav-contact-us",
+    "nav-reach-out",
+    "navigation-contact-us",
+    "nav-get-in-touch",
+    "nav-talk-to-us",
+    "navigation-reach-out",
+    "nav-contact-link",
+    "navigation-touch"
+  ],
+  "nav-trips": [
+    "nav-trips",
+    "navigation-trips",
+    "nav-my-trips",
+    "nav-history",
+    "navigation-my-trips",
+    "nav-bookings",
+    "nav-your-rides",
+    "navigation-history",
+    "nav-trips-link",
+    "navigation-bookings"
   ]
 }

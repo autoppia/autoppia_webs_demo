@@ -8,9 +8,10 @@ import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 
 type Props = {
   preserveSeed?: boolean;
+  excludeItems?: string[];
 };
 
-export default function GlobalHeader({ preserveSeed = true }: Props) {
+export default function GlobalHeader({ preserveSeed = true, excludeItems = [] }: Props) {
   const router = useSeedRouter();
   const dyn = useDynamicSystem();
   const [profileOpen, setProfileOpen] = useState(false);
@@ -32,7 +33,7 @@ export default function GlobalHeader({ preserveSeed = true }: Props) {
     { key: "help", href: "/help", textKey: "nav_help", label: "Help" },
     { key: "contact", href: "/contact", textKey: "nav_contact", label: "Contact" },
     { key: "trips", href: "/ride/trip/trips", textKey: "nav_trips", label: "My trips" },
-  ]), []);
+  ].filter(item => !excludeItems.includes(item.key))), [excludeItems]);
 
   const orderedNavItems = useMemo(() => {
     const order = dyn.v1.changeOrderElements("global-nav-items", navItems.length);
@@ -65,9 +66,11 @@ export default function GlobalHeader({ preserveSeed = true }: Props) {
   const LinkItem = ({
     href,
     label,
+    textKey,
   }: {
     href: string;
     label: string;
+    textKey?: string;
   }) => (
     dyn.v1.addWrapDecoy(
       `nav-link-${label.toLowerCase()}`,
@@ -77,7 +80,7 @@ export default function GlobalHeader({ preserveSeed = true }: Props) {
         id={dyn.v3.getVariant(`nav-${label.toLowerCase()}`, ID_VARIANTS_MAP, `nav-${label.toLowerCase()}`)}
         className={`text-sm font-medium text-slate-800 hover:text-[#207fc2] transition ${dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, "")}`}
       >
-        {dyn.v3.getVariant(label.toLowerCase().replace(" ", "_"), dynamicHeaderTextVariants, label)}
+        {dyn.v3.getVariant(textKey || label.toLowerCase().replace(" ", "_"), dynamicHeaderTextVariants, label)}
       </SeedLink>
     )
   );
@@ -105,7 +108,7 @@ export default function GlobalHeader({ preserveSeed = true }: Props) {
 
           <nav className="flex items-center gap-4 justify-center flex-1">
             {orderedNavItems.map((item) => (
-              <LinkItem key={item.key} href={item.href} label={item.label} />
+              <LinkItem key={item.key} href={item.href} label={item.label} textKey={item.textKey} />
             ))}
           </nav>
 

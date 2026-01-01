@@ -166,6 +166,30 @@
     "slot-choice",
     "time-picker-btn",
     "slot-picker-btn"
+  ],
+  "date-picker-container": [
+    "date-picker-container",
+    "date-selector-container",
+    "date-field-container",
+    "date-input-container",
+    "calendar-picker-container",
+    "date-picker-wrapper",
+    "date-select-wrapper",
+    "date-field-wrapper",
+    "date-input-wrapper",
+    "calendar-wrapper"
+  ],
+  "time-picker-container": [
+    "time-picker-container",
+    "time-selector-container",
+    "time-field-container",
+    "time-input-container",
+    "slot-picker-container",
+    "time-picker-wrapper",
+    "time-select-wrapper",
+    "time-field-wrapper",
+    "time-input-wrapper",
+    "slot-wrapper"
   ]
 }
 
