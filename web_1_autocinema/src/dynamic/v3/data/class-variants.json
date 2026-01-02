@@ -394,6 +394,41 @@
     "benefit-box",
     "feature-panel",
     "benefit-panel"
+  ],
+  "related-movie-card": [
+    "related-movie-card",
+    "related-film-card",
+    "related-movie-tile",
+    "related-film-tile",
+    "related-card",
+    "related-tile",
+    "related-movie-block",
+    "related-film-block",
+    "related-movie-box",
+    "related-film-box"
+  ],
+  "search-input": [
+    "search-input",
+    "query-input",
+    "search-field",
+    "filter-input",
+    "movie-search",
+    "find-input",
+    "search-box",
+    "lookup-input",
+    "movie-finder",
+    "type-to-search"
+  ],
+  "go-to-search-button": [
+    "go-to-search-button",
+    "search-link-btn",
+    "browse-search-btn",
+    "find-movies-btn",
+    "search-action-btn",
+    "go-search-btn",
+    "browse-btn",
+    "search-nav-btn",
+    "explore-search-btn",
+    "find-btn"
   ]
 }
-

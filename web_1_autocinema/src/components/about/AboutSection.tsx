@@ -3,8 +3,12 @@
 import { Film, Search, Filter, Star, Calendar, Clock, Users, Sparkles, TrendingUp, Zap } from "lucide-react";
 import { useMemo } from "react";
 import { getAvailableGenres, getAvailableYears, getMovies } from "@/dynamic/v2-data";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 export function AboutSection() {
+  const dyn = useDynamicSystem();
   const movies = useMemo(() => getMovies(), []);
   const genres = useMemo(() => getAvailableGenres(), []);
   const years = useMemo(() => getAvailableYears(), []);
@@ -245,10 +249,11 @@ export function AboutSection() {
           </p>
           <a
             href="/search"
-            className="inline-flex items-center gap-2 rounded-xl bg-secondary px-8 py-4 text-lg font-bold text-black transition-all hover:bg-secondary/90 hover:scale-105 shadow-lg shadow-secondary/20"
+            id={dyn.v3.getVariant("go-to-search-button", ID_VARIANTS_MAP, "go-to-search-button")}
+            className={cn("inline-flex items-center gap-2 rounded-xl bg-secondary px-8 py-4 text-lg font-bold text-black transition-all hover:bg-secondary/90 hover:scale-105 shadow-lg shadow-secondary/20", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
           >
             <Search className="h-5 w-5" />
-            Go to Search
+            {dyn.v3.getVariant("go_to_search", undefined, "Go to Search")}
           </a>
         </div>
       </div>

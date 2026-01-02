@@ -4,6 +4,9 @@ import { useState, useMemo } from "react";
 import type { Movie } from "@/data/movies";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 export interface MovieEditorData {
   title: string;
@@ -37,6 +40,8 @@ const GENRE_OPTIONS = [
 ];
 
 export function MovieEditor({ movie, onSubmit, onCancel, submitLabel = "Save changes" }: MovieEditorProps) {
+  const dyn = useDynamicSystem();
+  const dynamicSubmitLabel = submitLabel === "Save changes" ? dyn.v3.getVariant("save_changes", TEXT_VARIANTS_MAP, "Save changes") : submitLabel === "Add Film" ? dyn.v3.getVariant("add_film", TEXT_VARIANTS_MAP, "Add Film") : submitLabel;
   const [form, setForm] = useState<MovieEditorData>({
     title: movie.title,
     synopsis: movie.synopsis,
@@ -131,8 +136,8 @@ export function MovieEditor({ movie, onSubmit, onCancel, submitLabel = "Save cha
         />
       </label>
       <div className="flex flex-wrap gap-3">
-        <Button type="submit" className="rounded-full bg-secondary text-black hover:bg-secondary/80">
-          {submitLabel}
+        <Button type="submit" id={dyn.v3.getVariant("save-changes-button", ID_VARIANTS_MAP, "save-changes-button")} className={cn("rounded-full bg-secondary text-black hover:bg-secondary/80", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}>
+          {dynamicSubmitLabel}
         </Button>
         {onCancel && (
           <Button type="button" variant="ghost" className="rounded-full border border-white/20 text-white" onClick={onCancel}>

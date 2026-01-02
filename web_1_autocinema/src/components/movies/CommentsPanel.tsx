@@ -2,6 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { MessageSquare, User, Send } from "lucide-react";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 export interface CommentEntry {
   id: string;
@@ -18,7 +21,8 @@ interface CommentsPanelProps {
 }
 
 export function CommentsPanel({ comments, onSubmit }: CommentsPanelProps) {
-  const [author, setAuthor] = useState("Anon cinephile");
+  const dyn = useDynamicSystem();
+  const [author, setAuthor] = useState("");
   const [message, setMessage] = useState("");
 
   return (
@@ -78,8 +82,9 @@ export function CommentsPanel({ comments, onSubmit }: CommentsPanelProps) {
               <Input
                 value={author}
                 onChange={(event) => setAuthor(event.target.value)}
-                className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                placeholder="Your name"
+                id={dyn.v3.getVariant("comment-name-input", ID_VARIANTS_MAP, "comment-name-input")}
+                className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                placeholder={dyn.v3.getVariant("name_placeholder", undefined, "Your name")}
               />
             </label>
             <label className="block mb-6">
@@ -90,16 +95,18 @@ export function CommentsPanel({ comments, onSubmit }: CommentsPanelProps) {
               <textarea
                 value={message}
                 onChange={(event) => setMessage(event.target.value)}
-                className="w-full h-32 rounded-2xl border border-white/20 bg-white/10 p-4 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary resize-none"
-                placeholder="Share your thoughts..."
+                id={dyn.v3.getVariant("comment-message-textarea", ID_VARIANTS_MAP, "comment-message-textarea")}
+                className={cn("w-full h-32 rounded-2xl border border-white/20 bg-white/10 p-4 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary resize-none", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                placeholder={dyn.v3.getVariant("message_placeholder", undefined, "Share your thoughts...")}
               />
             </label>
             <Button 
               type="submit" 
-              className="w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold shadow-lg shadow-secondary/20 transition-all hover:scale-105"
+              id={dyn.v3.getVariant("share-feedback-button", ID_VARIANTS_MAP, "share-feedback-button")}
+              className={cn("w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold shadow-lg shadow-secondary/20 transition-all hover:scale-105", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
             >
               <Send className="h-5 w-5 mr-2" />
-              Share Feedback
+              {dyn.v3.getVariant("share_feedback", undefined, "Share Feedback")}
             </Button>
           </div>
         </form>

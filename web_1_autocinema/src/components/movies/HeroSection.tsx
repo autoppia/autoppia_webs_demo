@@ -8,6 +8,7 @@ import { Sparkles, TrendingUp, Play, Star, Search as SearchIcon } from "lucide-r
 import { useMemo } from "react";
 import { cn } from "@/library/utils";
 import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface HeroSectionProps {
   searchQuery: string;
@@ -95,7 +96,7 @@ export function HeroSection({
               </p>
 
               <form
-                className="mb-10 flex flex-col gap-3 sm:flex-row"
+                className={cn("mb-10 flex flex-col gap-3 sm:flex-row", dyn.v3.getVariant("search-form", CLASS_VARIANTS_MAP, ""))}
                 onSubmit={(event) => {
                   event.preventDefault();
                   onSearchSubmit();
@@ -108,12 +109,13 @@ export function HeroSection({
                     value={searchQuery}
                     onChange={(event) => onSearchChange(event.target.value)}
                     placeholder="Search directors, titles, or moods"
-                    className="pl-12 h-14 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base"
+                    className={cn("pl-12 h-14 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base", dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP, ""))}
                   />
                 </div>
                 <Button 
                   type="submit" 
-                  className="h-14 px-8 bg-secondary text-black hover:bg-secondary/90 shadow-lg shadow-secondary/20 font-semibold text-base"
+                  id={dyn.v3.getVariant("search-submit-button", ID_VARIANTS_MAP, "search-submit-button")}
+                  className={cn("h-14 px-8 bg-secondary text-black hover:bg-secondary/90 shadow-lg shadow-secondary/20 font-semibold text-base", dyn.v3.getVariant("search-button", CLASS_VARIANTS_MAP, ""))}
                 >
                   {dyn.v3.getVariant("search_button", undefined, "Search library")}
                 </Button>

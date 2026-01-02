@@ -6,16 +6,18 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
 import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/library/utils";
+import { useDynamicSystem } from "@/dynamic/shared";
 
 const NAV_LINKS = [
-  { label: "Home", href: "/", preserveSeed: true },
-  { label: "Search", href: "/search", preserveSeed: true },
-  { label: "About", href: "/about", preserveSeed: true },
-  { label: "Contact", href: "/contact", preserveSeed: true },
+  { label: "Home", href: "/", preserveSeed: true, textKey: "nav_home" },
+  { label: "Search", href: "/search", preserveSeed: true, textKey: "nav_search" },
+  { label: "About", href: "/about", preserveSeed: true, textKey: "nav_about" },
+  { label: "Contact", href: "/contact", preserveSeed: true, textKey: "nav_contact" },
 ];
 
 export function Header() {
   const { seed } = useSeed();
+  const dyn = useDynamicSystem();
   const { currentUser, logout } = useAuth();
   const pathname = usePathname();
 
@@ -35,7 +37,7 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-white/10 bg-neutral-950/80 backdrop-blur">
       <div className="mx-auto flex w-full flex-col gap-2 px-6 py-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
-          <SeedLink href="/" className="flex items-center gap-2">
+          <SeedLink href="/web_1_autocinema/public" className="flex items-center gap-2">
             <Film className="h-6 w-6 text-secondary" />
             <div>
               <p className="text-lg font-semibold uppercase tracking-widest">Autocinema</p>
@@ -57,7 +59,7 @@ export function Header() {
                   active && "font-semibold text-secondary"
                 )}
               >
-                {link.label}
+                {dyn.v3.getVariant(link.textKey!, undefined, link.label)}
               </SeedLink>
             );
           })}
