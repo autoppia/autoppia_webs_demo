@@ -5,8 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Mail, Send, MessageSquare, User, FileText, CheckCircle2, Sparkles, Film, Search } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 export function ContactSection() {
+  const dyn = useDynamicSystem();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
@@ -163,8 +167,9 @@ export function ContactSection() {
                   <Input
                     value={name}
                     onChange={(event) => setName(event.target.value)}
-                    className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all"
-                    placeholder="Your name"
+                    id={dyn.v3.getVariant("contact-name-input", ID_VARIANTS_MAP, "contact-name-input")}
+                    className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                    placeholder={dyn.v3.getVariant("contact_name_placeholder", TEXT_VARIANTS_MAP, "Your name")}
                     required
                   />
                 </div>
@@ -178,8 +183,9 @@ export function ContactSection() {
                     type="email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
-                    className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all"
-                    placeholder="you@example.com"
+                    id={dyn.v3.getVariant("contact-email-input", ID_VARIANTS_MAP, "contact-email-input")}
+                    className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                    placeholder={dyn.v3.getVariant("contact_email_placeholder", TEXT_VARIANTS_MAP, "you@example.com")}
                     required
                   />
                 </div>
@@ -192,8 +198,9 @@ export function ContactSection() {
                   <Input
                     value={subject}
                     onChange={(event) => setSubject(event.target.value)}
-                    className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all"
-                    placeholder="What's this about?"
+                    id={dyn.v3.getVariant("contact-subject-input", ID_VARIANTS_MAP, "contact-subject-input")}
+                    className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                    placeholder={dyn.v3.getVariant("contact_subject_placeholder", TEXT_VARIANTS_MAP, "What's this about?")}
                   />
                 </div>
 
@@ -205,18 +212,20 @@ export function ContactSection() {
                   <textarea
                     value={message}
                     onChange={(event) => setMessage(event.target.value)}
-                    className="w-full h-32 rounded-xl border border-white/20 bg-white/10 p-4 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all resize-none"
-                    placeholder="Tell us what's on your mind..."
+                    id={dyn.v3.getVariant("contact-message-textarea", ID_VARIANTS_MAP, "contact-message-textarea")}
+                    className={cn("w-full h-32 rounded-xl border border-white/20 bg-white/10 p-4 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all resize-none", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                    placeholder={dyn.v3.getVariant("message_placeholder", undefined, "Tell us what's on your mind...")}
                     required
                   />
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105"
+                  id={dyn.v3.getVariant("send-message-button", ID_VARIANTS_MAP, "send-message-button")}
+                  className={cn("w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
                 >
                   <Send className="h-5 w-5 mr-2" />
-                  Send Message
+                  {dyn.v3.getVariant("send_message", undefined, "Send Message")}
                 </Button>
               </form>
             </div>

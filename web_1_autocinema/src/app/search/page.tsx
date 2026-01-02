@@ -21,6 +21,7 @@ import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { cn } from "@/library/utils";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { useSeed } from "@/context/SeedContext";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 const MOVIES_PER_PAGE = 9;
 
@@ -238,15 +239,16 @@ function SearchContent() {
                 type="search"
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="Search directors, titles, or moods"
-                className="pl-12 h-14 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base"
+                placeholder={dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search directors, titles, or moods")}
+                className={cn("pl-12 h-14 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base", dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP, ""))}
               />
             </div>
             <Button 
               type="submit" 
-              className="h-14 px-8 bg-secondary text-black hover:bg-secondary/90 shadow-lg shadow-secondary/20 font-semibold text-base"
+              id={dyn.v3.getVariant("search-submit-button", ID_VARIANTS_MAP, "search-submit-button")}
+              className={cn("h-14 px-8 bg-secondary text-black hover:bg-secondary/90 shadow-lg shadow-secondary/20 font-semibold text-base", dyn.v3.getVariant("search-button", CLASS_VARIANTS_MAP, ""))}
             >
-              Search
+              {dyn.v3.getVariant("search_button", undefined, "Search")}
             </Button>
           </form>
         </div>

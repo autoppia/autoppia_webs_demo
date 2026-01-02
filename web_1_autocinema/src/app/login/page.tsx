@@ -8,8 +8,12 @@ import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { Film, LogIn, Lock, User } from "lucide-react";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 export default function LoginPage() {
+  const dyn = useDynamicSystem();
   const { login } = useAuth();
   const router = useSeedRouter();
   const [username, setUsername] = useState("");
@@ -69,8 +73,9 @@ export default function LoginPage() {
                   <Input
                     value={username}
                     onChange={(event) => setUsername(event.target.value)}
-                    className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                    placeholder="Enter your username"
+                    id={dyn.v3.getVariant("login-username-input", ID_VARIANTS_MAP, "login-username-input")}
+                    className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                    placeholder={dyn.v3.getVariant("login_username_placeholder", TEXT_VARIANTS_MAP, "Enter your username")}
                     autoComplete="username"
                     required
                   />
@@ -85,8 +90,9 @@ export default function LoginPage() {
                     type="password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
-                    className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                    placeholder="Enter your password"
+                    id={dyn.v3.getVariant("login-password-input", ID_VARIANTS_MAP, "login-password-input")}
+                    className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                    placeholder={dyn.v3.getVariant("login_password_placeholder", TEXT_VARIANTS_MAP, "Enter your password")}
                     autoComplete="current-password"
                     required
                   />
@@ -101,11 +107,12 @@ export default function LoginPage() {
 
               <Button 
                 type="submit" 
-                className="w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105" 
+                id={dyn.v3.getVariant("login-sign-in-button", ID_VARIANTS_MAP, "login-sign-in-button")}
+                className={cn("w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
                 disabled={isSubmitting}
               >
                 <LogIn className="h-5 w-5 mr-2" />
-                {isSubmitting ? "Signing in…" : "Sign in"}
+                {isSubmitting ? "Signing in…" : dyn.v3.getVariant("sign_in", undefined, "Sign in")}
               </Button>
             </form>
           </div>
@@ -114,8 +121,8 @@ export default function LoginPage() {
           <div className="text-center space-y-3">
             <p className="text-sm text-white/60">
               Need an account?{" "}
-              <SeedLink href="/register" className="font-semibold text-secondary hover:text-secondary/80 transition-colors">
-                Create one
+              <SeedLink href="/register" className={cn("font-semibold text-secondary hover:text-secondary/80 transition-colors", dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, ""))} id={dyn.v3.getVariant("create-account-link", ID_VARIANTS_MAP, "create-account-link")}>
+                {dyn.v3.getVariant("create_one", undefined, "Create one")}
               </SeedLink>
             </p>
             <p className="text-xs text-white/50 max-w-md mx-auto">

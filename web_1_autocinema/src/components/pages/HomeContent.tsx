@@ -215,7 +215,7 @@ export function HomeContent() {
                           value={searchQuery}
                           onChange={(event) => setSearchQuery(event.target.value)}
                           placeholder={dyn.v3.getVariant("search_placeholder", undefined, "Search directors, titles, or moods")}
-                          className="pl-12 h-14 w-full min-w-0 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base"
+                          className={cn("pl-12 h-14 w-full min-w-0 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base", dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP, ""))}
                         />
                       </div>
                     ))}
@@ -606,7 +606,7 @@ export function HomeContent() {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <SeedLink href="/search">
-                    <Button className="h-14 px-8 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105">
+                    <Button className={cn("h-14 px-8 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105", dyn.v3.getVariant("go-to-search-button", CLASS_VARIANTS_MAP, ""))}>
                       <Search className="h-5 w-5 mr-2" />
                       {dyn.v3.getVariant("go_to_search", dynamicV3TextVariants)}
                     </Button>
@@ -614,7 +614,8 @@ export function HomeContent() {
                   <SeedLink href="/about">
                     <Button
                       variant="outline"
-                      className="h-14 px-8 border-white/20 bg-white/10 text-white hover:bg-white/20 font-semibold text-base backdrop-blur-sm"
+                      id={dyn.v3.getVariant("learn-more-button", ID_VARIANTS_MAP, "learn-more-button")}
+                      className={cn("h-14 px-8 border-white/20 bg-white/10 text-white hover:bg-white/20 font-semibold text-base backdrop-blur-sm", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
                     >
                       {dyn.v3.getVariant("learn_more", dynamicV3TextVariants)}
                     </Button>

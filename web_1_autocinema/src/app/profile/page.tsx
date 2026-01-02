@@ -16,6 +16,9 @@ import {
 } from "@/utils/eventPayloads";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { User, Film, Edit, Trash2, Plus, Save, Mail, MapPin, Globe, Heart, FileText, Bookmark } from "lucide-react";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 type ProfileFormState = {
   firstName: string;
@@ -50,6 +53,7 @@ const parseGenreList = (value: string) =>
     .filter(Boolean);
 
 export default function ProfilePage() {
+  const dyn = useDynamicSystem();
   const { currentUser, addAllowedMovie, removeAllowedMovie, removeFromWatchlist } = useAuth();
   const movies = getMovies();
   const initialProfileState: ProfileFormState = {
@@ -226,22 +230,30 @@ export default function ProfilePage() {
         {/* Tabs */}
         <Tabs defaultValue="profile" className="space-y-6">
           <TabsList className="w-full justify-start">
-            <TabsTrigger value="profile" className="flex items-center gap-2">
-              <User className="h-4 w-4" />
-              Edit Profile
-            </TabsTrigger>
-            <TabsTrigger value="movies" className="flex items-center gap-2">
-              <Film className="h-4 w-4" />
-              Edit Movies
-            </TabsTrigger>
-            <TabsTrigger value="watchlist" className="flex items-center gap-2">
-              <Bookmark className="h-4 w-4" />
-              Watchlist
-            </TabsTrigger>
-            <TabsTrigger value="add-movies" className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              Add Movies
-            </TabsTrigger>
+            {dyn.v1.addWrapDecoy("profile-tab-trigger", (
+              <TabsTrigger value="profile" className="flex items-center gap-2">
+                <User className="h-4 w-4" />
+                {dyn.v3.getVariant("edit_profile", undefined, "Edit Profile")}
+              </TabsTrigger>
+            ))}
+            {dyn.v1.addWrapDecoy("movies-tab-trigger", (
+              <TabsTrigger value="movies" className="flex items-center gap-2">
+                <Film className="h-4 w-4" />
+                {dyn.v3.getVariant("edit_movies", undefined, "Edit Movies")}
+              </TabsTrigger>
+            ))}
+            {dyn.v1.addWrapDecoy("watchlist-tab-trigger", (
+              <TabsTrigger value="watchlist" className="flex items-center gap-2">
+                <Bookmark className="h-4 w-4" />
+                {dyn.v3.getVariant("watchlist", undefined, "Watchlist")}
+              </TabsTrigger>
+            ))}
+            {dyn.v1.addWrapDecoy("add-movies-tab-trigger", (
+              <TabsTrigger value="add-movies" className="flex items-center gap-2">
+                <Plus className="h-4 w-4" />
+                {dyn.v3.getVariant("add_movies", undefined, "Add Movies")}
+              </TabsTrigger>
+            ))}
           </TabsList>
 
           {/* Profile Tab */}
@@ -265,8 +277,9 @@ export default function ProfilePage() {
                     <Input 
                       value={profileForm.firstName} 
                       onChange={(event) => handleProfileInputChange("firstName", event.target.value)} 
-                      className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20" 
-                      placeholder="Enter your first name"
+                      id={dyn.v3.getVariant("profile-first-name-input", ID_VARIANTS_MAP, "profile-first-name-input")}
+                      className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                      placeholder={dyn.v3.getVariant("first_name_placeholder", TEXT_VARIANTS_MAP, "Enter your first name")}
                     />
                   </div>
                   <div>
@@ -277,8 +290,9 @@ export default function ProfilePage() {
                     <Input 
                       value={profileForm.lastName} 
                       onChange={(event) => handleProfileInputChange("lastName", event.target.value)} 
-                      className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20" 
-                      placeholder="Enter your last name"
+                      id={dyn.v3.getVariant("profile-last-name-input", ID_VARIANTS_MAP, "profile-last-name-input")}
+                      className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                      placeholder={dyn.v3.getVariant("last_name_placeholder", TEXT_VARIANTS_MAP, "Enter your last name")}
                     />
                   </div>
                 </div>
@@ -292,8 +306,9 @@ export default function ProfilePage() {
                     <Input 
                       value={profileForm.email} 
                       onChange={(event) => handleProfileInputChange("email", event.target.value)} 
-                      className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20" 
-                      placeholder="your.email@example.com"
+                      id={dyn.v3.getVariant("profile-email-input", ID_VARIANTS_MAP, "profile-email-input")}
+                      className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                      placeholder={dyn.v3.getVariant("email_placeholder_profile", TEXT_VARIANTS_MAP, "your.email@example.com")}
                     />
                   </div>
                   <div>
@@ -304,8 +319,9 @@ export default function ProfilePage() {
                     <Input
                       value={profileForm.favoriteGenres}
                       onChange={(event) => handleProfileInputChange("favoriteGenres", event.target.value)}
-                      className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                      placeholder="Drama, Action, Comedy..."
+                      id={dyn.v3.getVariant("profile-favorite-genres-input", ID_VARIANTS_MAP, "profile-favorite-genres-input")}
+                      className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                      placeholder={dyn.v3.getVariant("favorite_genres_placeholder", TEXT_VARIANTS_MAP, "Drama, Action, Comedy...")}
                     />
                   </div>
                 </div>
@@ -319,8 +335,9 @@ export default function ProfilePage() {
                     <Input 
                       value={profileForm.location} 
                       onChange={(event) => handleProfileInputChange("location", event.target.value)} 
-                      className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20" 
-                      placeholder="City, Country"
+                      id={dyn.v3.getVariant("profile-location-input", ID_VARIANTS_MAP, "profile-location-input")}
+                      className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                      placeholder={dyn.v3.getVariant("location_placeholder", TEXT_VARIANTS_MAP, "City, Country")}
                     />
                   </div>
                   <div>
@@ -331,8 +348,9 @@ export default function ProfilePage() {
                     <Input 
                       value={profileForm.website} 
                       onChange={(event) => handleProfileInputChange("website", event.target.value)} 
-                      className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20" 
-                      placeholder="https://yourwebsite.com"
+                      id={dyn.v3.getVariant("profile-website-input", ID_VARIANTS_MAP, "profile-website-input")}
+                      className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                      placeholder={dyn.v3.getVariant("website_placeholder", TEXT_VARIANTS_MAP, "https://yourwebsite.com")}
                     />
                   </div>
                 </div>
@@ -345,18 +363,20 @@ export default function ProfilePage() {
                   <textarea
                     value={profileForm.bio}
                     onChange={(event) => handleProfileInputChange("bio", event.target.value)}
-                    className="w-full min-h-[120px] rounded-2xl border border-white/20 bg-white/10 p-4 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary resize-none"
-                    placeholder="Tell us about yourself..."
+                    id={dyn.v3.getVariant("profile-bio-textarea", ID_VARIANTS_MAP, "profile-bio-textarea")}
+                    className={cn("w-full min-h-[120px] rounded-2xl border border-white/20 bg-white/10 p-4 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary resize-none", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                    placeholder={dyn.v3.getVariant("bio_placeholder", undefined, "Tell us about yourself...")}
                   />
                 </div>
                 
                 <div className="flex flex-wrap gap-3 pt-2">
                   <Button 
                     type="submit" 
-                    className="h-12 px-8 bg-secondary text-black hover:bg-secondary/90 font-bold shadow-lg shadow-secondary/20 transition-all hover:scale-105"
+                    id={dyn.v3.getVariant("save-profile-button", ID_VARIANTS_MAP, "save-profile-button")}
+                    className={cn("h-12 px-8 bg-secondary text-black hover:bg-secondary/90 font-bold shadow-lg shadow-secondary/20 transition-all hover:scale-105", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
                   >
                     <Save className="h-5 w-5 mr-2" />
-                    Save Profile
+                    {dyn.v3.getVariant("save_profile", undefined, "Save Profile")}
                   </Button>
                 </div>
               </form>
@@ -419,11 +439,12 @@ export default function ProfilePage() {
                       )}
                       <Button
                         variant="ghost"
-                        className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-400/10 text-red-300 hover:bg-red-400/20 transition-colors"
+                        id={dyn.v3.getVariant("delete-movie-button", ID_VARIANTS_MAP, "delete-movie-button")}
+                        className={cn("inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-400/10 text-red-300 hover:bg-red-400/20 transition-colors", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
                         onClick={() => handleEntryDelete(baseMovie)}
                       >
                         <Trash2 className="h-4 w-4" />
-                        Delete Movie
+                        {dyn.v3.getVariant("delete_movie", undefined, "Delete Movie")}
                       </Button>
                     </div>
                     
@@ -523,10 +544,11 @@ export default function ProfilePage() {
                   </p>
                   <SeedLink
                     href="/search"
-                    className="inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-secondary/20 px-6 py-3 text-sm font-semibold text-secondary hover:bg-secondary hover:text-black transition-colors"
+                    id={dyn.v3.getVariant("browse-movies-button", ID_VARIANTS_MAP, "browse-movies-button")}
+                    className={cn("inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-secondary/20 px-6 py-3 text-sm font-semibold text-secondary hover:bg-secondary hover:text-black transition-colors", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
                   >
                     <Film className="h-4 w-4" />
-                    Browse Movies
+                    {dyn.v3.getVariant("browse_movies", undefined, "Browse Movies")}
                   </SeedLink>
                 </div>
               )}

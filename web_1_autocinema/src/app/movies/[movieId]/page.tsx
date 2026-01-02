@@ -79,7 +79,7 @@ export default function MovieDetailPage() {
               Try selecting a different seed or explore the full library.
             </p>
             <SeedLink
-              href="/"
+              href="/web_1_autocinema/public"
               className="mt-6 inline-flex rounded-full border border-white/10 px-6 py-3 text-sm uppercase tracking-wide text-secondary hover:bg-secondary/10 transition-colors"
             >
               Back to home

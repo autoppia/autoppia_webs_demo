@@ -9,11 +9,15 @@ import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { getMovies } from "@/dynamic/v2-data";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { Film, UserPlus, Lock, User, Film as FilmIcon } from "lucide-react";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 const MIN_PASSWORD_LENGTH = 6;
 const FALLBACK_MOVIE_ID = "movie-v2-001";
 
 export default function RegisterPage() {
+  const dyn = useDynamicSystem();
   const { register } = useAuth();
   const router = useSeedRouter();
   const [username, setUsername] = useState("");
@@ -115,8 +119,9 @@ export default function RegisterPage() {
                   <Input
                     value={username}
                     onChange={(event) => setUsername(event.target.value)}
-                    className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                    placeholder="Choose a username"
+                    id={dyn.v3.getVariant("register-username-input", ID_VARIANTS_MAP, "register-username-input")}
+                    className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                    placeholder={dyn.v3.getVariant("username_placeholder", undefined, "Choose a username")}
                     autoComplete="username"
                     required
                   />
@@ -131,8 +136,9 @@ export default function RegisterPage() {
                     type="password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
-                    className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                    placeholder="Create a password"
+                    id={dyn.v3.getVariant("register-password-input", ID_VARIANTS_MAP, "register-password-input")}
+                    className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                    placeholder={dyn.v3.getVariant("password_placeholder", undefined, "Create a password")}
                     autoComplete="new-password"
                     required
                   />
@@ -148,8 +154,9 @@ export default function RegisterPage() {
                     type="password"
                     value={confirmPassword}
                     onChange={(event) => setConfirmPassword(event.target.value)}
-                    className="h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                    placeholder="Confirm your password"
+                    id={dyn.v3.getVariant("register-confirm-password-input", ID_VARIANTS_MAP, "register-confirm-password-input")}
+                    className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                    placeholder={dyn.v3.getVariant("confirm_password_placeholder", undefined, "Confirm your password")}
                     autoComplete="new-password"
                     required
                   />
@@ -185,11 +192,12 @@ export default function RegisterPage() {
 
               <Button 
                 type="submit" 
-                className="w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105" 
+                id={dyn.v3.getVariant("create-account-button", ID_VARIANTS_MAP, "create-account-button")}
+                className={cn("w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
                 disabled={isSubmitting}
               >
                 <UserPlus className="h-5 w-5 mr-2" />
-                {isSubmitting ? "Creating account…" : "Create account"}
+                {isSubmitting ? "Creating account…" : dyn.v3.getVariant("create_account", undefined, "Create account")}
               </Button>
             </form>
           </div>
@@ -198,8 +206,8 @@ export default function RegisterPage() {
           <div className="text-center">
             <p className="text-sm text-white/60">
               Already have an account?{" "}
-              <SeedLink href="/login" className="font-semibold text-secondary hover:text-secondary/80 transition-colors">
-                Sign in
+              <SeedLink href="/login" className={cn("font-semibold text-secondary hover:text-secondary/80 transition-colors", dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, ""))} id={dyn.v3.getVariant("sign-in-link", ID_VARIANTS_MAP, "sign-in-link")}>
+                {dyn.v3.getVariant("sign_in", undefined, "Sign in")}
               </SeedLink>
             </p>
           </div>
