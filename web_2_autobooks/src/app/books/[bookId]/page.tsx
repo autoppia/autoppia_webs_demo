@@ -21,6 +21,7 @@ import {
 } from "@/components/books/BookEditor";
 import { buildBookDetailPayload } from "@/library/bookEventPayload";
 import { useCart } from "@/context/CartContext";
+import { useDynamicSystem } from "@/dynamic/shared";
 
 const AVATARS = [
   "/media/gallery/people/person1.jpg",
@@ -225,67 +226,73 @@ export default function BookDetailPage() {
     });
   };
 
+  const dyn = useDynamicSystem();
+
   return (
-    <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative min-h-screen">
-      {/* Background grid pattern */}
-      <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
-      {/* Background gradient overlays */}
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
-      <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-      
-      <main className="relative mx-auto max-w-6xl space-y-8 px-4 py-10 text-white">
-        {message && (
-          <div className="rounded-xl border border-green-400/30 bg-green-400/10 p-4 backdrop-blur-sm">
-            <p className="text-sm text-green-200">{message}</p>
-          </div>
-        )}
-        {readingListMessage && (
-          <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-5 rounded-xl border border-secondary/30 bg-secondary/20 backdrop-blur-md px-6 py-4 shadow-2xl shadow-secondary/20">
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary/30">
-                <svg className="h-5 w-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
+    dyn.v1.addWrapDecoy("book-detail-page", (
+      <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative min-h-screen">
+        {/* Background grid pattern */}
+        <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+        {/* Background gradient overlays */}
+        <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
+        <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
+        <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
+        
+        {dyn.v1.addWrapDecoy("book-detail-content", (
+          <main className="relative mx-auto max-w-6xl space-y-8 px-4 py-10 text-white">
+            {message && (
+              <div className="rounded-xl border border-green-400/30 bg-green-400/10 p-4 backdrop-blur-sm">
+                <p className="text-sm text-green-200">{message}</p>
               </div>
-              <p className="text-sm font-semibold text-white">{readingListMessage}</p>
-            </div>
-          </div>
-        )}
-        <BookDetailHero
-          book={book}
-          onReadBook={handleWatchTrailer}
-          onReadingList={handleWatchlist}
-          onShare={handleShare}
-          onAddToCart={handleAddToCart}
-          isInReadingList={isInReadingList}
-        />
-        <BookMeta book={book} />
-        {canManageBook && (
-          <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl text-white">
-            <h2 className="text-2xl font-bold mb-2">Manage Book</h2>
-            <p className="text-sm text-white/70 mb-6">
-              Edit or delete this book from the catalog.
-            </p>
-            <div className="mb-6 flex flex-wrap gap-3">
-              <Button
-                variant="ghost"
-                className="rounded-full border border-red-400/30 bg-red-400/10 text-red-300 hover:bg-red-400/20 transition-colors"
-                onClick={handleDelete}
-              >
-                Delete book
-              </Button>
-            </div>
-            <BookEditor
+            )}
+            {readingListMessage && (
+              <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-5 rounded-xl border border-secondary/30 bg-secondary/20 backdrop-blur-md px-6 py-4 shadow-2xl shadow-secondary/20">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary/30">
+                    <svg className="h-5 w-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <p className="text-sm font-semibold text-white">{readingListMessage}</p>
+                </div>
+              </div>
+            )}
+            <BookDetailHero
               book={book}
-              onSubmit={handleEditSubmit}
-              submitLabel="Edit Book"
+              onReadBook={handleWatchTrailer}
+              onReadingList={handleWatchlist}
+              onShare={handleShare}
+              onAddToCart={handleAddToCart}
+              isInReadingList={isInReadingList}
             />
-          </section>
-        )}
-        <RelatedBooks books={relatedBooks} />
-        <CommentsPanel comments={comments} onSubmit={handleCommentSubmit} />
-      </main>
-    </div>
+            <BookMeta book={book} />
+            {canManageBook && (
+              <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl text-white">
+                <h2 className="text-2xl font-bold mb-2">Manage Book</h2>
+                <p className="text-sm text-white/70 mb-6">
+                  Edit or delete this book from the catalog.
+                </p>
+                <div className="mb-6 flex flex-wrap gap-3">
+                  <Button
+                    variant="ghost"
+                    className="rounded-full border border-red-400/30 bg-red-400/10 text-red-300 hover:bg-red-400/20 transition-colors"
+                    onClick={handleDelete}
+                  >
+                    Delete book
+                  </Button>
+                </div>
+                <BookEditor
+                  book={book}
+                  onSubmit={handleEditSubmit}
+                  submitLabel="Edit Book"
+                />
+              </section>
+            )}
+            <RelatedBooks books={relatedBooks} />
+            <CommentsPanel comments={comments} onSubmit={handleCommentSubmit} />
+          </main>
+        ))}
+      </div>
+    ))
   );
 }

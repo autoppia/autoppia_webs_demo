@@ -252,7 +252,7 @@ export function AboutSection() {
             {dyn.v1.addWrapDecoy("about-cta-button", (
               <a
                 href="/search"
-                id={dyn.v3.getVariant("about-cta-button", ID_VARIANTS_MAP, "about-cta-button")}
+                id={dyn.v3.getVariant("go-to-search-button", ID_VARIANTS_MAP, "go-to-search-button")}
                 className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "inline-flex items-center gap-2 rounded-xl bg-secondary px-8 py-4 text-lg font-bold text-black transition-all hover:bg-secondary/90 hover:scale-105 shadow-lg shadow-secondary/20")}
               >
                 <Search className="h-5 w-5" />

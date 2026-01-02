@@ -13,6 +13,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { User, BookOpen, Edit, Trash2, Plus, Save, Mail, MapPin, Globe, Heart, FileText, Bookmark } from "lucide-react";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 type ProfileFormState = {
   firstName: string;
@@ -246,22 +247,30 @@ export default function ProfilePage() {
         {/* Tabs */}
         <Tabs defaultValue="profile" className="space-y-6">
           <TabsList className="w-full justify-start">
-            <TabsTrigger value="profile" className="flex items-center gap-2">
-              <User className="h-4 w-4" />
-              {dyn.v3.getVariant("edit_profile", TEXT_VARIANTS_MAP, "Edit Profile")}
-            </TabsTrigger>
-            <TabsTrigger value="books" className="flex items-center gap-2">
-              <BookOpen className="h-4 w-4" />
-              {dyn.v3.getVariant("edit_books", TEXT_VARIANTS_MAP, "Edit Books")}
-            </TabsTrigger>
-            <TabsTrigger value="reading-list" className="flex items-center gap-2">
-              <Bookmark className="h-4 w-4" />
-              {dyn.v3.getVariant("reading_list", TEXT_VARIANTS_MAP, "Reading List")}
-            </TabsTrigger>
-            <TabsTrigger value="add-books" className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              {dyn.v3.getVariant("add_books", TEXT_VARIANTS_MAP, "Add Books")}
-            </TabsTrigger>
+            {dyn.v1.addWrapDecoy("profile-tab-trigger-profile", (
+              <TabsTrigger value="profile" id={dyn.v3.getVariant("profile-tab-profile", ID_VARIANTS_MAP, "profile-tab-profile")} className={cn("flex items-center gap-2", dyn.v3.getVariant("tab-trigger", CLASS_VARIANTS_MAP, ""))}>
+                <User className="h-4 w-4" />
+                {dyn.v3.getVariant("edit_profile", TEXT_VARIANTS_MAP, "Edit Profile")}
+              </TabsTrigger>
+            ))}
+            {dyn.v1.addWrapDecoy("profile-tab-trigger-books", (
+              <TabsTrigger value="books" id={dyn.v3.getVariant("profile-tab-books", ID_VARIANTS_MAP, "profile-tab-books")} className={cn("flex items-center gap-2", dyn.v3.getVariant("tab-trigger", CLASS_VARIANTS_MAP, ""))}>
+                <BookOpen className="h-4 w-4" />
+                {dyn.v3.getVariant("edit_books", TEXT_VARIANTS_MAP, "Edit Books")}
+              </TabsTrigger>
+            ))}
+            {dyn.v1.addWrapDecoy("profile-tab-trigger-reading-list", (
+              <TabsTrigger value="reading-list" id={dyn.v3.getVariant("profile-tab-reading-list", ID_VARIANTS_MAP, "profile-tab-reading-list")} className={cn("flex items-center gap-2", dyn.v3.getVariant("tab-trigger", CLASS_VARIANTS_MAP, ""))}>
+                <Bookmark className="h-4 w-4" />
+                {dyn.v3.getVariant("reading_list", TEXT_VARIANTS_MAP, "Reading List")}
+              </TabsTrigger>
+            ))}
+            {dyn.v1.addWrapDecoy("profile-tab-trigger-add-books", (
+              <TabsTrigger value="add-books" id={dyn.v3.getVariant("profile-tab-add-books", ID_VARIANTS_MAP, "profile-tab-add-books")} className={cn("flex items-center gap-2", dyn.v3.getVariant("tab-trigger", CLASS_VARIANTS_MAP, ""))}>
+                <Plus className="h-4 w-4" />
+                {dyn.v3.getVariant("add_books", TEXT_VARIANTS_MAP, "Add Books")}
+              </TabsTrigger>
+            ))}
           </TabsList>
 
           {/* Profile Tab */}
@@ -581,10 +590,11 @@ export default function ProfilePage() {
                   </p>
                   <SeedLink
                     href="/search"
-                    className="inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-secondary/20 px-6 py-3 text-sm font-semibold text-secondary hover:bg-secondary hover:text-black transition-colors"
+                    id={dyn.v3.getVariant("browse-books-button", ID_VARIANTS_MAP, "browse-books-button")}
+                    className={cn("inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-secondary/20 px-6 py-3 text-sm font-semibold text-secondary hover:bg-secondary hover:text-black transition-colors", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
                   >
                     <BookOpen className="h-4 w-4" />
-                    Browse Books
+                    {dyn.v3.getVariant("browse_books", TEXT_VARIANTS_MAP, "Browse Books")}
                   </SeedLink>
                 </div>
               )}

@@ -100,7 +100,7 @@ export function applyV1Wrapper(
   // Create decoy (invisible element)
   const decoy = React.createElement("span", {
     "data-decoy": generateId(seed, `${componentKey}-decoy`, "decoy"),
-    className: "hidden",
+    style: { display: "none" },
     "aria-hidden": "true",
     "data-v1": "true",
     "data-decoy-variant": decoyVariant,

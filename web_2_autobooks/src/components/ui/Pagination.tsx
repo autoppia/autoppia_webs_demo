@@ -4,6 +4,8 @@ import { useSearchParams, usePathname } from "next/navigation";
 import { Button } from "./button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface PaginationProps {
   currentPage: number;
@@ -15,6 +17,7 @@ export function Pagination({ currentPage, totalPages, totalItems }: PaginationPr
   const router = useSeedRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const dyn = useDynamicSystem();
 
   if (totalPages <= 1) return null;
 
@@ -53,7 +56,7 @@ export function Pagination({ currentPage, totalPages, totalItems }: PaginationPr
           className="border border-white/10 text-white hover:bg-white/10 disabled:opacity-50"
         >
           <ChevronLeft className="h-4 w-4" />
-          Previous
+          {dyn.v3.getVariant("previous", TEXT_VARIANTS_MAP, "Previous")}
         </Button>
 
         <div className="flex items-center gap-1">
@@ -104,7 +107,7 @@ export function Pagination({ currentPage, totalPages, totalItems }: PaginationPr
           disabled={currentPage === totalPages}
           className="border border-white/10 text-white hover:bg-white/10 disabled:opacity-50"
         >
-          Next
+          {dyn.v3.getVariant("next", TEXT_VARIANTS_MAP, "Next")}
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>

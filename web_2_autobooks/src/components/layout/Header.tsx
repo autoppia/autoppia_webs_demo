@@ -6,6 +6,8 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { cn } from "@/library/utils";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 const NAV_LINKS = [
   { label: "Home", href: "/", preserveSeed: true, icon: Home },
@@ -22,6 +24,7 @@ export function Header() {
   const pathname = usePathname();
   const readingListCount = currentUser?.readingList?.length ?? 0;
   const cartCount = cartState.totalItems ?? 0;
+  const dyn = useDynamicSystem();
 
   const isActive = (href: string) => {
     if (!pathname) return false;
@@ -77,7 +80,7 @@ export function Header() {
                   )}
                   aria-hidden="true"
                 />
-                {link.label}
+                {dyn.v3.getVariant(`nav_${link.label.toLowerCase()}`, TEXT_VARIANTS_MAP, link.label)}
                 {showBadge && (
                   <span
                     className={cn(

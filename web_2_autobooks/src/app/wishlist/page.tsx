@@ -100,7 +100,7 @@ export default function WishlistPage() {
               href="/search"
               className="mt-6 inline-flex rounded-full bg-secondary px-6 py-3 text-sm font-bold text-black hover:bg-secondary/90"
             >
-              Explore books
+              {dyn.v3.getVariant("explore_books", TEXT_VARIANTS_MAP, "Explore books")}
             </SeedLink>
           </section>
             ) : (

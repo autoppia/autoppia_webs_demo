@@ -48,10 +48,10 @@ export function BookCard({ book, onSelect }: BookCardProps) {
             <SeedLink
               href={`/books/${book.id}`}
               onClick={() => onSelect?.(book)}
-              id={dyn.v3.getVariant("view-details-button", ID_VARIANTS_MAP, "view-details-button")}
+              id={dyn.v3.getVariant("view-details-button", ID_VARIANTS_MAP, `view-details-button-${book.id}`)}
               className={cn(
                 "mt-4 inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-secondary hover:text-black hover:border-secondary hover:scale-105 shadow-lg",
-                dyn.v3.getVariant("button", CLASS_VARIANTS_MAP, "")
+                dyn.v3.getVariant("book-detail-link", CLASS_VARIANTS_MAP, dyn.v3.getVariant("button", CLASS_VARIANTS_MAP, ""))
               )}
             >
               {dyn.v3.getVariant("view_details", TEXT_VARIANTS_MAP, "Info")}

@@ -394,5 +394,41 @@
     "header-icon-container-box",
     "header-icon-holder-wrapper",
     "header-icon-wrap-box"
+  ],
+  "tab-trigger": [
+    "tab-trigger",
+    "tab-button",
+    "tab-item",
+    "trigger-tab",
+    "button-tab",
+    "item-tab",
+    "tab-control",
+    "trigger-button",
+    "tab-element",
+    "button-element"
+  ],
+  "book-detail-link": [
+    "book-detail-link",
+    "book-view-link",
+    "detail-link",
+    "view-book-link",
+    "book-info-link",
+    "detail-button",
+    "view-details-link",
+    "book-link",
+    "info-link",
+    "details-link"
+  ],
+  "textarea": [
+    "textarea",
+    "text-area",
+    "message-textarea",
+    "text-field-area",
+    "comment-textarea",
+    "input-textarea",
+    "text-box",
+    "message-field",
+    "text-area-field",
+    "textarea-input"
   ]
 }
