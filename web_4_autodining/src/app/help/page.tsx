@@ -3,6 +3,7 @@
 import { useSeed } from "@/context/SeedContext";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 import Navbar from "@/components/Navbar";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
@@ -210,8 +211,10 @@ export default function HelpPage() {
         {dyn.v1.addWrapDecoy("help-category-filters", (
           <section className="mb-8" id={dyn.v3.getVariant("help-category-filters", ID_VARIANTS_MAP, "help-category-filters")}>
             <div className="flex flex-wrap gap-3 justify-center">
-              {categories.map((category) => (
-                dyn.v1.addWrapDecoy(`help-category-${category}`, (
+              {categories.map((category) => {
+                const categoryKey = category.toLowerCase().replace(/\s+/g, "-");
+                const categoryTextKey = category.toLowerCase().replace(/\s+/g, "_");
+                return dyn.v1.addWrapDecoy(`help-category-${category}`, (
                   <button
                     key={category}
                     onClick={() => {
@@ -221,17 +224,21 @@ export default function HelpPage() {
                         seed,
                       });
                     }}
-                    id={dyn.v3.getVariant(`help-category-${category}`, ID_VARIANTS_MAP, `help-category-${category}`)}
-                    className={`px-6 py-2 rounded-full font-medium transition-colors ${
+                    id={dyn.v3.getVariant(`help-category-${categoryKey}`, ID_VARIANTS_MAP, `help-category-${categoryKey}`)}
+                    className={cn(
+                      dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
+                      "px-6 py-2 rounded-full font-medium transition-colors",
                       selectedCategory === category
                         ? "bg-[#46a758] text-white"
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                    )}
                   >
-                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                    {category === "all"
+                      ? dyn.v3.getVariant("all", TEXT_VARIANTS_MAP, "All")
+                      : dyn.v3.getVariant(`help_category_${categoryTextKey}`, TEXT_VARIANTS_MAP, category.charAt(0).toUpperCase() + category.slice(1))}
                   </button>
-                ), `help-category-wrap-${category}`)
-              ))}
+                ), `help-category-wrap-${category}`);
+              })}
             </div>
           </section>
         ), "help-category-filters-wrap")}

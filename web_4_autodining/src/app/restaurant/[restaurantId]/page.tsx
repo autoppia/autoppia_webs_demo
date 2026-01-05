@@ -622,10 +622,11 @@ export default function RestaurantPage() {
           ), "reviews-section-wrap")}
         </div>
         {/* Reservation Box - sticky and always visible */}
-        <div 
-          className="rounded-xl border-2 border-gray-200 bg-white shadow-lg p-6 w-full max-w-sm md:sticky md:top-8 self-start"
-          id={dyn.v3.getVariant("reservation-box", ID_VARIANTS_MAP, "reservation-box")}
-        >
+        {dyn.v1.addWrapDecoy("booking-widget", (
+          <div 
+            className="rounded-xl border-2 border-gray-200 bg-white shadow-lg p-6 w-full max-w-sm md:sticky md:top-8 self-start"
+            id={dyn.v3.getVariant("reservation-box", ID_VARIANTS_MAP, "reservation-box")}
+          >
               <h2 
                 className="font-bold text-xl mb-4 text-center text-gray-900"
                 id={dyn.v3.getVariant("reservation-title", ID_VARIANTS_MAP, "reservation-title")}
@@ -825,7 +826,8 @@ export default function RestaurantPage() {
               </Button>
             </SeedLink>
           </div>
-        </div>
+          </div>
+        ))}
       </div>
       </main>
     ), "restaurant-detail-page-wrap")

@@ -25,6 +25,7 @@ import { useSearchParams } from "next/navigation";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
+import { cn } from "@/library/utils";
 import { buildBookingHref } from "@/utils/bookingPaths";
 import Navbar from "@/components/Navbar";
 import fallbackRestaurants from "@/data/original/restaurants_1.json";
@@ -641,43 +642,50 @@ function HomePageContent() {
         </div>
 
         {/* Search and Filters */}
-        <section
-          className="flex flex-wrap gap-4 items-end justify-between mt-6 mb-8 relative w-full px-6"
-          style={{ minHeight: "auto", visibility: "visible", display: "flex" }}
-        >
-          {/* Search input - left side */}
-          <input
-            id={dyn.v3.getVariant("search_input", undefined, "search_input")}
-            type="text"
-            placeholder={
-              dyn.v3.getVariant("search_placeholder", undefined, "Search restaurant, cuisine...")
-            }
-            className="min-w-[400px] flex-1 h-9 px-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]"
-            value={search}
-            onChange={handleSearchChange}
-          />
+        {dyn.v1.addWrapDecoy("home-search-section", (
+          <section
+            className="flex flex-wrap gap-4 items-end justify-between mt-6 mb-8 relative w-full px-6"
+            style={{ minHeight: "auto", visibility: "visible", display: "flex" }}
+          >
+            {/* Search input - left side */}
+            {dyn.v1.addWrapDecoy("home-search-input-container", (
+              <input
+                id={dyn.v3.getVariant("search-input", ID_VARIANTS_MAP, "search-input")}
+                type="text"
+                placeholder={
+                  dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search restaurant, cuisine...")
+                }
+                className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "min-w-[400px] flex-1 h-9 px-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]")}
+                value={search}
+                onChange={handleSearchChange}
+              />
+            ))}
 
-          {/* Filters - right side */}
-          <div className="flex gap-4 items-end">
-            <Popover open={dateOpen} onOpenChange={setDateOpen} modal={false}>
-              <PopoverTrigger asChild>
-                <Button
-                  id={dyn.v3.getVariant("date_picker", undefined, "date_picker")}
-                  variant="outline"
-                  className="w-[200px] justify-start text-left font-normal"
-                  onClick={() =>
-                    logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, {
-                      action: "open",
-                    })
-                  }
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? (
-                    format(date, "PPP")
-                  ) : (
-                    <span>{dyn.v3.getVariant("date_picker", undefined, "Select date")}</span>
-                  )}
-                </Button>
+            {/* Filters - right side */}
+            <div className="flex gap-4 items-end">
+              {dyn.v1.addWrapDecoy("home-date-selector", (
+                <Popover open={dateOpen} onOpenChange={setDateOpen} modal={false}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      id={dyn.v3.getVariant("date_picker", ID_VARIANTS_MAP, "date_picker")}
+                      variant="outline"
+                      className={cn(
+                        dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
+                        "w-[200px] justify-start text-left font-normal"
+                      )}
+                      onClick={() =>
+                        logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, {
+                          action: "open",
+                        })
+                      }
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {date ? (
+                        format(date, "PPP")
+                      ) : (
+                        <span>{dyn.v3.getVariant("select_date", TEXT_VARIANTS_MAP, "Select date")}</span>
+                      )}
+                    </Button>
               </PopoverTrigger>
               <PopoverContent
                 className="w-auto p-0 z-[100]"
@@ -692,93 +700,103 @@ function HomePageContent() {
                   initialFocus
                 />
               </PopoverContent>
-            </Popover>
-
-            <Popover open={timeOpen} onOpenChange={setTimeOpen} modal={false}>
-              <PopoverTrigger asChild>
-                <Button
-                  id={dyn.v3.getVariant("time_picker", undefined, "time_picker")}
-                  variant="outline"
-                  className="w-[150px] justify-start text-left font-normal"
-                  onClick={() =>
-                    logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, {
-                      action: "open",
-                    })
-                  }
-                >
-                  <ClockIcon className="mr-2 h-4 w-4" />
-                  {time}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-auto p-0 z-[100]"
-                align="start"
-                side="bottom"
-                sideOffset={8}
-              >
-                <div className="p-2">
-                  {timeOptions.map((t) => (
+                </Popover>
+              ))}
+              {dyn.v1.addWrapDecoy("home-time-selector", (
+                <Popover open={timeOpen} onOpenChange={setTimeOpen} modal={false}>
+                  <PopoverTrigger asChild>
                     <Button
-                      key={t}
-                      variant="ghost"
-                      className="w-full justify-start"
-                      onClick={() => {
-                        handleTimeSelect(t);
-                        setTimeOpen(false);
-                      }}
+                      id={dyn.v3.getVariant("time_picker", ID_VARIANTS_MAP, "time_picker")}
+                      variant="outline"
+                      className={cn(
+                        dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
+                        "w-[150px] justify-start text-left font-normal"
+                      )}
+                      onClick={() =>
+                        logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, {
+                          action: "open",
+                        })
+                      }
                     >
-                      {t}
+                      <ClockIcon className="mr-2 h-4 w-4" />
+                      {time}
                     </Button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-
-            <Popover
-              open={peopleOpen}
-              onOpenChange={setPeopleOpen}
-              modal={false}
-            >
-              <PopoverTrigger asChild>
-                <Button
-                  id={dyn.v3.getVariant("people_picker", undefined, "people_picker")}
-                  variant="outline"
-                  className="w-[150px] justify-start text-left font-normal"
-                  onClick={() =>
-                    logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, {
-                      action: "open",
-                    })
-                  }
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-auto p-0 z-[100]"
+                    align="start"
+                    side="bottom"
+                    sideOffset={8}
+                  >
+                    <div className="p-2">
+                      {timeOptions.map((t) => (
+                        <Button
+                          key={t}
+                          variant="ghost"
+                          className="w-full justify-start"
+                          onClick={() => {
+                            handleTimeSelect(t);
+                            setTimeOpen(false);
+                          }}
+                        >
+                          {t}
+                        </Button>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              ))}
+              {dyn.v1.addWrapDecoy("home-guests-selector", (
+                <Popover
+                  open={peopleOpen}
+                  onOpenChange={setPeopleOpen}
+                  modal={false}
                 >
-                  <UserIcon className="mr-2 h-4 w-4" />
-                  {people} {people === 1 ? personLabel : peopleLabel}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-auto p-0 z-[100]"
-                align="start"
-                side="bottom"
-                sideOffset={8}
-              >
-                <div className="p-2">
-                  {peopleOptions.map((n) => (
+                  <PopoverTrigger asChild>
                     <Button
-                      key={n}
-                      variant="ghost"
-                      className="w-full justify-start"
-                      onClick={() => {
-                        handlePeopleSelect(n);
-                        setPeopleOpen(false);
-                      }}
+                      id={dyn.v3.getVariant("people_picker", ID_VARIANTS_MAP, "people_picker")}
+                      variant="outline"
+                      className={cn(
+                        dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
+                        "w-[150px] justify-start text-left font-normal"
+                      )}
+                      onClick={() =>
+                        logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, {
+                          action: "open",
+                        })
+                      }
                     >
-                      {n} {n === 1 ? personLabel : peopleLabel}
+                      <UserIcon className="mr-2 h-4 w-4" />
+                      {people} {people === 1 ? personLabel : peopleLabel}
                     </Button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
-        </section>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-auto p-0 z-[100]"
+                    align="start"
+                    side="bottom"
+                    sideOffset={8}
+                  >
+                    <div className="p-2">
+                      {peopleOptions.map((n) => (
+                        <Button
+                          key={n}
+                          variant="ghost"
+                          className="w-full justify-start"
+                          onClick={() => {
+                            handlePeopleSelect(n);
+                            setPeopleOpen(false);
+                          }}
+                        >
+                          {n} {n === 1 ? personLabel : peopleLabel}
+                        </Button>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              ))}
+            </div>
+          </section>
+        ))}
 
         {/* Main Content - Cards, Sections, etc. */}
         {isLoading || !isReady || list.length === 0 ? null : (

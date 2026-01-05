@@ -3,7 +3,8 @@
 import { useSeed } from "@/context/SeedContext";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP } from "@/dynamic/v3";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 interface NavbarProps {
   showSearch?: boolean;
@@ -22,10 +23,10 @@ export default function Navbar({
 
   // V1: Order navigation links dynamically
   const navLinks = [
-    { href: "/help", label: "Help", key: "nav-help" },
-    { href: "/about", label: "About", key: "nav-about" },
-    { href: "/contact", label: "Contact", key: "nav-contact" },
-    ...(showSearch ? [{ href: "/faqs", label: "FAQs", key: "nav-faqs" }] : []),
+    { href: "/help", label: "Help", key: "nav-help", textKey: "nav_help" },
+    { href: "/about", label: "About", key: "nav-about", textKey: "nav_about" },
+    { href: "/contact", label: "Contact", key: "nav-contact", textKey: "nav_contact" },
+    ...(showSearch ? [{ href: "/faqs", label: "FAQs", key: "nav-faqs", textKey: "nav_faqs" }] : []),
   ];
   const navOrder = dyn.v1.changeOrderElements("navbar-links", navLinks.length);
   const orderedNavLinks = navOrder.map((idx) => navLinks[idx]);
@@ -66,11 +67,14 @@ export default function Navbar({
               {orderedNavLinks.map((link) => (
                 <SeedLink
                   key={link.key}
-                  className="text-sm text-gray-600 hover:text-[#46a758] transition-colors"
+                  className={cn(
+                    dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, "nav-link"),
+                    "text-sm text-gray-600 hover:text-[#46a758] transition-colors"
+                  )}
                   href={link.href}
                   id={dyn.v3.getVariant(link.key, ID_VARIANTS_MAP, link.key)}
                 >
-                  {dyn.v1.addWrapDecoy(link.key, link.label)}
+                  {dyn.v1.addWrapDecoy(link.key, dyn.v3.getVariant(link.textKey, TEXT_VARIANTS_MAP, link.label))}
                 </SeedLink>
               ))}
             </div>

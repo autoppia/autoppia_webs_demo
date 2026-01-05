@@ -1906,6 +1906,54 @@
     "message-entry-contact",
     "contact-message-textbox",
     "message-textbox-contact"
+  ],
+  "nav-help": [
+    "nav-help",
+    "help-link",
+    "support-link",
+    "help-nav",
+    "support-nav",
+    "help-button",
+    "support-button",
+    "help-menu-item",
+    "support-menu-item",
+    "help-navigation"
+  ],
+  "nav-about": [
+    "nav-about",
+    "about-link",
+    "about-us-link",
+    "about-nav",
+    "about-us-nav",
+    "about-button",
+    "about-us-button",
+    "about-menu-item",
+    "about-us-menu-item",
+    "about-navigation"
+  ],
+  "nav-contact": [
+    "nav-contact",
+    "contact-link",
+    "contact-us-link",
+    "contact-nav",
+    "contact-us-nav",
+    "contact-button",
+    "contact-us-button",
+    "contact-menu-item",
+    "contact-us-menu-item",
+    "contact-navigation"
+  ],
+  "nav-faqs": [
+    "nav-faqs",
+    "faqs-link",
+    "faq-link",
+    "faqs-nav",
+    "faq-nav",
+    "faqs-button",
+    "faq-button",
+    "faqs-menu-item",
+    "faq-menu-item",
+    "faqs-navigation"
   ]
 }
 

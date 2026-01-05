@@ -9,6 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { cn } from "@/library/utils";
 
 export default function ContactPage() {
   const { seed, resolvedSeeds } = useSeed();
@@ -151,7 +152,8 @@ export default function ContactPage() {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              {dyn.v1.addWrapDecoy("contact-form", (
+                <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Name */}
                 <div>
                   <label
@@ -162,12 +164,15 @@ export default function ContactPage() {
                   </label>
                   <input
                     type="text"
-                    id="name"
+                    id={dyn.v3.getVariant("contact-name-input", ID_VARIANTS_MAP, "name")}
                     name="name"
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
+                    className={cn(
+                      dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "input-text"),
+                      "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
+                    )}
                     placeholder={dyn.v3.getVariant("name_placeholder", TEXT_VARIANTS_MAP, "Your full name")}
                   />
                 </div>
@@ -182,12 +187,15 @@ export default function ContactPage() {
                   </label>
                   <input
                     type="email"
-                    id="email"
+                    id={dyn.v3.getVariant("contact-email-input", ID_VARIANTS_MAP, "email")}
                     name="email"
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
+                    className={cn(
+                      dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "input-text"),
+                      "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
+                    )}
                     placeholder={dyn.v3.getVariant("email_placeholder", TEXT_VARIANTS_MAP, "your.email@example.com")}
                   />
                 </div>
@@ -202,12 +210,15 @@ export default function ContactPage() {
                   </label>
                   <input
                     type="text"
-                    id="subject"
+                    id={dyn.v3.getVariant("contact-subject-input", ID_VARIANTS_MAP, "subject")}
                     name="subject"
                     required
                     value={formData.subject}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
+                    className={cn(
+                      dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "input-text"),
+                      "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
+                    )}
                     placeholder={dyn.v3.getVariant("subject_placeholder", TEXT_VARIANTS_MAP, "What's this about?")}
                   />
                 </div>
@@ -221,13 +232,16 @@ export default function ContactPage() {
                     Message *
                   </label>
                   <textarea
-                    id="message"
+                    id={dyn.v3.getVariant("contact-message-textarea", ID_VARIANTS_MAP, "message")}
                     name="message"
                     required
                     value={formData.message}
                     onChange={handleChange}
                     rows={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none resize-none transition-colors"
+                    className={cn(
+                      dyn.v3.getVariant("textarea-text", CLASS_VARIANTS_MAP, "textarea-text"),
+                      "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none resize-none transition-colors"
+                    )}
                     placeholder={dyn.v3.getVariant("message_placeholder", TEXT_VARIANTS_MAP, "Tell us more about your inquiry...")}
                   />
                 </div>
@@ -245,7 +259,8 @@ export default function ContactPage() {
                     </Button>
                   ), "send-message-button-wrap")}
                 </div>
-              </form>
+                </form>
+              ), "contact-form-wrap")}
             </div>
           </div>
         </div>
