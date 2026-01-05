@@ -112,10 +112,12 @@ export function Toolbar({ onMenuClick, textStructure }: ToolbarProps) {
   );
 
   const searchInputId = dyn.v3.getVariant('search_input', ID_VARIANTS_MAP, 'search-input');
-  const searchInputClass = dyn.v3.getVariant(
-    'toolbar-search-input',
-    CLASS_VARIANTS_MAP,
-    'pl-10 pr-12 h-12 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-ring'
+  const searchInputClass = cn(
+    dyn.v3.getVariant(
+      'toolbar-search-input',
+      CLASS_VARIANTS_MAP,
+      'pl-10 pr-12 h-12 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-ring text-black'
+    )
   );
 
   const placeholderText = dyn.v3.getVariant(

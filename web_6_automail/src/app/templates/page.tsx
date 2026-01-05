@@ -118,10 +118,11 @@ export default function TemplatesPage() {
   };
 
   return (
-    <div
-      className={cn("min-h-screen bg-background", dyn.v3.getVariant("app-shell", CLASS_VARIANTS_MAP, ""))}
-      id={dyn.v3.getVariant("app-shell", ID_VARIANTS_MAP, "templates-shell")}
-    >
+    dyn.v1.addWrapDecoy("templates-page", (
+      <div
+        className={cn("min-h-screen bg-background", dyn.v3.getVariant("app-shell", CLASS_VARIANTS_MAP, ""))}
+        id={dyn.v3.getVariant("app-shell", ID_VARIANTS_MAP, "templates-shell")}
+      >
       <div className="border-b border-border bg-card/60 backdrop-blur px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Button
@@ -197,7 +198,10 @@ export default function TemplatesPage() {
                     value={templatesState[activeTemplate.id]?.to || ""}
                     onChange={(e) => updateTemplateState(activeTemplate.id, { to: e.target.value })}
                     id={dyn.v3.getVariant("template-to", ID_VARIANTS_MAP, "template-to")}
-                    className={dyn.v3.getVariant("template-field", CLASS_VARIANTS_MAP, "")}
+                    className={cn(
+                      dyn.v3.getVariant("template-field", CLASS_VARIANTS_MAP, "border rounded-md px-3 py-2 bg-muted/30 text-foreground"),
+                      "border rounded-md px-3 py-2"
+                    )}
                   />
                 </div>
 
@@ -209,7 +213,10 @@ export default function TemplatesPage() {
                     value={templatesState[activeTemplate.id]?.from || DEFAULT_FROM}
                     onChange={(e) => updateTemplateState(activeTemplate.id, { from: e.target.value })}
                     id={dyn.v3.getVariant("template-from", ID_VARIANTS_MAP, "template-from")}
-                    className={dyn.v3.getVariant("template-field", CLASS_VARIANTS_MAP, "")}
+                    className={cn(
+                      dyn.v3.getVariant("template-field", CLASS_VARIANTS_MAP, "border rounded-md px-3 py-2 bg-muted/30 text-foreground"),
+                      "border rounded-md px-3 py-2"
+                    )}
                   />
                 </div>
 
@@ -221,7 +228,11 @@ export default function TemplatesPage() {
                     rows={12}
                     value={templatesState[activeTemplate.id]?.body || ""}
                     onChange={(e) => handleBodyChange(activeTemplate, e.target.value)}
-                    className={cn("font-mono text-sm", dyn.v3.getVariant("template-field", CLASS_VARIANTS_MAP, ""))}
+                    className={cn(
+                      "font-mono text-sm",
+                      dyn.v3.getVariant("template-field", CLASS_VARIANTS_MAP, "border rounded-md px-3 py-2 bg-muted/30 text-foreground"),
+                      "border rounded-md px-3 py-2"
+                    )}
                     id={dyn.v3.getVariant("template-body", ID_VARIANTS_MAP, "template-body")}
                   />
                 </div>
@@ -243,5 +254,6 @@ export default function TemplatesPage() {
         </div>
       </div>
     </div>
+    ), "templates-page-wrap")
   );
 }

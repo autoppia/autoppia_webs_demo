@@ -10,7 +10,8 @@ import { useEmail } from '@/contexts/EmailContext';
 import { Plus } from 'lucide-react';
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { TEXT_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
+import { TEXT_VARIANTS_MAP, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
+import { cn } from "@/library/utils";
 
 const LABEL_COLORS = [
   '#4285f4', // Blue
@@ -53,7 +54,10 @@ export function CreateLabelDialog({ trigger }: CreateLabelDialogProps) {
     <Button
       variant="ghost"
       size="sm"
-      className="h-7 w-full justify-start gap-2 text-xs"
+      className={cn(
+        dyn.v3.getVariant("create-label-button", CLASS_VARIANTS_MAP, "h-7 w-full justify-start gap-2 text-xs"),
+        "h-7 w-full justify-start gap-2 text-xs"
+      )}
       id={dyn.v3.getVariant("label-selector-trigger", ID_VARIANTS_MAP, "create-label-btn")}
       onClick={() => setOpen(true)}
     >
@@ -81,6 +85,10 @@ export function CreateLabelDialog({ trigger }: CreateLabelDialogProps) {
               onChange={(e) => setLabelName(e.target.value)}
               placeholder={dyn.v3.getVariant("create_label", TEXT_VARIANTS_MAP, "Enter label name...")}
               onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
+              className={cn(
+                dyn.v3.getVariant("label-name-input", CLASS_VARIANTS_MAP, "border rounded-md px-3 py-2 bg-background text-foreground"),
+                "border rounded-md px-3 py-2"
+              )}
             />
           </div>
 
@@ -105,13 +113,24 @@ export function CreateLabelDialog({ trigger }: CreateLabelDialogProps) {
         </div>
 
         <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={() => setOpen(false)} id="cancel-create-label-button">
+          <Button 
+            variant="outline" 
+            onClick={() => setOpen(false)} 
+            id={dyn.v3.getVariant("cancel-create-label", ID_VARIANTS_MAP, "cancel-create-label-button")}
+            className={cn(
+              dyn.v3.getVariant("cancel-button", CLASS_VARIANTS_MAP, "variant-outline"),
+              "variant-outline"
+            )}
+          >
             Cancel
           </Button>
           <Button
-            id="create-label-button"
+            id={dyn.v3.getVariant("create-label-button", ID_VARIANTS_MAP, "create-label-button")}
             onClick={handleCreate}
-            className="btn-primary-gradient"
+            className={cn(
+              dyn.v3.getVariant("create-button", CLASS_VARIANTS_MAP, "btn-primary-gradient"),
+              "btn-primary-gradient"
+            )}
           >
             Create Label
           </Button>

@@ -655,6 +655,7 @@ function EmailItem({
         }}
         title="Archive"
         aria-label="Archive email"
+        id={dyn.v3.getVariant("archive_button", ID_VARIANTS_MAP, "archive-button")}
       >
         <Archive className="h-4 w-4" />
       </Button>

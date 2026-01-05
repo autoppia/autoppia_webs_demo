@@ -38,9 +38,18 @@
   "unread_button": ["unread-button", "mark-unread-button", "set-unread-button"],
   "spam_button": ["spam-button", "junk-button", "report-spam-button"],
   "snooze_button": ["snooze-button", "later-button", "remind-button"],
-  "archive_button": ["archive-button", "file-button", "store-button"],
+  "archive_button": ["archive-button", "file-button", "store-button", "archive-email-btn", "file-email-btn", "store-email-btn", "archive-action-btn", "file-action-btn", "store-action-btn", "archive-btn-primary"],
+  "email-reply": ["email-reply", "reply-button", "respond-button", "answer-button", "reply-email-btn", "respond-email-btn", "answer-email-btn", "reply-action-btn", "respond-action-btn", "answer-action-btn"],
+  "email-reply-all": ["email-reply-all", "reply-all-button", "respond-all-button", "answer-all-button", "reply-all-email-btn", "respond-all-email-btn", "answer-all-email-btn", "reply-all-action-btn", "respond-all-action-btn", "answer-all-action-btn"],
+  "email-forward": ["email-forward", "forward-button", "share-button", "send-forward-button", "forward-email-btn", "share-email-btn", "send-forward-email-btn", "forward-action-btn", "share-action-btn", "send-forward-action-btn"],
+  "email-snooze": ["email-snooze", "snooze-button", "later-button", "remind-button", "snooze-email-btn", "later-email-btn", "remind-email-btn", "snooze-action-btn", "later-action-btn", "remind-action-btn"],
+  "email-delete": ["email-delete", "delete-button", "remove-button", "discard-button", "delete-email-btn", "remove-email-btn", "discard-email-btn", "delete-action-btn", "remove-action-btn", "discard-action-btn"],
+  "email-mark-unread": ["email-mark-unread", "unread-button", "mark-unread-button", "set-unread-button", "mark-unread-email-btn", "unread-email-btn", "set-unread-email-btn", "mark-unread-action-btn", "unread-action-btn", "set-unread-action-btn"],
+  "email-mark-spam": ["email-mark-spam", "spam-button", "junk-button", "report-spam-button", "mark-spam-email-btn", "spam-email-btn", "junk-email-btn", "mark-spam-action-btn", "spam-action-btn", "junk-action-btn"],
   "templates-nav": ["templates-nav", "templates-link", "templates-button"],
   "template-to": ["template-to", "template-recipient", "template-destination"],
   "template-from": ["template-from", "template-sender", "template-origin"],
-  "template-body": ["template-body", "template-textarea", "template-message"]
+  "template-body": ["template-body", "template-textarea", "template-message"],
+  "cancel-create-label": ["cancel-create-label", "cancel-label-button", "discard-label-button", "cancel-label-btn", "discard-label-btn", "cancel-label-action", "discard-label-action", "cancel-label-btn-primary", "discard-label-btn-primary", "cancel-label-btn-secondary"],
+  "create-label-button": ["create-label-button", "create-label-btn", "add-label-button", "create-label-action", "add-label-action", "create-label-btn-primary", "add-label-btn-primary", "create-label-btn-secondary", "add-label-btn-secondary", "create-label-btn-tertiary"]
 }

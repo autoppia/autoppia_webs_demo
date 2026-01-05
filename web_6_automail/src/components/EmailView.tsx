@@ -222,12 +222,13 @@ export function EmailView({ textStructure }: EmailViewProps) {
   };
 
   return (
-    <div
-      className={cn("h-full flex flex-col bg-background", dyn.v3.getVariant("email-view", CLASS_VARIANTS_MAP, ""))}
-      data-testid="email-view"
-      suppressHydrationWarning
-      id={dyn.v3.getVariant("email-view", ID_VARIANTS_MAP, "email-view")}
-    >
+    dyn.v1.addWrapDecoy("email-content-view", (
+      <div
+        className={cn("h-full flex flex-col bg-background", dyn.v3.getVariant("email-view", CLASS_VARIANTS_MAP, ""))}
+        data-testid="email-view"
+        suppressHydrationWarning
+        id={dyn.v3.getVariant("email-view", ID_VARIANTS_MAP, "email-view")}
+      >
       {/* Top Toolbar */}
       <div className="flex items-center justify-between px-6 py-4 toolbar-glass">
         <div className="flex items-center gap-2">
@@ -283,7 +284,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
             </div>
 
             <Button
-              id={dyn.v3.getVariant("email-snooze", ID_VARIANTS_MAP, "snooze-button")}
+              id={dyn.v3.getVariant("email-snooze", ID_VARIANTS_MAP, textStructure?.email_ids.snooze_btn || "snooze-button")}
               variant="ghost"
               size="icon"
               title={dyn.v3.getVariant("snooze_action", TEXT_VARIANTS_MAP, "Snooze")}
@@ -400,7 +401,12 @@ export function EmailView({ textStructure }: EmailViewProps) {
               </div>
 
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" onClick={handleReply}>
+              <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={handleReply}
+              id={dyn.v3.getVariant("email-reply", ID_VARIANTS_MAP, textStructure?.email_ids.reply_btn || "reply-button")}
+            >
                 <Reply className="h-4 w-4" />
               </Button>
               {currentEmail.isDraft && (
@@ -529,5 +535,6 @@ export function EmailView({ textStructure }: EmailViewProps) {
         </div>
       </ScrollArea>
     </div>
+    ), "email-content-view-wrap")
   );
 }
