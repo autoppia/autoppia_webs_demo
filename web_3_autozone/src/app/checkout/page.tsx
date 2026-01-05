@@ -377,9 +377,9 @@ export default function CheckoutPage() {
 
                         <Button
                           id={dyn.v3.getVariant(
-                            "place-order-btn",
+                            "finalize-order-button",
                             ID_VARIANTS_MAP,
-                            "place-order"
+                            "finalize-order-button"
                           )}
                           className={dyn.v3.getVariant(
                             "button-primary",
@@ -408,9 +408,9 @@ export default function CheckoutPage() {
                           }}
                         >
                           {dyn.v3.getVariant(
-                            "place_order",
+                            "finalize_order",
                             TEXT_VARIANTS_MAP,
-                            "Place Order"
+                            "Finalize order"
                           )}
                         </Button>
 

@@ -289,7 +289,7 @@ function HomeContent() {
                           });
                           router.push("/wishlist");
                         }}
-                        id={dyn.v3.getVariant("view-all-btn", ID_VARIANTS_MAP)}
+                        id={dyn.v3.getVariant("view-all-btn", ID_VARIANTS_MAP, "view-all-btn")}
                         className={dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400")}
                       >
                         {dyn.v3.getVariant("view_all_saved", dynamicV3TextVariants, "View all saved")}

@@ -48,16 +48,16 @@
     "Shop Again"
   ],
   "in_stock": [
-    "In Stock",
+    "In stock",
     "Available",
-    "Ready to Ship",
-    "In Store",
-    "Available Now",
-    "Ships Today",
-    "Ready Now",
-    "On Hand",
-    "Stock Available",
-    "Currently Available"
+    "Ready to ship",
+    "In stock now",
+    "Available now",
+    "On hand",
+    "Ready",
+    "Stock available",
+    "Ships soon",
+    "In inventory"
   ],
   "remove": [
     "Remove",
@@ -995,18 +995,6 @@
     "Wishlist",
     "Add to list"
   ],
-  "in_stock": [
-    "In stock",
-    "Available",
-    "Ready to ship",
-    "In stock now",
-    "Available now",
-    "On hand",
-    "Ready",
-    "Stock available",
-    "Ships soon",
-    "In inventory"
-  ],
   "visit": [
     "Visit",
     "View",
@@ -1306,5 +1294,29 @@
     "What stands out before you purchase.",
     "The essentials before adding to cart.",
     "Key callouts before you check out."
+  ],
+  "all_categories": [
+    "All categories",
+    "All Categories",
+    "Browse All",
+    "View All",
+    "All",
+    "Categories",
+    "Shop All",
+    "All Items",
+    "Browse Categories",
+    "View Categories"
+  ],
+  "finalize_order": [
+    "Finalize order",
+    "Place Order",
+    "Complete Order",
+    "Confirm Order",
+    "Submit Order",
+    "Finish Order",
+    "Order Now",
+    "Checkout",
+    "Place Order",
+    "Confirm Purchase"
   ]
 }

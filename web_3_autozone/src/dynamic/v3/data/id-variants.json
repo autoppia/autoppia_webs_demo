@@ -646,6 +646,101 @@
     "discount-code",
     "coupon-code",
     "offer-code"
-  ]
+  ],
+  "all-categories-button": [
+    "all-categories-button",
+    "categories-btn",
+    "all-categories-btn",
+    "category-selector-button",
+    "categories-selector",
+    "all-cats-button",
+    "category-btn",
+    "all-cats-btn",
+    "categories-button",
+    "cat-selector-btn"
+  ],
+  "finalize-order-button": [
+    "finalize-order-button",
+    "place-order-btn",
+    "complete-order-button",
+    "confirm-order-btn",
+    "submit-order-button",
+    "finish-order-btn",
+    "order-now-button",
+    "checkout-button",
+    "place-order-button",
+    "confirm-purchase-button"
+  ],
+  "sort-selector": [
+    "sort-selector",
+    "sort-dropdown",
+    "filter-selector",
+    "sort-menu",
+    "filter-dropdown",
+    "sort-select",
+    "filter-select",
+    "sort-menu-button",
+    "filter-menu",
+    "sort-button"
+  ],
+  "grid-view-button": [
+    "grid-view-button",
+    "grid-btn",
+    "grid-toggle",
+    "grid-view-btn",
+    "grid-mode-button",
+    "grid-toggle-btn",
+    "grid-button",
+    "grid-view-toggle",
+    "grid-mode-btn",
+    "grid-display-button"
+  ],
+  "list-view-button": [
+    "list-view-button",
+    "list-btn",
+    "list-toggle",
+    "list-view-btn",
+    "list-mode-button",
+    "list-toggle-btn",
+    "list-button",
+    "list-view-toggle",
+    "list-mode-btn",
+    "list-display-button"
+  ],
+  "view-all-btn": [
+  "view-wishlist-button",
+  "wishlist-btn",
+  "view-all-button",
+  "view-all-btn",
+  "view-wishlist-btn",
+  "wishlist-button",
+  "show-wishlist-btn",
+  "open-wishlist-btn",
+  "wishlist-view-btn",
+  "all-wishlist-btn"
+  ],
+  "browse-all-btn": [
+  "browse-all-button",
+  "browse-all-btn",
+  "browse-btn",
+  "browse-button",
+  "browse-all-items-btn",
+  "browse-items-btn",
+  "browse-catalog-btn",
+  "browse-list-btn",
+  "open-browse-btn",
+  "browse-more-btn"
+],
+  "back-to-top-btn": [
+  "back-to-top-btn",
+  "back-to-top-button",
+  "scroll-to-top-btn",
+  "scroll-top-btn",
+  "go-to-top-btn",
+  "return-to-top-btn",
+  "top-scroll-btn",
+  "top-button",
+  "scroll-up-btn",
+  "jump-to-top-btn"
+]
 }
-

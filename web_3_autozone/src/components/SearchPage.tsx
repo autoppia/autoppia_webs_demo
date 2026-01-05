@@ -388,17 +388,17 @@ export default function SearchPage() {
   );
 
   return (
-    dyn.v1.addWrapDecoy("search-page-container", (
+    dyn.v1.addWrapDecoy("page-container", (
       <section 
         id={dyn.v3.getVariant("search-page", ID_VARIANTS_MAP, "search-page")}
         className={dyn.v3.getVariant("section-container", CLASS_VARIANTS_MAP, "omnizon-container grid gap-8 py-28 lg:grid-cols-[280px,1fr]")}
       >
-        {dyn.v1.addWrapDecoy("search-sidebar", (
+        {dyn.v1.addWrapDecoy("filter-sidebar", (
           <aside 
             id={dyn.v3.getVariant("filter-sidebar", ID_VARIANTS_MAP, "search-sidebar")}
-            className={dyn.v3.getVariant("filter-sidebar", CLASS_VARIANTS_MAP, "space-y-5 rounded-[32px] border border-white/60 bg-white/80 p-5 shadow-sm lg:sticky lg:top-32")}
+            className={dyn.v3.getVariant("filter-sidebar", CLASS_VARIANTS_MAP, "space-y-5 rounded-[32px] border border-white/60 bg-white/80 p-5 shadow-sm lg:sticky lg:top-32 self-start")}
           >
-            {dyn.v1.addWrapDecoy("search-sidebar-header", (
+            {dyn.v1.addWrapDecoy("sidebar-header", (
               <div>
                 <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
                   {dyn.v3.getVariant("search_results_for", dynamicV3TextVariants, "Search results for")}
@@ -411,9 +411,9 @@ export default function SearchPage() {
                 </p>
               </div>
             ))}
-            {dyn.v1.addWrapDecoy("search-sidebar-form", (
+            {dyn.v1.addWrapDecoy("sidebar-form", (
               <form onSubmit={handleSearchSubmit} className="space-y-3">
-                {dyn.v1.addWrapDecoy("search-sidebar-input", (
+                {dyn.v1.addWrapDecoy("sidebar-input", (
                   <Input
                     value={localQuery}
                     onChange={(event) => {
@@ -425,7 +425,7 @@ export default function SearchPage() {
                     className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm")}
                   />
                 ))}
-                {dyn.v1.addWrapDecoy("search-sidebar-submit", (
+                {dyn.v1.addWrapDecoy("sidebar-submit", (
                   <Button 
                     type="submit" 
                     id={dyn.v3.getVariant("search-button", ID_VARIANTS_MAP)}
@@ -440,39 +440,37 @@ export default function SearchPage() {
               </form>
             ))}
             <div className="subtle-divider" />
-            {dyn.v1.addWrapDecoy("search-sidebar-categories", (
-              <div>
+            {dyn.v1.addWrapDecoy("categories-section", (
+              <div className="w-full">
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
                   {dyn.v3.getVariant("category", dynamicV3TextVariants, "Category")}
                 </p>
-                <div className="mt-3 grid grid-cols-2 gap-2">
+                <div className="mt-3 grid grid-cols-2 gap-2 w-full">
                   {orderedAvailableCategories.map((category) => (
-                    dyn.v1.addWrapDecoy(`search-category-${category}`, (
-                      <button
-                        key={category}
-                        type="button"
-                        onClick={() => handleCategoryChange(category)}
-                        id={dyn.v3.getVariant("category-link", ID_VARIANTS_MAP, `category-${category}`)}
-                        className={cn(
-                          dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "rounded-full border px-3 py-2 text-xs font-semibold"),
-                          activeCategory === category
-                            ? "border-slate-900 bg-slate-900 text-white"
-                            : "border-slate-200 text-slate-700 hover:border-slate-400"
-                        )}
-                      >
-                        {category === "all"
-                          ? "All"
-                          : category.replace(/\b\w/g, (char) => char.toUpperCase())}
-                      </button>
-                    ), category)
+                    <button
+                      key={category}
+                      type="button"
+                      onClick={() => handleCategoryChange(category)}
+                      id={dyn.v3.getVariant("category-link", ID_VARIANTS_MAP, `category-${category}`)}
+                      className={cn(
+                        dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "rounded-full border px-3 py-2 text-xs font-semibold"),
+                        activeCategory === category
+                          ? "border-slate-900 bg-slate-900 text-white"
+                          : "border-slate-200 text-slate-700 hover:border-slate-400"
+                      )}
+                    >
+                      {category === "all"
+                        ? "All"
+                        : category.replace(/\b\w/g, (char) => char.toUpperCase())}
+                    </button>
                   ))}
                 </div>
               </div>
             ))}
             <div className="subtle-divider" />
-            {dyn.v1.addWrapDecoy("search-sidebar-quick-links", (
+            {dyn.v1.addWrapDecoy("sidebar-quick-links", (
               <div className="space-y-2 text-sm text-slate-600">
-                {dyn.v1.addWrapDecoy("search-wishlist-link", (
+                {dyn.v1.addWrapDecoy("wishlist-link", (
                   <button
                     type="button"
                     id={dyn.v3.getVariant("wishlist-button", ID_VARIANTS_MAP, "sidebar-wishlist")}
@@ -482,7 +480,7 @@ export default function SearchPage() {
                     ↗ {dyn.v3.getVariant("view_wishlist", dynamicV3TextVariants, "View wishlist")}
                   </button>
                 ))}
-                {dyn.v1.addWrapDecoy("search-cart-link", (
+                {dyn.v1.addWrapDecoy("cart-link", (
                   <button
                     type="button"
                     id={dyn.v3.getVariant("cart-button", ID_VARIANTS_MAP, "sidebar-cart")}
@@ -492,7 +490,7 @@ export default function SearchPage() {
                     ↗ {dyn.v3.getVariant("cart", TEXT_VARIANTS_MAP, "Jump to cart")}
                   </button>
                 ))}
-                {dyn.v1.addWrapDecoy("search-checkout-link", (
+                {dyn.v1.addWrapDecoy("checkout-link", (
                   <button
                     type="button"
                     id={dyn.v3.getVariant("checkout-button", ID_VARIANTS_MAP, "sidebar-checkout")}
@@ -506,7 +504,7 @@ export default function SearchPage() {
             ))}
           </aside>
         ))}
-        {dyn.v1.addWrapDecoy("search-main-content", (
+        {dyn.v1.addWrapDecoy("main-content", (
           <div className="space-y-6">
             {dyn.v1.addWrapDecoy("search-heading", (
               <SectionHeading
@@ -552,7 +550,7 @@ export default function SearchPage() {
                       onChange={(event) =>
                         setSortOption(event.target.value as typeof sortOption)
                       }
-                      id={dyn.v3.getVariant("sort-select", ID_VARIANTS_MAP)}
+                      id={dyn.v3.getVariant("sort-selector", ID_VARIANTS_MAP)}
                       className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 focus:border-slate-400 focus:outline-none")}
                     >
                       <option value="relevance">{dyn.v3.getVariant("sort_relevance", dynamicV3TextVariants, "Sort: Relevance")}</option>
@@ -567,7 +565,7 @@ export default function SearchPage() {
                         <button
                           type="button"
                           onClick={() => setViewMode("grid")}
-                          id={dyn.v3.getVariant("grid-view-btn", ID_VARIANTS_MAP)}
+                          id={dyn.v3.getVariant("grid-view-button", ID_VARIANTS_MAP)}
                           className={cn(
                             dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "flex items-center gap-2 rounded-l-full px-4 py-2 text-sm font-semibold whitespace-nowrap"),
                             viewMode === "grid"
@@ -583,7 +581,7 @@ export default function SearchPage() {
                         <button
                           type="button"
                           onClick={() => setViewMode("list")}
-                          id={dyn.v3.getVariant("list-view-btn", ID_VARIANTS_MAP)}
+                          id={dyn.v3.getVariant("list-view-button", ID_VARIANTS_MAP)}
                           className={cn(
                             dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "flex items-center gap-2 rounded-r-full px-4 py-2 text-sm font-semibold whitespace-nowrap"),
                             viewMode === "list"

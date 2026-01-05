@@ -185,14 +185,14 @@ export function Header() {
                               <button
                                 type="button"
                                 onClick={() => setIsCategoryOpen((prev) => !prev)}
-                                id={dyn.v3.getVariant("category-link", ID_VARIANTS_MAP)}
+                                id={dyn.v3.getVariant("all-categories-button", ID_VARIANTS_MAP, "all-categories-button")}
                                 className={dyn.v3.getVariant(
                                   "button-secondary",
                                   CLASS_VARIANTS_MAP,
                                   "flex h-12 items-center gap-2 rounded-full bg-slate-100 px-4 text-[13px] font-semibold text-slate-700 hover:bg-slate-200/70"
                                 )}
                               >
-                                <span className="max-w-40 truncate">{selectedCategory.label}</span>
+                                <span className="max-w-40 truncate">{dyn.v3.getVariant("all_categories", TEXT_VARIANTS_MAP, selectedCategory.label)}</span>
                                 <ChevronDown size={14} className="shrink-0 text-slate-400" />
                               </button>
                             ))}
