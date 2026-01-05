@@ -10,6 +10,7 @@ import { useSeed } from "@/context/SeedContext";
 import { CalendarDays, Search } from "lucide-react";
 import { initializeLogs } from "@/data/crm-enhanced";
 import { DynamicButton } from "@/components/DynamicButton";
+import { cn } from "@/library/utils";
 
 const normalizeLog = (log: any, index: number) => ({
   id: log?.id ?? Date.now() + index,
@@ -577,7 +578,10 @@ export default function BillingPage() {
                     </div>
                     <div className="absolute right-3 top-3 flex items-center gap-2">
                       <button
-                        className="text-zinc-400 hover:text-accent-forest rounded-full"
+                        className={cn(
+                          dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
+                          "text-zinc-400 hover:text-accent-forest rounded-full"
+                        )}
                         title={getText("edit", "Edit")}
                         onClick={() => startEdit(l.id)}
                         aria-label={`${getText("edit", "Edit")} ${l.matter}`}
@@ -586,7 +590,10 @@ export default function BillingPage() {
                       </button>
                       <button
                         id={`${getId("delete_log_button")}-${l.id}`}
-                        className="text-zinc-300 hover:text-red-500 rounded-full"
+                        className={cn(
+                          dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
+                          "text-zinc-300 hover:text-red-500 rounded-full"
+                        )}
                         title={getText("delete_button", "Delete")}
                         onClick={() => deleteLog(l.id)}
                         aria-label={`${getText("delete_button", "Delete")} ${l.matter}`}

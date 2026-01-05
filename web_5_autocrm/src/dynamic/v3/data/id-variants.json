@@ -863,6 +863,18 @@
     "destroy-client-button",
     "expunge-client-button"
   ],
+  "help_link": [
+    "help-nav-link",
+    "support-link",
+    "assistance-nav",
+    "guidance-link",
+    "faq-link",
+    "support-nav",
+    "help-hub-link",
+    "knowledge-base-link",
+    "resource-center-link",
+    "help-center-nav"
+  ],
   "help_center_title": [
     "help-center-title",
     "help-title",

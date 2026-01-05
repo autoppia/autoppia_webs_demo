@@ -140,6 +140,7 @@ export function NewEventModal({
               type="button"
               variant="outline"
               onClick={onClose}
+              id={dyn.v3.getVariant("cancel_button", ID_VARIANTS_MAP, "cancel_button")}
               className={dyn.v3.getVariant(
                 "button-secondary",
                 CLASS_VARIANTS_MAP,
@@ -152,6 +153,7 @@ export function NewEventModal({
               eventType="NEW_CALENDAR_EVENT_ADDED"
               index={1}
               type="submit"
+              id={dyn.v3.getVariant("save_button", ID_VARIANTS_MAP, "save_button")}
               className={dyn.v3.getVariant(
                 "button-primary",
                 CLASS_VARIANTS_MAP,

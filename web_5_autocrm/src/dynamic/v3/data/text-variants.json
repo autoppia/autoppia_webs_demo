@@ -1439,6 +1439,18 @@
     "Destroy client",
     "Expunge client"
   ],
+  "help_title": [
+    "Help",
+    "Support",
+    "Assistance",
+    "Guidance",
+    "FAQ",
+    "Help Center",
+    "Support Center",
+    "Help Hub",
+    "Knowledge Base",
+    "Resource Center"
+  ],
   "help_center": [
     "Help Center",
     "Help",
