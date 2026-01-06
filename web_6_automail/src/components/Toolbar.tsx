@@ -116,7 +116,7 @@ export function Toolbar({ onMenuClick, textStructure }: ToolbarProps) {
     dyn.v3.getVariant(
       'toolbar-search-input',
       CLASS_VARIANTS_MAP,
-      'pl-10 pr-12 h-12 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-ring text-black'
+      '!bg-muted/50 pl-10 pr-12 h-12 border-0 focus-visible:ring-1 focus-visible:ring-ring !text-foreground'
     )
   );
 

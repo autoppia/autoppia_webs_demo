@@ -86,7 +86,7 @@ export function CreateLabelDialog({ trigger }: CreateLabelDialogProps) {
               placeholder={dyn.v3.getVariant("create_label", TEXT_VARIANTS_MAP, "Enter label name...")}
               onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
               className={cn(
-                dyn.v3.getVariant("label-name-input", CLASS_VARIANTS_MAP, "border rounded-md px-3 py-2 bg-background text-foreground"),
+                dyn.v3.getVariant("label-name-input", CLASS_VARIANTS_MAP, "!bg-muted/30 border rounded-md px-3 py-2 !text-foreground"),
                 "border rounded-md px-3 py-2"
               )}
             />
@@ -113,9 +113,9 @@ export function CreateLabelDialog({ trigger }: CreateLabelDialogProps) {
         </div>
 
         <div className="flex justify-end gap-2">
-          <Button 
-            variant="outline" 
-            onClick={() => setOpen(false)} 
+          <Button
+            variant="outline"
+            onClick={() => setOpen(false)}
             id={dyn.v3.getVariant("cancel-create-label", ID_VARIANTS_MAP, "cancel-create-label-button")}
             className={cn(
               dyn.v3.getVariant("cancel-button", CLASS_VARIANTS_MAP, "variant-outline"),

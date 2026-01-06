@@ -199,7 +199,7 @@ export default function TemplatesPage() {
                     onChange={(e) => updateTemplateState(activeTemplate.id, { to: e.target.value })}
                     id={dyn.v3.getVariant("template-to", ID_VARIANTS_MAP, "template-to")}
                     className={cn(
-                      dyn.v3.getVariant("template-field", CLASS_VARIANTS_MAP, "border rounded-md px-3 py-2 bg-muted/30 text-foreground"),
+                      dyn.v3.getVariant("template-field", CLASS_VARIANTS_MAP, "!bg-muted/30 border rounded-md px-3 py-2 !text-foreground"),
                       "border rounded-md px-3 py-2"
                     )}
                   />
@@ -214,7 +214,7 @@ export default function TemplatesPage() {
                     onChange={(e) => updateTemplateState(activeTemplate.id, { from: e.target.value })}
                     id={dyn.v3.getVariant("template-from", ID_VARIANTS_MAP, "template-from")}
                     className={cn(
-                      dyn.v3.getVariant("template-field", CLASS_VARIANTS_MAP, "border rounded-md px-3 py-2 bg-muted/30 text-foreground"),
+                      dyn.v3.getVariant("template-field", CLASS_VARIANTS_MAP, "!bg-muted/30 border rounded-md px-3 py-2 !text-foreground"),
                       "border rounded-md px-3 py-2"
                     )}
                   />
