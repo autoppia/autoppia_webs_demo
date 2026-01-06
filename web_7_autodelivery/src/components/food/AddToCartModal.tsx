@@ -119,8 +119,8 @@ export function AddToCartModal({
   const incrementAria = dyn.v3.getVariant("quantity-increase-button", TEXT_VARIANTS_MAP, "Increase quantity");
 
   return (
-    dyn.v1.addWrapDecoy("add-to-cart-modal", (
     <Dialog open={open} onOpenChange={onOpenChange}>
+      {dyn.v1.addWrapDecoy("add-to-cart-modal-content", (
       <DialogContent className={`max-w-xl rounded-2xl px-0 sm:px-0 p-0 ${layout.modal.containerClass} ${dyn.v3.getVariant("modal", CLASS_VARIANTS_MAP, "")}`}>
         <div className={`max-h-[90vh] overflow-y-auto ${layout.modal.contentClass}`}>
           <DialogHeader className={`px-6 pt-6 pb-0 ${layout.modal.headerClass}`}>
@@ -286,7 +286,7 @@ export function AddToCartModal({
           </DialogFooter>
         </div>
       </DialogContent>
+      ), "add-to-cart-modal-content-wrap")}
     </Dialog>
-    ))
   );
 }

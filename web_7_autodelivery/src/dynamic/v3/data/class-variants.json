@@ -370,5 +370,77 @@
     "finalize-order-btn",
     "checkout-order-btn",
     "send-order-btn"
+  ],
+  "pagination-prev-class": [
+    "px-4 py-2 rounded-lg border border-zinc-300 hover:bg-zinc-50",
+    "px-3 py-1.5 rounded-md border border-gray-300 hover:bg-gray-50",
+    "px-5 py-2.5 rounded-full border-2 border-blue-300 hover:bg-blue-50",
+    "px-4 py-2 rounded border border-slate-300 hover:bg-slate-50",
+    "px-3 py-2 rounded-lg border border-neutral-300 hover:bg-neutral-50",
+    "px-4 py-2 rounded-md border-2 border-orange-300 hover:bg-orange-50",
+    "px-3 py-1.5 rounded border border-purple-300 hover:bg-purple-50",
+    "px-5 py-2 rounded-xl border border-green-300 hover:bg-green-50",
+    "px-4 py-2 rounded-lg border border-red-300 hover:bg-red-50",
+    "px-3 py-2 rounded-md border border-teal-300 hover:bg-teal-50"
+  ],
+  "pagination-next-class": [
+    "px-4 py-2 rounded-lg border border-zinc-300 hover:bg-zinc-50",
+    "px-3 py-1.5 rounded-md border border-gray-300 hover:bg-gray-50",
+    "px-5 py-2.5 rounded-full border-2 border-blue-300 hover:bg-blue-50",
+    "px-4 py-2 rounded border border-slate-300 hover:bg-slate-50",
+    "px-3 py-2 rounded-lg border border-neutral-300 hover:bg-neutral-50",
+    "px-4 py-2 rounded-md border-2 border-orange-300 hover:bg-orange-50",
+    "px-3 py-1.5 rounded border border-purple-300 hover:bg-purple-50",
+    "px-5 py-2 rounded-xl border border-green-300 hover:bg-green-50",
+    "px-4 py-2 rounded-lg border border-red-300 hover:bg-red-50",
+    "px-3 py-2 rounded-md border border-teal-300 hover:bg-teal-50"
+  ],
+  "cart-total-button-class": [
+    "fixed z-40 bottom-8 right-8 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg flex gap-2 px-6 py-3 items-center text-lg font-bold",
+    "fixed z-40 bottom-8 right-8 bg-green-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex gap-2 px-6 py-3 items-center text-lg font-bold",
+    "fixed z-40 bottom-8 right-8 bg-green-600 hover:bg-orange-700 text-white rounded-full shadow-lg flex gap-2 px-6 py-3 items-center text-lg font-bold",
+    "fixed z-40 bottom-8 right-8 bg-green-600 hover:bg-purple-700 text-white rounded-full shadow-lg flex gap-2 px-6 py-3 items-center text-lg font-bold",
+    "fixed z-40 bottom-8 right-8 bg-green-600 hover:bg-red-700 text-white rounded-full shadow-lg flex gap-2 px-6 py-3 items-center text-lg font-bold",
+    "fixed z-40 bottom-8 right-8 bg-green-600 hover:bg-teal-700 text-white rounded-full shadow-lg flex gap-2 px-6 py-3 items-center text-lg font-bold",
+    "fixed z-40 bottom-8 right-8 bg-green-600 hover:bg-indigo-700 text-white rounded-full shadow-lg flex gap-2 px-6 py-3 items-center text-lg font-bold",
+    "fixed z-40 bottom-8 right-8 bg-green-600 hover:bg-pink-700 text-white rounded-full shadow-lg flex gap-2 px-6 py-3 items-center text-lg font-bold",
+    "fixed z-40 bottom-8 right-8 bg-green-600 hover:bg-cyan-700 text-white rounded-full shadow-lg flex gap-2 px-6 py-3 items-center text-lg font-bold",
+    "fixed z-40 bottom-8 right-8 bg-green-600 hover:bg-amber-700 text-white rounded-full shadow-lg flex gap-2 px-6 py-3 items-center text-lg font-bold"
+  ],
+  "address-selector-class": [
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-gray-50 rounded-lg px-2",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-blue-50 rounded-xl px-2 border border-gray-200",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-slate-50 rounded-md px-2",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-neutral-50 rounded-lg px-2 border",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-orange-50 rounded-xl px-2",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-purple-50 rounded-lg px-2",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-green-50 rounded-xl px-2",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-red-50 rounded-lg px-2",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-teal-50 rounded-xl px-2"
+  ],
+  "dropoff-preferences-selector-class": [
+    "flex items-start gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2",
+    "flex items-start gap-3 py-3 cursor-pointer hover:bg-gray-50 rounded-lg px-2",
+    "flex items-start gap-3 py-3 cursor-pointer hover:bg-blue-50 rounded-xl px-2 border border-gray-200",
+    "flex items-start gap-3 py-3 cursor-pointer hover:bg-slate-50 rounded-md px-2",
+    "flex items-start gap-3 py-3 cursor-pointer hover:bg-neutral-50 rounded-lg px-2 border",
+    "flex items-start gap-3 py-3 cursor-pointer hover:bg-orange-50 rounded-xl px-2",
+    "flex items-start gap-3 py-3 cursor-pointer hover:bg-purple-50 rounded-lg px-2",
+    "flex items-start gap-3 py-3 cursor-pointer hover:bg-green-50 rounded-xl px-2",
+    "flex items-start gap-3 py-3 cursor-pointer hover:bg-red-50 rounded-lg px-2",
+    "flex items-start gap-3 py-3 cursor-pointer hover:bg-teal-50 rounded-xl px-2"
+  ],
+  "contact-number-selector-class": [
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-gray-50 rounded-lg px-2",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-blue-50 rounded-xl px-2 border border-gray-200",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-slate-50 rounded-md px-2",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-neutral-50 rounded-lg px-2 border",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-orange-50 rounded-xl px-2",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-purple-50 rounded-lg px-2",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-green-50 rounded-xl px-2",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-red-50 rounded-lg px-2",
+    "flex items-center gap-3 py-3 cursor-pointer hover:bg-teal-50 rounded-xl px-2"
   ]
 }

@@ -111,7 +111,7 @@ function ReviewsSection({
                 variant="ghost"
                 size="sm"
                 className={`opacity-0 group-hover:opacity-100 transition-opacity text-red-600 hover:text-red-700 hover:bg-red-50 ${dyn.v3.getVariant('delete-review-btn-class', CLASS_VARIANTS_MAP, '')}`}
-                id={dyn.v3.getVariant(`delete-review-btn-${i}`, ID_VARIANTS_MAP, `delete-review-btn-${i}`)}
+                id={dyn.v3.getVariant("delete-review-btn", ID_VARIANTS_MAP, `delete-review-btn-${i}`)}
                 onClick={() => {
                   onDeleteReview(i);
                   logEvent(EVENT_TYPES.DELETE_REVIEW, {
@@ -434,6 +434,7 @@ export default function RestaurantDetailPage({
 function CartFab() {
   const items = useCartStore((s) => s.items);
   const router = useSeedRouter();
+  const dyn = useDynamicSystem();
   const total = items.reduce((acc, i) => acc + i.quantity, 0);
 
   if (total === 0) return null;
@@ -453,7 +454,8 @@ function CartFab() {
 
   return (
     <button
-      className="fixed z-40 bottom-8 right-8 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg flex gap-2 px-6 py-3 items-center text-lg font-bold"
+      className={dyn.v3.getVariant("cart-total-button-class", CLASS_VARIANTS_MAP, "fixed z-40 bottom-8 right-8 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg flex gap-2 px-6 py-3 items-center text-lg font-bold")}
+      id={dyn.v3.getVariant("cart-total-button", ID_VARIANTS_MAP, "cart-total-button")}
       onClick={handleClick}
     >
       🛒{" "}

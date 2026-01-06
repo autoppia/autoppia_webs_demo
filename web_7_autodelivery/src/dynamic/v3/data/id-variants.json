@@ -442,5 +442,77 @@
     "finalize-order",
     "checkout-order",
     "send-order"
+  ],
+  "pagination-prev": [
+    "pagination-prev",
+    "prev-page-btn",
+    "previous-button",
+    "back-page-btn",
+    "prev-btn",
+    "previous-page",
+    "go-back-btn",
+    "prev-page-button",
+    "back-button",
+    "previous-btn"
+  ],
+  "pagination-next": [
+    "pagination-next",
+    "next-page-btn",
+    "next-button",
+    "forward-page-btn",
+    "next-btn",
+    "next-page",
+    "go-forward-btn",
+    "next-page-button",
+    "forward-button",
+    "next-btn-primary"
+  ],
+  "cart-total-button": [
+    "cart-total-button",
+    "cart-items-btn",
+    "total-items-button",
+    "cart-count-btn",
+    "items-count-button",
+    "cart-badge-button",
+    "total-cart-btn",
+    "cart-items-count",
+    "items-button",
+    "cart-total-btn"
+  ],
+  "address-selector": [
+    "address-selector",
+    "delivery-address-selector",
+    "address-picker",
+    "location-selector",
+    "address-chooser",
+    "delivery-location",
+    "address-selection",
+    "location-picker",
+    "address-select",
+    "delivery-address-picker"
+  ],
+  "dropoff-preferences-selector": [
+    "dropoff-preferences-selector",
+    "delivery-preference-selector",
+    "dropoff-selector",
+    "delivery-option-selector",
+    "preference-picker",
+    "dropoff-option-selector",
+    "delivery-preference-picker",
+    "dropoff-chooser",
+    "preference-selector",
+    "delivery-option-picker"
+  ],
+  "contact-number-selector": [
+    "contact-number-selector",
+    "phone-selector",
+    "contact-selector",
+    "phone-number-selector",
+    "contact-picker",
+    "phone-picker",
+    "contact-info-selector",
+    "phone-chooser",
+    "contact-number-picker",
+    "phone-number-picker"
   ]
 }

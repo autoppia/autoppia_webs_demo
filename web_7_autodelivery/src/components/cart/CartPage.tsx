@@ -533,9 +533,10 @@ export default function CartPage() {
             <>
               <div id="address-section" className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2">
                 <Home className="w-5 h-5 text-zinc-500" />
+                {dyn.v1.addWrapDecoy("address-selector-wrapper", (
                 <div
-                  id="address-selector"
-                  className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
+                  id={dyn.v3.getVariant("address-selector", ID_VARIANTS_MAP, "address-selector")}
+                  className={dyn.v3.getVariant("address-selector-class", CLASS_VARIANTS_MAP, "flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2")}
                   onClick={() => {
                     setCustomAddress(form.address);
                     setIsAddressModalOpen(true);
@@ -546,6 +547,7 @@ export default function CartPage() {
                   </span>
                   <ChevronRight className="w-4 h-4 text-zinc-400 ml-auto" />
                 </div>
+                ), "address-selector-wrap")}
 
                 {/* Modal Dialog */}
                 <Dialog
@@ -615,9 +617,10 @@ export default function CartPage() {
               </div>
               <div id="dropoff-section" className="flex items-start gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2">
                 <Home className="w-5 h-5 text-zinc-500 mt-3" />
+                {dyn.v1.addWrapDecoy("dropoff-preferences-selector-wrapper", (
                 <div
-                  id="dropoff-preferences-selector"
-                  className="flex items-start gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
+                  id={dyn.v3.getVariant("dropoff-preferences-selector", ID_VARIANTS_MAP, "dropoff-preferences-selector")}
+                  className={dyn.v3.getVariant("dropoff-preferences-selector-class", CLASS_VARIANTS_MAP, "flex items-start gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2")}
                   onClick={() => setIsDropoffModalOpen(true)}
                 >
                   <div>
@@ -633,6 +636,7 @@ export default function CartPage() {
                   </div>
                   <ChevronRight className="w-4 h-4 text-zinc-400 mt-2 ml-auto" />
                 </div>
+                ), "dropoff-preferences-selector-wrap")}
                 <Dialog
                   open={isDropoffModalOpen}
                   onOpenChange={setIsDropoffModalOpen}
@@ -675,9 +679,10 @@ export default function CartPage() {
                   </DialogContent>
                 </Dialog>
               </div>
+              {dyn.v1.addWrapDecoy("contact-number-selector-wrapper", (
               <div
-                id="contact-number-selector"
-                className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
+                id={dyn.v3.getVariant("contact-number-selector", ID_VARIANTS_MAP, "contact-number-selector")}
+                className={dyn.v3.getVariant("contact-number-selector-class", CLASS_VARIANTS_MAP, "flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2")}
                 onClick={() => setIsContactModalOpen(true)}
               >
                 <Phone className="w-5 h-5 text-zinc-500" />
@@ -686,6 +691,7 @@ export default function CartPage() {
                 </span>
                 <ChevronRight className="w-4 h-4 text-zinc-400" />
               </div>
+              ), "contact-number-selector-wrap")}
             </>
           ) : (
             <>

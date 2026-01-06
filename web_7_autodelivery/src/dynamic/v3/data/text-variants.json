@@ -430,5 +430,29 @@
     "Checkout",
     "Send Order",
     "Confirm Purchase"
+  ],
+  "pagination-prev-text": [
+    "Prev",
+    "Previous",
+    "Back",
+    "← Prev",
+    "Previous Page",
+    "Go Back",
+    "←",
+    "Back Page",
+    "Prev Page",
+    "← Previous"
+  ],
+  "pagination-next-text": [
+    "Next",
+    "Forward",
+    "→ Next",
+    "Next Page",
+    "Go Forward",
+    "→",
+    "Forward Page",
+    "Next →",
+    "Continue",
+    "→ Forward"
   ]
 }
