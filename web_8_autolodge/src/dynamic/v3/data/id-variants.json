@@ -131,6 +131,42 @@
     "travelers-count",
     "people-count"
   ],
+  "back_to_search": [
+    "back-to-search",
+    "return-to-search",
+    "go-back-link",
+    "back-link",
+    "return-link",
+    "back-to-results",
+    "search-again-link",
+    "new-search-link",
+    "back-to-browse",
+    "return-to-browse"
+  ],
+  "remove_from_wishlist": [
+    "remove-from-wishlist",
+    "delete-from-wishlist",
+    "remove-item",
+    "delete-item",
+    "remove-from-saved",
+    "unsave-item",
+    "remove-from-favorites",
+    "delete-from-list",
+    "remove-wishlist-item",
+    "delete-wishlist-item"
+  ],
+  "book_this_stay": [
+    "book-this-stay",
+    "reserve-now",
+    "book-now",
+    "reserve-this-stay",
+    "book-stay",
+    "make-reservation",
+    "reserve-stay",
+    "book-accommodation",
+    "reserve-accommodation",
+    "book-property"
+  ],
   "reserve_button": [
     "reserve-button",
     "book-button",

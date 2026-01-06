@@ -552,7 +552,7 @@ function HomeContent() {
               </span>
               <select
                 id={dyn.v3.getVariant("rating_filter", ID_VARIANTS_MAP, "rating-filter")}
-                className={`h-10 border border-neutral-300 bg-white text-sm rounded-full px-3 text-neutral-800 shadow-sm ${dyn.v3.getVariant("filter_select", CLASS_VARIANTS_MAP, "")}`}
+                className={`h-10 border border-neutral-300 bg-white text-sm rounded-full px-3 text-neutral-800 shadow-sm ${dyn.v3.getVariant("rating_filter_class", CLASS_VARIANTS_MAP, "")}`}
                 value={minRating}
                 onChange={(event) => setMinRating(Number(event.target.value))}
               >
@@ -569,7 +569,7 @@ function HomeContent() {
               </span>
               <select
                 id={dyn.v3.getVariant("region_filter", ID_VARIANTS_MAP, "region-filter")}
-                className={`h-10 border border-neutral-300 bg-white text-sm rounded-full px-3 text-neutral-800 shadow-sm ${dyn.v3.getVariant("filter_select", CLASS_VARIANTS_MAP, "")}`}
+                className={`h-10 border border-neutral-300 bg-white text-sm rounded-full px-3 text-neutral-800 shadow-sm ${dyn.v3.getVariant("region_filter_class", CLASS_VARIANTS_MAP, "")}`}
                 value={region}
                 onChange={(event) => setRegion(event.target.value)}
               >
@@ -591,14 +591,14 @@ function HomeContent() {
                   setRegion("all");
                 }}
               >
-                {dyn.v3.getVariant("reset_filters", dynamicV3TextVariants, "Reset")}
+                {dyn.v3.getVariant("reset_filters", TEXT_VARIANTS_MAP, "Reset")}
               </button>
               <button
                 type="button"
                 className={`h-10 px-4 rounded-full bg-[#616882] text-white font-semibold hover:bg-[#7b86aa] transition shadow-sm ${dyn.v3.getVariant("filter_apply_button", CLASS_VARIANTS_MAP, "")}`}
                 onClick={handleApplyFilters}
               >
-                {dyn.v3.getVariant("apply_filters", dynamicV3TextVariants, "Apply")}
+                {dyn.v3.getVariant("apply_filters", TEXT_VARIANTS_MAP, "Apply")}
               </button>
             </div>
           </div>

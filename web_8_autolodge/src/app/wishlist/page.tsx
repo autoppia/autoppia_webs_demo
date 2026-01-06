@@ -6,9 +6,13 @@ import { PropertyCard } from "@/components/PropertyCard";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useWishlist } from "@/hooks/useWishlist";
 import { SeedLink } from "@/components/ui/SeedLink";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 function WishlistContent() {
   const { wishlist, removeFromWishlist, ready } = useWishlist();
+  const dyn = useDynamicSystem();
 
   useEffect(() => {
     if (!ready) return;
@@ -23,9 +27,13 @@ function WishlistContent() {
         <h1 className="text-2xl font-semibold">My wishlist</h1>
         <SeedLink
           href="/"
-          className="text-sm text-[#616882] underline font-medium"
+          id={dyn.v3.getVariant("back_to_search", ID_VARIANTS_MAP, "back-to-search")}
+          className={cn(
+            "text-sm text-[#616882] underline font-medium",
+            dyn.v3.getVariant("back_to_search_class", CLASS_VARIANTS_MAP, "")
+          )}
         >
-          Back to search
+          {dyn.v3.getVariant("back_to_search_text", TEXT_VARIANTS_MAP, "Back to search")}
         </SeedLink>
       </div>
 
@@ -54,7 +62,11 @@ function WishlistContent() {
               <div className="mt-2 flex justify-between items-center">
                 <SeedLink
                   href={`/stay/${hotel.id}?source=wishlist`}
-                  className="text-sm text-[#616882] font-semibold underline"
+                  id={dyn.v3.getVariant("book_this_stay", ID_VARIANTS_MAP, `book-this-stay-${hotel.id}`)}
+                  className={cn(
+                    "text-sm text-[#616882] font-semibold underline",
+                    dyn.v3.getVariant("book_this_stay_class", CLASS_VARIANTS_MAP, "")
+                  )}
                   onClick={() =>
                     logEvent(EVENT_TYPES.BOOK_FROM_WISHLIST, {
                       hotelId: hotel.id,
@@ -62,10 +74,14 @@ function WishlistContent() {
                     })
                   }
                 >
-                  Book this stay
+                  {dyn.v3.getVariant("book_this_stay_text", TEXT_VARIANTS_MAP, "Book this stay")}
                 </SeedLink>
                 <button
-                  className="text-xs text-neutral-500 underline"
+                  id={dyn.v3.getVariant("remove_from_wishlist", ID_VARIANTS_MAP, `remove-from-wishlist-${hotel.id}`)}
+                  className={cn(
+                    "text-xs text-neutral-500 underline",
+                    dyn.v3.getVariant("remove_from_wishlist_class", CLASS_VARIANTS_MAP, "")
+                  )}
                   onClick={() => {
                     removeFromWishlist(hotel.id);
                     logEvent(EVENT_TYPES.REMOVE_FROM_WISHLIST, {
@@ -74,7 +90,7 @@ function WishlistContent() {
                     });
                   }}
                 >
-                  Remove
+                  {dyn.v3.getVariant("remove_from_wishlist_text", TEXT_VARIANTS_MAP, "Remove")}
                 </button>
               </div>
             </div>

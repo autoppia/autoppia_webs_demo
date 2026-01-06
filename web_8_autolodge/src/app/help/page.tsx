@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Suspense } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useDynamicSystem } from "@/dynamic/shared";
 
 const FAQS = [
   {
@@ -25,6 +26,7 @@ const FAQS = [
 
 function HelpContent() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const dyn = useDynamicSystem();
 
   useEffect(() => {
     logEvent(EVENT_TYPES.HELP_VIEWED, { page: "help" });
@@ -42,6 +44,7 @@ function HelpContent() {
   };
 
   return (
+    dyn.v1.addWrapDecoy("help-page", (
     <div className="mt-6 max-w-3xl">
       <h1 className="text-2xl font-semibold mb-2">Help & FAQs</h1>
       <p className="text-neutral-600 mb-4">
@@ -75,6 +78,7 @@ function HelpContent() {
         })}
       </div>
     </div>
+    ), "help-page-wrap")
   );
 }
 

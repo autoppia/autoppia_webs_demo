@@ -28,6 +28,7 @@ export default function Header() {
 
   return (
     <>
+      {dyn.v1.addWrapDecoy("header", (
       <header className="w-full flex flex-col items-center border-b border-neutral-200 bg-white sticky top-0 z-20">
         <nav
           id={dyn.v3.getVariant("nav_bar", ID_VARIANTS_MAP, "nav-bar")}
@@ -78,6 +79,7 @@ export default function Header() {
           <div className="min-w-[130px] flex justify-end" />
         </nav>
       </header>
+      ), "header-wrap")}
     </>
   );
 }

@@ -22,12 +22,62 @@
   "reset_filters": [
     "Reset",
     "Clear filters",
-    "Reset filters"
+    "Reset filters",
+    "Clear all",
+    "Reset all",
+    "Clear",
+    "Reset to default",
+    "Clear selections",
+    "Reset selections",
+    "Clear filters"
   ],
   "apply_filters": [
     "Apply",
     "Apply filters",
-    "Run filters"
+    "Run filters",
+    "Filter",
+    "Search",
+    "Go",
+    "Submit",
+    "Apply changes",
+    "Filter results",
+    "Apply selection"
+  ],
+  "back_to_search_text": [
+    "Back to search",
+    "Return to search",
+    "Go back",
+    "Back",
+    "Return",
+    "Back to results",
+    "Search again",
+    "New search",
+    "Back to browse",
+    "Return to browse"
+  ],
+  "remove_from_wishlist_text": [
+    "Remove",
+    "Delete",
+    "Remove from list",
+    "Take out",
+    "Remove item",
+    "Delete item",
+    "Remove from saved",
+    "Unsave",
+    "Remove from favorites",
+    "Delete from list"
+  ],
+  "book_this_stay_text": [
+    "Book this stay",
+    "Reserve now",
+    "Book now",
+    "Reserve this stay",
+    "Book stay",
+    "Make reservation",
+    "Reserve stay",
+    "Book accommodation",
+    "Reserve accommodation",
+    "Book property"
   ],
   "submit_review": [
     "Submit review",
@@ -238,5 +288,8 @@
     "Year Range",
     "Year Range",
     "Year Range"
+  ],
+  "rating_any": [
+    "rating_selector"
   ]
 }

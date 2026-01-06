@@ -466,7 +466,7 @@ function PropertyDetailContent() {
                   : dyn.v3.getVariant("removed_from_wishlist", dynamicV3TextVariants, "Removed from wishlist 💔")
               );
             }}
-            className="p-2 bg-white border border-neutral-200 rounded-full hover:shadow transition"
+            className={`p-2 bg-white border border-neutral-200 rounded-full hover:shadow transition ${dyn.v3.getVariant("wishlist_button_stays", CLASS_VARIANTS_MAP, "")}`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -696,7 +696,7 @@ function PropertyDetailContent() {
           </div>
           <input
             id={dyn.v3.getVariant("guests_count", ID_VARIANTS_MAP, "guests-count")}
-            className="bg-transparent text-[15px] w-full p-0 border-none outline-none"
+            className={`bg-transparent text-[15px] w-full p-0 border-none outline-none ${dyn.v3.getVariant("guests_count_input", CLASS_VARIANTS_MAP, "")}`}
             value={guests}
             type="number"
             min={1}

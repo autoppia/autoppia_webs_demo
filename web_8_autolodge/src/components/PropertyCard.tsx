@@ -89,13 +89,14 @@ export function PropertyCard({
     price_night: ["night", "per night", "each night"],
   };
 
-  return dyn.v1.addWrapDecoy("property-card", (
+  return (
     <SeedLink
       href={href ?? `/stay/${id}`}
       id={dyn.v3.getVariant("property_card_link", ID_VARIANTS_MAP, `property-card-${id}`)}
       className="group relative block overflow-hidden rounded-xl border border-neutral-200 bg-white transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
       aria-label={`View details for ${title}`}
     >
+      {dyn.v1.addWrapDecoy("property-card", (
       <div
         className={cn(
           "bg-white max-w-[275px] rounded-3xl shadow-md border border-neutral-200 flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer",
@@ -173,6 +174,7 @@ export function PropertyCard({
           </div>
         </div>
       </div>
-      </SeedLink>
-  ));
+      ), `property-card-${id}`)}
+    </SeedLink>
+  );
 }
