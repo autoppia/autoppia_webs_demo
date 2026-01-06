@@ -142,13 +142,14 @@ export default function MovieDetailPage() {
     }
     
     const payload = movieToFilmPayload(movie);
-    logEvent(EVENT_TYPES.ADD_TO_WATCHLIST, payload);
-    
     const isInWatchlist = currentUser.watchlist?.includes(movie.id);
+
     if (isInWatchlist) {
+      logEvent(EVENT_TYPES.REMOVE_FROM_WATCHLIST, payload);
       removeFromWatchlist(movie.id);
       setWatchlistMessage(`"${movie.title}" removed from watchlist`);
     } else {
+      logEvent(EVENT_TYPES.ADD_TO_WATCHLIST, payload);
       addToWatchlist(movie.id);
       setWatchlistMessage(`"${movie.title}" added to watchlist`);
     }
