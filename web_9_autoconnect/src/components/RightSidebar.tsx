@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import UserSearchBar from "./UserSearchBar";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
@@ -49,13 +48,6 @@ export default function RightSidebar() {
       )}
       id={dyn.v3.getVariant("right_sidebar", ID_VARIANTS_MAP, "right_sidebar")}
     >
-      {/* Always show SearchBar at top, and also in header for all layouts */}
-      {dyn.v1.addWrapDecoy(
-        "right-search",
-        <div className={`mb-4`}>
-          <UserSearchBar />
-        </div>
-      )}
       <h2 className="font-bold text-base mb-4">Add to your feed</h2>
       {dyn.v1.addWrapDecoy(
         "company-feed",

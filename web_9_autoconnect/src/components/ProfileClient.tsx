@@ -16,7 +16,7 @@ import {
   persistSavedPosts,
 } from "@/library/localState";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 function ProfileContent({ username }: { username: string }) {
   type ExperienceEntry = NonNullable<User["experience"]>[number];
@@ -485,7 +485,7 @@ function ProfileContent({ username }: { username: string }) {
           {!isSelf &&
             (connectState === "connect" ? (
               <button
-                className="ml-2 px-6 py-2 rounded-full font-medium transition-colors text-white bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg"
+                className={`ml-2 px-6 py-2 rounded-full font-medium transition-colors text-white bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg ${dyn.v3.getVariant("profile_connect_button", CLASS_VARIANTS_MAP, "")}`}
                 onClick={handleConnect}
               >
                 {dyn.v3.getVariant("profile_connect", TEXT_VARIANTS_MAP, "Connect")}
@@ -525,9 +525,9 @@ function ProfileContent({ username }: { username: string }) {
                   setIsEditingProfileHeader(true);
                 }
               }}
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors"
+              className={`text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors ${dyn.v3.getVariant("edit_profile_button", CLASS_VARIANTS_MAP, "")}`}
             >
-              {isEditingProfileHeader ? "💾 Save profile" : "✏️ Edit profile"}
+              {isEditingProfileHeader ? dyn.v3.getVariant("save_profile_text", TEXT_VARIANTS_MAP, "💾 Save profile") : dyn.v3.getVariant("edit_profile_text", TEXT_VARIANTS_MAP, "✏️ Edit profile")}
             </button>
           </div>
         )}
@@ -554,9 +554,9 @@ function ProfileContent({ username }: { username: string }) {
                   setIsEditingAbout(true);
                 }
               }}
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors"
+              className={`text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors ${dyn.v3.getVariant("edit_button", CLASS_VARIANTS_MAP, "")}`}
             >
-              {isEditingAbout ? "💾 Save" : "✏️ Edit"}
+              {isEditingAbout ? dyn.v3.getVariant("save_text", TEXT_VARIANTS_MAP, "💾 Save") : dyn.v3.getVariant("edit_text", TEXT_VARIANTS_MAP, "✏️ Edit")}
             </button>
           )}
         </div>
@@ -593,9 +593,9 @@ function ProfileContent({ username }: { username: string }) {
                 setIsEditingExperience(true);
               }
             }}
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors"
+            className={`text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors ${dyn.v3.getVariant("edit_button", CLASS_VARIANTS_MAP, "")}`}
           >
-            {isEditingExperience ? "💾 Save" : "✏️ Edit"}
+            {isEditingExperience ? dyn.v3.getVariant("save_text", TEXT_VARIANTS_MAP, "💾 Save") : dyn.v3.getVariant("edit_text", TEXT_VARIANTS_MAP, "✏️ Edit")}
           </button>
         )}
       </div>
@@ -701,15 +701,15 @@ function ProfileContent({ username }: { username: string }) {
         <div className="flex items-center justify-end gap-3 mt-4">
           <button
             onClick={handleCancelExperience}
-            className="px-4 py-2 rounded border border-gray-300 text-sm text-gray-700 hover:bg-gray-50"
+            className={`px-4 py-2 rounded border border-gray-300 text-sm text-gray-700 hover:bg-gray-50 ${dyn.v3.getVariant("cancel_button", CLASS_VARIANTS_MAP, "")}`}
           >
-            Cancel
+            {dyn.v3.getVariant("cancel_text", TEXT_VARIANTS_MAP, "Cancel")}
           </button>
           <button
             onClick={handleSaveExperience}
-            className="px-4 py-2 rounded bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700"
+            className={`px-4 py-2 rounded bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 ${dyn.v3.getVariant("save_experience_button", CLASS_VARIANTS_MAP, "")}`}
           >
-            Save experience
+            {dyn.v3.getVariant("save_experience_text", TEXT_VARIANTS_MAP, "Save experience")}
           </button>
         </div>
       )}
@@ -744,8 +744,8 @@ function ProfileContent({ username }: { username: string }) {
               <textarea
                 value={newPostContent}
                 onChange={(e) => setNewPostContent(e.target.value)}
-                placeholder="Share something..."
-                className="w-full border-2 border-gray-200 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[100px] resize-y"
+                placeholder={dyn.v3.getVariant("profile_comment_placeholder", TEXT_VARIANTS_MAP, "Share something...")}
+                className={`w-full border-2 border-gray-200 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[100px] resize-y ${dyn.v3.getVariant("profile_comment_textarea", CLASS_VARIANTS_MAP, "")}`}
                 maxLength={500}
               />
               <div className="flex items-center justify-between mt-3">
@@ -755,9 +755,9 @@ function ProfileContent({ username }: { username: string }) {
                 <button
                   type="submit"
                   disabled={!newPostContent.trim()}
-                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors shadow-md hover:shadow-lg"
+                  className={`px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors shadow-md hover:shadow-lg ${dyn.v3.getVariant("profile_post_button", CLASS_VARIANTS_MAP, "")}`}
                 >
-                  Post
+                  {dyn.v3.getVariant("profile_post_button_text", TEXT_VARIANTS_MAP, "Post")}
                 </button>
               </div>
             </div>
@@ -800,6 +800,7 @@ function ProfileContent({ username }: { username: string }) {
 
   if (layout.profileLayout === "sidebar") {
     return (
+      dyn.v1.addWrapDecoy("profile-page", (
       <section className={profileClasses}>
         <div className="lg:col-span-2">
           {renderProfileHeader()}
@@ -810,16 +811,19 @@ function ProfileContent({ username }: { username: string }) {
           {renderPosts()}
         </div>
       </section>
+      ), "profile-page-wrap")
     );
   }
 
   return (
+    dyn.v1.addWrapDecoy("profile-page", (
     <section className={`${profileClasses} max-w-4xl mx-auto px-6`}>
       {renderProfileHeader()}
       {renderAbout()}
       {renderExperience()}
       {renderPosts()}
     </section>
+    ), "profile-page-wrap")
   );
 }
 

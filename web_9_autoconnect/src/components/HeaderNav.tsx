@@ -75,6 +75,7 @@ export default function HeaderNav() {
   const orderedNavItems = navItems;
 
   return (
+    dyn.v1.addWrapDecoy("header", (
     <header
       className={dyn.v3.getVariant(
         "header_classes",
@@ -133,5 +134,6 @@ export default function HeaderNav() {
         <div className="min-w-[140px] flex justify-end" />
       </div>
     </header>
+    ), "header-wrap")
   );
 }

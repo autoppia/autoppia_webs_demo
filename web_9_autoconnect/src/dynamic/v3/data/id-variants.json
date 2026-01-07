@@ -430,6 +430,42 @@
     "button-element",
     "action-control",
     "button-control"
+  ],
+  "comment_input": [
+    "comment-input",
+    "comment-field",
+    "reply-input",
+    "comment-box",
+    "reply-field",
+    "comment-text",
+    "reply-box",
+    "comment-entry",
+    "reply-entry",
+    "comment-form"
+  ],
+  "comment_button": [
+    "comment-button",
+    "comment-btn",
+    "reply-button",
+    "post-comment",
+    "submit-comment",
+    "reply-btn",
+    "comment-submit",
+    "reply-submit",
+    "post-reply",
+    "comment-post"
+  ],
+  "jobs_search_button": [
+    "jobs-search-button",
+    "search-jobs-btn",
+    "find-jobs-button",
+    "job-search-btn",
+    "search-button",
+    "find-jobs-btn",
+    "job-search-button",
+    "search-jobs-button",
+    "find-jobs",
+    "search-btn"
   ]
 }
 

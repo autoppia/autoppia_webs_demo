@@ -281,5 +281,14 @@
   "jobs_location_any": ["Any Location", "All locations", "Anywhere"],
   "jobs_remote_only": ["Remote Only", "Remote", "Work from home"],
   "jobs_search_button": ["Search", "Find jobs", "Explore"],
-  "jobs_list_container": ["jobs-list-container", "jobs-list", "job-results"]
+  "jobs_list_container": ["jobs-list-container", "jobs-list", "job-results"],
+  "apply_now_button_text": ["Apply Now", "Apply", "Submit Application"],
+  "edit_profile_text": ["✏️ Edit profile", "Edit profile", "Modify profile"],
+  "save_profile_text": ["💾 Save profile", "Save profile", "Save changes"],
+  "edit_text": ["✏️ Edit", "Edit", "Modify"],
+  "save_text": ["💾 Save", "Save", "Save changes"],
+  "profile_comment_placeholder": ["Share something...", "What's on your mind?", "Write an update..."],
+  "profile_post_button_text": ["Post", "Share", "Publish"],
+  "cancel_text": ["Cancel", "Close", "Discard"],
+  "save_experience_text": ["Save experience", "Save", "Save changes"]
 }

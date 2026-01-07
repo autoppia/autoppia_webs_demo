@@ -10,9 +10,12 @@ import {
   persistAppliedJobs,
   type StoredAppliedJob,
 } from "@/library/localState";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 function JobDetailContent({ jobId }: { jobId: string }) {
   const job = dynamicDataProvider.getJobById(jobId);
+  const dyn = useDynamicSystem();
   const [appliedJobs, setAppliedJobs] = useState<
     Record<string, StoredAppliedJob>
   >({});
@@ -176,17 +179,19 @@ function JobDetailContent({ jobId }: { jobId: string }) {
                 )}
               </div>
               <div className="flex items-center gap-3">
+                {dyn.v1.addWrapDecoy("apply-now-button", (
                 <button
                   className={`px-6 py-2 rounded-full font-semibold transition ${
                     isApplied
                       ? "bg-green-600 text-white cursor-default"
                       : "bg-blue-600 hover:bg-blue-700 text-white"
-                  }`}
+                  } ${dyn.v3.getVariant("apply_now_button", CLASS_VARIANTS_MAP, "")}`}
                   onClick={handleApply}
                   disabled={isApplied}
                 >
-                  {isApplied ? "Applied" : "Apply Now"}
+                  {isApplied ? dyn.v3.getVariant("jobs_apply_done", TEXT_VARIANTS_MAP, "Applied") : dyn.v3.getVariant("apply_now_button_text", TEXT_VARIANTS_MAP, "Apply Now")}
                 </button>
+                ), "apply-now-button-wrap")}
                 {isApplied && (
                   <button
                     onClick={handleCancel}

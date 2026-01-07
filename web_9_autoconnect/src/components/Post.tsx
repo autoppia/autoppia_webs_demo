@@ -112,7 +112,7 @@ export default function Post({
                 })
               }
             >
-              {dyn.v3.getVariant("post_author", TEXT_VARIANTS_MAP, post.user.name)}
+              {post.user.name}
             </SeedLink>
           )}
           <div className="text-xs text-gray-500">{timeAgo(post.timestamp)}</div>
@@ -230,7 +230,7 @@ export default function Post({
       >
         <input
           id={dyn.v3.getVariant(
-            `comment_input_${post.id}`,
+            "comment_input",
             ID_VARIANTS_MAP,
             `comment_input_${post.id}`
           )}
@@ -245,7 +245,7 @@ export default function Post({
         <button
           type="submit"
           id={dyn.v3.getVariant(
-            `comment_button_${post.id}`,
+            "comment_button",
             ID_VARIANTS_MAP,
             `comment_button_${post.id}`
           )}

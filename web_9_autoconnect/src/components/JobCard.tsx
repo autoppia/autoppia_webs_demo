@@ -80,17 +80,17 @@ export default function JobCard({
       )}
       <div className="flex-1">
         <div className="font-bold text-blue-800 text-lg leading-tight hover:text-blue-600">
-          {dyn.v3.getVariant("job_title", TEXT_VARIANTS_MAP, job.title)}
+          {job.title}
         </div>
         <div className="text-gray-700 font-medium">
-          {dyn.v3.getVariant("job_company", TEXT_VARIANTS_MAP, job.company)}
+          {job.company}
         </div>
         <div className="text-sm text-gray-500">
-          {dyn.v3.getVariant("job_location", TEXT_VARIANTS_MAP, job.location)}
+          {job.location}
         </div>
         {job.salary && (
           <div className="text-sm text-green-600 font-medium mt-1">
-            {dyn.v3.getVariant("job_salary", TEXT_VARIANTS_MAP, job.salary)}
+            {job.salary}
           </div>
         )}
       </div>

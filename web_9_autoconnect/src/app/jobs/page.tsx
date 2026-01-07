@@ -13,7 +13,7 @@ import {
 } from "@/library/localState";
 import Link from "next/link";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface Filters {
   search: string;
@@ -234,23 +234,25 @@ function JobsContent() {
         </h1>
         <Link
           href="/jobs/applied"
-          className="text-sm text-blue-700 hover:underline font-semibold"
+          className={`text-sm text-blue-700 hover:underline font-semibold ${dyn.v3.getVariant("view_applied_jobs_link", CLASS_VARIANTS_MAP, "")}`}
         >
           View applied jobs ({Object.keys(appliedJobs).length})
         </Link>
       </div>
 
       {/* Search Bar */}
+      {dyn.v1.addWrapDecoy("job-search-input-container", (
       <div className="mb-6">
         <input
           id={dyn.v3.getVariant("jobs_search_input", ID_VARIANTS_MAP, "jobs_search_input")}
-          className="w-full rounded-full border border-gray-300 px-4 py-2 outline-blue-500"
+          className={`w-full rounded-full border border-gray-300 px-4 py-2 outline-blue-500 ${dyn.v3.getVariant("jobs_search_input_class", CLASS_VARIANTS_MAP, "")}`}
           value={filters.search}
           onChange={handleSearchInput}
           placeholder={dyn.v3.getVariant("jobs_search_placeholder",TEXT_VARIANTS_MAP,"Search jobs by title or company..."
           )}
         />
       </div>
+      ), "job-search-input-wrap")}
 
       {/* Filters Header */}
       <div className="mb-3">
@@ -270,6 +272,7 @@ function JobsContent() {
       </div>
 
       {/* Filters Card */}
+      {dyn.v1.addWrapDecoy("job-filters-card", (
       <div
         className={`bg-white rounded-lg shadow border border-gray-200 p-6 mb-6 ${filtersClasses}`}
         id={dyn.v3.getVariant("jobs_filters_card", ID_VARIANTS_MAP, "jobs_filters_card")}
@@ -283,7 +286,7 @@ function JobsContent() {
             <select
               value={filters.experience}
               onChange={(e) => handleFilterChange("experience", e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className={`w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${dyn.v3.getVariant("jobs_experience_selector", CLASS_VARIANTS_MAP, "")}`}
             >
               <option value="">
                 {dyn.v3.getVariant("jobs_experience_any", TEXT_VARIANTS_MAP, "Any Experience")}
@@ -304,7 +307,7 @@ function JobsContent() {
             <select
               value={filters.salary}
               onChange={(e) => handleFilterChange("salary", e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className={`w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${dyn.v3.getVariant("jobs_salary_selector", CLASS_VARIANTS_MAP, "")}`}
             >
               {salaryRanges.map((range) => (
                 <option key={range.value} value={range.value}>
@@ -324,7 +327,7 @@ function JobsContent() {
             <select
               value={filters.location}
               onChange={(e) => handleFilterChange("location", e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className={`w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${dyn.v3.getVariant("jobs_location_selector", CLASS_VARIANTS_MAP, "")}`}
             >
               <option value="">
                 {dyn.v3.getVariant("jobs_location_any", TEXT_VARIANTS_MAP, "Any Location")}
@@ -354,14 +357,15 @@ function JobsContent() {
 
           {/* Search Button */}
           <button
-            id="search-job-btn"
+            id={dyn.v3.getVariant("jobs_search_button", ID_VARIANTS_MAP, "search-job-btn")}
             onClick={triggerSearchEvent}
-            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors text-sm font-medium mb-1.5"
+            className={`bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors text-sm font-medium mb-1.5 ${dyn.v3.getVariant("jobs_search_button_class", CLASS_VARIANTS_MAP, "")}`}
           >
             {dyn.v3.getVariant("jobs_search_button", TEXT_VARIANTS_MAP, "Search")}
           </button>
         </div>
       </div>
+      ), "job-filters-card-wrap")}
       {/* Results Count */}
       <div className="mb-4">
         <p className="text-gray-600">

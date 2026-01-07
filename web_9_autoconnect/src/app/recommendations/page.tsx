@@ -7,7 +7,8 @@ import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
 import { useSeed } from "@/context/SeedContext";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 function RecommendationsContent() {
   const { seed, resolvedSeeds } = useSeed();
@@ -151,11 +152,14 @@ function RecommendationsContent() {
 
                     <button
                       onClick={() => toggleFollow(rec.id, rec.title)}
-                      className={`px-4 py-2 text-sm font-medium rounded-full transition ${
-                        following[rec.id]
-                          ? "bg-green-500 text-white"
-                          : "bg-blue-600 hover:bg-blue-700 text-white"
-                      }`}
+                      className={cn(
+                        `px-4 py-2 text-sm font-medium rounded-full transition ${
+                          following[rec.id]
+                            ? "bg-green-500 text-white"
+                            : "bg-blue-600 hover:bg-blue-700 text-white"
+                        }`,
+                        dyn.v3.getVariant("follow_button_class", CLASS_VARIANTS_MAP, "")
+                      )}
                     >
                       {following[rec.id]
                         ? dyn.v3.getVariant("follow_following", TEXT_VARIANTS_MAP, "Following")
