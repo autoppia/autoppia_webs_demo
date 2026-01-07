@@ -5,6 +5,8 @@ import { useAutoworkData } from "@/hooks/useAutoworkData";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface UserProfile {
   username: string;
@@ -29,6 +31,7 @@ export default function ProfileClient({ username }: { username: string }) {
   };
 
   const router = useSeedRouter();
+  const dyn = useDynamicSystem();
   const { getElementAttributes, getText } = useSeedLayout();
   const jobsState = useAutoworkData<any>("web_10_autowork_jobs", 6);
   const hiresState = useAutoworkData<any>("web_10_autowork_hires", 6);
@@ -196,7 +199,7 @@ export default function ProfileClient({ username }: { username: string }) {
     setIsEditingProfile(false);
   };
 
-  return (
+  return dyn.v1.addWrapDecoy("profile-page", (
     <main className="px-10 mt-12 pb-16 max-w-6xl mx-auto">
       {/* Header Section */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl shadow-xl p-8 mb-8 border border-blue-100">
@@ -307,9 +310,9 @@ export default function ProfileClient({ username }: { username: string }) {
                 ) : (
                   <button
                     onClick={() => setIsEditingProfile(true)}
-                    className="px-3 py-2 text-sm bg-white text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-50"
+                    className={`px-3 py-2 text-sm bg-white text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-50 ${dyn.v3.getVariant("edit-profile-button-class", CLASS_VARIANTS_MAP, "")}`}
                   >
-                    Edit profile
+                    {dyn.v3.getVariant("edit-profile-button-text", TEXT_VARIANTS_MAP, "Edit profile")}
                   </button>
                 )}
               </div>
@@ -349,9 +352,9 @@ export default function ProfileClient({ username }: { username: string }) {
           {!isEditingAbout && (
             <button
               onClick={() => setIsEditingAbout(true)}
-              className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+              className={`text-blue-600 hover:text-blue-700 font-medium text-sm ${dyn.v3.getVariant("edit-button-class", CLASS_VARIANTS_MAP, "")}`}
             >
-              Edit
+              {dyn.v3.getVariant("edit-button-text", TEXT_VARIANTS_MAP, "Edit")}
             </button>
           )}
         </div>
@@ -398,9 +401,9 @@ export default function ProfileClient({ username }: { username: string }) {
             <h2 className="text-2xl font-bold text-gray-900">Recent Jobs</h2>
             <button
               onClick={() => router.push("/jobs")}
-              className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+              className={`text-blue-600 hover:text-blue-700 font-medium text-sm ${dyn.v3.getVariant("view-all-button-class", CLASS_VARIANTS_MAP, "")}`}
             >
-              View all
+              {dyn.v3.getVariant("view-all-button-text", TEXT_VARIANTS_MAP, "View all")}
             </button>
           </div>
           <div className="space-y-4">
@@ -543,12 +546,12 @@ export default function ProfileClient({ username }: { username: string }) {
             })}
             {favoriteExperts.length === 0 && (
               <div className="text-center text-gray-500 py-8 text-sm">
-                No favorites yet. <button onClick={() => router.push("/experts")} className="text-blue-600 hover:underline">Browse experts</button>
+                No favorites yet. <button onClick={() => router.push("/experts")} className={`text-blue-600 hover:underline ${dyn.v3.getVariant("browse-experts-link-class", CLASS_VARIANTS_MAP, "")}`}>{dyn.v3.getVariant("browse-experts-link-text", TEXT_VARIANTS_MAP, "Browse experts")}</button>
               </div>
             )}
           </div>
         </div>
       </div>
     </main>
-  );
+  ), "profile-page-wrap");
 }

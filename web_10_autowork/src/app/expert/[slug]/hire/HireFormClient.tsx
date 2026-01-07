@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface Expert {
   slug: string;
@@ -79,8 +80,8 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                 Hiring team
               </label>
               <select
-                className="border rounded-lg px-4 py-2 w/full mb-5"
-                id="select-team"
+                id={dyn.v3.getVariant("hire-team-selector", ID_VARIANTS_MAP, "hire-team-selector")}
+                className={`border rounded-lg px-4 py-2 w/full mb-5 ${dyn.v3.getVariant("hire-team-selector-class", CLASS_VARIANTS_MAP, "")}`}
                 onChange={(e) => {
                   const team = e.target.value;
                   // Fire event
@@ -90,7 +91,6 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                     expertSlug: expert.slug,
                   });
                 }}
-                {...getElementAttributes('hire-team-select', 0)}
               >
                 <option value="Microsoft">Microsoft</option>
                 <option value="Apple">Apple</option>
@@ -100,9 +100,9 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                 Contract title
               </label>
               <input
-                className="border rounded-lg px-4 py-2 w-full text-base mb-1"
-                placeholder="Enter the contract title"
-                {...getElementAttributes('hire-title-input', 0)}
+                id={dyn.v3.getVariant("contract-input-field", ID_VARIANTS_MAP, "contract-input-field")}
+                className={`border rounded-lg px-4 py-2 w-full text-base mb-1 ${dyn.v3.getVariant("contract-input-field-class", CLASS_VARIANTS_MAP, "")}`}
+                placeholder={dyn.v3.getVariant("contract-input-field-placeholder", TEXT_VARIANTS_MAP, "Enter the contract title")}
               />
             </div>
             <hr className="my-9" />
@@ -222,9 +222,8 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                   <select
                     value={increaseWhen}
                     onChange={(e) => setIncreaseWhen(e.target.value)}
-                    className="border border-gray-300 rounded-lg px-4 py-2 text-base"
-                    id="rate-increase-when"
-                    {...getElementAttributes('hire-increase-when', 0)}
+                    id={dyn.v3.getVariant("hire-when-increase-selector", ID_VARIANTS_MAP, "hire-when-increase-selector")}
+                    className={`border border-gray-300 rounded-lg px-4 py-2 text-base ${dyn.v3.getVariant("hire-when-increase-selector-class", CLASS_VARIANTS_MAP, "")}`}
                   >
                     <option>Never</option>
                     <option>After 3 months</option>
@@ -234,9 +233,8 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                   <select
                     value={increaseHowMuch}
                     onChange={(e) => setIncreaseHowMuch(e.target.value)}
-                    className="border border-gray-300 rounded-lg px-4 py-2 text-base"
-                    id="rate-increase"
-                    {...getElementAttributes('hire-increase-howmuch', 0)}
+                    id={dyn.v3.getVariant("hire-how-much-selector", ID_VARIANTS_MAP, "hire-how-much-selector")}
+                    className={`border border-gray-300 rounded-lg px-4 py-2 text-base ${dyn.v3.getVariant("hire-how-much-selector-class", CLASS_VARIANTS_MAP, "")}`}
                   >
                     <option>5%</option>
                     <option>10%</option>
@@ -255,22 +253,22 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
             >
               <button
                 type="button"
+                id={dyn.v3.getVariant("hire-cancel-button", ID_VARIANTS_MAP, "hire-cancel-button")}
                 className={`border border-green-600 text-green-700 hover:bg-green-50 px-6 py-2 rounded-lg font-semibold transition ${
                   layout.buttonPositions.cancel === 'center' ? 'order-2' : ''
-                }`}
+                } ${dyn.v3.getVariant("hire-cancel-button-class", CLASS_VARIANTS_MAP, "")}`}
                 onClick={handleCancel}
-                {...getElementAttributes('hire-cancel-button', 0)}
               >
-                {getText('hire-cancel-button-label', 'Cancel')}
+                {dyn.v3.getVariant("hire-cancel-button-text", TEXT_VARIANTS_MAP, getText('hire-cancel-button-label', 'Cancel'))}
               </button>
               <button
                 type="submit"
+                id={dyn.v3.getVariant("hire-button", ID_VARIANTS_MAP, "hire-button")}
                 className={`bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition ${
                   layout.buttonPositions.hire === 'center' ? 'order-1' : ''
-                }`}
-                {...getElementAttributes('hire-submit-button', 0)}
+                } ${dyn.v3.getVariant("hire-button-class", CLASS_VARIANTS_MAP, "")}`}
               >
-                {getText('hire-submit-button-label', 'Hire')}
+                {dyn.v3.getVariant("hire-button-text", TEXT_VARIANTS_MAP, getText('hire-submit-button-label', 'Hire'))}
               </button>
             </div>
           </form>

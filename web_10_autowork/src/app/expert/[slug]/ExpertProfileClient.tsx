@@ -8,6 +8,7 @@ import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { getSeedLayout } from "@/library/utils";
 import { useSeed } from "@/context/SeedContext";
 import HireButton from "@/app/components/HireButton";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface Expert {
   slug: string;
@@ -289,12 +290,12 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
             // End hire flow immediately for quick hire
             window.alert("Quick hire completed for this expert.");
           }}
-          className="px-6 py-2.5 border-2 border-green-600 text-green-700 rounded-lg font-medium hover:bg-green-50 transition cursor-pointer"
+          className={`px-6 py-2.5 border-2 border-green-600 text-green-700 rounded-lg font-medium hover:bg-green-50 transition cursor-pointer ${dyn.v3.getVariant("quick-hire-button-class", CLASS_VARIANTS_MAP, "")}`}
         >
-          {getText("expert-quick-hire-button-label", "Quick hire")}
+          {dyn.v3.getVariant("quick-hire-button-text", TEXT_VARIANTS_MAP, getText("expert-quick-hire-button-label", "Quick hire"))}
         </button>
         <button
-          {...getElementAttributes("expert-message-button", 0)}
+          id={dyn.v3.getVariant("contact-button", ID_VARIANTS_MAP, "contact-button")}
           type="button"
           onClick={(e) => {
             e.preventDefault();
@@ -309,9 +310,9 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
               rating: expert.rating,
             });
           }}
-          className="px-6 py-2.5 border-2 border-blue-600 text-blue-600 rounded-lg font-medium hover:bg-blue-600 hover:text-white transition cursor-pointer"
+          className={`px-6 py-2.5 border-2 border-blue-600 text-blue-600 rounded-lg font-medium hover:bg-blue-600 hover:text-white transition cursor-pointer ${dyn.v3.getVariant("contact-button-class", CLASS_VARIANTS_MAP, "")}`}
         >
-          {getText("expert-message-button-label", "Contact")}
+          {dyn.v3.getVariant("contact-button-text", TEXT_VARIANTS_MAP, getText("expert-message-button-label", "Contact"))}
         </button>
         <button
           type="button"
@@ -361,9 +362,9 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
             isHireLater
               ? "border-orange-500 text-orange-700 bg-orange-50 hover:bg-orange-100"
               : "border-gray-300 text-gray-700 hover:bg-gray-50"
-          }`}
+          } ${dyn.v3.getVariant("hire-later-button-class", CLASS_VARIANTS_MAP, "")}`}
         >
-          {isHireLater ? "Remove hire later" : "Hire later"}
+          {dyn.v3.getVariant("hire-later-button-text", TEXT_VARIANTS_MAP, isHireLater ? "Remove hire later" : "Hire later")}
         </button>
         <button
           type="button"
@@ -416,8 +417,8 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
             isFavorite
               ? "border-red-300 bg-red-50 hover:bg-red-100"
               : "border-gray-300 hover:bg-red-50 hover:border-red-300"
-          }`}
-          {...getElementAttributes("expert-favorite-button", 0)}
+          } ${dyn.v3.getVariant("add-to-favorites-button-class", CLASS_VARIANTS_MAP, "")}`}
+          id={dyn.v3.getVariant("add-to-favorites-button", ID_VARIANTS_MAP, "add-to-favorites-button")}
           title={isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
           <svg

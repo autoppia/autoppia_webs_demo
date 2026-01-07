@@ -7,6 +7,7 @@ import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { useAutoworkData } from "@/hooks/useAutoworkData";
 import { writeJson } from "@/shared/storage";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 const POPULAR_SKILLS = [
   "JavaScript",
@@ -1054,23 +1055,25 @@ export default function Home() {
 						>
 							{getText('jobs-heading', 'Jobs Dashboard')}
 						</h2>
-						<button
-							{...getElementAttributes('post-job-button', 0)}
-							type="button"
-							className={`inline-flex items-center px-6 py-3 rounded-full bg-[#1fc12c] hover:bg-[#199225] text-white font-semibold shadow-md hover:shadow-lg text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#199225] ${
-								layout.buttonPositions.postJob === 'left' ? 'ml-auto' :
-								layout.buttonPositions.postJob === 'center' ? 'mx-auto' : ''
-							}`}
-							onClick={() => {
-								setShowPostJob(true);
-								logEvent(EVENT_TYPES.POST_A_JOB, {
-									source: "button",
-									page: "home",
-								});
-							}}
-						>
-							{getText('post-job-button-label', '+ Create posting')}
-						</button>
+						{dyn.v1.addWrapDecoy("create-posting-button", (
+							<button
+								id={dyn.v3.getVariant("create-posting-button", ID_VARIANTS_MAP, "create-posting-button")}
+								type="button"
+								className={`inline-flex items-center px-6 py-3 rounded-full bg-[#1fc12c] hover:bg-[#199225] text-white font-semibold shadow-md hover:shadow-lg text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#199225] ${
+									layout.buttonPositions.postJob === 'left' ? 'ml-auto' :
+									layout.buttonPositions.postJob === 'center' ? 'mx-auto' : ''
+								} ${dyn.v3.getVariant("create-posting-button-class", CLASS_VARIANTS_MAP, "")}`}
+								onClick={() => {
+									setShowPostJob(true);
+									logEvent(EVENT_TYPES.POST_A_JOB, {
+										source: "button",
+										page: "home",
+									});
+								}}
+							>
+								{dyn.v3.getVariant("create-posting-button-text", TEXT_VARIANTS_MAP, getText('post-job-button-label', '+ Create posting'))}
+							</button>
+						), "create-posting-button-wrap")}
 					</div>
 					
 					{/* Stats Cards */}
@@ -1259,11 +1262,12 @@ export default function Home() {
 
 				{/* Hire Cards Grid */}
 				<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-					{hiresState.data.map((hire: any) => (
-						<div
-							key={hire.name}
-							className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 group"
-						>
+					{hiresState.data.map((hire: any, i: number) => (
+						dyn.v1.addWrapDecoy("rehire-expert-card", (
+							<div
+								key={hire.name}
+								className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 group"
+							>
 							<div className="flex items-start gap-4 mb-4">
 								<div className="relative">
 									<img
@@ -1317,9 +1321,9 @@ export default function Home() {
 							{hire.rehire ? (
 								<button
 									onClick={() => handleViewProfile(hire)}
-									className="w-full mt-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+									className={`w-full mt-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md ${dyn.v3.getVariant("available-for-rehire-button-class", CLASS_VARIANTS_MAP, "")}`}
 								>
-									Available for rehire
+									{dyn.v3.getVariant("available-for-rehire-button-text", TEXT_VARIANTS_MAP, "Available for rehire")}
 								</button>
 							) : (
 								<button
@@ -1329,7 +1333,8 @@ export default function Home() {
 									Not available for rehire
 								</button>
 							)}
-						</div>
+							</div>
+						), `rehire-expert-card-wrap-${i}`)
 					))}
 				</div>
 			</section>
@@ -1458,10 +1463,11 @@ export default function Home() {
 					{expertsState.data.map((expert: any, i: number) => {
 						const isFavorite = favorites.has(expert.name);
 						return (
-							<div
-								key={expert.name}
-								className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 group relative"
-							>
+							dyn.v1.addWrapDecoy("expert-card", (
+								<div
+									key={expert.name}
+									className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 group relative"
+								>
 								{/* Favorite Button */}
 								<button
 									type="button"
@@ -1550,13 +1556,15 @@ export default function Home() {
 								</div>
 
 								<button
+									id={dyn.v3.getVariant("consult-expert-button", ID_VARIANTS_MAP, "consult-expert-button")}
 									onClick={() => handleViewExpert(expert)}
 									{...getElementAttributes('book-consultation-button', i)}
-									className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+									className={`w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md ${dyn.v3.getVariant("consult-expert-button-class", CLASS_VARIANTS_MAP, "")}`}
 								>
-									{getText('book-consultation-button-label', 'Consult an expert')}
+									{dyn.v3.getVariant("consult-expert-button-text", TEXT_VARIANTS_MAP, getText('book-consultation-button-label', 'Consult an expert'))}
 								</button>
-							</div>
+								</div>
+							), `expert-card-wrap-${i}`)
 						);
 					})}
 				</div>

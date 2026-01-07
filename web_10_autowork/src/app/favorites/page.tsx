@@ -4,9 +4,12 @@ import { useEffect, useState, useMemo } from "react";
 import { useAutoworkData } from "@/hooks/useAutoworkData";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 export default function FavoritesPage() {
   const router = useSeedRouter();
+  const dyn = useDynamicSystem();
   const expertsState = useAutoworkData<any>("web_10_autowork_experts", 6);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   
@@ -78,7 +81,7 @@ export default function FavoritesPage() {
   }, [expertsState.data, favorites]);
 
   if (favoriteExperts.length === 0) {
-    return (
+    return dyn.v1.addWrapDecoy("favorites-page", (
       <main className="px-10 mt-12 pb-16">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">My Favorites</h1>
@@ -102,23 +105,25 @@ export default function FavoritesPage() {
           <p className="text-gray-500 text-center max-w-md">
             Start exploring experts and click the heart icon to save them to your favorites.
           </p>
-          <button
-            onClick={() => {
-              logEvent(EVENT_TYPES.BROWSE_FAVORITE_EXPERT, {
-                source: "favorites_empty_state",
-              });
-              router.push("/experts");
-            }}
-            className="mt-6 px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
-          >
-            Browse Experts
-          </button>
+          {dyn.v1.addWrapDecoy("browse-experts-button", (
+            <button
+              onClick={() => {
+                logEvent(EVENT_TYPES.BROWSE_FAVORITE_EXPERT, {
+                  source: "favorites_empty_state",
+                });
+                router.push("/experts");
+              }}
+              className={`mt-6 px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md ${dyn.v3.getVariant("browse-experts-button-class", CLASS_VARIANTS_MAP, "")}`}
+            >
+              {dyn.v3.getVariant("browse-experts-button-text", TEXT_VARIANTS_MAP, "Browse Experts")}
+            </button>
+          ), "browse-experts-button-wrap")}
         </div>
       </main>
-    );
+    ), "favorites-page-wrap-empty");
   }
 
-  return (
+  return dyn.v1.addWrapDecoy("favorites-page", (
     <main className="px-10 mt-12 pb-16">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">My Favorites</h1>
@@ -233,5 +238,5 @@ export default function FavoritesPage() {
         })}
       </div>
     </main>
-  );
+  ), "favorites-page-wrap");
 }

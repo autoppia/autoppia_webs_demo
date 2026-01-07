@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 type HireLaterExpert = {
   slug: string;
@@ -15,6 +17,7 @@ type HireLaterExpert = {
 
 export default function HireLaterPage() {
   const router = useSeedRouter();
+  const dyn = useDynamicSystem();
   const [experts, setExperts] = useState<HireLaterExpert[]>([]);
 
   useEffect(() => {
@@ -65,7 +68,7 @@ export default function HireLaterPage() {
     router.push("/experts");
   };
 
-  return (
+  return dyn.v1.addWrapDecoy("hire-later-page", (
     <main className="px-10 mt-12 pb-16">
       <div className="mb-8 flex items-center justify-between">
         <div>
@@ -75,9 +78,9 @@ export default function HireLaterPage() {
         {experts.length > 0 && (
           <button
             onClick={handleBrowse}
-            className="px-4 py-2 text-sm bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
+            className={`px-4 py-2 text-sm bg-white border border-gray-200 rounded-lg hover:bg-gray-50 ${dyn.v3.getVariant("browse-more-experts-button-class", CLASS_VARIANTS_MAP, "")}`}
           >
-            Browse more experts
+            {dyn.v3.getVariant("browse-more-experts-button-text", TEXT_VARIANTS_MAP, "Browse more experts")}
           </button>
         )}
       </div>
@@ -139,15 +142,15 @@ export default function HireLaterPage() {
               <div className="flex gap-2 mt-auto">
                 <button
                   onClick={() => handleStartHire(expert)}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg"
+                  className={`flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg ${dyn.v3.getVariant("start-hiring-button-class", CLASS_VARIANTS_MAP, "")}`}
                 >
-                  Start hiring
+                  {dyn.v3.getVariant("start-hiring-button-text", TEXT_VARIANTS_MAP, "Start hiring")}
                 </button>
                 <button
                   onClick={() => handleRemove(expert)}
-                  className="px-3 py-2 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50"
+                  className={`px-3 py-2 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 ${dyn.v3.getVariant("remove-button-class", CLASS_VARIANTS_MAP, "")}`}
                 >
-                  Remove
+                  {dyn.v3.getVariant("remove-button-text", TEXT_VARIANTS_MAP, "Remove")}
                 </button>
               </div>
             </div>
@@ -155,5 +158,5 @@ export default function HireLaterPage() {
         </div>
       )}
     </main>
-  );
+  ), "hire-later-page-wrap");
 }
