@@ -1433,8 +1433,8 @@ function CalendarApp() {
                               color: cal.color,
                             });
                             setMyCalendars((cals) =>
-                              cals.map((c, i) =>
-                                i === idx ? { ...c, enabled: !c.enabled } : c
+                              cals.map((c) =>
+                                c.name === cal.name ? { ...c, enabled: !c.enabled } : c
                               )
                             );
                           }}
@@ -1641,8 +1641,8 @@ function CalendarApp() {
                               color: cal.color,
                             });
                             setMyCalendars((cals) =>
-                              cals.map((c, i) =>
-                                i === idx ? { ...c, enabled: !c.enabled } : c
+                              cals.map((c) =>
+                                c.name === cal.name ? { ...c, enabled: !c.enabled } : c
                               )
                             );
                           }}
