@@ -427,14 +427,14 @@ function AddTaskCard({
                 <input
                   id={editingTask ? dyn.v3.getVariant("edit-task-name-input", ID_VARIANTS_MAP, "edit-task-name-input") : dyn.v3.getVariant("task-name-input", ID_VARIANTS_MAP, "task-name-input")}
                   ref={inputRef}
-                  className={inputFieldClass}
+                  className={`${inputFieldClass} ${editingTask ? dyn.v3.getVariant("edit-task-name-input-class", CLASS_VARIANTS_MAP, "") : ""}`}
                   placeholder={getText("input-task-name-placeholder", "Task name")}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
                 <input
                   id={editingTask ? dyn.v3.getVariant("edit-task-description-input", ID_VARIANTS_MAP, "edit-task-description-input") : dyn.v3.getVariant("task-description-input", ID_VARIANTS_MAP, "task-description-input")}
-                  className={`${inputFieldClass} mt-1 mb-3 py-5 text-gray-700 placeholder-gray-400`}
+                  className={`${inputFieldClass} mt-1 mb-3 py-5 text-gray-700 placeholder-gray-400 ${editingTask ? dyn.v3.getVariant("edit-task-description-input-class", CLASS_VARIANTS_MAP, "") : ""}`}
                   placeholder={getText("input-description-placeholder", "Description")}
                   value={desc}
                   onChange={(e) => setDesc(e.target.value)}
@@ -791,21 +791,29 @@ export default function Home() {
             </div>
           </div>
           <div className="mt-6 flex justify-center gap-3">
-            <button
-              className="bg-[#d1453b] hover:bg-[#c0342f] text-white px-5 py-2 rounded font-semibold shadow"
-              onClick={() => {
-                setShowForm(true);
-                setSelectedView("inbox");
-              }}
-            >
-              {getText('getting-started-cta', 'Add your first task')}
-            </button>
-            <button
-              className="border border-gray-300 text-gray-700 px-5 py-2 rounded font-semibold"
-              onClick={() => setSelectedView("inbox")}
-            >
-              {getText('getting-started-browse', 'Back to list')}
-            </button>
+            {dyn.v1.addWrapDecoy(
+              "add-first-task-button",
+              <button
+                className="bg-[#d1453b] hover:bg-[#c0342f] text-white px-5 py-2 rounded font-semibold shadow"
+                onClick={() => {
+                  setShowForm(true);
+                  setSelectedView("inbox");
+                }}
+              >
+                {getText('getting-started-cta', 'Add your first task')}
+              </button>,
+              "add-first-task-button-wrap"
+            )}
+            {dyn.v1.addWrapDecoy(
+              "back-to-list-button",
+              <button
+                className="border border-gray-300 text-gray-700 px-5 py-2 rounded font-semibold"
+                onClick={() => setSelectedView("inbox")}
+              >
+                {getText('getting-started-browse', 'Back to list')}
+              </button>,
+              "back-to-list-button-wrap"
+            )}
           </div>
         </div>
       </div>
@@ -1071,18 +1079,26 @@ function renderChatPlaceholder(chatId: string) {
             )}
           </div>
           <div className="mt-6 flex items-center gap-3">
-            <textarea
-              value={draft}
-              onChange={(e) => setChatDrafts((prev) => ({ ...prev, [chatId]: e.target.value }))}
-              placeholder="Write a message..."
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#f6bcb3] focus:border-[#f6bcb3] resize-none min-h-[64px]"
-            />
-            <button
-              onClick={handleSend}
-              className="bg-[#d1453b] hover:bg-[#c0342f] text-white px-4 py-2 rounded-lg font-semibold text-sm shadow"
-            >
-              Send
-            </button>
+            {dyn.v1.addWrapDecoy(
+              "chat-message-textarea",
+              <textarea
+                value={draft}
+                onChange={(e) => setChatDrafts((prev) => ({ ...prev, [chatId]: e.target.value }))}
+                placeholder="Write a message..."
+                className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#f6bcb3] focus:border-[#f6bcb3] resize-none min-h-[64px]"
+              />,
+              "chat-message-textarea-wrap"
+            )}
+            {dyn.v1.addWrapDecoy(
+              "chat-send-button",
+              <button
+                onClick={handleSend}
+                className="bg-[#d1453b] hover:bg-[#c0342f] text-white px-4 py-2 rounded-lg font-semibold text-sm shadow"
+              >
+                Send
+              </button>,
+              "chat-send-button-wrap"
+            )}
           </div>
         </div>
       </div>
@@ -1402,7 +1418,7 @@ function renderChatPlaceholder(chatId: string) {
                           </div>
                           <button
                             {...getElementAttributes("cta-add-task", 0)}
-                            className={`${dynClasses.primary} flex items-center gap-2 font-semibold px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fdede7] focus:ring-offset-2 shadow transition`}
+                            className={`${dynClasses.primary} flex items-center gap-2 font-semibold px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fdede7] focus:ring-offset-2 shadow transition ${dyn.v3.getVariant("add-first-task-button-class", CLASS_VARIANTS_MAP, "")}`}
                             onClick={() => {
                               logEvent(EVENT_TYPES.ADD_TASK, {
                                 source: "inbox_cta_button",

@@ -46,7 +46,7 @@ export default function Sidebar({
   className?: string;
 }) {
   const dyn = useDynamicSystem();
-  const wrap = (_key: string, node: ReactNode) => node;
+  const wrap = (key: string, node: ReactNode) => dyn.v1.addWrapDecoy(key, node, `${key}-wrap`);
   const [projectModalOpen, setProjectModalOpen] = useState(false);
   const [teamModalOpen, setTeamModalOpen] = useState(false);
   const [chatsOpen, setChatsOpen] = useState(true);
@@ -172,8 +172,8 @@ export default function Sidebar({
     onSelect?.(`chat-${userId}`);
   };
 
-  return wrap(
-    "sidebar-panel",
+  return dyn.v1.addWrapDecoy(
+    "aside",
     <aside
       id={sidebarIds.sidebar}
       data-dyn-key="sidebar-panel"
@@ -213,7 +213,7 @@ export default function Sidebar({
                     key={item.id}
                     id={dyn.v3.getVariant("sidebar-nav-item", ID_VARIANTS_MAP, `nav-${item.id}`)}
                     data-dyn-key="sidebar-nav-item"
-                    className={item.className}
+                    className={`${item.className} ${item.id === "backlog" ? dyn.v3.getVariant("inbox-li-class", CLASS_VARIANTS_MAP, "") : ""}`}
                     onClick={item.onClick}
                   >
                     {item.icon}
@@ -238,7 +238,7 @@ export default function Sidebar({
                 </div>
                 <Button
                   size="small"
-                  className="text-[#d1453b]"
+                  className={`text-[#d1453b] ${dyn.v3.getVariant("add-project-button-class", CLASS_VARIANTS_MAP, "")}`}
                   type="text"
                   icon={<PlusOutlined />}
                   onClick={() => setProjectModalOpen(true)}
@@ -264,7 +264,7 @@ export default function Sidebar({
                       >
                         {item.icon}
                         <span className="flex-1">
-                          {item.label} {item.id === "getting-started" && <span className="ml-1 text-base">👋</span>}
+                          {item.id === "getting-started" ? dyn.v3.getVariant("getting-started-li-text", TEXT_VARIANTS_MAP, item.label) : item.label} {item.id === "getting-started" && <span className="ml-1 text-base">👋</span>}
                         </span>
                         {item.count !== undefined && (
                           <span className="bg-gray-200 text-xs py-0.5 px-2 rounded-full">{item.count}</span>
@@ -344,8 +344,8 @@ export default function Sidebar({
           {chatsOpen && (
             <div className="space-y-2">
               {orderedChatUsers.map((user, index) =>
-                wrap(
-                  `chat-user-${index}`,
+                dyn.v1.addWrapDecoy(
+                  "chat-user-card",
                   <div
                     key={user.id}
                     className={`${sidebarClasses.card} flex items-center gap-2 p-2 cursor-pointer hover:bg-gray-50`}
@@ -371,7 +371,8 @@ export default function Sidebar({
                       }`}
                       title={user.status}
                     />
-                  </div>
+                  </div>,
+                  `chat-user-card-wrap-${user.id}`
                 )
               )}
             </div>
@@ -405,6 +406,7 @@ export default function Sidebar({
           setTeamModalOpen(false);
         }}
       />
-    </aside>
+    </aside>,
+    "aside-wrap"
   );
 }

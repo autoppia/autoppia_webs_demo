@@ -106,8 +106,15 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
       okText={dyn.v3.getVariant("save-team-button", TEXT_VARIANTS_MAP, "Save Team")}
       cancelText={dyn.v3.getVariant("cancel_action", TEXT_VARIANTS_MAP, "Cancel")}
       className={modalClass}
-      okButtonProps={{ id: dyn.v3.getVariant("create-team-button", ID_VARIANTS_MAP, "create-team-button"), loading }}
-      cancelButtonProps={{ id: dyn.v3.getVariant("cancel-team-button", ID_VARIANTS_MAP, "cancel-team-button") }}
+      okButtonProps={{ 
+        id: dyn.v3.getVariant("create-team-button", ID_VARIANTS_MAP, "create-team-button"), 
+        loading,
+        className: dyn.v3.getVariant("save-team-button-class", CLASS_VARIANTS_MAP, "")
+      }}
+      cancelButtonProps={{ 
+        id: dyn.v3.getVariant("cancel-team-button", ID_VARIANTS_MAP, "cancel-team-button"),
+        className: dyn.v3.getVariant("cancel-team-button-class", CLASS_VARIANTS_MAP, "")
+      }}
     >
       {dyn.v1.addWrapDecoy(
         "team-modal-body",
@@ -128,6 +135,7 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
                 <Input
                   placeholder={dyn.v3.getVariant("enter-team-name-placeholder", TEXT_VARIANTS_MAP, "Enter team name")}
                   id={dyn.v3.getVariant("team-name-input", ID_VARIANTS_MAP, "team-name-input")}
+                  className={dyn.v3.getVariant("team-name-input-class", CLASS_VARIANTS_MAP, "")}
                 />
               </Form.Item>
             )}
@@ -147,6 +155,7 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
                   placeholder={dyn.v3.getVariant("input-description-placeholder", TEXT_VARIANTS_MAP, "Enter team description")}
                   rows={4}
                   id={dyn.v3.getVariant("team-description-input", ID_VARIANTS_MAP, "team-description-input")}
+                  className={dyn.v3.getVariant("team-description-textarea-class", CLASS_VARIANTS_MAP, "")}
                 />
               </Form.Item>
             )}
@@ -157,6 +166,7 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
                 name="members"
                 label={dyn.v3.getVariant("team-members-label", TEXT_VARIANTS_MAP, "Team Members")}
                 rules={[{ required: true, message: "Please add at least one team member" }]}
+                className={dyn.v3.getVariant("team-people-div-class", CLASS_VARIANTS_MAP, "")}
               >
                 <Select
                   mode="multiple"

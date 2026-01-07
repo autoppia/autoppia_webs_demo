@@ -84,5 +84,6 @@
   "team-members-label": ["Team Members", "Members", "People", "Team People", "Add Members"],
   "enter-team-name-placeholder": ["Enter team name", "Team name", "Type team name", "Name your team", "Team name here"],
   "select-team-members-placeholder": ["Select team members", "Choose members", "Add members", "Pick members", "Select people"],
-  "save-team-button": ["Save Team", "Save", "Create Team", "Confirm", "Add Team"]
+  "save-team-button": ["Save Team", "Save", "Create Team", "Confirm", "Add Team"],
+  "getting-started-li-text": ["Getting Started", "Start Here", "Welcome", "Begin", "Quick Start", "Getting Started", "Start Here", "Welcome", "Begin", "Quick Start"]
 }
