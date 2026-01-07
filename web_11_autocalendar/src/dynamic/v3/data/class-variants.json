@@ -15,5 +15,18 @@
   "modal": ["modal-shell", "dialog-shell", "layer-shell", "sheet-shell"],
   "dropdown": ["dropdown-surface", "menu-surface", "popover-surface", "list-surface"],
   "calendar-cell": ["calendar-cell", "date-cell", "grid-cell", "planner-cell"],
-  "timeline-row": ["timeline-row", "week-row", "time-row", "track-row"]
+  "timeline-row": ["timeline-row", "week-row", "time-row", "track-row"],
+  "nav-prev-btn-class": ["", "nav-prev-btn", "prev-button-class", "nav-back-btn"],
+  "nav-next-btn-class": ["", "nav-next-btn", "next-button-class", "nav-forward-btn"],
+  "my-calendars-button-class": ["", "my-calendars-btn", "calendars-button", "sidebar-heading-btn"],
+  "add-calendar-button-class": ["", "add-calendar-btn", "create-calendar-button", "new-calendar-btn"],
+  "event-details-button-class": ["", "event-details-btn", "details-button", "wizard-details-btn"],
+  "event-people-button-class": ["", "event-people-btn", "people-button", "wizard-people-btn"],
+  "event-options-button-class": ["", "event-options-btn", "options-button", "wizard-options-btn"],
+  "event-calendar-selector-class": ["", "event-calendar-select", "calendar-picker-class", "calendar-selector"],
+  "event-name-input-class": ["", "event-name-field", "event-title-input-class", "name-input"],
+  "event-start-time-selector-class": ["", "start-time-select", "start-time-picker-class", "begin-time-selector"],
+  "event-end-time-selector-class": ["", "end-time-select", "end-time-picker-class", "finish-time-selector"],
+  "event-repeat-selector-class": ["", "repeat-select", "recurrence-selector-class", "repeat-picker-class"],
+  "event-cancel-button-class": ["", "event-cancel-btn", "cancel-button-class", "wizard-cancel-btn"]
 }

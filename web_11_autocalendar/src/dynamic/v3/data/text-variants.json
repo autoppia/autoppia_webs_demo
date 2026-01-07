@@ -66,5 +66,7 @@
   "chip": ["Chip", "Tag", "Pill"],
   "tag": ["Tag", "Label", "Chip"],
   "section-title": ["Section", "Heading", "Title"],
-  "timeline-row": ["Timeline row", "Row", "Entry"]
+  "timeline-row": ["Timeline row", "Row", "Entry"],
+  "add-calendar-name-placeholder": ["Name", "Calendar name", "Enter name", "Title"],
+  "add-calendar-description-placeholder": ["Description", "Enter description", "Add description", "Notes"]
 }

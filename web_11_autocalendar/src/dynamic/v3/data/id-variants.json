@@ -24,5 +24,14 @@
   "create-event-button": ["create-event-button", "new-event-button", "add-event-button", "launch-event-button"],
   "add-calendar-modal": ["add-calendar-modal", "new-calendar-modal", "calendar-dialog", "calendar-wizard"],
   "calendar-list": ["calendar-list", "calendar-collection", "calendar-menu", "calendar-bank"],
-  "debug-panel": ["debug-panel", "dynamic-debug-panel", "inspector-panel", "trace-panel"]
+  "debug-panel": ["debug-panel", "dynamic-debug-panel", "inspector-panel", "trace-panel"],
+  "event-calendar-selector": ["event-calendar-selector", "calendar-picker", "event-calendar-picker", "calendar-select"],
+  "event-name-input": ["event-name-input", "event-title-input", "event-label-input", "event-name-field"],
+  "event-location-input": ["event-location-input", "location-field", "event-location-field", "location-input"],
+  "event-allday-input": ["event-allday-input", "allday-checkbox", "all-day-input", "allday-field"],
+  "event-start-time-selector": ["event-start-time-selector", "start-time-picker", "start-time-select", "begin-time-selector"],
+  "event-end-time-selector": ["event-end-time-selector", "end-time-picker", "end-time-select", "finish-time-selector"],
+  "event-repeat-selector": ["event-repeat-selector", "repeat-picker", "recurrence-selector", "repeat-select"],
+  "event-repeat-until-input": ["event-repeat-until-input", "repeat-until-field", "recurrence-end-input", "repeat-end-input"],
+  "event-date-input": ["date-selector", "date-picker", "event-date", "select-date"]
 }

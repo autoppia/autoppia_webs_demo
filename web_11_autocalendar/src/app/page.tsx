@@ -1392,6 +1392,7 @@ function CalendarApp() {
                 aria-expanded={myCalExpanded}
                 aria-label="Toggle my calendars"
                 id={getIdVariant("calendar-filter")}
+                className={`${getClassVariant("my-calendars-button-class")}`}
               >
                 <span>{getTextVariant("sidebar_heading", "My calendars")}</span>
                 <svg
@@ -1806,7 +1807,7 @@ function CalendarApp() {
                         (
                           <button
                             id={dynamicIds.navPrev}
-                            className="rounded-full hover:bg-gray-100 p-4 text-3xl text-black"
+                            className={`rounded-full hover:bg-gray-100 p-4 text-3xl text-black ${getClassVariant("nav-prev-btn-class")}`}
                             onClick={() => handleWeekNav("prev")}
                             aria-label="Previous week"
                           >
@@ -1820,7 +1821,7 @@ function CalendarApp() {
                         (
                           <button
                             id={dynamicIds.navNext}
-                            className="rounded-full hover:bg-gray-100 p-4 text-3xl text-black"
+                            className={`rounded-full hover:bg-gray-100 p-4 text-3xl text-black ${getClassVariant("nav-next-btn-class")}`}
                             onClick={() => handleWeekNav("next")}
                             aria-label="Next week"
                           >
@@ -2361,7 +2362,7 @@ function CalendarApp() {
                   >
                     <Input
                       id={`${getIdVariant("add-calendar-modal")}-name`}
-                      placeholder="Name"
+                      placeholder={getTextVariant("add-calendar-name-placeholder", "Name")}
                       required
                       value={addCalName}
                       onChange={(e) => setAddCalName(e.target.value)}
@@ -2369,7 +2370,7 @@ function CalendarApp() {
                     />
                     <Textarea
                       id={`${getIdVariant("add-calendar-modal")}-description`}
-                      placeholder="Description"
+                      placeholder={getTextVariant("add-calendar-description-placeholder", "Description")}
                       value={addCalDesc}
                       onChange={(e) => setAddCalDesc(e.target.value)}
                       className={`bg-[#eee] border-none min-h-[90px] text-base py-2 ${getClassVariant("input")}`}
@@ -2385,7 +2386,7 @@ function CalendarApp() {
                       "add-calendar-submit",
                       (
                         <Button
-                          className="mt-1 bg-[#1976d2] hover:bg-[#1660b2] px-6 py-2"
+                          className={`mt-1 bg-[#1976d2] hover:bg-[#1660b2] px-6 py-2 ${getClassVariant("add-calendar-button-class")}`}
                           type="submit"
                           id={`${getIdVariant("add-calendar-modal")}-submit`}
                         >
@@ -2431,7 +2432,7 @@ function CalendarApp() {
                       eventModal.step === s.idx
                         ? "bg-[#1976d2] text-white border-[#1976d2]"
                         : "bg-white text-[#383e4d] border-[#e5e5e5]"
-                    }`}
+                    } ${s.idx === 0 ? getClassVariant("event-details-button-class") : s.idx === 1 ? getClassVariant("event-people-button-class") : getClassVariant("event-options-button-class")}`}
                     id={`${getIdVariant("event-modal-title")}-step-${s.idx}`}
                     aria-label={`Go to ${s.label} step`}
                   >
@@ -2447,8 +2448,8 @@ function CalendarApp() {
                 <div className="flex flex-col mb-2">
                   <Label htmlFor="calendar-select">{getTextVariant("label_calendar", "Calendar")}</Label>
                   <select
-                    id="calendar-select"
-                    className="px-3 py-2 border rounded w-full mt-1"
+                    id={getIdVariant("event-calendar-selector")}
+                    className={`px-3 py-2 border rounded w-full mt-1 ${getClassVariant("event-calendar-selector-class")}`}
                     value={eventModal.calendar}
                     onChange={(e) => handleModalField("calendar", e.target.value)}
                     required
@@ -2463,14 +2464,14 @@ function CalendarApp() {
                 <div>
                   <Label htmlFor="event-title">{getTextVariant("label_title", "Title")}</Label>
                   <Input
-                    id={getIdVariant("event-title-input")}
+                    id={getIdVariant("event-name-input")}
                     value={eventModal.label}
                     onChange={(e) => handleModalField("label", e.target.value)}
                     required
                     autoFocus
                     maxLength={80}
                     aria-required="true"
-                    className={getClassVariant("input")}
+                    className={`${getClassVariant("input")} ${getClassVariant("event-name-input-class")}`}
                   />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -2497,20 +2498,20 @@ function CalendarApp() {
                 </div>
                 <div className="flex items-center gap-2">
                   <input
-                    id="allday"
+                    id={getIdVariant("event-allday-input")}
                     type="checkbox"
                     checked={eventModal.allDay}
                     onChange={(e) => handleModalField("allDay", e.target.checked)}
                   />
-                  <Label htmlFor="allday">{getTextVariant("label_all_day", "All day")}</Label>
+                  <Label htmlFor={getIdVariant("event-allday-input")}>{getTextVariant("label_all_day", "All day")}</Label>
                 </div>
                 <div className="flex gap-4">
                   <div className="flex-1 opacity-100">
                     <Label htmlFor="start-time-hour">{getTextVariant("label_start_time", "Start Time")}</Label>
                     <div className="flex gap-2 mt-1">
                       <select
-                        id="start-time-hour"
-                        className="px-3 py-2 border rounded w-full"
+                        id={getIdVariant("event-start-time-selector")}
+                        className={`px-3 py-2 border rounded w-full ${getClassVariant("event-start-time-selector-class")}`}
                         value={eventModal.startTime[0]}
                         onChange={(e) =>
                           handleModalField("startTime", [
@@ -2554,11 +2555,11 @@ function CalendarApp() {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <Label htmlFor="end-time-hour">{getTextVariant("label_end_time", "End Time")}</Label>
+                    <Label htmlFor={getIdVariant("event-end-time-selector")}>{getTextVariant("label_end_time", "End Time")}</Label>
                     <div className="flex gap-2 mt-1">
                       <select
-                        id="end-time-hour"
-                        className="px-3 py-2 border rounded w-full"
+                        id={getIdVariant("event-end-time-selector")}
+                        className={`px-3 py-2 border rounded w-full ${getClassVariant("event-end-time-selector-class")}`}
                         value={eventModal.endTime[0]}
                         onChange={(e) =>
                           handleModalField("endTime", [
@@ -2604,10 +2605,10 @@ function CalendarApp() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="recurrence">{getTextVariant("label_repeat", "Repeat")}</Label>
+                    <Label htmlFor={getIdVariant("event-repeat-selector")}>{getTextVariant("label_repeat", "Repeat")}</Label>
                     <select
-                      id="recurrence"
-                      className="px-3 py-2 border rounded w-full mt-1"
+                      id={getIdVariant("event-repeat-selector")}
+                      className={`px-3 py-2 border rounded w-full mt-1 ${getClassVariant("event-repeat-selector-class")}`}
                       value={eventModal.recurrence}
                       onChange={(e) =>
                         handleModalField(
@@ -2623,9 +2624,9 @@ function CalendarApp() {
                     </select>
                   </div>
                   <div>
-                    <Label htmlFor="recurrence-end">{getTextVariant("label_repeat_until", "Repeat until")}</Label>
+                    <Label htmlFor={getIdVariant("event-repeat-until-input")}>{getTextVariant("label_repeat_until", "Repeat until")}</Label>
                     <Input
-                      id="recurrence-end"
+                      id={getIdVariant("event-repeat-until-input")}
                       type="date"
                       value={
                         eventModal.recurrenceEndDate ??
@@ -2791,7 +2792,7 @@ function CalendarApp() {
                 addWrapDecoy(
                   "wizard-back",
                   (
-                    <Button type="button" variant="outline" onClick={goPrevStep} id={`${getIdVariant("event-modal")}-back`}>
+                    <Button type="button" variant="outline" onClick={goPrevStep} id={`${getIdVariant("event-modal")}-back`} className={getClassVariant("event-cancel-button-class")}>
                       {getTextVariant("wizard_details", "Back")}
                     </Button>
                   ),
@@ -2864,6 +2865,8 @@ function CalendarApp() {
                     };
                     logEvent(EVENT_TYPES.CANCEL_ADD_EVENT, eventData);
                   }}
+                  className={getClassVariant("event-cancel-button-class")}
+                  id={getIdVariant("event-modal-cancel")}
                 >
                   {getTextVariant("modal_cancel", "Cancel")}
                 </Button>
