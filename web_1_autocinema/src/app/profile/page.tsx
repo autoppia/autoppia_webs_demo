@@ -85,6 +85,9 @@ export default function ProfilePage() {
     }));
   }, [currentUser]);
 
+  // Move useMemo before conditional return to follow Rules of Hooks
+  const addFilmTemplate = useMemo(() => buildFallbackMovie(`new-film-${addFilmKey}`), [addFilmKey]);
+
   if (!currentUser) {
     return (
       <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative min-h-screen flex items-center justify-center">
@@ -115,8 +118,6 @@ export default function ProfilePage() {
     movieId,
     movie: movies.find((movie) => movie.id === movieId),
   }));
-
-  const addFilmTemplate = useMemo(() => buildFallbackMovie(`new-film-${addFilmKey}`), [addFilmKey]);
 
   const handleProfileInputChange = (key: keyof ProfileFormState, value: string) => {
     setProfileForm((prev) => ({ ...prev, [key]: value }));

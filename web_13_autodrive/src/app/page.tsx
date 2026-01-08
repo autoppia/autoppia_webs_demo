@@ -266,16 +266,6 @@ function PlaceSelect({
               page: "trip_form",
               action: "focus",
             });
-            const rideEnterEvent =
-              placeholder.toLowerCase().includes("pickup")
-                ? EVENT_TYPES.RIDE_ENTER_LOCATION
-                : EVENT_TYPES.RIDE_ENTER_DESTINATION;
-            logEvent(rideEnterEvent, {
-              context: "home_page",
-              inputType: placeholder.toLowerCase().includes("pickup") ? "location" : "destination",
-              action: "focus",
-              seed: dyn.seed,
-            });
           }}
           onBlur={() => {
             // Delay to allow for dropdown selection

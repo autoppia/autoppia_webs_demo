@@ -18,7 +18,7 @@ function formatDateShort(date: string, time: string) {
   });
 }
 
-function TripCard({ trip }: { trip: Trip }) {
+function TripCard({ trip, onCancel }: { trip: Trip; onCancel?: (tripId: string) => void }) {
   const router = useSeedRouter();
   const { getElementAttributes, getText } = useSeedLayout();
   
@@ -40,6 +40,19 @@ function TripCard({ trip }: { trip: Trip }) {
     
     // Navigate to trip details page
     router.push(`/ride/trip/trips/${trip.id}`);
+  };
+
+  const handleCancel = () => {
+    if (onCancel) {
+      logEvent(EVENT_TYPES.CANCEL_RESERVATION, {
+        tripId: trip.id,
+        timestamp: new Date().toISOString(),
+        tripData: trip,
+        cancellationReason: 'user_requested',
+        cancellationTime: new Date().toISOString()
+      });
+      onCancel(trip.id);
+    }
   };
   
   return (
@@ -79,6 +92,22 @@ function TripCard({ trip }: { trip: Trip }) {
           </svg>
           {getText('trips-card-details', 'Trip Details')}
         </button>
+        {onCancel && (
+          <button
+            className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg font-semibold text-sm border border-red-200 hover:bg-red-100 transition"
+            onClick={handleCancel}
+          >
+            <svg width="16" height="16" fill="none" viewBox="0 0 20 20">
+              <path
+                d="M5 5l10 10M15 5l-10 10"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+            {getText('trips-cancel', 'Cancel')}
+          </button>
+        )}
       </div>
     </div>
   );
@@ -300,27 +329,91 @@ export default function TripsDashboardPage() {
     }
   }
 
+  // Helper to read reserved trips from localStorage
+  function readReservedTrips(): Trip[] {
+    if (typeof window === "undefined") return [];
+    try {
+      const r = JSON.parse(localStorage.getItem("reservedTrips") || "[]");
+      return Array.isArray(r) ? r : [];
+    } catch {
+      return [];
+    }
+  }
+
   // On mount, load trips and cancelledIds
   useEffect(() => {
     setLoading(true);
     setTimeout(() => {
-      setTrips(simulatedTrips);
+      const reservedTrips = readReservedTrips();
+      // Merge reserved trips with simulated trips, avoiding duplicates
+      const allTrips = [...simulatedTrips];
+      reservedTrips.forEach((reservedTrip) => {
+        if (!allTrips.find((t) => t.id === reservedTrip.id)) {
+          allTrips.push(reservedTrip);
+        }
+      });
+      setTrips(allTrips);
       setCancelledIds(readCancelledTrips());
       setLoading(false);
     }, 1200);
   }, []);
 
-  // Listen for navigation and localStorage changes to update cancelledIds
+  // Handler to cancel a reservation
+  const handleCancelReservation = (tripId: string) => {
+    // Add to cancelled trips
+    const cancelled = readCancelledTrips();
+    if (!cancelled.includes(tripId)) {
+      cancelled.push(tripId);
+      localStorage.setItem("cancelledTrips", JSON.stringify(cancelled));
+    }
+    
+    // Remove from reserved trips if it's a reserved trip
+    try {
+      const reservedTrips = readReservedTrips();
+      const updatedReserved = reservedTrips.filter((t: Trip) => t.id !== tripId);
+      localStorage.setItem("reservedTrips", JSON.stringify(updatedReserved));
+    } catch (error) {
+      console.error("Error removing reserved trip:", error);
+    }
+    
+    // Update state
+    setCancelledIds([...cancelledIds, tripId]);
+    setTrips((prev) => prev.filter((t) => t.id !== tripId));
+  };
+
+  // Listen for navigation and localStorage changes to update cancelledIds and trips
   useEffect(() => {
     // Handler for storage event (cross-tab)
     function handleStorage(e: StorageEvent) {
       if (e.key === "cancelledTrips") {
         setCancelledIds(readCancelledTrips());
       }
+      if (e.key === "reservedTrips") {
+        const reservedTrips = readReservedTrips();
+        setTrips((prev) => {
+          const allTrips = [...simulatedTrips];
+          reservedTrips.forEach((reservedTrip: Trip) => {
+            if (!allTrips.find((t) => t.id === reservedTrip.id)) {
+              allTrips.push(reservedTrip);
+            }
+          });
+          return allTrips;
+        });
+      }
     }
     // Handler for navigation (popstate)
     function handlePopState() {
       setCancelledIds(readCancelledTrips());
+      const reservedTrips = readReservedTrips();
+      setTrips((prev) => {
+        const allTrips = [...simulatedTrips];
+        reservedTrips.forEach((reservedTrip: Trip) => {
+          if (!allTrips.find((t) => t.id === reservedTrip.id)) {
+            allTrips.push(reservedTrip);
+          }
+        });
+        return allTrips;
+      });
     }
     window.addEventListener("storage", handleStorage);
     window.addEventListener("popstate", handlePopState);
@@ -378,7 +471,7 @@ export default function TripsDashboardPage() {
             <section>
               <div className="text-3xl font-bold mb-6" {...getElementAttributes('trips-upcoming-title', 0)}>{getText('trips-upcoming-title', 'Upcoming')}</div>
               {upcomingDisplay.map((trip) => (
-                <TripCard key={trip.id} trip={trip} />
+                <TripCard key={trip.id} trip={trip} onCancel={handleCancelReservation} />
               ))}
             </section>
             <PastSection />

@@ -1,6 +1,4 @@
 "use client";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { Briefcase, Users, Calendar, FileText, Clock, Settings2 } from "lucide-react";
 import { Suspense, useState, useEffect, useRef, useMemo } from "react";
@@ -8,6 +6,7 @@ import { useSeed } from "@/context/SeedContext";
 import { useDynamicSystem } from "@/dynamic";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { useProjectData } from "@/shared/universal-loader";
+import { logEvent, EVENT_TYPES } from "@/library/events";
 import { initializeClients, initializeEvents, initializeFiles, initializeLogs, initializeMatters } from "@/data/crm-enhanced";
 import fallbackClientsJson from "@/data/original/clients_1.json";
 import fallbackMattersJson from "@/data/original/matters_1.json";
@@ -138,6 +137,9 @@ function DashboardContent() {
           href="/calendar"
           id={dyn.v3.getVariant("calendar_link", ID_VARIANTS_MAP, "calendar_link")}
           className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
+          onClick={() => {
+            logEvent(EVENT_TYPES.VIEW_PENDING_EVENTS, {});
+          }}
         >
           <div className="flex justify-between items-center">
             <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("upcoming_events", undefined, "Upcoming Events")}</span>

@@ -796,6 +796,10 @@ export default function Home() {
               <button
                 className="bg-[#d1453b] hover:bg-[#c0342f] text-white px-5 py-2 rounded font-semibold shadow"
                 onClick={() => {
+                  logEvent(EVENT_TYPES.ADD_TASK, {
+                    source: "getting_started",
+                    action: "clicked",
+                  });
                   setShowForm(true);
                   setSelectedView("inbox");
                 }}

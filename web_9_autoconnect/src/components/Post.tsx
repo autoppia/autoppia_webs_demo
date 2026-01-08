@@ -158,7 +158,7 @@ export default function Post({
       {dyn.v1.addWrapDecoy(
         "post-content",
         <p className="mb-3 text-base whitespace-pre-line break-words">
-          {dyn.v3.getVariant("post_content", undefined, post.content)}
+          {post.content}
         </p>
       )}
       {post.image && (

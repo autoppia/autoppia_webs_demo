@@ -26,7 +26,10 @@ export default function SettingsPage() {
   const saveName = () => {
     Cookies.set("user_name", name, { expires: 7 });
     logEvent("CHANGE_USER_NAME", { name });
-    window.location.reload();
+    // Dispatch custom event to update UserNameBadge without page reload
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("userNameChanged", { detail: { name } }));
+    }
   };
 
   return (

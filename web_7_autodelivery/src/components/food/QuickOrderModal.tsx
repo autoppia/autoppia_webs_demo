@@ -14,6 +14,7 @@ import { useLayout } from "@/contexts/LayoutProvider";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 
 interface QuickOrderModalProps {
   open: boolean;
@@ -28,6 +29,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
   const { getNavigationUrl } = useLayout();
   const { restaurants, isLoading } = useRestaurants();
   const dyn = useDynamicSystem();
+  const router = useSeedRouter();
   
   // Get popular restaurants (those with high ratings or featured)
   const popularRestaurants = useMemo(
@@ -355,7 +357,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
               onClick={() => {
                 logEvent(EVENT_TYPES.VIEW_ALL_RESTAURANTS, { source: "quick_order_modal" });
                 onOpenChange(false);
-                window.location.href = getNavigationUrl("/restaurants");
+                router.push("/restaurants");
               }}
             >
               View All Restaurants

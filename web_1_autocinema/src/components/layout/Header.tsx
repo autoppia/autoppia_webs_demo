@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
 import { useAuth } from "@/context/AuthContext";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { cn } from "@/library/utils";
 import { useDynamicSystem } from "@/dynamic/shared";
 
@@ -20,6 +21,7 @@ export function Header() {
   const dyn = useDynamicSystem();
   const { currentUser, logout } = useAuth();
   const pathname = usePathname();
+  const router = useSeedRouter();
 
   const isActive = (href: string) => {
     if (!pathname) return false;
@@ -76,7 +78,18 @@ export function Header() {
               </SeedLink>
               <button
                 type="button"
-                onClick={logout}
+                onClick={() => {
+                  const isOnProfile = pathname?.split("?")[0] === "/profile";
+                  if (isOnProfile) {
+                    router.replace("/");
+                    // Use setTimeout to ensure navigation starts before logout state change
+                    setTimeout(() => {
+                      logout();
+                    }, 0);
+                  } else {
+                    logout();
+                  }
+                }}
                 className="text-xs uppercase tracking-wide text-white/60 hover:text-white transition"
               >
                 Logout

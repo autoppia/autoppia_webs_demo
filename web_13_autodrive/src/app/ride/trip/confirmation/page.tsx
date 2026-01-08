@@ -5,6 +5,7 @@ import GlobalHeader from "@/components/GlobalHeader";
 import { rides } from "@/data/trips-enhanced";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { TEXT_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { logEvent, EVENT_TYPES } from "@/library/event";
 
 function formatDateTime(date: string, time: string) {
   if (!date || !time) return "";
@@ -28,6 +29,7 @@ export default function ConfirmationPage() {
     date: "",
     time: "",
   });
+  const [tripSaved, setTripSaved] = useState(false);
   const ride = rides[data.rideIdx] ?? rides[0];
   const router = useRouter();
   const dyn = useDynamicSystem();
@@ -42,10 +44,48 @@ export default function ConfirmationPage() {
       const date = sessionStorage.getItem("ud_pickupdate") || "";
       const time = sessionStorage.getItem("ud_pickuptime") || "";
       setData({ rideIdx, pickup, dropoff, date, time });
+      
+      // Save the reservation as an upcoming trip (only once)
+      if (!tripSaved && rideIdx !== null && pickup && dropoff) {
+        const selectedRide = rides[rideIdx] || rides[0];
+        // Use a consistent trip ID based on the reservation data to avoid duplicates
+        const tripId = `reserved-${rideIdx}-${pickup.slice(0, 20)}-${dropoff.slice(0, 20)}-${date}-${time}`.replace(/[^a-zA-Z0-9-]/g, '-');
+        const newTrip = {
+          id: tripId,
+          status: "upcoming" as const,
+          ride: selectedRide,
+          pickup,
+          dropoff,
+          date: date || new Date().toISOString().split("T")[0],
+          time: time || new Date().toTimeString().slice(0, 5),
+          price: selectedRide.price,
+          payment: "card",
+          driver: {
+            name: ["Michael Chen", "Sarah Johnson", "David Martinez", "Emily Rodriguez"][rideIdx % 4],
+            car: "Vehicle",
+            plate: "ABC-123",
+            phone: "+1-555-0101",
+            photo: `https://i.pravatar.cc/150?img=${(rideIdx % 10) + 1}`,
+          },
+        };
+        
+        // Save to localStorage
+        try {
+          const reservedTrips = JSON.parse(localStorage.getItem("reservedTrips") || "[]");
+          // Check if trip already exists (avoid duplicates)
+          if (!reservedTrips.find((t: any) => t.id === tripId)) {
+            reservedTrips.push(newTrip);
+            localStorage.setItem("reservedTrips", JSON.stringify(reservedTrips));
+            setTripSaved(true);
+          }
+        } catch (error) {
+          console.error("Error saving reserved trip:", error);
+        }
+      }
     }
     const id = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(id);
-  }, []);
+  }, [tripSaved]);
   return (
     <div className="min-h-screen bg-[#f5fbfc]">
       <GlobalHeader />
@@ -257,6 +297,22 @@ export default function ConfirmationPage() {
                 <button
                   className={`mt-4 w-full bg-[#2095d2] text-white font-bold rounded-md py-3 text-lg hover:bg-[#1273a0] transition ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`}
                   onClick={() => {
+                    // Generate a trip ID for this reservation
+                    const tripId = `trip-${Date.now()}`;
+                    logEvent(EVENT_TYPES.TRIP_DETAILS, {
+                      trip_id: tripId,
+                      ride_name: ride.name,
+                      timestamp: new Date().toISOString(),
+                      trip_status: "upcoming",
+                      trip_date: data.date,
+                      trip_time: data.time,
+                      trip_price: ride.price,
+                      trip_payment: "card",
+                      driver_name: ["Michael Chen", "Sarah Johnson", "David Martinez", "Emily Rodriguez"][data.rideIdx % 4],
+                      pickup_location: data.pickup,
+                      dropoff_location: data.dropoff,
+                      source: "confirmation_page",
+                    });
                     setLoading(true);
                     setTimeout(() => {
                       router.push("/ride/trip/trips");

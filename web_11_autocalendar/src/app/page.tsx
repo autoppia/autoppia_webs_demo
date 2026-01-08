@@ -298,9 +298,6 @@ function usePersistedEvents(v2Seed?: number | null) {
   return [state, setState, isGenerating, genError] as const;
 }
 
-const weekDates = [15, 16, 17, 18, 19];
-const getDayLabel = (dayIdx: number) =>
-  `${weekDaysFull[dayIdx]}, July ${weekDates[dayIdx]}`;
 const pad2 = (x: number) => (x < 10 ? `0${x}` : `${x}`);
 
 function formatTime(hhmm: [number, number]) {
@@ -700,12 +697,6 @@ function CalendarApp() {
   );
 
   const VIEW_OPTIONS = ["Day", "5 days", "Week", "Month"];
-  const viewTextKeyMap: Record<string, string> = {
-    "Day": "view_day",
-    "5 days": "view_five_days",
-    "Week": "view_week",
-    "Month": "view_month",
-  };
   const [currentView, setCurrentView] = useState("5 days");
   const orderedViewOptions = useMemo(() => {
     const order = dyn.v1.changeOrderElements("view-options", VIEW_OPTIONS.length);
