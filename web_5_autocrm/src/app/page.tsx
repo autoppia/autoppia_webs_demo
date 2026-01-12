@@ -99,104 +99,105 @@ function DashboardContent() {
     <section>
       <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">Dashboard</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
-        {/* Card 1: Matters */}
-        {dyn.v1.addWrapDecoy("matters-card", (
-        <SeedLink
-          href="/matters"
-          id={dyn.v3.getVariant("matters_link", ID_VARIANTS_MAP, "matters_link")}
-          className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
-        >
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("matters_title", undefined, "Matters")}</span>
-            <Briefcase className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
-          </div>
-          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.matters}</span>
-          <span className="text-sm text-zinc-400">{dyn.v3.getVariant("total_matters", undefined, "Total Matters")}</span>
-        </SeedLink>
-        ), "matters-card-wrap")}
-
-        {/* Card 2: Clients */}
-        {dyn.v1.addWrapDecoy("clients-card", (
-        <SeedLink
-          href="/clients"
-          id={dyn.v3.getVariant("clients_link", ID_VARIANTS_MAP, "clients_link")}
-          className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
-        >
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("clients_title", undefined, "Clients")}</span>
-            <Users className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
-          </div>
-          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.clients}</span>
-          <span className="text-sm text-zinc-400">{dyn.v3.getVariant("total_clients", undefined, "Total Clients")}</span>
-        </SeedLink>
-        ), "clients-card-wrap")}
-
-        {/* Card 3: Calendar */}
-        {dyn.v1.addWrapDecoy("calendar-card", (
-        <SeedLink
-          href="/calendar"
-          id={dyn.v3.getVariant("calendar_link", ID_VARIANTS_MAP, "calendar_link")}
-          className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
-          onClick={() => {
-            logEvent(EVENT_TYPES.VIEW_PENDING_EVENTS, {});
-          }}
-        >
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("upcoming_events", undefined, "Upcoming Events")}</span>
-            <Calendar className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
-          </div>
-          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.events}</span>
-          <span className="text-sm text-zinc-400">{dyn.v3.getVariant("event_date", undefined, "Event Date")}</span>
-        </SeedLink>
-        ), "calendar-card-wrap")}
-
-        {/* Card 4: Documents */}
-        {dyn.v1.addWrapDecoy("documents-card", (
-        <SeedLink
-          href="/documents"
-          id={dyn.v3.getVariant("documents_link", ID_VARIANTS_MAP, "documents_link")}
-          className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
-        >
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("documents_title", undefined, "Documents")}</span>
-            <FileText className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
-          </div>
-          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.files}</span>
-          <span className="text-sm text-zinc-400">{dyn.v3.getVariant("document_name", undefined, "Document Name")}</span>
-        </SeedLink>
-        ), "documents-card-wrap")}
-
-        {/* Card 5: Time Tracking */}
-        {dyn.v1.addWrapDecoy("billing-card", (
-        <SeedLink
-          href="/billing"
-          id={dyn.v3.getVariant("billing_link", ID_VARIANTS_MAP, "billing_link")}
-          className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
-        >
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("billing_title", undefined, "Billing")}</span>
-            <Clock className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
-          </div>
-          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.logs}</span>
-          <span className="text-sm text-zinc-400">{dyn.v3.getVariant("hours_logged", undefined, "Hours Logged")}</span>
-        </SeedLink>
-        ), "billing-card-wrap")}
-
-        {/* Card 6: Settings */}
-        {dyn.v1.addWrapDecoy("settings-card", (
-        <SeedLink
-          href="/settings"
-          id={dyn.v3.getVariant("settings_link", ID_VARIANTS_MAP, "settings_link")}
-          className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
-        >
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("settings_title", undefined, "Settings")}</span>
-            <Settings2 className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
-          </div>
-          <span className="text-4xl md:text-5xl font-bold tracking-tight text-[#1A1A1A] select-none">--</span>
-          <span className="text-sm text-zinc-400">{dyn.v3.getVariant("notes", undefined, "Notes")}</span>
-        </SeedLink>
-        ), "settings-card-wrap")}
+        {(() => {
+          const dashboardCards = [
+            dyn.v1.addWrapDecoy("matters-card", (
+              <SeedLink
+                key="matters"
+                href="/matters"
+                id={dyn.v3.getVariant("matters_link", ID_VARIANTS_MAP, "matters_link")}
+                className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
+              >
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("matters_title", undefined, "Matters")}</span>
+                  <Briefcase className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
+                </div>
+                <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.matters}</span>
+                <span className="text-sm text-zinc-400">{dyn.v3.getVariant("total_matters", undefined, "Total Matters")}</span>
+              </SeedLink>
+            ), "matters-card-wrap"),
+            dyn.v1.addWrapDecoy("clients-card", (
+              <SeedLink
+                key="clients"
+                href="/clients"
+                id={dyn.v3.getVariant("clients_link", ID_VARIANTS_MAP, "clients_link")}
+                className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
+              >
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("clients_title", undefined, "Clients")}</span>
+                  <Users className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
+                </div>
+                <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.clients}</span>
+                <span className="text-sm text-zinc-400">{dyn.v3.getVariant("total_clients", undefined, "Total Clients")}</span>
+              </SeedLink>
+            ), "clients-card-wrap"),
+            dyn.v1.addWrapDecoy("calendar-card", (
+              <SeedLink
+                key="calendar"
+                href="/calendar"
+                id={dyn.v3.getVariant("calendar_link", ID_VARIANTS_MAP, "calendar_link")}
+                className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
+                onClick={() => {
+                  logEvent(EVENT_TYPES.VIEW_PENDING_EVENTS, {});
+                }}
+              >
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("upcoming_events", undefined, "Upcoming Events")}</span>
+                  <Calendar className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
+                </div>
+                <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.events}</span>
+                <span className="text-sm text-zinc-400">{dyn.v3.getVariant("event_date", undefined, "Event Date")}</span>
+              </SeedLink>
+            ), "calendar-card-wrap"),
+            dyn.v1.addWrapDecoy("documents-card", (
+              <SeedLink
+                key="documents"
+                href="/documents"
+                id={dyn.v3.getVariant("documents_link", ID_VARIANTS_MAP, "documents_link")}
+                className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
+              >
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("documents_title", undefined, "Documents")}</span>
+                  <FileText className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
+                </div>
+                <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.files}</span>
+                <span className="text-sm text-zinc-400">{dyn.v3.getVariant("document_name", undefined, "Document Name")}</span>
+              </SeedLink>
+            ), "documents-card-wrap"),
+            dyn.v1.addWrapDecoy("billing-card", (
+              <SeedLink
+                key="billing"
+                href="/billing"
+                id={dyn.v3.getVariant("billing_link", ID_VARIANTS_MAP, "billing_link")}
+                className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
+              >
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("billing_title", undefined, "Billing")}</span>
+                  <Clock className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
+                </div>
+                <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.logs}</span>
+                <span className="text-sm text-zinc-400">{dyn.v3.getVariant("hours_logged", undefined, "Hours Logged")}</span>
+              </SeedLink>
+            ), "billing-card-wrap"),
+            dyn.v1.addWrapDecoy("settings-card", (
+              <SeedLink
+                key="settings"
+                href="/settings"
+                id={dyn.v3.getVariant("settings_link", ID_VARIANTS_MAP, "settings_link")}
+                className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200")}
+              >
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold text-zinc-600 text-lg">{dyn.v3.getVariant("settings_title", undefined, "Settings")}</span>
+                  <Settings2 className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
+                </div>
+                <span className="text-4xl md:text-5xl font-bold tracking-tight text-[#1A1A1A] select-none">--</span>
+                <span className="text-sm text-zinc-400">{dyn.v3.getVariant("notes", undefined, "Notes")}</span>
+              </SeedLink>
+            ), "settings-card-wrap")
+          ];
+          const order = dyn.v1.changeOrderElements("dashboard-cards", dashboardCards.length);
+          return order.map((idx) => dashboardCards[idx]);
+        })()}
       </div>
     </section>
   );

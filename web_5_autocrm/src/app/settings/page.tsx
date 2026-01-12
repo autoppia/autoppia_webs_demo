@@ -42,32 +42,38 @@ export default function SettingsPage() {
         <DynamicElement elementType="section" index={1}>
           <h2 className="font-semibold text-lg mb-4">{getText("user_profile", "User Profile")}</h2>
           <div className="flex flex-col gap-5">
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-zinc-700 flex items-center gap-2">
-                <User className="w-4 h-4 inline" /> {getText("full_name", "Full Name")}
-              </label>
-              <input
-                id={getId("user_name_input")}
-                data-testid="user-name-input"
-                className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, inputBase)}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                onBlur={saveName}
-                aria-label={getText("full_name", "Full Name")}
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-zinc-700 flex items-center gap-2">
-                <Mail className="w-4 h-4 inline" /> {getText("client_email", "Client Email")}
-              </label>
-              <input
-                id={getId("user_email_input")}
-                className="rounded-xl border px-4 py-3 font-medium bg-zinc-50"
-                value="j.doe@firmly.com"
-                disabled
-                aria-label={getText("client_email", "Client Email")}
-              />
-            </div>
+            {(() => {
+              const profileFields = [
+                <div key="full-name" className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-zinc-700 flex items-center gap-2">
+                    <User className="w-4 h-4 inline" /> {getText("full_name", "Full Name")}
+                  </label>
+                  <input
+                    id={getId("user_name_input")}
+                    data-testid="user-name-input"
+                    className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, inputBase)}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    onBlur={saveName}
+                    aria-label={getText("full_name", "Full Name")}
+                  />
+                </div>,
+                <div key="email" className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-zinc-700 flex items-center gap-2">
+                    <Mail className="w-4 h-4 inline" /> {getText("client_email", "Client Email")}
+                  </label>
+                  <input
+                    id={getId("user_email_input")}
+                    className="rounded-xl border px-4 py-3 font-medium bg-zinc-50"
+                    value="j.doe@firmly.com"
+                    disabled
+                    aria-label={getText("client_email", "Client Email")}
+                  />
+                </div>
+              ];
+              const order = dyn.v1.changeOrderElements("settings-profile-fields", profileFields.length);
+              return order.map((idx) => profileFields[idx]);
+            })()}
             <div className="flex items-center gap-3">
               <DynamicButton
                 eventType="CHANGE_USER_NAME"

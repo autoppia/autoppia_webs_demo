@@ -359,56 +359,62 @@ export default function BillingPage() {
                 <Plus className="w-6 h-6 text-accent-forest" />
                 <span className="font-bold text-lg">{getText("add_time_entry", "Add Time Entry")}</span>
               </div>
-              <div className="flex flex-col gap-2">
-                <label htmlFor={getId("manual_matter_input")} className="text-sm font-medium text-zinc-700">
-                  {getText("matter_name", "Matter Name")}
-                </label>
-                <input
-                  id={getId("manual_matter_input")}
-                  className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, formInputBase)}
-                  value={manual.matter}
-                  onChange={(e) =>
-                    setManual((m) => ({ ...m, matter: e.target.value }))
-                  }
-                  placeholder={getText("matter_name", "Matter Name")}
-                  required
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label htmlFor={getId("manual_description_input")} className="text-sm font-medium text-zinc-700">
-                  {getText("task_description", "Task Description")}
-                </label>
-                <input
-                  id={getId("manual_description_input")}
-                  className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, formInputBase)}
-                  value={manual.description}
-                  onChange={(e) =>
-                    setManual((m) => ({ ...m, description: e.target.value }))
-                  }
-                  placeholder={getText("task_description", "Task Description")}
-                  required
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label htmlFor={getId("manual_hours_input")} className="text-sm font-medium text-zinc-700">{getText("hours_logged", "Hours Logged")}</label>
-                <input
-                  id={getId("manual_hours_input")}
-                  type="number"
-                  step=".1"
-                  min="0.1"
-                  max="24"
-                  className={dyn.v3.getVariant(
-                    "input",
-                    CLASS_VARIANTS_MAP,
-                    `${formInputBase} w-32`
-                  )}
-                  value={manual.hours}
-                  onChange={(e) =>
-                    setManual((m) => ({ ...m, hours: +e.target.value }))
-                  }
-                  required
-                />
-              </div>
+              {(() => {
+                const formFields = [
+                  <div key="matter" className="flex flex-col gap-2">
+                    <label htmlFor={getId("manual_matter_input")} className="text-sm font-medium text-zinc-700">
+                      {getText("matter_name", "Matter Name")}
+                    </label>
+                    <input
+                      id={getId("manual_matter_input")}
+                      className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, formInputBase)}
+                      value={manual.matter}
+                      onChange={(e) =>
+                        setManual((m) => ({ ...m, matter: e.target.value }))
+                      }
+                      placeholder={getText("matter_name", "Matter Name")}
+                      required
+                    />
+                  </div>,
+                  <div key="description" className="flex flex-col gap-2">
+                    <label htmlFor={getId("manual_description_input")} className="text-sm font-medium text-zinc-700">
+                      {getText("task_description", "Task Description")}
+                    </label>
+                    <input
+                      id={getId("manual_description_input")}
+                      className={dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, formInputBase)}
+                      value={manual.description}
+                      onChange={(e) =>
+                        setManual((m) => ({ ...m, description: e.target.value }))
+                      }
+                      placeholder={getText("task_description", "Task Description")}
+                      required
+                    />
+                  </div>,
+                  <div key="hours" className="flex flex-col gap-2">
+                    <label htmlFor={getId("manual_hours_input")} className="text-sm font-medium text-zinc-700">{getText("hours_logged", "Hours Logged")}</label>
+                    <input
+                      id={getId("manual_hours_input")}
+                      type="number"
+                      step=".1"
+                      min="0.1"
+                      max="24"
+                      className={dyn.v3.getVariant(
+                        "input",
+                        CLASS_VARIANTS_MAP,
+                        `${formInputBase} w-32`
+                      )}
+                      value={manual.hours}
+                      onChange={(e) =>
+                        setManual((m) => ({ ...m, hours: +e.target.value }))
+                      }
+                      required
+                    />
+                  </div>
+                ];
+                const order = dyn.v1.changeOrderElements("billing-form-fields", formFields.length);
+                return order.map((idx) => formFields[idx]);
+              })()}
               <button
                 id={getId("add_entry_button")}
                 type="submit"

@@ -46,24 +46,32 @@ function HelpContent() {
       ))}
       {dyn.v1.addWrapDecoy("help-faqs", (
         <div className="space-y-3">
-          {FAQS.map((item, idx) => {
-            const isOpen = open === idx;
-            return dyn.v1.addWrapDecoy(`help-faq-${idx}`, (
-              <div key={item.q} className="border border-zinc-200 rounded-2xl bg-white shadow-sm">
-                <button
-                  id={dyn.v3.getVariant(`faq_question_${idx}`, ID_VARIANTS_MAP, `faq-question-${idx}`)}
-                  className="w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-zinc-800"
-                  onClick={() => setOpen(isOpen ? null : idx)}
-                >
-                  {item.q}
-                  <span className="text-xl text-zinc-400">{isOpen ? "−" : "+"}</span>
-                </button>
-                {isOpen && (
-                  <div id={dyn.v3.getVariant(`faq_answer_${idx}`, ID_VARIANTS_MAP, `faq-answer-${idx}`)} className="px-4 pb-4 text-sm text-zinc-600">{item.a}</div>
-                )}
-              </div>
-            ));
-          })}
+          {(() => {
+            const faqItems = FAQS.map((item, originalIdx) => {
+              const isOpen = open === originalIdx;
+              return {
+                originalIdx,
+                item,
+                element: dyn.v1.addWrapDecoy(`help-faq-${originalIdx}`, (
+                  <div key={item.q} className="border border-zinc-200 rounded-2xl bg-white shadow-sm">
+                    <button
+                      id={dyn.v3.getVariant(`faq_question_${originalIdx}`, ID_VARIANTS_MAP, `faq-question-${originalIdx}`)}
+                      className="w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-zinc-800"
+                      onClick={() => setOpen(isOpen ? null : originalIdx)}
+                    >
+                      {item.q}
+                      <span className="text-xl text-zinc-400">{isOpen ? "−" : "+"}</span>
+                    </button>
+                    {isOpen && (
+                      <div id={dyn.v3.getVariant(`faq_answer_${originalIdx}`, ID_VARIANTS_MAP, `faq-answer-${originalIdx}`)} className="px-4 pb-4 text-sm text-zinc-600">{item.a}</div>
+                    )}
+                  </div>
+                ))
+              };
+            });
+            const order = dyn.v1.changeOrderElements("help-faq-items", faqItems.length);
+            return order.map((idx) => faqItems[idx].element);
+          })()}
         </div>
       ))}
     </div>
