@@ -50,6 +50,18 @@ export default function ConfirmationPage() {
         const selectedRide = rides[rideIdx] || rides[0];
         // Use a consistent trip ID based on the reservation data to avoid duplicates
         const tripId = `reserved-${rideIdx}-${pickup.slice(0, 20)}-${dropoff.slice(0, 20)}-${date}-${time}`.replace(/[^a-zA-Z0-9-]/g, '-');
+        
+        // Get RESERVE_RIDE event data from sessionStorage if available
+        const reserveRideDataStr = sessionStorage.getItem("__ud_reserveRideData");
+        let reserveRideData = null;
+        if (reserveRideDataStr) {
+          try {
+            reserveRideData = JSON.parse(reserveRideDataStr);
+          } catch (e) {
+            console.error("Error parsing reserveRideData:", e);
+          }
+        }
+        
         const newTrip = {
           id: tripId,
           status: "upcoming" as const,
@@ -67,6 +79,8 @@ export default function ConfirmationPage() {
             phone: "+1-555-0101",
             photo: `https://i.pravatar.cc/150?img=${(rideIdx % 10) + 1}`,
           },
+          // Store the complete RESERVE_RIDE event data for later use
+          reserveRideData: reserveRideData || null,
         };
         
         // Save to localStorage
@@ -298,22 +312,61 @@ export default function ConfirmationPage() {
                   <button
                     className={`mt-4 w-full bg-[#2095d2] text-white font-bold rounded-md py-3 text-lg hover:bg-[#1273a0] transition ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`}
                     onClick={() => {
-                    // Generate a trip ID for this reservation
-                    const tripId = `trip-${Date.now()}`;
-                    logEvent(EVENT_TYPES.TRIP_DETAILS, {
-                      trip_id: tripId,
-                      ride_name: ride.name,
-                      timestamp: new Date().toISOString(),
-                      trip_status: "upcoming",
-                      trip_date: data.date,
-                      trip_time: data.time,
-                      trip_price: ride.price,
-                      trip_payment: "card",
-                      driver_name: ["Michael Chen", "Sarah Johnson", "David Martinez", "Emily Rodriguez"][data.rideIdx % 4],
-                      pickup_location: data.pickup,
-                      dropoff_location: data.dropoff,
-                      source: "confirmation_page",
-                    });
+                    // Get RESERVE_RIDE event data from sessionStorage if available
+                    const reserveRideDataStr = sessionStorage.getItem("__ud_reserveRideData");
+                    let reserveRideData = null;
+                    if (reserveRideDataStr) {
+                      try {
+                        reserveRideData = JSON.parse(reserveRideDataStr);
+                      } catch (e) {
+                        console.error("Error parsing reserveRideData:", e);
+                      }
+                    }
+                    
+                    if (reserveRideData) {
+                      // Use the actual reserved ride data from RESERVE_RIDE event
+                      logEvent(EVENT_TYPES.TRIP_DETAILS, {
+                        ...reserveRideData,
+                        timestamp: new Date().toISOString(), // Update timestamp
+                      });
+                    } else {
+                      // Fallback to template data if reserved ride data is not available
+                      const RIDE_TEMPLATES = [
+                        { name: "AutoDriverX", seats: 4, basePrice: 26.6 },
+                        { name: "Comfort", seats: 4, basePrice: 31.5 },
+                        { name: "AutoDriverXL", seats: 6, basePrice: 27.37 },
+                        { name: "Executive", seats: 4, basePrice: 45.0 },
+                      ];
+                      const rideTemplate = RIDE_TEMPLATES.find(r => r.name === ride.name) || RIDE_TEMPLATES[0];
+                      const oldPrice = Number((ride.price * 1.1).toFixed(2));
+                      const scheduled = data.date && data.time ? `${data.date} ${data.time}` : "now";
+                      
+                      logEvent(EVENT_TYPES.TRIP_DETAILS, {
+                        rideId: data.rideIdx,
+                        rideName: ride.name,
+                        rideType: ride.name,
+                        price: ride.price,
+                        oldPrice: oldPrice,
+                        seats: rideTemplate.seats,
+                        eta: "5 min away · " + (data.time || new Date().toTimeString().slice(0, 5)),
+                        pickup: data.pickup,
+                        dropoff: data.dropoff,
+                        scheduled: scheduled,
+                        timestamp: new Date().toISOString(),
+                        priceDifference: oldPrice - ride.price,
+                        discountPercentage: ((oldPrice - ride.price) / oldPrice * 100).toFixed(2),
+                        isRecommended: false,
+                        tripDetails: {
+                          pickup: data.pickup,
+                          dropoff: data.dropoff,
+                          scheduled: scheduled,
+                          rideType: ride.name,
+                          price: ride.price,
+                          totalSeats: rideTemplate.seats,
+                          estimatedArrival: "5 min away · " + (data.time || new Date().toTimeString().slice(0, 5))
+                        }
+                      });
+                    }
                     setLoading(true);
                     setTimeout(() => {
                       router.push("/ride/trip/trips");

@@ -26,20 +26,55 @@ function TripCard({ trip, onCancel, index }: { trip: Trip; onCancel?: (tripId: s
   const { getElementAttributes, getText } = useSeedLayout();
   
   const handleTripDetailsClick = () => {
-    // Log the TRIP_DETAILS event
-    logEvent(EVENT_TYPES.TRIP_DETAILS, { 
-      trip_id: trip.id, 
-      ride_name: trip.ride.name,
-      timestamp: new Date().toISOString(),
-      trip_status: trip.status,
-      trip_date: trip.date,
-      trip_time: trip.time,
-      trip_price: trip.price,
-      trip_payment: trip.payment,
-      driver_name: trip.driver.name,
-      pickup_location: trip.pickup,
-      dropoff_location: trip.dropoff
-    });
+    // Check if this trip has reserved ride data (from RESERVE_RIDE event)
+    const reservedRideData = (trip as any).reserveRideData;
+    
+    if (reservedRideData) {
+      // Use the actual reserved ride data from RESERVE_RIDE event
+      logEvent(EVENT_TYPES.TRIP_DETAILS, {
+        ...reservedRideData,
+        timestamp: new Date().toISOString(), // Update timestamp
+      });
+    } else {
+      // Fallback to template data if reserved ride data is not available (for simulated trips)
+      const RIDE_TEMPLATES = [
+        { name: "AutoDriverX", seats: 4, basePrice: 26.6 },
+        { name: "Comfort", seats: 4, basePrice: 31.5 },
+        { name: "AutoDriverXL", seats: 6, basePrice: 27.37 },
+        { name: "Executive", seats: 4, basePrice: 45.0 },
+      ];
+      const rideTemplate = RIDE_TEMPLATES.find(r => r.name === trip.ride.name) || RIDE_TEMPLATES[0];
+      const oldPrice = Number((trip.price * 1.1).toFixed(2));
+      const scheduled = trip.date && trip.time ? `${trip.date} ${trip.time}` : "now";
+      
+      logEvent(EVENT_TYPES.TRIP_DETAILS, {
+        rideId: RIDE_TEMPLATES.findIndex(r => r.name === trip.ride.name) >= 0 
+          ? RIDE_TEMPLATES.findIndex(r => r.name === trip.ride.name) 
+          : 0,
+        rideName: trip.ride.name,
+        rideType: trip.ride.name,
+        price: trip.price,
+        oldPrice: oldPrice,
+        seats: rideTemplate.seats,
+        eta: "5 min away · " + (trip.time || new Date().toTimeString().slice(0, 5)),
+        pickup: trip.pickup,
+        dropoff: trip.dropoff,
+        scheduled: scheduled,
+        timestamp: new Date().toISOString(),
+        priceDifference: oldPrice - trip.price,
+        discountPercentage: ((oldPrice - trip.price) / oldPrice * 100).toFixed(2),
+        isRecommended: false,
+        tripDetails: {
+          pickup: trip.pickup,
+          dropoff: trip.dropoff,
+          scheduled: scheduled,
+          rideType: trip.ride.name,
+          price: trip.price,
+          totalSeats: rideTemplate.seats,
+          estimatedArrival: "5 min away · " + (trip.time || new Date().toTimeString().slice(0, 5))
+        }
+      });
+    }
     
     // Navigate to trip details page
     router.push(`/ride/trip/trips/${trip.id}`);
@@ -47,13 +82,28 @@ function TripCard({ trip, onCancel, index }: { trip: Trip; onCancel?: (tripId: s
 
   const handleCancel = () => {
     if (onCancel) {
-      logEvent(EVENT_TYPES.CANCEL_RESERVATION, {
-        tripId: trip.id,
-        timestamp: new Date().toISOString(),
-        tripData: trip,
-        cancellationReason: 'user_requested',
-        cancellationTime: new Date().toISOString()
-      });
+      // Check if this trip has reserved ride data (from RESERVE_RIDE event)
+      const reservedRideData = (trip as any).reserveRideData;
+      
+      if (reservedRideData) {
+        // Use the actual reserved ride data from RESERVE_RIDE event
+        logEvent(EVENT_TYPES.CANCEL_RESERVATION, {
+          ...reservedRideData,
+          tripId: trip.id,
+          timestamp: new Date().toISOString(),
+          cancellationReason: 'user_requested',
+          cancellationTime: new Date().toISOString()
+        });
+      } else {
+        // Fallback to template data if reserved ride data is not available
+        logEvent(EVENT_TYPES.CANCEL_RESERVATION, {
+          tripId: trip.id,
+          timestamp: new Date().toISOString(),
+          tripData: trip,
+          cancellationReason: 'user_requested',
+          cancellationTime: new Date().toISOString()
+        });
+      }
       onCancel(trip.id);
     }
   };

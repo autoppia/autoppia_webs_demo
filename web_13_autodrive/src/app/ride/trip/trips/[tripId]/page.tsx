@@ -33,21 +33,50 @@ export default function TripDetailsPage() {
   const [showCancelModal, setShowCancelModal] = useState(false);
 
   // Get trip from storage or fallback
-  const [activeTrip, setActiveTrip] = useState(
-    simulatedTrips.find((t) => t.id === tripId) || simulatedTrips[0]
-  );
+  const [activeTrip, setActiveTrip] = useState(() => {
+    // First try to find in reserved trips
+    if (typeof window !== "undefined") {
+      try {
+        const reservedTrips = JSON.parse(localStorage.getItem("reservedTrips") || "[]");
+        const reservedTrip = reservedTrips.find((t: any) => t.id === tripId);
+        if (reservedTrip) {
+          return reservedTrip;
+        }
+      } catch (e) {
+        console.error("Error reading reserved trips:", e);
+      }
+    }
+    // Fallback to simulated trips
+    return simulatedTrips.find((t) => t.id === tripId) || simulatedTrips[0];
+  });
 
   // Handler to actually cancel
   function handleConfirmCancel() {
     // Log the CANCEL_RESERVATION event
     console.log("Logging CANCEL_RESERVATION", { tripId });
-    logEvent(EVENT_TYPES.CANCEL_RESERVATION, { 
-      tripId,
-      timestamp: new Date().toISOString(),
-      tripData: activeTrip,
-      cancellationReason: 'user_requested',
-      cancellationTime: new Date().toISOString()
-    });
+    
+    // Check if this trip has reserved ride data (from RESERVE_RIDE event)
+    const reservedRideData = (activeTrip as any).reserveRideData;
+    
+    if (reservedRideData) {
+      // Use the actual reserved ride data from RESERVE_RIDE event
+      logEvent(EVENT_TYPES.CANCEL_RESERVATION, {
+        ...reservedRideData,
+        tripId,
+        timestamp: new Date().toISOString(),
+        cancellationReason: 'user_requested',
+        cancellationTime: new Date().toISOString()
+      });
+    } else {
+      // Fallback to template data if reserved ride data is not available
+      logEvent(EVENT_TYPES.CANCEL_RESERVATION, { 
+        tripId,
+        timestamp: new Date().toISOString(),
+        tripData: activeTrip,
+        cancellationReason: 'user_requested',
+        cancellationTime: new Date().toISOString()
+      });
+    }
     
     if (typeof window !== "undefined") {
       // We use localStorage to store a simple array of cancelled trip ids
@@ -66,21 +95,56 @@ export default function TripDetailsPage() {
   // On page load or when trip details are shown:
   useEffect(() => {
     console.log("Logging TRIP_DETAILS", { tripId });
-    logEvent(EVENT_TYPES.TRIP_DETAILS, { 
-      tripId,
-      pageType: 'trip_details',
-      trip_id: activeTrip.id,
-      ride_name: activeTrip.ride.name,
-      timestamp: new Date().toISOString(),
-      trip_status: activeTrip.status,
-      trip_date: activeTrip.date,
-      trip_time: activeTrip.time,
-      trip_price: activeTrip.price,
-      trip_payment: activeTrip.payment,
-      driver_name: activeTrip.driver.name,
-      pickup_location: activeTrip.pickup,
-      dropoff_location: activeTrip.dropoff
-    });
+    
+    // Check if this trip has reserved ride data (from RESERVE_RIDE event)
+    const reservedRideData = (activeTrip as any).reserveRideData;
+    
+    if (reservedRideData) {
+      // Use the actual reserved ride data from RESERVE_RIDE event
+      logEvent(EVENT_TYPES.TRIP_DETAILS, {
+        ...reservedRideData,
+        timestamp: new Date().toISOString(), // Update timestamp
+      });
+    } else {
+      // Fallback to template data if reserved ride data is not available (for simulated trips)
+      const RIDE_TEMPLATES = [
+        { name: "AutoDriverX", seats: 4, basePrice: 26.6 },
+        { name: "Comfort", seats: 4, basePrice: 31.5 },
+        { name: "AutoDriverXL", seats: 6, basePrice: 27.37 },
+        { name: "Executive", seats: 4, basePrice: 45.0 },
+      ];
+      const rideTemplate = RIDE_TEMPLATES.find(r => r.name === activeTrip.ride.name) || RIDE_TEMPLATES[0];
+      const oldPrice = Number((activeTrip.price * 1.1).toFixed(2));
+      const scheduled = activeTrip.date && activeTrip.time ? `${activeTrip.date} ${activeTrip.time}` : "now";
+      
+      logEvent(EVENT_TYPES.TRIP_DETAILS, {
+        rideId: RIDE_TEMPLATES.findIndex(r => r.name === activeTrip.ride.name) >= 0 
+          ? RIDE_TEMPLATES.findIndex(r => r.name === activeTrip.ride.name) 
+          : 0,
+        rideName: activeTrip.ride.name,
+        rideType: activeTrip.ride.name,
+        price: activeTrip.price,
+        oldPrice: oldPrice,
+        seats: rideTemplate.seats,
+        eta: "5 min away · " + (activeTrip.time || new Date().toTimeString().slice(0, 5)),
+        pickup: activeTrip.pickup,
+        dropoff: activeTrip.dropoff,
+        scheduled: scheduled,
+        timestamp: new Date().toISOString(),
+        priceDifference: oldPrice - activeTrip.price,
+        discountPercentage: ((oldPrice - activeTrip.price) / oldPrice * 100).toFixed(2),
+        isRecommended: false,
+        tripDetails: {
+          pickup: activeTrip.pickup,
+          dropoff: activeTrip.dropoff,
+          scheduled: scheduled,
+          rideType: activeTrip.ride.name,
+          price: activeTrip.price,
+          totalSeats: rideTemplate.seats,
+          estimatedArrival: "5 min away · " + (activeTrip.time || new Date().toTimeString().slice(0, 5))
+        }
+      });
+    }
   }, [tripId, activeTrip]);
 
   const rideIcon = activeTrip.ride.icon;

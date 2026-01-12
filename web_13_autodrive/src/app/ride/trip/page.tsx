@@ -1202,7 +1202,7 @@ export default function RideTripPage() {
                 if (selectedRideIdx !== null) {
                   const selectedRide = rides[selectedRideIdx];
                   // 🔹 log the RESERVE_RIDE event
-                  logEvent(EVENT_TYPES.RESERVE_RIDE, {
+                  const reserveRideEventData = {
                     rideId: selectedRideIdx,
                     rideName: selectedRide.name,
                     rideType: selectedRide.name,
@@ -1230,7 +1230,14 @@ export default function RideTripPage() {
                       totalSeats: selectedRide.seats,
                       estimatedArrival: selectedRide.eta
                     },
-                  });
+                  };
+                  
+                  // Save RESERVE_RIDE event data to sessionStorage for use in confirmation page
+                  if (typeof window !== "undefined") {
+                    sessionStorage.setItem("__ud_reserveRideData", JSON.stringify(reserveRideEventData));
+                  }
+                  
+                  logEvent(EVENT_TYPES.RESERVE_RIDE, reserveRideEventData);
                   
                   if (typeof window !== "undefined") {
                     sessionStorage.setItem(

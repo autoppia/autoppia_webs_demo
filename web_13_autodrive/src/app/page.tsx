@@ -179,12 +179,14 @@ function PlaceSelect({
   placeholder,
   open,
   setOpen,
+  inputType,
 }: {
   value: string | null;
   setValue: (x: string | null) => void;
   placeholder: string;
   open: boolean;
   setOpen: (v: boolean) => void;
+  inputType: "location" | "destination";
 }) {
   const dyn = useDynamicSystem();
   const [searchValue, setSearchValue] = useState("");
@@ -210,8 +212,8 @@ function PlaceSelect({
     }
   }, [open]);
 
-  // Determine component key based on placeholder
-  const componentKey = placeholder.toLowerCase().includes("pickup")
+  // Determine component key based on inputType
+  const componentKey = inputType === "location"
     ? "location-input-field"
     : "destination-input-field";
 
@@ -257,7 +259,7 @@ function PlaceSelect({
           className={cn(
             "flex-1 bg-transparent border-none outline-none text-[16px] placeholder:text-gray-400 pr-8",
             dyn.v3.getVariant(
-              placeholder.toLowerCase().includes("pickup") 
+              inputType === "location"
                 ? "location-input-field-class" 
                 : "destination-input-field-class",
               CLASS_VARIANTS_MAP,
@@ -271,14 +273,12 @@ function PlaceSelect({
               setSearchValue("");
             }
             // Log enter event when user focuses on input
-            const enterEventType = placeholder.toLowerCase().includes("pickup")
+            const enterEventType = inputType === "location"
               ? EVENT_TYPES.ENTER_LOCATION
               : EVENT_TYPES.ENTER_DESTINATION;
 
             logEvent(enterEventType, {
-              inputType: placeholder.toLowerCase().includes("pickup")
-                ? "location"
-                : "destination",
+              inputType: inputType,
               timestamp: new Date().toISOString(),
               page: "trip_form",
               action: "focus",
@@ -311,17 +311,13 @@ function PlaceSelect({
                 setSearchValue("");
 
                 // Log ENTER event for exact match
-                const enterEventType = placeholder
-                  .toLowerCase()
-                  .includes("pickup")
+                const enterEventType = inputType === "location"
                   ? EVENT_TYPES.ENTER_LOCATION
                   : EVENT_TYPES.ENTER_DESTINATION;
 
                 logEvent(enterEventType, {
                   value: exactMatch.label,
-                  inputType: placeholder.toLowerCase().includes("pickup")
-                    ? "location"
-                    : "destination",
+                  inputType: inputType,
                   timestamp: new Date().toISOString(),
                   page: "trip_form",
                   selectionMethod: "enter_key_exact_match",
@@ -334,7 +330,7 @@ function PlaceSelect({
 
                 if (typeof window !== "undefined") {
                   sessionStorage.setItem(
-                    placeholder === "Pickup location"
+                    inputType === "location"
                       ? "__ud_pickup"
                       : "__ud_dropoff",
                     exactMatch.label
@@ -349,17 +345,13 @@ function PlaceSelect({
                 setSearchValue("");
 
                 // Log ENTER event for custom value
-                const enterEventType = placeholder
-                  .toLowerCase()
-                  .includes("pickup")
+                const enterEventType = inputType === "location"
                   ? EVENT_TYPES.ENTER_LOCATION
                   : EVENT_TYPES.ENTER_DESTINATION;
 
                 logEvent(enterEventType, {
                   value: customOption,
-                  inputType: placeholder.toLowerCase().includes("pickup")
-                    ? "location"
-                    : "destination",
+                  inputType: inputType,
                   timestamp: new Date().toISOString(),
                   page: "trip_form",
                   selectionMethod: "enter_key_custom",
@@ -369,7 +361,7 @@ function PlaceSelect({
 
                 if (typeof window !== "undefined") {
                   sessionStorage.setItem(
-                    placeholder === "Pickup location"
+                    inputType === "location"
                       ? "__ud_pickup"
                       : "__ud_dropoff",
                     customOption
@@ -390,9 +382,7 @@ function PlaceSelect({
 
               // Log SEARCH event when user types
               if (newValue.trim()) {
-                const searchEventType = placeholder
-                  .toLowerCase()
-                  .includes("pickup")
+                const searchEventType = inputType === "location"
                   ? EVENT_TYPES.SEARCH_LOCATION
                   : EVENT_TYPES.SEARCH_DESTINATION;
 
@@ -409,9 +399,7 @@ function PlaceSelect({
 
                 logEvent(searchEventType, {
                   value: newValue,
-                  inputType: placeholder.toLowerCase().includes("pickup")
-                    ? "location"
-                    : "destination",
+                  inputType: inputType,
                   timestamp: new Date().toISOString(),
                   searchType: "typing",
                   page: "trip_form",
@@ -533,17 +521,13 @@ function PlaceSelect({
                       setSearchValue("");
 
                       // Log ENTER event when user selects from dropdown
-                      const enterEventType = placeholder
-                        .toLowerCase()
-                        .includes("pickup")
+                      const enterEventType = inputType === "location"
                         ? EVENT_TYPES.ENTER_LOCATION
                         : EVENT_TYPES.ENTER_DESTINATION;
 
                       logEvent(enterEventType, {
                         value: option.label,
-                        inputType: placeholder.toLowerCase().includes("pickup")
-                          ? "location"
-                          : "destination",
+                        inputType: inputType,
                         timestamp: new Date().toISOString(),
                         page: "trip_form",
                         selectionMethod: "dropdown",
@@ -558,7 +542,7 @@ function PlaceSelect({
 
                       if (typeof window !== "undefined") {
                         sessionStorage.setItem(
-                          placeholder === "Pickup location"
+                          inputType === "location"
                             ? "__ud_pickup"
                             : "__ud_dropoff",
                           option.label
@@ -622,7 +606,7 @@ function PlaceSelect({
 
                       logEvent(enterEventType, {
                         value: customOption,
-                        inputType: placeholder.toLowerCase().includes("pickup")
+                        inputType: inputType
                           ? "location"
                           : "destination",
                         timestamp: new Date().toISOString(),
@@ -1057,6 +1041,7 @@ export default function Home() {
         placeholder={pageText.pickupPlaceholder}
         open={pickupOpen}
         setOpen={setPickupOpen}
+        inputType="location"
       />
       <PlaceSelect
         value={dropoff}
@@ -1064,6 +1049,7 @@ export default function Home() {
         placeholder={pageText.dropoffPlaceholder}
         open={dropoffOpen}
         setOpen={setDropoffOpen}
+        inputType="destination"
       />
       {dyn.v1.addWrapDecoy(
         "pickup-now-toggle",
@@ -1397,7 +1383,7 @@ export default function Home() {
                 if (selectedRideIdx !== null) {
                   const selectedRide = rides[selectedRideIdx];
                   // 🔹 log the RESERVE_RIDE event
-                  logEvent(EVENT_TYPES.RESERVE_RIDE, {
+                  const reserveRideEventData = {
                     rideId: selectedRideIdx,
                     rideName: selectedRide.name,
                     rideType: selectedRide.name,
@@ -1429,7 +1415,14 @@ export default function Home() {
                       totalSeats: selectedRide.seats,
                       estimatedArrival: selectedRide.eta,
                     },
-                  });
+                  };
+                  
+                  // Save RESERVE_RIDE event data to sessionStorage for use in confirmation page
+                  if (typeof window !== "undefined") {
+                    sessionStorage.setItem("__ud_reserveRideData", JSON.stringify(reserveRideEventData));
+                  }
+                  
+                  logEvent(EVENT_TYPES.RESERVE_RIDE, reserveRideEventData);
 
                   if (typeof window !== "undefined") {
                     sessionStorage.setItem(
