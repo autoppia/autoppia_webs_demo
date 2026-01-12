@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import GlobalHeader from "@/components/GlobalHeader";
 import { EVENT_TYPES, logEvent } from "@/library/event";
 import { simulatedTrips, rides } from "@/data/trips-enhanced";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 function formatDateTime(date: string, time: string) {
   if (!date || !time) return "--";
@@ -21,6 +23,7 @@ function formatDateTime(date: string, time: string) {
 
 export default function TripDetailsPage() {
   const router = useRouter();
+  const dyn = useDynamicSystem();
   const { tripId } = useParams();
 
   // Active page for nav highlighting
@@ -197,7 +200,7 @@ export default function TripDetailsPage() {
             charge up to 1 hour in advance.
           </div>
           <button
-            className="w-full bg-[#2095d2] rounded-md text-white font-bold py-3 text-base mt-3 flex items-center justify-center gap-2 hover:bg-[#187bb3] transition"
+            className={dyn.v3.getVariant("reserved-cancel-trip-button-class", CLASS_VARIANTS_MAP, "w-full bg-[#2095d2] rounded-md text-white font-bold py-3 text-base mt-3 flex items-center justify-center gap-2 hover:bg-[#187bb3] transition")}
             onClick={() => setShowCancelModal(true)}
           >
             <svg
@@ -215,7 +218,7 @@ export default function TripDetailsPage() {
                 strokeLinecap="round"
               />
             </svg>
-            Cancel this trip
+            {dyn.v3.getVariant("reserved-cancel-trip-button-text", TEXT_VARIANTS_MAP, "Cancel this trip")}
           </button>
         </div>
       </div>

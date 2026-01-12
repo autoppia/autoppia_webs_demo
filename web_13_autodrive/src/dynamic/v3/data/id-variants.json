@@ -2123,5 +2123,41 @@
     "navigation-history",
     "nav-trips-link",
     "navigation-bookings"
+  ],
+  "time-picker-div-id": [
+    "time-picker-div",
+    "time-picker-element",
+    "time-selector-div",
+    "time-field-div",
+    "time-input-div",
+    "slot-picker-div",
+    "time-picker-wrapper",
+    "time-select-wrapper",
+    "time-field-wrapper",
+    "time-input-wrapper"
+  ],
+  "pickupnow-next-button-id": [
+    "pickupnow-next-button",
+    "pickupnow-continue-button",
+    "pickupnow-proceed-button",
+    "pickupnow-submit-button",
+    "pickupnow-confirm-button",
+    "pickupnow-next-btn",
+    "pickupnow-continue-btn",
+    "pickupnow-proceed-btn",
+    "pickupnow-submit-btn",
+    "pickupnow-confirm-btn"
+  ],
+  "trips-card-details-button-id": [
+    "trips-card-details-button",
+    "trips-details-button",
+    "trip-details-button",
+    "trips-view-details-button",
+    "trip-view-details-button",
+    "trips-card-details-btn",
+    "trips-details-btn",
+    "trip-details-btn",
+    "trips-view-details-btn",
+    "trip-view-details-btn"
   ]
 }

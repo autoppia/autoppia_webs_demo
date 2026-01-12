@@ -294,9 +294,10 @@ export default function ConfirmationPage() {
                     </div>
                   </div>
                 </div>
-                <button
-                  className={`mt-4 w-full bg-[#2095d2] text-white font-bold rounded-md py-3 text-lg hover:bg-[#1273a0] transition ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`}
-                  onClick={() => {
+                {dyn.v1.addWrapDecoy("confirmation-view-track-trip-button", (
+                  <button
+                    className={`mt-4 w-full bg-[#2095d2] text-white font-bold rounded-md py-3 text-lg hover:bg-[#1273a0] transition ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`}
+                    onClick={() => {
                     // Generate a trip ID for this reservation
                     const tripId = `trip-${Date.now()}`;
                     logEvent(EVENT_TYPES.TRIP_DETAILS, {
@@ -319,8 +320,9 @@ export default function ConfirmationPage() {
                     }, 800);
                   }}
                 >
-                  {dyn.v3.getVariant("view_track_trip", TEXT_VARIANTS_MAP, "View and track your trip")}
-                </button>
+                    {dyn.v3.getVariant("view_track_trip", TEXT_VARIANTS_MAP, "View and track your trip")}
+                  </button>
+                ))}
                 <div className="text-xs text-gray-600 mt-4 text-center">
                   You'll see driver and car details shortly before your pickup.
                 </div>

@@ -966,18 +966,20 @@ export default function RideTripPage() {
           <path d="M2 4l3 3 3-3" stroke="#2095d2" strokeWidth="1.3" />
         </svg>
       </div>
-      <button
-        id={dyn.v3.getVariant("search-button", ID_VARIANTS_MAP, "search-button")}
-        onClick={handleSearch}
-        className={`rounded-md h-10 font-bold mb-2 transition ${
-          !pickup || !dropoff || loading
-            ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-            : "bg-[#2095d2] text-white hover:bg-[#1273a0]"
-        } ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`}
-        disabled={!pickup || !dropoff || loading}
-      >
-        {loading ? getText('searching-label', 'Searching...') : getText('search-button', 'Search')}
-      </button>
+      {dyn.v1.addWrapDecoy("ride-trip-search-button", (
+        <button
+          id={dyn.v3.getVariant("search-button", ID_VARIANTS_MAP, "search-button")}
+          onClick={handleSearch}
+          className={`rounded-md h-10 font-bold mb-2 transition ${
+            !pickup || !dropoff || loading
+              ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+              : "bg-[#2095d2] text-white hover:bg-[#1273a0]"
+          } ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`}
+          disabled={!pickup || !dropoff || loading}
+        >
+          {loading ? getText('searching-label', 'Searching...') : getText('search-button', 'Search')}
+        </button>
+      ))}
 
       {/* Stats Section */}
       <div className="mt-6 pt-6 border-t border-gray-200">
@@ -1023,14 +1025,16 @@ export default function RideTripPage() {
       <Spinner />
     </section>
   ) : pickup && dropoff && showRides ? (
-    <section className="flex-1 max-w-2xl max-lg:max-w-full">
-      <h1 className="text-3xl font-bold mb-2" {...getElementAttributes('choose-ride-title', 0)}>{getText('choose-ride-title', 'Choose a ride')}</h1>
-      <div className="text-lg font-semibold mb-4" {...getElementAttributes('recommended-label', 0)}>{getText('recommended-label', 'Recommended')}</div>
-      <div className="space-y-3">
-        {rides.map((ride, idx) => (
-          <div
-            key={ride.name}
-            onClick={() => {
+    dyn.v1.addWrapDecoy("ride-trip-choose-ride-section", (
+      <section className="flex-1 max-w-2xl max-lg:max-w-full">
+        <h1 className="text-3xl font-bold mb-2" {...getElementAttributes('choose-ride-title', 0)}>{getText('choose-ride-title', 'Choose a ride')}</h1>
+        <div className="text-lg font-semibold mb-4" {...getElementAttributes('recommended-label', 0)}>{getText('recommended-label', 'Recommended')}</div>
+        <div className="space-y-3">
+          {rides.map((ride, idx) => 
+            dyn.v1.addWrapDecoy(`ride-trip-ride-card-${idx}`, (
+              <div
+                key={ride.name}
+                onClick={() => {
               setSelectedRideIdx(idx);
               // 🔹 log the SELECT_CAR event
               logEvent(EVENT_TYPES.SELECT_CAR, {
@@ -1113,9 +1117,11 @@ export default function RideTripPage() {
               </div>
             </div>
           </div>
-        ))}
-      </div>
-    </section>
+            ))
+          )}
+        </div>
+      </section>
+    ))
   ) : null;
 
   // Map section component

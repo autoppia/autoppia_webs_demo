@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import GlobalHeader from "@/components/GlobalHeader";
 import { logEvent, EVENT_TYPES } from "@/library/event";
 import {simulatedTrips, rides, DriverType, RideType, Trip} from "@/data/trips-enhanced";
@@ -18,8 +20,9 @@ function formatDateShort(date: string, time: string) {
   });
 }
 
-function TripCard({ trip, onCancel }: { trip: Trip; onCancel?: (tripId: string) => void }) {
+function TripCard({ trip, onCancel, index }: { trip: Trip; onCancel?: (tripId: string) => void; index: number }) {
   const router = useSeedRouter();
+  const dyn = useDynamicSystem();
   const { getElementAttributes, getText } = useSeedLayout();
   
   const handleTripDetailsClick = () => {
@@ -56,7 +59,8 @@ function TripCard({ trip, onCancel }: { trip: Trip; onCancel?: (tripId: string) 
   };
   
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl flex items-center px-8 py-6 gap-7 mb-6 shadow-sm">
+    dyn.v1.addWrapDecoy(`trips-upcoming-ride-card-${index}`, (
+      <div className="bg-white border border-gray-200 rounded-2xl flex items-center px-8 py-6 gap-7 mb-6 shadow-sm">
       <img
         src={trip.ride.image || trip.ride.icon}
         alt="Car"
@@ -77,8 +81,8 @@ function TripCard({ trip, onCancel }: { trip: Trip; onCancel?: (tripId: string) 
       </div>
       <div className="flex flex-col justify-between items-end h-full gap-2">
         <button
-          {...getElementAttributes('trips-card-details', 0)}
-          className="flex items-center gap-2 px-4 py-2 bg-[#2095d2] text-white rounded-lg font-semibold text-sm shadow hover:bg-[#1273a0] transition"
+          id={dyn.v3.getVariant("trips-card-details-button-id", ID_VARIANTS_MAP, "trips-card-details")}
+          className={dyn.v3.getVariant("trips-card-details-button-class", CLASS_VARIANTS_MAP, "flex items-center gap-2 px-4 py-2 bg-[#2095d2] text-white rounded-lg font-semibold text-sm shadow hover:bg-[#1273a0] transition")}
           onClick={handleTripDetailsClick}
         >
           <svg width="18" height="18" fill="none" viewBox="0 0 20 20">
@@ -90,11 +94,11 @@ function TripCard({ trip, onCancel }: { trip: Trip; onCancel?: (tripId: string) 
               strokeLinecap="round"
             />
           </svg>
-          {getText('trips-card-details', 'Trip Details')}
+          {dyn.v3.getVariant("trips-card-details-button-text", TEXT_VARIANTS_MAP, getText('trips-card-details', 'Trip Details'))}
         </button>
         {onCancel && (
           <button
-            className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg font-semibold text-sm border border-red-200 hover:bg-red-100 transition"
+            className={dyn.v3.getVariant("trips-cancel-button-class", CLASS_VARIANTS_MAP, "flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg font-semibold text-sm border border-red-200 hover:bg-red-100 transition")}
             onClick={handleCancel}
           >
             <svg width="16" height="16" fill="none" viewBox="0 0 20 20">
@@ -105,11 +109,12 @@ function TripCard({ trip, onCancel }: { trip: Trip; onCancel?: (tripId: string) 
                 strokeLinecap="round"
               />
             </svg>
-            {getText('trips-cancel', 'Cancel')}
+            {dyn.v3.getVariant("trips-cancel-button-text", TEXT_VARIANTS_MAP, getText('trips-cancel', 'Cancel'))}
           </button>
         )}
       </div>
-    </div>
+      </div>
+    ))
   );
 }
 
@@ -313,6 +318,7 @@ function PastSection() {
 
 export default function TripsDashboardPage() {
   const { getElementAttributes, getText } = useSeedLayout();
+  const dyn = useDynamicSystem();
   const [loading, setLoading] = useState<boolean>(true);
   const [trips, setTrips] = useState<Trip[]>([]);
   const [cancelledIds, setCancelledIds] = useState<string[]>([]);
@@ -433,8 +439,9 @@ export default function TripsDashboardPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#fafbfc]">
-      <GlobalHeader />
+    dyn.v1.addWrapDecoy("trips-page", (
+      <div className="min-h-screen bg-[#fafbfc]">
+        <GlobalHeader />
       {loading ? (
         <div className="flex w-full h-[70vh] items-center justify-center">
           <div className="flex items-center gap-6 w-full max-w-[500px] justify-end pr-12">
@@ -470,8 +477,8 @@ export default function TripsDashboardPage() {
           <div className="w-[60%] max-md:w-full">
             <section>
               <div className="text-3xl font-bold mb-6" {...getElementAttributes('trips-upcoming-title', 0)}>{getText('trips-upcoming-title', 'Upcoming')}</div>
-              {upcomingDisplay.map((trip) => (
-                <TripCard key={trip.id} trip={trip} onCancel={handleCancelReservation} />
+              {upcomingDisplay.map((trip, idx) => (
+                <TripCard key={trip.id} trip={trip} onCancel={handleCancelReservation} index={idx} />
               ))}
             </section>
             <PastSection />
@@ -499,6 +506,7 @@ export default function TripsDashboardPage() {
           </aside>
         </div>
       )}
-    </div>
+      </div>
+    ))
   );
 }

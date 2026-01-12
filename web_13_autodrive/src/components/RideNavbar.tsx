@@ -2,6 +2,8 @@
 
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useState } from "react";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 interface RideNavbarProps {
   activeTab: "ride" | "mytrips";
@@ -9,6 +11,7 @@ interface RideNavbarProps {
 
 export default function RideNavbar({ activeTab }: RideNavbarProps) {
   const router = useSeedRouter();
+  const dyn = useDynamicSystem();
   const [profileOpen, setProfileOpen] = useState(false);
 
   return (
@@ -23,31 +26,29 @@ export default function RideNavbar({ activeTab }: RideNavbarProps) {
         <ul className="hidden md:flex space-x-6">
           <li>
             <button
-              className={
-                "transition font-bold border-b-2 " +
+              className={dyn.v3.getVariant("navbar-ride-button-class", CLASS_VARIANTS_MAP, "transition font-bold border-b-2 " +
                 (activeTab === "ride"
                   ? "border-[#2095d2] text-[#2095d2]"
-                  : "border-transparent text-black hover:text-[#2095d2]")
-              }
+                  : "border-transparent text-black hover:text-[#2095d2]"))}
               onClick={() => router.push("/ride/trip")}
             >
-              Ride
+              {dyn.v3.getVariant("navbar-ride-button-text", TEXT_VARIANTS_MAP, "Ride")}
             </button>
           </li>
           <li>
             <button
-              className="transition font-bold border-b-2 border-transparent text-black hover:text-[#2095d2]"
+              className={dyn.v3.getVariant("navbar-about-button-class", CLASS_VARIANTS_MAP, "transition font-bold border-b-2 border-transparent text-black hover:text-[#2095d2]")}
               onClick={() => router.push("/about")}
             >
-              About
+              {dyn.v3.getVariant("navbar-about-button-text", TEXT_VARIANTS_MAP, "About")}
             </button>
           </li>
           <li>
             <button
-              className="transition font-bold border-b-2 border-transparent text-black hover:text-[#2095d2]"
+              className={dyn.v3.getVariant("navbar-help-button-class", CLASS_VARIANTS_MAP, "transition font-bold border-b-2 border-transparent text-black hover:text-[#2095d2]")}
               onClick={() => router.push("/help")}
             >
-              Help
+              {dyn.v3.getVariant("navbar-help-button-text", TEXT_VARIANTS_MAP, "Help")}
             </button>
           </li>
         </ul>

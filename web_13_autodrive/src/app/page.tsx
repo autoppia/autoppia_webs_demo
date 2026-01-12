@@ -8,6 +8,7 @@ import SiteElements from "@/components/SiteElements";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeed } from "@/context/SeedContext";
+import { cn } from "@/library/utils";
 
 const PLACES = [
   {
@@ -209,20 +210,27 @@ function PlaceSelect({
     }
   }, [open]);
 
+  // Determine component key based on placeholder
+  const componentKey = placeholder.toLowerCase().includes("pickup")
+    ? "location-input-field"
+    : "destination-input-field";
+
   return (
-    <div ref={ref} className="mb-3 w-full relative">
-      <div
-        className={`flex items-center px-3 py-2 rounded border bg-white shadow-sm focus-within:border-[#2095d2] cursor-pointer relative ${
-          open ? "border-[#2095d2] ring-2 ring-[#2095d2]" : "border-gray-300"
-        }`}
-        onClick={() => {
-          if (!isTyping) {
-            setOpen(true);
-          }
-        }}
-        tabIndex={0}
-        style={{ paddingRight: 42 }}
-      >
+    dyn.v1.addWrapDecoy(
+      componentKey,
+      <div ref={ref} className="mb-3 w-full relative">
+        <div
+          className={`flex items-center px-3 py-2 rounded border bg-white shadow-sm focus-within:border-[#2095d2] cursor-pointer relative ${
+            open ? "border-[#2095d2] ring-2 ring-[#2095d2]" : "border-gray-300"
+          }`}
+          onClick={() => {
+            if (!isTyping) {
+              setOpen(true);
+            }
+          }}
+          tabIndex={0}
+          style={{ paddingRight: 42 }}
+        >
         <span className="text-gray-600 mr-2">
           <svg
             width="18"
@@ -246,7 +254,16 @@ function PlaceSelect({
           value={isTyping ? searchValue : value ? value : ""}
           readOnly={!isTyping}
           placeholder={placeholder}
-          className="flex-1 bg-transparent border-none outline-none text-[16px] placeholder:text-gray-400 pr-8"
+          className={cn(
+            "flex-1 bg-transparent border-none outline-none text-[16px] placeholder:text-gray-400 pr-8",
+            dyn.v3.getVariant(
+              placeholder.toLowerCase().includes("pickup") 
+                ? "location-input-field-class" 
+                : "destination-input-field-class",
+              CLASS_VARIANTS_MAP,
+              ""
+            )
+          )}
           style={{ paddingRight: 32 }}
           onFocus={() => {
             if (!isTyping) {
@@ -666,7 +683,8 @@ function PlaceSelect({
           })()}
         </div>
       )}
-    </div>
+      </div>
+    )
   );
 }
 
@@ -1076,7 +1094,7 @@ export default function Home() {
               strokeLinecap="round"
             />
           </svg>
-          <span className="font-bold mr-1 text-[#2095d2]">
+          <span className={cn("font-bold mr-1 text-[#2095d2]", dyn.v3.getVariant("homepage-pickup-span-class", CLASS_VARIANTS_MAP, ""))}>
             {pickupScheduled ? pageText.pickupLabel : pageText.pickupNow}
           </span>
           {pickupScheduled ? (

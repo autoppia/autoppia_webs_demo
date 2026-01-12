@@ -586,5 +586,77 @@
   "Ride finder",
   "Search car",
   "Find your ride"
-]
+],
+  "navbar-ride-button-text": [
+    "Ride",
+    "Trips",
+    "Go",
+    "Book",
+    "Drive",
+    "Book Ride",
+    "Get Ride",
+    "Ride Now",
+    "Start Ride",
+    "Book Trip"
+  ],
+  "navbar-about-button-text": [
+    "About",
+    "About us",
+    "Company",
+    "Why AutoDriver",
+    "Story",
+    "About AutoDriver",
+    "Our Story",
+    "Company Info",
+    "Learn More",
+    "About Company"
+  ],
+  "navbar-help-button-text": [
+    "Help",
+    "Support",
+    "Assistance",
+    "Guide",
+    "Help Center",
+    "Get Help",
+    "Support Center",
+    "FAQ",
+    "Help & Support",
+    "Customer Support"
+  ],
+  "trips-card-details-button-text": [
+    "Trip Details",
+    "View Details",
+    "See Details",
+    "Details",
+    "View Trip",
+    "Trip Info",
+    "View Trip Details",
+    "See Trip",
+    "Trip Information",
+    "View Information"
+  ],
+  "trips-cancel-button-text": [
+    "Cancel",
+    "Cancel Trip",
+    "Remove",
+    "Delete",
+    "Cancel Reservation",
+    "Remove Trip",
+    "Cancel Ride",
+    "Delete Trip",
+    "Remove Reservation",
+    "Cancel Booking"
+  ],
+  "reserved-cancel-trip-button-text": [
+    "Cancel this trip",
+    "Cancel trip",
+    "Cancel reservation",
+    "Cancel ride",
+    "Remove trip",
+    "Cancel this reservation",
+    "Remove reservation",
+    "Cancel booking",
+    "Delete trip",
+    "Cancel this ride"
+  ]
 }

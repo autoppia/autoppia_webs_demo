@@ -190,6 +190,126 @@
     "time-field-wrapper",
     "time-input-wrapper",
     "slot-wrapper"
+  ],
+  "date-picker-container-class": [
+    "date-picker-container-class",
+    "date-picker-wrapper-class",
+    "date-selector-container-class",
+    "date-field-container-class",
+    "date-input-container-class",
+    "calendar-container-class",
+    "date-picker-div-class",
+    "date-selector-div-class",
+    "date-field-div-class",
+    "date-input-div-class"
+  ],
+  "location-input-field-class": [
+    "location-input-field-class",
+    "location-input-class",
+    "pickup-input-field-class",
+    "pickup-location-input-class",
+    "location-field-class",
+    "pickup-field-class",
+    "location-entry-class",
+    "pickup-entry-class",
+    "location-input-wrapper-class",
+    "pickup-input-wrapper-class"
+  ],
+  "destination-input-field-class": [
+    "destination-input-field-class",
+    "destination-input-class",
+    "dropoff-input-field-class",
+    "dropoff-location-input-class",
+    "destination-field-class",
+    "dropoff-field-class",
+    "destination-entry-class",
+    "dropoff-entry-class",
+    "destination-input-wrapper-class",
+    "dropoff-input-wrapper-class"
+  ],
+  "homepage-pickup-span-class": [
+    "homepage-pickup-span-class",
+    "pickup-span-class",
+    "homepage-pickup-label-class",
+    "pickup-label-class",
+    "homepage-pickup-text-class",
+    "pickup-text-class",
+    "homepage-pickup-span-wrapper-class",
+    "pickup-span-wrapper-class",
+    "homepage-pickup-label-wrapper-class",
+    "pickup-label-wrapper-class"
+  ],
+  "navbar-ride-button-class": [
+    "navbar-ride-button-class",
+    "nav-ride-button-class",
+    "navbar-ride-btn-class",
+    "nav-ride-btn-class",
+    "ride-nav-button-class",
+    "ride-nav-btn-class",
+    "navbar-ride-link-class",
+    "nav-ride-link-class",
+    "ride-nav-link-class",
+    "navbar-ride-item-class"
+  ],
+  "navbar-about-button-class": [
+    "navbar-about-button-class",
+    "nav-about-button-class",
+    "navbar-about-btn-class",
+    "nav-about-btn-class",
+    "about-nav-button-class",
+    "about-nav-btn-class",
+    "navbar-about-link-class",
+    "nav-about-link-class",
+    "about-nav-link-class",
+    "navbar-about-item-class"
+  ],
+  "navbar-help-button-class": [
+    "navbar-help-button-class",
+    "nav-help-button-class",
+    "navbar-help-btn-class",
+    "nav-help-btn-class",
+    "help-nav-button-class",
+    "help-nav-btn-class",
+    "navbar-help-link-class",
+    "nav-help-link-class",
+    "help-nav-link-class",
+    "navbar-help-item-class"
+  ],
+  "trips-card-details-button-class": [
+    "trips-card-details-button-class",
+    "trips-details-button-class",
+    "trip-details-button-class",
+    "trips-view-details-button-class",
+    "trip-view-details-button-class",
+    "trips-card-details-btn-class",
+    "trips-details-btn-class",
+    "trip-details-btn-class",
+    "trips-view-details-btn-class",
+    "trip-view-details-btn-class"
+  ],
+  "trips-cancel-button-class": [
+    "trips-cancel-button-class",
+    "trips-cancel-btn-class",
+    "trip-cancel-button-class",
+    "trip-cancel-btn-class",
+    "trips-remove-button-class",
+    "trip-remove-button-class",
+    "trips-remove-btn-class",
+    "trip-remove-btn-class",
+    "trips-delete-button-class",
+    "trip-delete-button-class"
+  ],
+  "reserved-cancel-trip-button-class": [
+    "reserved-cancel-trip-button-class",
+    "reserved-cancel-button-class",
+    "reserved-cancel-btn-class",
+    "cancel-reservation-button-class",
+    "cancel-reservation-btn-class",
+    "reserved-remove-button-class",
+    "reserved-remove-btn-class",
+    "cancel-trip-button-class",
+    "cancel-trip-btn-class",
+    "reserved-delete-button-class"
   ]
 }
 

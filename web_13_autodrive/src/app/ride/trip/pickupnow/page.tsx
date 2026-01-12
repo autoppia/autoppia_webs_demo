@@ -8,7 +8,8 @@ import { DatePickerInput } from "../../../../components/DatePicker";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { getEffectiveSeed } from "@/dynamic/v2-data";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 
 function getTimeSlotsForDate(dateStr: string) {
   const results = [];
@@ -578,7 +579,7 @@ export default function PickupNowPage() {
         data-seed={isDynamicEnabled ? seed : undefined}
         data-variant={isDynamicEnabled ? `variant-${((seed % 30) + 1) % 10 || 10}` : undefined}
       >
-        <RideNavbar activeTab="ride" />
+        {dyn.v1.addWrapDecoy("pickupnow-navigation-bar", <RideNavbar activeTab="ride" />)}
         <div className="flex gap-8 mt-8 px-8 pb-10 max-lg:flex-col max-lg:px-2 max-lg:gap-4">
           <section 
             className="bg-white rounded-2xl shadow-xl p-8 flex flex-col max-lg:w-full mx-auto mt-2 relative border border-gray-100"
@@ -638,8 +639,9 @@ export default function PickupNowPage() {
           )}
           
           {/* Date picker row */}
-          <div className={`mb-4 ${dyn.v3.getVariant("date-picker-container", CLASS_VARIANTS_MAP, "")}`}>
-            <DatePickerInput
+          {dyn.v1.addWrapDecoy("pickupnow-date-picker", (
+            <div className={cn("mb-4", dyn.v3.getVariant("date-picker-container-class", CLASS_VARIANTS_MAP, ""))}>
+              <DatePickerInput
               date={selectedDate}
               onDateChange={(newDate) => {
                 setSelectedDate(newDate);
@@ -661,13 +663,15 @@ export default function PickupNowPage() {
               disabled={!isMounted}
               minDate={new Date()}
               maxDate={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)} // 30 days from now
-            />
-          </div>
+              />
+            </div>
+          ))}
           {/* Time picker row */}
-          <div className={`mb-7 relative ${dyn.v3.getVariant("time-picker-container", CLASS_VARIANTS_MAP, "")}`}>
-            <div
+          {dyn.v1.addWrapDecoy("pickupnow-time-picker", (
+            <div className={`mb-7 relative ${dyn.v3.getVariant("time-picker-container", CLASS_VARIANTS_MAP, "")}`}>
+              <div
               className={`bg-gray-100 rounded-lg flex items-center px-4 py-3 cursor-pointer border border-gray-200 text-base group ${dyn.v3.getVariant("time-picker-container", CLASS_VARIANTS_MAP, "")}`}
-              id={generateId('time-picker', 0)}
+              id={dyn.v3.getVariant("time-picker-div-id", ID_VARIANTS_MAP, generateId('time-picker', 0))}
               onClick={() => isMounted && setShowSlotPanel(!showSlotPanel)}
               tabIndex={0}
             >
@@ -755,7 +759,8 @@ export default function PickupNowPage() {
                 ))}
               </div>
             )}
-          </div>
+            </div>
+          ))}
           {/* Info items positioned AFTER time picker */}
           {variant.infoPosition === 'after' && (
             <ul 
@@ -783,19 +788,21 @@ export default function PickupNowPage() {
           >
             {variant.termsLinkText}
           </a>
-          <button
-            onClick={handleNext}
-            className={getButtonClasses("block w-full text-white py-3 text-lg font-bold mt-2 transition")}
-            style={{ 
-              backgroundColor: variant.accentColor,
-              '--hover-color': `${variant.accentColor}dd`
-            } as React.CSSProperties}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = `${variant.accentColor}dd`}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = variant.accentColor}
-            id={generateId('next-button', 0)}
-          >
-            {variant.nextButtonText}
-          </button>
+          {dyn.v1.addWrapDecoy("pickupnow-continue-button", (
+            <button
+              onClick={handleNext}
+              className={getButtonClasses("block w-full text-white py-3 text-lg font-bold mt-2 transition")}
+              style={{ 
+                backgroundColor: variant.accentColor,
+                '--hover-color': `${variant.accentColor}dd`
+              } as React.CSSProperties}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = `${variant.accentColor}dd`}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = variant.accentColor}
+              id={dyn.v3.getVariant("pickupnow-next-button-id", ID_VARIANTS_MAP, generateId('next-button', 0))}
+            >
+              {variant.nextButtonText}
+            </button>
+          ))}
         </section>
         <section 
           className="flex-1 min-w-0"
