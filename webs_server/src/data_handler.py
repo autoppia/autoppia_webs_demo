@@ -144,32 +144,102 @@ def load_all_data(web_name: str, entity_type: Optional[str] = None) -> List[Dict
         if entity_type:
             # Load specific entity type
             original_file = f"{original_dir}/{entity_type}_1.json"
+            file_loaded = False
+
             if os.path.exists(original_file):
                 try:
-                    with open(original_file, "r", encoding="utf-8") as f:
-                        contents = json.load(f)
-                        if isinstance(contents, list):
-                            all_data.extend(contents)
-                        elif isinstance(contents, dict):
-                            all_data.append(contents)
+                    # Check if file is empty
+                    file_size = os.path.getsize(original_file)
+                    if file_size == 0:
+                        logger.warning(f"File is empty in original/, trying fallback to data/: {original_file}")
+                    else:
+                        with open(original_file, "r", encoding="utf-8") as f:
+                            contents = json.load(f)
+                            if isinstance(contents, list):
+                                all_data.extend(contents)
+                            elif isinstance(contents, dict):
+                                all_data.append(contents)
+                        file_loaded = True
+                except json.JSONDecodeError as e:
+                    logger.error(f"Invalid JSON in file {original_file}: {e}")
                 except Exception as e:
-                    print(f"Error reading file {original_file}: {e}")
+                    logger.error(f"Error reading file {original_file}: {e}")
+            else:
+                logger.warning(f"File does not exist in original/, trying fallback to data/: {original_file}")
+
+            # Fallback to data/ directory if original/ file is empty or doesn't exist
+            if not file_loaded:
+                data_dir = get_data_dir(web_name)
+                data_file = f"{data_dir}/{entity_type}_1.json"
+                if os.path.exists(data_file):
+                    try:
+                        file_size = os.path.getsize(data_file)
+                        if file_size == 0:
+                            logger.warning(f"Fallback file is also empty: {data_file}")
+                        else:
+                            with open(data_file, "r", encoding="utf-8") as f:
+                                contents = json.load(f)
+                                if isinstance(contents, list):
+                                    all_data.extend(contents)
+                                elif isinstance(contents, dict):
+                                    all_data.append(contents)
+                            logger.info(f"Loaded data from fallback location: {data_file}")
+                    except json.JSONDecodeError as e:
+                        logger.error(f"Invalid JSON in fallback file {data_file}: {e}")
+                    except Exception as e:
+                        logger.error(f"Error reading fallback file {data_file}: {e}")
+                else:
+                    logger.warning(f"Fallback file also does not exist: {data_file}")
         else:
             # Load all JSON files from original/
+            data_dir = get_data_dir(web_name)
+            loaded_files = set()
+
             for filename in sorted(os.listdir(original_dir)):
                 if not filename.endswith(".json"):
                     continue
                 original_file = f"{original_dir}/{filename}"
+                file_loaded = False
+
                 try:
-                    with open(original_file, "r", encoding="utf-8") as f:
-                        contents = json.load(f)
-                        if isinstance(contents, list):
-                            all_data.extend(contents)
-                        elif isinstance(contents, dict):
-                            all_data.append(contents)
+                    # Check if file is empty
+                    if os.path.getsize(original_file) == 0:
+                        logger.warning(f"File is empty in original/, trying fallback: {original_file}")
+                    else:
+                        with open(original_file, "r", encoding="utf-8") as f:
+                            contents = json.load(f)
+                            if isinstance(contents, list):
+                                all_data.extend(contents)
+                            elif isinstance(contents, dict):
+                                all_data.append(contents)
+                        file_loaded = True
+                        loaded_files.add(filename)
+                except json.JSONDecodeError as e:
+                    logger.error(f"Invalid JSON in file {original_file}: {e}")
                 except Exception as e:
                     logger.error(f"Error reading file {original_file}: {e}")
-                    continue
+
+                # Fallback to data/ directory if original/ file is empty or failed to load
+                if not file_loaded and os.path.exists(data_dir):
+                    data_file = f"{data_dir}/{filename}"
+                    if os.path.exists(data_file) and filename not in loaded_files:
+                        try:
+                            file_size = os.path.getsize(data_file)
+                            if file_size == 0:
+                                logger.warning(f"Fallback file is also empty: {data_file}")
+                            else:
+                                with open(data_file, "r", encoding="utf-8") as f:
+                                    contents = json.load(f)
+                                    if isinstance(contents, list):
+                                        all_data.extend(contents)
+                                    elif isinstance(contents, dict):
+                                        all_data.append(contents)
+                                logger.info(f"Loaded data from fallback location: {data_file}")
+                                loaded_files.add(filename)
+                        except json.JSONDecodeError as e:
+                            logger.error(f"Invalid JSON in fallback file {data_file}: {e}")
+                        except Exception as e:
+                            logger.error(f"Error reading fallback file {data_file}: {e}")
 
         return all_data
     else:
@@ -213,14 +283,23 @@ def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> Li
         abs_path = f"{BASE_PATH}/{web_name}/{normalized_rel}"
         if os.path.exists(abs_path):
             try:
+                # Check if file is empty
+                if os.path.getsize(abs_path) == 0:
+                    logger.warning("Referenced data file is empty, skipping", extra={"path": abs_path, "rel_path": rel_path, "web_name": web_name})
+                    continue
+
                 with open(abs_path, "r", encoding="utf-8") as f:
                     contents = json.load(f)
                     if isinstance(contents, list):
                         all_data.extend(contents)
                     elif isinstance(contents, dict):
                         all_data.append(contents)
+            except json.JSONDecodeError as e:
+                logger.error("Invalid JSON in referenced data file", extra={"path": abs_path, "rel_path": rel_path, "web_name": web_name, "error": str(e)})
+                # Skip unreadable or malformed file
+                continue
             except Exception as e:
-                logger.error("Error reading referenced data file", extra={"path": abs_path, "error": str(e)})
+                logger.error("Error reading referenced data file", extra={"path": abs_path, "rel_path": rel_path, "web_name": web_name, "error": str(e)})
                 # Skip unreadable or malformed file
                 continue
         else:
