@@ -24,7 +24,6 @@ export const EVENT_TYPES = {
   VIEW_CART_BOOK: "VIEW_CART_BOOK",
   ADD_TO_CART_BOOK: "ADD_TO_CART_BOOK",
   REMOVE_FROM_CART_BOOK: "REMOVE_FROM_CART_BOOK",
-  // POST_REVIEW: "POST_REVIEW",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
