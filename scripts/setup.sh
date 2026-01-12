@@ -10,7 +10,7 @@
 #   --webs_port=PORT              Set webs_server port (default: 8090)
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
 #   --demo=NAME                   Deploy specific demo: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all (default: all)
-#   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
+#   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v3)
 #                                            v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
 #   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
 #   --webs_data_path=PATH         Host dir to bind at /app/data (default: $DEMOS_DIR/webs_server/initial_data)
@@ -19,7 +19,7 @@
 #   -h, --help                    Show this help and exit
 #
 # Examples:
-#   ./setup.sh --demo=automail  # v1 enabled by default (seeds + layout variants)
+#   ./setup.sh --demo=automail  # v1,v3 enabled by default (seeds + layout variants + HTML structure)
 #   ./setup.sh --enabled_dynamic_versions=v2  # v2: DB Mode
 #   ./setup.sh --enabled_dynamic_versions=v1,v2  # v1 + v2: Layouts + DB Mode
 #------------------------------------------------------------
@@ -42,7 +42,7 @@ Options:
   --webs_port=PORT              Set webs_server port (default: 8090)
   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
   --demo=NAME                   One of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, all (default: all)
-  --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
+  --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v3)
                                             v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
   --webs_data_path=PATH         Host dir to bind at /app/data (default: \$DEMOS_DIR/webs_server/initial_data)
@@ -50,7 +50,7 @@ Options:
   -h, --help                    Show this help and exit
 
 Examples:
-  ./setup.sh --demo=automail  # v1 enabled by default (seeds + layout variants)
+  ./setup.sh --demo=automail  # v1,v3 enabled by default (seeds + layout variants + HTML structure)
   ./setup.sh --enabled_dynamic_versions=v2  # v2: DB Mode
   ./setup.sh --enabled_dynamic_versions=v1,v2  # v1 + v2: Layouts + DB Mode
 USAGE
@@ -94,7 +94,7 @@ WEBS_PORT="${WEBS_PORT:-8090}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-5437}"
 WEB_DEMO="${WEB_DEMO:-all}"
 FAST_MODE="${FAST_MODE:-false}"
-ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-}"
+ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-v1,v3}"
 
 # Initialize dynamic version flags (will be set by version mapping)
 ENABLE_DYNAMIC_V1="${ENABLE_DYNAMIC_V1:-false}"

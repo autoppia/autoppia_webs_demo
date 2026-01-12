@@ -218,34 +218,39 @@ The command launches `web_2_autobooks` and the shared `webs_server` instance, mi
 ./scripts/setup.sh --demo=autohealth --web_port=8013
 ```
 
-#### **🎨 Enable Dynamic HTML (AutoMail & AutoConnect)**
+#### **🎨 Dynamic Features (Enabled by Default)**
 
-AutoMail and AutoConnect support dynamic HTML generation for anti-scraping protection. Enable it with:
+All demo webs support dynamic features for anti-scraping protection. **By default, v1 and v3 are enabled**, which provides:
 
-```bash
-# Deploy AutoMail with dynamic HTML enabled
-./scripts/setup.sh --demo=automail --web_port=8005 --enable_dynamic_html=true
-
-# Deploy AutoConnect with dynamic HTML enabled
-./scripts/setup.sh --demo=autoconnect --web_port=8008 --enable_dynamic_html=true
-
-# Deploy all demos with dynamic HTML enabled
-./scripts/setup.sh --demo=all --enable_dynamic_html=true
-```
-
-**What Dynamic HTML does:**
-- 🔀 Changes page layouts based on URL seed parameter (1-300)
-- 🎯 Adds dynamic attributes to confuse web scrapers
-- 🆔 Generates seed-based element IDs and XPath selectors
-- 🎨 Applies CSS variables for layout variations
-- 🔒 Enhances protection against automated data extraction
+- 🔀 **Layout variants** based on URL seed parameter (1-300) - v1
+- 🎯 **Dynamic HTML structure** changes (classes, IDs) - v3
+- 🆔 **Seed preservation** across navigation - v1
+- 🎨 **CSS variables** for layout variations - v1
+- 🔒 **Anti-fingerprinting** protection - v3
 
 **Testing different layouts:**
 ```
-http://localhost:8005/?seed=1    # Default layout
-http://localhost:8005/?seed=180  # Ultra-wide layout
-http://localhost:8005/?seed=200  # Asymmetric layout
+http://localhost:8005/?seed=1    # Layout variant 1
+http://localhost:8005/?seed=180  # Layout variant 10
+http://localhost:8005/?seed=200  # Different HTML structure
 ```
+
+**To customize dynamic features:**
+```bash
+# Use default (v1,v3 enabled)
+./scripts/setup.sh --demo=automail
+
+# Enable only v1 (seeds + layouts, no HTML structure changes)
+./scripts/setup.sh --demo=automail --enabled_dynamic_versions=v1
+
+# Enable all versions
+./scripts/setup.sh --demo=automail --enabled_dynamic_versions=v1,v2,v3,v4
+
+# Disable all dynamic features
+./scripts/setup.sh --demo=automail --enabled_dynamic_versions=""
+```
+
+See the [Dynamic Versions](#dynamic-versions-shorthand) section below for detailed information.
 
 > ⚠️ **Note:** Autozone and Autodining run **standalone Next.js** apps. The `--postgres_port` flag is ignored if provided.
 
@@ -261,10 +266,8 @@ http://localhost:8005/?seed=200  # Asymmetric layout
 | `--postgres_port=PORT` | Base PostgreSQL port | `5434` | `--postgres_port=6000` |
 | `--webs_port=PORT` | webs_server API port | `8090` | `--webs_port=8080` |
 | `--webs_postgres=PORT` | webs_server DB port | `5437` | `--webs_postgres=5440` |
-| `--enable_dynamic_html=BOOL` | Enable dynamic HTML rendering for frontends (true/false) | `false` | `--enable_dynamic_html=true` |
-| `--enable_data_generation=BOOL` | Generate demo data where supported (true/false) | `false` | `--enable_data_generation=true` |
-| `--enable_db_mode=BOOL` | Force DB-backed mode for apps that support it (true/false) | `false` | `--enable_db_mode=true` |
-| `--enabled_dynamic_versions=[v1,v2,...]` | Enable one or more dynamic "versions" (see below) — accepts `v1,v2` or `[v1,v2]` formats | `` (none) | `--enabled_dynamic_versions=v1,v3` or `--enabled_dynamic_versions=[v1,v2]` |
+| `--enable_db_mode=BOOL` | Enable DB-backed mode for v2 (loads data from DB via ?v2-seed=X) | `false` | `--enable_db_mode=true` |
+| `--enabled_dynamic_versions=[v1,v2,...]` | Enable one or more dynamic "versions" (see below) — accepts `v1,v2` or `[v1,v2]` formats | `v1,v3` | `--enabled_dynamic_versions=v1,v3` or `--enabled_dynamic_versions=[v1,v2]` |
 | `--seed_value=INT` | Optional integer seed used by data generation / seed-based HTML features | `` | `--seed_value=42` |
 | `--fast=BOOL` | Skip global Docker cleanup and use cached builds (true/false) | `false` | `--fast=true` |
 | `-y, --yes` | Skip confirmation prompts / force Docker cleanup (convenience flag) | - | `-y` |
@@ -276,49 +279,91 @@ http://localhost:8005/?seed=200  # Asymmetric layout
 
 ### Dynamic versions (shorthand)
 
-The `--enabled_dynamic_versions` flag provides a shorthand to enable multiple dynamic features at once. Accepted formats:
+The `--enabled_dynamic_versions` flag provides a shorthand to enable multiple dynamic features at once. **By default, `v1,v3` are enabled** (seeds + layout variants + HTML structure changes).
 
+Accepted formats:
 - Comma-separated: `--enabled_dynamic_versions=v1,v2`
 - Bracketed: `--enabled_dynamic_versions=[v1,v2]`
 
-Supported tokens and what they enable:
+#### Version Details
 
-- `v1` → ENABLE_DYNAMIC_HTML (enables dynamic HTML rendering in frontends)
-- `v2` → ENABLE_DATA_GENERATION (turns on demo data generation where supported)
-- `v3` → ENABLE_DYNAMIC_STRUCTURE (enables dynamic DOM/structure changes for anti-scraping)
-- `v4` → ENABLE_SEED_HTML (enables seed-based HTML variations)
+| Version | Feature | What It Does | Dependencies |
+|---------|---------|--------------|--------------|
+| **v1** | Seeds + Layout Variants | ✅ Preserves seed values in URLs (e.g., `?seed=123`)<br>✅ Enables layout variants based on seed (1-300)<br>✅ Maps seeds to 10 distinct layout variants<br>❌ **If disabled:** Seeds are not preserved, layouts stay fixed | Independent - works alone or with others |
+| **v2** | DB Mode | ✅ Loads pre-generated data from database via `?v2-seed=X` URL parameter<br>✅ Uses data from `data/` directory (more records)<br>❌ **If disabled:** Uses data from `original/` directory (high quality, fewer records) | Independent - works alone or with others |
+| **v3** | HTML Structure Changes | ✅ Changes CSS classes, IDs, and HTML structure dynamically<br>✅ Anti-fingerprinting protection<br>✅ Modifies DOM structure based on seed<br>❌ **If disabled:** HTML structure stays static | Independent - works alone or with others |
+| **v4** | Seed HTML | ✅ Enables seed-based HTML variations | Independent - works alone or with others |
 
-Example usages:
+#### How Versions Work Together
 
-- Enable only dynamic HTML:
+- **Versions are independent**: Each version can work alone or in combination with others
+- **No dependencies**: v1, v2, v3, and v4 are completely independent
+- **Default behavior**: With `v1,v3` enabled by default:
+  - Seeds are preserved in URLs (`?seed=X`)
+  - Layout variants change based on seed
+  - HTML structure (classes, IDs) changes dynamically
+  - Data is loaded from `original/` directory (v2 disabled)
 
+#### Data Loading Behavior
+
+**When v2 is DISABLED (default):**
+- ✅ Data is copied from `original/` directory (high quality, fewer records)
+- ✅ Data comes from `webs_server/initial_data/<project>/original/`
+- ✅ Used for standard operation without DB mode
+
+**When v2 is ENABLED:**
+- ✅ Data is loaded from `data/` directory (more records)
+- ✅ Data comes from `webs_server/initial_data/<project>/data/`
+- ✅ Supports `?v2-seed=X` URL parameter for dynamic data selection
+- ✅ Requires database connection to webs_server
+
+#### Example Usages
+
+**Default deployment (v1,v3 enabled):**
+```bash
+./scripts/setup.sh --demo=automail
+# Seeds preserved, layout variants active, HTML structure changes active
+# Data loaded from original/ directory
+```
+
+**Enable only v1 (seeds + layouts):**
 ```bash
 ./scripts/setup.sh --demo=automail --enabled_dynamic_versions=v1
+# Seeds preserved, layout variants active
+# HTML structure stays static (v3 disabled)
 ```
 
-- Enable dynamic HTML and data generation:
-
+**Enable v1 + v2 (seeds + layouts + DB mode):**
 ```bash
-./scripts/setup.sh --demo=automail --enabled_dynamic_versions=v1,v2 --seed_value=123
+./scripts/setup.sh --demo=automail --enabled_dynamic_versions=v1,v2
+# Seeds preserved, layout variants active
+# Data loaded from data/ directory (DB mode)
+# Supports ?v2-seed=X URL parameter
 ```
 
-- Use bracketed form:
-
+**Enable all versions:**
 ```bash
-./scripts/setup.sh --demo=all --enabled_dynamic_versions=[v1,v3]
+./scripts/setup.sh --demo=automail --enabled_dynamic_versions=v1,v2,v3,v4
+# All dynamic features enabled
 ```
 
-Notes:
-- The script normalizes boolean flags (accepts `true/false`, `yes/no`, `1/0`, `y/n`).
-- If you pass both `--enabled_dynamic_versions` and individual flags (e.g. `--enable_dynamic_html=true`), the union of enabled flags will be used.
-- `--fast=true` will skip Docker cleanup and reuse existing images/build cache; use it to speed up iterative testing.
+**Disable all dynamic features:**
+```bash
+./scripts/setup.sh --demo=automail --enabled_dynamic_versions=""
+# All versions disabled - static behavior
+```
 
-📦 Data generation storage (v2): If you enable `v2` (data generation) using `--enabled_dynamic_versions=v2` or `--enable_data_generation=true`, ensure a host directory `~/webs_data` exists and is writable. The webs-server mounts `~/webs_data` to `/app/data` to store generated datasets.
+#### Notes
 
-Create it if missing:
- ```bash
- mkdir -p ~/webs_data
- ```
+- **Default:** `v1,v3` are enabled by default (seeds + HTML structure changes)
+- **Data storage:** If you enable `v2`, ensure `~/webs_data` exists and is writable
+- **Flag normalization:** The script accepts `true/false`, `yes/no`, `1/0`, `y/n`
+- **Fast mode:** Use `--fast=true` to skip Docker cleanup and reuse cached builds
+
+📦 **Data generation storage (v2):** If you enable `v2` (DB mode), the webs-server mounts `~/webs_data` to `/app/data` to store generated datasets. Create it if missing:
+```bash
+mkdir -p ~/webs_data
+```
 Generated files will appear under `~/webs_data/<project_key>/data/...`.
 
 ---
