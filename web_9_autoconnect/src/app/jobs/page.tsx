@@ -234,6 +234,7 @@ function JobsContent() {
         </h1>
         <Link
           href="/jobs/applied"
+          id={dyn.v3.getVariant("view_all_jobs_link", ID_VARIANTS_MAP, "view-all-jobs-link")}
           className={`text-sm text-blue-700 hover:underline font-semibold ${dyn.v3.getVariant("view_applied_jobs_link", CLASS_VARIANTS_MAP, "")}`}
         >
           View applied jobs ({Object.keys(appliedJobs).length})

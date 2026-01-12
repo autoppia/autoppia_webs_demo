@@ -74,7 +74,7 @@ export default function Post({
   }
   return (
     <article
-      id={dyn.v3.getVariant(`post_card_${post.id}`, ID_VARIANTS_MAP, `post_card_${post.id}`)}
+      id={dyn.v3.getVariant("post_article", ID_VARIANTS_MAP, "post-article")}
       className={withVariant("post_card", "bg-white rounded-lg shadow p-4")}
     >
       <div className="flex gap-3 items-start mb-2">

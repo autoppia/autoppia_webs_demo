@@ -466,6 +466,30 @@
     "search-jobs-button",
     "find-jobs",
     "search-btn"
+  ],
+  "post_article": [
+    "post-article",
+    "article-card",
+    "post-card",
+    "feed-article",
+    "content-article",
+    "post-item",
+    "article-item",
+    "feed-card",
+    "content-card",
+    "post-entry"
+  ],
+  "view_all_jobs_link": [
+    "view-all-jobs-link",
+    "all-jobs-link",
+    "view-jobs-anchor",
+    "all-jobs-anchor",
+    "jobs-view-all-link",
+    "view-all-jobs-anchor",
+    "jobs-all-link",
+    "all-jobs-view-link",
+    "jobs-view-link",
+    "view-jobs-link"
   ]
 }
 
