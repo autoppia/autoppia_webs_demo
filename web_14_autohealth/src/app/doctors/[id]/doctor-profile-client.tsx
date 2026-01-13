@@ -1,6 +1,6 @@
 "use client";
 
-import { doctors, type Doctor } from "@/data/doctors";
+import type { Doctor } from "@/data/doctors";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import { DoctorReviewsModal } from "@/components/doctor-reviews-modal";
 import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
-import { cn } from "@/lib/utils";
+import { cn } from "@/library/utils";
 import { initializeDoctorReviews } from "@/data/reviews-enhanced";
 
 function Stars({ value }: { value: number }) {

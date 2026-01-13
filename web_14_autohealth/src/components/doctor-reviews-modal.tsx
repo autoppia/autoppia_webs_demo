@@ -4,11 +4,11 @@ import * as React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, Filter, SortAsc, SortDesc } from "lucide-react";
+import { Star } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
-import { cn } from "@/lib/utils";
+import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/library/utils";
 import type { Doctor } from "@/data/doctors";
 import { initializeDoctorReviews } from "@/data/reviews-enhanced";
 

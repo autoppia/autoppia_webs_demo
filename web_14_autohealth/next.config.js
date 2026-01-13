@@ -1,19 +1,14 @@
 // Set default environment variables for local development
 // For local development (non-Docker), always enable dynamic HTML
 // Docker builds will override these values via build args
-const isDockerBuild = process.env.DOCKER_BUILD === 'true' || process.env.NODE_ENV === 'production';
-const isLocalDev = process.env.NODE_ENV !== 'production' && !process.env.DOCKER_BUILD;
+const isDockerBuild = process.env.DOCKER_BUILD === "true" || process.env.NODE_ENV === "production";
+const isLocalDev = process.env.NODE_ENV !== "production" && !process.env.DOCKER_BUILD;
 
-// For local development, always default to true unless explicitly set to false
-if (!process.env.ENABLE_DYNAMIC_V1) {
-  process.env.ENABLE_DYNAMIC_V1 = isLocalDev ? 'true' : 'false';
-}
-// For local development, always force NEXT_PUBLIC_ENABLE_DYNAMIC_V1 to true
-if (isLocalDev) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'true';
-} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'false';
-}
+// Enable dynamic HTML/attributes by default so V1/V3 run in tests and local dev
+process.env.ENABLE_DYNAMIC_V1 = process.env.ENABLE_DYNAMIC_V1 ?? "true";
+process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ?? "true";
+process.env.ENABLE_DYNAMIC_V3 = process.env.ENABLE_DYNAMIC_V3 ?? "true";
+process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 ?? "true";
 
 console.log('🔍 Next.js config - Environment variables:');
 console.log('  NODE_ENV:', process.env.NODE_ENV);
@@ -23,6 +18,11 @@ console.log('  API_URL:', process.env.API_URL);
 console.log('  ENABLE_DYNAMIC_V1:', process.env.ENABLE_DYNAMIC_V1);
 console.log('  ENABLE_DATA_GENERATION:', process.env.ENABLE_DYNAMIC_V2_AI_GENERATE);
 console.log('  NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V1:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1);
+console.log('  DYNAMIC_HTML_STRUCTURE:', process.env.DYNAMIC_HTML_STRUCTURE);
+console.log('  NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE:', process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE);
+console.log('  ENABLE_DYNAMIC_V3:', process.env.ENABLE_DYNAMIC_V3);
+console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V3:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

@@ -13,7 +13,7 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
-import { cn } from "@/lib/utils";
+import { cn } from "@/library/utils";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 function Stars({ value }: { value: number }) {

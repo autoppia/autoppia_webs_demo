@@ -136,12 +136,3 @@ export function resolveSeedsSync(baseSeed: number): ResolvedSeeds {
   const enabledFlags = getEnabledFlagsInternal();
   return resolveSeedsLocal(baseSeed, enabledFlags);
 }
-
-export function getEnabledFlags(): { v1: boolean; v2: boolean; v3: boolean } {
-  return getEnabledFlagsInternal();
-}
-
-export const seedResolverConfig = {
-  base: BASE_SEED,
-  getEnabledFlags,
-};

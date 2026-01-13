@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
-import { cn } from "@/lib/utils";
+import { cn } from "@/library/utils";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useMemo } from "react";
 
