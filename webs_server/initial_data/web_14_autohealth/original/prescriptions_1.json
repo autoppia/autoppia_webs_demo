@@ -270,5 +270,1105 @@
     "prescriptionNumber": "RX-2024-000012",
     "cost": 24.99,
     "insuranceCoverage": false
+  },
+  {
+    "id": "p11",
+    "medicineName": "Simvastatin",
+    "genericName": "Zocor",
+    "dosage": "250 mg every 8 hours",
+    "doctorName": "Dr. Brian Thompson",
+    "startDate": "2024-11-11",
+    "endDate": "2024-02-14",
+    "status": "discontinued",
+    "category": "cholesterol",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Rash",
+      "Itching",
+      "Swelling"
+    ],
+    "warnings": [
+      "Complete full course",
+      "Take with meals",
+      "Store in cool place"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "Walgreens - Oak Ave",
+    "prescriptionNumber": "RX-2024-100010",
+    "cost": 19.2,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p12",
+    "medicineName": "Losartan",
+    "genericName": "Cozaar",
+    "dosage": "250 mg every 8 hours",
+    "doctorName": "Dr. Barbara Thompson",
+    "startDate": "2024-12-12",
+    "status": "refill_needed",
+    "category": "blood_pressure",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Rash",
+      "Itching",
+      "Swelling"
+    ],
+    "warnings": [
+      "Take with food",
+      "Monitor symptoms",
+      "Report side effects"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-100011",
+    "cost": 27.27,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p13",
+    "medicineName": "Gabapentin",
+    "genericName": "Neurontin",
+    "dosage": "25 mg daily",
+    "doctorName": "Dr. Lisa Thompson",
+    "startDate": "2024-01-13",
+    "status": "active",
+    "category": "pain_management",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Stomach upset",
+      "Diarrhea",
+      "Vomiting"
+    ],
+    "warnings": [
+      "Avoid alcohol",
+      "Monitor blood pressure",
+      "Regular checkups needed"
+    ],
+    "refillsRemaining": 1,
+    "totalRefills": 3,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-100012",
+    "cost": 12.99,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p14",
+    "medicineName": "Sertraline",
+    "genericName": "Zoloft",
+    "dosage": "100 mg daily",
+    "doctorName": "Dr. Brian Thompson",
+    "startDate": "2024-02-14",
+    "endDate": "2024-05-17",
+    "status": "completed",
+    "category": "other",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Rash",
+      "Itching",
+      "Swelling"
+    ],
+    "warnings": [
+      "Complete full course",
+      "Take with meals",
+      "Store in cool place"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "Walgreens - Oak Ave",
+    "prescriptionNumber": "RX-2024-100013",
+    "cost": 34.85,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p15",
+    "medicineName": "Tramadol",
+    "genericName": "Ultram",
+    "dosage": "5 mg daily",
+    "doctorName": "Dr. Mark Thompson",
+    "startDate": "2024-03-15",
+    "endDate": "2024-06-18",
+    "status": "discontinued",
+    "category": "pain_management",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Stomach upset",
+      "Diarrhea",
+      "Vomiting"
+    ],
+    "warnings": [
+      "Complete full course",
+      "Take with meals",
+      "Store in cool place"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "Walgreens - Oak Ave",
+    "prescriptionNumber": "RX-2024-100014",
+    "cost": 16.8,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p16",
+    "medicineName": "Ciprofloxacin",
+    "genericName": "Cipro",
+    "dosage": "25 mg daily",
+    "doctorName": "Dr. Clara Nguyen",
+    "startDate": "2024-04-16",
+    "status": "refill_needed",
+    "category": "antibiotic",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Dry mouth",
+      "Constipation",
+      "Drowsiness"
+    ],
+    "warnings": [
+      "Do not exceed recommended dose",
+      "Take at same time daily",
+      "Stay hydrated"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-100015",
+    "cost": 16.03,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p17",
+    "medicineName": "Azithromycin",
+    "genericName": "Zithromax",
+    "dosage": "5 mg daily",
+    "doctorName": "Dr. Lisa Thompson",
+    "startDate": "2024-05-17",
+    "status": "active",
+    "category": "antibiotic",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Muscle pain",
+      "Digestive issues",
+      "Fatigue"
+    ],
+    "warnings": [
+      "Take with food",
+      "Monitor symptoms",
+      "Report side effects"
+    ],
+    "refillsRemaining": 4,
+    "totalRefills": 4,
+    "pharmacy": "Safeway Pharmacy",
+    "prescriptionNumber": "RX-2024-100016",
+    "cost": 12.47,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p18",
+    "medicineName": "Prednisone",
+    "genericName": "Deltasone",
+    "dosage": "5 mg daily",
+    "doctorName": "Dr. George Thompson",
+    "startDate": "2024-06-18",
+    "endDate": "2024-09-21",
+    "status": "completed",
+    "category": "other",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "warnings": [
+      "Complete full course",
+      "Take with meals",
+      "Store in cool place"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "Safeway Pharmacy",
+    "prescriptionNumber": "RX-2024-100017",
+    "cost": 10.11,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p19",
+    "medicineName": "Furosemide",
+    "genericName": "Lasix",
+    "dosage": "200 mg as needed",
+    "doctorName": "Dr. Jennifer Thompson",
+    "startDate": "2024-07-19",
+    "endDate": "2024-10-22",
+    "status": "discontinued",
+    "category": "cardiovascular",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "warnings": [
+      "Do not exceed recommended dose",
+      "Take at same time daily",
+      "Stay hydrated"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "Rite Aid - Central Plaza",
+    "prescriptionNumber": "RX-2024-100018",
+    "cost": 33.99,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p20",
+    "medicineName": "Warfarin",
+    "genericName": "Coumadin",
+    "dosage": "25 mg daily",
+    "doctorName": "Dr. David Thompson",
+    "startDate": "2024-08-20",
+    "status": "refill_needed",
+    "category": "cardiovascular",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Dry mouth",
+      "Constipation",
+      "Drowsiness"
+    ],
+    "warnings": [
+      "Take with food",
+      "Monitor symptoms",
+      "Report side effects"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-100019",
+    "cost": 31.65,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p21",
+    "medicineName": "Pantoprazole",
+    "genericName": "Protonix",
+    "dosage": "2 tablets daily",
+    "doctorName": "Dr. Susan Thompson",
+    "startDate": "2024-09-21",
+    "status": "active",
+    "category": "other",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Rash",
+      "Itching",
+      "Swelling"
+    ],
+    "warnings": [
+      "Do not exceed recommended dose",
+      "Take at same time daily",
+      "Stay hydrated"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 2,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-100020",
+    "cost": 19.08,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p22",
+    "medicineName": "Tamsulosin",
+    "genericName": "Flomax",
+    "dosage": "2 tablets daily",
+    "doctorName": "Dr. Emily Rodriguez",
+    "startDate": "2024-10-22",
+    "endDate": "2024-01-25",
+    "status": "completed",
+    "category": "other",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "warnings": [
+      "Do not exceed recommended dose",
+      "Take at same time daily",
+      "Stay hydrated"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-100021",
+    "cost": 25.81,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p23",
+    "medicineName": "Montelukast",
+    "genericName": "Singulair",
+    "dosage": "200 mg as needed",
+    "doctorName": "Dr. Kevin Thompson",
+    "startDate": "2024-11-23",
+    "endDate": "2024-02-26",
+    "status": "discontinued",
+    "category": "other",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Dry mouth",
+      "Constipation",
+      "Drowsiness"
+    ],
+    "warnings": [
+      "Take with food",
+      "Monitor symptoms",
+      "Report side effects"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "Walgreens - Oak Ave",
+    "prescriptionNumber": "RX-2024-100022",
+    "cost": 32.19,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p24",
+    "medicineName": "Escitalopram",
+    "genericName": "Lexapro",
+    "dosage": "10 mg daily",
+    "doctorName": "Dr. Maria Thompson",
+    "startDate": "2024-12-24",
+    "status": "refill_needed",
+    "category": "other",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "warnings": [
+      "Avoid alcohol",
+      "Monitor blood pressure",
+      "Regular checkups needed"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-100023",
+    "cost": 16.25,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p25",
+    "medicineName": "Fluoxetine",
+    "genericName": "Prozac",
+    "dosage": "1 tablet daily",
+    "doctorName": "Dr. Steven Thompson",
+    "startDate": "2024-01-25",
+    "status": "active",
+    "category": "other",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Stomach upset",
+      "Diarrhea",
+      "Vomiting"
+    ],
+    "warnings": [
+      "Complete full course",
+      "Take with meals",
+      "Store in cool place"
+    ],
+    "refillsRemaining": 1,
+    "totalRefills": 1,
+    "pharmacy": "Safeway Pharmacy",
+    "prescriptionNumber": "RX-2024-100024",
+    "cost": 33.47,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p26",
+    "medicineName": "Clopidogrel",
+    "genericName": "Plavix",
+    "dosage": "250 mg every 8 hours",
+    "doctorName": "Dr. Kimberly Thompson",
+    "startDate": "2024-02-26",
+    "endDate": "2024-05-01",
+    "status": "completed",
+    "category": "cardiovascular",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "warnings": [
+      "Do not exceed recommended dose",
+      "Take at same time daily",
+      "Stay hydrated"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "CVS Pharmacy - Main St",
+    "prescriptionNumber": "RX-2024-100025",
+    "cost": 19.69,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p27",
+    "medicineName": "Carvedilol",
+    "genericName": "Coreg",
+    "dosage": "5 mg daily",
+    "doctorName": "Dr. Sharon Thompson",
+    "startDate": "2024-03-27",
+    "endDate": "2024-06-02",
+    "status": "discontinued",
+    "category": "cardiovascular",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Stomach upset",
+      "Diarrhea",
+      "Vomiting"
+    ],
+    "warnings": [
+      "Complete full course",
+      "Take with meals",
+      "Store in cool place"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "Walgreens - Oak Ave",
+    "prescriptionNumber": "RX-2024-100026",
+    "cost": 14.75,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p28",
+    "medicineName": "Duloxetine",
+    "genericName": "Cymbalta",
+    "dosage": "200 mg as needed",
+    "doctorName": "Dr. Susan Thompson",
+    "startDate": "2024-04-28",
+    "status": "refill_needed",
+    "category": "other",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Rash",
+      "Itching",
+      "Swelling"
+    ],
+    "warnings": [
+      "Complete full course",
+      "Take with meals",
+      "Store in cool place"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-100027",
+    "cost": 19.24,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p29",
+    "medicineName": "Venlafaxine",
+    "genericName": "Effexor",
+    "dosage": "2 tablets daily",
+    "doctorName": "Dr. Daniel Ruiz",
+    "startDate": "2024-05-01",
+    "status": "active",
+    "category": "other",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "warnings": [
+      "Do not exceed recommended dose",
+      "Take at same time daily",
+      "Stay hydrated"
+    ],
+    "refillsRemaining": 2,
+    "totalRefills": 4,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-100028",
+    "cost": 38.28,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p30",
+    "medicineName": "Trazodone",
+    "genericName": "Desyrel",
+    "dosage": "10 mg daily",
+    "doctorName": "Dr. Jennifer Thompson",
+    "startDate": "2024-06-02",
+    "endDate": "2024-09-05",
+    "status": "completed",
+    "category": "other",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Rash",
+      "Itching",
+      "Swelling"
+    ],
+    "warnings": [
+      "Take with food",
+      "Monitor symptoms",
+      "Report side effects"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "Safeway Pharmacy",
+    "prescriptionNumber": "RX-2024-100029",
+    "cost": 41.95,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p31",
+    "medicineName": "Atorvastatin",
+    "genericName": "Lipitor",
+    "dosage": "500 mg twice daily",
+    "doctorName": "Dr. Richard Thompson",
+    "startDate": "2024-07-03",
+    "endDate": "2024-10-06",
+    "status": "discontinued",
+    "category": "cholesterol",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Dry mouth",
+      "Constipation",
+      "Drowsiness"
+    ],
+    "warnings": [
+      "Avoid alcohol",
+      "Monitor blood pressure",
+      "Regular checkups needed"
+    ],
+    "refillsRemaining": 2,
+    "totalRefills": 4,
+    "pharmacy": "CVS Pharmacy - Main St",
+    "prescriptionNumber": "RX-2024-100030",
+    "cost": 41.73,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p32",
+    "medicineName": "Amoxicillin",
+    "genericName": "Amoxil",
+    "dosage": "25 mg daily",
+    "doctorName": "Dr. Edward Thompson",
+    "startDate": "2024-08-04",
+    "status": "refill_needed",
+    "category": "antibiotic",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Stomach upset",
+      "Diarrhea",
+      "Vomiting"
+    ],
+    "warnings": [
+      "Take with food",
+      "Monitor symptoms",
+      "Report side effects"
+    ],
+    "refillsRemaining": 2,
+    "totalRefills": 3,
+    "pharmacy": "Safeway Pharmacy",
+    "prescriptionNumber": "RX-2024-100031",
+    "cost": 26.96,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p33",
+    "medicineName": "Ibuprofen",
+    "genericName": "Advil",
+    "dosage": "20 mg daily",
+    "doctorName": "Dr. Brian Thompson",
+    "startDate": "2024-09-05",
+    "status": "active",
+    "category": "pain_management",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Rash",
+      "Itching",
+      "Swelling"
+    ],
+    "warnings": [
+      "Avoid alcohol",
+      "Monitor blood pressure",
+      "Regular checkups needed"
+    ],
+    "refillsRemaining": 5,
+    "totalRefills": 6,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-100032",
+    "cost": 21.59,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p34",
+    "medicineName": "Metformin",
+    "genericName": "Glucophage",
+    "dosage": "250 mg every 8 hours",
+    "doctorName": "Dr. Maria Thompson",
+    "startDate": "2024-10-06",
+    "endDate": "2024-01-09",
+    "status": "completed",
+    "category": "diabetes",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Stomach upset",
+      "Diarrhea",
+      "Vomiting"
+    ],
+    "warnings": [
+      "Avoid alcohol",
+      "Monitor blood pressure",
+      "Regular checkups needed"
+    ],
+    "refillsRemaining": 6,
+    "totalRefills": 9,
+    "pharmacy": "Walgreens - Oak Ave",
+    "prescriptionNumber": "RX-2024-100033",
+    "cost": 9.99,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p35",
+    "medicineName": "Lisinopril",
+    "genericName": "Prinivil",
+    "dosage": "10 mg daily",
+    "doctorName": "Dr. Christopher Thompson",
+    "startDate": "2024-11-07",
+    "endDate": "2024-02-10",
+    "status": "discontinued",
+    "category": "blood_pressure",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Dry mouth",
+      "Constipation",
+      "Drowsiness"
+    ],
+    "warnings": [
+      "Avoid alcohol",
+      "Monitor blood pressure",
+      "Regular checkups needed"
+    ],
+    "refillsRemaining": 1,
+    "totalRefills": 1,
+    "pharmacy": "Safeway Pharmacy",
+    "prescriptionNumber": "RX-2024-100034",
+    "cost": 14.74,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p36",
+    "medicineName": "Levothyroxine",
+    "genericName": "Synthroid",
+    "dosage": "250 mg every 8 hours",
+    "doctorName": "Dr. Nancy Thompson",
+    "startDate": "2024-12-08",
+    "status": "refill_needed",
+    "category": "thyroid",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Rash",
+      "Itching",
+      "Swelling"
+    ],
+    "warnings": [
+      "Complete full course",
+      "Take with meals",
+      "Store in cool place"
+    ],
+    "refillsRemaining": 3,
+    "totalRefills": 4,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-100035",
+    "cost": 9.43,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p37",
+    "medicineName": "Omeprazole",
+    "genericName": "Prilosec",
+    "dosage": "500 mg twice daily",
+    "doctorName": "Dr. Robert Thompson",
+    "startDate": "2024-01-09",
+    "status": "active",
+    "category": "other",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Stomach upset",
+      "Diarrhea",
+      "Vomiting"
+    ],
+    "warnings": [
+      "Complete full course",
+      "Take with meals",
+      "Store in cool place"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 1,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-100036",
+    "cost": 10.33,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p38",
+    "medicineName": "Albuterol",
+    "genericName": "Proventil",
+    "dosage": "50 mg daily",
+    "doctorName": "Dr. Clara Nguyen",
+    "startDate": "2024-02-10",
+    "endDate": "2024-05-13",
+    "status": "completed",
+    "category": "other",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Rash",
+      "Itching",
+      "Swelling"
+    ],
+    "warnings": [
+      "Avoid alcohol",
+      "Monitor blood pressure",
+      "Regular checkups needed"
+    ],
+    "refillsRemaining": 1,
+    "totalRefills": 3,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-100037",
+    "cost": 22.66,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p39",
+    "medicineName": "Amlodipine",
+    "genericName": "Norvasc",
+    "dosage": "50 mg daily",
+    "doctorName": "Dr. Susan Thompson",
+    "startDate": "2024-03-11",
+    "endDate": "2024-06-14",
+    "status": "discontinued",
+    "category": "blood_pressure",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Stomach upset",
+      "Diarrhea",
+      "Vomiting"
+    ],
+    "warnings": [
+      "Avoid alcohol",
+      "Monitor blood pressure",
+      "Regular checkups needed"
+    ],
+    "refillsRemaining": 2,
+    "totalRefills": 4,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-100038",
+    "cost": 23.45,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p40",
+    "medicineName": "Metoprolol",
+    "genericName": "Lopressor",
+    "dosage": "10 mg daily",
+    "doctorName": "Dr. Jennifer Thompson",
+    "startDate": "2024-04-12",
+    "status": "refill_needed",
+    "category": "cardiovascular",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Rash",
+      "Itching",
+      "Swelling"
+    ],
+    "warnings": [
+      "Complete full course",
+      "Take with meals",
+      "Store in cool place"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 0,
+    "pharmacy": "CVS Pharmacy - Main St",
+    "prescriptionNumber": "RX-2024-100039",
+    "cost": 16.17,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p41",
+    "medicineName": "Simvastatin",
+    "genericName": "Zocor",
+    "dosage": "20 mg daily",
+    "doctorName": "Dr. Andrew Thompson",
+    "startDate": "2024-05-13",
+    "status": "active",
+    "category": "cholesterol",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Muscle pain",
+      "Digestive issues",
+      "Fatigue"
+    ],
+    "warnings": [
+      "Complete full course",
+      "Take with meals",
+      "Store in cool place"
+    ],
+    "refillsRemaining": 1,
+    "totalRefills": 2,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-100040",
+    "cost": 36.01,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p42",
+    "medicineName": "Losartan",
+    "genericName": "Cozaar",
+    "dosage": "2 tablets daily",
+    "doctorName": "Dr. Michelle Thompson",
+    "startDate": "2024-06-14",
+    "endDate": "2024-09-17",
+    "status": "completed",
+    "category": "blood_pressure",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Stomach upset",
+      "Diarrhea",
+      "Vomiting"
+    ],
+    "warnings": [
+      "Take with food",
+      "Monitor symptoms",
+      "Report side effects"
+    ],
+    "refillsRemaining": 3,
+    "totalRefills": 4,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-100041",
+    "cost": 9.62,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p43",
+    "medicineName": "Gabapentin",
+    "genericName": "Neurontin",
+    "dosage": "5 mg daily",
+    "doctorName": "Dr. Thomas Thompson",
+    "startDate": "2024-07-15",
+    "endDate": "2024-10-18",
+    "status": "discontinued",
+    "category": "pain_management",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "warnings": [
+      "Take with food",
+      "Monitor symptoms",
+      "Report side effects"
+    ],
+    "refillsRemaining": 7,
+    "totalRefills": 9,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-100042",
+    "cost": 14.47,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p44",
+    "medicineName": "Sertraline",
+    "genericName": "Zoloft",
+    "dosage": "100 mg daily",
+    "doctorName": "Dr. Kimberly Thompson",
+    "startDate": "2024-08-16",
+    "status": "refill_needed",
+    "category": "other",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Muscle pain",
+      "Digestive issues",
+      "Fatigue"
+    ],
+    "warnings": [
+      "Do not exceed recommended dose",
+      "Take at same time daily",
+      "Stay hydrated"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 2,
+    "pharmacy": "Walgreens - Oak Ave",
+    "prescriptionNumber": "RX-2024-100043",
+    "cost": 12.46,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p45",
+    "medicineName": "Tramadol",
+    "genericName": "Ultram",
+    "dosage": "50 mg daily",
+    "doctorName": "Dr. Steven Thompson",
+    "startDate": "2024-09-17",
+    "status": "active",
+    "category": "pain_management",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Muscle pain",
+      "Digestive issues",
+      "Fatigue"
+    ],
+    "warnings": [
+      "Take with food",
+      "Monitor symptoms",
+      "Report side effects"
+    ],
+    "refillsRemaining": 3,
+    "totalRefills": 3,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-100044",
+    "cost": 20.39,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p46",
+    "medicineName": "Ciprofloxacin",
+    "genericName": "Cipro",
+    "dosage": "10 mg daily",
+    "doctorName": "Dr. Michelle Thompson",
+    "startDate": "2024-10-18",
+    "endDate": "2024-01-21",
+    "status": "completed",
+    "category": "antibiotic",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Muscle pain",
+      "Digestive issues",
+      "Fatigue"
+    ],
+    "warnings": [
+      "Complete full course",
+      "Take with meals",
+      "Store in cool place"
+    ],
+    "refillsRemaining": 1,
+    "totalRefills": 2,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-100045",
+    "cost": 27.46,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p47",
+    "medicineName": "Azithromycin",
+    "genericName": "Zithromax",
+    "dosage": "200 mg as needed",
+    "doctorName": "Dr. Thomas Thompson",
+    "startDate": "2024-11-19",
+    "endDate": "2024-02-22",
+    "status": "discontinued",
+    "category": "antibiotic",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Stomach upset",
+      "Diarrhea",
+      "Vomiting"
+    ],
+    "warnings": [
+      "Avoid alcohol",
+      "Monitor blood pressure",
+      "Regular checkups needed"
+    ],
+    "refillsRemaining": 5,
+    "totalRefills": 7,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-100046",
+    "cost": 26.88,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p48",
+    "medicineName": "Prednisone",
+    "genericName": "Deltasone",
+    "dosage": "20 mg daily",
+    "doctorName": "Dr. Edward Thompson",
+    "startDate": "2024-12-20",
+    "status": "refill_needed",
+    "category": "other",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Muscle pain",
+      "Digestive issues",
+      "Fatigue"
+    ],
+    "warnings": [
+      "Avoid alcohol",
+      "Monitor blood pressure",
+      "Regular checkups needed"
+    ],
+    "refillsRemaining": 1,
+    "totalRefills": 2,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-100047",
+    "cost": 44.65,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p49",
+    "medicineName": "Furosemide",
+    "genericName": "Lasix",
+    "dosage": "100 mg daily",
+    "doctorName": "Dr. David Thompson",
+    "startDate": "2024-01-21",
+    "status": "active",
+    "category": "cardiovascular",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Rash",
+      "Itching",
+      "Swelling"
+    ],
+    "warnings": [
+      "Avoid alcohol",
+      "Monitor blood pressure",
+      "Regular checkups needed"
+    ],
+    "refillsRemaining": 1,
+    "totalRefills": 1,
+    "pharmacy": "Walgreens - Oak Ave",
+    "prescriptionNumber": "RX-2024-100048",
+    "cost": 37.96,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p50",
+    "medicineName": "Warfarin",
+    "genericName": "Coumadin",
+    "dosage": "250 mg every 8 hours",
+    "doctorName": "Dr. Clara Nguyen",
+    "startDate": "2024-02-22",
+    "endDate": "2024-05-25",
+    "status": "completed",
+    "category": "cardiovascular",
+    "instructions": "Take as directed by your physician. Follow the prescribed schedule and do not skip doses.",
+    "sideEffects": [
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "warnings": [
+      "Take with food",
+      "Monitor symptoms",
+      "Report side effects"
+    ],
+    "refillsRemaining": 3,
+    "totalRefills": 5,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-100049",
+    "cost": 23.1,
+    "insuranceCoverage": false
   }
 ]

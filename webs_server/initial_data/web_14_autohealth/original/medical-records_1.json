@@ -208,5 +208,586 @@
       "Multivitamin": "1 tablet daily",
       "Last Review": "2024-02-15"
     }
+  },
+  {
+    "id": "mr14",
+    "type": "allergy",
+    "title": "Allergy Assessment",
+    "date": "2024-02-14",
+    "doctorName": "Dr. Christopher Thompson",
+    "facility": "Community Health Center",
+    "description": "Comprehensive allergy testing results",
+    "status": "abnormal",
+    "category": "preventive",
+    "values": {
+      "Allergen 1": "Mild reaction",
+      "Allergen 2": "No reaction",
+      "Allergen 3": "Moderate reaction"
+    }
+  },
+  {
+    "id": "mr15",
+    "type": "vital_signs",
+    "title": "Vital Signs Monitoring",
+    "date": "2024-03-15",
+    "doctorName": "Dr. Donald Thompson",
+    "facility": "Community Health Center",
+    "description": "Home monitoring results",
+    "status": "pending",
+    "category": "treatment",
+    "values": {
+      "Average Systolic": "121 mmHg",
+      "Average Diastolic": "71 mmHg",
+      "Readings Taken": "20",
+      "Monitoring Period": "12 days"
+    }
+  },
+  {
+    "id": "mr16",
+    "type": "procedure",
+    "title": "Endoscopy",
+    "date": "2024-04-16",
+    "doctorName": "Dr. Susan Thompson",
+    "facility": "General Hospital Lab",
+    "description": "Medical procedure: endoscopy",
+    "status": "reviewed",
+    "category": "monitoring",
+    "values": {
+      "Procedure": "Endoscopy",
+      "Findings": "Normal",
+      "Status": "Completed"
+    }
+  },
+  {
+    "id": "mr17",
+    "type": "lab_result",
+    "title": "Kidney Function Test",
+    "date": "2024-05-17",
+    "doctorName": "Dr. Sandra Thompson",
+    "facility": "City Medical Lab",
+    "description": "Laboratory test results for kidney function test",
+    "status": "normal",
+    "category": "diagnostic",
+    "values": {
+      "Test Result 1": "5.6 mg/dL",
+      "Test Result 2": "1.6 mIU/L",
+      "Test Result 3": "11.2 %"
+    }
+  },
+  {
+    "id": "mr18",
+    "type": "imaging",
+    "title": "X-Ray - Knee",
+    "date": "2024-06-18",
+    "doctorName": "Dr. Helen Thompson",
+    "facility": "Advanced Imaging Center",
+    "description": "Imaging study: x-ray - knee",
+    "status": "abnormal",
+    "category": "preventive",
+    "fileUrl": "/images/x-ray---knee-2024-06-18.pdf"
+  },
+  {
+    "id": "mr19",
+    "type": "vaccination",
+    "title": "Pneumococcal Vaccine",
+    "date": "2024-07-19",
+    "doctorName": "Dr. Barbara Thompson",
+    "facility": "City Medical Lab",
+    "description": "Vaccination record: pneumococcal vaccine",
+    "status": "pending",
+    "category": "treatment",
+    "values": {
+      "Vaccine": "Pneumococcal Vaccine",
+      "Lot Number": "LOT100018",
+      "Dose": "Standard"
+    }
+  },
+  {
+    "id": "mr20",
+    "type": "visit_summary",
+    "title": "Wellness Check",
+    "date": "2024-08-20",
+    "doctorName": "Dr. George Thompson",
+    "facility": "Endocrine Center",
+    "description": "Visit summary: wellness check",
+    "status": "reviewed",
+    "category": "monitoring",
+    "values": {
+      "Blood Pressure": "137/68 mmHg",
+      "Heart Rate": "73 bpm",
+      "Weight": "160 lbs",
+      "Height": "5'8\""
+    }
+  },
+  {
+    "id": "mr21",
+    "type": "prescription_history",
+    "title": "Current Medications",
+    "date": "2024-09-21",
+    "doctorName": "Dr. Anthony Thompson",
+    "facility": "Radiology Associates",
+    "description": "Current prescription medications and dosages",
+    "status": "normal",
+    "category": "diagnostic",
+    "values": {
+      "Medication 1": "10mg daily",
+      "Medication 2": "500mg twice daily",
+      "Last Review": "2024-09-21"
+    }
+  },
+  {
+    "id": "mr22",
+    "type": "allergy",
+    "title": "Allergy Assessment",
+    "date": "2024-10-22",
+    "doctorName": "Dr. Donna Thompson",
+    "facility": "General Hospital Lab",
+    "description": "Comprehensive allergy testing results",
+    "status": "abnormal",
+    "category": "preventive",
+    "values": {
+      "Allergen 1": "Mild reaction",
+      "Allergen 2": "No reaction",
+      "Allergen 3": "Moderate reaction"
+    }
+  },
+  {
+    "id": "mr23",
+    "type": "vital_signs",
+    "title": "Vital Signs Monitoring",
+    "date": "2024-11-23",
+    "doctorName": "Dr. Carol Thompson",
+    "facility": "Cardiology Center",
+    "description": "Home monitoring results",
+    "status": "pending",
+    "category": "treatment",
+    "values": {
+      "Average Systolic": "117 mmHg",
+      "Average Diastolic": "67 mmHg",
+      "Readings Taken": "23",
+      "Monitoring Period": "17 days"
+    }
+  },
+  {
+    "id": "mr24",
+    "type": "procedure",
+    "title": "Biopsy",
+    "date": "2024-12-24",
+    "doctorName": "Dr. Kenneth Thompson",
+    "facility": "General Hospital Lab",
+    "description": "Medical procedure: biopsy",
+    "status": "reviewed",
+    "category": "monitoring",
+    "values": {
+      "Procedure": "Biopsy",
+      "Findings": "Normal",
+      "Status": "Completed"
+    }
+  },
+  {
+    "id": "mr25",
+    "type": "lab_result",
+    "title": "Complete Blood Count (CBC)",
+    "date": "2024-01-25",
+    "doctorName": "Dr. James Wilson",
+    "facility": "City Medical Lab",
+    "description": "Laboratory test results for complete blood count (cbc)",
+    "status": "normal",
+    "category": "diagnostic",
+    "values": {
+      "Test Result 1": "7.6 mg/dL",
+      "Test Result 2": "1.7 mIU/L",
+      "Test Result 3": "4.8 %"
+    }
+  },
+  {
+    "id": "mr26",
+    "type": "imaging",
+    "title": "Bone Density Scan",
+    "date": "2024-02-26",
+    "doctorName": "Dr. Elizabeth Thompson",
+    "facility": "Endocrine Center",
+    "description": "Imaging study: bone density scan",
+    "status": "abnormal",
+    "category": "preventive",
+    "fileUrl": "/images/bone-density-scan-2024-02-26.pdf"
+  },
+  {
+    "id": "mr27",
+    "type": "vaccination",
+    "title": "Shingles Vaccine",
+    "date": "2024-03-27",
+    "doctorName": "Dr. Donald Thompson",
+    "facility": "Cardiology Center",
+    "description": "Vaccination record: shingles vaccine",
+    "status": "pending",
+    "category": "treatment",
+    "values": {
+      "Vaccine": "Shingles Vaccine",
+      "Lot Number": "LOT100026",
+      "Dose": "Standard"
+    }
+  },
+  {
+    "id": "mr28",
+    "type": "visit_summary",
+    "title": "Specialist Consultation",
+    "date": "2024-04-28",
+    "doctorName": "Dr. Charles Thompson",
+    "facility": "Community Health Center",
+    "description": "Visit summary: specialist consultation",
+    "status": "reviewed",
+    "category": "monitoring",
+    "values": {
+      "Blood Pressure": "126/78 mmHg",
+      "Heart Rate": "98 bpm",
+      "Weight": "162 lbs",
+      "Height": "5'2\""
+    }
+  },
+  {
+    "id": "mr29",
+    "type": "prescription_history",
+    "title": "Current Medications",
+    "date": "2024-05-01",
+    "doctorName": "Dr. Carol Thompson",
+    "facility": "Radiology Associates",
+    "description": "Current prescription medications and dosages",
+    "status": "normal",
+    "category": "diagnostic",
+    "values": {
+      "Medication 1": "10mg daily",
+      "Medication 2": "500mg twice daily",
+      "Last Review": "2024-05-01"
+    }
+  },
+  {
+    "id": "mr30",
+    "type": "allergy",
+    "title": "Allergy Assessment",
+    "date": "2024-06-02",
+    "doctorName": "Dr. Karen Thompson",
+    "facility": "General Hospital Lab",
+    "description": "Comprehensive allergy testing results",
+    "status": "abnormal",
+    "category": "preventive",
+    "values": {
+      "Allergen 1": "Mild reaction",
+      "Allergen 2": "No reaction",
+      "Allergen 3": "Moderate reaction"
+    }
+  },
+  {
+    "id": "mr31",
+    "type": "vital_signs",
+    "title": "Vital Signs Monitoring",
+    "date": "2024-07-03",
+    "doctorName": "Dr. Susan Thompson",
+    "facility": "Advanced Imaging Center",
+    "description": "Home monitoring results",
+    "status": "pending",
+    "category": "treatment",
+    "values": {
+      "Average Systolic": "120 mmHg",
+      "Average Diastolic": "74 mmHg",
+      "Readings Taken": "17",
+      "Monitoring Period": "14 days"
+    }
+  },
+  {
+    "id": "mr32",
+    "type": "procedure",
+    "title": "Minor Surgery",
+    "date": "2024-08-04",
+    "doctorName": "Dr. Elizabeth Thompson",
+    "facility": "Radiology Associates",
+    "description": "Medical procedure: minor surgery",
+    "status": "reviewed",
+    "category": "monitoring",
+    "values": {
+      "Procedure": "Minor Surgery",
+      "Findings": "Normal",
+      "Status": "Completed"
+    }
+  },
+  {
+    "id": "mr33",
+    "type": "lab_result",
+    "title": "B12 Level",
+    "date": "2024-09-05",
+    "doctorName": "Dr. Michael Chen",
+    "facility": "General Hospital Lab",
+    "description": "Laboratory test results for b12 level",
+    "status": "normal",
+    "category": "diagnostic",
+    "values": {
+      "Test Result 1": "7.4 mg/dL",
+      "Test Result 2": "0.1 mIU/L",
+      "Test Result 3": "9.4 %"
+    }
+  },
+  {
+    "id": "mr34",
+    "type": "imaging",
+    "title": "Ultrasound - Abdomen",
+    "date": "2024-10-06",
+    "doctorName": "Dr. Anthony Thompson",
+    "facility": "City Medical Lab",
+    "description": "Imaging study: ultrasound - abdomen",
+    "status": "abnormal",
+    "category": "preventive",
+    "fileUrl": "/images/ultrasound---abdomen-2024-10-06.pdf"
+  },
+  {
+    "id": "mr35",
+    "type": "vaccination",
+    "title": "MMR Vaccine",
+    "date": "2024-11-07",
+    "doctorName": "Dr. Steven Thompson",
+    "facility": "City Medical Lab",
+    "description": "Vaccination record: mmr vaccine",
+    "status": "pending",
+    "category": "treatment",
+    "values": {
+      "Vaccine": "MMR Vaccine",
+      "Lot Number": "LOT100034",
+      "Dose": "Standard"
+    }
+  },
+  {
+    "id": "mr36",
+    "type": "visit_summary",
+    "title": "Annual Physical Exam",
+    "date": "2024-12-08",
+    "doctorName": "Dr. Jessica Thompson",
+    "facility": "Advanced Imaging Center",
+    "description": "Visit summary: annual physical exam",
+    "status": "reviewed",
+    "category": "monitoring",
+    "values": {
+      "Blood Pressure": "138/77 mmHg",
+      "Heart Rate": "98 bpm",
+      "Weight": "192 lbs",
+      "Height": "5'5\""
+    }
+  },
+  {
+    "id": "mr37",
+    "type": "prescription_history",
+    "title": "Current Medications",
+    "date": "2024-01-09",
+    "doctorName": "Dr. Kenneth Thompson",
+    "facility": "Community Health Center",
+    "description": "Current prescription medications and dosages",
+    "status": "normal",
+    "category": "diagnostic",
+    "values": {
+      "Medication 1": "10mg daily",
+      "Medication 2": "500mg twice daily",
+      "Last Review": "2024-01-09"
+    }
+  },
+  {
+    "id": "mr38",
+    "type": "allergy",
+    "title": "Allergy Assessment",
+    "date": "2024-02-10",
+    "doctorName": "Dr. Brian Thompson",
+    "facility": "Radiology Associates",
+    "description": "Comprehensive allergy testing results",
+    "status": "abnormal",
+    "category": "preventive",
+    "values": {
+      "Allergen 1": "Mild reaction",
+      "Allergen 2": "No reaction",
+      "Allergen 3": "Moderate reaction"
+    }
+  },
+  {
+    "id": "mr39",
+    "type": "vital_signs",
+    "title": "Vital Signs Monitoring",
+    "date": "2024-03-11",
+    "doctorName": "Dr. Mark Thompson",
+    "facility": "City Medical Lab",
+    "description": "Home monitoring results",
+    "status": "pending",
+    "category": "treatment",
+    "values": {
+      "Average Systolic": "115 mmHg",
+      "Average Diastolic": "66 mmHg",
+      "Readings Taken": "20",
+      "Monitoring Period": "13 days"
+    }
+  },
+  {
+    "id": "mr40",
+    "type": "procedure",
+    "title": "Physical Therapy",
+    "date": "2024-04-12",
+    "doctorName": "Dr. Laura Thompson",
+    "facility": "Community Health Center",
+    "description": "Medical procedure: physical therapy",
+    "status": "reviewed",
+    "category": "monitoring",
+    "values": {
+      "Procedure": "Physical Therapy",
+      "Findings": "Normal",
+      "Status": "Completed"
+    }
+  },
+  {
+    "id": "mr41",
+    "type": "lab_result",
+    "title": "Kidney Function Test",
+    "date": "2024-05-13",
+    "doctorName": "Dr. Edward Thompson",
+    "facility": "General Hospital Lab",
+    "description": "Laboratory test results for kidney function test",
+    "status": "normal",
+    "category": "diagnostic",
+    "values": {
+      "Test Result 1": "4.8 mg/dL",
+      "Test Result 2": "3.2 mIU/L",
+      "Test Result 3": "4.0 %"
+    }
+  },
+  {
+    "id": "mr42",
+    "type": "imaging",
+    "title": "MRI - Lower Back",
+    "date": "2024-06-14",
+    "doctorName": "Dr. Edward Thompson",
+    "facility": "Endocrine Center",
+    "description": "Imaging study: mri - lower back",
+    "status": "abnormal",
+    "category": "preventive",
+    "fileUrl": "/images/mri---lower-back-2024-06-14.pdf"
+  },
+  {
+    "id": "mr43",
+    "type": "vaccination",
+    "title": "COVID-19 Booster",
+    "date": "2024-07-15",
+    "doctorName": "Dr. Linda Thompson",
+    "facility": "Cardiology Center",
+    "description": "Vaccination record: covid-19 booster",
+    "status": "pending",
+    "category": "treatment",
+    "values": {
+      "Vaccine": "COVID-19 Booster",
+      "Lot Number": "LOT100042",
+      "Dose": "Standard"
+    }
+  },
+  {
+    "id": "mr44",
+    "type": "visit_summary",
+    "title": "Dermatology Consultation",
+    "date": "2024-08-16",
+    "doctorName": "Dr. Donald Thompson",
+    "facility": "Community Health Center",
+    "description": "Visit summary: dermatology consultation",
+    "status": "reviewed",
+    "category": "monitoring",
+    "values": {
+      "Blood Pressure": "119/87 mmHg",
+      "Heart Rate": "94 bpm",
+      "Weight": "172 lbs",
+      "Height": "5'11\""
+    }
+  },
+  {
+    "id": "mr45",
+    "type": "prescription_history",
+    "title": "Current Medications",
+    "date": "2024-09-17",
+    "doctorName": "Dr. Edward Thompson",
+    "facility": "City Medical Lab",
+    "description": "Current prescription medications and dosages",
+    "status": "normal",
+    "category": "diagnostic",
+    "values": {
+      "Medication 1": "10mg daily",
+      "Medication 2": "500mg twice daily",
+      "Last Review": "2024-09-17"
+    }
+  },
+  {
+    "id": "mr46",
+    "type": "allergy",
+    "title": "Allergy Assessment",
+    "date": "2024-10-18",
+    "doctorName": "Dr. Barbara Thompson",
+    "facility": "General Hospital Lab",
+    "description": "Comprehensive allergy testing results",
+    "status": "abnormal",
+    "category": "preventive",
+    "values": {
+      "Allergen 1": "Mild reaction",
+      "Allergen 2": "No reaction",
+      "Allergen 3": "Moderate reaction"
+    }
+  },
+  {
+    "id": "mr47",
+    "type": "vital_signs",
+    "title": "Vital Signs Monitoring",
+    "date": "2024-11-19",
+    "doctorName": "Dr. Brian Thompson",
+    "facility": "Endocrine Center",
+    "description": "Home monitoring results",
+    "status": "pending",
+    "category": "treatment",
+    "values": {
+      "Average Systolic": "111 mmHg",
+      "Average Diastolic": "79 mmHg",
+      "Readings Taken": "15",
+      "Monitoring Period": "18 days"
+    }
+  },
+  {
+    "id": "mr48",
+    "type": "procedure",
+    "title": "Cardiac Catheterization",
+    "date": "2024-12-20",
+    "doctorName": "Dr. Karen Thompson",
+    "facility": "Cardiology Center",
+    "description": "Medical procedure: cardiac catheterization",
+    "status": "reviewed",
+    "category": "monitoring",
+    "values": {
+      "Procedure": "Cardiac Catheterization",
+      "Findings": "Normal",
+      "Status": "Completed"
+    }
+  },
+  {
+    "id": "mr49",
+    "type": "lab_result",
+    "title": "Complete Blood Count (CBC)",
+    "date": "2024-01-21",
+    "doctorName": "Dr. Emily Rodriguez",
+    "facility": "Radiology Associates",
+    "description": "Laboratory test results for complete blood count (cbc)",
+    "status": "normal",
+    "category": "diagnostic",
+    "values": {
+      "Test Result 1": "8.6 mg/dL",
+      "Test Result 2": "1.2 mIU/L",
+      "Test Result 3": "2.6 %"
+    }
+  },
+  {
+    "id": "mr50",
+    "type": "imaging",
+    "title": "CT Scan - Chest",
+    "date": "2024-02-22",
+    "doctorName": "Dr. Steven Thompson",
+    "facility": "Endocrine Center",
+    "description": "Imaging study: ct scan - chest",
+    "status": "abnormal",
+    "category": "preventive",
+    "fileUrl": "/images/ct-scan---chest-2024-02-22.pdf"
   }
 ]

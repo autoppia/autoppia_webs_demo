@@ -18,7 +18,7 @@ COPY web_14_autohealth/package.json web_14_autohealth/package-lock.json ./
 RUN set -e; for i in 1 2 3; do npm ci && exit 0 || echo "Attempt $i failed, retrying..."; sleep 5; done; exit 1
 
 # Copy original dataset files for fallback
-COPY webs_server/initial_data/web_14_autohealth/original/ webs_server/initial_data/web_14_autohealth/original/
+COPY webs_server/initial_data/web_14_autohealth/original/ src/data/original/
 COPY web_14_autohealth/ .
 
 # Build args for environment flags and API URL
