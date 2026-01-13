@@ -130,7 +130,7 @@ export default function MedicalRecordsPage() {
               size="sm"
               onClick={() => {
                 setSelectedCategory(category);
-                logEvent(EVENT_TYPES.FILTER_BY_SPECIALTY, { category });
+                logEvent(EVENT_TYPES.FILTER_BY_CATEGORY, { category });
               }}
             >
               {dyn.v3.getVariant(`filter_${category}`, TEXT_VARIANTS_MAP, category.charAt(0).toUpperCase() + category.slice(1))}
