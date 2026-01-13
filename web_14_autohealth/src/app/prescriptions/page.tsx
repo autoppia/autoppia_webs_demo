@@ -1,19 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { initializePrescriptions } from "@/data/prescriptions-enhanced";
 import type { Prescription } from "@/data/prescriptions";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
-import { DynamicElement } from "@/components/DynamicElement";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/lib/utils";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 export default function PrescriptionsPage() {
-  const { reorderElements, getId, getClass, getText } = useSeedLayout();
+  const dyn = useDynamicSystem();
   const [selectedPrescription, setSelectedPrescription] = useState<Prescription | null>(null);
   const [prescriptionList, setPrescriptionList] = useState<Prescription[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -57,8 +58,12 @@ export default function PrescriptionsPage() {
     }
   };
 
-  const statuses = ["all", "active", "completed", "discontinued", "refill_needed"];
-  const orderedStatuses = reorderElements(statuses);
+  const statuses = useMemo(() => ["all", "active", "completed", "discontinued", "refill_needed"], []);
+  const orderedStatuses = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("prescriptions-statuses", statuses.length);
+    return order.map((idx) => statuses[idx]);
+  }, [dyn.seed, statuses]);
+
   useEffect(() => {
     let mounted = true;
     initializePrescriptions()
@@ -66,10 +71,31 @@ export default function PrescriptionsPage() {
       .finally(() => { if (mounted) setIsLoading(false); });
     return () => { mounted = false; };
   }, []);
-  const filteredPrescriptions = selectedStatus === "all" 
-    ? prescriptionList 
-    : prescriptionList.filter(p => p.status === selectedStatus);
-  const orderedRows = reorderElements(filteredPrescriptions);
+
+  const filteredPrescriptions = useMemo(() => {
+    return selectedStatus === "all" 
+      ? prescriptionList 
+      : prescriptionList.filter(p => p.status === selectedStatus);
+  }, [selectedStatus, prescriptionList]);
+
+  const orderedRows = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("prescriptions-rows", filteredPrescriptions.length);
+    return order.map((idx) => filteredPrescriptions[idx]);
+  }, [dyn.seed, filteredPrescriptions]);
+
+  const columns = useMemo(() => [
+    { key: 'medicine', header: 'Medicine' },
+    { key: 'dosage', header: 'Dosage' },
+    { key: 'doctor', header: 'Doctor' },
+    { key: 'start', header: 'Start Date' },
+    { key: 'status', header: 'Status' },
+    { key: 'action', header: 'Action', align: 'right' as const },
+  ], []);
+
+  const orderedColumns = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("prescriptions-columns", columns.length);
+    return order.map((idx) => columns[idx]);
+  }, [dyn.seed, columns]);
 
   if (useAiGeneration && isLoading) {
     return (
@@ -96,35 +122,25 @@ export default function PrescriptionsPage() {
       {/* Status Filter */}
       <div className="mt-6 flex flex-wrap gap-2">
         {orderedStatuses.map((status, i) => (
-          <DynamicElement key={status} elementType="status-filter" as="span" index={i}>
-          <Button
-            id={getId("status-filter-button", i)}
-            className={getClass("button-secondary", "")}
-            variant={selectedStatus === status ? "default" : "outline"}
-            size="sm"
-            onClick={() => {
-              setSelectedStatus(status);
-              logEvent(EVENT_TYPES.FILTER_BY_SPECIALTY, { status });
-            }}
-          >
-            {status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
-          </Button>
-          </DynamicElement>
+          dyn.v1.addWrapDecoy(`status-filter-${i}`, (
+            <Button
+              key={status}
+              id={dyn.v3.getVariant(`status-filter-button-${status}`, ID_VARIANTS_MAP, `status-filter-button-${status}`)}
+              className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+              variant={selectedStatus === status ? "default" : "outline"}
+              size="sm"
+              onClick={() => {
+                setSelectedStatus(status);
+                logEvent(EVENT_TYPES.FILTER_BY_SPECIALTY, { status });
+              }}
+            >
+              {dyn.v3.getVariant(`filter_${status}`, TEXT_VARIANTS_MAP, status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' '))}
+            </Button>
+          ), `status-filter-${i}`)
         ))}
       </div>
 
       <div className="mt-6">
-        {(() => {
-          const columns = [
-            { key: 'medicine', header: 'Medicine' },
-            { key: 'dosage', header: 'Dosage' },
-            { key: 'doctor', header: 'Doctor' },
-            { key: 'start', header: 'Start Date' },
-            { key: 'status', header: 'Status' },
-            { key: 'action', header: 'Action', align: 'right' as const },
-          ];
-          const orderedColumns = reorderElements(columns);
-          return (
         <Table>
           <TableHeader>
             <TableRow>
@@ -135,7 +151,7 @@ export default function PrescriptionsPage() {
           </TableHeader>
           <TableBody>
             {orderedRows.map((p, ri) => (
-              <DynamicElement key={p.id} elementType="prescription-row" as="tr" index={ri}>
+              <TableRow key={p.id}>
                 {orderedColumns.map((c) => {
                   if (c.key === 'medicine') return (
                     <TableCell key={c.key}>
@@ -155,31 +171,31 @@ export default function PrescriptionsPage() {
                   if (c.key === 'start') return <TableCell key={c.key}>{p.startDate}</TableCell>;
                   if (c.key === 'status') return (
                     <TableCell key={c.key}>
-                      <Badge className={getStatusColor(p.status)}>
+                      <Badge className={cn(getStatusColor(p.status), dyn.v3.getVariant("badge", CLASS_VARIANTS_MAP, ""))}>
                         {p.status.replace('_', ' ')}
                       </Badge>
                     </TableCell>
                   );
                   if (c.key === 'action') return (
                     <TableCell key={c.key} className="text-right">
-                      <Button 
-                        id={getId("view-prescription-button", ri)}
-                        className={getClass("button-secondary", "")}
-                        onClick={() => handleViewPrescription(p)} 
-                        size="sm"
-                      >
-                        {getText("view_prescription", "View Prescription")}
-                      </Button>
+                      {dyn.v1.addWrapDecoy(`view-prescription-button-${ri}`, (
+                        <Button 
+                          id={dyn.v3.getVariant("view-prescription-button", ID_VARIANTS_MAP, `view-prescription-button-${ri}`)}
+                          className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+                          onClick={() => handleViewPrescription(p)} 
+                          size="sm"
+                        >
+                          {dyn.v3.getVariant("view_prescription", TEXT_VARIANTS_MAP, "View Prescription")}
+                        </Button>
+                      ))}
                     </TableCell>
                   );
                   return null;
                 })}
-              </DynamicElement>
+              </TableRow>
             ))}
           </TableBody>
         </Table>
-          );
-        })()}
       </div>
 
       {/* Prescription Detail Modal */}
@@ -196,14 +212,16 @@ export default function PrescriptionsPage() {
                   )}
                 </div>
               </div>
-              <Button 
-                id={getId("close-modal-button", 0)}
-                className={getClass("button-secondary", "")}
-                variant="outline" 
-                onClick={() => setSelectedPrescription(null)}
-              >
-                {getText("close", "Close")}
-              </Button>
+              {dyn.v1.addWrapDecoy("close-modal-button", (
+                <Button 
+                  id={dyn.v3.getVariant("close-modal-button", ID_VARIANTS_MAP, "close-modal-button")}
+                  className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+                  variant="outline" 
+                  onClick={() => setSelectedPrescription(null)}
+                >
+                  {dyn.v3.getVariant("close", TEXT_VARIANTS_MAP, "Close")}
+                </Button>
+              ))}
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -212,9 +230,11 @@ export default function PrescriptionsPage() {
                   { key: 'details' },
                   { key: 'cost' },
                 ];
-                const orderedSections = reorderElements(sections);
-                return orderedSections.map((s, si) => (
-                  <DynamicElement key={s.key} elementType="prescription-modal-section" as="div" index={si} className="space-y-4">
+                const order = dyn.v1.changeOrderElements("prescription-modal-sections", sections.length);
+                return order.map((idx) => sections[idx]);
+              })().map((s, si) => 
+                dyn.v1.addWrapDecoy(`prescription-modal-section-${si}`, (
+                  <div key={s.key} className="space-y-4">
                     {s.key === 'details' && (
                       <>
                         <h3 className="text-lg font-semibold">Prescription Details</h3>
@@ -240,9 +260,9 @@ export default function PrescriptionsPage() {
                         </div>
                       </>
                     )}
-                  </DynamicElement>
-                ));
-              })()}
+                  </div>
+                ), `prescription-modal-section-wrap-${si}`)
+              )}
             </div>
 
             {/* Instructions */}

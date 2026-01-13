@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, Filter, SortAsc, SortDesc } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/lib/utils";
 import type { Doctor } from "@/data/doctors";
 import { initializeDoctorReviews } from "@/data/reviews-enhanced";
 
@@ -26,6 +29,7 @@ function Stars({ value }: { value: number }) {
 }
 
 export function DoctorReviewsModal({ open, onOpenChange, doctor }: DoctorReviewsModalProps) {
+  const dyn = useDynamicSystem();
   const [filterRating, setFilterRating] = React.useState<number | null>(null);
   const [sortOrder, setSortOrder] = React.useState<"newest" | "oldest" | "highest" | "lowest">("newest");
   const [reviews, setReviews] = React.useState<Array<{ rating: number; comment: string; patientName: string; date: string }>>([]);
@@ -170,6 +174,7 @@ export function DoctorReviewsModal({ open, onOpenChange, doctor }: DoctorReviews
             <div className="flex flex-wrap gap-2">
               <span className="text-sm font-medium">Filter by rating:</span>
               <Button
+                className={cn(dyn.v3.getVariant("review-filter-all-button", CLASS_VARIANTS_MAP, ""))}
                 variant={filterRating === null ? "default" : "outline"}
                 size="sm"
                 onClick={() => handleFilterChange(null)}
@@ -179,6 +184,7 @@ export function DoctorReviewsModal({ open, onOpenChange, doctor }: DoctorReviews
               {[5, 4, 3, 2, 1].map((rating) => (
                 <Button
                   key={rating}
+                  className={cn(dyn.v3.getVariant(`review-filter-${rating}-button`, CLASS_VARIANTS_MAP, ""))}
                   variant={filterRating === rating ? "default" : "outline"}
                   size="sm"
                   onClick={() => handleFilterChange(rating)}
@@ -192,7 +198,7 @@ export function DoctorReviewsModal({ open, onOpenChange, doctor }: DoctorReviews
               <select
                 value={sortOrder}
                 onChange={(e) => handleSortChange(e.target.value as "newest" | "oldest" | "highest" | "lowest")}
-                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={cn("p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", dyn.v3.getVariant("select", CLASS_VARIANTS_MAP, ""))}
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
@@ -244,9 +250,15 @@ export function DoctorReviewsModal({ open, onOpenChange, doctor }: DoctorReviews
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={handleClose}>
-            Close
-          </Button>
+          {dyn.v1.addWrapDecoy("close-reviews-button", (
+            <Button 
+              className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+              variant="outline" 
+              onClick={handleClose}
+            >
+              {dyn.v3.getVariant("close", TEXT_VARIANTS_MAP, "Close")}
+            </Button>
+          ))}
         </DialogFooter>
       </DialogContent>
     </Dialog>

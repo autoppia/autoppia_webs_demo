@@ -1,7 +1,7 @@
 "use client";
 
 import { SeedLink } from "@/components/ui/SeedLink";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { initializeDoctors } from "@/data/doctors-enhanced";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import type { Doctor } from "@/data/doctors";
@@ -11,8 +11,9 @@ import { Avatar } from "@/components/ui/avatar";
 import { Star } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
-import { DynamicElement } from "@/components/DynamicElement";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/lib/utils";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 function Stars({ value }: { value: number }) {
@@ -26,7 +27,7 @@ function Stars({ value }: { value: number }) {
 }
 
 export default function DoctorsPage() {
-  const { reorderElements, getId, getClass, getText } = useSeedLayout();
+  const dyn = useDynamicSystem();
   const [doctorList, setDoctorList] = useState<Doctor[]>([]);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
@@ -59,7 +60,11 @@ export default function DoctorsPage() {
       .finally(() => { if (mounted) setIsLoading(false); });
     return () => { mounted = false; };
   }, []);
-  const orderedDoctors = reorderElements(doctorList);
+  
+  const orderedDoctors = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("doctors-list", doctorList.length);
+    return order.map((idx) => doctorList[idx]);
+  }, [dyn.seed, doctorList]);
 
   if (useAiGeneration && isLoading) {
     return (
@@ -81,48 +86,54 @@ export default function DoctorsPage() {
 
   return (
     <div className="container py-10">
-      <h1 className="text-2xl font-semibold">Doctors</h1>
+      {dyn.v1.addWrapDecoy("doctors-page-header", (
+        <h1 className="text-2xl font-semibold">Doctors</h1>
+      ))}
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {orderedDoctors.map((d, i) => (
-          <DynamicElement key={d.id} elementType="doctor-card" as="div" index={i} className="flex">
-            <Card className="flex flex-col w-full">
-            <CardHeader className="flex-row items-center gap-4">
-              <Avatar name={d.name} />
-              <div>
-                <CardTitle className="text-lg">{d.name}</CardTitle>
-                <div className="text-sm text-muted-foreground">{d.specialty}</div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <Stars value={d.rating} />
-              <p className="mt-3 text-sm text-muted-foreground">{d.bio}</p>
-            </CardContent>
-            <CardFooter className="mt-auto flex gap-2">
-              <SeedLink href={`/doctors/${d.id}`}>
-                <Button 
-                  id={getId("view-profile-button", i)}
-                  className={getClass("button-secondary", "")}
-                  variant="outline"
-                  onClick={() => logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
-                    doctorId: d.id,
-                    doctorName: d.name,
-                    specialty: d.specialty,
-                    rating: d.rating
-                  })}
-                >
-                  {getText("view_profile", "View Profile")}
-                </Button>
-              </SeedLink>
-              <Button 
-                id={getId("book-now-button", i)}
-                className={`bg-green-600 hover:bg-green-700 ${getClass("button-primary", "")}`}
-                onClick={() => handleBookNow(d)}
-              >
-                {getText("book_now", "Book Now")}
-              </Button>
-            </CardFooter>
+          dyn.v1.addWrapDecoy(`doctor-card-${i}`, (
+            <Card key={d.id} className={cn("flex flex-col w-full", dyn.v3.getVariant("doctor-card", CLASS_VARIANTS_MAP, ""))}>
+              <CardHeader className="flex-row items-center gap-4">
+                <Avatar name={d.name} />
+                <div>
+                  <CardTitle className="text-lg">{d.name}</CardTitle>
+                  <div className="text-sm text-muted-foreground">{d.specialty}</div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <Stars value={d.rating} />
+                <p className="mt-3 text-sm text-muted-foreground">{d.bio}</p>
+              </CardContent>
+              <CardFooter className="mt-auto flex gap-2">
+                <SeedLink href={`/doctors/${d.id}`}>
+                  {dyn.v1.addWrapDecoy(`view-profile-button-${i}`, (
+                    <Button 
+                      id={dyn.v3.getVariant("view-profile-button", ID_VARIANTS_MAP, `view-profile-button-${i}`)}
+                      className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+                      variant="outline"
+                      onClick={() => logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
+                        doctorId: d.id,
+                        doctorName: d.name,
+                        specialty: d.specialty,
+                        rating: d.rating
+                      })}
+                    >
+                      {dyn.v3.getVariant("view_profile", TEXT_VARIANTS_MAP, "View Profile")}
+                    </Button>
+                  ))}
+                </SeedLink>
+                {dyn.v1.addWrapDecoy(`book-now-button-${i}`, (
+                  <Button 
+                    id={dyn.v3.getVariant("book-now-button", ID_VARIANTS_MAP, `book-now-button-${i}`)}
+                    className={cn("bg-green-600 hover:bg-green-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+                    onClick={() => handleBookNow(d)}
+                  >
+                    {dyn.v3.getVariant("book_now", TEXT_VARIANTS_MAP, "Book Now")}
+                  </Button>
+                ))}
+              </CardFooter>
             </Card>
-          </DynamicElement>
+          ), `doctor-card-${i}`)
         ))}
       </div>
 

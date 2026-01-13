@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/lib/utils";
 import type { Doctor } from "@/data/doctors";
 
 interface ContactDoctorModalProps {
@@ -26,6 +29,7 @@ interface ContactFormData {
 }
 
 export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctorModalProps) {
+  const dyn = useDynamicSystem();
   const [formData, setFormData] = React.useState<ContactFormData>({
     patientName: "",
     patientEmail: "",
@@ -156,41 +160,44 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
             <h3 className="text-lg font-medium">Your Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="patientName">Full Name *</Label>
+                <Label htmlFor={dyn.v3.getVariant("contact-patient-name-input", ID_VARIANTS_MAP, "patientName")}>Full Name *</Label>
                 <Input
-                  id="patientName"
+                  id={dyn.v3.getVariant("contact-patient-name-input", ID_VARIANTS_MAP, "patientName")}
+                  className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
                   value={formData.patientName}
                   onChange={(e) => handleInputChange("patientName", e.target.value)}
-                  placeholder="Enter your full name"
+                  placeholder={dyn.v3.getVariant("contact_patient_name_placeholder", TEXT_VARIANTS_MAP, "Enter your full name")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="patientEmail">Email Address *</Label>
+                <Label htmlFor={dyn.v3.getVariant("contact-patient-email-input", ID_VARIANTS_MAP, "patientEmail")}>Email Address *</Label>
                 <Input
-                  id="patientEmail"
+                  id={dyn.v3.getVariant("contact-patient-email-input", ID_VARIANTS_MAP, "patientEmail")}
+                  className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
                   type="email"
                   value={formData.patientEmail}
                   onChange={(e) => handleInputChange("patientEmail", e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder={dyn.v3.getVariant("contact_patient_email_placeholder", TEXT_VARIANTS_MAP, "Enter your email")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="patientPhone">Phone Number</Label>
+                <Label htmlFor={dyn.v3.getVariant("contact-patient-phone-input", ID_VARIANTS_MAP, "patientPhone")}>Phone Number</Label>
                 <Input
-                  id="patientPhone"
+                  id={dyn.v3.getVariant("contact-patient-phone-input", ID_VARIANTS_MAP, "patientPhone")}
+                  className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
                   type="tel"
                   value={formData.patientPhone}
                   onChange={(e) => handleInputChange("patientPhone", e.target.value)}
-                  placeholder="Enter your phone number"
+                  placeholder={dyn.v3.getVariant("contact_patient_phone_placeholder", TEXT_VARIANTS_MAP, "Enter your phone number")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="urgency">Urgency Level</Label>
+                <Label htmlFor={dyn.v3.getVariant("contact-urgency-select", ID_VARIANTS_MAP, "urgency")}>Urgency Level</Label>
                 <select
-                  id="urgency"
+                  id={dyn.v3.getVariant("contact-urgency-select", ID_VARIANTS_MAP, "urgency")}
+                  className={cn("w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", dyn.v3.getVariant("select", CLASS_VARIANTS_MAP, ""))}
                   value={formData.urgency}
                   onChange={(e) => handleInputChange("urgency", e.target.value as "low" | "medium" | "high")}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="low">Low - General inquiry</option>
                   <option value="medium">Medium - Need response soon</option>
@@ -205,22 +212,23 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
             <h3 className="text-lg font-medium">Message Details</h3>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="subject">Subject *</Label>
+                <Label htmlFor={dyn.v3.getVariant("contact-subject-input", ID_VARIANTS_MAP, "subject")}>Subject *</Label>
                 <Input
-                  id="subject"
+                  id={dyn.v3.getVariant("contact-subject-input", ID_VARIANTS_MAP, "subject")}
+                  className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
                   value={formData.subject}
                   onChange={(e) => handleInputChange("subject", e.target.value)}
-                  placeholder="Brief description of your inquiry"
+                  placeholder={dyn.v3.getVariant("contact_subject_placeholder", TEXT_VARIANTS_MAP, "Brief description of your inquiry")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="message">Message *</Label>
+                <Label htmlFor={dyn.v3.getVariant("contact-message-input", ID_VARIANTS_MAP, "message")}>Message *</Label>
                 <textarea
-                  id="message"
-                  className="w-full min-h-[120px] p-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  id={dyn.v3.getVariant("contact-message-input", ID_VARIANTS_MAP, "message")}
+                  className={cn("w-full min-h-[120px] p-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500", dyn.v3.getVariant("textarea", CLASS_VARIANTS_MAP, ""))}
                   value={formData.message}
                   onChange={(e) => handleInputChange("message", e.target.value)}
-                  placeholder="Please provide details about your inquiry, symptoms, or questions..."
+                  placeholder={dyn.v3.getVariant("contact_message_placeholder", TEXT_VARIANTS_MAP, "Please provide details about your inquiry, symptoms, or questions...")}
                 />
               </div>
             </div>
@@ -231,12 +239,12 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
             <h3 className="text-lg font-medium">Contact Preferences</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="preferredContactMethod">Preferred Contact Method</Label>
+                <Label htmlFor={dyn.v3.getVariant("contact-preferred-method-select", ID_VARIANTS_MAP, "preferredContactMethod")}>Preferred Contact Method</Label>
                 <select
-                  id="preferredContactMethod"
+                  id={dyn.v3.getVariant("contact-preferred-method-select", ID_VARIANTS_MAP, "preferredContactMethod")}
+                  className={cn("w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", dyn.v3.getVariant("select", CLASS_VARIANTS_MAP, ""))}
                   value={formData.preferredContactMethod}
                   onChange={(e) => handleInputChange("preferredContactMethod", e.target.value as "email" | "phone" | "either")}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="either">Either email or phone</option>
                   <option value="email">Email only</option>
@@ -247,12 +255,12 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
-                    id="appointmentRequest"
+                    id={dyn.v3.getVariant("contact-appointment-request-checkbox", ID_VARIANTS_MAP, "appointmentRequest")}
                     checked={formData.appointmentRequest}
                     onChange={(e) => handleInputChange("appointmentRequest", e.target.checked)}
-                    className="rounded border-gray-300"
+                    className={cn("rounded border-gray-300", dyn.v3.getVariant("checkbox", CLASS_VARIANTS_MAP, ""))}
                   />
-                  <Label htmlFor="appointmentRequest">I would like to request an appointment</Label>
+                  <Label htmlFor={dyn.v3.getVariant("contact-appointment-request-checkbox", ID_VARIANTS_MAP, "appointmentRequest")}>I would like to request an appointment</Label>
                 </div>
               </div>
             </div>
@@ -272,16 +280,26 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={handleCancel} disabled={isSubmitting}>
-            Cancel
-          </Button>
-          <Button 
-            onClick={handleSubmitContact} 
-            disabled={isSubmitting || !validateForm()}
-            className="bg-blue-600 hover:bg-blue-700"
-          >
-            {isSubmitting ? "Sending..." : "Send Message"}
-          </Button>
+          {dyn.v1.addWrapDecoy("cancel-contact-button", (
+            <Button 
+              className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+              variant="outline" 
+              onClick={handleCancel} 
+              disabled={isSubmitting}
+            >
+              {dyn.v3.getVariant("cancel", TEXT_VARIANTS_MAP, "Cancel")}
+            </Button>
+          ))}
+          {dyn.v1.addWrapDecoy("send-message-button", (
+            <Button 
+              id={dyn.v3.getVariant("contact-doctor-button", ID_VARIANTS_MAP, "send-message-button")}
+              className={cn("bg-blue-600 hover:bg-blue-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+              onClick={handleSubmitContact} 
+              disabled={isSubmitting || !validateForm()}
+            >
+              {isSubmitting ? dyn.v3.getVariant("booking", TEXT_VARIANTS_MAP, "Sending...") : dyn.v3.getVariant("contact_doctor", TEXT_VARIANTS_MAP, "Send Message")}
+            </Button>
+          ))}
         </DialogFooter>
       </DialogContent>
     </Dialog>

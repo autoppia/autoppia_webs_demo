@@ -7,12 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, Phone, Mail, MapPin, Clock, Award, BookOpen, Stethoscope } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { ContactDoctorModal } from "@/components/contact-doctor-modal";
 import { DoctorReviewsModal } from "@/components/doctor-reviews-modal";
 import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
-import { DynamicElement } from "@/components/DynamicElement";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/lib/utils";
 import { initializeDoctorReviews } from "@/data/reviews-enhanced";
 
 function Stars({ value }: { value: number }) {
@@ -26,7 +27,7 @@ function Stars({ value }: { value: number }) {
 }
 
 export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
-  const { reorderElements, getId, getClass, getText } = useSeedLayout();
+  const dyn = useDynamicSystem();
   const [activeTab, setActiveTab] = useState("overview");
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
@@ -93,7 +94,10 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
     { id: "reviews", label: "Reviews" },
     { id: "procedures", label: "Procedures" }
   ];
-  const orderedTabs = reorderElements(tabs);
+  const orderedTabs = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("doctor-profile-tabs", tabs.length);
+    return order.map((idx) => tabs[idx]);
+  }, [dyn.seed, tabs]);
 
   return (
     <div className="container py-10">
@@ -105,9 +109,13 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
               { key: 'avatar' },
               { key: 'details' },
             ];
-            const orderedHeader = reorderElements(headerParts);
+            const orderedHeader = useMemo(() => {
+              const order = dyn.v1.changeOrderElements("doctor-profile-header", headerParts.length);
+              return order.map((idx) => headerParts[idx]);
+            }, [dyn.seed, headerParts]);
             return orderedHeader.map((p, i) => (
-              <DynamicElement key={p.key} elementType={`profile-header-${p.key}`} as="div" index={i} className={p.key === 'avatar' ? 'flex-shrink-0' : 'flex-1'}>
+              dyn.v1.addWrapDecoy(`profile-header-${p.key}`, (
+                <div key={p.key} className={p.key === 'avatar' ? 'flex-shrink-0' : 'flex-1'}>
                 {p.key === 'avatar' && (
                   <Avatar name={doctor.name} className="w-24 h-24 text-2xl" />
                 )}
@@ -131,7 +139,8 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
                     </div>
                   </div>
                 )}
-              </DynamicElement>
+                </div>
+              ), `profile-header-${p.key}-${i}`)
             ));
           })()}
         </div>
@@ -154,15 +163,20 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
                 { key: 'email', icon: <Mail className="h-4 w-4 text-muted-foreground" />, label: 'Email', value: doctor.email || 'N/A' },
                 { key: 'fee', icon: <span className="text-lg">💰</span>, label: 'Consultation Fee', value: doctor.consultationFee != null ? `$${doctor.consultationFee}` : 'N/A' },
               ];
-              const orderedInfo = reorderElements(info);
+              const orderedInfo = useMemo(() => {
+                const order = dyn.v1.changeOrderElements("doctor-contact-info", info.length);
+                return order.map((idx) => info[idx]);
+              }, [dyn.seed, info]);
               return orderedInfo.map((it, i) => (
-                <DynamicElement key={it.key} elementType="contact-item" as="div" index={i} className="flex items-center gap-3">
+                dyn.v1.addWrapDecoy(`contact-item-${i}`, (
+                  <div key={it.key} className="flex items-center gap-3">
                   {it.icon}
                   <div>
                     <p className="font-medium">{it.label}</p>
                     <p className="text-sm text-muted-foreground">{it.value}</p>
                   </div>
-                </DynamicElement>
+                </div>
+              ), `contact-item-${i}`)
               ));
             })()}
           </div>
@@ -173,16 +187,17 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
       <div className="mb-6">
         <div className="flex flex-wrap gap-2 border-b">
           {orderedTabs.map((tab, i) => (
-            <DynamicElement key={tab.id} elementType="profile-tab" as="span" index={i}>
-            <Button
-              id={getId("profile-tab", i)}
-              className={`rounded-b-none ${getClass("button-secondary", "")}`}
-              variant={activeTab === tab.id ? "default" : "ghost"}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.label}
-            </Button>
-            </DynamicElement>
+            dyn.v1.addWrapDecoy(`profile-tab-${i}`, (
+              <Button
+                key={tab.id}
+                id={dyn.v3.getVariant(`profile-tab-${tab.id}`, ID_VARIANTS_MAP, `profile-tab-${tab.id}`)}
+                className={cn("rounded-b-none", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+                variant={activeTab === tab.id ? "default" : "ghost"}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                {tab.label}
+              </Button>
+            ), `profile-tab-${i}`)
           ))}
         </div>
       </div>
@@ -405,40 +420,51 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
         {(() => {
           const actions = [
             { key: 'book', node: (
-              <Button 
-                id={getId("book-appointment-button", 0)}
-                className={`flex-1 bg-blue-600 hover:bg-blue-700 ${getClass("button-primary", "")}`}
-                onClick={handleBookAppointment}
-              >
-                {getText("book_appointment", "Book Appointment")}
-              </Button>
+              dyn.v1.addWrapDecoy("book-appointment-button", (
+                <Button 
+                  id={dyn.v3.getVariant("book-appointment-button", ID_VARIANTS_MAP, "book-appointment-button")}
+                  className={cn("flex-1 bg-blue-600 hover:bg-blue-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+                  onClick={handleBookAppointment}
+                >
+                  {dyn.v3.getVariant("book_appointment", TEXT_VARIANTS_MAP, "Book Appointment")}
+                </Button>
+              ))
             ) },
             { key: 'contact', node: (
-              <Button 
-                id={getId("contact-doctor-button", 0)}
-                className={`flex-1 ${getClass("button-secondary", "")}`}
-                variant="outline" 
-                onClick={handleContactDoctor}
-              >
-                {getText("contact_doctor", "Contact Doctor")}
-              </Button>
+              dyn.v1.addWrapDecoy("contact-doctor-button", (
+                <Button 
+                  id={dyn.v3.getVariant("contact-doctor-button", ID_VARIANTS_MAP, "contact-doctor-button")}
+                  className={cn("flex-1", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+                  variant="outline" 
+                  onClick={handleContactDoctor}
+                >
+                  {dyn.v3.getVariant("contact_doctor", TEXT_VARIANTS_MAP, "Contact Doctor")}
+                </Button>
+              ))
             ) },
             { key: 'reviews', node: (
-              <Button 
-                id={getId("view-reviews-button", 0)}
-                className={`flex-1 ${getClass("button-secondary", "")}`}
-                variant="outline" 
-                onClick={handleViewReviews}
-              >
-                {getText("view_reviews", "View All Reviews")}
-              </Button>
+              dyn.v1.addWrapDecoy("view-reviews-button", (
+                <Button 
+                  id={dyn.v3.getVariant("view-reviews-button", ID_VARIANTS_MAP, "view-reviews-button")}
+                  className={cn("flex-1", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+                  variant="outline" 
+                  onClick={handleViewReviews}
+                >
+                  {dyn.v3.getVariant("view_reviews", TEXT_VARIANTS_MAP, "View All Reviews")}
+                </Button>
+              ))
             ) },
           ];
-          const orderedActions = reorderElements(actions);
+          const orderedActions = useMemo(() => {
+            const order = dyn.v1.changeOrderElements("doctor-profile-actions", actions.length);
+            return order.map((idx) => actions[idx]);
+          }, [dyn.seed, actions]);
           return orderedActions.map((a, i) => (
-            <DynamicElement key={a.key} elementType="profile-action" as="div" index={i}>
-              {a.node}
-            </DynamicElement>
+            dyn.v1.addWrapDecoy(`profile-action-${i}`, (
+              <div key={a.key}>
+                {a.node}
+              </div>
+            ), `profile-action-${i}`)
           ));
         })()}
       </div>

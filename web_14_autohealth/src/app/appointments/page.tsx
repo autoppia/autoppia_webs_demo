@@ -1,19 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { initializeAppointments } from "@/data/appointments-enhanced";
 import type { Appointment } from "@/data/appointments";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
-import { DynamicElement } from "@/components/DynamicElement";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/lib/utils";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 export default function AppointmentsPage() {
-  const { reorderElements, getId, getClass, getText } = useSeedLayout();
+  const dyn = useDynamicSystem();
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [appointmentList, setAppointmentList] = useState<Appointment[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,6 +47,25 @@ export default function AppointmentsPage() {
     return () => { mounted = false; };
   }, []);
 
+  // Column definitions (keys drive order of headers/cells)
+  const columns = useMemo(() => [
+    { key: 'doctor', header: 'Doctor' },
+    { key: 'specialty', header: 'Specialty' },
+    { key: 'date', header: 'Date' },
+    { key: 'time', header: 'Time' },
+    { key: 'action', header: 'Action', align: 'right' as const },
+  ], []);
+
+  const orderedColumns = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("appointments-columns", columns.length);
+    return order.map((idx) => columns[idx]);
+  }, [dyn.seed, columns]);
+
+  const orderedRows = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("appointments-rows", appointmentList.length);
+    return order.map((idx) => appointmentList[idx]);
+  }, [dyn.seed, appointmentList]);
+
   if (useAiGeneration && isLoading) {
     return (
       <div className="container py-20 flex items-center justify-center">
@@ -67,56 +87,45 @@ export default function AppointmentsPage() {
     <div className="container py-10">
       <h1 className="text-2xl font-semibold">Available Appointments</h1>
       <div className="mt-6">
-        {(() => {
-          // Column definitions (keys drive order of headers/cells)
-          const columns = [
-            { key: 'doctor', header: 'Doctor' },
-            { key: 'specialty', header: 'Specialty' },
-            { key: 'date', header: 'Date' },
-            { key: 'time', header: 'Time' },
-            { key: 'action', header: 'Action', align: 'right' as const },
-          ];
-          const orderedColumns = reorderElements(columns);
-          const rows = reorderElements(appointmentList);
-
-          return (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {orderedColumns.map((c, ci) => (
-                <TableHead key={c.key} className={c.align === 'right' ? 'text-right' : undefined}>
-                  {c.header}
-                </TableHead>
+        {dyn.v1.addWrapDecoy("appointments-table", (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                {orderedColumns.map((c, ci) => (
+                  <TableHead key={c.key} className={c.align === 'right' ? 'text-right' : undefined}>
+                    {c.header}
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {orderedRows.map((a, ri) => (
+                <TableRow key={a.id}>
+                  {orderedColumns.map((c) => {
+                    if (c.key === 'doctor') return <TableCell key={c.key}>{a.doctorName}</TableCell>;
+                    if (c.key === 'specialty') return <TableCell key={c.key}>{a.specialty}</TableCell>;
+                    if (c.key === 'date') return <TableCell key={c.key}>{a.date}</TableCell>;
+                    if (c.key === 'time') return <TableCell key={c.key}>{a.time}</TableCell>;
+                    if (c.key === 'action') return (
+                      <TableCell key={c.key} className="text-right">
+                        {dyn.v1.addWrapDecoy(`book-appointment-button-${ri}`, (
+                          <Button 
+                            id={dyn.v3.getVariant("book-appointment-button", ID_VARIANTS_MAP, `book-appointment-button-${ri}`)}
+                            className={cn("bg-blue-600 hover:bg-blue-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+                            onClick={() => handleBookAppointment(a)}
+                          >
+                            {dyn.v3.getVariant("book_appointment", TEXT_VARIANTS_MAP, "Book Appointment")}
+                          </Button>
+                        ))}
+                      </TableCell>
+                    );
+                    return null;
+                  })}
+                </TableRow>
               ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {rows.map((a, ri) => (
-              <DynamicElement key={a.id} elementType="appointment-row" as="tr" index={ri}>
-                {orderedColumns.map((c) => {
-                  if (c.key === 'doctor') return <TableCell key={c.key}>{a.doctorName}</TableCell>;
-                  if (c.key === 'specialty') return <TableCell key={c.key}>{a.specialty}</TableCell>;
-                  if (c.key === 'date') return <TableCell key={c.key}>{a.date}</TableCell>;
-                  if (c.key === 'time') return <TableCell key={c.key}>{a.time}</TableCell>;
-                  if (c.key === 'action') return (
-                    <TableCell key={c.key} className="text-right">
-                      <Button 
-                        id={getId("book-appointment-button", ri)}
-                        className={`bg-blue-600 hover:bg-blue-700 ${getClass("button-primary", "")}`}
-                        onClick={() => handleBookAppointment(a)}
-                      >
-                        {getText("book_appointment", "Book Appointment")}
-                      </Button>
-                    </TableCell>
-                  );
-                  return null;
-                })}
-              </DynamicElement>
-            ))}
-          </TableBody>
-        </Table>
-          );
-        })()}
+            </TableBody>
+          </Table>
+        ), "appointments-table-wrap")}
       </div>
 
       <AppointmentBookingModal

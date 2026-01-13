@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -9,13 +9,14 @@ import { Badge } from "@/components/ui/badge";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { initializeMedicalRecords } from "@/data/medical-records-enhanced";
 import type { MedicalRecord } from "@/data/medical-records";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
-import { DynamicElement } from "@/components/DynamicElement";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/lib/utils";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 export default function MedicalRecordsPage() {
-  const { reorderElements, getId, getClass, getText } = useSeedLayout();
+  const dyn = useDynamicSystem();
   const [files, setFiles] = useState<File[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedRecord, setSelectedRecord] = useState<MedicalRecord | null>(null);
@@ -76,7 +77,10 @@ export default function MedicalRecordsPage() {
   };
 
   const categories = ["all", "diagnostic", "preventive", "treatment", "monitoring"];
-  const orderedCategories = reorderElements(categories);
+  const orderedCategories = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("medical-records-categories", categories.length);
+    return order.map((idx) => categories[idx]);
+  }, [dyn.seed, categories]);
   useEffect(() => {
     let mounted = true;
     initializeMedicalRecords()
@@ -87,7 +91,10 @@ export default function MedicalRecordsPage() {
   const filteredRecords = selectedCategory === "all" 
     ? recordsList 
     : recordsList.filter(record => record.category === selectedCategory);
-  const orderedRecords = reorderElements(filteredRecords);
+  const orderedRecords = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("medical-records-list", filteredRecords.length);
+    return order.map((idx) => filteredRecords[idx]);
+  }, [dyn.seed, filteredRecords]);
 
   if (useAiGeneration && isLoading) {
     return (
@@ -114,73 +121,89 @@ export default function MedicalRecordsPage() {
       {/* Category Filter */}
       <div className="mt-6 flex flex-wrap gap-2">
         {orderedCategories.map((category, i) => (
-          <DynamicElement key={category} elementType="records-filter" as="span" index={i}>
-          <Button
-            id={getId("category-filter-button", i)}
-            className={getClass("button-secondary", "")}
-            variant={selectedCategory === category ? "default" : "outline"}
-            size="sm"
-            onClick={() => {
-              setSelectedCategory(category);
-              logEvent(EVENT_TYPES.FILTER_BY_SPECIALTY, { category });
-            }}
-          >
-            {getText(`filter_${category}`, category.charAt(0).toUpperCase() + category.slice(1))}
-          </Button>
-          </DynamicElement>
+          dyn.v1.addWrapDecoy(`records-filter-${i}`, (
+            <Button
+              key={category}
+              id={dyn.v3.getVariant(`category-filter-button-${category}`, ID_VARIANTS_MAP, `category-filter-button-${category}`)}
+              className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+              variant={selectedCategory === category ? "default" : "outline"}
+              size="sm"
+              onClick={() => {
+                setSelectedCategory(category);
+                logEvent(EVENT_TYPES.FILTER_BY_SPECIALTY, { category });
+              }}
+            >
+              {dyn.v3.getVariant(`filter_${category}`, TEXT_VARIANTS_MAP, category.charAt(0).toUpperCase() + category.slice(1))}
+            </Button>
+          ), `records-filter-${i}`)
         ))}
       </div>
 
       {/* Upload Section */}
-      <div className="mt-8 max-w-xl space-y-2">
-        <Label htmlFor="records">Upload additional files (PDF or images)</Label>
-        <div className="flex gap-2">
-          <Input id={getId("records-upload-input", 0)} type="file" accept="application/pdf,image/*" multiple ref={fileRef} />
-          <Button 
-            id={getId("upload-record-button", 0)}
-            className={getClass("button-primary", "")}
-            onClick={() => addFiles(fileRef.current?.files ?? null)}
-          >
-            {getText("upload_record", "Upload Record")}
-          </Button>
+      {dyn.v1.addWrapDecoy("upload-section", (
+        <div className="mt-8 max-w-xl space-y-2">
+          <Label htmlFor={dyn.v3.getVariant("records-upload-input", ID_VARIANTS_MAP, "records-upload-input")}>Upload additional files (PDF or images)</Label>
+          <div className="flex gap-2">
+            {dyn.v1.addWrapDecoy("records-upload-input-container", (
+              <Input 
+                id={dyn.v3.getVariant("records-upload-input", ID_VARIANTS_MAP, "records-upload-input")} 
+                type="file" 
+                accept="application/pdf,image/*" 
+                multiple 
+                ref={fileRef}
+                className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
+              />
+            ))}
+            {dyn.v1.addWrapDecoy("upload-record-button", (
+              <Button 
+                id={dyn.v3.getVariant("upload-record-button", ID_VARIANTS_MAP, "upload-record-button")}
+                className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+                onClick={() => addFiles(fileRef.current?.files ?? null)}
+              >
+                {dyn.v3.getVariant("upload_record", TEXT_VARIANTS_MAP, "Upload Record")}
+              </Button>
+            ))}
+          </div>
+          <p className="text-sm text-muted-foreground">Files are not stored. They only appear in the list below for this session.</p>
         </div>
-        <p className="text-sm text-muted-foreground">Files are not stored. They only appear in the list below for this session.</p>
-      </div>
+      ))}
 
       {/* Medical Records Grid */}
       <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {orderedRecords.map((record, i) => (
-          <DynamicElement key={record.id} elementType="record-card" as="div" index={i}>
-            <Card className="hover:shadow-md transition-shadow">
-            <CardHeader className="pb-3">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">{getTypeIcon(record.type)}</span>
-                  <CardTitle className="text-base">{record.title}</CardTitle>
+          dyn.v1.addWrapDecoy(`record-card-${i}`, (
+            <Card key={record.id} className={cn("hover:shadow-md transition-shadow", dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, ""))}>
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{getTypeIcon(record.type)}</span>
+                    <CardTitle className="text-base">{record.title}</CardTitle>
+                  </div>
+                  <Badge className={cn(getStatusColor(record.status), dyn.v3.getVariant("badge", CLASS_VARIANTS_MAP, ""))}>
+                    {record.status}
+                  </Badge>
                 </div>
-                <Badge className={getStatusColor(record.status)}>
-                  {record.status}
-                </Badge>
-              </div>
-              <div className="text-sm text-muted-foreground">
-                {record.date} • {record.doctorName}
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                {record.description}
-              </p>
-              <Button
-                id={getId("view-record-button", i)}
-                className={`w-full ${getClass("button-secondary", "")}`}
-                size="sm"
-                onClick={() => handleViewRecord(record)}
-              >
-                {getText("view_record", "View Details")}
-              </Button>
-            </CardContent>
+                <div className="text-sm text-muted-foreground">
+                  {record.date} • {record.doctorName}
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                  {record.description}
+                </p>
+                {dyn.v1.addWrapDecoy(`view-record-button-${i}`, (
+                  <Button
+                    id={dyn.v3.getVariant("view-record-button", ID_VARIANTS_MAP, `view-record-button-${i}`)}
+                    className={cn("w-full", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+                    size="sm"
+                    onClick={() => handleViewRecord(record)}
+                  >
+                    {dyn.v3.getVariant("view_record", TEXT_VARIANTS_MAP, "View Details")}
+                  </Button>
+                ))}
+              </CardContent>
             </Card>
-          </DynamicElement>
+          ), `record-card-${i}`)
         ))}
       </div>
 
@@ -195,21 +218,23 @@ export default function MedicalRecordsPage() {
                   <div className="truncate font-medium">{f.name}</div>
                   <div className="truncate text-sm text-muted-foreground">{f.type || "unknown"} • {(f.size / 1024).toFixed(1)} KB</div>
                 </div>
-                <Button
-                  id={getId("view-record-button", idx)}
-                  className={getClass("button-secondary", "")}
-                  variant="outline"
-                  onClick={() => {
-                    logEvent(EVENT_TYPES.VIEW_HEALTH_METRICS, { 
-                      index: idx, 
-                      fileName: f.name,
-                      fileType: f.type,
-                      fileSize: f.size
-                    });
-                  }}
-                >
-                  {getText("view_record", "View Record")}
-                </Button>
+                {dyn.v1.addWrapDecoy(`view-uploaded-record-button-${idx}`, (
+                  <Button
+                    id={dyn.v3.getVariant("view-record-button", ID_VARIANTS_MAP, `view-record-button-${idx}`)}
+                    className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+                    variant="outline"
+                    onClick={() => {
+                      logEvent(EVENT_TYPES.VIEW_HEALTH_METRICS, { 
+                        index: idx, 
+                        fileName: f.name,
+                        fileType: f.type,
+                        fileSize: f.size
+                      });
+                    }}
+                  >
+                    {dyn.v3.getVariant("view_record", TEXT_VARIANTS_MAP, "View Record")}
+                  </Button>
+                ))}
               </li>
             ))}
           </ul>
@@ -225,14 +250,16 @@ export default function MedicalRecordsPage() {
                 <span className="text-2xl">{getTypeIcon(selectedRecord.type)}</span>
                 <h2 className="text-xl font-semibold">{selectedRecord.title}</h2>
               </div>
-              <Button 
-                id={getId("close-modal-button", 0)}
-                className={getClass("button-secondary", "")}
-                variant="outline" 
-                onClick={() => setSelectedRecord(null)}
-              >
-                {getText("close", "Close")}
-              </Button>
+              {dyn.v1.addWrapDecoy("close-modal-button", (
+                <Button 
+                  id={dyn.v3.getVariant("close-modal-button", ID_VARIANTS_MAP, "close-modal-button")}
+                  className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+                  variant="outline" 
+                  onClick={() => setSelectedRecord(null)}
+                >
+                  {dyn.v3.getVariant("close", TEXT_VARIANTS_MAP, "Close")}
+                </Button>
+              ))}
             </div>
             
             <div className="space-y-4">
@@ -242,41 +269,44 @@ export default function MedicalRecordsPage() {
                   { key: 'desc' },
                   { key: 'values' },
                 ];
-                const orderedBlocks = reorderElements(infoBlocks);
-                return orderedBlocks.map((b, bi) => (
-                  <DynamicElement key={b.key} elementType="record-modal-block" as="div" index={bi}>
-                    {b.key === 'meta' && (
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div><span className="font-medium">Date:</span> {selectedRecord.date}</div>
-                        <div><span className="font-medium">Doctor:</span> {selectedRecord.doctorName}</div>
-                        <div><span className="font-medium">Facility:</span> {selectedRecord.facility}</div>
+                const order = dyn.v1.changeOrderElements("record-modal-blocks", infoBlocks.length);
+                const orderedBlocks = order.map((idx) => infoBlocks[idx]);
+                return orderedBlocks.map((b, bi) => 
+                  dyn.v1.addWrapDecoy(`record-modal-block-${bi}`, (
+                    <div key={b.key}>
+                      {b.key === 'meta' && (
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div><span className="font-medium">Date:</span> {selectedRecord.date}</div>
+                          <div><span className="font-medium">Doctor:</span> {selectedRecord.doctorName}</div>
+                          <div><span className="font-medium">Facility:</span> {selectedRecord.facility}</div>
+                          <div>
+                            <span className="font-medium">Status:</span>
+                            <Badge className={cn("ml-2", getStatusColor(selectedRecord.status), dyn.v3.getVariant("badge", CLASS_VARIANTS_MAP, ""))}>{selectedRecord.status}</Badge>
+                          </div>
+                        </div>
+                      )}
+                      {b.key === 'desc' && (
                         <div>
-                          <span className="font-medium">Status:</span>
-                          <Badge className={`ml-2 ${getStatusColor(selectedRecord.status)}`}>{selectedRecord.status}</Badge>
+                          <span className="font-medium">Description:</span>
+                          <p className="mt-1 text-muted-foreground">{selectedRecord.description}</p>
                         </div>
-                      </div>
-                    )}
-                    {b.key === 'desc' && (
-                      <div>
-                        <span className="font-medium">Description:</span>
-                        <p className="mt-1 text-muted-foreground">{selectedRecord.description}</p>
-                      </div>
-                    )}
-                    {b.key === 'values' && selectedRecord.values && (
-                      <div>
-                        <span className="font-medium">Results/Values:</span>
-                        <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
-                          {Object.entries(selectedRecord.values).map(([key, value]) => (
-                            <div key={key} className="flex justify-between p-2 bg-gray-50 rounded">
-                              <span className="font-medium">{key}:</span>
-                              <span>{value}</span>
-                            </div>
-                          ))}
+                      )}
+                      {b.key === 'values' && selectedRecord.values && (
+                        <div>
+                          <span className="font-medium">Results/Values:</span>
+                          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+                            {Object.entries(selectedRecord.values).map(([key, value]) => (
+                              <div key={key} className="flex justify-between p-2 bg-gray-50 rounded">
+                                <span className="font-medium">{key}:</span>
+                                <span>{value}</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </DynamicElement>
-                ));
+                      )}
+                    </div>
+                  ), `record-modal-block-wrap-${bi}`)
+                );
               })()}
             </div>
           </div>

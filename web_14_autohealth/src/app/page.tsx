@@ -1,12 +1,13 @@
 "use client";
 
 import { SeedLink } from "@/components/ui/SeedLink";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
-import { DynamicElement } from "@/components/DynamicElement";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/lib/utils";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import { initializeDoctors } from "@/data/doctors-enhanced";
 import { initializeAppointments } from "@/data/appointments-enhanced";
@@ -16,7 +17,7 @@ import { initializeDoctorReviews } from "@/data/reviews-enhanced";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 export default function Home() {
-  const { reorderElements, getId, getClass, getText } = useSeedLayout();
+  const dyn = useDynamicSystem();
   const [isLoading, setIsLoading] = useState(true);
   const nav = [
     { href: "/appointments", title: "Appointments", desc: "Find a slot and book online", event: EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED },
@@ -24,14 +25,20 @@ export default function Home() {
     { href: "/prescriptions", title: "Prescriptions", desc: "View your medications", event: EVENT_TYPES.BROWSE_PRESCRIPTIONS_CLICKED },
     { href: "/medical-records", title: "Medical Records", desc: "Upload and review files", event: EVENT_TYPES.BROWSE_MEDICAL_RECORDS_CLICKED },
   ];
-  const reorderedNav = reorderElements(nav);
+  const orderedNav = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("home-nav", nav.length);
+    return order.map((idx) => nav[idx]);
+  }, [dyn.seed, nav]);
 
   const heroParts = [
     { key: 'title' },
     { key: 'desc' },
     { key: 'cta' },
   ];
-  const orderedHero = reorderElements(heroParts);
+  const orderedHero = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("home-hero", heroParts.length);
+    return order.map((idx) => heroParts[idx]);
+  }, [dyn.seed, heroParts]);
   const useAiGeneration = isDataGenerationAvailable() && !isDbLoadModeEnabled();
 
   useEffect(() => {
@@ -85,41 +92,45 @@ export default function Home() {
     <div className="container py-10">
       <section className="mx-auto max-w-3xl text-center">
         {orderedHero.map((part, i) => (
-          <DynamicElement key={part.key} elementType={`hero-${part.key}`} as="div" index={i}>
-            {part.key === 'title' && (
-              <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-                {getText("hero_title", "Book your doctor online")}
-              </h1>
-            )}
-            {part.key === 'desc' && (
-              <p className="mt-3 text-muted-foreground">
-                Simple, fast, and secure. Demo only — no sign-in, no backend.
-              </p>
-            )}
-            {part.key === 'cta' && (
-              <div className="mt-6 flex justify-center">
-                <SeedLink href="/appointments">
-                  <Button 
-                    id={getId("hero-cta", 0)}
-                    className={getClass("button-primary", "")}
-                    size="lg"
-                    onClick={() => logEvent(EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED, { source: "homepage_cta_button" })}
-                  >
-                    {getText("browse_appointments", "Browse Appointments")}
-                  </Button>
-                </SeedLink>
-              </div>
-            )}
-          </DynamicElement>
+          dyn.v1.addWrapDecoy(`hero-${part.key}`, (
+            <div key={part.key}>
+              {part.key === 'title' && (
+                <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+                  {dyn.v3.getVariant("hero_title", TEXT_VARIANTS_MAP, "Book your doctor online")}
+                </h1>
+              )}
+              {part.key === 'desc' && (
+                <p className="mt-3 text-muted-foreground">
+                  Simple, fast, and secure. Demo only — no sign-in, no backend.
+                </p>
+              )}
+              {part.key === 'cta' && (
+                <div className="mt-6 flex justify-center">
+                  <SeedLink href="/appointments">
+                    {dyn.v1.addWrapDecoy("hero-cta-button", (
+                      <Button 
+                        id={dyn.v3.getVariant("hero-cta", ID_VARIANTS_MAP, "hero-cta")}
+                        className={cn("size-lg", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+                        size="lg"
+                        onClick={() => logEvent(EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED, { source: "homepage_cta_button" })}
+                      >
+                        {dyn.v3.getVariant("browse_appointments", TEXT_VARIANTS_MAP, "Browse Appointments")}
+                      </Button>
+                    ))}
+                  </SeedLink>
+                </div>
+              )}
+            </div>
+          ), `hero-${part.key}-${i}`)
         ))}
       </section>
 
       <section className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {reorderedNav.map((n, i) => (
-          <DynamicElement key={n.href} elementType="nav-card" as="section" index={i}>
-            <SeedLink href={n.href}>
+        {orderedNav.map((n, i) => (
+          dyn.v1.addWrapDecoy(`nav-card-${i}`, (
+            <SeedLink key={n.href} href={n.href}>
               <Card 
-                className="h-full transition hover:shadow-md"
+                className={cn("h-full transition hover:shadow-md", dyn.v3.getVariant("nav-card", CLASS_VARIANTS_MAP, ""))}
                 onClick={() => logEvent(n.event, { 
                   source: "homepage_card", 
                   destination: n.href,
@@ -127,14 +138,16 @@ export default function Home() {
                 })}
               >
                 <CardHeader>
-                  <CardTitle>{n.title}</CardTitle>
+                  <CardTitle className={cn(dyn.v3.getVariant("homepage-card-title", CLASS_VARIANTS_MAP, ""))}>
+                    {dyn.v3.getVariant(`nav_${n.href.substring(1)}`, TEXT_VARIANTS_MAP, n.title)}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground">{n.desc}</p>
+                  <p className={cn("text-sm text-muted-foreground", dyn.v3.getVariant("homepage-card-desc", CLASS_VARIANTS_MAP, ""))}>{n.desc}</p>
                 </CardContent>
               </Card>
             </SeedLink>
-          </DynamicElement>
+          ), `nav-card-${i}`)
         ))}
       </section>
     </div>

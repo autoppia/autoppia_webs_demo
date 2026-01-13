@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { cn } from "@/lib/utils";
 import type { Appointment } from "@/data/appointments";
 
 interface AppointmentBookingModalProps {
@@ -28,7 +30,7 @@ interface BookingFormData {
 }
 
 export function AppointmentBookingModal({ open, onOpenChange, appointment }: AppointmentBookingModalProps) {
-  const { getId, getClass, getText } = useSeedLayout();
+  const dyn = useDynamicSystem();
   const [formData, setFormData] = React.useState<BookingFormData>({
     patientName: "",
     patientEmail: "",
@@ -185,41 +187,45 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
             <h3 className="text-lg font-medium">Patient Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="patientName">Full Name *</Label>
+                <Label htmlFor={dyn.v3.getVariant("booking-patient-name-input", ID_VARIANTS_MAP, "patientName")}>Full Name *</Label>
                 <Input
-                  id="patientName"
+                  id={dyn.v3.getVariant("booking-patient-name-input", ID_VARIANTS_MAP, "patientName")}
+                  className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
                   value={formData.patientName}
                   onChange={(e) => handleInputChange("patientName", e.target.value)}
-                  placeholder="Enter your full name"
+                  placeholder={dyn.v3.getVariant("booking_patient_name_placeholder", TEXT_VARIANTS_MAP, "Enter your full name")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="patientEmail">Email Address *</Label>
+                <Label htmlFor={dyn.v3.getVariant("booking-patient-email-input", ID_VARIANTS_MAP, "patientEmail")}>Email Address *</Label>
                 <Input
-                  id="patientEmail"
+                  id={dyn.v3.getVariant("booking-patient-email-input", ID_VARIANTS_MAP, "patientEmail")}
+                  className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
                   type="email"
                   value={formData.patientEmail}
                   onChange={(e) => handleInputChange("patientEmail", e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder={dyn.v3.getVariant("booking_patient_email_placeholder", TEXT_VARIANTS_MAP, "Enter your email")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="patientPhone">Phone Number *</Label>
+                <Label htmlFor={dyn.v3.getVariant("booking-patient-phone-input", ID_VARIANTS_MAP, "patientPhone")}>Phone Number *</Label>
                 <Input
-                  id="patientPhone"
+                  id={dyn.v3.getVariant("booking-patient-phone-input", ID_VARIANTS_MAP, "patientPhone")}
+                  className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
                   type="tel"
                   value={formData.patientPhone}
                   onChange={(e) => handleInputChange("patientPhone", e.target.value)}
-                  placeholder="Enter your phone number"
+                  placeholder={dyn.v3.getVariant("booking_patient_phone_placeholder", TEXT_VARIANTS_MAP, "Enter your phone number")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="reasonForVisit">Reason for Visit *</Label>
+                <Label htmlFor={dyn.v3.getVariant("booking-reason-input", ID_VARIANTS_MAP, "reasonForVisit")}>Reason for Visit *</Label>
                 <Input
-                  id="reasonForVisit"
+                  id={dyn.v3.getVariant("booking-reason-input", ID_VARIANTS_MAP, "reasonForVisit")}
+                  className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
                   value={formData.reasonForVisit}
                   onChange={(e) => handleInputChange("reasonForVisit", e.target.value)}
-                  placeholder="Brief description of your concern"
+                  placeholder={dyn.v3.getVariant("booking_reason_placeholder", TEXT_VARIANTS_MAP, "Brief description of your concern")}
                 />
               </div>
             </div>
@@ -230,21 +236,23 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
             <h3 className="text-lg font-medium">Insurance Information (Optional)</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="insuranceProvider">Insurance Provider</Label>
+                <Label htmlFor={dyn.v3.getVariant("booking-insurance-provider-input", ID_VARIANTS_MAP, "insuranceProvider")}>Insurance Provider</Label>
                 <Input
-                  id="insuranceProvider"
+                  id={dyn.v3.getVariant("booking-insurance-provider-input", ID_VARIANTS_MAP, "insuranceProvider")}
+                  className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
                   value={formData.insuranceProvider}
                   onChange={(e) => handleInputChange("insuranceProvider", e.target.value)}
-                  placeholder="e.g., Blue Cross Blue Shield"
+                  placeholder={dyn.v3.getVariant("booking_insurance_provider_placeholder", TEXT_VARIANTS_MAP, "e.g., Blue Cross Blue Shield")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="insuranceNumber">Policy Number</Label>
+                <Label htmlFor={dyn.v3.getVariant("booking-insurance-number-input", ID_VARIANTS_MAP, "insuranceNumber")}>Policy Number</Label>
                 <Input
-                  id="insuranceNumber"
+                  id={dyn.v3.getVariant("booking-insurance-number-input", ID_VARIANTS_MAP, "insuranceNumber")}
+                  className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
                   value={formData.insuranceNumber}
                   onChange={(e) => handleInputChange("insuranceNumber", e.target.value)}
-                  placeholder="Enter policy number"
+                  placeholder={dyn.v3.getVariant("booking_insurance_number_placeholder", TEXT_VARIANTS_MAP, "Enter policy number")}
                 />
               </div>
             </div>
@@ -255,22 +263,24 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
             <h3 className="text-lg font-medium">Emergency Contact (Optional)</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="emergencyContact">Emergency Contact Name</Label>
+                <Label htmlFor={dyn.v3.getVariant("booking-emergency-contact-input", ID_VARIANTS_MAP, "emergencyContact")}>Emergency Contact Name</Label>
                 <Input
-                  id="emergencyContact"
+                  id={dyn.v3.getVariant("booking-emergency-contact-input", ID_VARIANTS_MAP, "emergencyContact")}
+                  className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
                   value={formData.emergencyContact}
                   onChange={(e) => handleInputChange("emergencyContact", e.target.value)}
-                  placeholder="Emergency contact name"
+                  placeholder={dyn.v3.getVariant("booking_emergency_contact_placeholder", TEXT_VARIANTS_MAP, "Emergency contact name")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="emergencyPhone">Emergency Contact Phone</Label>
+                <Label htmlFor={dyn.v3.getVariant("booking-emergency-phone-input", ID_VARIANTS_MAP, "emergencyPhone")}>Emergency Contact Phone</Label>
                 <Input
-                  id="emergencyPhone"
+                  id={dyn.v3.getVariant("booking-emergency-phone-input", ID_VARIANTS_MAP, "emergencyPhone")}
+                  className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
                   type="tel"
                   value={formData.emergencyPhone}
                   onChange={(e) => handleInputChange("emergencyPhone", e.target.value)}
-                  placeholder="Emergency contact phone"
+                  placeholder={dyn.v3.getVariant("booking_emergency_phone_placeholder", TEXT_VARIANTS_MAP, "Emergency contact phone")}
                 />
               </div>
             </div>
@@ -280,36 +290,40 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Additional Notes (Optional)</h3>
             <div className="space-y-2">
-              <Label htmlFor="notes">Notes</Label>
+              <Label htmlFor={dyn.v3.getVariant("booking-notes-input", ID_VARIANTS_MAP, "notes")}>Notes</Label>
               <textarea
-                id="notes"
-                className="w-full min-h-[100px] p-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                id={dyn.v3.getVariant("booking-notes-input", ID_VARIANTS_MAP, "notes")}
+                className={cn("w-full min-h-[100px] p-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500", dyn.v3.getVariant("textarea", CLASS_VARIANTS_MAP, ""))}
                 value={formData.notes}
                 onChange={(e) => handleInputChange("notes", e.target.value)}
-                placeholder="Any additional information you'd like to share with the doctor..."
+                placeholder={dyn.v3.getVariant("booking_notes_placeholder", TEXT_VARIANTS_MAP, "Any additional information you'd like to share with the doctor...")}
               />
             </div>
           </div>
         </div>
 
         <DialogFooter>
-          <Button 
-            id={getId("cancel-booking-button", 0)}
-            className={getClass("button-secondary", "")}
-            variant="outline" 
-            onClick={handleCancel} 
-            disabled={isSubmitting}
-          >
-            {getText("cancel", "Cancel")}
-          </Button>
-          <Button 
-            id={getId("confirm-booking-button", 0)}
-            className={`bg-blue-600 hover:bg-blue-700 ${getClass("button-primary", "")}`}
-            onClick={handleConfirmAppointment} 
-            disabled={isSubmitting || !validateForm()}
-          >
-            {isSubmitting ? getText("booking", "Booking...") : getText("confirm_appointment", "Confirm Appointment")}
-          </Button>
+          {dyn.v1.addWrapDecoy("cancel-booking-button", (
+            <Button 
+              id={dyn.v3.getVariant("cancel-booking-button", ID_VARIANTS_MAP, "cancel-booking-button")}
+              className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+              variant="outline" 
+              onClick={handleCancel} 
+              disabled={isSubmitting}
+            >
+              {dyn.v3.getVariant("cancel", TEXT_VARIANTS_MAP, "Cancel")}
+            </Button>
+          ))}
+          {dyn.v1.addWrapDecoy("confirm-booking-button", (
+            <Button 
+              id={dyn.v3.getVariant("confirm-booking-button", ID_VARIANTS_MAP, "confirm-booking-button")}
+              className={cn("bg-blue-600 hover:bg-blue-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+              onClick={handleConfirmAppointment} 
+              disabled={isSubmitting || !validateForm()}
+            >
+              {isSubmitting ? dyn.v3.getVariant("booking", TEXT_VARIANTS_MAP, "Booking...") : dyn.v3.getVariant("confirm_appointment", TEXT_VARIANTS_MAP, "Confirm Appointment")}
+            </Button>
+          ))}
         </DialogFooter>
       </DialogContent>
     </Dialog>
