@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { initializePrescriptions } from "@/data/prescriptions-enhanced";
-import type { Prescription } from "@/data/prescriptions";
+import type { Prescription } from "@/data/types";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

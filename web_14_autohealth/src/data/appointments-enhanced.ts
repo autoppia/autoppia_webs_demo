@@ -1,13 +1,15 @@
-import type { Appointment } from '@/data/appointments';
-import type { Doctor } from '@/data/doctors';
-import { isDataGenerationAvailable, generateAppointments } from '@/utils/healthDataGenerator';
-import { fetchSeededSelection, isDbLoadModeEnabled } from '@/shared/seeded-loader';
-import { resolveDatasetSeed, waitForDatasetSeed } from '@/utils/v2Seed';
+import type { Appointment, Doctor } from "@/data/types";
+import fallbackAppointmentsJson from "@/data/original/appointments_1.json";
+import { isDataGenerationAvailable, generateAppointments } from "@/utils/healthDataGenerator";
+import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { resolveDatasetSeed, waitForDatasetSeed } from "@/utils/v2Seed";
 
 const CACHE_KEY = 'autohealth_appointments_v1';
 const DOCTORS_CACHE_KEY = 'autohealth_doctors_v1';
 const PROJECT_KEY = 'web_14_autohealth';
 let appointmentsCache: Appointment[] = [];
+const FALLBACK_APPOINTMENTS: Appointment[] = Array.isArray(fallbackAppointmentsJson) ? (fallbackAppointmentsJson as Appointment[]) : [];
+
 
 async function loadAppointmentsFromDataset(v2SeedValue?: number | null): Promise<Appointment[]> {
   await waitForDatasetSeed(v2SeedValue);
@@ -34,7 +36,7 @@ export async function initializeAppointments(doctors?: Doctor[], v2SeedValue?: n
   }
 
   if (!isDataGenerationAvailable()) {
-    appointmentsCache = (await import('./appointments')).appointments as Appointment[];
+    appointmentsCache = FALLBACK_APPOINTMENTS;
     return appointmentsCache;
   }
 
@@ -65,6 +67,6 @@ export async function initializeAppointments(doctors?: Doctor[], v2SeedValue?: n
     if (typeof window !== 'undefined') localStorage.setItem(CACHE_KEY, JSON.stringify(appointmentsCache));
     return appointmentsCache;
   }
-  appointmentsCache = (await import('./appointments')).appointments as Appointment[];
+  appointmentsCache = FALLBACK_APPOINTMENTS;
   return appointmentsCache;
 }

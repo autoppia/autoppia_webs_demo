@@ -1,13 +1,14 @@
-import type { Prescription } from '@/data/prescriptions';
-import type { Doctor } from '@/data/doctors';
-import { isDataGenerationAvailable, generatePrescriptions } from '@/utils/healthDataGenerator';
-import { fetchSeededSelection, isDbLoadModeEnabled } from '@/shared/seeded-loader';
-import { resolveDatasetSeed, waitForDatasetSeed } from '@/utils/v2Seed';
+import type { Doctor, Prescription } from "@/data/types";
+import fallbackPrescriptionsJson from "@/data/original/prescriptions_1.json";
+import { isDataGenerationAvailable, generatePrescriptions } from "@/utils/healthDataGenerator";
+import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { resolveDatasetSeed, waitForDatasetSeed } from "@/utils/v2Seed";
 
 const CACHE_KEY = 'autohealth_prescriptions_v1';
 const DOCTORS_CACHE_KEY = 'autohealth_doctors_v1';
 const PROJECT_KEY = 'web_14_autohealth';
 let prescriptionsCache: Prescription[] = [];
+const FALLBACK_PRESCRIPTIONS: Prescription[] = Array.isArray(fallbackPrescriptionsJson) ? (fallbackPrescriptionsJson as Prescription[]) : [];
 
 async function loadPrescriptionsFromDataset(v2SeedValue?: number | null): Promise<Prescription[]> {
   await waitForDatasetSeed(v2SeedValue);
@@ -34,7 +35,7 @@ export async function initializePrescriptions(doctors?: Doctor[], v2SeedValue?: 
   }
 
   if (!isDataGenerationAvailable()) {
-    prescriptionsCache = (await import('./prescriptions')).prescriptions as Prescription[];
+    prescriptionsCache = FALLBACK_PRESCRIPTIONS;
     return prescriptionsCache;
   }
 
@@ -65,6 +66,6 @@ export async function initializePrescriptions(doctors?: Doctor[], v2SeedValue?: 
     if (typeof window !== 'undefined') localStorage.setItem(CACHE_KEY, JSON.stringify(prescriptionsCache));
     return prescriptionsCache;
   }
-  prescriptionsCache = (await import('./prescriptions')).prescriptions as Prescription[];
+  prescriptionsCache = FALLBACK_PRESCRIPTIONS;
   return prescriptionsCache;
 }

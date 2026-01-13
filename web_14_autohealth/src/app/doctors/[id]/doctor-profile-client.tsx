@@ -1,6 +1,6 @@
 "use client";
 
-import type { Doctor } from "@/data/doctors";
+import type { Doctor } from "@/data/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";

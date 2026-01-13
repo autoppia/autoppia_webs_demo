@@ -9,7 +9,7 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
-import type { Doctor } from "@/data/doctors";
+import type { Doctor } from "@/data/types";
 import { initializeDoctorReviews } from "@/data/reviews-enhanced";
 
 interface DoctorReviewsModalProps {

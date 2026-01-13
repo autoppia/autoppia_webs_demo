@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { initializeMedicalRecords } from "@/data/medical-records-enhanced";
-import type { MedicalRecord } from "@/data/medical-records";
+import type { MedicalRecord } from "@/data/types";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";

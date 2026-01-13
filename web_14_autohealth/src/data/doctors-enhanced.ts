@@ -1,11 +1,14 @@
-import type { Doctor } from '@/data/doctors';
-import { isDataGenerationAvailable, generateDoctors } from '@/utils/healthDataGenerator';
-import { fetchSeededSelection, isDbLoadModeEnabled } from '@/shared/seeded-loader';
-import { resolveDatasetSeed, waitForDatasetSeed } from '@/utils/v2Seed';
+import type { Doctor } from "@/data/types";
+import fallbackDoctorsJson from "@/data/original/doctors_1.json";
+import { isDataGenerationAvailable, generateDoctors } from "@/utils/healthDataGenerator";
+import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { resolveDatasetSeed, waitForDatasetSeed } from "@/utils/v2Seed";
+
 
 const CACHE_KEY = 'autohealth_doctors_v1';
 const PROJECT_KEY = 'web_14_autohealth';
 let doctorsCache: Doctor[] = [];
+const FALLBACK_DOCTORS: Doctor[] = Array.isArray(fallbackDoctorsJson) ? (fallbackDoctorsJson as Doctor[]) : [];
 
 async function loadDoctorsFromDataset(v2SeedValue?: number | null): Promise<Doctor[]> {
   await waitForDatasetSeed(v2SeedValue);
@@ -32,7 +35,7 @@ export async function initializeDoctors(v2SeedValue?: number | null): Promise<Do
   }
 
   if (!isDataGenerationAvailable()) {
-    doctorsCache = (await import('./doctors')).doctors as Doctor[];
+    doctorsCache = FALLBACK_DOCTORS;
     return doctorsCache;
   }
 
@@ -53,6 +56,6 @@ export async function initializeDoctors(v2SeedValue?: number | null): Promise<Do
     return doctorsCache;
   }
 
-  doctorsCache = (await import('./doctors')).doctors as Doctor[];
+  doctorsCache = FALLBACK_DOCTORS;
   return doctorsCache;
 }

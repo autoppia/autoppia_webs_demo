@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { initializeAppointments } from "@/data/appointments-enhanced";
-import type { Appointment } from "@/data/appointments";
+import type { Appointment } from "@/data/types";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { AppointmentBookingModal } from "@/components/appointment-booking-modal";

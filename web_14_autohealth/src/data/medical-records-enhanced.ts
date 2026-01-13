@@ -1,13 +1,14 @@
-import type { MedicalRecord } from '@/data/medical-records';
-import type { Doctor } from '@/data/doctors';
-import { isDataGenerationAvailable, generateMedicalRecords } from '@/utils/healthDataGenerator';
-import { fetchSeededSelection, isDbLoadModeEnabled } from '@/shared/seeded-loader';
-import { resolveDatasetSeed, waitForDatasetSeed } from '@/utils/v2Seed';
+import type { Doctor, MedicalRecord } from "@/data/types";
+import fallbackMedicalRecordsJson from "@/data/original/medical-records_1.json";
+import { isDataGenerationAvailable, generateMedicalRecords } from "@/utils/healthDataGenerator";
+import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { resolveDatasetSeed, waitForDatasetSeed } from "@/utils/v2Seed";
 
 const CACHE_KEY = 'autohealth_medical_records_v1';
 const DOCTORS_CACHE_KEY = 'autohealth_doctors_v1';
 const PROJECT_KEY = 'web_14_autohealth';
 let recordsCache: MedicalRecord[] = [];
+const FALLBACK_MEDICAL_RECORDS: MedicalRecord[] = Array.isArray(fallbackMedicalRecordsJson) ? (fallbackMedicalRecordsJson as MedicalRecord[]) : [];
 
 async function loadMedicalRecordsFromDataset(v2SeedValue?: number | null): Promise<MedicalRecord[]> {
   await waitForDatasetSeed(v2SeedValue);
@@ -34,7 +35,7 @@ export async function initializeMedicalRecords(doctors?: Doctor[], v2SeedValue?:
   }
 
   if (!isDataGenerationAvailable()) {
-    recordsCache = (await import('./medical-records')).medicalRecords as MedicalRecord[];
+    recordsCache = FALLBACK_MEDICAL_RECORDS;
     return recordsCache;
   }
 
@@ -65,6 +66,6 @@ export async function initializeMedicalRecords(doctors?: Doctor[], v2SeedValue?:
     if (typeof window !== 'undefined') localStorage.setItem(CACHE_KEY, JSON.stringify(recordsCache));
     return recordsCache;
   }
-  recordsCache = (await import('./medical-records')).medicalRecords as MedicalRecord[];
+  recordsCache = FALLBACK_MEDICAL_RECORDS;
   return recordsCache;
 }

@@ -4,7 +4,7 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { useEffect, useState, useMemo } from "react";
 import { initializeDoctors } from "@/data/doctors-enhanced";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
-import type { Doctor } from "@/data/doctors";
+import type { Doctor } from "@/data/types";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";

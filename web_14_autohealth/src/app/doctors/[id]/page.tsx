@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import type { Doctor } from "@/data/doctors";
+import type { Doctor } from "@/data/types";
 import { initializeDoctors } from "@/data/doctors-enhanced";
 import { DoctorProfileClient } from "./doctor-profile-client";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
