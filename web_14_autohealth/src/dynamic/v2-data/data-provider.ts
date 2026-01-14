@@ -1,8 +1,5 @@
-import {
-  getEffectiveLayoutConfig,
-  isDynamicEnabled as isV1Enabled,
-} from "@/dynamic/v1-layouts";
 
+import { isV1Enabled } from '../shared/flags'
 class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private isEnabled: boolean;
@@ -31,9 +28,9 @@ class DynamicDataProvider {
     return providedSeed;
   }
 
-  public getLayoutConfig(seed?: number) {
-    return getEffectiveLayoutConfig(seed);
-  }
+  // public getLayoutConfig(seed?: number) {
+  //   return getEffectiveLayoutConfig(seed);
+  // }
 }
 
 const dynamicDataProvider = DynamicDataProvider.getInstance();
@@ -42,5 +39,5 @@ export const isDynamicModeEnabled = () =>
   dynamicDataProvider.isDynamicModeEnabled();
 export const getEffectiveSeed = (providedSeed?: number) =>
   dynamicDataProvider.getEffectiveSeed(providedSeed ?? 1);
-export const getLayoutConfig = (seed?: number) =>
-  dynamicDataProvider.getLayoutConfig(seed);
+// export const getLayoutConfig = (seed?: number) =>
+//   dynamicDataProvider.getLayoutConfig(seed);
