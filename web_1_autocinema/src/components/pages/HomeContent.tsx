@@ -4,7 +4,7 @@ import { Suspense, useMemo, useState, useEffect } from "react";
 import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
 import { HeroSection } from "@/components/movies/HeroSection";
 import { SpotlightRow } from "@/components/movies/SpotlightRow";
-import { getFeaturedMovies, getMoviesByGenre, getAvailableGenres, getMovies } from "@/dynamic/v2-data";
+import { getFeaturedMovies, getMoviesByGenre, getAvailableGenres, getMovies } from "@/dynamic/v2";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Search, Film, Star, TrendingUp, Sparkles, ArrowRight, Play, Clock, Calendar } from "lucide-react";
 import { SeedLink } from "@/components/ui/SeedLink";
@@ -53,20 +53,24 @@ export function HomeContent() {
   // Do not render dynamic content until the seed is ready
   const isReady = isMounted && isSeedReady;
 
-  // Debug: Verify V1 and V3 are working
+  // Debug: Verify V1, V2, and V3 are working
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
       console.log("[page.tsx] Debug dinámico:", {
         seed: dyn.seed,
         v1Enabled: isV1Enabled(),
+        v2Enabled: dyn.v2.isEnabled(),
+        v2DbMode: dyn.v2.isDbModeEnabled(),
+        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2Fallback: dyn.v2.isFallbackMode(),
         v3Enabled: isV3Enabled(),
       });
     }
-  }, [dyn.seed]);
+  }, [dyn.seed, dyn.v2]);
 
-  const featuredMovies = useMemo(() => getFeaturedMovies(6), []);
-  const allMovies = useMemo(() => getMovies(), []);
-  const genres = useMemo(() => getAvailableGenres(), []);
+  const featuredMovies = useMemo(() => getFeaturedMovies(6), [seed]);
+  const allMovies = useMemo(() => getMovies(), [seed]);
+  const genres = useMemo(() => getAvailableGenres(), [seed]);
 
   const handleSearchSubmit = () => {
     // Redirect to search page with query
@@ -79,10 +83,10 @@ export function HomeContent() {
   };
 
   // Get movies by different genres for spotlight sections
-  const dramaFocus = useMemo(() => getMoviesByGenre("Drama").slice(0, 5), []);
-  const thrillerFocus = useMemo(() => getMoviesByGenre("Thriller").slice(0, 5), []);
-  const actionFocus = useMemo(() => getMoviesByGenre("Action").slice(0, 5), []);
-  const comedyFocus = useMemo(() => getMoviesByGenre("Comedy").slice(0, 5), []);
+  const dramaFocus = useMemo(() => getMoviesByGenre("Drama").slice(0, 5), [seed]);
+  const thrillerFocus = useMemo(() => getMoviesByGenre("Thriller").slice(0, 5), [seed]);
+  const actionFocus = useMemo(() => getMoviesByGenre("Action").slice(0, 5), [seed]);
+  const comedyFocus = useMemo(() => getMoviesByGenre("Comedy").slice(0, 5), [seed]);
 
   // Get popular genres (top 6 by movie count)
   const popularGenres = useMemo(() => {

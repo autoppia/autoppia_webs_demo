@@ -11,8 +11,9 @@
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
 #   --demo=NAME                   Deploy specific demo: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all (default: all)
 #   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v3)
-#                                            v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
+#                                            v2 enables data generation (AI generation or DB mode)
 #   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
+#   --enable_ai_generation_mode=BOOL  Enable AI generation mode (for v2: generate data on-the-fly using AI)
 #   --webs_data_path=PATH         Host dir to bind at /app/data (default: $DEMOS_DIR/webs_server/initial_data)
 #   -y, --yes                     Force Docker cleanup (remove all containers/images/volumes) before deploy
 #   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
@@ -43,8 +44,9 @@ Options:
   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
   --demo=NAME                   One of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, all (default: all)
   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v3)
-                                            v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
+                                            v2 enables data generation (AI generation or DB mode)
   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
+  --enable_ai_generation_mode=BOOL  Enable AI generation mode (for v2: generate data on-the-fly using AI)
   --webs_data_path=PATH         Host dir to bind at /app/data (default: \$DEMOS_DIR/webs_server/initial_data)
   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
   -h, --help                    Show this help and exit
@@ -79,6 +81,7 @@ for ARG in "$@"; do
     --webs_postgres=*)   WEBS_PG_PORT="${ARG#*=}" ;;
     --demo=*)            WEB_DEMO="${ARG#*=}" ;;
     --enable_db_mode=*)  ENABLE_DYNAMIC_V2_DB_MODE="${ARG#*=}" ;;
+    --enable_ai_generation_mode=*)  ENABLE_DYNAMIC_V2_AI_GENERATE="${ARG#*=}" ;;
     --enabled_dynamic_versions=*) ENABLED_DYNAMIC_VERSIONS="${ARG#*=}" ;;
     --webs_data_path=*)  WEBS_DATA_PATH="${ARG#*=}" ;;
     -h|--help)           print_usage; exit 0 ;;
@@ -132,9 +135,24 @@ if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
         echo "[INFO] v1 enabled: seeds + layout variants"
         ;;
       v2)
-        ENABLE_DYNAMIC_V2_DB_MODE=true
-        ENABLE_DYNAMIC_V2_AI_GENERATE=false
-        echo "[INFO] v2 enabled: DB mode (use ?v2-seed=X in URL)"
+        # v2 mode selection: DB mode, AI generation mode, or fallback to original data
+        # If --enable_db_mode=true, use DB mode
+        # If --enable_ai_generation_mode=true, use AI generation mode
+        # If neither is specified, use fallback original data (both flags remain false)
+        if [ "$(normalize_bool "${ENABLE_DYNAMIC_V2_DB_MODE:-false}")" = "true" ]; then
+          ENABLE_DYNAMIC_V2_DB_MODE=true
+          ENABLE_DYNAMIC_V2_AI_GENERATE=false
+          echo "[INFO] v2 enabled: DB mode (use ?v2-seed=X in URL)"
+        elif [ "$(normalize_bool "${ENABLE_DYNAMIC_V2_AI_GENERATE:-false}")" = "true" ]; then
+          ENABLE_DYNAMIC_V2_DB_MODE=false
+          ENABLE_DYNAMIC_V2_AI_GENERATE=true
+          echo "[INFO] v2 enabled: AI generation mode"
+        else
+          # Default: use fallback original data (both flags remain false)
+          ENABLE_DYNAMIC_V2_DB_MODE=false
+          ENABLE_DYNAMIC_V2_AI_GENERATE=false
+          echo "[INFO] v2 enabled: using fallback original data"
+        fi
         ;;
       v3)
         ENABLE_DYNAMIC_V3=true

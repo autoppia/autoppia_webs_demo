@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { getMovies } from "@/dynamic/v2-data";
+import { getMovies } from "@/dynamic/v2";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -72,6 +72,18 @@ export default function ProfilePage() {
   const [profileMessage, setProfileMessage] = useState<string | null>(null);
   const [addFilmMessage, setAddFilmMessage] = useState<string | null>(null);
   const [addFilmKey, setAddFilmKey] = useState(0);
+
+  // Debug: Verify V2 status
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[profile/page] V2 status:", {
+        v2Enabled: dyn.v2.isEnabled(),
+        v2DbMode: dyn.v2.isDbModeEnabled(),
+        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2Fallback: dyn.v2.isFallbackMode(),
+      });
+    }
+  }, [dyn.v2]);
 
   useEffect(() => {
     if (!currentUser) return;

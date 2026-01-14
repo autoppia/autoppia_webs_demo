@@ -1,5 +1,6 @@
 import asyncio
 import os
+import re
 from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import List, Dict, Any, Optional
@@ -59,6 +60,60 @@ def trim_url_to_origin(url: str) -> str:
     parsed = urlparse(url)
     port_str = f":{parsed.port}" if parsed.port else ""
     return f"{parsed.scheme}://{parsed.hostname}{port_str}"
+
+
+# --- Helper Function for Extracting JSON from OpenAI Response ---
+def extract_json_from_content(content: str) -> str:
+    """
+    Extracts JSON array from OpenAI response that may be wrapped in markdown code blocks.
+    
+    Handles cases like:
+    - Direct JSON: [{"id": "1", ...}]
+    - Markdown code block: ```json\n[{"id": "1", ...}]\n```
+    - Markdown code block without lang: ```\n[{"id": "1", ...}]\n```
+    - Text with JSON: Some text [{"id": "1", ...}] more text
+    - Multiple code blocks: Extract the one that looks like JSON array
+    """
+    if not content:
+        return content
+    
+    content = content.strip()
+    
+    # Try direct parsing first (most common case)
+    if content.startswith('[') and content.endswith(']'):
+        return content
+    
+    # Try to extract from markdown code blocks
+    # Match ```json ... ``` or ``` ... ``` (non-greedy, multiline)
+    markdown_pattern = r'```(?:json)?\s*\n?(.*?)\n?```'
+    matches = list(re.finditer(markdown_pattern, content, re.DOTALL))
+    if matches:
+        # Try each match, return the first one that looks like a JSON array
+        for match in matches:
+            extracted = match.group(1).strip()
+            if extracted.startswith('[') and extracted.endswith(']'):
+                return extracted
+        # If none start with [, return the last match (most likely to be the data)
+        if matches:
+            return matches[-1].group(1).strip()
+    
+    # Try to find JSON array by finding first [ and last ]
+    # This handles cases where there's text before/after the JSON
+    first_bracket = content.find('[')
+    if first_bracket != -1:
+        # Find the matching closing bracket
+        bracket_count = 0
+        for i in range(first_bracket, len(content)):
+            if content[i] == '[':
+                bracket_count += 1
+            elif content[i] == ']':
+                bracket_count -= 1
+                if bracket_count == 0:
+                    extracted = content[first_bracket:i + 1]
+                    return extracted
+    
+    # Return original content if no pattern matches
+    return content
 
 
 # --- SQL Query Constants ---
@@ -539,7 +594,7 @@ Output strictly a JSON array only.
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a strict JSON data generator. Output must be a JSON array only.",
+                    "content": "You are a JSON array data generator. You must return ONLY a valid JSON array, starting with [ and ending with ]. No markdown formatting, no code blocks, no explanatory text. Just the raw JSON array.",
                 },
                 {"role": "user", "content": prompt},
             ],
@@ -548,14 +603,18 @@ Output strictly a JSON array only.
         )
         content = resp.choices[0].message.content.strip()
 
+        # Extract JSON from content (handles markdown code blocks)
+        json_content = extract_json_from_content(content)
+        
         try:
-            data = orjson.loads(content)
+            data = orjson.loads(json_content)
             if not isinstance(data, list):
                 raise ValueError("Model response is not a JSON array")
         except Exception as e:
             # Log raw content for debugging
             logger.error(f"Failed to parse generation as JSON array: {e}")
-            logger.error(f"Raw content: {content[:1000]}...")
+            logger.error(f"Raw content (first 1000 chars): {content[:1000]}...")
+            logger.error(f"Extracted JSON content (first 1000 chars): {json_content[:1000]}...")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Generated output is not valid JSON",
