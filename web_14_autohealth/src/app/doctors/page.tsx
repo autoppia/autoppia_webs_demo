@@ -184,7 +184,13 @@ export default function DoctorsPage() {
           dyn.v1.addWrapDecoy(`doctor-card-${i}`, (
             <Card key={d.id} className={cn("flex flex-col w-full", dyn.v3.getVariant("doctor-card", CLASS_VARIANTS_MAP, ""))}>
               <CardHeader className="flex-row items-center gap-4">
-                <Avatar name={d.name} />
+                <Avatar 
+                  src={`/images/doctors/${d.id}.jpg`}
+                  alt={`${d.name} profile photo`}
+                  name={d.name}
+                  data-testid={`doctor-avatar-${d.id}`}
+                  data-agent-id={`doctor-profile-image-${d.id}`}
+                />
                 <div>
                   <CardTitle className="text-lg">{d.name}</CardTitle>
                   <div className="text-sm text-muted-foreground">{d.specialty}</div>

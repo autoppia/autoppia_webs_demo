@@ -509,7 +509,7 @@ export default function AppointmentsPage() {
                         {dyn.v1.addWrapDecoy(`book-appointment-button-${ri}`, (
                           <Button 
                             id={dyn.v3.getVariant("book-appointment-button", ID_VARIANTS_MAP, `book-appointment-button-${ri}`)}
-                            className={cn("bg-blue-600 hover:bg-blue-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+                            className={cn("bg-emerald-600 hover:bg-emerald-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
                             onClick={() => handleBookAppointment(a)}
                           >
                             {dyn.v3.getVariant("book_appointment", TEXT_VARIANTS_MAP, "Book Appointment")}

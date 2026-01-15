@@ -10,7 +10,6 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useEffect, useState, useMemo } from "react";
 import { ContactDoctorModal } from "@/components/contact-doctor-modal";
 import { DoctorReviewsModal } from "@/components/doctor-reviews-modal";
-import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
@@ -31,7 +30,6 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [aiReviews, setAiReviews] = useState<Array<{ rating: number; comment: string; patientName: string; date: string }>>([]);
   const [isReviewsLoading, setIsReviewsLoading] = useState(false);
 
@@ -44,11 +42,11 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
       rating: doctor.rating,
       date: new Date().toISOString().split('T')[0],
       time: "10:00 AM",
-      action: "open_booking_modal",
-      source: "doctor_profile_page",
-      modalOpenTime: new Date().toISOString()
+      action: "redirect_to_appointments",
+      source: "doctor_profile_page"
     });
-    setIsBookingModalOpen(true);
+    // Redirect to appointments page filtered by this doctor
+    window.location.href = `/appointments?doctorId=${encodeURIComponent(doctor.id)}`;
   };
 
   const handleContactDoctor = () => {
@@ -117,7 +115,14 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
               dyn.v1.addWrapDecoy(`profile-header-${p.key}`, (
                 <div key={p.key} className={p.key === 'avatar' ? 'flex-shrink-0' : 'flex-1'}>
                 {p.key === 'avatar' && (
-                  <Avatar name={doctor.name} className="w-24 h-24 text-2xl" />
+                  <Avatar 
+                    src={`/images/doctors/${doctor.id}.jpg`}
+                    alt={`${doctor.name} profile photo`}
+                    name={doctor.name}
+                    className="w-24 h-24 text-2xl"
+                    data-testid="doctor-profile-main-avatar"
+                    data-agent-id="doctor-profile-header-image"
+                  />
                 )}
                 {p.key === 'details' && (
                   <div>
@@ -482,18 +487,6 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
         doctor={doctor}
       />
 
-      <AppointmentBookingModal
-        open={isBookingModalOpen}
-        onOpenChange={setIsBookingModalOpen}
-        appointment={{
-          id: `temp-${doctor.id}`,
-          doctorId: doctor.id,
-          doctorName: doctor.name,
-          specialty: doctor.specialty,
-          date: new Date().toISOString().split('T')[0],
-          time: "10:00 AM"
-        }}
-      />
     </div>
   );
 }
