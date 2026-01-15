@@ -101,27 +101,33 @@ export function QuickAppointmentHero() {
         patientEmail: formData.email,
         patientPhone: formData.phone,
         specialty: formData.specialty || "General",
-        action: "quick_booking_request"
+        action: "redirect_to_filtered_appointments"
       });
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Save form data to localStorage so it can be pre-filled in the booking modal
+      if (typeof window !== 'undefined') {
+        const quickFormData = {
+          patientName: formData.name,
+          patientEmail: formData.email,
+          patientPhone: formData.phone,
+        };
+        localStorage.setItem('quick_appointment_form_data', JSON.stringify(quickFormData));
+      }
 
-      alert("Request submitted! We'll contact you soon to confirm your appointment.");
+      // Redirect immediately to appointments page with specialty filter if provided
+      // User will select the appointment from the filtered list
+      const redirectUrl = formData.specialty.trim()
+        ? `/appointments?specialty=${encodeURIComponent(formData.specialty.trim())}`
+        : "/appointments";
       
-      // Reset form
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        specialty: "",
-      });
-
-      // Redirect to appointments page
-      window.location.href = "/appointments";
+      window.location.href = redirectUrl;
     } catch (error) {
-      console.error("Error submitting quick appointment:", error);
-      alert("Error submitting request. Please try again.");
+      console.error("Error redirecting to appointments:", error);
+      // Still redirect even if logging fails
+      const redirectUrl = formData.specialty.trim()
+        ? `/appointments?specialty=${encodeURIComponent(formData.specialty.trim())}`
+        : "/appointments";
+      window.location.href = redirectUrl;
     } finally {
       setIsSubmitting(false);
     }

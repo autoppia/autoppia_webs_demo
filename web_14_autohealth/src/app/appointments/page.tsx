@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import { initializeAppointments } from "@/data/appointments-enhanced";
 import type { Appointment } from "@/data/types";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -15,6 +16,8 @@ import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 export default function AppointmentsPage() {
   const dyn = useDynamicSystem();
+  const searchParams = useSearchParams();
+  const specialtyFilter = searchParams.get("specialty");
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [appointmentList, setAppointmentList] = useState<Appointment[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -61,10 +64,20 @@ export default function AppointmentsPage() {
     return order.map((idx) => columns[idx]);
   }, [dyn.seed, columns]);
 
+  // Filter appointments by specialty if filter is provided
+  const filteredAppointments = useMemo(() => {
+    if (!specialtyFilter) {
+      return appointmentList;
+    }
+    return appointmentList.filter(
+      appointment => appointment.specialty.toLowerCase() === specialtyFilter.toLowerCase()
+    );
+  }, [appointmentList, specialtyFilter]);
+
   const orderedRows = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("appointments-rows", appointmentList.length);
-    return order.map((idx) => appointmentList[idx]);
-  }, [dyn.seed, appointmentList]);
+    const order = dyn.v1.changeOrderElements("appointments-rows", filteredAppointments.length);
+    return order.map((idx) => filteredAppointments[idx]);
+  }, [dyn.seed, filteredAppointments]);
 
   if (useAiGeneration && isLoading) {
     return (
@@ -85,7 +98,16 @@ export default function AppointmentsPage() {
   }
   return (
     <div className="container py-10">
-      <h1 className="text-2xl font-semibold">Available Appointments</h1>
+      <h1 className="text-2xl font-semibold">
+        {specialtyFilter 
+          ? `Available Appointments - ${specialtyFilter}`
+          : "Available Appointments"}
+      </h1>
+      {specialtyFilter && (
+        <p className="mt-2 text-muted-foreground">
+          Showing appointments filtered by specialty: <strong>{specialtyFilter}</strong>
+        </p>
+      )}
       <div className="mt-6">
         {dyn.v1.addWrapDecoy("appointments-table", (
           <Table>
