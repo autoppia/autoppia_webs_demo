@@ -15,6 +15,7 @@ import { initializePrescriptions } from "@/data/prescriptions-enhanced";
 import { initializeMedicalRecords } from "@/data/medical-records-enhanced";
 import { initializeDoctorReviews } from "@/data/reviews-enhanced";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { QuickAppointmentHero } from "@/components/quick-appointment-hero";
 
 export default function Home() {
   const dyn = useDynamicSystem();
@@ -89,8 +90,10 @@ export default function Home() {
   }
 
   return (
-    <div className="container py-10">
-      <section className="mx-auto max-w-3xl text-center">
+    <>
+      <QuickAppointmentHero />
+      <div className="container py-10">
+        <section className="mx-auto max-w-3xl text-center">
         {orderedHero.map((part, i) => (
           dyn.v1.addWrapDecoy(`hero-${part.key}`, (
             <div key={part.key}>
@@ -150,6 +153,7 @@ export default function Home() {
           ), `nav-card-${i}`)
         ))}
       </section>
-    </div>
+      </div>
+    </>
   );
 }
