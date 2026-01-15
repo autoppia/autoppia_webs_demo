@@ -10,11 +10,13 @@ import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Star } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { MEDICAL_SPECIALTIES } from "@/data/medical-specialties";
 
 function Stars({ value }: { value: number }) {
   const stars = Array.from({ length: 5 }).map((_, i) => {
@@ -29,9 +31,9 @@ function Stars({ value }: { value: number }) {
 export default function DoctorsPage() {
   const dyn = useDynamicSystem();
   const [doctorList, setDoctorList] = useState<Doctor[]>([]);
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchName, setSearchName] = useState("");
+  const [selectedSpecialty, setSelectedSpecialty] = useState<string>("");
   const useAiGeneration = isDataGenerationAvailable() && !isDbLoadModeEnabled();
 
   const handleBookNow = (doctor: Doctor) => {
@@ -44,13 +46,12 @@ export default function DoctorsPage() {
       rating: doctor.rating,
       date: new Date().toISOString().split('T')[0],
       time: "10:00 AM",
-      action: "open_booking_modal",
-      source: "doctors_page",
-      modalOpenTime: new Date().toISOString()
+      action: "redirect_to_appointments",
+      source: "doctors_page"
     });
 
-    setSelectedDoctor(doctor);
-    setIsBookingModalOpen(true);
+    // Redirect to appointments page filtered by this doctor
+    window.location.href = `/appointments?doctorId=${encodeURIComponent(doctor.id)}`;
   };
 
   useEffect(() => {
@@ -61,10 +62,32 @@ export default function DoctorsPage() {
     return () => { mounted = false; };
   }, []);
   
+  // Filter doctors by name and specialty
+  const filteredDoctors = useMemo(() => {
+    let filtered = doctorList;
+
+    // Filter by name (case-insensitive)
+    if (searchName.trim()) {
+      const searchTerm = searchName.toLowerCase();
+      filtered = filtered.filter(doctor =>
+        doctor.name.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    // Filter by specialty
+    if (selectedSpecialty) {
+      filtered = filtered.filter(doctor =>
+        doctor.specialty.toLowerCase() === selectedSpecialty.toLowerCase()
+      );
+    }
+
+    return filtered;
+  }, [doctorList, searchName, selectedSpecialty]);
+
   const orderedDoctors = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("doctors-list", doctorList.length);
-    return order.map((idx) => doctorList[idx]);
-  }, [dyn.seed, doctorList]);
+    const order = dyn.v1.changeOrderElements("doctors-list", filteredDoctors.length);
+    return order.map((idx) => filteredDoctors[idx]);
+  }, [dyn.seed, filteredDoctors]);
 
   if (useAiGeneration && isLoading) {
     return (
@@ -85,11 +108,78 @@ export default function DoctorsPage() {
   }
 
   return (
-    <div className="container py-10">
-      {dyn.v1.addWrapDecoy("doctors-page-header", (
-        <h1 className="text-2xl font-semibold">Doctors</h1>
-      ))}
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <>
+      {/* Hero Section with Filters */}
+      <section 
+        className="relative min-h-[280px] flex items-center justify-center bg-cover bg-no-repeat"
+        style={{
+          backgroundImage: "url('/images/doctors.jpg')",
+          backgroundPosition: "center top",
+        }}
+      >
+        {/* Dark overlay for better readability */}
+        <div className="absolute inset-0 bg-black/60" />
+        
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-4 py-6">
+          <div className="max-w-6xl mx-auto">
+            {dyn.v1.addWrapDecoy("doctors-page-header", (
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-4 text-center">Doctors</h1>
+            ))}
+            
+            {/* Search and Filter Section */}
+            <div className="p-4 md:p-6">
+              <div className="grid gap-4 md:grid-cols-2">
+                {/* Name Search */}
+                <div className="space-y-2">
+                  <Label htmlFor="doctor-name-search" className="text-sm font-medium text-white">Search by Name</Label>
+                  <Input
+                    id="doctor-name-search"
+                    type="text"
+                    placeholder="Enter doctor's name..."
+                    value={searchName}
+                    onChange={(e) => setSearchName(e.target.value)}
+                    className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
+                  />
+                </div>
+
+                {/* Specialty Filter */}
+                <div className="space-y-2">
+                  <Label htmlFor="doctor-specialty-filter" className="text-sm font-medium text-white">Filter by Specialty</Label>
+                  <select
+                    id="doctor-specialty-filter"
+                    value={selectedSpecialty}
+                    onChange={(e) => setSelectedSpecialty(e.target.value)}
+                    className={cn(
+                      "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                      dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "")
+                    )}
+                  >
+                    <option value="">All Specialties</option>
+                    {MEDICAL_SPECIALTIES.sort().map((specialty) => (
+                      <option key={specialty} value={specialty}>
+                        {specialty}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Results count */}
+              <div className="mt-4 text-sm text-white">
+                Showing {orderedDoctors.length} of {doctorList.length} doctors
+                {searchName && ` matching "${searchName}"`}
+                {selectedSpecialty && ` in ${selectedSpecialty}`}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Doctors Grid */}
+      <div className="container py-10">
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {orderedDoctors.map((d, i) => (
           dyn.v1.addWrapDecoy(`doctor-card-${i}`, (
             <Card key={d.id} className={cn("flex flex-col w-full", dyn.v3.getVariant("doctor-card", CLASS_VARIANTS_MAP, ""))}>
@@ -136,20 +226,7 @@ export default function DoctorsPage() {
           ), `doctor-card-${i}`)
         ))}
       </div>
-
-      {/* Appointment Booking Modal */}
-      <AppointmentBookingModal
-        open={isBookingModalOpen}
-        onOpenChange={setIsBookingModalOpen}
-        appointment={selectedDoctor ? {
-          id: `temp-${selectedDoctor.id}`,
-          doctorId: selectedDoctor.id,
-          doctorName: selectedDoctor.name,
-          specialty: selectedDoctor.specialty,
-          date: new Date().toISOString().split('T')[0],
-          time: "10:00 AM"
-        } : null}
-      />
-    </div>
+      </div>
+    </>
   );
 }
