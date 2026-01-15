@@ -29,6 +29,8 @@ interface BookingFormData {
   notes: string;
 }
 
+const QUICK_FORM_DATA_KEY = 'quick_appointment_form_data';
+
 export function AppointmentBookingModal({ open, onOpenChange, appointment }: AppointmentBookingModalProps) {
   const dyn = useDynamicSystem();
   const [formData, setFormData] = React.useState<BookingFormData>({
@@ -44,6 +46,26 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
   });
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  // Load pre-filled data from quick appointment form when modal opens
+  React.useEffect(() => {
+    if (open && typeof window !== 'undefined') {
+      try {
+        const savedData = localStorage.getItem(QUICK_FORM_DATA_KEY);
+        if (savedData) {
+          const parsed = JSON.parse(savedData);
+          setFormData(prev => ({
+            ...prev,
+            patientName: parsed.patientName || prev.patientName,
+            patientEmail: parsed.patientEmail || prev.patientEmail,
+            patientPhone: parsed.patientPhone || prev.patientPhone,
+          }));
+        }
+      } catch (error) {
+        console.error("Error loading pre-filled form data:", error);
+      }
+    }
+  }, [open]);
 
   const handleInputChange = (field: keyof BookingFormData, value: string) => {
     setFormData(prev => ({
@@ -135,6 +157,12 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
       });
 
       alert("Appointment booked successfully!");
+      
+      // Clear saved quick form data from localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(QUICK_FORM_DATA_KEY);
+      }
+      
       onOpenChange(false);
       
       // Reset form
