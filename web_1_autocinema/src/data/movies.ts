@@ -203,6 +203,14 @@ export async function initializeMovies(v2SeedValue?: number | null, limit = 300)
   const dbModeEnabled = isDbLoadModeEnabled();
   const aiGenerateEnabled = isV2AiGenerateEnabled();
   
+  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+    console.log("[autocinema] Base seed is 1, using original data (skipping DB/AI modes)");
+    moviesCache = (fallbackMovies as DatasetMovie[]).map(normalizeMovie);
+    return moviesCache;
+  }
+
   // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
     // Si no se proporciona seed, leerlo de la URL
@@ -216,7 +224,7 @@ export async function initializeMovies(v2SeedValue?: number | null, limit = 300)
         projectKey: "web_1_autocinema",
         entityType: "movies",
         seedValue: effectiveSeed,
-        limit,
+        limit: 50, // Fixed limit of 50 items for DB mode
         method: "distribute",
         filterKey: "category",
       });
