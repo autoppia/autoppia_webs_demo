@@ -107,6 +107,13 @@ ENABLE_DYNAMIC_V3="${ENABLE_DYNAMIC_V3:-false}"
 ENABLE_DYNAMIC_V4="${ENABLE_DYNAMIC_V4:-false}"
 
 # ============================================================================
+# FORCE AI GENERATION MODE TO DISABLED (Hardcoded for now)
+# TODO: Make this dynamic via environment variable in the future
+# ============================================================================
+ENABLE_DYNAMIC_V2_AI_GENERATE=false
+echo "[INFO] AI generation mode is currently disabled (hardcoded in setup.sh)"
+
+# ============================================================================
 # 3. NORMALIZE VALUES
 # ============================================================================
 
@@ -136,22 +143,19 @@ if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
         ;;
       v2)
         # v2 mode selection: DB mode, AI generation mode, or fallback to original data
+        # NOTE: AI generation mode is currently disabled (hardcoded to false in setup.sh)
         # If --enable_db_mode=true, use DB mode
-        # If --enable_ai_generation_mode=true, use AI generation mode
         # If neither is specified, use fallback original data (both flags remain false)
         if [ "$(normalize_bool "${ENABLE_DYNAMIC_V2_DB_MODE:-false}")" = "true" ]; then
           ENABLE_DYNAMIC_V2_DB_MODE=true
           ENABLE_DYNAMIC_V2_AI_GENERATE=false
           echo "[INFO] v2 enabled: DB mode (use ?v2-seed=X in URL)"
-        elif [ "$(normalize_bool "${ENABLE_DYNAMIC_V2_AI_GENERATE:-false}")" = "true" ]; then
-          ENABLE_DYNAMIC_V2_DB_MODE=false
-          ENABLE_DYNAMIC_V2_AI_GENERATE=true
-          echo "[INFO] v2 enabled: AI generation mode"
         else
           # Default: use fallback original data (both flags remain false)
+          # Note: AI generation mode is disabled, so if DB mode is not enabled, use fallback
           ENABLE_DYNAMIC_V2_DB_MODE=false
           ENABLE_DYNAMIC_V2_AI_GENERATE=false
-          echo "[INFO] v2 enabled: using fallback original data"
+          echo "[INFO] v2 enabled: using fallback original data (AI generation mode is disabled)"
         fi
         ;;
       v3)
@@ -175,6 +179,10 @@ fi
 for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2_AI_GENERATE ENABLE_DYNAMIC_V2_DB_MODE ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
   eval "$var=\$(normalize_bool \"\$$var\")"
 done
+
+# Force AI generation mode to false (override any previous settings)
+# This ensures AI generation mode is always disabled regardless of terminal input
+ENABLE_DYNAMIC_V2_AI_GENERATE=false
 
 # Check for invalid booleans
 for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2_AI_GENERATE ENABLE_DYNAMIC_V2_DB_MODE ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
