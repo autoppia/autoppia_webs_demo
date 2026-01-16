@@ -121,7 +121,16 @@ const buildPosterPath = (imagePath?: string): string => {
   if (imagePath.startsWith("/")) {
     return imagePath;
   }
-  return `/media/${imagePath}`;
+  // Ensure the path doesn't have -sm-web suffix (remove if present)
+  let cleanPath = imagePath;
+  if (cleanPath.includes('-sm-web')) {
+    cleanPath = cleanPath.replace(/-sm-web\.(jpg|jpeg|png)$/i, '.$1');
+  }
+  // Normalize the path: remove 'gallery/' prefix if present, we'll add it back
+  if (cleanPath.startsWith('gallery/')) {
+    cleanPath = cleanPath.replace('gallery/', '');
+  }
+  return `/media/gallery/${cleanPath}`;
 };
 
 const generateFallbackId = (): string => {
