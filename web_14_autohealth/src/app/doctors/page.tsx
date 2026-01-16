@@ -51,7 +51,8 @@ export default function DoctorsPage() {
     });
 
     // Redirect to appointments page filtered by this doctor
-    window.location.href = `/appointments?doctorId=${encodeURIComponent(doctor.id)}`;
+    // Add source as query param to preserve the booking origin
+    window.location.href = `/appointments?doctorId=${encodeURIComponent(doctor.id)}&source=doctors_page`;
   };
 
   useEffect(() => {

@@ -56,10 +56,13 @@ export default function AppointmentsPage() {
     const doctorId = searchParams.get("doctorId") || "";
     const specialty = searchParams.get("specialty") || "";
     const date = searchParams.get("date") || "";
+    // Read source from query params (preserves the booking origin)
+    const bookingSource = searchParams.get("source") || "appointments_table";
     
     setSelectedDoctorId(doctorId);
     setSelectedSpecialty(specialty);
     setDateFilter(date);
+    // Source is read directly from searchParams when needed
     isInitialMount.current = false;
   }, []); // Only run on mount
 
@@ -87,13 +90,22 @@ export default function AppointmentsPage() {
     if (selectedDoctorId) params.set("doctorId", selectedDoctorId);
     if (selectedSpecialty) params.set("specialty", selectedSpecialty);
     if (dateFilter) params.set("date", dateFilter);
+    // Preserve source if it exists in current query params
+    const currentSource = searchParams.get("source");
+    if (currentSource) {
+      params.set("source", currentSource);
+    }
     
     const newUrl = params.toString() ? `/appointments?${params.toString()}` : "/appointments";
     router.replace(newUrl, { scroll: false });
-  }, [selectedDoctorId, selectedSpecialty, dateFilter, router]);
+  }, [selectedDoctorId, selectedSpecialty, dateFilter, router, searchParams]);
 
   const handleBookAppointment = (appointment: Appointment) => {
-    // Log the initial booking attempt
+    // Detect source from query params (preserves the booking origin)
+    const bookingSource = searchParams.get("source") || "appointments_table";
+    
+    // Log the initial booking attempt (when modal opens)
+    // This is a different event from confirmation (action: "confirm_booking")
     logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
       appointmentId: appointment.id,
       doctorId: appointment.doctorId,
@@ -102,7 +114,7 @@ export default function AppointmentsPage() {
       date: appointment.date,
       time: appointment.time,
       action: "open_booking_modal",
-      source: "appointments_page",
+      source: bookingSource, // Use source detected from query params
       modalOpenTime: new Date().toISOString()
     });
 
@@ -530,6 +542,7 @@ export default function AppointmentsPage() {
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
         appointment={selectedAppointment}
+        source={searchParams.get("source") || "appointments_table"} // Use source from query params or default
       />
       </div>
     </>

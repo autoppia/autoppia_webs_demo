@@ -116,17 +116,25 @@ export function QuickAppointmentHero() {
 
       // Redirect immediately to appointments page with specialty filter if provided
       // User will select the appointment from the filtered list
-      const redirectUrl = formData.specialty.trim()
-        ? `/appointments?specialty=${encodeURIComponent(formData.specialty.trim())}`
-        : "/appointments";
+      // Add source as query param to preserve the booking origin
+      const baseParams = new URLSearchParams();
+      if (formData.specialty.trim()) {
+        baseParams.set("specialty", formData.specialty.trim());
+      }
+      baseParams.set("source", "quick_appointment_hero");
+      const redirectUrl = `/appointments?${baseParams.toString()}`;
       
       window.location.href = redirectUrl;
     } catch (error) {
       console.error("Error redirecting to appointments:", error);
       // Still redirect even if logging fails
-      const redirectUrl = formData.specialty.trim()
-        ? `/appointments?specialty=${encodeURIComponent(formData.specialty.trim())}`
-        : "/appointments";
+      // Add source as query param to preserve the booking origin
+      const baseParams = new URLSearchParams();
+      if (formData.specialty.trim()) {
+        baseParams.set("specialty", formData.specialty.trim());
+      }
+      baseParams.set("source", "quick_appointment_hero");
+      const redirectUrl = `/appointments?${baseParams.toString()}`;
       window.location.href = redirectUrl;
     } finally {
       setIsSubmitting(false);

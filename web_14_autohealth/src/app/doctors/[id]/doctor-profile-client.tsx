@@ -46,7 +46,8 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
       source: "doctor_profile_page"
     });
     // Redirect to appointments page filtered by this doctor
-    window.location.href = `/appointments?doctorId=${encodeURIComponent(doctor.id)}`;
+    // Add source as query param to preserve the booking origin
+    window.location.href = `/appointments?doctorId=${encodeURIComponent(doctor.id)}&source=doctor_profile_page`;
   };
 
   const handleContactDoctor = () => {

@@ -15,6 +15,7 @@ interface AppointmentBookingModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   appointment: Appointment | null;
+  source?: string; // Source indicates where the modal was opened from (appointments_table, doctor_card, doctor_profile_page, quick_appointment_hero)
 }
 
 interface BookingFormData {
@@ -31,7 +32,7 @@ interface BookingFormData {
 
 const QUICK_FORM_DATA_KEY = 'quick_appointment_form_data';
 
-export function AppointmentBookingModal({ open, onOpenChange, appointment }: AppointmentBookingModalProps) {
+export function AppointmentBookingModal({ open, onOpenChange, appointment, source = "appointments_table" }: AppointmentBookingModalProps) {
   const dyn = useDynamicSystem();
   const [formData, setFormData] = React.useState<BookingFormData>({
     patientName: "",
@@ -96,65 +97,53 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
     setIsSubmitting(true);
 
     try {
-      // Log the appointment booking event
+      // Log the appointment booking event (single generic event with all information)
+      // According to .cursorrules: "Generic Use Cases: We do not create unique events for every UI path"
+      // Differences are captured in metadata, not in the event name
       logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
+        // Source: indicates where the booking was initiated from (metadata context)
+        source: source,
+        
+        // Appointment data (constraints for benchmark verification)
         appointmentId: appointment.id,
+        doctorId: appointment.doctorId, // Added for complete verification
         doctorName: appointment.doctorName,
         specialty: appointment.specialty,
         date: appointment.date,
         time: appointment.time,
+        
         // Patient Information
         patientName: formData.patientName,
         patientEmail: formData.patientEmail,
         patientPhone: formData.patientPhone,
         reasonForVisit: formData.reasonForVisit,
+        
         // Insurance Information
         insuranceProvider: formData.insuranceProvider,
         insuranceNumber: formData.insuranceNumber,
         hasInsurance: !!formData.insuranceProvider,
+        
         // Emergency Contact
         emergencyContact: formData.emergencyContact,
         emergencyPhone: formData.emergencyPhone,
         hasEmergencyContact: !!formData.emergencyContact,
+        
         // Additional Information
         notes: formData.notes,
         hasNotes: !!formData.notes,
-        // Form completion
+        
+        // Action metadata
         action: "confirm_booking",
-        formCompletionTime: new Date().toISOString()
+        success: true, // Indicate success in the same event (do not create separate event)
+        bookingTimestamp: new Date().toISOString()
       });
 
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Log successful booking
-      logEvent(EVENT_TYPES.APPOINTMENT_BOOKED_SUCCESSFULLY, {
-        appointmentId: appointment.id,
-        doctorId: appointment.doctorId,
-        doctorName: appointment.doctorName,
-        specialty: appointment.specialty,
-        date: appointment.date,
-        time: appointment.time,
-        // Patient Information
-        patientName: formData.patientName,
-        patientEmail: formData.patientEmail,
-        patientPhone: formData.patientPhone,
-        reasonForVisit: formData.reasonForVisit,
-        // Insurance Information
-        insuranceProvider: formData.insuranceProvider,
-        insuranceNumber: formData.insuranceNumber,
-        hasInsurance: !!formData.insuranceProvider,
-        // Emergency Contact
-        emergencyContact: formData.emergencyContact,
-        emergencyPhone: formData.emergencyPhone,
-        hasEmergencyContact: !!formData.emergencyContact,
-        // Additional Information
-        notes: formData.notes,
-        hasNotes: !!formData.notes,
-        // Success metadata
-        bookingTimestamp: new Date().toISOString(),
-        success: true
-      });
+      // REMOVED: Do not log APPOINTMENT_BOOKED_SUCCESSFULLY
+      // Reason: According to .cursorrules, we use generic events. Success is indicated with success: true
+      // in the same BOOK_APPOINTMENT event, not by creating a separate event.
 
       alert("Appointment booked successfully!");
       
@@ -348,6 +337,8 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
               className={cn("bg-blue-600 hover:bg-blue-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
               onClick={handleConfirmAppointment} 
               disabled={isSubmitting || !validateForm()}
+              data-testid="confirm-appointment-btn" // For agent navigation according to .cursorrules
+              data-agent-id="confirm-appointment-button" // Additional identifier for agent
             >
               {isSubmitting ? dyn.v3.getVariant("booking", TEXT_VARIANTS_MAP, "Booking...") : dyn.v3.getVariant("confirm_appointment", TEXT_VARIANTS_MAP, "Confirm Appointment")}
             </Button>
