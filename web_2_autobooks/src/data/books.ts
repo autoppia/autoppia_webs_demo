@@ -296,7 +296,3 @@ export async function initializeBooks(v2SeedValue?: number | null, limit = 300):
   booksCache = (fallbackBooks as DatasetBook[]).map(normalizeBook);
   return booksCache;
 }
-
-export const getCachedBooks = () => booksCache;
-export const getCachedMovies = getCachedBooks;
-export const initializeMovies = initializeBooks;
