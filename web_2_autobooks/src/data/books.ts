@@ -1,4 +1,7 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
+import { getApiBaseUrl } from "@/shared/data-generator";
 import imageManifest from "@/data/imageManifest.json";
 import fallbackBooks from "./original/books_1.json";
 
@@ -49,11 +52,16 @@ const IMAGE_LOOKUP = new Map(Object.entries(imageManifest as Record<string, stri
 const clampSeed = (value: number, fallback = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;
 
-const getRuntimeV2Seed = (): number | null => {
+const getBaseSeedFromUrl = (): number | null => {
   if (typeof window === "undefined") return null;
-  const value = (window as any).__autobooksV2Seed;
-  if (typeof value === "number" && Number.isFinite(value)) {
-    return clampSeed(value);
+  // Leer seed base de la URL
+  const params = new URLSearchParams(window.location.search);
+  const seedParam = params.get("seed");
+  if (seedParam) {
+    const parsed = Number.parseInt(seedParam, 10);
+    if (Number.isFinite(parsed)) {
+      return clampBaseSeed(parsed);
+    }
   }
   return null;
 };
@@ -62,13 +70,24 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
   if (!dbModeEnabled) {
     return 1;
   }
+  
+  // Si se proporciona un seed específico (ya derivado), usarlo directamente
   if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
     return clampSeed(seedValue);
   }
-  const runtimeSeed = getRuntimeV2Seed();
-  if (runtimeSeed !== null) {
-    return runtimeSeed;
+  
+  // Obtener seed base de la URL y derivar el V2 seed
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed !== null) {
+    // Derivar V2 seed usando la fórmula: ((baseSeed * 53 + 17) % 300) + 1
+    const resolvedSeeds = resolveSeedsSync(baseSeed);
+    if (resolvedSeeds.v2 !== null) {
+      return resolvedSeeds.v2;
+    }
+    // Si V2 no está habilitado, usar el base seed
+    return clampSeed(baseSeed);
   }
+  
   return 1;
 };
 
@@ -166,38 +185,116 @@ const normalizeBook = (book: DatasetBook): Book => {
 
 let booksCache: Book[] = [];
 
-export async function initializeBooks(v2SeedValue?: number | null, limit = 300): Promise<Book[]> {
-  const dbModeEnabled = isDbLoadModeEnabled();
-  if (!dbModeEnabled) {
-    booksCache = (fallbackBooks as DatasetBook[]).map(normalizeBook);
-    return booksCache;
-  }
-  if (dbModeEnabled && typeof window !== "undefined" && v2SeedValue == null) {
-    await new Promise((resolve) => setTimeout(resolve, 75));
-  }
-  const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
-
+/**
+ * Fetch AI generated books from /datasets/generate-smart endpoint
+ */
+async function fetchAiGeneratedBooks(count: number): Promise<DatasetBook[]> {
+  const baseUrl = getApiBaseUrl();
+  const url = `${baseUrl}/datasets/generate-smart`;
+  
   try {
-    const books = await fetchSeededSelection<DatasetBook>({
-      projectKey: "web_2_autobooks",
-      entityType: "books",
-      seedValue: effectiveSeed,
-      limit,
-      method: "distribute",
-      filterKey: "category",
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        project_key: "web_2_autobooks",
+        entity_type: "books",
+        count: 50, // Fixed count of 50
+      }),
     });
 
-    if (!Array.isArray(books) || books.length === 0) {
-      throw new Error(`[autobooks] No books returned from dataset (seed=${effectiveSeed})`);
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "");
+      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
     }
 
-    booksCache = books.map(normalizeBook);
-    return booksCache;
+    const result = await response.json();
+    const generatedData = result?.generated_data ?? [];
+    
+    if (!Array.isArray(generatedData) || generatedData.length === 0) {
+      throw new Error("No data returned from AI generation endpoint");
+    }
+
+    return generatedData as DatasetBook[];
   } catch (error) {
-    console.warn("[autobooks] Falling back to static books:", error);
+    console.error("[autobooks] AI generation failed:", error);
+    throw error;
+  }
+}
+
+export async function initializeBooks(v2SeedValue?: number | null, limit = 300): Promise<Book[]> {
+  const dbModeEnabled = isDbLoadModeEnabled();
+  const aiGenerateEnabled = isV2AiGenerateEnabled();
+  
+  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+    console.log("[autobooks] Base seed is 1, using original data (skipping DB/AI modes)");
     booksCache = (fallbackBooks as DatasetBook[]).map(normalizeBook);
     return booksCache;
   }
+  
+  // Priority 1: DB mode - fetch from /datasets/load endpoint
+  if (dbModeEnabled) {
+    // Si no se proporciona seed, leerlo de la URL
+    if (typeof window !== "undefined" && v2SeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+
+    try {
+      const books = await fetchSeededSelection<DatasetBook>({
+        projectKey: "web_2_autobooks",
+        entityType: "books",
+        seedValue: effectiveSeed,
+        limit: 50, // Fixed limit of 50 items for DB mode
+        method: "distribute",
+        filterKey: "category",
+      });
+
+      if (Array.isArray(books) && books.length > 0) {
+        console.log(
+          `[autobooks] Loaded ${books.length} books from dataset (seed=${effectiveSeed})`
+        );
+        booksCache = books.map(normalizeBook);
+        return booksCache;
+      }
+
+      // If no books returned from backend, fallback to local JSON
+      console.warn(`[autobooks] No books returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+    } catch (error) {
+      // If backend fails, fallback to local JSON
+      console.warn("[autobooks] Backend unavailable, falling back to local JSON:", error);
+    }
+  }
+  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
+  else if (aiGenerateEnabled) {
+    try {
+      console.log("[autobooks] AI generation mode enabled, generating books...");
+      const generatedBooks = await fetchAiGeneratedBooks(limit);
+      
+      if (Array.isArray(generatedBooks) && generatedBooks.length > 0) {
+        console.log(`[autobooks] Generated ${generatedBooks.length} books via AI`);
+        booksCache = generatedBooks.map(normalizeBook);
+        return booksCache;
+      }
+      
+      console.warn("[autobooks] No books generated, falling back to local JSON");
+    } catch (error) {
+      // If AI generation fails, fallback to local JSON
+      console.warn("[autobooks] AI generation failed, falling back to local JSON:", error);
+    }
+  }
+  // Priority 3: Fallback - use original local JSON data
+  else {
+    console.log("[autobooks] V2 modes disabled, loading from local JSON");
+  }
+
+  // Fallback to local JSON
+  booksCache = (fallbackBooks as DatasetBook[]).map(normalizeBook);
+  return booksCache;
 }
 
 export const getCachedBooks = () => booksCache;

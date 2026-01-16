@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useEffect } from "react";
 import { SpotlightRow } from "@/components/books/SpotlightRow";
-import { getFeaturedBooks, getBooksByGenre, getAvailableGenres, getBooks } from "@/dynamic/v2-data";
+import { getFeaturedBooks, getBooksByGenre, getAvailableGenres, getBooks } from "@/dynamic/v2";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Search, BookOpen, Star, TrendingUp, Sparkles, ArrowRight, Book, Calendar } from "lucide-react";
 import { SeedLink } from "@/components/ui/SeedLink";

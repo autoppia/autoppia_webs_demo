@@ -16,7 +16,7 @@ import {
   getBooksByGenre,
   searchBooks,
   getBooks,
-} from "@/dynamic/v2-data";
+} from "@/dynamic/v2";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { cn } from "@/library/utils";
 import { useDynamicSystem } from "@/dynamic/shared";

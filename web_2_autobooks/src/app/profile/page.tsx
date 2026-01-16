@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { getBooks } from "@/dynamic/v2-data";
+import { getBooks } from "@/dynamic/v2";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
