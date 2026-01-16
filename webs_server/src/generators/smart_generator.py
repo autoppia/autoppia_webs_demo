@@ -132,6 +132,20 @@ def get_project_entity_metadata(project_key: str, entity_type: str) -> Dict[str,
     """
     # Define known metadata for common entity types
     metadata_map = {
+        "web_1_autocinema": {
+            "movies": {
+                "description": "Movie catalog entries",
+                "categories": ["Action", "Adventure", "Animation", "Comedy", "Documentary", "Drama", "Fantasy", "Romance", "Sci-Fi", "Thriller"],
+                "requirements": "Include realistic movie titles, descriptions, years (1900-2025), durations (60-180 minutes), ratings (0-5), directors, cast arrays, trailer URLs, image paths, genres arrays, and category field.",
+            }
+        },
+        "web_2_autobooks": {
+            "books": {
+                "description": "Book catalog entries",
+                "categories": ["Adventure", "Drama", "Education", "Fantasy", "Fiction", "Historical Fiction", "Horror", "Literary", "Mystery", "Nonfiction", "Romance", "Science", "Sci-Fi", "Thriller"],
+                "requirements": "Include realistic book titles, descriptions, years (1900-2025), durations (pages: 200-1000), ratings (0-5), authors (director field), cast arrays (optional), purchase URLs (trailer_url field), image paths, genres arrays, and optional price field.",
+            }
+        },
         "web_5_autocrm": {
             "logs": {
                 "description": "Time tracking logs for legal work",

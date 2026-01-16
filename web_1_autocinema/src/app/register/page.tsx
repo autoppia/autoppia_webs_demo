@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { getMovies } from "@/dynamic/v2-data";
+import { getMovies } from "@/dynamic/v2";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { Film, UserPlus, Lock, User, Film as FilmIcon } from "lucide-react";
 import { useDynamicSystem } from "@/dynamic/shared";
@@ -42,6 +42,18 @@ export default function RegisterPage() {
       setAssignedMovie(preferredDefaultMovie);
     }
   }, [assignedMovie, preferredDefaultMovie]);
+
+  // Debug: Verify V2 status
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[register/page] V2 status:", {
+        v2Enabled: dyn.v2.isEnabled(),
+        v2DbMode: dyn.v2.isDbModeEnabled(),
+        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2Fallback: dyn.v2.isFallbackMode(),
+      });
+    }
+  }, [dyn.v2]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

@@ -16,7 +16,7 @@ import {
   getMoviesByGenre,
   searchMovies,
   getMovies,
-} from "@/dynamic/v2-data";
+} from "@/dynamic/v2";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { cn } from "@/library/utils";
 import { useDynamicSystem } from "@/dynamic/shared";
@@ -51,9 +51,21 @@ function SearchContent() {
     setSortBy(initialSort);
   }, [initialSearch, initialGenre, initialYear, initialSort]);
 
-  const genres = useMemo(() => getAvailableGenres(), []);
-  const years = useMemo(() => getAvailableYears(), []);
-  const allMovies = useMemo(() => getMovies(), []);
+  // Debug: Verify V2 status
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[search/page] V2 status:", {
+        v2Enabled: dyn.v2.isEnabled(),
+        v2DbMode: dyn.v2.isDbModeEnabled(),
+        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2Fallback: dyn.v2.isFallbackMode(),
+      });
+    }
+  }, [dyn.v2]);
+
+  const genres = useMemo(() => getAvailableGenres(), [seed]);
+  const years = useMemo(() => getAvailableYears(), [seed]);
+  const allMovies = useMemo(() => getMovies(), [seed]);
 
   // Get popular genres (top 6 by movie count)
   const popularGenres = useMemo(() => {

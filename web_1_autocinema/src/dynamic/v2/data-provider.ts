@@ -15,6 +15,8 @@ export class DynamicDataProvider {
   private isEnabled = false;
   private ready = false;
   private readyPromise: Promise<void>;
+  private currentSeed: number = 1;
+  private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
     // V2 siempre habilitado si hay datos
@@ -58,7 +60,8 @@ export class DynamicDataProvider {
 
   private async loadMovies(): Promise<void> {
     try {
-      this.getBaseSeed();
+      const seed = this.getBaseSeed();
+      this.currentSeed = seed;
       this.movies = await initializeMovies();
     } catch (error) {
       console.error("[autocinema] Failed to initialize movies", error);
@@ -68,12 +71,80 @@ export class DynamicDataProvider {
     }
   }
 
+  private async reloadIfSeedChanged(): Promise<void> {
+    const newSeed = this.getBaseSeed();
+    if (newSeed !== this.currentSeed) {
+      console.log(`[autocinema] Seed changed from ${this.currentSeed} to ${newSeed}, reloading movies...`);
+      this.currentSeed = newSeed;
+      this.ready = false;
+      
+      // If already loading, wait for it
+      if (this.loadingPromise) {
+        await this.loadingPromise;
+        return;
+      }
+      
+      // Start new load
+      this.loadingPromise = (async () => {
+        try {
+          this.movies = await initializeMovies();
+          this.ready = true;
+        } catch (error) {
+          console.error("[autocinema] Failed to reload movies", error);
+          this.ready = true; // Mark as ready even on error to prevent blocking
+        } finally {
+          this.loadingPromise = null;
+        }
+      })();
+      
+      await this.loadingPromise;
+    }
+  }
+
   public isReady(): boolean {
     return this.ready;
   }
 
   public whenReady(): Promise<void> {
     return this.readyPromise;
+  }
+
+  public async reload(seedValue?: number | null): Promise<void> {
+    if (typeof window === "undefined") return;
+    
+    const targetSeed = seedValue !== undefined && seedValue !== null 
+      ? clampBaseSeed(seedValue)
+      : this.getBaseSeed();
+    
+    if (targetSeed === this.currentSeed && this.ready) {
+      return; // Already loaded with this seed
+    }
+    
+    console.log(`[autocinema] Reloading movies for base seed=${targetSeed}...`);
+    this.currentSeed = targetSeed;
+    this.ready = false;
+    
+    // If already loading, wait for it
+    if (this.loadingPromise) {
+      await this.loadingPromise;
+      return;
+    }
+    
+    // Start new load (initializeMovies will derive the V2 seed from the URL)
+    this.loadingPromise = (async () => {
+      try {
+        this.movies = await initializeMovies();
+        this.ready = true;
+        console.log(`[autocinema] Movies reloaded: ${this.movies.length} movies`);
+      } catch (error) {
+        console.error("[autocinema] Failed to reload movies", error);
+        this.ready = true; // Mark as ready even on error to prevent blocking
+      } finally {
+        this.loadingPromise = null;
+      }
+    })();
+    
+    await this.loadingPromise;
   }
 
   public getMovies(): Movie[] {
@@ -160,4 +231,3 @@ export const getMoviesByGenre = (genre: string) => dynamicDataProvider.getMovies
 export const getAvailableGenres = () => dynamicDataProvider.getAvailableGenres();
 export const getAvailableYears = () => dynamicDataProvider.getAvailableYears();
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
-export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);

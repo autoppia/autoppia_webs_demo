@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
+import { useSeed } from "@/context/SeedContext";
 
 export function DataReadyGate({ children }: { children: React.ReactNode }) {
   // Initialize as true on the server to avoid hydration mismatches
   // Then verify on the client if it is actually ready
   const [ready, setReady] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const { seed } = useSeed();
 
   useEffect(() => {
     setMounted(true);
@@ -31,6 +33,24 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
       };
     }
   }, []);
+
+  // Reload data when seed changes
+  useEffect(() => {
+    if (!mounted) return;
+    
+    const reloadData = async () => {
+      setReady(false);
+      try {
+        await dynamicDataProvider.reload();
+        setReady(true);
+      } catch (error) {
+        console.error("[autocinema] Failed to reload data on seed change", error);
+        setReady(true);
+      }
+    };
+    
+    reloadData();
+  }, [seed, mounted]);
 
   // During SSR and the first client render, show children
   // Only show loading if we are on the client and it truly is not ready

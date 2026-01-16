@@ -2,7 +2,7 @@
 
 import { Film, Search, Filter, Star, Calendar, Clock, Users, Sparkles, TrendingUp, Zap } from "lucide-react";
 import { useMemo } from "react";
-import { getAvailableGenres, getAvailableYears, getMovies } from "@/dynamic/v2-data";
+import { getAvailableGenres, getAvailableYears, getMovies } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";

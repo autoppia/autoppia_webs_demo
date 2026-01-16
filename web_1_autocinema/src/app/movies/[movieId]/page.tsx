@@ -10,11 +10,12 @@ import {
   type CommentEntry,
 } from "@/components/movies/CommentsPanel";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { getMovieById, getRelatedMovies } from "@/dynamic/v2-data";
+import { getMovieById, getRelatedMovies } from "@/dynamic/v2";
 import { SeedLink } from "@/components/ui/SeedLink";
 import type { Movie } from "@/data/movies";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
+import { useDynamicSystem } from "@/dynamic/shared";
 import {
   MovieEditor,
   type MovieEditorData,
@@ -55,6 +56,19 @@ export default function MovieDetailPage() {
   const movieId = decodeURIComponent(params.movieId);
   const movie = getMovieById(movieId);
   const { currentUser, addToWatchlist, removeFromWatchlist } = useAuth();
+  const dyn = useDynamicSystem();
+
+  // Debug: Verify V2 status
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[movies/[movieId]/page] V2 status:", {
+        v2Enabled: dyn.v2.isEnabled(),
+        v2DbMode: dyn.v2.isDbModeEnabled(),
+        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2Fallback: dyn.v2.isFallbackMode(),
+      });
+    }
+  }, [dyn.v2]);
 
   const [comments, setComments] = useState(() =>
     movie ? createMockComments(movie) : []
