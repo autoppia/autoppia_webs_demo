@@ -22,4 +22,4 @@ openai==1.57.2
 fastjsonschema==2.21.1
  
 # Optional file locking for safe concurrent writes
-filelock==3.16.1
+filelock==3.20.1
