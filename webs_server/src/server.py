@@ -895,6 +895,20 @@ async def load_dataset_endpoint(
             # Default 'select' method
             selected = seeded_select(file_data_pool, seed=seed_value, count=limit, allow_duplicates=False)
 
+        # Regenerate IDs dynamically based on seed + position
+        # This ensures different seeds produce different IDs for the same movies
+        for index, item in enumerate(selected):
+            original_id = item.get("id")
+            # Generate deterministic ID based on seed + position + original_id
+            combined = f"{seed_value}_{index}"
+            if original_id is not None:
+                combined += f"_{original_id}"
+            import hashlib
+            hash_obj = hashlib.md5(combined.encode())
+            hash_int = int(hash_obj.hexdigest()[:8], 16)
+            new_id = (hash_int % 2147483647) + 1
+            item["id"] = new_id
+        
         metadata = {
             "source": "file_storage",
             "projectKey": project_key,
