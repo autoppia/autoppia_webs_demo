@@ -5,7 +5,7 @@ import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { BlurCard } from "@/components/ui/BlurCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Suspense } from "react";
-import { getProductsByCategory, getEffectiveSeed } from "@/dynamic/v2-data";
+import { getProductsByCategory, getEffectiveSeed } from "@/dynamic/v2";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ArrowRight, Package, ShieldCheck, Sparkles } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/events";
@@ -18,6 +18,7 @@ import {
 import { useSeed } from "@/context/SeedContext";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
 
 const HOME_CATEGORIES = ["Kitchen", "Electronics", "Technology", "Home", "Fitness"] as const;
 
@@ -27,6 +28,21 @@ function HomeContent() {
   const router = useSeedRouter();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base ?? 1;
   const seed = getEffectiveSeed(v2Seed);
+
+  // Debug: Verify V1, V2, and V3 are working
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[page.tsx] Debug dinámico:", {
+        seed: dyn.seed,
+        v1Enabled: isV1Enabled(),
+        v2Enabled: dyn.v2.isEnabled(),
+        v2DbMode: dyn.v2.isDbModeEnabled(),
+        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2Fallback: dyn.v2.isFallbackMode(),
+        v3Enabled: isV3Enabled(),
+      });
+    }
+  }, [dyn.seed, dyn.v2]);
 
   // Local text variants for this component
   const dynamicV3TextVariants: Record<string, string[]> = {

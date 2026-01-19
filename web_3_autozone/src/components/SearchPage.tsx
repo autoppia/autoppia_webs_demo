@@ -10,7 +10,7 @@ import type { Product } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/events";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { searchProducts } from "@/dynamic/v2-data";
+import { searchProducts } from "@/dynamic/v2";
 import { BlurCard } from "@/components/ui/BlurCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SafeImage } from "@/components/ui/SafeImage";
@@ -47,6 +47,18 @@ export default function SearchPage() {
     activeCategory === "all"
       ? "All products"
       : activeCategory.replace(/\b\w/g, (char) => char.toUpperCase());
+
+  // Debug: Verify V2 status
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[SearchPage] V2 status:", {
+        v2Enabled: dyn.v2.isEnabled(),
+        v2DbMode: dyn.v2.isDbModeEnabled(),
+        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2Fallback: dyn.v2.isFallbackMode(),
+      });
+    }
+  }, [dyn.v2]);
 
   // Local text variants
   const dynamicV3TextVariants: Record<string, string[]> = {
