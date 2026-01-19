@@ -12,10 +12,15 @@ const BASE_SEED_STORAGE_KEY = "autobooks_seed_base";
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private books: Book[] = [];
+  private isEnabled = false;
   private ready = false;
   private readyPromise: Promise<void>;
+  private currentSeed: number = 1;
+  private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
+    // V2 siempre habilitado si hay datos
+    this.isEnabled = true;
     if (typeof window === "undefined") {
       this.ready = true;
       this.readyPromise = Promise.resolve();
@@ -55,16 +60,44 @@ export class DynamicDataProvider {
 
   private async loadBooks(): Promise<void> {
     try {
-      this.getBaseSeed();
-      const loadedBooks = await initializeBooks();
-      // Asegurar que books siempre sea un array
-      this.books = Array.isArray(loadedBooks) ? loadedBooks : [];
+      const seed = this.getBaseSeed();
+      this.currentSeed = seed;
+      this.books = await initializeBooks();
     } catch (error) {
       console.error("[autobooks] Failed to initialize books", error);
-      // En caso de error, usar array vacío en lugar de lanzar error
-      this.books = [];
+      throw error;
     } finally {
       this.ready = true;
+    }
+  }
+
+  private async reloadIfSeedChanged(): Promise<void> {
+    const newSeed = this.getBaseSeed();
+    if (newSeed !== this.currentSeed) {
+      console.log(`[autobooks] Seed changed from ${this.currentSeed} to ${newSeed}, reloading books...`);
+      this.currentSeed = newSeed;
+      this.ready = false;
+      
+      // If already loading, wait for it
+      if (this.loadingPromise) {
+        await this.loadingPromise;
+        return;
+      }
+      
+      // Start new load
+      this.loadingPromise = (async () => {
+        try {
+          this.books = await initializeBooks();
+          this.ready = true;
+        } catch (error) {
+          console.error("[autobooks] Failed to reload books", error);
+          this.ready = true; // Mark as ready even on error to prevent blocking
+        } finally {
+          this.loadingPromise = null;
+        }
+      })();
+      
+      await this.loadingPromise;
     }
   }
 
@@ -76,8 +109,52 @@ export class DynamicDataProvider {
     return this.readyPromise;
   }
 
+  public async reload(seedValue?: number | null): Promise<void> {
+    if (typeof window === "undefined") return;
+    
+    const targetSeed = seedValue !== undefined && seedValue !== null 
+      ? clampBaseSeed(seedValue)
+      : this.getBaseSeed();
+    
+    if (targetSeed === this.currentSeed && this.ready) {
+      return; // Already loaded with this seed
+    }
+    
+    console.log(`[autobooks] Reloading books for base seed=${targetSeed}...`);
+    this.currentSeed = targetSeed;
+    this.ready = false;
+    
+    // If already loading, wait for it
+    if (this.loadingPromise) {
+      await this.loadingPromise;
+      return;
+    }
+    
+    // Start new load (initializeBooks will derive the V2 seed from the URL)
+    this.loadingPromise = (async () => {
+      try {
+        this.books = await initializeBooks();
+        this.ready = true;
+        console.log(`[autobooks] Books reloaded: ${this.books.length} books`);
+      } catch (error) {
+        console.error("[autobooks] Failed to reload books", error);
+        this.ready = true; // Mark as ready even on error to prevent blocking
+      } finally {
+        this.loadingPromise = null;
+      }
+    })();
+    
+    await this.loadingPromise;
+  }
+
   public getBooks(): Book[] {
-    return Array.isArray(this.books) ? this.books : [];
+    // Trigger reload if seed changed
+    if (typeof window !== "undefined") {
+      this.reloadIfSeedChanged().catch((error) => {
+        console.error("[autobooks] Failed to check/reload on seed change:", error);
+      });
+    }
+    return this.books;
   }
 
   public getBookById(id: string): Book | undefined {
@@ -168,8 +245,7 @@ export class DynamicDataProvider {
   }
 
   public isDynamicModeEnabled(): boolean {
-    // V2 está desactivado por ahora, siempre devuelve false
-    return false;
+    return this.isEnabled;
   }
 }
 
