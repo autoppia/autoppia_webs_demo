@@ -2,7 +2,6 @@ import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loade
 import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
 import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
 import { getApiBaseUrl } from "@/shared/data-generator";
-import imageManifest from "@/data/imageManifest.json";
 import fallbackBooks from "./original/books_1.json";
 
 export interface Book {
@@ -47,7 +46,6 @@ type DatasetBook = {
 };
 
 const DEFAULT_POSTER = "/media/gallery/default_book.png";
-const IMAGE_LOOKUP = new Map(Object.entries(imageManifest as Record<string, string>));
 
 const clampSeed = (value: number, fallback = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;
@@ -128,23 +126,31 @@ const normalizeCast = (cast?: string[] | string): string[] => {
 
 const buildPosterPath = (imagePath?: string): string => {
   if (!imagePath) return DEFAULT_POSTER;
-
-  const normalized = imagePath.replace(/^\/+/, "");
-  const filename = normalized.split("/").pop();
-
-  // Try manifest by full path, then by filename, then by prefix
-  const prefix = filename?.split(".")[0]?.split("_")[0] ?? "";
-  const manifestMatch =
-    IMAGE_LOOKUP.get(normalized) ||
-    (filename ? IMAGE_LOOKUP.get(filename) : undefined) ||
-    IMAGE_LOOKUP.get(prefix);
-
-  if (manifestMatch) {
-    return `/${manifestMatch}`;
+  
+  // If path already starts with "/", return it as is (already absolute)
+  // This handles paths like "/media/gallery/9780140268867.jpg" directly
+  if (imagePath.startsWith("/")) {
+    return imagePath;
   }
-
-  // Otherwise fall back to the provided path (it will resolve if the file exists in /public)
-  return `/${normalized}`;
+  
+  // Ensure the path doesn't have -sm-web suffix (remove if present)
+  let cleanPath = imagePath;
+  if (cleanPath.includes('-sm-web')) {
+    cleanPath = cleanPath.replace(/-sm-web\.(jpg|jpeg|png|webp)$/i, '.$1');
+  }
+  
+  // Normalize the path: remove 'gallery/' prefix if present, we'll add it back
+  if (cleanPath.startsWith('gallery/')) {
+    cleanPath = cleanPath.replace('gallery/', '');
+  }
+  
+  // Also remove 'media/gallery/' prefix if present
+  if (cleanPath.startsWith('media/gallery/')) {
+    cleanPath = cleanPath.replace('media/gallery/', '');
+  }
+  
+  // Build the final path - always use /media/gallery/ for consistency
+  return `/media/gallery/${cleanPath}`;
 };
 
 const generateFallbackId = (): string => {
@@ -228,15 +234,15 @@ export async function initializeBooks(v2SeedValue?: number | null, limit = 300):
   const dbModeEnabled = isDbLoadModeEnabled();
   const aiGenerateEnabled = isV2AiGenerateEnabled();
   
-  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  // Get base seed from URL - if seed = 1, use original data for both DB and AI modes
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
-    console.log("[autobooks] Base seed is 1, using original data (skipping DB/AI modes)");
+    console.log("[autobooks] Base seed is 1, using original data from original/books_1.json (skipping DB/AI modes)");
     booksCache = (fallbackBooks as DatasetBook[]).map(normalizeBook);
     return booksCache;
   }
   
-  // Priority 1: DB mode - fetch from /datasets/load endpoint
+  // Priority 1: DB mode - fetch from /datasets/load endpoint (loads from data/books_1.json)
   if (dbModeEnabled) {
     // Si no se proporciona seed, leerlo de la URL
     if (typeof window !== "undefined" && v2SeedValue == null) {
@@ -256,17 +262,17 @@ export async function initializeBooks(v2SeedValue?: number | null, limit = 300):
 
       if (Array.isArray(books) && books.length > 0) {
         console.log(
-          `[autobooks] Loaded ${books.length} books from dataset (seed=${effectiveSeed})`
+          `[autobooks] Loaded ${books.length} books from dataset (seed=${effectiveSeed}, source=data/books_1.json)`
         );
         booksCache = books.map(normalizeBook);
         return booksCache;
       }
 
-      // If no books returned from backend, fallback to local JSON
-      console.warn(`[autobooks] No books returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+      // If no books returned from backend, fallback to original data
+      console.warn(`[autobooks] No books returned from backend (seed=${effectiveSeed}), falling back to original data`);
     } catch (error) {
-      // If backend fails, fallback to local JSON
-      console.warn("[autobooks] Backend unavailable, falling back to local JSON:", error);
+      // If backend fails, fallback to original data
+      console.warn("[autobooks] Backend unavailable, falling back to original data:", error);
     }
   }
   // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
@@ -281,18 +287,18 @@ export async function initializeBooks(v2SeedValue?: number | null, limit = 300):
         return booksCache;
       }
       
-      console.warn("[autobooks] No books generated, falling back to local JSON");
+      console.warn("[autobooks] No books generated, falling back to original data");
     } catch (error) {
-      // If AI generation fails, fallback to local JSON
-      console.warn("[autobooks] AI generation failed, falling back to local JSON:", error);
+      // If AI generation fails, fallback to original data
+      console.warn("[autobooks] AI generation failed, falling back to original data:", error);
     }
   }
   // Priority 3: Fallback - use original local JSON data
   else {
-    console.log("[autobooks] V2 modes disabled, loading from local JSON");
+    console.log("[autobooks] V2 modes disabled, loading from original data");
   }
 
-  // Fallback to local JSON
+  // Fallback to original data (original/books_1.json)
   booksCache = (fallbackBooks as DatasetBook[]).map(normalizeBook);
   return booksCache;
 }
