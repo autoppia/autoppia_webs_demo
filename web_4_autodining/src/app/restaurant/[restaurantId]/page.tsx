@@ -20,7 +20,7 @@ import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
-import { initializeRestaurants, getRestaurants } from "@/dynamic/v2-data";
+import { getRestaurantById, dynamicDataProvider } from "@/dynamic/v2";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { buildBookingHref } from "@/utils/bookingPaths";
@@ -71,6 +71,18 @@ export default function RestaurantPage() {
   const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
 
+  // Debug: Verify V2 status
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[restaurant/[restaurantId]/page] V2 status:", {
+        v2Enabled: dyn.v2.isEnabled(),
+        v2DbMode: dyn.v2.isDbModeEnabled(),
+        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2Fallback: dyn.v2.isFallbackMode(),
+      });
+    }
+  }, [dyn.v2]);
+
   const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
   const timeOptions = [
     "12:00 PM",
@@ -92,18 +104,32 @@ export default function RestaurantPage() {
     return order.map(i => timeOptions[i]);
   }, [dyn.v1]);
 
+  // Load restaurant data using V2 system
   useEffect(() => {
-    // Ensure data is initialized and loaded from DB or generator as configured
     let mounted = true;
     const run = async () => {
       setIsLoading(true);
       const genEnabled = isDataGenerationEnabled();
       if (genEnabled) setIsGenerating(true);
       try {
-        await initializeRestaurants(v2Seed ?? undefined);
+        console.log(`[restaurant/[restaurantId]/page] Loading restaurant ${id} with seed=${seed}, v2Seed=${v2Seed}`);
+        
+        // Wait for data to be ready (DataReadyGate handles initial load, but we need to wait here too)
+        await dynamicDataProvider.whenReady();
+        
+        // Reload to ensure we have the correct data for the current seed
+        // This will use the seed from the URL automatically
+        await dynamicDataProvider.reload(seed ?? undefined);
+        
+        // Wait again to ensure reload is complete
+        await dynamicDataProvider.whenReady();
+        
         if (!mounted) return;
-        const list = getRestaurants();
-        const found = list.find((x) => x.id === id) || list[0];
+        
+        // Get restaurant directly using getRestaurantById
+        const found = getRestaurantById(id);
+        console.log(`[restaurant/[restaurantId]/page] Restaurant ${id} found:`, found ? found.name : "NOT FOUND");
+        
         if (found) {
           // Usar rating y stars separados
           const rating = (found as any).rating ?? found.stars ?? 4.5;
@@ -128,7 +154,18 @@ export default function RestaurantPage() {
             photos,
           };
           setR(mapped);
+        } else {
+          // Restaurant not found - log available restaurants for debugging
+          const allRestaurants = dynamicDataProvider.getRestaurants();
+          console.log(`[restaurant/[restaurantId]/page] Restaurant ${id} not found. Available restaurants (${allRestaurants.length}):`, 
+            allRestaurants.map(r => ({ id: r.id, name: r.name })).slice(0, 5)
+          );
+          setR(null);
         }
+      } catch (error) {
+        console.error("[restaurant/[restaurantId]/page] Failed to load restaurant", error);
+        if (!mounted) return;
+        setR(null);
       } finally {
         if (!mounted) return;
         setIsLoading(false);
@@ -139,8 +176,9 @@ export default function RestaurantPage() {
     return () => {
       mounted = false;
     };
-  }, [id, v2Seed]);
+  }, [id, seed, v2Seed]);
 
+  // Log view event when restaurant is loaded - MUST be before any conditional returns
   useEffect(() => {
     if (!r) return; // evita enviar si aún no hay datos
     logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
@@ -155,7 +193,42 @@ export default function RestaurantPage() {
       stars: r?.stars ?? 5,
     });
   }, [id, r]);
+
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
+
+  // Show loading or not found state - AFTER all hooks
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          {isGenerating ? (
+            <p className="text-gray-600">Generating restaurant data...</p>
+          ) : (
+            <p className="text-gray-600">Loading restaurant...</p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (!r) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center max-w-md px-4">
+          <h1 className="text-3xl font-semibold text-gray-900 mb-3">Restaurant not found</h1>
+          <p className="text-gray-600 mb-6">
+            Try selecting a different seed or explore the full restaurant list.
+          </p>
+          <SeedLink
+            href="/"
+            className="inline-flex rounded-full border border-gray-300 px-6 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Back to home
+          </SeedLink>
+        </div>
+      </div>
+    );
+  }
 
   const handleToggleMenu = () => {
     const newState = !showFullMenu;

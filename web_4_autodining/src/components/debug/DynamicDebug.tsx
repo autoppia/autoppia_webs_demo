@@ -25,6 +25,10 @@ export function DynamicDebug() {
     console.log("=== 🔍 DYNAMIC DEBUG (web4) ===");
     console.log("Seed:", dyn.seed);
     console.log("V1 enabled:", isV1Enabled());
+    console.log("V2 enabled:", dyn.v2.isEnabled());
+    console.log("V2 DB mode:", dyn.v2.isDbModeEnabled());
+    console.log("V2 AI generate:", dyn.v2.isAiGenerateEnabled());
+    console.log("V2 fallback mode:", dyn.v2.isFallbackMode());
     console.log("V3 enabled:", isV3Enabled());
     console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V1:", typeof window !== "undefined" ? (window as Window & typeof globalThis & { __NEXT_DATA__?: { env?: { NEXT_PUBLIC_ENABLE_DYNAMIC_V1?: string } } }).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 : "SSR");
     console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V3:", typeof window !== "undefined" ? (window as Window & typeof globalThis & { __NEXT_DATA__?: { env?: { NEXT_PUBLIC_ENABLE_DYNAMIC_V3?: string } } }).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 : "SSR");

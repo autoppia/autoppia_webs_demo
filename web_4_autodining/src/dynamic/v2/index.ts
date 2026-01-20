@@ -8,9 +8,14 @@ export {
   dynamicDataProvider,
   initializeRestaurants,
   getRestaurants,
+  getRestaurantsFromProvider,
+  getRestaurantById,
+  getRestaurantsByCuisine,
+  getFeaturedRestaurants,
+  searchRestaurants,
   isDynamicModeEnabled,
 } from "./data-provider";
-export type { RestaurantData } from "./data-provider";
+export type { RestaurantGenerated } from "./data-provider";
 
 // Export whenReady function
 export const whenReady = () => dynamicDataProvider.whenReady();
