@@ -51,12 +51,10 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
   };
 
   const handleContactDoctor = () => {
-    logEvent(EVENT_TYPES.CONTACT_DOCTOR, {
-      doctorId: doctor.id,
-      doctorName: doctor.name,
-      specialty: doctor.specialty,
-      rating: doctor.rating
-    });
+    // REMOVED: Do not log CONTACT_DOCTOR when opening modal
+    // Reason: According to .cursorrules, events should be logged only when the action is completed
+    // (when the message is sent), not when the modal is opened. The event will be logged in
+    // ContactDoctorModal.handleSubmitContact when the user confirms the contact.
     setIsContactModalOpen(true);
   };
 

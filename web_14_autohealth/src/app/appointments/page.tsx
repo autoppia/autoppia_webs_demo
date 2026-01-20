@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { initializeAppointments } from "@/data/appointments-enhanced";
 import { initializeDoctors } from "@/data/doctors-enhanced";
@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MEDICAL_SPECIALTIES, filterSpecialties } from "@/data/medical-specialties";
 
-export default function AppointmentsPage() {
+function AppointmentsPageContent() {
   const dyn = useDynamicSystem();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -546,5 +546,17 @@ export default function AppointmentsPage() {
       />
       </div>
     </>
+  );
+}
+
+export default function AppointmentsPage() {
+  return (
+    <Suspense fallback={
+      <div className="container py-20 flex items-center justify-center">
+        <div className="text-muted-foreground">Loading appointments…</div>
+      </div>
+    }>
+      <AppointmentsPageContent />
+    </Suspense>
   );
 }

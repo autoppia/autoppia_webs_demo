@@ -75,40 +75,39 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
     setIsSubmitting(true);
 
     try {
-      // Log the contact doctor event
+      // Log the contact doctor event (single generic event with all information)
+      // According to .cursorrules: "Generic Use Cases: We do not create unique events for every UI path"
+      // Differences are captured in metadata, not in the event name
       logEvent(EVENT_TYPES.CONTACT_DOCTOR, {
+        // Doctor Information (constraints for benchmark verification)
         doctorId: doctor.id,
         doctorName: doctor.name,
         specialty: doctor.specialty,
-        action: "contact_doctor_submit",
-        urgency: formData.urgency,
-        preferredContactMethod: formData.preferredContactMethod,
-        appointmentRequest: formData.appointmentRequest,
-        subject: formData.subject
-      });
-
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Log successful contact
-      logEvent(EVENT_TYPES.DOCTOR_CONTACTED_SUCCESSFULLY, {
-        doctorId: doctor.id,
-        doctorName: doctor.name,
-        specialty: doctor.specialty,
+        
         // Patient Information
         patientName: formData.patientName,
         patientEmail: formData.patientEmail,
         patientPhone: formData.patientPhone,
-        // Message Information
+        
+        // Message Information (constraints for benchmark verification)
         subject: formData.subject,
         message: formData.message,
         urgency: formData.urgency,
         preferredContactMethod: formData.preferredContactMethod,
         appointmentRequest: formData.appointmentRequest,
-        // Success metadata
-        contactTimestamp: new Date().toISOString(),
-        success: true
+        
+        // Action metadata
+        action: "send_message",
+        success: true, // Indicate success in the same event (do not create separate event)
+        contactTimestamp: new Date().toISOString()
       });
+
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // REMOVED: Do not log DOCTOR_CONTACTED_SUCCESSFULLY
+      // Reason: According to .cursorrules, we use generic events. Success is indicated with success: true
+      // in the same CONTACT_DOCTOR event, not by creating a separate event.
 
       alert("Your message has been sent successfully! The doctor will contact you within 24 hours.");
       onOpenChange(false);
