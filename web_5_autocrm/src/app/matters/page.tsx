@@ -25,6 +25,7 @@ import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
+import { dynamicDataProvider, getMatters, getClients } from "@/dynamic/v2";
 
 const STORAGE_KEY = "matters";
 
@@ -87,38 +88,76 @@ function MattersListPageContent() {
   const { getText, getId } = useDynamicStructure();
   const baseInputClass = "w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm";
   const baseSelectClass = "rounded-lg border border-zinc-200 px-3 py-2 text-sm";
-  const { resolvedSeeds } = useSeed();
+  const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+
+  // Debug: Verify V2 status
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[matters/page] V2 status:", {
+        v2Enabled: dyn.v2.isEnabled(),
+        v2DbMode: dyn.v2.isDbModeEnabled(),
+        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2Fallback: dyn.v2.isFallbackMode(),
+      });
+    }
+  }, [dyn.v2]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("All");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
-  const { data, isLoading, error } = useProjectData<any>({
-    projectKey: "web_5_autocrm",
-    entityType: "matters",
-    seedValue: v2Seed,
-  });
   
-  // Load clients to get avatars
-  const { data: clientsData } = useProjectData<any>({
-    projectKey: "web_5_autocrm",
-    entityType: "clients",
-    seedValue: v2Seed,
-  });
-  const [fallbackClients, setFallbackClients] = useState<any[]>([]);
+  // Use dynamicDataProvider to get matters - same source as detail page
+  const [matters, setMatters] = useState<any[]>([]);
+  const [clients, setClients] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    initializeClients().then((rows) => {
-      setFallbackClients(rows);
-    });
-  }, []);
-  
-  const clients = useMemo(() => {
-    const base = clientsData && clientsData.length > 0 ? clientsData : fallbackClients;
-    return base.map((c: any) => ({
-      id: c.id,
-      name: c.name ?? c.title ?? "",
-      avatar: c.avatar ?? "",
-    }));
-  }, [clientsData, fallbackClients]);
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        // Wait for data to be ready
+        await dynamicDataProvider.whenReady();
+        
+        // Reload with current seed to ensure we have the right data
+        await dynamicDataProvider.reload(seed ?? undefined);
+        
+        // Wait again to ensure reload is complete
+        await dynamicDataProvider.whenReady();
+        
+        // Get matters and clients from provider
+        const mattersData = getMatters();
+        const clientsData = getClients();
+        
+        // Normalize matters for display - preserve original ID from provider
+        const normalizedMatters = mattersData.map((m: any, i: number) => ({
+          id: m.id || `MAT-${1000 + i}`, // Use original ID, don't override
+          name: m.name ?? m.title ?? `Matter ${i + 1}`,
+          client: m.client ?? "—",
+          status: m.status ?? "Active",
+          updated: m.updated ?? "Today",
+        }));
+        
+        // Normalize clients for avatars
+        const normalizedClients = clientsData.map((c: any) => ({
+          id: c.id,
+          name: c.name ?? c.title ?? "",
+          avatar: c.avatar ?? "",
+        }));
+        
+        setMatters(normalizedMatters);
+        setClients(normalizedClients);
+      } catch (error) {
+        console.error("[MattersPage] Failed to load matters", error);
+        setMatters([]);
+        setClients([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadData();
+  }, [seed, v2Seed]);
   
   const getClientAvatar = (clientName: string): string => {
     const client = clients.find((c) => c.name === clientName);
@@ -132,21 +171,17 @@ function MattersListPageContent() {
   //   error,
   //   sample: (data || []).slice(0, 3),
   // });
-  const [fallbackMatters, setFallbackMatters] = useState<Matter[]>([]);
-  useEffect(() => {
-    initializeMatters().then((rows) => {
-      setFallbackMatters(rows.map((m: any, idx: number) => normalizeMatter(m, idx)));
-    });
-  }, []);
-
-  const normalizedApi = useMemo(() => (data || []).map((m, idx) => normalizeMatter(m, idx)), [data]);
-  const resolvedMatters = normalizedApi.length > 0 ? normalizedApi : fallbackMatters;
   const storageKey = useMemo(
     () => `${STORAGE_KEY}_${v2Seed ?? "default"}`,
     [v2Seed]
   );
-  const [matters, setMatters] = useState<Matter[]>(resolvedMatters);
+  const [mattersList, setMattersList] = useState<Matter[]>([]);
   const [seedSnapshot, setSeedSnapshot] = useState<number | null>(null);
+
+  // Update mattersList when matters change
+  useEffect(() => {
+    setMattersList(matters);
+  }, [matters]);
   const [selected, setSelected] = useState<string[]>([]);
   const [openNew, setOpenNew] = useState(false);
   const [editingMatter, setEditingMatter] = useState<Matter | null>(null);
@@ -164,33 +199,22 @@ function MattersListPageContent() {
   useEffect(() => {
     if (isLoading) return;
     const currentSeed = v2Seed;
-    if (seedSnapshot === currentSeed) return;
-    let next = resolvedMatters;
-    if (typeof window !== "undefined") {
-      const saved = window.localStorage.getItem(storageKey);
-      if (saved) {
-        try {
-          next = JSON.parse(saved);
-        } catch (err) {
-          console.warn("[MattersPage] Unable to parse cached matters", err);
-        }
-      } else {
-        window.localStorage.setItem(storageKey, JSON.stringify(resolvedMatters));
-      }
-    }
-    const nextWithTimestamps = next.map((m: any, idx: number) => ({
+    if (seedSnapshot === currentSeed && mattersList.length > 0) return;
+    
+    // Add timestamps to matters for sorting
+    const nextWithTimestamps = matters.map((m: any, idx: number) => ({
       ...m,
       createdAt:
         typeof m.createdAt === "number"
           ? m.createdAt
           : Date.now() - idx * 1000,
     }));
-    setMatters(nextWithTimestamps);
+    setMattersList(nextWithTimestamps);
     if (typeof window !== "undefined") {
       window.localStorage.setItem(storageKey, JSON.stringify(nextWithTimestamps));
     }
     setSeedSnapshot(currentSeed);
-  }, [resolvedMatters, storageKey, v2Seed, isLoading, seedSnapshot]);
+  }, [matters, storageKey, v2Seed, isLoading, seedSnapshot]);
 
   const updateMatters = (newList: Matter[]) => {
     const withTimestamps = newList.map((m, idx) => ({
@@ -200,11 +224,11 @@ function MattersListPageContent() {
           ? m.createdAt
           : Date.now() - idx * 1000,
     }));
-    setMatters(withTimestamps);
+    setMattersList(withTimestamps);
     if (typeof window !== "undefined") {
       window.localStorage.setItem(storageKey, JSON.stringify(withTimestamps));
     }
-    const baseIds = new Set(resolvedMatters.map((m) => m.id));
+    const baseIds = new Set(mattersList.map((m) => m.id));
     const custom = withTimestamps.filter((m) => !baseIds.has(m.id));
     Cookies.set(`custom_matters_${v2Seed ?? "default"}`, JSON.stringify(custom), {
       expires: 7,
@@ -237,24 +261,24 @@ function MattersListPageContent() {
   };
 
   const deleteSelected = () => {
-    const deleted = matters.filter(m => selected.includes(m.id));
-    updateMatters(matters.filter(m => !selected.includes(m.id)));
+    const deleted = mattersList.filter(m => selected.includes(m.id));
+    updateMatters(mattersList.filter(m => !selected.includes(m.id)));
     logEvent(EVENT_TYPES.DELETE_MATTER, { deleted });
     setSelected([]);
   };
 
   const archiveSelected = () => {
-    const newList = matters.map(m =>
+    const newList = mattersList.map(m =>
       selected.includes(m.id) ? { ...m, status: "Archived" } : m
     );
-    const archived = matters.filter(m => selected.includes(m.id));
+    const archived = mattersList.filter(m => selected.includes(m.id));
     updateMatters(newList);
     logEvent(EVENT_TYPES.ARCHIVE_MATTER, { archived });
     setSelected([]);
   };
 
   const filteredMatters = useMemo(() => {
-    let list = [...matters];
+    let list = [...mattersList];
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       list = list.filter(
@@ -273,7 +297,7 @@ function MattersListPageContent() {
         : a.createdAt - b.createdAt
     );
     return list;
-  }, [matters, searchQuery, statusFilter, sortDirection]);
+  }, [mattersList, searchQuery, statusFilter, sortDirection]);
 
   useEffect(() => {
     if (!searchQuery.trim()) return;
@@ -316,7 +340,7 @@ function MattersListPageContent() {
       status: editDraft.status,
       updated: "Updated just now",
     };
-    const newList = matters.map((m) =>
+    const newList = mattersList.map((m) =>
       m.id === editingMatter.id ? updatedMatter : m
     );
     updateMatters(newList);
@@ -395,10 +419,7 @@ function MattersListPageContent() {
 
         {/* Matter List */}
         <div className="grid gap-4">
-          {error && (
-            <div className="text-red-600">Failed to load matters: {error}</div>
-          )}
-          {isLoading && matters.length === 0 && (
+          {isLoading && mattersList.length === 0 && (
             <div className="text-zinc-500">
               {getText("loading_message", "Loading...") ?? "Loading matters..."}
             </div>

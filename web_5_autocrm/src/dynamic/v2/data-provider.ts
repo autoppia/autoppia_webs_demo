@@ -1,4 +1,5 @@
 import { isDataGenerationEnabled } from "@/shared/data-generator";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 
 // Legacy function - always return false since v1-layouts is removed
 const isDynamicEnabled = (): boolean => {
@@ -23,6 +24,8 @@ const isDynamicHtmlEnabled = (): boolean => {
   return isDynamicEnabled();
 };
 
+const BASE_SEED_STORAGE_KEY = "autocrm_seed_base";
+
 // Dynamic data provider that returns either seed data or empty arrays based on config
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
@@ -36,10 +39,20 @@ export class DynamicDataProvider {
   private files: any[] = [];
   private events: any[] = [];
   private logs: any[] = [];
+  private currentSeed: number = 1;
+  private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
     this.dataGenerationEnabled = isDataGenerationEnabled();
+    
+    // V2 siempre habilitado si hay datos
+    this.isEnabled = true;
+    if (typeof window === "undefined") {
+      this.ready = true;
+      this.readyPromise = Promise.resolve();
+      return;
+    }
     
     // hydrate from cache if available to keep content stable across reloads (unless unique mode is enabled)
     const uniqueFlag = (process.env.NEXT_PUBLIC_DATA_GENERATION_UNIQUE || process.env.DATA_GENERATION_UNIQUE || '').toString().toLowerCase();
@@ -59,6 +72,37 @@ export class DynamicDataProvider {
     this.initializeData();
   }
 
+  private getBaseSeed(): number {
+    if (typeof window === "undefined") {
+      return clampBaseSeed(1);
+    }
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get("seed");
+      if (raw) {
+        const parsed = clampBaseSeed(Number.parseInt(raw, 10));
+        window.localStorage.setItem(BASE_SEED_STORAGE_KEY, parsed.toString());
+        return parsed;
+      }
+      const stored = window.localStorage.getItem(BASE_SEED_STORAGE_KEY);
+      if (stored) {
+        return clampBaseSeed(Number.parseInt(stored, 10));
+      }
+    } catch (error) {
+      console.warn("[autocrm] Failed to resolve base seed from URL/localStorage", error);
+    }
+    return clampBaseSeed(1);
+  }
+
+  private async reloadIfSeedChanged(): Promise<void> {
+    const newSeed = this.getBaseSeed();
+    if (newSeed !== this.currentSeed) {
+      console.log(`[autocrm] Seed changed from ${this.currentSeed} to ${newSeed}, reloading data...`);
+      this.currentSeed = newSeed;
+      await this.reload();
+    }
+  }
+
   public static getInstance(): DynamicDataProvider {
     if (!DynamicDataProvider.instance) {
       DynamicDataProvider.instance = new DynamicDataProvider();
@@ -68,13 +112,12 @@ export class DynamicDataProvider {
 
   private async initializeData(): Promise<void> {
     try {
+      const seed = this.getBaseSeed();
+      this.currentSeed = seed;
+      
       // Try DB mode first if enabled
-      const runtimeSeed = (typeof window !== "undefined" ? (window as any).__autocrmV2Seed : null) as number | null;
-      if (runtimeSeed) {
-        console.log("[DynamicDataProvider] Using runtime v2Seed for DB load:", runtimeSeed);
-      }
-      const dbClients = await loadClientsFromDb(runtimeSeed ?? undefined);
-      const dbMatters = await loadMattersFromDb(runtimeSeed ?? undefined);
+      const dbClients = await loadClientsFromDb(seed);
+      const dbMatters = await loadMattersFromDb(seed);
       if (dbClients.length > 0) {
         this.clients = dbClients;
         writeCachedClients(this.clients);
@@ -139,6 +182,62 @@ export class DynamicDataProvider {
     }
   }
 
+  public async reload(seedValue?: number | null): Promise<void> {
+    if (typeof window === "undefined") return;
+    
+    const targetSeed = seedValue !== undefined && seedValue !== null 
+      ? clampBaseSeed(seedValue)
+      : this.getBaseSeed();
+    
+    if (targetSeed === this.currentSeed && this.ready) {
+      return; // Already loaded with this seed
+    }
+    
+    console.log(`[autocrm] Reloading data for base seed=${targetSeed}...`);
+    this.currentSeed = targetSeed;
+    this.ready = false;
+    
+    // If already loading, wait for it
+    if (this.loadingPromise) {
+      await this.loadingPromise;
+      return;
+    }
+    
+    // Start new load
+    this.loadingPromise = (async () => {
+      try {
+        // Use initializeClients/initializeMatters which handle seed derivation internally
+        const [clients, matters, files, events, logs] = await Promise.all([
+          initializeClients(),
+          initializeMatters(),
+          initializeFiles(),
+          initializeEvents(),
+          initializeLogs(),
+        ]);
+        
+        this.clients = clients;
+        this.matters = matters;
+        this.files = files;
+        this.events = events;
+        this.logs = logs;
+        
+        // Cache primary entities
+        if (this.clients.length > 0) writeCachedClients(this.clients);
+        if (this.matters.length > 0) writeCachedMatters(this.matters);
+        
+        this.ready = true;
+        console.log(`[autocrm] Data reloaded: ${this.clients.length} clients, ${this.matters.length} matters`);
+      } catch (error) {
+        console.error("[autocrm] Failed to reload data", error);
+        this.ready = true; // Mark as ready even on error to prevent blocking
+      } finally {
+        this.loadingPromise = null;
+      }
+    })();
+    
+    await this.loadingPromise;
+  }
+
   public isReady(): boolean {
     return this.ready;
   }
@@ -152,6 +251,12 @@ export class DynamicDataProvider {
   }
 
   public getClients(): any[] {
+    // Trigger reload if seed changed
+    if (typeof window !== "undefined") {
+      this.reloadIfSeedChanged().catch((error) => {
+        console.error("[autocrm] Failed to check/reload on seed change:", error);
+      });
+    }
     return this.clients;
   }
 
@@ -172,11 +277,123 @@ export class DynamicDataProvider {
   }
 
   public getClientById(id: string): any | undefined {
-    return this.clients.find((client) => client.id === id);
+    if (!Array.isArray(this.clients)) {
+      console.log("[autocrm] getClientById: clients array is not valid");
+      return undefined;
+    }
+    
+    // Ensure id is a string
+    const searchId = String(id || '');
+    if (!searchId) {
+      console.log("[autocrm] getClientById: invalid id provided");
+      return undefined;
+    }
+    
+    // Try exact match first
+    let found = this.clients.find((client) => {
+      const clientId = String(client.id || '');
+      return clientId === searchId;
+    });
+    
+    // If not found, try with URL decoding
+    if (!found) {
+      try {
+        const decodedId = decodeURIComponent(searchId);
+        found = this.clients.find((client) => {
+          const clientId = String(client.id || '');
+          return clientId === decodedId;
+        });
+      } catch (e) {
+        // Ignore decode errors
+      }
+    }
+    
+    // If still not found, try matching without 'CL-' prefix (if ID is numeric)
+    if (!found && /^\d+$/.test(searchId)) {
+      found = this.clients.find((client) => {
+        const clientId = String(client.id || '');
+        // Try matching the numeric part
+        const numericId = clientId.replace(/^CL-/, '');
+        return numericId === searchId || clientId === searchId;
+      });
+    }
+    
+    // If still not found, try partial match (in case ID was transformed)
+    if (!found) {
+      found = this.clients.find((client) => {
+        const clientId = String(client.id || '');
+        return clientId.includes(searchId) || searchId.includes(clientId);
+      });
+    }
+    
+    // Log available client IDs for debugging if not found
+    if (!found && this.clients.length > 0) {
+      console.log(`[autocrm] Client ${searchId} not found. Available clients (${this.clients.length}):`,
+        this.clients.slice(0, 5).map(c => ({ id: c.id, name: c.name }))
+      );
+    }
+    
+    return found;
   }
 
   public getMatterById(id: string): any | undefined {
-    return this.matters.find((matter) => matter.id === id);
+    if (!Array.isArray(this.matters)) {
+      console.log("[autocrm] getMatterById: matters array is not valid");
+      return undefined;
+    }
+    
+    // Ensure id is a string
+    const searchId = String(id || '');
+    if (!searchId) {
+      console.log("[autocrm] getMatterById: invalid id provided");
+      return undefined;
+    }
+    
+    // Try exact match first
+    let found = this.matters.find((matter) => {
+      const matterId = String(matter.id || '');
+      return matterId === searchId;
+    });
+    
+    // If not found, try with URL decoding
+    if (!found) {
+      try {
+        const decodedId = decodeURIComponent(searchId);
+        found = this.matters.find((matter) => {
+          const matterId = String(matter.id || '');
+          return matterId === decodedId;
+        });
+      } catch (e) {
+        // Ignore decode errors
+      }
+    }
+    
+    // If still not found, try matching without 'MAT-' prefix (if ID is numeric)
+    if (!found && /^\d+$/.test(searchId)) {
+      found = this.matters.find((matter) => {
+        const matterId = String(matter.id || '');
+        // Try matching the numeric part
+        const numericId = matterId.replace(/^MAT-/, '');
+        return numericId === searchId || matterId === searchId;
+      });
+    }
+    
+    // If still not found, try partial match (in case ID was transformed)
+    if (!found) {
+      found = this.matters.find((matter) => {
+        const matterId = String(matter.id || '');
+        return matterId.includes(searchId) || searchId.includes(matterId);
+      });
+    }
+    
+    // Log available matter IDs for debugging if not found
+    if (!found && this.matters.length > 0) {
+      console.log(`[autocrm] Matter ${searchId} not found. Available matters (${this.matters.length}):`,
+        this.matters.slice(0, 5).map(m => ({ id: m.id, name: m.name }))
+      );
+    }
+    
+    return found;
   }
 
   public searchClients(query: string): any[] {

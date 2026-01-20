@@ -15,6 +15,9 @@ import {
   isDataGenerationAvailable 
 } from "@/utils/dataGenerator";
 import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { isV2AiGenerateEnabled, isV2Enabled } from "@/dynamic/shared/flags";
+import { getApiBaseUrl } from "@/shared/data-generator";
 import fallbackClients from "./original/clients_1.json";
 import fallbackMatters from "./original/matters_1.json";
 import fallbackFiles from "./original/files_1.json";
@@ -98,8 +101,14 @@ const DATA_GENERATION_CONFIG = {
 };
 
 function isUniqueGenerationEnabled(): boolean {
-  const raw = (process.env.NEXT_PUBLIC_DATA_GENERATION_UNIQUE || process.env.DATA_GENERATION_UNIQUE || '').toString().toLowerCase();
-  return raw === 'true' || raw === '1' || raw === 'yes' || raw === 'on';
+  try {
+    // @ts-ignore - process may not be available in all environments
+    const env = typeof process !== 'undefined' ? process.env : {};
+    const raw = (env?.NEXT_PUBLIC_DATA_GENERATION_UNIQUE || env?.DATA_GENERATION_UNIQUE || '').toString().toLowerCase();
+    return raw === 'true' || raw === '1' || raw === 'yes' || raw === 'on';
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -130,135 +139,284 @@ function normalizeMatter(matter: any, index: number): any {
   };
 }
 
-/**
- * Get v2 seed from window (synchronized by SeedContext)
- */
-const getRuntimeV2Seed = (): number | null => {
+const clampSeed = (value: number, fallback = 1): number =>
+  value >= 1 && value <= 300 ? fallback : value;
+
+const getBaseSeedFromUrl = (): number | null => {
   if (typeof window === "undefined") return null;
-  const value = (window as any).__autocrmV2Seed;
-  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
-    return value;
+  const params = new URLSearchParams(window.location.search);
+  const seedParam = params.get("seed");
+  if (seedParam) {
+    const parsed = Number.parseInt(seedParam, 10);
+    if (Number.isFinite(parsed)) {
+      return clampBaseSeed(parsed);
+    }
   }
   return null;
 };
 
+const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number => {
+  if (!dbModeEnabled) {
+    return 1;
+  }
+  
+  if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
+    return clampSeed(seedValue);
+  }
+  
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed !== null) {
+    const resolvedSeeds = resolveSeedsSync(baseSeed);
+    if (resolvedSeeds.v2 !== null) {
+      return resolvedSeeds.v2;
+    }
+    return clampSeed(baseSeed);
+  }
+  
+  return 1;
+};
+
 /**
- * Initialize clients with data generation if enabled
+ * Fetch AI generated clients from /datasets/generate-smart endpoint
+ */
+async function fetchAiGeneratedClients(count: number): Promise<any[]> {
+  const baseUrl = getApiBaseUrl();
+  const url = `${baseUrl}/datasets/generate-smart`;
+  
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        project_key: "web_5_autocrm",
+        entity_type: "clients",
+        count: 50, // Fixed count of 50
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "");
+      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
+    }
+
+    const result = await response.json();
+    const generatedData = result?.generated_data ?? [];
+    
+    if (!Array.isArray(generatedData) || generatedData.length === 0) {
+      throw new Error("No data returned from AI generation endpoint");
+    }
+
+    return generatedData;
+  } catch (error) {
+    console.error("[autocrm] AI generation failed:", error);
+    throw error;
+  }
+}
+
+/**
+ * Initialize clients with V2 system (DB mode, AI generation, or fallback)
  */
 export async function initializeClients(v2SeedValue?: number | null): Promise<any[]> {
-  // Check if v2 (DB mode) is enabled
-  let dbModeEnabled = false;
-  try {
-    dbModeEnabled = isDbLoadModeEnabled();
-  } catch {}
-
-  // Determine the seed to use
-  const effectiveSeed: number = dbModeEnabled ? (v2SeedValue ?? getRuntimeV2Seed() ?? 1) : 1;
-
-  if (!dbModeEnabled) {
+  const dbModeEnabled = isDbLoadModeEnabled();
+  const aiGenerateEnabled = isV2AiGenerateEnabled();
+  
+  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+    console.log("[autocrm] Base seed is 1, using original data (skipping DB/AI modes)");
+    // Use local fallback data (from webs_server/initial_data/web_5_autocrm/original/)
+    // These files are imported at build time and represent the original data
     dynamicClients = (fallbackClients as any[]).map((c, i) => normalizeClient(c, i));
     return dynamicClients;
   }
 
-  if (typeof window !== "undefined") {
-    await new Promise(resolve => setTimeout(resolve, 100));
-  }
-
-  // Load from DB with the determined seed
-  try {
-    // Clear existing clients to force fresh load
-    dynamicClients = [];
-    const fromDb = await fetchSeededSelection<any>({
-      projectKey: "web_5_autocrm",
-      entityType: "clients",
-      seedValue: effectiveSeed,
-      limit: 100,
-      method: "distribute",
-      filterKey: "status",
-    });
-    
-    console.log(`[autocrm] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
-    
-    if (fromDb && fromDb.length > 0) {
-      dynamicClients = fromDb.map(normalizeClient);
-      return dynamicClients;
-    } else {
-      console.warn(`[autocrm] No data returned from DB with seed=${effectiveSeed}`);
-      throw new Error(`[autocrm] No data found for seed=${effectiveSeed}`);
+  // Priority 1: DB mode - fetch from /datasets/load endpoint
+  if (dbModeEnabled) {
+    if (typeof window !== "undefined" && v2SeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
-  } catch (err) {
-    console.error(`[autocrm] Failed to load from DB with seed=${effectiveSeed}:`, err);
-    dynamicClients = (fallbackClients as any[]).map((c, i) => normalizeClient(c, i));
-    return dynamicClients;
+    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+
+    try {
+      const clients = await fetchSeededSelection<any>({
+        projectKey: "web_5_autocrm",
+        entityType: "clients",
+        seedValue: effectiveSeed,
+        limit: 50, // Fixed limit of 50 items for DB mode
+        method: "distribute",
+        filterKey: "status",
+      });
+
+      if (Array.isArray(clients) && clients.length > 0) {
+        console.log(
+          `[autocrm] Loaded ${clients.length} clients from dataset (seed=${effectiveSeed})`
+        );
+        dynamicClients = clients.map((c, i) => normalizeClient(c, i));
+        return dynamicClients;
+      }
+
+      console.warn(`[autocrm] No clients returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+    } catch (error) {
+      console.warn("[autocrm] Backend unavailable, falling back to local JSON:", error);
+    }
+  }
+  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
+  else if (aiGenerateEnabled) {
+    try {
+      console.log("[autocrm] AI generation mode enabled, generating clients...");
+      const generatedClients = await fetchAiGeneratedClients(50);
+      
+      if (Array.isArray(generatedClients) && generatedClients.length > 0) {
+        console.log(`[autocrm] Generated ${generatedClients.length} clients via AI`);
+        dynamicClients = generatedClients.map((c, i) => normalizeClient(c, i));
+        return dynamicClients;
+      }
+      
+      console.warn("[autocrm] No clients generated, falling back to local JSON");
+    } catch (error) {
+      console.warn("[autocrm] AI generation failed, falling back to local JSON:", error);
+    }
+  }
+  // Priority 3: Fallback - use original local JSON data
+  else {
+    console.log("[autocrm] V2 modes disabled, loading from local JSON");
+  }
+
+  // Fallback to local JSON
+  dynamicClients = (fallbackClients as any[]).map((c, i) => normalizeClient(c, i));
+  return dynamicClients;
+}
+
+/**
+ * Fetch AI generated matters from /datasets/generate-smart endpoint
+ */
+async function fetchAiGeneratedMatters(count: number): Promise<any[]> {
+  const baseUrl = getApiBaseUrl();
+  const url = `${baseUrl}/datasets/generate-smart`;
+  
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        project_key: "web_5_autocrm",
+        entity_type: "matters",
+        count: 50, // Fixed count of 50
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "");
+      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
+    }
+
+    const result = await response.json();
+    const generatedData = result?.generated_data ?? [];
+    
+    if (!Array.isArray(generatedData) || generatedData.length === 0) {
+      throw new Error("No data returned from AI generation endpoint");
+    }
+
+    return generatedData;
+  } catch (error) {
+    console.error("[autocrm] AI generation failed:", error);
+    throw error;
   }
 }
 
 /**
- * Initialize matters with data generation if enabled
+ * Initialize matters with V2 system (DB mode, AI generation, or fallback)
  */
-export async function initializeMatters(): Promise<any[]> {
-  // If DB mode is off, return fallback immediately
-  let dbModeEnabled = false;
-  try {
-    dbModeEnabled = isDbLoadModeEnabled();
-  } catch {}
-  if (!dbModeEnabled) {
+export async function initializeMatters(v2SeedValue?: number | null): Promise<any[]> {
+  const dbModeEnabled = isDbLoadModeEnabled();
+  const aiGenerateEnabled = isV2AiGenerateEnabled();
+  
+  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+    console.log("[autocrm] Base seed is 1, using original data for matters (skipping DB/AI modes)");
+    // Use local fallback data (from webs_server/initial_data/web_5_autocrm/original/)
     dynamicMatters = (fallbackMatters as any[]).map((m, i) => normalizeMatter(m, i));
     return dynamicMatters;
   }
 
-  // DB mode on or generation allowed
-  if (!isDataGenerationAvailable()) {
-    dynamicMatters = (fallbackMatters as any[]).map((m, i) => normalizeMatter(m, i));
-    return dynamicMatters;
-  }
+  // Priority 1: DB mode - fetch from /datasets/load endpoint
+  if (dbModeEnabled) {
+    if (typeof window !== "undefined" && v2SeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
 
-  try {
-    if (!isUniqueGenerationEnabled()) {
-      const cached = readCachedMatters();
-      if (cached && cached.length > 0) {
-        dynamicMatters = cached.map(normalizeMatter);
+    try {
+      const matters = await fetchSeededSelection<any>({
+        projectKey: "web_5_autocrm",
+        entityType: "matters",
+        seedValue: effectiveSeed,
+        limit: 50, // Fixed limit of 50 items for DB mode
+        method: "distribute",
+        filterKey: "status",
+      });
+
+      if (Array.isArray(matters) && matters.length > 0) {
+        console.log(
+          `[autocrm] Loaded ${matters.length} matters from dataset (seed=${effectiveSeed})`
+        );
+        dynamicMatters = matters.map((m, i) => normalizeMatter(m, i));
         return dynamicMatters;
       }
+
+      console.warn(`[autocrm] No matters returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+    } catch (error) {
+      console.warn("[autocrm] Backend unavailable, falling back to local JSON:", error);
     }
-
-    console.log("🚀 Starting async data generation for matters...");
-
-    const count = DATA_GENERATION_CONFIG.DEFAULT_MATTERS_COUNT;
-    const categories = DATA_GENERATION_CONFIG.AVAILABLE_MATTER_CATEGORIES;
-
-    const generatedMatters = await generateMattersWithFallback(
-      [],
-      count,
-      categories
-    );
-
-    const allowed = new Set(categories);
-    const normalized = generatedMatters.map((m, i) => ({
-      ...normalizeMatter(m, i),
-      status: allowed.has(m.status || "") ? m.status : "Active",
-    }));
-
-    dynamicMatters = normalized;
-    if (!isUniqueGenerationEnabled()) {
-      writeCachedMatters(dynamicMatters);
-    }
-    return dynamicMatters;
-  } catch (error) {
-    console.warn("⚠️ Failed to generate matters while generation is enabled. Error:", error);
-    dynamicMatters = (fallbackMatters as any[]).map((m, i) => normalizeMatter(m, i));
-    return dynamicMatters;
   }
+  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
+  else if (aiGenerateEnabled) {
+    try {
+      console.log("[autocrm] AI generation mode enabled, generating matters...");
+      const generatedMatters = await fetchAiGeneratedMatters(50);
+      
+      if (Array.isArray(generatedMatters) && generatedMatters.length > 0) {
+        console.log(`[autocrm] Generated ${generatedMatters.length} matters via AI`);
+        dynamicMatters = generatedMatters.map((m, i) => normalizeMatter(m, i));
+        return dynamicMatters;
+      }
+      
+      console.warn("[autocrm] No matters generated, falling back to local JSON");
+    } catch (error) {
+      console.warn("[autocrm] AI generation failed, falling back to local JSON:", error);
+    }
+  }
+  // Priority 3: Fallback - use original local JSON data
+  else {
+    console.log("[autocrm] V2 modes disabled for matters, loading from local JSON");
+  }
+
+  // Fallback to local JSON
+  dynamicMatters = (fallbackMatters as any[]).map((m, i) => normalizeMatter(m, i));
+  return dynamicMatters;
 }
 
 /**
- * Initialize files with data generation if enabled
+ * Initialize files with V2 system (DB mode, AI generation, or fallback)
  */
 export async function initializeFiles(): Promise<any[]> {
-  let dbModeEnabled = false;
-  try {
-    dbModeEnabled = isDbLoadModeEnabled();
-  } catch {}
+  const dbModeEnabled = isDbLoadModeEnabled();
+  const aiGenerateEnabled = isV2AiGenerateEnabled();
+  
+  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+    console.log("[autocrm] Base seed is 1, using original data for files (skipping DB/AI modes)");
+    // Use local fallback data (from webs_server/initial_data/web_5_autocrm/original/)
+    dynamicFiles = (fallbackFiles as any[]);
+    return dynamicFiles;
+  }
+  
   if (!dbModeEnabled) {
     dynamicFiles = (fallbackFiles as any[]);
     return dynamicFiles;
@@ -294,13 +452,21 @@ export async function initializeFiles(): Promise<any[]> {
 }
 
 /**
- * Initialize events with data generation if enabled
+ * Initialize events with V2 system (DB mode, AI generation, or fallback)
  */
 export async function initializeEvents(): Promise<any[]> {
-  let dbModeEnabled = false;
-  try {
-    dbModeEnabled = isDbLoadModeEnabled();
-  } catch {}
+  const dbModeEnabled = isDbLoadModeEnabled();
+  const aiGenerateEnabled = isV2AiGenerateEnabled();
+  
+  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+    console.log("[autocrm] Base seed is 1, using original data for events (skipping DB/AI modes)");
+    // Use local fallback data (from webs_server/initial_data/web_5_autocrm/original/)
+    dynamicEvents = (fallbackEvents as any[]);
+    return dynamicEvents;
+  }
+  
   if (!dbModeEnabled) {
     dynamicEvents = (fallbackEvents as any[]);
     return dynamicEvents;
@@ -336,13 +502,21 @@ export async function initializeEvents(): Promise<any[]> {
 }
 
 /**
- * Initialize logs with data generation if enabled
+ * Initialize logs with V2 system (DB mode, AI generation, or fallback)
  */
 export async function initializeLogs(): Promise<any[]> {
-  let dbModeEnabled = false;
-  try {
-    dbModeEnabled = isDbLoadModeEnabled();
-  } catch {}
+  const dbModeEnabled = isDbLoadModeEnabled();
+  const aiGenerateEnabled = isV2AiGenerateEnabled();
+  
+  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+    console.log("[autocrm] Base seed is 1, using original data for logs (skipping DB/AI modes)");
+    // Use local fallback data (from webs_server/initial_data/web_5_autocrm/original/)
+    dynamicLogs = (fallbackLogs as any[]);
+    return dynamicLogs;
+  }
+  
   if (!dbModeEnabled) {
     dynamicLogs = (fallbackLogs as any[]);
     return dynamicLogs;
@@ -385,7 +559,7 @@ export async function loadClientsFromDb(seedOverride?: number): Promise<any[]> {
   
   try {
     const seed = typeof seedOverride === "number" ? seedOverride : getActiveSeed(1);
-    const limit = 100;
+    const limit = 50;
     const selected = await fetchSeededSelection<any>({
       projectKey: "web_5_autocrm",
       entityType: "clients",
@@ -438,7 +612,7 @@ export async function loadMattersFromDb(seedOverride?: number): Promise<any[]> {
   
   try {
     const seed = typeof seedOverride === "number" ? seedOverride : getActiveSeed(1);
-    const limit = 100;
+    const limit = 50;
     const selected = await fetchSeededSelection<any>({
       projectKey: "web_5_autocrm",
       entityType: "matters",
