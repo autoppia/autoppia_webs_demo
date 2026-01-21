@@ -89,10 +89,20 @@ export function PropertyCard({
     price_night: ["night", "per night", "each night"],
   };
 
+  // Ensure ID is properly formatted for the URL - use the ID as-is from the hotel object
+  // This ensures the ID in the URL matches exactly the ID in the data
+  const hotelId = id; // Use the ID directly without any transformation
+  const hotelHref = href ?? `/stay/${hotelId}`;
+  
+  // Log when a hotel card is rendered to track ID consistency
+  if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
+    console.log(`[PropertyCard] Rendering hotel card - ID: ${hotelId} (type: ${typeof hotelId}), href: ${hotelHref}, title: ${title}`);
+  }
+  
   return (
     <SeedLink
-      href={href ?? `/stay/${id}`}
-      id={dyn.v3.getVariant("property_card_link", ID_VARIANTS_MAP, `property-card-${id}`)}
+      href={hotelHref}
+      id={dyn.v3.getVariant("property_card_link", ID_VARIANTS_MAP, `property-card-${hotelId}`)}
       className="group relative block overflow-hidden rounded-xl border border-neutral-200 bg-white transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
       aria-label={`View details for ${title}`}
     >

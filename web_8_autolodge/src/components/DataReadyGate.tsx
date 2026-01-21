@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
 
 interface DataReadyGateProps {
   children: React.ReactNode;
@@ -11,23 +11,56 @@ interface DataReadyGateProps {
  * DataReadyGate ensures hotel data is loaded before rendering children
  */
 export function DataReadyGate({ children, fallback }: DataReadyGateProps) {
-  const [isReady, setIsReady] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isReady, setIsReady] = useState(() => {
+    const ready = dynamicDataProvider.isReady();
+    console.log("[DataReadyGate] Initial state check - ready:", ready);
+    return ready;
+  });
+  const [isLoading, setIsLoading] = useState(!dynamicDataProvider.isReady());
 
   useEffect(() => {
-    const checkDataReady = async () => {
-      try {
-        await dynamicDataProvider.whenReady();
+    // Check if already ready
+    const checkReady = () => {
+      const ready = dynamicDataProvider.isReady();
+      console.log("[DataReadyGate] Checking ready state:", ready);
+      if (ready) {
         setIsReady(true);
         setIsLoading(false);
-      } catch (error) {
-        console.error('❌ Data loading failed:', error);
-        setIsReady(true); // Still render children even if data loading failed
-        setIsLoading(false);
+        return true;
       }
+      return false;
     };
 
-    checkDataReady();
+    if (checkReady()) {
+      return;
+    }
+
+    console.log("[DataReadyGate] Not ready yet, waiting for whenReady()...");
+    // Wait for data to be ready
+    dynamicDataProvider.whenReady().then(() => {
+      console.log("[DataReadyGate] whenReady() resolved, checking state again...");
+      // Double check the state after promise resolves
+      checkReady();
+    }).catch((error) => {
+      console.error("[DataReadyGate] Error waiting for ready:", error);
+      // Still set ready to prevent infinite loading
+      setIsReady(true);
+      setIsLoading(false);
+    });
+
+    // Also subscribe to hotel updates to catch when data is loaded
+    const unsubscribe = dynamicDataProvider.subscribeHotels((hotels) => {
+      console.log("[DataReadyGate] Hotel subscription update - hotels:", hotels.length);
+      if (hotels.length > 0 && dynamicDataProvider.isReady()) {
+        console.log("[DataReadyGate] Hotels loaded and ready, setting isReady to true");
+        setIsReady(true);
+        setIsLoading(false);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   if (isLoading) {

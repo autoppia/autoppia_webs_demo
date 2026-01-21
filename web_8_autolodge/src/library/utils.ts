@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
-import { isDynamicModeEnabled } from "@/dynamic/v2-data";
+import { isDynamicModeEnabled } from "@/dynamic/v2";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

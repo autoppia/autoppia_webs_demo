@@ -39,12 +39,12 @@ export function getSeedValueFromEnv(defaultSeed: number = 1): number {
   return defaultSeed;
 }
 
-export async function fetchSeededSelection<T = any>(
+export async function fetchSeededSelection<T = unknown>(
   options: SeededLoadOptions
 ): Promise<T[]> {
   // Si el modo DB está deshabilitado, NO hacer ninguna llamada HTTP
   if (!isDbLoadModeEnabled()) {
-    console.log(`[seeded-loader] DB mode disabled, skipping API call for ${options.entityType}`);
+    console.log(`[autolodge/seeded-loader] DB mode disabled, skipping API call for ${options.entityType}`);
     return [] as T[];
   }
 
@@ -65,12 +65,34 @@ export async function fetchSeededSelection<T = any>(
   }
 
   const url = `${baseUrl}/datasets/load?${params.toString()}`;
-  const resp = await fetch(url, { method: "GET" });
-  if (!resp.ok) {
-    throw new Error(`Seeded selection request failed: ${resp.status}`);
+  console.log("[autolodge/seeded-loader] Fetching from:", url);
+  console.log("[autolodge/seeded-loader] Options:", { projectKey: options.projectKey, entityType: options.entityType, seed, limit, method, filterKey: options.filterKey });
+  
+  try {
+    const resp = await fetch(url, { method: "GET" });
+    console.log("[autolodge/seeded-loader] Response status:", resp.status, resp.statusText);
+    
+    if (!resp.ok) {
+      const errorText = await resp.text().catch(() => "");
+      console.error("[autolodge/seeded-loader] Request failed:", resp.status, errorText);
+      throw new Error(`Seeded selection request failed: ${resp.status} - ${errorText.slice(0, 200)}`);
+    }
+    
+    const json = await resp.json();
+    console.log("[autolodge/seeded-loader] Response keys:", Object.keys(json));
+    console.log("[autolodge/seeded-loader] Data length:", json?.data?.length, "isArray:", Array.isArray(json?.data));
+    
+    const result = (json?.data ?? []) as T[];
+    console.log("[autolodge/seeded-loader] Returning", result.length, "items");
+    return result;
+  } catch (error) {
+    console.error("[autolodge/seeded-loader] Error in fetchSeededSelection:", error);
+    if (error instanceof Error) {
+      console.error("[autolodge/seeded-loader] Error message:", error.message);
+      console.error("[autolodge/seeded-loader] Error stack:", error.stack);
+    }
+    throw error;
   }
-  const json = await resp.json();
-  return (json?.data ?? []) as T[];
 }
 
 export async function fetchPoolInfo(

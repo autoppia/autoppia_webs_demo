@@ -6,7 +6,7 @@ import { addDays, format, isWithinInterval, parseISO } from "date-fns";
 import type { DateRange } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeedStructureNavigation } from "../../../../hooks/useSeedStructureNavigation";
@@ -81,19 +81,108 @@ function ConfirmPageContent() {
   const router = useSeedRouter();
   const params = useParams<{ id: string }>();
   const search = useSearchParams();
-  const prop = useMemo(() => {
-    const numId = Number(params.id);
-    const hotel = dynamicDataProvider.getHotelById(numId);
-    return hotel ?? dynamicDataProvider.getHotels()[0];
+  const [hotelNotFound, setHotelNotFound] = useState(false);
+  const [isCheckingHotel, setIsCheckingHotel] = useState(true);
+  const [prop, setProp] = useState<Hotel | null>(null);
+
+  // Check if hotel exists whenever params.id or data changes
+  useEffect(() => {
+    let mounted = true;
+    
+    const checkHotel = async () => {
+      if (!mounted) return;
+      
+      setIsCheckingHotel(true);
+      // Wait for data provider to be ready
+      await dynamicDataProvider.whenReady();
+      
+      // Add a small delay to ensure data is fully loaded
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      if (!mounted) return;
+      
+      const numId = Number(params.id);
+      if (Number.isFinite(numId)) {
+        const hotels = dynamicDataProvider.getHotels();
+        console.log(`[autolodge/confirm] Searching for hotel ${numId} in ${hotels.length} hotels`);
+        
+        const hotel = dynamicDataProvider.getHotelById(numId);
+        if (hotel) {
+          console.log(`[autolodge/confirm] ✅ Hotel ${numId} found:`, hotel.title);
+          setProp(hotel);
+          setHotelNotFound(false);
+        } else {
+          console.log(`[autolodge/confirm] ❌ Hotel ${numId} not found`);
+          if (hotels.length > 0) {
+            setHotelNotFound(true);
+            setProp(null);
+          } else {
+            // Still loading, keep checking
+            const fallback = dynamicDataProvider.getHotels()[0];
+            if (fallback) {
+              setProp(fallback);
+              setHotelNotFound(false);
+            }
+          }
+        }
+      } else {
+        setHotelNotFound(true);
+        setProp(null);
+      }
+      setIsCheckingHotel(false);
+    };
+
+    checkHotel();
+
+    // Subscribe to hotel updates to re-check when data changes
+    const unsubscribe = dynamicDataProvider.subscribeHotels((hotels) => {
+      if (!mounted) return;
+      
+      console.log(`[autolodge/confirm] Hotels updated (${hotels.length} hotels), re-checking hotel ${params.id}...`);
+      const numId = Number(params.id);
+      if (Number.isFinite(numId)) {
+        const hotel = dynamicDataProvider.getHotelById(numId);
+        if (hotel) {
+          console.log(`[autolodge/confirm] ✅ Hotel ${numId} found after update:`, hotel.title);
+          setProp(hotel);
+          setHotelNotFound(false);
+          setIsCheckingHotel(false);
+        } else if (hotels.length > 0) {
+          console.log(`[autolodge/confirm] ❌ Hotel ${numId} still not found after update`);
+          setHotelNotFound(true);
+          setProp(null);
+          setIsCheckingHotel(false);
+        }
+      }
+    });
+
+    // Listen for seed changes to re-check
+    const handleSeedChange = () => {
+      if (!mounted) return;
+      console.log('[autolodge/confirm] Seed changed, re-checking hotel...');
+      checkHotel();
+    };
+
+    window.addEventListener("autolodge:v2SeedChange", handleSeedChange);
+    
+    return () => {
+      mounted = false;
+      unsubscribe();
+      window.removeEventListener("autolodge:v2SeedChange", handleSeedChange);
+    };
   }, [params.id]);
+
   const stayFrom = useMemo(() => {
+    if (!prop) return toStartOfDay(new Date());
     const parsed = parseLocalDate(prop.datesFrom);
     return parsed ? toStartOfDay(parsed) : toStartOfDay(new Date());
-  }, [prop.datesFrom]);
+  }, [prop?.datesFrom]);
+
   const stayTo = useMemo(() => {
+    if (!prop) return addDays(stayFrom, 1);
     const parsed = parseLocalDate(prop.datesTo);
     return parsed ? toStartOfDay(parsed) : addDays(stayFrom, 1);
-  }, [prop.datesTo, stayFrom]);
+  }, [prop?.datesTo, stayFrom]);
   // Load selection from search params (or defaults)
   const urlCheckin = search.get("checkin");
   const urlCheckout = search.get("checkout");
@@ -140,7 +229,7 @@ function ConfirmPageContent() {
 
   const cleaningFee = 15;
   const serviceFee = 34;
-  const priceSubtotal = prop.price * nights;
+  const priceSubtotal = (prop?.price ?? 0) * nights;
   const total = priceSubtotal + cleaningFee + serviceFee;
 
   function isWithinAvailable(date: Date) {
@@ -238,6 +327,38 @@ function ConfirmPageContent() {
       }
     };
   }, [dateRange.from, dateRange.to, guests, params.id, prop]);
+
+  // Show loading state while checking
+  if (isCheckingHotel) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-neutral-600">Loading hotel details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show "Hotel not found" message
+  if (hotelNotFound || !prop) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center max-w-md px-4">
+          <h1 className="text-2xl font-bold mb-4 text-neutral-800">Hotel Not Found</h1>
+          <p className="text-neutral-600 mb-6">
+            The hotel you're looking for (ID: {params.id}) is not available with the current seed value.
+          </p>
+          <button
+            onClick={() => navigateWithSeedStructure("/")}
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Back to All Hotels
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return dyn.v1.addWrapDecoy("confirm-page-root", (
     <div className="w-full" style={{ marginTop: "38px" }}>
