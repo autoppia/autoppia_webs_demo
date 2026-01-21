@@ -97,7 +97,7 @@ WEBS_PORT="${WEBS_PORT:-8090}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-5437}"
 WEB_DEMO="${WEB_DEMO:-all}"
 FAST_MODE="${FAST_MODE:-false}"
-ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-v1,v3}"
+ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-v1,v2,v3}"
 
 # Initialize dynamic version flags (will be set by version mapping)
 ENABLE_DYNAMIC_V1="${ENABLE_DYNAMIC_V1:-false}"
@@ -142,20 +142,20 @@ if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
         echo "[INFO] v1 enabled: seeds + layout variants"
         ;;
       v2)
-        # v2 mode selection: DB mode, AI generation mode, or fallback to original data
+        # v2 mode selection: DB mode by default when v2 is specified
         # NOTE: AI generation mode is currently disabled (hardcoded to false in setup.sh)
-        # If --enable_db_mode=true, use DB mode
-        # If neither is specified, use fallback original data (both flags remain false)
-        if [ "$(normalize_bool "${ENABLE_DYNAMIC_V2_DB_MODE:-false}")" = "true" ]; then
+        # If --enable_db_mode=false explicitly passed, disable DB mode
+        # Otherwise, enable DB mode by default when v2 is in the list
+        if [ "$(normalize_bool "${ENABLE_DYNAMIC_V2_DB_MODE:-true}")" = "false" ]; then
+          # User explicitly disabled DB mode
+          ENABLE_DYNAMIC_V2_DB_MODE=false
+          ENABLE_DYNAMIC_V2_AI_GENERATE=false
+          echo "[INFO] v2 enabled: DB mode explicitly disabled, using fallback original data"
+        else
+          # Default: enable DB mode when v2 is specified
           ENABLE_DYNAMIC_V2_DB_MODE=true
           ENABLE_DYNAMIC_V2_AI_GENERATE=false
           echo "[INFO] v2 enabled: DB mode (use ?v2-seed=X in URL)"
-        else
-          # Default: use fallback original data (both flags remain false)
-          # Note: AI generation mode is disabled, so if DB mode is not enabled, use fallback
-          ENABLE_DYNAMIC_V2_DB_MODE=false
-          ENABLE_DYNAMIC_V2_AI_GENERATE=false
-          echo "[INFO] v2 enabled: using fallback original data (AI generation mode is disabled)"
         fi
         ;;
       v3)
@@ -606,18 +606,18 @@ case "$WEB_DEMO" in
   all)
     deploy_webs_server
     deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
-    deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
-    deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
-    deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
-    deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
-    deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
-    deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
-    deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
-    deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
-    deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
-    deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
-    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
+    # deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
+    # deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
+    # deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
+    # deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
+    # deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
+    # deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
+    # deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
+    # deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
+    # deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+    # deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
+    # deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+    # deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
 #    deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     ;;
   *)
