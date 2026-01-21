@@ -14,6 +14,9 @@ import {
   isDataGenerationAvailable 
 } from "@/utils/emailDataGenerator";
 import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
+import { getApiBaseUrl } from "@/shared/data-generator";
 import { systemLabels as importedSystemLabels, userLabels as importedUserLabels } from "@/library/dataset";
 import fallbackEmails from "./original/emails_1.json";
 
@@ -267,6 +270,43 @@ async function generateEmailsForCategories(
   }
 }
 
+const clampSeed = (value: number, fallback = 1): number =>
+  value >= 1 && value <= 300 ? value : fallback;
+
+const getBaseSeedFromUrl = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search);
+  const seedParam = params.get("seed");
+  if (seedParam) {
+    const parsed = Number.parseInt(seedParam, 10);
+    if (Number.isFinite(parsed)) {
+      return clampBaseSeed(parsed);
+    }
+  }
+  return null;
+};
+
+const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number => {
+  if (!dbModeEnabled) {
+    return 1;
+  }
+  
+  if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
+    return clampSeed(seedValue);
+  }
+  
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed !== null) {
+    const resolvedSeeds = resolveSeedsSync(baseSeed);
+    if (resolvedSeeds.v2 !== null) {
+      return resolvedSeeds.v2;
+    }
+    return clampSeed(baseSeed);
+  }
+  
+  return 1;
+};
+
 /**
  * Get v2 seed from window (synchronized by SeedContext)
  */
@@ -280,74 +320,192 @@ const getRuntimeV2Seed = (): number | null => {
 };
 
 /**
- * Initialize emails with data generation if enabled
- * Uses async calls for each category to avoid overwhelming the server
+ * Fetch AI generated emails from /datasets/generate-smart endpoint
+ */
+async function fetchAiGeneratedEmails(count: number): Promise<any[]> {
+  const baseUrl = getApiBaseUrl();
+  const url = `${baseUrl}/datasets/generate-smart`;
+  
+  console.log("[automail] fetchAiGeneratedEmails - URL:", url, "count:", count);
+  
+  try {
+    console.log("[automail] Sending AI generation request...");
+    const requestBody = {
+      project_key: "web_6_automail",
+      entity_type: "emails",
+      count: 50, // Fixed count of 50
+    };
+    console.log("[automail] Request body:", requestBody);
+    
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    console.log("[automail] AI generation response status:", response.status, response.statusText);
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "");
+      console.error("[automail] AI generation request failed - Status:", response.status, "Error:", errorText);
+      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
+    }
+
+    console.log("[automail] Parsing AI generation response...");
+    const result = await response.json();
+    console.log("[automail] AI generation response keys:", Object.keys(result));
+    
+    const generatedData = result?.generated_data ?? [];
+    console.log("[automail] Generated data length:", generatedData.length, "isArray:", Array.isArray(generatedData));
+    
+    if (!Array.isArray(generatedData) || generatedData.length === 0) {
+      console.error("[automail] Invalid generated data:", generatedData);
+      throw new Error("No data returned from AI generation endpoint");
+    }
+
+    console.log("[automail] Successfully fetched", generatedData.length, "emails from AI generation");
+    return generatedData;
+  } catch (error) {
+    console.error("[automail] AI generation failed with error:", error);
+    if (error instanceof Error) {
+      console.error("[automail] Error message:", error.message);
+      console.error("[automail] Error stack:", error.stack);
+    }
+    throw error;
+  }
+}
+
+/**
+ * Initialize emails with V2 system (DB mode, AI generation, or fallback)
  */
 export async function initializeEmails(v2SeedValue?: number | null): Promise<Email[]> {
-  // Check if v2 (DB mode) is enabled
-  let dbModeEnabled = false;
-  try {
-    dbModeEnabled = isDbLoadModeEnabled();
-  } catch {}
-
-  // Determine the seed to use
-  let effectiveSeed: number;
+  const dbModeEnabled = isDbLoadModeEnabled();
+  const aiGenerateEnabled = isV2AiGenerateEnabled();
   
-  if (dbModeEnabled) {
-    // Wait a bit for SeedContext to sync v2Seed to window if needed
-    if (typeof window !== "undefined") {
-      await new Promise(resolve => setTimeout(resolve, 100));
+  console.log("[automail] initializeEmails - dbModeEnabled:", dbModeEnabled, "aiGenerateEnabled:", aiGenerateEnabled, "v2SeedValue:", v2SeedValue);
+  
+  // Get base seed from URL to check if seed = 1
+  const baseSeed = getBaseSeedFromUrl();
+  
+  // Check if seed = 1 - if so, use original data for both DB and AI modes
+  // Also check v2SeedValue directly if provided (from data-provider)
+  if (baseSeed === 1 || v2SeedValue === 1) {
+    if (dbModeEnabled || aiGenerateEnabled) {
+      console.log("[automail] Base seed is 1, using original data (skipping DB/AI modes)");
+      dynamicEmails = normalizeEmailTimestamps(fallbackEmails as Email[]);
+      return dynamicEmails;
     }
-    // If v2 is enabled, use the v2-seed provided OR from window OR default to 1
-    effectiveSeed = v2SeedValue ?? getRuntimeV2Seed() ?? 1;
-  } else {
-    // If v2 is NOT enabled, use static dataset
-    effectiveSeed = 1;
-    const fallback = normalizeEmailTimestamps(fallbackEmails as Email[]);
-    dynamicEmails = fallback;
-    return fallback;
   }
 
-  // Load from DB with the determined seed
-  try {
-    // Clear existing emails to force fresh load
-    dynamicEmails = [];
-    const fromDb = await fetchSeededSelection<Email>({
-      projectKey: "web_6_automail",
-      entityType: "emails",
-      seedValue: effectiveSeed,
-      limit: 100,
-      method: "distribute",
-      filterKey: "category",
-    });
+  // Priority 1: DB mode - fetch from /datasets/load endpoint
+  if (dbModeEnabled) {
+    console.log("[automail] DB mode enabled, attempting to load from DB...");
+    console.log("[automail] baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue);
     
-    console.log(`[automail] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
-    
-    if (fromDb && fromDb.length > 0) {
-      dynamicEmails = normalizeEmailTimestamps(fromDb);
-      return dynamicEmails;
-    } else {
-      console.warn(`[automail] No data returned from DB with seed=${effectiveSeed}`);
-      throw new Error(`[automail] No data found for seed=${effectiveSeed}`);
+    if (typeof window !== "undefined" && v2SeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
-  } catch (err) {
-    console.error(`[automail] Failed to load from DB with seed=${effectiveSeed}:`, err);
-    const fallback = normalizeEmailTimestamps(fallbackEmails as Email[]);
-    dynamicEmails = fallback;
-    return fallback;
+    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+    console.log("[automail] Effective seed for DB load:", effectiveSeed);
+
+    try {
+      console.log("[automail] Calling fetchSeededSelection with:", {
+        projectKey: "web_6_automail",
+        entityType: "emails",
+        seedValue: effectiveSeed,
+        limit: 50,
+        method: "distribute",
+        filterKey: "category",
+      });
+      
+      const emails = await fetchSeededSelection<Email>({
+        projectKey: "web_6_automail",
+        entityType: "emails",
+        seedValue: effectiveSeed,
+        limit: 50, // Fixed limit of 50 items for DB mode
+        method: "distribute",
+        filterKey: "category",
+      });
+
+      console.log("[automail] fetchSeededSelection returned:", emails?.length, "emails");
+      console.log("[automail] First few emails:", emails?.slice(0, 3));
+
+      if (Array.isArray(emails) && emails.length > 0) {
+        console.log(
+          `[automail] ✅ Successfully loaded ${emails.length} emails from dataset (seed=${effectiveSeed})`
+        );
+        dynamicEmails = normalizeEmailTimestamps(emails);
+        return dynamicEmails;
+      }
+
+      console.warn(`[automail] ⚠️ No emails returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+    } catch (error) {
+      console.error("[automail] ❌ Backend unavailable, falling back to local JSON. Error:", error);
+      if (error instanceof Error) {
+        console.error("[automail] Error message:", error.message);
+        console.error("[automail] Error stack:", error.stack);
+      }
+    }
   }
+  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
+  // Only try AI generation if DB mode is not enabled (AI is fallback when DB is off)
+  if (aiGenerateEnabled && !dbModeEnabled) {
+    try {
+      console.log("[automail] AI generation mode enabled, generating emails...");
+      const generatedEmails = await fetchAiGeneratedEmails(50);
+      console.log("[automail] fetchAiGeneratedEmails returned:", generatedEmails?.length, "emails");
+      
+      if (Array.isArray(generatedEmails) && generatedEmails.length > 0) {
+        console.log(`[automail] Generated ${generatedEmails.length} emails via AI`);
+        dynamicEmails = normalizeEmailTimestamps(generatedEmails as Email[]);
+        console.log("[automail] Normalized emails count:", dynamicEmails.length);
+        return dynamicEmails;
+      }
+      
+      console.warn("[automail] No emails generated, falling back to local JSON. generatedEmails:", generatedEmails);
+    } catch (error) {
+      console.error("[automail] AI generation failed, falling back to local JSON. Error details:", error);
+      if (error instanceof Error) {
+        console.error("[automail] Error message:", error.message);
+        console.error("[automail] Error stack:", error.stack);
+      }
+    }
+  }
+  // Priority 3: Fallback - use original local JSON data
+  else {
+    console.log("[automail] V2 modes disabled, loading from local JSON");
+  }
+
+  // Fallback to local JSON
+  dynamicEmails = normalizeEmailTimestamps(fallbackEmails as Email[]);
+  return dynamicEmails;
 }
 
 // Runtime-only DB fetch for when DB mode is enabled
 export async function loadEmailsFromDb(seedOverride?: number | null): Promise<Email[]> {
   if (!isDbLoadModeEnabled()) {
+    console.log("[automail] loadEmailsFromDb: DB mode not enabled, returning empty array");
+    return [];
+  }
+  
+  // Check base seed from URL - if seed = 1, return empty array to trigger fallback
+  const baseSeed = getBaseSeedFromUrl();
+  const fallbackSeed = getSeedValueFromEnv(1);
+  const seed = (typeof seedOverride === "number" && seedOverride > 0) ? seedOverride : fallbackSeed;
+  
+  console.log("[automail] loadEmailsFromDb - baseSeed:", baseSeed, "seedOverride:", seedOverride, "final seed:", seed);
+  
+  // If seed = 1, return empty array so initializeEmails will use fallback data
+  if (baseSeed === 1 || seed === 1) {
+    console.log("[automail] loadEmailsFromDb: seed is 1, returning empty array to use fallback data");
     return [];
   }
   
   try {
-    const fallbackSeed = getSeedValueFromEnv(1);
-    const seed = (typeof seedOverride === "number" && seedOverride > 0) ? seedOverride : fallbackSeed;
-    const limit = 100;
+    const limit = 50; // Fixed limit of 50 items
+    console.log("[automail] loadEmailsFromDb: Fetching from server with seed:", seed, "limit:", limit);
     // Prefer distributed selection to avoid category dominance (e.g., primary only)
       const distributed = await fetchSeededSelection<Email>({
       projectKey: "web_6_automail",
@@ -394,12 +552,20 @@ export async function loadEmailsFromDb(seedOverride?: number | null): Promise<Em
         return true;
       });
 
+      console.log("[automail] loadEmailsFromDb: ✅ Successfully loaded", deduped.length, "emails from DB");
       return normalizeEmailTimestamps(deduped);
+    } else {
+      console.warn("[automail] loadEmailsFromDb: ⚠️ No emails selected from DB (selected length:", selected?.length, ")");
     }
   } catch (e) {
-    console.warn("Failed to load seeded email selection from DB:", e);
+    console.error("[automail] loadEmailsFromDb: ❌ Failed to load seeded email selection from DB:", e);
+    if (e instanceof Error) {
+      console.error("[automail] Error message:", e.message);
+      console.error("[automail] Error stack:", e.stack);
+    }
   }
   
+  console.log("[automail] loadEmailsFromDb: Returning empty array");
   return [];
 }
 

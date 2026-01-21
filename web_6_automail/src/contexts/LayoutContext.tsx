@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { getEffectiveSeed } from '@/dynamic/v2-data';
+import { getEffectiveSeed } from '@/dynamic/v2';
 import { useSeed } from '@/context/SeedContext';
 
 declare global {

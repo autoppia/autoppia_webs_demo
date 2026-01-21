@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
+import { useSeed } from "@/context/SeedContext";
 
 interface EmailViewProps {
   textStructure?: TextStructureConfig;
@@ -48,6 +49,18 @@ export function EmailView({ textStructure }: EmailViewProps) {
     setEditingDraftId,
   } = useEmail();
   const dyn = useDynamicSystem();
+  const { seed } = useSeed();
+
+  // Log V2 status for debugging
+  useEffect(() => {
+    console.log("[automail/EmailView] V2 Status:", {
+      seed,
+      v2Enabled: dyn.v2.isEnabled(),
+      dbMode: dyn.v2.isDbModeEnabled(),
+      aiMode: dyn.v2.isAiGenerateEnabled(),
+      fallback: dyn.v2.isFallbackMode(),
+    });
+  }, [seed, dyn.v2]);
 
   // useEffect(() => {
   //   if (!currentEmail) return;

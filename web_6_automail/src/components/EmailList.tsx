@@ -1,6 +1,7 @@
 "use client";
 
 import type React from "react";
+import { useEffect } from "react";
 import { cn } from "@/library/utils";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,6 +16,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import { TextStructureConfig } from "@/utils/textStructureProvider";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
+import { useSeed } from "@/context/SeedContext";
 import {
   Star,
   Archive,
@@ -36,6 +38,7 @@ interface EmailListProps {
 export function EmailList({ textStructure }: EmailListProps) {
   const { currentVariant } = useLayout();
   const dyn = useDynamicSystem();
+  const { seed } = useSeed();
   const {
     paginatedEmails,
     filteredEmails,
@@ -63,6 +66,17 @@ export function EmailList({ textStructure }: EmailListProps) {
     currentPage,
     itemsPerPage,
   } = useEmail();
+
+  // Log V2 status for debugging
+  useEffect(() => {
+    console.log("[automail/EmailList] V2 Status:", {
+      seed,
+      v2Enabled: dyn.v2.isEnabled(),
+      dbMode: dyn.v2.isDbModeEnabled(),
+      aiMode: dyn.v2.isAiGenerateEnabled(),
+      fallback: dyn.v2.isFallbackMode(),
+    });
+  }, [seed, dyn.v2]);
 
   const formatTimestamp = (date: Date) => {
     const now = new Date();
