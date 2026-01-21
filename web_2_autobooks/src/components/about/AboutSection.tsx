@@ -1,8 +1,8 @@
 "use client";
 
-import { BookOpen, Search, Filter, Star, Calendar, Book, Users, Sparkles, TrendingUp, Zap } from "lucide-react";
+import { BookOpen, Search, Filter, Star, Calendar, Book, Sparkles, TrendingUp, Zap } from "lucide-react";
 import { useMemo } from "react";
-import { getAvailableGenres, getAvailableYears, getBooks } from "@/dynamic/v2-data";
+import { getAvailableGenres, getAvailableYears, getBooks } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 

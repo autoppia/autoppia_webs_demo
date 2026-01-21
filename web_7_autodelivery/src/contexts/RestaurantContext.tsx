@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import type { Restaurant } from "@/data/restaurants";
 import type { Testimonial } from "@/data/testimonials";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
 
 interface RestaurantContextType {
   restaurants: Restaurant[];

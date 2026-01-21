@@ -1,5 +1,5 @@
 import type { Book } from "@/data/books";
-import { Clock, BookOpen, User, Users, Calendar } from "lucide-react";
+import { Clock, BookOpen, User } from "lucide-react";
 
 interface BookMetaProps {
   book: Book;

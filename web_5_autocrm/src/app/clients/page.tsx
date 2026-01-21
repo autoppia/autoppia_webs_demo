@@ -5,6 +5,7 @@ import { User, Filter, ChevronRight, Search } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { initializeClients } from "@/data/crm-enhanced";
 import { useProjectData } from "@/shared/universal-loader";
+import { dynamicDataProvider, getClients } from "@/dynamic/v2";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
@@ -35,7 +36,7 @@ const STORAGE_KEY_PREFIX = "clients";
 function ClientsDirectoryContent() {
   const [query, setQuery] = useState("");
   const dyn = useDynamicSystem();
-  const { resolvedSeeds } = useSeed();
+  const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const searchInputBase =
     "w-full h-12 pl-12 pr-4 rounded-2xl bg-neutral-bg-dark border border-zinc-200 text-md focus:outline-accent-forest focus:border-accent-forest placeholder-zinc-400 font-medium";
@@ -43,40 +44,57 @@ function ClientsDirectoryContent() {
     "h-12 rounded-2xl border border-zinc-200 px-3 text-sm font-medium text-zinc-700 bg-white";
   // console.log("[ClientsPage] current v2Seed", v2Seed);
 
-  const { data, isLoading, error } = useProjectData<any>({
-    projectKey: 'web_5_autocrm',
-    entityType: 'clients',
-    generateCount: 60,
-    version: 'v1',
-    seedValue: v2Seed ?? undefined,
-  });
-  const [fallbackClients, setFallbackClients] = useState<any[]>([]);
-  useEffect(() => {
-    initializeClients().then(setFallbackClients);
-  }, []);
-  // console.log("[ClientsPage] useProjectData response", { count: data?.length ?? 0, isLoading, error });
+  // Use dynamicDataProvider to get clients - same source as detail page
+  const [clients, setClients] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const clients = useMemo(
-    () =>
-      (data && data.length ? data : fallbackClients).map((c: any, i: number) => ({
-        id: c.id ?? `CL-${1000 + i}`,
-        name: c.name ?? c.title ?? `Client ${i + 1}`,
-        email: c.email ?? `client${i + 1}@example.com`,
-        matters:
-          typeof c.matters === "number"
-            ? c.matters
-            : Math.floor(Math.random() * 5) + 1,
-        avatar: c.avatar ?? "",
-        status: c.status ?? "Active",
-        last: c.last ?? "Today",
-      })),
-    [data, fallbackClients]
-  );
+  useEffect(() => {
+    const loadClients = async () => {
+      setIsLoading(true);
+      try {
+        // Wait for data to be ready
+        await dynamicDataProvider.whenReady();
+        
+        // Reload with current seed to ensure we have the right data
+        await dynamicDataProvider.reload(seed ?? undefined);
+        
+        // Wait again to ensure reload is complete
+        await dynamicDataProvider.whenReady();
+        
+        // Get clients from provider
+        const clientsData = getClients();
+        
+        // Normalize clients for display
+        const normalized = clientsData.map((c: any, i: number) => ({
+          id: c.id ?? `CL-${1000 + i}`,
+          name: c.name ?? c.title ?? `Client ${i + 1}`,
+          email: c.email ?? `client${i + 1}@example.com`,
+          matters:
+            typeof c.matters === "number"
+              ? c.matters
+              : Math.floor(Math.random() * 5) + 1,
+          avatar: c.avatar ?? "",
+          status: c.status ?? "Active",
+          last: c.last ?? "Today",
+        }));
+        
+        setClients(normalized);
+      } catch (error) {
+        console.error("[ClientsPage] Failed to load clients", error);
+        setClients([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadClients();
+  }, [seed, v2Seed]);
   const [clientList, setClientList] = useState(clients);
 
   useEffect(() => {
     setClientList(clients);
   }, [clients]);
+
   const seedRouter = useSeedRouter();
   const { getText, getId } = useDynamicStructure();
   const storageKey = useMemo(
@@ -311,9 +329,6 @@ function ClientsDirectoryContent() {
         <LoadingNotice message={getText("loading_message", "Loading...") ?? "Loading clients..."} />
       )}
       <DynamicElement elementType="section" index={2} className="rounded-2xl bg-white shadow-card border border-zinc-100">
-        {error && (
-          <div className="py-6 px-6 text-red-600">Failed to load data: {error}</div>
-        )}
         <div
           className="hidden md:grid grid-cols-7 px-10 pt-6 pb-2 text-zinc-500 text-xs uppercase tracking-wide select-none"
           style={{ letterSpacing: "0.08em" }}

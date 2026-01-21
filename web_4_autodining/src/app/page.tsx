@@ -19,11 +19,12 @@ import {
 } from "lucide-react";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { getRestaurants, initializeRestaurants } from "@/dynamic/v2-data";
-import type { RestaurantData } from "@/dynamic/v2-data";
+import { getRestaurants, initializeRestaurants } from "@/dynamic/v2";
+import type { RestaurantGenerated } from "@/dynamic/v2";
 import { useSearchParams } from "next/navigation";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 import { cn } from "@/library/utils";
 import { buildBookingHref } from "@/utils/bookingPaths";
@@ -394,6 +395,21 @@ function HomePageContent() {
 
   const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+
+  // Debug: Verify V1, V2, and V3 are working
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[page.tsx] Debug dinámico:", {
+        seed: dyn.seed,
+        v1Enabled: isV1Enabled(),
+        v2Enabled: dyn.v2.isEnabled(),
+        v2DbMode: dyn.v2.isDbModeEnabled(),
+        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2Fallback: dyn.v2.isFallbackMode(),
+        v3Enabled: isV3Enabled(),
+      });
+    }
+  }, [dyn.seed, dyn.v2]);
 
   function toLocalISO(date: Date): string {
     const pad = (n: number) => String(n).padStart(2, "0");

@@ -5,7 +5,7 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
-import { getBookById } from "@/dynamic/v2-data";
+import { getBookById } from "@/dynamic/v2";
 import { buildBookDetailPayload } from "@/library/bookEventPayload";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { Trash2, ShoppingCart } from "lucide-react";

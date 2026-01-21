@@ -11,8 +11,9 @@ import React, { useState, useMemo, useEffect, Suspense } from "react";
 import Cookies from "js-cookie";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
-import { useProjectData } from "@/shared/universal-loader";
 import { initializeMatters } from "@/data/crm-enhanced";
+import { getMatterById, dynamicDataProvider } from "@/dynamic/v2";
+import { useDynamicSystem } from "@/dynamic/shared";
 const TABS = [
   { name: "Overview", icon: <Briefcase className="w-5 h-5 mr-1" /> },
   { name: "Documents", icon: <FileText className="w-5 h-5 mr-1" /> },
@@ -107,8 +108,21 @@ function MatterDetailPageContent() {
   const layout = useDetailLayoutVariant();
   const params = useParams();
   const matterId = params?.id as string;
-  const { resolvedSeeds } = useSeed();
+  const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const dyn = useDynamicSystem();
+
+  // Debug: Verify V2 status
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[matters/[id]/page] V2 status:", {
+        v2Enabled: dyn.v2.isEnabled(),
+        v2DbMode: dyn.v2.isDbModeEnabled(),
+        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2Fallback: dyn.v2.isFallbackMode(),
+      });
+    }
+  }, [dyn.v2]);
   const storageKey = useMemo(
     () => `${STORAGE_KEY_PREFIX}_${v2Seed ?? "default"}`,
     [v2Seed]
@@ -118,86 +132,59 @@ function MatterDetailPageContent() {
     [v2Seed]
   );
 
-  const { data } = useProjectData<any>({
-    projectKey: "web_5_autocrm",
-    entityType: "matters",
-    seedValue: v2Seed ?? undefined,
-  });
-
-  const [fallbackMatters, setFallbackMatters] = useState<Matter[]>([]);
-  useEffect(() => {
-    initializeMatters().then((rows) =>
-      setFallbackMatters(rows.map((m: any, idx: number) => normalizeMatter(m, idx)))
-    );
-  }, []);
-
-  const baseMatters = useMemo(() => {
-    const normalizedApi = (data || []).map((m: any, idx: number) =>
-      normalizeMatter(m, idx)
-    );
-    if (normalizedApi.length > 0) return normalizedApi;
-    return fallbackMatters;
-  }, [data, fallbackMatters]);
-
+  // Load matter data using V2 system
   useEffect(() => {
     if (!matterId) return;
-    if (baseMatters.length === 0) return;
 
-    setIsResolving(true);
-
-    let resolvedList: Matter[] = baseMatters;
-
-    if (typeof window !== "undefined") {
-      const saved = window.localStorage.getItem(storageKey);
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            resolvedList = parsed;
-          }
-        } catch (error) {
-          console.warn("[MatterDetail] Failed to parse cached matters", error);
+    let mounted = true;
+    const run = async () => {
+      setIsResolving(true);
+      try {
+        console.log(`[matters/[id]/page] Loading matter ${matterId} with seed=${seed}, v2Seed=${v2Seed}`);
+        
+        // Wait for data to be ready
+        await dynamicDataProvider.whenReady();
+        
+        // Reload if seed changed
+        await dynamicDataProvider.reload(seed ?? undefined);
+        
+        // Wait again to ensure reload is complete
+        await dynamicDataProvider.whenReady();
+        
+        if (!mounted) return;
+        
+        // Get matter directly using getMatterById
+        const allMatters = dynamicDataProvider.getMatters();
+        console.log(`[matters/[id]/page] Searching for matter ${matterId} in ${allMatters.length} matters`);
+        
+        const found = getMatterById(matterId);
+        console.log(`[matters/[id]/page] Matter ${matterId} found:`, found ? found.name : "NOT FOUND");
+        
+        if (found) {
+          const normalized = normalizeMatter(found, 0);
+          setCurrentMatter(normalized);
+          logEvent(EVENT_TYPES.VIEW_MATTER_DETAILS, normalized);
+        } else {
+          // Log available matters for debugging
+          console.warn(`[matters/[id]/page] Matter ${matterId} not found. Available matters (${allMatters.length}):`,
+            allMatters.slice(0, 5).map(m => ({ id: m.id, name: m.name }))
+          );
+          setCurrentMatter(null);
         }
-      } else {
-        window.localStorage.setItem(storageKey, JSON.stringify(baseMatters));
+      } catch (error) {
+        console.error("[matters/[id]/page] Failed to load matter", error);
+        if (!mounted) return;
+        setCurrentMatter(null);
+      } finally {
+        if (!mounted) return;
+        setIsResolving(false);
       }
-
-      if (resolvedList === baseMatters) {
-        const cookie = Cookies.get(cookieKey);
-        if (cookie) {
-          try {
-            const parsed = JSON.parse(cookie);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              const existingIds = new Set(resolvedList.map((m) => m.id));
-              const merged = [...resolvedList];
-              for (const entry of parsed) {
-                if (!existingIds.has(entry.id)) {
-                  merged.unshift(entry);
-                }
-              }
-              resolvedList = merged;
-            }
-          } catch (error) {
-            console.warn("[MatterDetail] Failed to parse custom matters cookie", error);
-          }
-        }
-      }
-    }
-
-    const match =
-      resolvedList.find((m) => m.id === matterId) ??
-      baseMatters.find((m) => m.id === matterId) ??
-      null;
-
-    if (match) {
-      setCurrentMatter(match);
-      logEvent(EVENT_TYPES.VIEW_MATTER_DETAILS, match);
-    } else {
-      console.warn(`Matter with ID ${matterId} not found.`);
-      setCurrentMatter(null);
-    }
-    setIsResolving(false);
-  }, [matterId, baseMatters, storageKey, cookieKey]);
+    };
+    run();
+    return () => {
+      mounted = false;
+    };
+  }, [matterId, seed, v2Seed]);
 
   // If the matter is not found, show error
   if (isResolving) {

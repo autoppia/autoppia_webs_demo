@@ -9,6 +9,7 @@ import { useSeed } from "@/context/SeedContext";
 import { useProjectData } from "@/shared/universal-loader";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
+import { getClientById, dynamicDataProvider } from "@/dynamic/v2";
 
 function getInitials(name: string) {
   return name
@@ -54,7 +55,7 @@ function ClientProfilePageContent() {
   const clientId = params?.id as string;
   const seedRouter = useSeedRouter();
   const searchParams = useSearchParams();
-  const { resolvedSeeds } = useSeed();
+  const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const storageKey = useMemo(
     () => `${STORAGE_KEY_PREFIX}_${v2Seed ?? "default"}`,
@@ -70,8 +71,8 @@ function ClientProfilePageContent() {
   });
   const [fallbackClients, setFallbackClients] = useState<any[]>([]);
   useEffect(() => {
-    initializeClients().then(setFallbackClients);
-  }, []);
+    initializeClients(v2Seed ?? undefined).then(setFallbackClients);
+  }, [v2Seed]);
 
   const baseClients = useMemo(() => {
     const normalizedApi = (data || []).map((c: any, idx: number) =>
@@ -81,43 +82,57 @@ function ClientProfilePageContent() {
     return fallbackClients.map((c, idx) => normalizeClient(c, idx));
   }, [data, fallbackClients]);
 
+  // Load client data using V2 system
   useEffect(() => {
     if (!clientId) return;
-    if (baseClients.length === 0) return;
 
-    setIsResolving(true);
-    let source = baseClients;
-
-    if (typeof window !== "undefined") {
-      const cached = window.localStorage.getItem(storageKey);
-      if (cached) {
-        try {
-          const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            source = parsed;
-          }
-        } catch (error) {
-          console.warn("[ClientDetail] Failed to parse cached clients", error);
+    let mounted = true;
+    const run = async () => {
+      setIsResolving(true);
+      try {
+        // Wait for data to be ready
+        await dynamicDataProvider.whenReady();
+        
+        // Reload if seed changed
+        await dynamicDataProvider.reload(seed ?? undefined);
+        
+        // Wait again to ensure reload is complete
+        await dynamicDataProvider.whenReady();
+        
+        if (!mounted) return;
+        
+        // Get client directly using getClientById
+        const allClients = dynamicDataProvider.getClients();
+        console.log(`[clients/[id]/page] Searching for client ${clientId} in ${allClients.length} clients`);
+        
+        const found = getClientById(clientId);
+        console.log(`[clients/[id]/page] Client ${clientId} found:`, found ? found.name : "NOT FOUND");
+        
+        if (found) {
+          const normalized = normalizeClient(found, 0);
+          setClient(normalized);
+          logEvent(EVENT_TYPES.VIEW_CLIENT_DETAILS, normalized);
+        } else {
+          // Log available clients for debugging
+          console.warn(`[clients/[id]/page] Client ${clientId} not found. Available clients (${allClients.length}):`,
+            allClients.slice(0, 5).map(c => ({ id: c.id, name: c.name }))
+          );
+          setClient(null);
         }
-      } else {
-        window.localStorage.setItem(storageKey, JSON.stringify(baseClients));
+      } catch (error) {
+        console.error("[clients/[id]/page] Failed to load client", error);
+        if (!mounted) return;
+        setClient(null);
+      } finally {
+        if (!mounted) return;
+        setIsResolving(false);
       }
-    }
-
-    const found =
-      source.find((c) => c.id === clientId) ??
-      baseClients.find((c) => c.id === clientId) ??
-      null;
-
-    if (found) {
-      setClient(found);
-      logEvent(EVENT_TYPES.VIEW_CLIENT_DETAILS, found);
-    } else {
-      console.warn(`Client with ID ${clientId} not found.`);
-      setClient(null);
-    }
-    setIsResolving(false);
-  }, [clientId, baseClients, storageKey]);
+    };
+    run();
+    return () => {
+      mounted = false;
+    };
+  }, [clientId, v2Seed, seed]);
 
   const matters = [
     { id: 'MAT-113', name: 'Estate Plan Review', status: 'Active' },

@@ -23,7 +23,7 @@ import {
     userLabels,
     systemLabels,
 } from "@/library/dataset";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
 
@@ -421,7 +421,7 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
         // Only refresh if v2Seed actually changed
         if (lastV2SeedRef.current !== v2Seed) {
             lastV2SeedRef.current = v2Seed;
-            dynamicDataProvider.refreshEmailsForSeed(v2Seed ?? null);
+            dynamicDataProvider.reload(v2Seed ?? null);
         }
     }, [v2Seed]);
 

@@ -1,92 +1,66 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { whenReady } from "@/dynamic/v2-data";
-import { isDataGenerationEnabled } from "@/shared/data-generator";
+import { dynamicDataProvider } from "@/dynamic/v2";
+import { useSeed } from "@/context/SeedContext";
 
 export function DataReadyGate({ children }: { children: React.ReactNode }) {
-  const [isReady, setIsReady] = useState(false);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const dataGenEnabled = isDataGenerationEnabled();
+  // Initialize as true on the server to avoid hydration mismatches
+  // Then verify on the client if it is actually ready
+  const [ready, setReady] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  const { seed } = useSeed();
 
   useEffect(() => {
-    // Only show loading if data generation is enabled
-    if (!dataGenEnabled) {
-      setIsReady(true);
-      return;
+    setMounted(true);
+    // Check if it is actually ready after mounting
+    if (!dynamicDataProvider.isReady()) {
+      setReady(false);
+      let isMounted = true;
+      dynamicDataProvider
+        .whenReady()
+        .then(() => {
+          if (!isMounted) return;
+          setReady(true);
+        })
+        .catch((error) => {
+          console.error("[autocrm] Data load failed", error);
+          if (!isMounted) return;
+          setReady(true);
+        });
+      return () => {
+        isMounted = false;
+      };
     }
+  }, []);
 
-    setIsGenerating(true);
+  // Reload data when seed changes
+  useEffect(() => {
+    if (!mounted) return;
     
-    // Wait for all data to be ready
-    whenReady()
-      .then(() => {
-        setIsReady(true);
-        setIsGenerating(false);
-      })
-      .catch((error) => {
-        console.error("Error waiting for data:", error);
-        // Even if there's an error, show the content after a delay
-        setTimeout(() => {
-          setIsReady(true);
-          setIsGenerating(false);
-        }, 3000);
-      });
-  }, [dataGenEnabled]);
+    const reloadData = async () => {
+      setReady(false);
+      try {
+        await dynamicDataProvider.reload();
+        setReady(true);
+      } catch (error) {
+        console.error("[autocrm] Failed to reload data on seed change", error);
+        setReady(true);
+      }
+    };
+    
+    reloadData();
+  }, [seed, mounted]);
 
-  // If data generation is not enabled, show content immediately
-  if (!dataGenEnabled) {
-    return <>{children}</>;
-  }
-
-  // Show loading screen while generating
-  if (!isReady || isGenerating) {
+  // During SSR and the first client render, show children
+  // Only show loading if we are on the client and it truly is not ready
+  if (mounted && !ready) {
     return (
-      <div className="fixed inset-0 bg-white z-50 flex items-center justify-center">
-        <div className="text-center max-w-md px-6">
-          {/* Loading Spinner */}
-          <div className="mb-6 flex justify-center">
-            <div className="relative w-16 h-16">
-              <div className="absolute top-0 left-0 w-16 h-16 border-4 border-accent-forest/20 rounded-full"></div>
-              <div className="absolute top-0 left-0 w-16 h-16 border-4 border-accent-forest border-t-transparent rounded-full animate-spin"></div>
-            </div>
-          </div>
-
-          {/* AI Generation Message */}
-          <div className="space-y-3">
-            <h2 className="text-2xl font-bold text-zinc-800">
-              Generating Data with AI
-            </h2>
-            <p className="text-zinc-600 text-lg">
-              Please wait while we generate your CRM data using artificial intelligence...
-            </p>
-            <div className="flex items-center justify-center gap-2 text-sm text-zinc-500 mt-4">
-              <svg
-                className="animate-pulse w-4 h-4 text-accent-forest"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span>This may take a few moments</span>
-            </div>
-          </div>
-
-          {/* Progress Dots Animation */}
-          <div className="flex justify-center gap-2 mt-8">
-            <div className="w-2 h-2 bg-accent-forest rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-            <div className="w-2 h-2 bg-accent-forest rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-            <div className="w-2 h-2 bg-accent-forest rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-          </div>
-        </div>
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center text-gray-700">
+        Loading CRM data…
       </div>
     );
   }
 
-  // Data is ready, show content
   return <>{children}</>;
 }

@@ -57,12 +57,34 @@ export async function fetchSeededSelection<T = any>(options: SeededLoadOptions):
   }
 
   const url = `${baseUrl}/datasets/load?${params.toString()}`;
-  const resp = await fetch(url, { method: "GET" });
-  if (!resp.ok) {
-    throw new Error(`Seeded selection request failed: ${resp.status}`);
+  console.log("[automail/seeded-loader] Fetching from:", url);
+  console.log("[automail/seeded-loader] Options:", { projectKey: options.projectKey, entityType: options.entityType, seed, limit, method, filterKey: options.filterKey });
+  
+  try {
+    const resp = await fetch(url, { method: "GET" });
+    console.log("[automail/seeded-loader] Response status:", resp.status, resp.statusText);
+    
+    if (!resp.ok) {
+      const errorText = await resp.text().catch(() => "");
+      console.error("[automail/seeded-loader] Request failed:", resp.status, errorText);
+      throw new Error(`Seeded selection request failed: ${resp.status} - ${errorText.slice(0, 200)}`);
+    }
+    
+    const json = await resp.json();
+    console.log("[automail/seeded-loader] Response keys:", Object.keys(json));
+    console.log("[automail/seeded-loader] Data length:", json?.data?.length, "isArray:", Array.isArray(json?.data));
+    
+    const result = (json?.data ?? []) as T[];
+    console.log("[automail/seeded-loader] Returning", result.length, "items");
+    return result;
+  } catch (error) {
+    console.error("[automail/seeded-loader] Error in fetchSeededSelection:", error);
+    if (error instanceof Error) {
+      console.error("[automail/seeded-loader] Error message:", error.message);
+      console.error("[automail/seeded-loader] Error stack:", error.stack);
+    }
+    throw error;
   }
-  const json = await resp.json();
-  return (json?.data ?? []) as T[];
 }
 
 
