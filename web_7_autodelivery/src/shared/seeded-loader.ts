@@ -1,68 +1,106 @@
-/**
- * Database seeded selection utilities
- */
+function getApiBaseUrl(): string {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
+  const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
+  const envIsLocal = envUrl && (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"));
+  const originIsLocal = origin && (origin.includes("localhost") || origin.includes("127.0.0.1"));
 
-export interface SeededSelectionParams {
+  if (envUrl && (!(envIsLocal) || originIsLocal)) {
+    return envUrl;
+  }
+  if (origin) {
+    return `${origin}/api`;
+  }
+  return envUrl || "http://app:8090";
+}
+
+export interface SeededLoadOptions {
   projectKey: string;
   entityType: string;
-  seedValue: number;
-  limit: number;
-  method: 'select' | 'distribute';
+  seedValue?: number;
+  limit?: number;
+  method?: "select" | "shuffle" | "filter" | "distribute";
   filterKey?: string;
+  filterValues?: string[];
 }
 
-/**
- * Check if DB load mode is enabled via environment variables
- */
 export function isDbLoadModeEnabled(): boolean {
-  if (typeof window !== 'undefined') {
-    return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE === 'true';
-  }
-  return process.env.ENABLE_DYNAMIC_V2_DB_MODE === 'true';
+  const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE || process.env.ENABLE_DYNAMIC_V2_DB_MODE || "").toString().toLowerCase();
+  return raw === "true";
 }
 
-/**
- * Get seed value from environment variables
- * Note: v2-seed comes from URL parameter, not env vars
- */
-export function getSeedValueFromEnv(defaultValue: number = 1): number {
+export function getSeedValueFromEnv(defaultSeed: number = 1): number {
   // Always return default seed (v2-seed comes from URL parameter, not env vars)
-  return defaultValue;
+  return defaultSeed;
 }
 
-/**
- * Fetch seeded selection from database
- */
-export async function fetchSeededSelection<T>(params: SeededSelectionParams): Promise<T[]> {
+export async function fetchSeededSelection<T = unknown>(options: SeededLoadOptions): Promise<T[]> {
+  // Si el modo DB está deshabilitado, NO hacer ninguna llamada HTTP
   if (!isDbLoadModeEnabled()) {
-    console.log("🔍 DB mode not enabled, returning empty array");
-    return [];
+    console.log(`[autodelivery/seeded-loader] DB mode disabled, skipping API call for ${options.entityType}`);
+    return [] as T[];
   }
 
+  const baseUrl = getApiBaseUrl();
+  const seed = options.seedValue ?? getSeedValueFromEnv(1);
+  const limit = options.limit ?? 50;
+  const method = options.method ?? "select";
+  const params = new URLSearchParams({
+    project_key: options.projectKey,
+    entity_type: options.entityType,
+    seed_value: String(seed),
+    limit: String(limit),
+    method,
+  });
+  if (options.filterKey) params.set("filter_key", options.filterKey);
+  if (options.filterValues && options.filterValues.length > 0) {
+    params.set("filter_values", options.filterValues.join(","));
+  }
+
+  const url = `${baseUrl}/datasets/load?${params.toString()}`;
+  console.log("[autodelivery/seeded-loader] Fetching from:", url);
+  console.log("[autodelivery/seeded-loader] Options:", { projectKey: options.projectKey, entityType: options.entityType, seed, limit, method, filterKey: options.filterKey });
+  
   try {
-    const apiUrl = typeof window !== 'undefined' 
-      ? process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8090'
-      : process.env.API_URL || 'http://localhost:8090';
-
-    const queryParams = new URLSearchParams({
-      project_key: params.projectKey,
-      entity_type: params.entityType,
-      seed_value: params.seedValue.toString(),
-      limit: params.limit.toString(),
-      method: params.method,
-      ...(params.filterKey && { filter_key: params.filterKey })
-    });
-
-    const response = await fetch(`${apiUrl}/datasets/load?${queryParams}`);
+    const resp = await fetch(url, { method: "GET" });
+    console.log("[autodelivery/seeded-loader] Response status:", resp.status, resp.statusText);
     
-    if (!response.ok) {
-      throw new Error(`Seeded selection request failed: ${response.status}`);
+    if (!resp.ok) {
+      const errorText = await resp.text().catch(() => "");
+      console.error("[autodelivery/seeded-loader] Request failed:", resp.status, errorText);
+      throw new Error(`Seeded selection request failed: ${resp.status} - ${errorText.slice(0, 200)}`);
     }
-
-    const result = await response.json();
-    return result.data || [];
+    
+    const json = await resp.json();
+    console.log("[autodelivery/seeded-loader] Response keys:", Object.keys(json));
+    console.log("[autodelivery/seeded-loader] Data length:", json?.data?.length, "isArray:", Array.isArray(json?.data));
+    
+    const result = (json?.data ?? []) as T[];
+    console.log("[autodelivery/seeded-loader] Returning", result.length, "items");
+    return result;
   } catch (error) {
-    console.error("Failed to load seeded selection from DB:", error);
+    console.error("[autodelivery/seeded-loader] Error in fetchSeededSelection:", error);
+    if (error instanceof Error) {
+      console.error("[autodelivery/seeded-loader] Error message:", error.message);
+      console.error("[autodelivery/seeded-loader] Error stack:", error.stack);
+    }
     throw error;
   }
 }
+
+
+export async function fetchPoolInfo(projectKey: string, entityType: string): Promise<{ pool_size: number } | null> {
+  const baseUrl = getApiBaseUrl();
+  const url = `${baseUrl}/datasets/pool/info?project_key=${encodeURIComponent(projectKey)}&entity_type=${encodeURIComponent(entityType)}`;
+  try {
+    const resp = await fetch(url, { method: "GET" });
+    if (!resp.ok) return null;
+    const json = await resp.json();
+    if (json && typeof json.pool_size === "number") {
+      return { pool_size: json.pool_size as number };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+

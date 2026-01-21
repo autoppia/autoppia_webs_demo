@@ -2,9 +2,25 @@
 
 import RestaurantsListPage from '@/components/food/RestaurantsListPage';
 import { useLayout } from '@/contexts/LayoutProvider';
+import { useDynamicSystem } from '@/dynamic/shared';
+import { useSeed } from '@/context/SeedContext';
+import { useEffect } from 'react';
 
 export default function RestaurantsPage() {
   const layout = useLayout();
+  const dyn = useDynamicSystem();
+  const { seed } = useSeed();
+
+  // Log V2 status for debugging
+  useEffect(() => {
+    console.log("[autodelivery] V2 Status:", {
+      seed,
+      v2Enabled: dyn.v2.isEnabled(),
+      dbMode: dyn.v2.isDbModeEnabled(),
+      aiMode: dyn.v2.isAiGenerateEnabled(),
+      fallback: dyn.v2.isFallbackMode(),
+    });
+  }, [seed, dyn]);
 
   return (
     <main 
