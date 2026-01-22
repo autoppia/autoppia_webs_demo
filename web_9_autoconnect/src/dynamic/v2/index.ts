@@ -2,6 +2,7 @@ export {
   dynamicDataProvider,
   whenReady,
   getUsers,
+  getUserByUsername,
   searchUsers,
   getPosts,
   getJobs,

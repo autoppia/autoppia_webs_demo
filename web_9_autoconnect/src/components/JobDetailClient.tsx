@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import Image from "next/image";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import {
   loadAppliedJobs,

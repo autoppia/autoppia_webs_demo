@@ -5,7 +5,7 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { usePathname } from "next/navigation";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
