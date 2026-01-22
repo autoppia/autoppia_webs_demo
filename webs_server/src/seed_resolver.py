@@ -103,12 +103,8 @@ def resolve_seeds(
         )
 
     if v2_enabled:
-        result["v2"] = derive_seed(
-            safe_seed,
-            v2_cfg["multiplier"],
-            v2_cfg["max"],
-            v2_cfg.get("offset", 0),
-        )
+        # V2: usar seed base directamente (sin derivación)
+        result["v2"] = safe_seed
 
     if v3_enabled:
         result["v3"] = derive_seed(

@@ -28,6 +28,8 @@ except ImportError:
 from master_dataset_handler import (
     get_pool_info,
     list_available_pools,
+    save_master_pool,
+    get_master_pool,
 )
 from data_handler import (
     load_all_data,
@@ -255,11 +257,90 @@ async def init_db_pool():
 
 
 # --- Application Lifespan Management ---
+async def preload_all_datasets():
+    """
+    Preload all datasets from initial_data into PostgreSQL at startup.
+    This ensures all data is in memory/DB and no disk I/O is needed during requests.
+    """
+    logger.info("🔄 Starting dataset preload into PostgreSQL...")
+    
+    base_path = os.getenv("BASE_DATA_PATH", "/app/data")
+    if not os.path.exists(base_path):
+        logger.warning(f"Base data path does not exist: {base_path}")
+        return
+    
+    pool = app.state.pool
+    loaded_count = 0
+    failed_count = 0
+    
+    # Scan all project directories
+    for project_dir in sorted(os.listdir(base_path)):
+        project_path = os.path.join(base_path, project_dir)
+        if not os.path.isdir(project_path):
+            continue
+        
+        # Read main.json to get entity types
+        main_json_path = os.path.join(project_path, "main.json")
+        if not os.path.exists(main_json_path):
+            continue
+        
+        try:
+            with open(main_json_path, "r", encoding="utf-8") as f:
+                main_data = orjson.loads(f.read())
+            
+            # Load each entity type
+            for entity_type, file_list in main_data.items():
+                if not isinstance(file_list, list):
+                    continue
+                
+                try:
+                    # Load all data for this entity
+                    data_pool = load_all_data(project_dir, entity_type)
+                    
+                    if not data_pool:
+                        logger.warning(f"No data found for {project_dir}/{entity_type}")
+                        continue
+                    
+                    # Check if already exists in PostgreSQL
+                    existing_pool = await get_master_pool(pool, project_dir, entity_type)
+                    
+                    if existing_pool and len(existing_pool) == len(data_pool):
+                        logger.info(f"✓ {project_dir}/{entity_type}: already loaded ({len(data_pool)} items)")
+                        loaded_count += 1
+                        continue
+                    
+                    # Save to PostgreSQL
+                    await save_master_pool(
+                        pool,
+                        project_dir,
+                        entity_type,
+                        data_pool,
+                        metadata={"source": "initial_data", "preloaded_at": datetime.now().isoformat()}
+                    )
+                    
+                    logger.info(f"✅ {project_dir}/{entity_type}: loaded {len(data_pool)} items into PostgreSQL")
+                    loaded_count += 1
+                    
+                except Exception as e:
+                    logger.error(f"❌ Failed to load {project_dir}/{entity_type}: {e}")
+                    failed_count += 1
+        
+        except Exception as e:
+            logger.error(f"❌ Failed to process {project_dir}: {e}")
+            failed_count += 1
+    
+    logger.info(f"🎉 Dataset preload complete: {loaded_count} loaded, {failed_count} failed")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
     await init_db_pool()
     logger.info("Application startup complete.")
+    
+    # Preload all datasets into PostgreSQL
+    await preload_all_datasets()
+    
     yield
     # Shutdown
     if hasattr(app.state, "pool") and app.state.pool:
@@ -841,33 +922,77 @@ async def load_dataset_endpoint(
     This endpoint is used when projects are deployed with --load_from_db parameter.
     """
     try:
-        # Load from file-based storage under /app/data only (files-only mode)
-        file_data_pool = load_all_data(project_key, entity_type)
+        # Priority 1: Load from PostgreSQL (preloaded at startup)
+        pool = app.state.pool
+        file_data_pool = await get_master_pool(pool, project_key, entity_type)
+        
+        # Fallback: Load from file-based storage if not in PostgreSQL
+        if not file_data_pool:
+            logger.warning(f"Data not found in PostgreSQL for {project_key}/{entity_type}, loading from files...")
+            file_data_pool = load_all_data(project_key, entity_type)
+            
+            # Save to PostgreSQL for next time
+            if file_data_pool:
+                try:
+                    await save_master_pool(
+                        pool,
+                        project_key,
+                        entity_type,
+                        file_data_pool,
+                        metadata={"source": "lazy_load", "loaded_at": datetime.now().isoformat()}
+                    )
+                    logger.info(f"Saved {project_key}/{entity_type} to PostgreSQL ({len(file_data_pool)} items)")
+                except Exception as e:
+                    logger.error(f"Failed to save to PostgreSQL: {e}")
 
         if not file_data_pool:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"No file-based data found for project={project_key}. Generate data first.",
+                detail=f"No data found for project={project_key}, entity={entity_type}. Generate data first.",
             )
 
-        # If V2 DB mode is disabled, return full pool (original dataset) without seeded selection
-        if os.getenv("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() in {"false", "0", "no", "off"}:
+        # If V2 DB mode is disabled, use seed=1 (equivalent to original data)
+        v2_disabled = os.getenv("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() in {"false", "0", "no", "off"}
+        if v2_disabled:
+            # Force seed=1 when V2 is disabled
+            effective_seed = 1
+            # Apply seeded selection with seed=1 to get consistent "original" data
+            method_normalized = (method or "select").lower()
+            filter_list = [v.strip() for v in filter_values.split(",")] if filter_values else None
+            
+            if method_normalized == "shuffle":
+                selected = seeded_shuffle(file_data_pool, effective_seed, limit=limit)
+            elif method_normalized == "filter":
+                selected = seeded_filter_and_select(
+                    file_data_pool,
+                    effective_seed,
+                    limit,
+                    filter_key=filter_key,
+                    filter_values=filter_list,
+                )
+            elif method_normalized == "distribute":
+                category_key = filter_key or "category"
+                selected = seeded_distribution(file_data_pool, effective_seed, category_key=category_key, total_count=limit)
+            else:
+                selected = seeded_select(file_data_pool, seed=effective_seed, count=limit, allow_duplicates=False)
+            
             metadata = {
                 "source": "file_storage",
                 "projectKey": project_key,
                 "entityType": entity_type,
-                "seed": seed_value,
-                "limit": len(file_data_pool),
-                "method": "full",
+                "seed": effective_seed,  # Always 1 when V2 disabled
+                "limit": limit,
+                "method": method_normalized,
                 "filterKey": filter_key,
-                "filterValues": None,
+                "filterValues": filter_list,
                 "totalAvailable": len(file_data_pool),
+                "v2_disabled": True,
             }
             return DatasetLoadResponse(
-                message=f"DB mode disabled; returning full dataset ({len(file_data_pool)} items)",
+                message=f"V2 disabled; using seed=1 (original data), selected {len(selected)} items",
                 metadata=metadata,
-                data=file_data_pool,
-                count=len(file_data_pool),
+                data=selected,
+                count=len(selected),
             )
 
         # Apply seeded selection based on requested method
