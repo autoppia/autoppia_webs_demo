@@ -9,7 +9,7 @@ import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import {
   loadHiddenPostIds,
@@ -62,6 +62,85 @@ function HomeContent() {
   const [hiddenPostIds, setHiddenPostIds] = useState<Set<string>>(new Set());
   const [hiddenPosts, setHiddenPosts] = useState<PostType[]>([]);
   const [newPost, setNewPost] = useState("");
+
+  // Subscribe to posts updates to refresh when data changes (e.g., seed change)
+  useEffect(() => {
+    const unsubscribePosts = dynamicDataProvider.subscribePosts((updatedPosts) => {
+      console.log(`[autoconnect] Posts updated (${updatedPosts.length} posts), refreshing home page...`);
+      // Update posts with fresh data, preserving liked state from local state
+      setPosts((currentPosts) => {
+        // Create a map of current liked state by post ID
+        const likedStateMap = new Map(
+          currentPosts.map((p) => [p.id, { liked: p.liked, likes: p.likes }])
+        );
+        
+        // Map new posts, preserving liked state if post ID matches
+        // Note: When seed changes, posts will have new IDs, so we reset all likes
+        return updatedPosts.map((post) => {
+          const existingState = likedStateMap.get(post.id);
+          if (existingState) {
+            return { ...post, liked: existingState.liked, likes: existingState.likes };
+          }
+          return { ...post, liked: false };
+        });
+      });
+    });
+
+    // Also subscribe to users updates to ensure posts have correct user references
+    const unsubscribeUsers = dynamicDataProvider.subscribeUsers((updatedUsers) => {
+      console.log(`[autoconnect] Users updated (${updatedUsers.length} users), refreshing posts with new user references...`);
+      // When users change, refresh posts to get updated user references
+      const freshPosts = dynamicDataProvider.getPosts();
+      setPosts((currentPosts) => {
+        // Create a map of current liked state by post ID
+        const likedStateMap = new Map(
+          currentPosts.map((p) => [p.id, { liked: p.liked, likes: p.likes }])
+        );
+        
+        // Map new posts with updated user references
+        return freshPosts.map((post) => {
+          const existingState = likedStateMap.get(post.id);
+          if (existingState) {
+            return { ...post, liked: existingState.liked, likes: existingState.likes };
+          }
+          return { ...post, liked: false };
+        });
+      });
+    });
+
+    return () => {
+      unsubscribePosts();
+      unsubscribeUsers();
+    };
+  }, []);
+
+  // Also listen for seed changes to refresh posts
+  useEffect(() => {
+    const handleSeedChange = async () => {
+      console.log('[autoconnect] Seed changed, refreshing posts...');
+      // Wait for data to be ready
+      await dynamicDataProvider.whenReady();
+      // Small delay to ensure data is fully loaded
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      const freshPosts = dynamicDataProvider.getPosts();
+      const freshUsers = dynamicDataProvider.getUsers();
+      console.log(`[autoconnect] Refreshed posts: ${freshPosts.length} posts, users: ${freshUsers.length} users`);
+      
+      // Reset all posts with fresh data (new seed = new posts = reset likes)
+      setPosts(freshPosts.map((post) => ({ ...post, liked: false })));
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("autoconnect:v2SeedChange", handleSeedChange);
+    }
+
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("autoconnect:v2SeedChange", handleSeedChange);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     setSavedPosts(loadSavedPosts());

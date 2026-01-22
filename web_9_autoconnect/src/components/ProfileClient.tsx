@@ -1,11 +1,11 @@
 "use client";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { type User, type Post } from "@/library/dataset";
 import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import {
   loadHiddenPostIds,
@@ -26,14 +26,93 @@ function ProfileContent({ username }: { username: string }) {
   // Default layout config (no v1 layout variations in this build)
   const layout = { profileLayout: "full" as const };
 
+  const [userNotFound, setUserNotFound] = useState(false);
+  const [isCheckingUser, setIsCheckingUser] = useState(true);
+
   // Get data from dynamic provider
   const users = dynamicDataProvider.getUsers();
-  const mockPosts = dynamicDataProvider.getPosts();
-
-  const user = users.find((u) => u.username === username);
-  const currentUser = users[2] || users[0];
+  
+  // Subscribe to posts to get stable reference
+  const [mockPosts, setMockPosts] = useState<Post[]>(() => dynamicDataProvider.getPosts());
+  
+  useEffect(() => {
+    const unsubscribe = dynamicDataProvider.subscribePosts((updatedPosts) => {
+      setMockPosts(updatedPosts);
+    });
+    return () => unsubscribe();
+  }, []);
+  
+  // Subscribe to users to get stable reference
+  const [usersState, setUsersState] = useState<User[]>(() => dynamicDataProvider.getUsers());
+  
+  useEffect(() => {
+    const unsubscribe = dynamicDataProvider.subscribeUsers((updatedUsers) => {
+      setUsersState(updatedUsers);
+    });
+    return () => unsubscribe();
+  }, []);
+  
+  // Serialize usersState for stable dependency
+  const usersStateKey = useMemo(() => {
+    if (!usersState || usersState.length === 0) return '';
+    return usersState.map(u => u.username).sort().join(',');
+  }, [usersState]);
+  
+  // Memoize user lookup to avoid reference changes - search in usersState directly
+  const user = useMemo(() => {
+    if (!usersState || usersState.length === 0) return undefined;
+    const searchUsername = String(username || "").trim().toLowerCase();
+    
+    // Strategy 1: Exact match
+    let found = usersState.find((u) => {
+      const userUsername = String(u.username || "").trim().toLowerCase();
+      return userUsername === searchUsername;
+    });
+    
+    if (found) return found;
+    
+    // Strategy 2: Partial match
+    found = usersState.find((u) => {
+      const userUsername = String(u.username || "").trim().toLowerCase();
+      return userUsername.includes(searchUsername) || searchUsername.includes(userUsername);
+    });
+    
+    if (found) return found;
+    
+    // Strategy 3: Without dots
+    const searchWithoutDots = searchUsername.replace(/\./g, "");
+    found = usersState.find((u) => {
+      const userUsername = String(u.username || "").trim().toLowerCase();
+      const userWithoutDots = userUsername.replace(/\./g, "");
+      return userWithoutDots === searchWithoutDots;
+    });
+    
+    return found;
+  }, [username, usersState, usersStateKey]);
+  
+  // Memoize currentUser to avoid reference changes
+  const currentUser = useMemo(() => {
+    return usersState[2] || usersState[0];
+  }, [usersState, usersStateKey]);
+  
   const dyn = useDynamicSystem();
-  const isSelf = user?.username === currentUser.username;
+  
+  // Memoize isSelf to avoid recalculation
+  const isSelf = useMemo(() => {
+    return user?.username === currentUser?.username;
+  }, [user?.username, currentUser?.username]);
+  
+  // Create stable reference for dyn.seed
+  const dynSeed = dyn.seed;
+  
+  // Memoize dyn.v3 to avoid reference changes
+  const dynV3 = useMemo(() => dyn.v3, [dyn.seed]);
+  
+  // Use ref to maintain stable reference to changeOrderElements
+  const changeOrderElementsRef = useRef(dyn.v1.changeOrderElements);
+  useEffect(() => {
+    changeOrderElementsRef.current = dyn.v1.changeOrderElements;
+  }, [dyn.v1]);
   const [connectState, setConnectState] = useState<
     "connect" | "pending" | "connected"
   >("connect");
@@ -115,6 +194,80 @@ function ProfileContent({ username }: { username: string }) {
   const [localPosts, setLocalPosts] = useState<Post[]>(getLocalPosts);
   const [postsState, setPostsState] = useState<Record<string, { likes: number; liked: boolean; comments: Post['comments'] }>>({});
 
+  // Check if user exists whenever username or data changes
+  useEffect(() => {
+    let mounted = true;
+    
+    const checkUser = async () => {
+      if (!mounted) return;
+      
+      setIsCheckingUser(true);
+      
+      // Wait for data provider to be ready
+      await dynamicDataProvider.whenReady();
+      
+      // Wait a bit more to ensure data is fully loaded
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
+      if (!mounted) return;
+      
+      const foundUser = dynamicDataProvider.getUserByUsername(username);
+      
+      if (foundUser) {
+        console.log(`[autoconnect] ✅ User "${username}" found:`, foundUser.name);
+        setUserNotFound(false);
+        setIsCheckingUser(false);
+      } else {
+        const allUsers = dynamicDataProvider.getUsers();
+        console.log(`[autoconnect] ❌ User "${username}" not found. Available users (${allUsers.length}):`, 
+          allUsers.slice(0, 10).map(u => ({ username: u.username, name: u.name })));
+        setUserNotFound(true);
+        setIsCheckingUser(false);
+      }
+    };
+
+    checkUser();
+
+    // Subscribe to user updates to re-check when data changes
+    const unsubscribe = dynamicDataProvider.subscribeUsers((users) => {
+      if (!mounted) return;
+      
+      console.log(`[autoconnect] Users updated (${users.length} users), re-checking user ${username}...`);
+      setTimeout(() => {
+        if (!mounted) return;
+        const foundUser = dynamicDataProvider.getUserByUsername(username);
+        if (foundUser) {
+          console.log(`[autoconnect] ✅ User "${username}" found after update:`, foundUser.name);
+          setUserNotFound(false);
+          setIsCheckingUser(false);
+        } else if (users.length > 0) {
+          console.log(`[autoconnect] ❌ User "${username}" still not found after update`);
+          setUserNotFound(true);
+          setIsCheckingUser(false);
+        }
+      }, 200);
+    });
+
+    // Listen for seed changes to re-check
+    const handleSeedChange = () => {
+      if (!mounted) return;
+      console.log('[autoconnect] Seed changed, re-checking user...');
+      checkUser();
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("autoconnect:v2SeedChange", handleSeedChange);
+    }
+    
+    return () => {
+      mounted = false;
+      unsubscribe();
+      if (typeof window !== "undefined") {
+        window.removeEventListener("autoconnect:v2SeedChange", handleSeedChange);
+      }
+    };
+  }, [username]);
+
   // Load posts state from localStorage (likes and comments)
   useEffect(() => {
     if (user) {
@@ -149,20 +302,63 @@ function ProfileContent({ username }: { username: string }) {
     }
   }, [user]);
 
-  if (!user)
-    return (
-      <div className="text-center text-red-600 mt-8">
-        {dyn.v3.getVariant("profile_not_found", TEXT_VARIANTS_MAP, "User not found.")}
-      </div>
-    );
-
-  const posts = mockPosts.filter((p) => p.user.username === user.username);
-  const allPosts = isSelf ? [...localPosts, ...posts] : posts;
+  // Calculate posts for this user - memoize with stable dependencies
+  // IMPORTANT: All hooks must be called before any early returns to follow React's rules of hooks
+  const userUsername = user?.username;
+  
+  // Serialize mockPosts for stable dependency check
+  const mockPostsKey = useMemo(() => {
+    if (!mockPosts || mockPosts.length === 0) return '';
+    return mockPosts.map(p => `${p.id}:${p.user?.username || ''}`).sort().join(',');
+  }, [mockPosts]);
+  
+  const posts = useMemo(() => {
+    if (!userUsername || !mockPosts || mockPosts.length === 0) return [];
+    return mockPosts.filter((p) => p.user.username === userUsername);
+  }, [mockPosts, mockPostsKey, userUsername]);
+  
+  // Serialize localPosts for stable dependency check
+  const localPostsKey = useMemo(() => {
+    if (!localPosts || localPosts.length === 0) return '';
+    return localPosts.map(p => p.id).sort().join(',');
+  }, [localPosts]);
+  
+  const allPosts = useMemo(() => {
+    if (!posts || posts.length === 0) {
+      return isSelf && localPosts.length > 0 ? localPosts : [];
+    }
+    return isSelf ? [...localPosts, ...posts] : posts;
+  }, [isSelf, localPosts, localPostsKey, posts]);
+  
+  // Serialize allPosts for stable dependency
+  const allPostsKey = useMemo(() => {
+    if (!allPosts || allPosts.length === 0) return '';
+    return allPosts.map(p => p.id).sort().join(',');
+  }, [allPosts]);
+  
+  // Serialize postsState completely for stable dependency comparison
+  const postsStateSerialized = useMemo(() => {
+    try {
+      return JSON.stringify(postsState);
+    } catch {
+      return '';
+    }
+  }, [postsState]);
   
   // Merge posts with saved state (likes and comments) - recalculate when postsState changes
   const postsWithState = useMemo(() => {
+    if (!allPosts || allPosts.length === 0) return [];
+    
+    // Parse the serialized state to avoid accessing postsState directly
+    let parsedState: typeof postsState = {};
+    try {
+      parsedState = postsStateSerialized ? JSON.parse(postsStateSerialized) : {};
+    } catch {
+      parsedState = {};
+    }
+    
     return allPosts.map(post => {
-      const state = postsState[post.id];
+      const state = parsedState[post.id];
       if (state) {
         return {
           ...post,
@@ -173,13 +369,56 @@ function ProfileContent({ username }: { username: string }) {
       }
       return post;
     });
-  }, [allPosts, postsState]);
+  }, [allPosts, allPostsKey, postsStateSerialized]);
+  
+  // Serialize hiddenPostIds for stable dependency
+  const hiddenPostIdsStr = useMemo(() => {
+    return Array.from(hiddenPostIds).sort().join(',');
+  }, [hiddenPostIds]);
+  
+  // Serialize postsWithState for stable dependency
+  const postsWithStateKey = useMemo(() => {
+    if (!postsWithState || postsWithState.length === 0) return '';
+    return postsWithState.map(p => p.id).sort().join(',');
+  }, [postsWithState]);
+  
+  // Memoize the order separately - use ref to avoid dependency on dyn.v1
+  const postsLength = postsWithState?.length || 0;
+  const postsOrder = useMemo(() => {
+    if (postsLength === 0) return [];
+    return changeOrderElementsRef.current("profile-posts", postsLength);
+  }, [postsLength, dynSeed]);
   
   const visiblePosts = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("profile-posts", postsWithState.length);
-    const orderedPosts = order.map((idx) => postsWithState[idx]);
-    return orderedPosts.filter((p) => !hiddenPostIds.has(p.id));
-  }, [postsWithState, dyn.seed, hiddenPostIds]);
+    if (!postsWithState || postsWithState.length === 0) return [];
+    
+    // Parse the serialized hiddenPostIds to avoid accessing hiddenPostIds directly
+    const hiddenSet = new Set(hiddenPostIdsStr ? hiddenPostIdsStr.split(',') : []);
+    
+    const orderedPosts = postsOrder.map((idx) => postsWithState[idx]);
+    return orderedPosts.filter((p) => !hiddenSet.has(p.id));
+  }, [postsWithState, postsWithStateKey, postsOrder, hiddenPostIdsStr]);
+
+  if (isCheckingUser) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading user profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user || userNotFound) {
+    return (
+      <div className="text-center text-red-600 mt-8">
+        <h1 className="text-2xl font-bold mb-4">User Not Found</h1>
+        <p className="mb-4">The user profile you're looking for doesn't exist.</p>
+        <p className="text-sm text-gray-500">Username: {username}</p>
+      </div>
+    );
+  }
   const profileClasses = "max-w-5xl";
 
   const handleConnect = () => {
@@ -329,7 +568,7 @@ function ProfileContent({ username }: { username: string }) {
   };
 
   const handleLike = (postId: string) => {
-    const post = allPosts.find((p) => p.id === postId);
+    const post = postsWithState.find((p) => p.id === postId) || allPosts.find((p) => p.id === postId);
     if (!post || !user) return;
 
     const currentState = postsState[postId] || {
@@ -360,7 +599,7 @@ function ProfileContent({ username }: { username: string }) {
   };
 
   const handleAddComment = (postId: string, text: string) => {
-    const post = allPosts.find((p) => p.id === postId);
+    const post = postsWithState.find((p) => p.id === postId) || allPosts.find((p) => p.id === postId);
     if (!post || !user || !text.trim()) return;
 
     const currentState = postsState[postId] || {
@@ -396,7 +635,7 @@ function ProfileContent({ username }: { username: string }) {
 
   const handleDeletePost = (postId: string) => {
     if (!isSelf || !user) return;
-    const target = allPosts.find((p) => p.id === postId);
+    const target = postsWithState.find((p) => p.id === postId) || allPosts.find((p) => p.id === postId);
     setLocalPosts((prev) => {
       const next = prev.filter((p) => p.id !== postId);
       localStorage.setItem(
@@ -485,21 +724,21 @@ function ProfileContent({ username }: { username: string }) {
           {!isSelf &&
             (connectState === "connect" ? (
               <button
-                className={`ml-2 px-6 py-2 rounded-full font-medium transition-colors text-white bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg ${dyn.v3.getVariant("profile_connect_button", CLASS_VARIANTS_MAP, "")}`}
+                className={`ml-2 px-6 py-2 rounded-full font-medium transition-colors text-white bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg ${dynV3.getVariant("profile_connect_button", CLASS_VARIANTS_MAP, "")}`}
                 onClick={handleConnect}
               >
-                {dyn.v3.getVariant("profile_connect", TEXT_VARIANTS_MAP, "Connect")}
+                {dynV3.getVariant("profile_connect", TEXT_VARIANTS_MAP, "Connect")}
               </button>
             ) : connectState === "pending" ? (
               <button
                 className="ml-2 px-6 py-2 rounded-full font-medium transition-colors text-white bg-gray-400 cursor-wait"
                 disabled
               >
-                {dyn.v3.getVariant("profile_pending", TEXT_VARIANTS_MAP, "Pending...")}
+                {dynV3.getVariant("profile_pending", TEXT_VARIANTS_MAP, "Pending...")}
               </button>
             ) : (
               <span className="ml-2 px-6 py-2 rounded-full font-medium transition-colors text-white bg-green-600 cursor-default select-none">
-                {dyn.v3.getVariant("profile_message", TEXT_VARIANTS_MAP, "Message")}
+                {dynV3.getVariant("profile_message", TEXT_VARIANTS_MAP, "Message")}
               </span>
             ))}
         </div>
@@ -525,9 +764,9 @@ function ProfileContent({ username }: { username: string }) {
                   setIsEditingProfileHeader(true);
                 }
               }}
-              className={`text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors ${dyn.v3.getVariant("edit_profile_button", CLASS_VARIANTS_MAP, "")}`}
+              className={`text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors ${dynV3.getVariant("edit_profile_button", CLASS_VARIANTS_MAP, "")}`}
             >
-              {isEditingProfileHeader ? dyn.v3.getVariant("save_profile_text", TEXT_VARIANTS_MAP, "💾 Save profile") : dyn.v3.getVariant("edit_profile_text", TEXT_VARIANTS_MAP, "✏️ Edit profile")}
+              {isEditingProfileHeader ? dynV3.getVariant("save_profile_text", TEXT_VARIANTS_MAP, "💾 Save profile") : dynV3.getVariant("edit_profile_text", TEXT_VARIANTS_MAP, "✏️ Edit profile")}
             </button>
           </div>
         )}
@@ -543,7 +782,7 @@ function ProfileContent({ username }: { username: string }) {
       <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-bold text-xl text-gray-900">
-            {dyn.v3.getVariant("profile_about", TEXT_VARIANTS_MAP, "About")}
+            {dynV3.getVariant("profile_about", TEXT_VARIANTS_MAP, "About")}
           </h3>
           {isSelf && (
             <button
@@ -554,9 +793,9 @@ function ProfileContent({ username }: { username: string }) {
                   setIsEditingAbout(true);
                 }
               }}
-              className={`text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors ${dyn.v3.getVariant("edit_button", CLASS_VARIANTS_MAP, "")}`}
+              className={`text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors ${dynV3.getVariant("edit_button", CLASS_VARIANTS_MAP, "")}`}
             >
-              {isEditingAbout ? dyn.v3.getVariant("save_text", TEXT_VARIANTS_MAP, "💾 Save") : dyn.v3.getVariant("edit_text", TEXT_VARIANTS_MAP, "✏️ Edit")}
+              {isEditingAbout ? dynV3.getVariant("save_text", TEXT_VARIANTS_MAP, "💾 Save") : dynV3.getVariant("edit_text", TEXT_VARIANTS_MAP, "✏️ Edit")}
             </button>
           )}
         </div>
@@ -581,7 +820,7 @@ function ProfileContent({ username }: { username: string }) {
     <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-bold text-xl text-gray-900">
-          {dyn.v3.getVariant("profile_experience", TEXT_VARIANTS_MAP, "Experience")}
+          {dynV3.getVariant("profile_experience", TEXT_VARIANTS_MAP, "Experience")}
         </h3>
         {isSelf && (
           <button
@@ -593,15 +832,15 @@ function ProfileContent({ username }: { username: string }) {
                 setIsEditingExperience(true);
               }
             }}
-            className={`text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors ${dyn.v3.getVariant("edit_button", CLASS_VARIANTS_MAP, "")}`}
+            className={`text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors ${dynV3.getVariant("edit_button", CLASS_VARIANTS_MAP, "")}`}
           >
-            {isEditingExperience ? dyn.v3.getVariant("save_text", TEXT_VARIANTS_MAP, "💾 Save") : dyn.v3.getVariant("edit_text", TEXT_VARIANTS_MAP, "✏️ Edit")}
+            {isEditingExperience ? dynV3.getVariant("save_text", TEXT_VARIANTS_MAP, "💾 Save") : dynV3.getVariant("edit_text", TEXT_VARIANTS_MAP, "✏️ Edit")}
           </button>
         )}
       </div>
       {experience.length === 0 && !isEditingExperience ? (
         <div className="text-gray-600 text-sm">
-          {dyn.v3.getVariant("profile_no_experience", TEXT_VARIANTS_MAP, "No experience added yet.")}
+          {dynV3.getVariant("profile_no_experience", TEXT_VARIANTS_MAP, "No experience added yet.")}
         </div>
       ) : (
         <div className="flex flex-col gap-6">
@@ -701,15 +940,15 @@ function ProfileContent({ username }: { username: string }) {
         <div className="flex items-center justify-end gap-3 mt-4">
           <button
             onClick={handleCancelExperience}
-            className={`px-4 py-2 rounded border border-gray-300 text-sm text-gray-700 hover:bg-gray-50 ${dyn.v3.getVariant("cancel_button", CLASS_VARIANTS_MAP, "")}`}
+            className={`px-4 py-2 rounded border border-gray-300 text-sm text-gray-700 hover:bg-gray-50 ${dynV3.getVariant("cancel_button", CLASS_VARIANTS_MAP, "")}`}
           >
-            {dyn.v3.getVariant("cancel_text", TEXT_VARIANTS_MAP, "Cancel")}
+            {dynV3.getVariant("cancel_text", TEXT_VARIANTS_MAP, "Cancel")}
           </button>
           <button
             onClick={handleSaveExperience}
-            className={`px-4 py-2 rounded bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 ${dyn.v3.getVariant("save_experience_button", CLASS_VARIANTS_MAP, "")}`}
+            className={`px-4 py-2 rounded bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 ${dynV3.getVariant("save_experience_button", CLASS_VARIANTS_MAP, "")}`}
           >
-            {dyn.v3.getVariant("save_experience_text", TEXT_VARIANTS_MAP, "Save experience")}
+            {dynV3.getVariant("save_experience_text", TEXT_VARIANTS_MAP, "Save experience")}
           </button>
         </div>
       )}
@@ -728,7 +967,7 @@ function ProfileContent({ username }: { username: string }) {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-bold text-xl text-gray-900">
-          {dyn.v3.getVariant("profile_posts_by", TEXT_VARIANTS_MAP, "Posts by")} {user.name}
+          {dynV3.getVariant("profile_posts_by", TEXT_VARIANTS_MAP, "Posts by")} {user.name}
         </h2>
       </div>
 
@@ -744,8 +983,8 @@ function ProfileContent({ username }: { username: string }) {
               <textarea
                 value={newPostContent}
                 onChange={(e) => setNewPostContent(e.target.value)}
-                placeholder={dyn.v3.getVariant("profile_comment_placeholder", TEXT_VARIANTS_MAP, "Share something...")}
-                className={`w-full border-2 border-gray-200 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[100px] resize-y ${dyn.v3.getVariant("profile_comment_textarea", CLASS_VARIANTS_MAP, "")}`}
+                placeholder={dynV3.getVariant("profile_comment_placeholder", TEXT_VARIANTS_MAP, "Share something...")}
+                className={`w-full border-2 border-gray-200 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[100px] resize-y ${dynV3.getVariant("profile_comment_textarea", CLASS_VARIANTS_MAP, "")}`}
                 maxLength={500}
               />
               <div className="flex items-center justify-between mt-3">
@@ -755,9 +994,9 @@ function ProfileContent({ username }: { username: string }) {
                 <button
                   type="submit"
                   disabled={!newPostContent.trim()}
-                  className={`px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors shadow-md hover:shadow-lg ${dyn.v3.getVariant("profile_post_button", CLASS_VARIANTS_MAP, "")}`}
+                  className={`px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors shadow-md hover:shadow-lg ${dynV3.getVariant("profile_post_button", CLASS_VARIANTS_MAP, "")}`}
                 >
-                  {dyn.v3.getVariant("profile_post_button_text", TEXT_VARIANTS_MAP, "Post")}
+                  {dynV3.getVariant("profile_post_button_text", TEXT_VARIANTS_MAP, "Post")}
                 </button>
               </div>
             </div>
@@ -769,7 +1008,7 @@ function ProfileContent({ username }: { username: string }) {
         {visiblePosts.length === 0 ? (
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
             <div className="text-gray-500 italic text-lg">
-              {dyn.v3.getVariant("profile_no_posts", TEXT_VARIANTS_MAP, "No posts yet.")}
+              {dynV3.getVariant("profile_no_posts", TEXT_VARIANTS_MAP, "No posts yet.")}
             </div>
           </div>
         ) : (
@@ -782,7 +1021,7 @@ function ProfileContent({ username }: { username: string }) {
               onSave={handleSavePost}
               onHide={(postId) => {
                 handleHidePost(postId);
-                const target = allPosts.find((p) => p.id === postId);
+                const target = postsWithState.find((p) => p.id === postId) || allPosts.find((p) => p.id === postId);
                 if (target) {
                   setHiddenPosts((prev) => {
                     const filtered = prev.filter((p) => p.id !== postId);
