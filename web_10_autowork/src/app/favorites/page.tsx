@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { useAutoworkData } from "@/hooks/useAutoworkData";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
@@ -10,8 +10,21 @@ import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 export default function FavoritesPage() {
   const router = useSeedRouter();
   const dyn = useDynamicSystem();
-  const expertsState = useAutoworkData<any>("web_10_autowork_experts", 6);
+  const [experts, setExperts] = useState<any[]>([]);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  
+  // Subscribe to experts data
+  useEffect(() => {
+    dyn.v2.whenReady().then(() => {
+      setExperts(dynamicDataProvider.getExperts().slice(0, 6));
+    });
+    
+    const unsubscribe = dynamicDataProvider.subscribeExperts((updatedExperts) => {
+      setExperts(updatedExperts.slice(0, 6));
+    });
+    
+    return () => unsubscribe();
+  }, [dyn.v2]);
   
   // Load favorites from localStorage
   useEffect(() => {
@@ -77,8 +90,8 @@ export default function FavoritesPage() {
 
   // Filter experts to show only favorites
   const favoriteExperts = useMemo(() => {
-    return expertsState.data.filter((expert: any) => favorites.has(expert.name));
-  }, [expertsState.data, favorites]);
+    return experts.filter((expert: any) => favorites.has(expert.name));
+  }, [experts, favorites]);
 
   if (favoriteExperts.length === 0) {
     return dyn.v1.addWrapDecoy("favorites-page", (

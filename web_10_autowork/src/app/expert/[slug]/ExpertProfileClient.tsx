@@ -9,6 +9,8 @@ import { getSeedLayout } from "@/library/utils";
 import { useSeed } from "@/context/SeedContext";
 import HireButton from "@/app/components/HireButton";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { dynamicDataProvider } from "@/dynamic/v2";
+import { useDynamicSystem } from "@/dynamic/shared";
 
 interface Expert {
   slug: string;
@@ -42,56 +44,238 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
   const [isHireLater, setIsHireLater] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [contactMessage, setContactMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const { resolvedSeeds } = useSeed();
   const seed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? 1;
   const layout = getSeedLayout(seed);
   const { getElementAttributes, getText, dyn } = useSeedLayout();
 
+  // Function to find expert by slug or name
+  const findExpert = (searchSlug: string): Expert | null => {
+    console.log(`[autowork] findExpert: searching for slug="${searchSlug}"`);
+    
+    // First try to find by slug using dynamicDataProvider
+    let found = dynamicDataProvider.getExpertBySlug(searchSlug);
+    
+    if (found) {
+      console.log(`[autowork] findExpert: ✅ Found by slug:`, found.name);
+      return found as Expert;
+    }
+    
+    // If slug looks like a name (contains spaces or doesn't match slug pattern), try by name
+    const allExperts = dynamicDataProvider.getExperts();
+    console.log(`[autowork] findExpert: Searching in ${allExperts.length} experts`);
+    
+    // Try to extract name from slug (reverse the slug generation)
+    // If slug was generated from name, try to find by name
+    const normalizedSearch = searchSlug.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    
+    // Try exact match by normalized name
+    found = allExperts.find((e) => {
+      const expertName = (e.name || "").toLowerCase().trim();
+      const expertNameNormalized = expertName.replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const expertSlug = (e.slug || "").toLowerCase();
+      return expertSlug === normalizedSearch || expertNameNormalized === normalizedSearch || expertName === searchSlug;
+    });
+    
+    if (found) {
+      console.log(`[autowork] findExpert: ✅ Found by normalized name:`, found.name);
+      return found as Expert;
+    }
+    
+    // Try partial match
+    found = allExperts.find((e) => {
+      const expertName = (e.name || "").toLowerCase().trim();
+      const expertSlug = (e.slug || "").toLowerCase();
+      const expertNameNoDots = expertName.replace(/\./g, '').replace(/[^a-z0-9]+/g, '');
+      const searchNoDots = normalizedSearch.replace(/\./g, '');
+      return expertSlug.includes(normalizedSearch) || normalizedSearch.includes(expertSlug) ||
+             expertName.includes(searchSlug) || searchSlug.includes(expertName) ||
+             expertNameNoDots === searchNoDots;
+    });
+    
+    if (found) {
+      console.log(`[autowork] findExpert: ✅ Found by partial match:`, found.name);
+      return found as Expert;
+    }
+    
+    // NOTE: Removed localStorage fallback to ensure we only use current seed data
+    // Using localStorage could return data from a different seed, which breaks consistency
+    
+    console.log(`[autowork] findExpert: ❌ Not found after all strategies`);
+    console.log(`[autowork] Available experts (first 5):`, allExperts.slice(0, 5).map(e => ({ slug: e.slug, name: e.name })));
+    return null;
+  };
+
   useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem("autowork_experts");
-      if (raw) {
-        const arr = JSON.parse(raw) as Expert[];
-        const found = Array.isArray(arr)
-          ? arr.find((e) => e.slug === slug)
-          : null;
+    let mounted = true;
+    let retryCount = 0;
+    const maxRetries = 5;
+    
+    const loadExpert = async () => {
+      if (!mounted) return;
+      
+      setIsLoading(true);
+      setExpert(null); // Clear expert state when loading
+      
+      // Wait for data provider to be ready
+      await dynamicDataProvider.whenReady();
+      
+      // Wait a bit more to ensure data is fully loaded and synced
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      if (!mounted) return;
+      
+      let experts = dynamicDataProvider.getExperts();
+      
+      // Retry a few times if no experts loaded yet OR if expert not found but we should wait
+      while (mounted && retryCount < maxRetries) {
+        // Check if experts are loaded
+        if (experts.length === 0) {
+          retryCount++;
+          console.log(`[autowork] No experts loaded yet, retrying... (${retryCount}/${maxRetries})`);
+          await new Promise(resolve => setTimeout(resolve, 300));
+          experts = dynamicDataProvider.getExperts();
+          continue;
+        }
+        
+        // Experts are loaded, check if our expert is in the list
+        const found = findExpert(slug);
+        
+        // If expert is found in the list, break out of retry loop
+        if (found) {
+          break;
+        }
+        
+        // Expert not in list, but might still be loading - retry a couple more times
+        if (retryCount < 3) {
+          retryCount++;
+          console.log(`[autowork] Expert "${slug}" not found in ${experts.length} experts, retrying... (${retryCount}/${maxRetries})`);
+          await new Promise(resolve => setTimeout(resolve, 300));
+          experts = dynamicDataProvider.getExperts();
+        } else {
+          // Give up after 3 retries
+          break;
+        }
+      }
+      
+      if (!mounted) return;
+      
+      const found = findExpert(slug);
+      
+      if (mounted) {
         if (found) {
           setExpert(found);
+          
           // Check if expert is in favorites
-          const favoritesRaw = window.localStorage.getItem(
-            "autowork_expert_favorites"
-          );
-          if (favoritesRaw) {
-            try {
+          try {
+            const favoritesRaw = window.localStorage.getItem("autowork_expert_favorites");
+            if (favoritesRaw) {
               const favorites = new Set(JSON.parse(favoritesRaw));
               setIsFavorite(favorites.has(found.name));
-            } catch {}
-          }
-
-          const hireLaterRaw = window.localStorage.getItem(
-            "autowork_hire_later_experts"
-          );
-          if (hireLaterRaw) {
-            try {
+            }
+          } catch {}
+          
+          // Check if expert is in hire later
+          try {
+            const hireLaterRaw = window.localStorage.getItem("autowork_hire_later_experts");
+            if (hireLaterRaw) {
               const hireLaterList = JSON.parse(hireLaterRaw);
               if (Array.isArray(hireLaterList)) {
                 setIsHireLater(
-                  hireLaterList.some((item: any) => (item.slug || item.name) === found.slug)
+                  hireLaterList.some((item: any) => (item.slug || item.name) === found.slug || item.name === found.name)
                 );
               }
-            } catch {}
+            }
+          } catch {}
+        } else {
+          // Expert not found with current seed - only mark as not found if experts are loaded
+          if (experts.length > 0) {
+            console.log(`[autowork] ❌ Expert "${slug}" not found in ${experts.length} experts with current seed`);
+            setExpert(null);
+          } else {
+            // If still no experts, keep checking
+            console.log(`[autowork] Still waiting for experts to load...`);
+            setIsLoading(true);
+            return;
           }
         }
+        
+        setIsLoading(false);
       }
-    } catch {}
-  }, [slug]);
+    };
+    
+    loadExpert();
+    
+    // Subscribe to experts updates to re-check when data changes
+    const unsubscribe = dynamicDataProvider.subscribeExperts((experts) => {
+      if (!mounted) return;
+      
+      console.log(`[autowork] Experts updated (${experts.length} experts), re-checking expert "${slug}"...`);
+      
+      // If experts array is empty, it means data was cleared (seed change in progress)
+      if (experts.length === 0) {
+        console.log(`[autowork] Experts array is empty - seed change in progress, clearing expert state`);
+        setExpert(null);
+        setIsLoading(true);
+        return;
+      }
+      
+      // Wait a bit to ensure data is fully synced
+      setTimeout(() => {
+        if (!mounted) return;
+        
+        const currentExperts = dynamicDataProvider.getExperts();
+        if (currentExperts.length > 0) {
+          const found = findExpert(slug);
+          if (found) {
+            console.log(`[autowork] ✅ Expert "${slug}" found after update:`, found.name);
+            setExpert(found);
+            setIsLoading(false);
+          } else {
+            console.log(`[autowork] ❌ Expert "${slug}" still not found after update (${currentExperts.length} experts loaded)`);
+            setExpert(null);
+            setIsLoading(false);
+          }
+        } else {
+          // Still no experts, keep loading state
+          setExpert(null);
+          setIsLoading(true);
+        }
+      }, 200);
+    });
+    
+    // Listen for seed changes to re-check
+    const handleSeedChange = () => {
+      if (!mounted) return;
+      console.log(`[autowork] Seed changed, re-checking expert "${slug}"...`);
+      retryCount = 0; // Reset retry count on seed change
+      // Clear expert state when seed changes to prevent showing old data
+      setExpert(null);
+      setIsLoading(true);
+      // Reload expert with new seed data
+      loadExpert();
+    };
+    
+    if (typeof window !== "undefined") {
+      window.addEventListener("autowork:v2SeedChange", handleSeedChange);
+    }
+    
+    return () => {
+      mounted = false;
+      unsubscribe();
+      if (typeof window !== "undefined") {
+        window.removeEventListener("autowork:v2SeedChange", handleSeedChange);
+      }
+    };
+  }, [slug, dyn.v2]);
 
-  if (!expert) {
+  if (isLoading || !expert) {
     return (
       <main className="max-w-6xl mx-auto px-5 py-5">
         <div className="bg-white rounded-2xl shadow border border-gray-100 p-8 flex items-center justify-center text-gray-500">
-          Loading expert...
+          {isLoading ? "Loading expert..." : "Expert not found"}
         </div>
       </main>
     );
