@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Image from "next/image";
 import {
   Dialog,
@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { EVENTS_DATASET } from "@/library/dataset";
-import { initializeEvents } from "@/data/events-enhanced";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeed } from "@/context/SeedContext";
@@ -134,168 +134,10 @@ interface RawEvent {
   meetingLink?: string;
 }
 
-const EVENTS_STORAGE_PREFIX = "gocal_events_seed_";
-const LEGACY_EVENTS_STORAGE_KEY = "gocal_events";
-
-const clampV2Seed = (value?: number | null): number => {
-  if (
-    typeof value === "number" &&
-    Number.isFinite(value) &&
-    value >= 1 &&
-    value <= 300
-  ) {
-    return value;
-  }
-  return 1;
-};
-
-const getEventsStorageKey = (seed?: number | null) =>
-  `${EVENTS_STORAGE_PREFIX}${clampV2Seed(seed)}`;
-
-const normalizeStoredEvents = (rawEvents: RawEvent[]): Event[] => {
-  return rawEvents
-    .map((ev) => {
-      const start = ev.start ?? 9;
-      const end = ev.end ?? 10;
-      const startTime: [number, number] =
-        Array.isArray(ev.startTime) && ev.startTime.length === 2
-          ? [
-              Math.floor(ev.startTime[0]),
-              ev.startTime[1] === 30 ? 30 : 0,
-            ]
-          : [Math.floor(start), start % 1 === 0.5 ? 30 : 0];
-      const endTime: [number, number] =
-        Array.isArray(ev.endTime) && ev.endTime.length === 2
-          ? [
-              Math.floor(ev.endTime[0]),
-              ev.endTime[1] === 30 ? 30 : 0,
-            ]
-          : [Math.floor(end), end % 1 === 0.5 ? 30 : 0];
-      return {
-        id: ev.id ?? Math.random().toString(36).slice(2),
-        date: ev.date ?? new Date().toISOString().split("T")[0],
-        start,
-        end,
-        label: ev.label ?? "",
-        calendar: ev.calendar ?? "Work",
-        color: ev.color ?? calendarColors.Work,
-        startTime,
-        endTime,
-        description: ev.description ?? "",
-        location: ev.location ?? "",
-        allDay: ev.allDay ?? false,
-        recurrence: ev.recurrence ?? "none",
-        recurrenceEndDate: ev.recurrenceEndDate ?? null,
-        attendees: Array.isArray(ev.attendees) ? ev.attendees : [],
-        reminders: Array.isArray(ev.reminders) ? ev.reminders : [],
-        busy: ev.busy ?? true,
-        visibility: ev.visibility ?? "default",
-        meetingLink: ev.meetingLink ?? "",
-      } as Event;
-    })
-    .filter(
-      (ev) =>
-        Number.isInteger(ev.startTime[0]) && Number.isInteger(ev.endTime[0])
-    );
-};
-
 interface Calendar {
   name: string;
   enabled: boolean;
   color: string;
-}
-
-function usePersistedEvents(v2Seed?: number | null) {
-  // SSR-safe: initialize with EVENTS_DATASET, then hydrate from localStorage on client
-  const [state, setState] = useState<Event[]>(EVENTS_DATASET as Event[]);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [genError, setGenError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    let cancelled = false;
-    const storageKey = getEventsStorageKey(v2Seed);
-
-    const tryLoadFromStorage = (): boolean => {
-      const candidateKeys = [storageKey, LEGACY_EVENTS_STORAGE_KEY];
-      for (const key of candidateKeys) {
-        const stored = window.localStorage.getItem(key);
-        if (!stored) continue;
-        try {
-          const validEvents = normalizeStoredEvents(JSON.parse(stored) as RawEvent[]);
-          if (validEvents.length === 0) {
-            window.localStorage.removeItem(key);
-            continue;
-          }
-          if (!cancelled) {
-            setState(validEvents);
-            if (key === LEGACY_EVENTS_STORAGE_KEY && key !== storageKey) {
-              window.localStorage.setItem(storageKey, JSON.stringify(validEvents));
-              window.localStorage.removeItem(LEGACY_EVENTS_STORAGE_KEY);
-            }
-          }
-          return true;
-        } catch (error) {
-          console.error("[AutoCalendar] Failed to parse stored events:", error);
-          window.localStorage.removeItem(key);
-        }
-      }
-      return false;
-    };
-
-    const loadEvents = async () => {
-      setIsGenerating(true);
-      setGenError(null);
-
-      if (tryLoadFromStorage()) {
-        if (!cancelled) {
-          setIsGenerating(false);
-        }
-        return;
-      }
-
-      // No stored events for this seed – fall back to static dataset while fetching
-      if (!cancelled) {
-        setState(EVENTS_DATASET as Event[]);
-      }
-
-      try {
-        const initialized = await initializeEvents(v2Seed ?? undefined);
-        if (!cancelled && Array.isArray(initialized) && initialized.length > 0) {
-          setState(initialized as Event[]);
-          window.localStorage.setItem(storageKey, JSON.stringify(initialized));
-        }
-      } catch (err) {
-        if (!cancelled) {
-          console.error("[AutoCalendar] usePersistedEvents() init failure", err);
-          setGenError(err instanceof Error ? err.message : "Generation failed");
-        }
-      } finally {
-        if (!cancelled) {
-          setIsGenerating(false);
-        }
-      }
-    };
-
-    loadEvents();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [v2Seed]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const storageKey = getEventsStorageKey(v2Seed);
-      window.localStorage.setItem(storageKey, JSON.stringify(state));
-      window.localStorage.removeItem(LEGACY_EVENTS_STORAGE_KEY);
-    } catch (error) {
-      console.error("[AutoCalendar] Failed to persist events:", error);
-    }
-  }, [state, v2Seed]);
-
-  return [state, setState, isGenerating, genError] as const;
 }
 
 const pad2 = (x: number) => (x < 10 ? `0${x}` : `${x}`);
@@ -558,22 +400,103 @@ function CalendarApp() {
   });
   const [myCalExpanded, setMyCalExpanded] = useState(true);
   const [viewDropdown, setViewDropdown] = useState(false);
-  const [events, setEvents, isGenerating, genError] = usePersistedEvents(v2Seed);
+  // V2: Subscribe to dynamic events from data provider
+  const [v2Events, setV2Events] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [userEvents, setUserEvents] = useState<Event[]>([]); // User-created/edited events
+  
+  // Subscribe to V2 events
+  useEffect(() => {
+    // Wait for data to be ready
+    dyn.v2.whenReady().then(() => {
+      const events = dynamicDataProvider.getEvents();
+      setV2Events(events as Event[]);
+      setIsLoading(false);
+    });
+    
+    // Subscribe to events updates
+    const unsubscribe = dynamicDataProvider.subscribeEvents((updatedEvents) => {
+      // If events array is empty, it means data was cleared (seed change in progress)
+      if (updatedEvents.length === 0) {
+        console.log(`[autocalendar] Events array is empty - seed change in progress, clearing events state`);
+        setV2Events([]);
+        setIsLoading(true);
+        return;
+      }
+      
+      setV2Events(updatedEvents as Event[]);
+      setIsLoading(false);
+    });
+    
+    // Listen for seed changes
+    const handleSeedChange = () => {
+      console.log(`[autocalendar] Seed changed, reloading events...`);
+      setV2Events([]);
+      setIsLoading(true);
+      // Clear user events when seed changes (they belong to old seed)
+      setUserEvents([]);
+    };
+    
+    if (typeof window !== "undefined") {
+      window.addEventListener("autocalendar:v2SeedChange", handleSeedChange);
+    }
+    
+    return () => {
+      unsubscribe();
+      if (typeof window !== "undefined") {
+        window.removeEventListener("autocalendar:v2SeedChange", handleSeedChange);
+      }
+    };
+  }, [dyn.v2]);
+  
+  // Combine V2 events with user-created events
+  const events = useMemo(() => {
+    // Merge V2 events with user events, avoiding duplicates
+    const v2EventIds = new Set(v2Events.map(e => e.id));
+    const uniqueUserEvents = userEvents.filter(e => !v2EventIds.has(e.id));
+    return [...v2Events, ...uniqueUserEvents];
+  }, [v2Events, userEvents]);
+  
+  // setEvents now updates userEvents instead of all events
+  const setEvents = useCallback((updater: Event[] | ((prev: Event[]) => Event[])) => {
+    setUserEvents((prev) => {
+      const newEvents = typeof updater === 'function' ? updater(prev) : updater;
+      // Filter out V2 events from user events (they should only contain user-created/edited events)
+      const v2EventIds = new Set(v2Events.map(e => e.id));
+      return newEvents.filter(e => !v2EventIds.has(e.id));
+    });
+  }, [v2Events]);
+  
+  const isGenerating = isLoading;
+  const genError = null; // V2 handles errors internally
   const [miniCalMonth, setMiniCalMonth] = useState(viewDate.getMonth());
   const [miniCalYear, setMiniCalYear] = useState(viewDate.getFullYear());
   const [addCalOpen, setAddCalOpen] = useState(false);
   const [addCalName, setAddCalName] = useState("");
   const [addCalDesc, setAddCalDesc] = useState("");
   const [addCalColorIdx, setAddCalColorIdx] = useState(0);
-  // Dynamically generate all calendar types from EVENTS_DATASET, enabled by default
-  const uniqueCalendars = Array.from(
-    new Map(
-      EVENTS_DATASET.map((ev) => [ev.calendar, ev.color])
-    ).entries()
-  );
-  const [myCalendars, setMyCalendars] = useState<Calendar[]>(
-    uniqueCalendars.map(([name, color]) => ({ name, enabled: true, color }))
-  );
+  // Dynamically generate all calendar types from V2 events, enabled by default
+  const uniqueCalendars = useMemo(() => {
+    return Array.from(
+      new Map(
+        events.map((ev) => [ev.calendar, ev.color])
+      ).entries()
+    );
+  }, [events]);
+  
+  const [myCalendars, setMyCalendars] = useState<Calendar[]>([]);
+  
+  // Update calendars when events change
+  useEffect(() => {
+    if (uniqueCalendars.length > 0) {
+      const calendarMap = new Map(myCalendars.map(c => [c.name, c]));
+      const newCalendars = uniqueCalendars.map(([name, color]) => {
+        const existing = calendarMap.get(name);
+        return existing || { name, enabled: true, color };
+      });
+      setMyCalendars(newCalendars);
+    }
+  }, [uniqueCalendars]);
   const orderedCalendars = useMemo(() => {
     const count = myCalendars.length;
     if (count <= 1) return myCalendars;
@@ -612,21 +535,15 @@ function CalendarApp() {
   const [submittedSearch, setSubmittedSearch] = useState("");
   const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
 
-  // Loader overlay while AI data generation is in progress
+  // Loader overlay while V2 data is loading
   const generationOverlay = isGenerating ? (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="flex items-center space-x-3 rounded-lg bg-white p-4 shadow-lg">
         <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-indigo-600"></div>
         <div className="text-sm text-gray-700">
-          Data generation is in progress. This may take some time...
+          Loading calendar events...
         </div>
       </div>
-    </div>
-  ) : null;
-
-  const generationErrorBanner = genError ? (
-    <div className="fixed top-2 left-1/2 z-50 -translate-x-1/2 rounded-md border border-red-300 bg-red-50 px-4 py-2 text-sm text-red-700 shadow">
-      AI data generation failed. Showing static dataset. Error: {genError}
     </div>
   ) : null;
   const [searchResults, setSearchResults] = useState<typeof EVENTS_DATASET>([]);
@@ -654,12 +571,13 @@ function CalendarApp() {
       setSubmittedSearch(searchQuery);
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
-        const results = EVENTS_DATASET.filter(
-          (e) =>
-            e.label.toLowerCase().includes(q) ||
-            (e.location ?? "").toLowerCase().includes(q)
+        // Use V2 events for search
+        const results = events.filter(
+          (ev) =>
+            ev.label.toLowerCase().includes(q) ||
+            (ev.location ?? "").toLowerCase().includes(q)
         );
-        setSearchResults(results);
+        setSearchResults(results as typeof EVENTS_DATASET);
         setSearchDropdownOpen(true);
       } else {
         setSearchResults([]);

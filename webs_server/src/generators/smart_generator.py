@@ -233,7 +233,7 @@ def get_project_entity_metadata(project_key: str, entity_type: str) -> Dict[str,
             "calendar_events": {
                 "description": "Calendar events with recurrence and attendees",
                 "categories": ["Work", "Personal", "Wellness", "Friends", "Family"],
-                "requirements": "Include date, start/end, calendars, attendance list, recurrence details, reminders, and meeting links.",
+                "requirements": "Each event must include a unique id, date, numeric start and end hours, label, calendar category, color, startTime and endTime arrays, description, location, allDay flag, recurrence type with optional recurrenceEndDate, attendees list, reminder offsets in minutes, busy status, visibility level, and an optional meeting link."
             }
         },
         "web_12_autolist": {

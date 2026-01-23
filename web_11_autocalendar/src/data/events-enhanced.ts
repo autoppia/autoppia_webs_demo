@@ -1,78 +1,156 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { CalendarEvent } from "@/library/dataset";
-import fallbackEvents from "./original/events_1.json";
+import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
+import { getApiBaseUrl } from "@/shared/data-generator";
+import { CalendarEvent, EVENTS_DATASET } from "@/library/dataset";
 
 const PROJECT_KEY = "web_11_autocalendar";
 const ENTITY_TYPE = "events";
 
-const clampSeed = (value?: number | null, fallback: number = 1): number =>
-  typeof value === "number" && value >= 1 && value <= 300 ? value : fallback;
+const clampSeed = (value: number, fallback = 1): number => {
+  if (Number.isNaN(value)) return fallback;
+  if (value < 1) return fallback;
+  if (value > 300) return fallback;
+  return value;
+};
 
-/**
- * Get v2 seed from window (synchronized by SeedContext)
- */
-const getRuntimeV2Seed = (): number | null => {
+const getBaseSeedFromUrl = (): number | null => {
   if (typeof window === "undefined") return null;
-  const value = (window as any).__autocalendarV2Seed;
-  if (
-    typeof value === "number" &&
-    Number.isFinite(value) &&
-    value >= 1 &&
-    value <= 300
-  ) {
-    return value;
+  const params = new URLSearchParams(window.location.search);
+  const seedParam = params.get("seed");
+  if (seedParam) {
+    const parsed = Number.parseInt(seedParam, 10);
+    if (Number.isFinite(parsed)) {
+      return clampBaseSeed(parsed);
+    }
   }
   return null;
 };
 
-export async function initializeEvents(
-  v2Seed?: number | null
-): Promise<CalendarEvent[]> {
-  const dbModeEnabled = isDbLoadModeEnabled();
-  let effectiveSeed = clampSeed(v2Seed ?? 1, 1);
-
-  if (dbModeEnabled) {
-    if (typeof window === "undefined") {
-      effectiveSeed = 1;
-    } else {
-      // Wait a bit for SeedContext to sync v2Seed to window
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      const resolvedSeed =
-        typeof v2Seed === "number" ? clampSeed(v2Seed, 1) : getRuntimeV2Seed();
-      // Default to 1 if no v2-seed provided
-      effectiveSeed = resolvedSeed ?? 1;
-    }
-  } else if (typeof v2Seed === "number") {
-    effectiveSeed = clampSeed(v2Seed, 1);
-  }
-
-  // If V2 is NOT enabled, return original dataset immediately
+const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number => {
   if (!dbModeEnabled) {
-    console.log("[AutoCalendar] DB mode disabled, using original dataset");
-    return (fallbackEvents as CalendarEvent[]).map((e) => ({ ...e }));
+    return 1;
   }
-
-  try {
-    const events = await fetchSeededSelection<CalendarEvent>({
-      projectKey: PROJECT_KEY,
-      entityType: ENTITY_TYPE,
-      seedValue: effectiveSeed,
-      limit: 200,
-      method: "shuffle",
-    });
-    if (Array.isArray(events) && events.length > 0) {
-      return events;
+  
+  if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
+    return clampSeed(seedValue);
+  }
+  
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed !== null) {
+    const resolvedSeeds = resolveSeedsSync(baseSeed);
+    if (resolvedSeeds.v2 !== null) {
+      return resolvedSeeds.v2;
     }
+    return clampSeed(baseSeed);
+  }
+  
+  return 1;
+};
+
+/**
+ * Fetch AI generated events from /datasets/generate-smart endpoint
+ */
+async function fetchAiGeneratedEvents(count: number): Promise<CalendarEvent[]> {
+  const baseUrl = getApiBaseUrl();
+  const url = `${baseUrl}/datasets/generate-smart`;
+  
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        project_key: PROJECT_KEY,
+        entity_type: ENTITY_TYPE,
+        count: 50, // Fixed count of 50
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "");
+      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
+    }
+
+    const result = await response.json();
+    const generatedData = result?.generated_data ?? [];
+    
+    if (!Array.isArray(generatedData) || generatedData.length === 0) {
+      throw new Error("No data returned from AI generation endpoint");
+    }
+
+    return generatedData as CalendarEvent[];
   } catch (error) {
-    console.error(
-      "[AutoCalendar] Failed to load events from dataset (seed:",
-      effectiveSeed,
-      "), using original dataset fallback",
-      error
-    );
+    console.error("[autocalendar] AI generation failed:", error);
+    throw error;
+  }
+}
+
+export async function initializeEvents(v2SeedValue?: number | null, limit = 200): Promise<CalendarEvent[]> {
+  const dbModeEnabled = isDbLoadModeEnabled();
+  const aiGenerateEnabled = isV2AiGenerateEnabled();
+  
+  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+    console.log("[autocalendar] Base seed is 1, using original data (skipping DB/AI modes)");
+    return EVENTS_DATASET.map((e) => ({ ...e }));
   }
 
-  // Fallback to original dataset
-  console.log("[AutoCalendar] Falling back to original dataset");
-  return (fallbackEvents as CalendarEvent[]).map((e) => ({ ...e }));
+  // Priority 1: DB mode - fetch from /datasets/load endpoint
+  if (dbModeEnabled) {
+    // If no seed provided, wait a bit for SeedContext to sync v2Seed to window
+    if (typeof window !== "undefined" && v2SeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+
+    try {
+      const events = await fetchSeededSelection<CalendarEvent>({
+        projectKey: PROJECT_KEY,
+        entityType: ENTITY_TYPE,
+        seedValue: effectiveSeed,
+        limit: 50, // Fixed limit of 50 items for DB mode
+        method: "shuffle",
+      });
+
+      if (Array.isArray(events) && events.length > 0) {
+        console.log(
+          `[autocalendar] Loaded ${events.length} events from dataset (seed=${effectiveSeed})`
+        );
+        return events;
+      }
+
+      // If no events returned from backend, fallback to local JSON
+      console.warn(`[autocalendar] No events returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+    } catch (error) {
+      // If backend fails, fallback to local JSON
+      console.warn("[autocalendar] Backend unavailable, falling back to local JSON:", error);
+    }
+  }
+  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
+  else if (aiGenerateEnabled) {
+    try {
+      console.log("[autocalendar] AI generation mode enabled, generating events...");
+      const generatedEvents = await fetchAiGeneratedEvents(limit);
+      
+      if (Array.isArray(generatedEvents) && generatedEvents.length > 0) {
+        console.log(`[autocalendar] Generated ${generatedEvents.length} events via AI`);
+        return generatedEvents;
+      }
+      
+      console.warn("[autocalendar] No events generated, falling back to local JSON");
+    } catch (error) {
+      // If AI generation fails, fallback to local JSON
+      console.warn("[autocalendar] AI generation failed, falling back to local JSON:", error);
+    }
+  }
+  // Priority 3: Fallback - use original local JSON data
+  else {
+    console.log("[autocalendar] V2 modes disabled, loading from local JSON");
+  }
+
+  // Fallback to local JSON
+  return EVENTS_DATASET.map((e) => ({ ...e }));
 }
