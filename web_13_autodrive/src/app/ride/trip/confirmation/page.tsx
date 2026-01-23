@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import GlobalHeader from "@/components/GlobalHeader";
-import { rides } from "@/data/trips-enhanced";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { TEXT_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { logEvent, EVENT_TYPES } from "@/library/event";
@@ -20,6 +19,14 @@ function formatDateTime(date: string, time: string) {
   });
 }
 
+// Ride templates mapping for image lookup
+const RIDE_IMAGE_MAP: Record<string, string> = {
+  "AutoDriverX": "/car1.png",
+  "Comfort": "/car2.png",
+  "AutoDriverXL": "/car3.png",
+  "Executive": "/dashboard.jpg",
+};
+
 export default function ConfirmationPage() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
@@ -29,10 +36,26 @@ export default function ConfirmationPage() {
     date: "",
     time: "",
   });
+  const [selectedRideInfo, setSelectedRideInfo] = useState<{
+    name: string;
+    image: string;
+    price: number;
+    icon?: string;
+  } | null>(null);
+  const [reserveRideData, setReserveRideData] = useState<any>(null);
   const [tripSaved, setTripSaved] = useState(false);
-  const ride = rides[data.rideIdx] ?? rides[0];
   const router = useRouter();
   const dyn = useDynamicSystem();
+  
+  // Use selected ride info - this should always be set from sessionStorage
+  const ride = selectedRideInfo || {
+    name: "AutoDriverX",
+    image: "/car1.png",
+    price: 26.6,
+  };
+  
+  // Get rideId from reserveRideData, fallback to data.rideIdx
+  const rideIdForDriver = reserveRideData?.rideId ?? data.rideIdx;
 
   useEffect(() => {
     // Get rideIdx, pickup, dropoff, etc from sessionStorage (simulate state persistence)
@@ -45,18 +68,82 @@ export default function ConfirmationPage() {
       const time = sessionStorage.getItem("ud_pickuptime") || "";
       setData({ rideIdx, pickup, dropoff, date, time });
       
+      // Get selected ride information from sessionStorage - this is the source of truth
+      const reserveRideDataStr = sessionStorage.getItem("__ud_reserveRideData");
+      if (reserveRideDataStr) {
+        try {
+          const parsedReserveRideData = JSON.parse(reserveRideDataStr);
+          // Store the complete reserveRideData for use in driver calculations
+          setReserveRideData(parsedReserveRideData);
+          // Use data directly from reserveRideData - this contains the actual selected ride info
+          const rideName = parsedReserveRideData.rideName || parsedReserveRideData.rideType || "AutoDriverX";
+          const ridePrice = parsedReserveRideData.price || 26.6;
+          // Use image directly from reserveRideData, fallback to RIDE_IMAGE_MAP only if image is missing
+          const rideImage = parsedReserveRideData.image || RIDE_IMAGE_MAP[rideName] || "/car1.png";
+          
+          setSelectedRideInfo({
+            name: rideName,
+            image: rideImage,
+            price: ridePrice,
+            icon: parsedReserveRideData.icon,
+          });
+        } catch (e) {
+          console.error("Error parsing reserveRideData:", e);
+          // If parsing fails, use minimal fallback
+          setReserveRideData(null);
+          setSelectedRideInfo({
+            name: "AutoDriverX",
+            image: "/car1.png",
+            price: 26.6,
+          });
+        }
+      } else {
+        // If no reserveRideData, this shouldn't happen, but provide a fallback
+        console.warn("No reserveRideData found in sessionStorage");
+        setReserveRideData(null);
+        setSelectedRideInfo({
+          name: "AutoDriverX",
+          image: "/car1.png",
+          price: 26.6,
+        });
+      }
+      
       // Save the reservation as an upcoming trip (only once)
       if (!tripSaved && rideIdx !== null && pickup && dropoff) {
-        const selectedRide = rides[rideIdx] || rides[0];
+        // Get ride info directly from sessionStorage - this is the source of truth
+        const reserveRideDataStrForTrip = sessionStorage.getItem("__ud_reserveRideData");
+        let rideToUse = {
+          name: "AutoDriverX",
+          image: "/car1.png",
+          price: 26.6,
+          icon: "",
+        };
+        
+        if (reserveRideDataStrForTrip) {
+          try {
+            const reserveRideDataForTrip = JSON.parse(reserveRideDataStrForTrip);
+            const rideNameForTrip = reserveRideDataForTrip.rideName || reserveRideDataForTrip.rideType || "AutoDriverX";
+            const ridePriceForTrip = reserveRideDataForTrip.price || 26.6;
+            // Use image directly from reserveRideDataForTrip, fallback to RIDE_IMAGE_MAP only if image is missing
+            const rideImageForTrip = reserveRideDataForTrip.image || RIDE_IMAGE_MAP[rideNameForTrip] || "/car1.png";
+            rideToUse = {
+              name: rideNameForTrip,
+              image: rideImageForTrip,
+              price: ridePriceForTrip,
+              icon: reserveRideDataForTrip.icon || "",
+            };
+          } catch (e) {
+            console.error("Error parsing reserveRideData for trip:", e);
+          }
+        }
         // Use a consistent trip ID based on the reservation data to avoid duplicates
         const tripId = `reserved-${rideIdx}-${pickup.slice(0, 20)}-${dropoff.slice(0, 20)}-${date}-${time}`.replace(/[^a-zA-Z0-9-]/g, '-');
         
-        // Get RESERVE_RIDE event data from sessionStorage if available
-        const reserveRideDataStr = sessionStorage.getItem("__ud_reserveRideData");
+        // Get RESERVE_RIDE event data from sessionStorage if available (reuse the one we already parsed)
         let reserveRideData = null;
-        if (reserveRideDataStr) {
+        if (reserveRideDataStrForTrip) {
           try {
-            reserveRideData = JSON.parse(reserveRideDataStr);
+            reserveRideData = JSON.parse(reserveRideDataStrForTrip);
           } catch (e) {
             console.error("Error parsing reserveRideData:", e);
           }
@@ -65,19 +152,19 @@ export default function ConfirmationPage() {
         const newTrip = {
           id: tripId,
           status: "upcoming" as const,
-          ride: selectedRide,
+          ride: rideToUse,
           pickup,
           dropoff,
           date: date || new Date().toISOString().split("T")[0],
           time: time || new Date().toTimeString().slice(0, 5),
-          price: selectedRide.price,
+          price: rideToUse.price,
           payment: "card",
           driver: {
-            name: ["Michael Chen", "Sarah Johnson", "David Martinez", "Emily Rodriguez"][rideIdx % 4],
+            name: ["Michael Chen", "Sarah Johnson", "David Martinez", "Emily Rodriguez"][(reserveRideData?.rideId ?? rideIdx) % 4],
             car: "Vehicle",
             plate: "ABC-123",
             phone: "+1-555-0101",
-            photo: `https://i.pravatar.cc/150?img=${(rideIdx % 10) + 1}`,
+            photo: `https://i.pravatar.cc/150?img=${((reserveRideData?.rideId ?? rideIdx) % 10) + 1}`,
           },
           // Store the complete RESERVE_RIDE event data for later use
           reserveRideData: reserveRideData || null,
@@ -163,7 +250,7 @@ export default function ConfirmationPage() {
                     </svg>
                     <div>
                       <div className="text-3xl font-bold">
-                        ${ride.price.toFixed(2)}
+                        ${(ride.price || 0).toFixed(2)}
                       </div>
                       <div className="text-sm text-blue-100 mt-1">
                         Visa ••••1270
@@ -176,7 +263,7 @@ export default function ConfirmationPage() {
               {/* 3. Large car image */}
               <div className="mb-6">
                 <img
-                  src="/car2.png"
+                  src={ride.image || "/car1.png"}
                   alt={ride.name}
                   className="w-full h-64 rounded-xl object-cover shadow-lg"
                 />
@@ -187,7 +274,7 @@ export default function ConfirmationPage() {
                 <div className="flex items-center gap-4 mb-4">
                   <div className="relative">
                     <img
-                      src={`https://i.pravatar.cc/150?img=${(data.rideIdx % 10) + 1}`}
+                      src={`https://i.pravatar.cc/150?img=${(rideIdForDriver % 10) + 1}`}
                       alt="Driver"
                       className="w-16 h-16 rounded-full object-cover border-2 border-[#2095d2]"
                     />
@@ -195,7 +282,7 @@ export default function ConfirmationPage() {
                   </div>
                   <div className="flex-1">
                     <div className="font-bold text-xl text-gray-900">
-                      {["Michael Chen", "Sarah Johnson", "David Martinez", "Emily Rodriguez"][data.rideIdx % 4]}
+                      {["Michael Chen", "Sarah Johnson", "David Martinez", "Emily Rodriguez"][rideIdForDriver % 4]}
                     </div>
                     <div className="text-sm text-gray-600">
                       Your driver
@@ -207,19 +294,19 @@ export default function ConfirmationPage() {
                 <div className="grid grid-cols-3 gap-3 mt-4">
                   <div className="bg-gray-50 rounded-lg p-3 text-center">
                     <div className="text-2xl font-bold text-[#2095d2]">
-                      {["4.9", "4.8", "5.0", "4.7"][data.rideIdx % 4]}
+                      {["4.9", "4.8", "5.0", "4.7"][rideIdForDriver % 4]}
                     </div>
                     <div className="text-xs text-gray-600 mt-1">Rating</div>
                   </div>
                   <div className="bg-gray-50 rounded-lg p-3 text-center">
                     <div className="text-2xl font-bold text-[#2095d2]">
-                      {["1.2k", "850", "2.1k", "650"][data.rideIdx % 4]}
+                      {["1.2k", "850", "2.1k", "650"][rideIdForDriver % 4]}
                     </div>
                     <div className="text-xs text-gray-600 mt-1">Trips</div>
                   </div>
                   <div className="bg-gray-50 rounded-lg p-3 text-center">
                     <div className="text-2xl font-bold text-[#2095d2]">
-                      {["3", "2", "5", "2"][data.rideIdx % 4]} min
+                      {["3", "2", "5", "2"][rideIdForDriver % 4]} min
                     </div>
                     <div className="text-xs text-gray-600 mt-1">ETA</div>
                   </div>
@@ -342,7 +429,7 @@ export default function ConfirmationPage() {
                       const scheduled = data.date && data.time ? `${data.date} ${data.time}` : "now";
                       
                       logEvent(EVENT_TYPES.TRIP_DETAILS, {
-                        rideId: data.rideIdx,
+                        rideId: rideIdForDriver,
                         rideName: ride.name,
                         rideType: ride.name,
                         price: ride.price,

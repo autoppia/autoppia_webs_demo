@@ -1,4 +1,10 @@
-import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { fetchSeededSelection, isDbLoadModeEnabled, getApiBaseUrl } from "@/shared/seeded-loader";
+import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
+import fallbackTripsData from "./original/trips_1.json";
+
+const PROJECT_KEY = "web_13_autodrive";
+const ENTITY_TYPE = "trips";
 
 // Trip type for extensibility
 export interface Trip {
@@ -118,23 +124,51 @@ const clampSeed = (value: number, fallback: number = 1): number =>
  */
 const getRuntimeV2Seed = (): number | null => {
   if (typeof window === "undefined") return null;
-  const value = (window as any).__autodriveV2Seed;
+  const value = (window as Window & { __autodriveV2Seed?: number | null }).__autodriveV2Seed;
   if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
     return value;
   }
   return null;
 };
 
-const resolveSeed = (v2SeedValue?: number | null): number => {
+const getBaseSeedFromUrl = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search);
+  const seedParam = params.get("seed");
+  if (seedParam) {
+    const parsed = Number.parseInt(seedParam, 10);
+    if (Number.isFinite(parsed)) {
+      return clampBaseSeed(parsed);
+    }
+  }
+  return null;
+};
+
+const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): number => {
+  if (!dbModeEnabled) {
+    return 1;
+  }
+  
   if (typeof v2SeedValue === "number" && Number.isFinite(v2SeedValue)) {
     return clampSeed(v2SeedValue);
   }
+  
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed !== null) {
+    const resolvedSeeds = resolveSeedsSync(baseSeed);
+    if (resolvedSeeds.v2 !== null) {
+      return resolvedSeeds.v2;
+    }
+    return clampSeed(baseSeed);
+  }
+  
   if (typeof window !== "undefined") {
     const fromClient = getRuntimeV2Seed();
     if (typeof fromClient === "number") {
       return fromClient;
     }
   }
+  
   return 1;
 };
 
@@ -202,6 +236,33 @@ const seededRandom = (seed: number) => {
 const pick = <T,>(rng: () => number, collection: T[]): T =>
   collection[Math.floor(rng() * collection.length)];
 
+/**
+ * Normalize trip from JSON data
+ */
+const normalizeTrip = (trip: any): Trip => ({
+  id: trip.id || `trip-${Math.random().toString(36).slice(2, 9)}`,
+  status: trip.status || "upcoming",
+  ride: {
+    name: trip.ride?.name || "AutoDriverX",
+    icon: trip.ride?.icon || trip.ride?.image || "/car1.png",
+    image: trip.ride?.image || "/car1.png",
+    price: trip.ride?.price || 26.6,
+  },
+  pickup: trip.pickup || "",
+  dropoff: trip.dropoff || "",
+  date: trip.date || new Date().toISOString().split("T")[0],
+  time: trip.time || "10:00",
+  price: trip.price || trip.ride?.price || 26.6,
+  payment: trip.payment || "card",
+  driver: {
+    name: trip.driver?.name || "Driver",
+    car: trip.driver?.car || "Vehicle",
+    plate: trip.driver?.plate || "ABC-123",
+    phone: trip.driver?.phone || "+1-555-0101",
+    photo: trip.driver?.photo || "https://i.pravatar.cc/150?img=1",
+  },
+});
+
 function generateDeterministicTrips(seed: number, limit: number): Trip[] {
   const rng = seededRandom(seed || 1);
   return Array.from({ length: limit }).map((_, index) => {
@@ -231,42 +292,116 @@ function generateDeterministicTrips(seed: number, limit: number): Trip[] {
 }
 
 /**
- * Initialize trips data for Web13 with deterministic pools.
- * Always load from the seeded dataset and throw when it is unavailable,
- * ensuring seed selections stay consistent across reloads.
+ * Fetch AI generated trips from /datasets/generate-smart endpoint
  */
-export async function initializeTrips(
-  limit: number = 30,
-  seedOverride?: number | null
-): Promise<Trip[]> {
-  const dbEnabled = isDbLoadModeEnabled();
-  const effectiveSeed = resolveSeed(seedOverride);
-
-  if (!dbEnabled) {
-    return generateDeterministicTrips(effectiveSeed, limit);
-  }
-
+async function fetchAiGeneratedTrips(count: number): Promise<Trip[]> {
+  const baseUrl = getApiBaseUrl();
+  const url = `${baseUrl}/datasets/generate-smart`;
+  
   try {
-    const trips = await fetchSeededSelection<Trip>({
-      projectKey: "web_13_autodrive",
-      entityType: "trips",
-      seedValue: effectiveSeed,
-      limit,
-      method: "shuffle",
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        project_key: PROJECT_KEY,
+        entity_type: ENTITY_TYPE,
+        count: 50, // Fixed count of 50
+      }),
     });
 
-    if (Array.isArray(trips) && trips.length > 0) {
-      console.log(
-        `[autodrive] Loaded ${trips.length} trips from dataset (seed=${effectiveSeed})`
-      );
-      return trips;
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "");
+      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
     }
 
-    throw new Error(
-      `[autodrive] No trips returned from dataset (seed=${effectiveSeed})`
-    );
+    const result = await response.json();
+    const generatedData = result?.generated_data ?? [];
+    
+    if (!Array.isArray(generatedData) || generatedData.length === 0) {
+      throw new Error("No data returned from AI generation endpoint");
+    }
+
+    return generatedData as Trip[];
   } catch (error) {
-    console.error("[autodrive] Failed to load trips from dataset", error);
-    return generateDeterministicTrips(effectiveSeed, limit);
+    console.error("[autodrive] AI generation failed:", error);
+    throw error;
   }
+}
+
+/**
+ * Initialize trips data for Web13 with deterministic pools.
+ * Priority: DB → AI → Fallback (deterministic)
+ */
+export async function initializeTrips(
+  v2SeedValue?: number | null,
+  limit: number = 30
+): Promise<Trip[]> {
+  const dbModeEnabled = isDbLoadModeEnabled();
+  const aiGenerateEnabled = isV2AiGenerateEnabled();
+  
+  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+    console.log("[autodrive] Base seed is 1, using original trips data (skipping DB/AI modes)");
+    // Return normalized trips from JSON
+    return (fallbackTripsData as any[]).map(normalizeTrip);
+  }
+
+  // Priority 1: DB mode - fetch from /datasets/load endpoint
+  if (dbModeEnabled) {
+    // If no seed provided, wait a bit for SeedContext to sync v2Seed to window
+    if (typeof window !== "undefined" && v2SeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+
+    try {
+      const trips = await fetchSeededSelection<Trip>({
+        projectKey: PROJECT_KEY,
+        entityType: ENTITY_TYPE,
+        seedValue: effectiveSeed,
+        limit: 50, // Fixed limit of 50 items for DB mode
+        method: "shuffle",
+      });
+
+      if (Array.isArray(trips) && trips.length > 0) {
+        console.log(
+          `[autodrive] Loaded ${trips.length} trips from dataset (seed=${effectiveSeed})`
+        );
+        return trips;
+      }
+
+      // If no trips returned from backend, fallback to original JSON data
+      console.warn(`[autodrive] No trips returned from backend (seed=${effectiveSeed}), falling back to original data`);
+    } catch (error) {
+      // If backend fails, fallback to original JSON data
+      console.warn("[autodrive] Backend unavailable, falling back to original data:", error);
+    }
+  }
+  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
+  else if (aiGenerateEnabled) {
+    try {
+      console.log("[autodrive] AI generation mode enabled, generating trips...");
+      const generatedTrips = await fetchAiGeneratedTrips(limit);
+      
+      if (Array.isArray(generatedTrips) && generatedTrips.length > 0) {
+        console.log(`[autodrive] Generated ${generatedTrips.length} trips via AI`);
+        return generatedTrips;
+      }
+      
+      console.warn("[autodrive] No trips generated, falling back to original data");
+    } catch (error) {
+      // If AI generation fails, fallback to original JSON data
+      console.warn("[autodrive] AI generation failed, falling back to original data:", error);
+    }
+  }
+  // Priority 3: Fallback - use original JSON data
+  else {
+    console.log("[autodrive] V2 modes disabled, using original data");
+  }
+
+  // Fallback to original JSON data
+  return (fallbackTripsData as any[]).map(normalizeTrip);
 }
