@@ -8,11 +8,13 @@ import { DoctorProfileClient } from "./doctor-profile-client";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { useDynamicSystem } from "@/dynamic/shared";
+import { useSeed } from "@/context/SeedContext";
 
 export default function DoctorProfile() {
   const params = useParams();
   const id = params?.id as string;
   const dyn = useDynamicSystem();
+  const { seed: currentSeed } = useSeed();
   const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [notFoundError, setNotFoundError] = useState(false);
@@ -45,21 +47,35 @@ export default function DoctorProfile() {
         // Try to find doctor by ID first
         let foundDoctor = doctors.find((d) => d.id === id);
         
-        // If not found by ID, try to find by index from sessionStorage
+        // If not found by ID, try to find by index from sessionStorage (only if seed matches)
         if (!foundDoctor && typeof window !== 'undefined' && doctors.length > 0) {
-          const indexStr = sessionStorage.getItem(`__autohealth_doctor_index_${id}`);
-          if (indexStr !== null) {
-            const index = parseInt(indexStr, 10);
-            if (!isNaN(index) && index >= 0) {
-              const order = dyn.v1.changeOrderElements("doctors-list", doctors.length);
-              const orderedDoctors = order.map((idx: number) => doctors[idx]);
-              if (index < orderedDoctors.length) {
-                const doctorByIndex = orderedDoctors[index];
-                if (doctorByIndex) {
-                  foundDoctor = doctorByIndex;
-                  console.log(`[DoctorProfile] Found doctor by index ${index}: ${doctorByIndex.name}`);
+          const indexDataStr = sessionStorage.getItem(`__autohealth_doctor_index_${id}`);
+          if (indexDataStr !== null) {
+            try {
+              const indexData = JSON.parse(indexDataStr);
+              // Only use the stored index if the seed matches the current seed
+              if (indexData.seed === currentSeed && typeof indexData.index === 'number') {
+                const index = indexData.index;
+                if (!isNaN(index) && index >= 0) {
+                  const order = dyn.v1.changeOrderElements("doctors-list", doctors.length);
+                  const orderedDoctors = order.map((idx: number) => doctors[idx]);
+                  if (index < orderedDoctors.length) {
+                    const doctorByIndex = orderedDoctors[index];
+                    if (doctorByIndex) {
+                      foundDoctor = doctorByIndex;
+                      console.log(`[DoctorProfile] Found doctor by index ${index} (seed=${currentSeed}): ${doctorByIndex.name}`);
+                    }
+                  }
                 }
+              } else {
+                // Seed mismatch - clear the stale sessionStorage entry
+                console.log(`[DoctorProfile] Seed mismatch (stored: ${indexData.seed}, current: ${currentSeed}), clearing sessionStorage entry`);
+                sessionStorage.removeItem(`__autohealth_doctor_index_${id}`);
               }
+            } catch (e) {
+              // Legacy format (just a number) - clear it
+              console.log(`[DoctorProfile] Legacy sessionStorage format detected, clearing entry`);
+              sessionStorage.removeItem(`__autohealth_doctor_index_${id}`);
             }
           }
         }
@@ -94,21 +110,35 @@ export default function DoctorProfile() {
             // Try to find doctor by ID first
             let updatedDoctor = updatedDoctors.find((d) => d.id === id);
             
-            // If not found by ID, try to find by index from sessionStorage
+            // If not found by ID, try to find by index from sessionStorage (only if seed matches)
             if (!updatedDoctor && typeof window !== 'undefined' && updatedDoctors.length > 0) {
-              const indexStr = sessionStorage.getItem(`__autohealth_doctor_index_${id}`);
-              if (indexStr !== null) {
-                const index = parseInt(indexStr, 10);
-                if (!isNaN(index) && index >= 0) {
-                  const order = dyn.v1.changeOrderElements("doctors-list", updatedDoctors.length);
-                  const orderedDoctors = order.map((idx: number) => updatedDoctors[idx]);
-                  if (index < orderedDoctors.length) {
-                    const doctorByIndex = orderedDoctors[index];
-                    if (doctorByIndex) {
-                      updatedDoctor = doctorByIndex;
-                      console.log(`[DoctorProfile] Found doctor by index ${index} in updated list: ${doctorByIndex.name}`);
+              const indexDataStr = sessionStorage.getItem(`__autohealth_doctor_index_${id}`);
+              if (indexDataStr !== null) {
+                try {
+                  const indexData = JSON.parse(indexDataStr);
+                  // Only use the stored index if the seed matches the current seed
+                  if (indexData.seed === currentSeed && typeof indexData.index === 'number') {
+                    const index = indexData.index;
+                    if (!isNaN(index) && index >= 0) {
+                      const order = dyn.v1.changeOrderElements("doctors-list", updatedDoctors.length);
+                      const orderedDoctors = order.map((idx: number) => updatedDoctors[idx]);
+                      if (index < orderedDoctors.length) {
+                        const doctorByIndex = orderedDoctors[index];
+                        if (doctorByIndex) {
+                          updatedDoctor = doctorByIndex;
+                          console.log(`[DoctorProfile] Found doctor by index ${index} in updated list (seed=${currentSeed}): ${doctorByIndex.name}`);
+                        }
+                      }
                     }
+                  } else {
+                    // Seed mismatch - clear the stale sessionStorage entry
+                    console.log(`[DoctorProfile] Seed mismatch in update (stored: ${indexData.seed}, current: ${currentSeed}), clearing sessionStorage entry`);
+                    sessionStorage.removeItem(`__autohealth_doctor_index_${id}`);
                   }
+                } catch (e) {
+                  // Legacy format (just a number) - clear it
+                  console.log(`[DoctorProfile] Legacy sessionStorage format detected in update, clearing entry`);
+                  sessionStorage.removeItem(`__autohealth_doctor_index_${id}`);
                 }
               }
             }
@@ -141,7 +171,7 @@ export default function DoctorProfile() {
       mounted = false;
       if (unsubscribe) unsubscribe();
     };
-  }, [id]);
+  }, [id, currentSeed, dyn]);
 
   if (isLoading) {
     if (useAiGeneration) {

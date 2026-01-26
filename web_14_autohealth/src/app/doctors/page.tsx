@@ -140,9 +140,10 @@ export default function DoctorsPage() {
                       className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
                       variant="outline"
                       onClick={() => {
-                        // Store index in sessionStorage for fallback lookup
+                        // Store index and seed in sessionStorage for fallback lookup
                         if (typeof window !== 'undefined') {
-                          sessionStorage.setItem(`__autohealth_doctor_index_${d.id}`, i.toString());
+                          const indexData = JSON.stringify({ index: i, seed: dyn.seed });
+                          sessionStorage.setItem(`__autohealth_doctor_index_${d.id}`, indexData);
                         }
                         logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
                           doctorId: d.id,
