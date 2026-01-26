@@ -2,7 +2,7 @@
 
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useEffect, useState, useMemo } from "react";
-import { initializeDoctors } from "@/data/doctors-enhanced";
+import { getDoctors, subscribeDoctors, whenReady } from "@/dynamic/v2";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import type { Doctor } from "@/data/types";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -55,10 +55,38 @@ export default function DoctorsPage() {
 
   useEffect(() => {
     let mounted = true;
-    initializeDoctors()
-      .then((data) => { if (mounted) setDoctorList(data); })
-      .finally(() => { if (mounted) setIsLoading(false); });
-    return () => { mounted = false; };
+    let unsubscribe: (() => void) | null = null;
+    
+    const loadDoctors = async () => {
+      try {
+        await whenReady();
+        if (!mounted) return;
+        
+        // Get initial data
+        const doctors = getDoctors();
+        if (mounted) {
+          setDoctorList(doctors);
+          setIsLoading(false);
+        }
+        
+        // Subscribe to updates
+        unsubscribe = subscribeDoctors((doctors) => {
+          if (mounted) {
+            setDoctorList(doctors);
+          }
+        });
+      } catch (error) {
+        console.error("[DoctorsPage] Failed to load doctors:", error);
+        if (mounted) setIsLoading(false);
+      }
+    };
+    
+    loadDoctors();
+    
+    return () => {
+      mounted = false;
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
   
   const orderedDoctors = useMemo(() => {
@@ -111,12 +139,18 @@ export default function DoctorsPage() {
                       id={dyn.v3.getVariant("view-profile-button", ID_VARIANTS_MAP, `view-profile-button-${i}`)}
                       className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
                       variant="outline"
-                      onClick={() => logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
-                        doctorId: d.id,
-                        doctorName: d.name,
-                        specialty: d.specialty,
-                        rating: d.rating
-                      })}
+                      onClick={() => {
+                        // Store index in sessionStorage for fallback lookup
+                        if (typeof window !== 'undefined') {
+                          sessionStorage.setItem(`__autohealth_doctor_index_${d.id}`, i.toString());
+                        }
+                        logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
+                          doctorId: d.id,
+                          doctorName: d.name,
+                          specialty: d.specialty,
+                          rating: d.rating
+                        });
+                      }}
                     >
                       {dyn.v3.getVariant("view_profile", TEXT_VARIANTS_MAP, "View Profile")}
                     </Button>

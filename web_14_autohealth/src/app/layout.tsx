@@ -6,6 +6,7 @@ import Script from "next/script";
 import Navbar from "@/components/site/navbar";
 import Footer from "@/components/site/footer";
 import { SeedProvider } from "@/context/SeedContext";
+import { DataReadyGate } from "@/components/layout/DataReadyGate";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,13 +39,15 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning className="antialiased">
         <SeedProvider>
-          <ClientBody>
-            <div className="min-h-dvh flex flex-col">
-              <Navbar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-          </ClientBody>
+          <DataReadyGate>
+            <ClientBody>
+              <div className="min-h-dvh flex flex-col">
+                <Navbar />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </div>
+            </ClientBody>
+          </DataReadyGate>
         </SeedProvider>
       </body>
     </html>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { initializeAppointments } from "@/data/appointments-enhanced";
+import { getAppointments, subscribeAppointments, whenReady } from "@/dynamic/v2";
 import type { Appointment } from "@/data/types";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -41,10 +41,38 @@ export default function AppointmentsPage() {
 
   useEffect(() => {
     let mounted = true;
-    initializeAppointments()
-      .then((data) => { if (mounted) setAppointmentList(data); })
-      .finally(() => { if (mounted) setIsLoading(false); });
-    return () => { mounted = false; };
+    let unsubscribe: (() => void) | null = null;
+    
+    const loadAppointments = async () => {
+      try {
+        await whenReady();
+        if (!mounted) return;
+        
+        // Get initial data
+        const appointments = getAppointments();
+        if (mounted) {
+          setAppointmentList(appointments);
+          setIsLoading(false);
+        }
+        
+        // Subscribe to updates
+        unsubscribe = subscribeAppointments((appointments) => {
+          if (mounted) {
+            setAppointmentList(appointments);
+          }
+        });
+      } catch (error) {
+        console.error("[AppointmentsPage] Failed to load appointments:", error);
+        if (mounted) setIsLoading(false);
+      }
+    };
+    
+    loadAppointments();
+    
+    return () => {
+      mounted = false;
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   // Column definitions (keys drive order of headers/cells)

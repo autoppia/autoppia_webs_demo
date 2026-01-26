@@ -3,12 +3,29 @@ import fallbackAppointmentsJson from "@/data/original/appointments_1.json";
 import { isDataGenerationAvailable, generateAppointments } from "@/utils/healthDataGenerator";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { resolveDatasetSeed, waitForDatasetSeed } from "@/utils/v2Seed";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 
 const CACHE_KEY = 'autohealth_appointments_v1';
 const DOCTORS_CACHE_KEY = 'autohealth_doctors_v1';
 const PROJECT_KEY = 'web_14_autohealth';
 let appointmentsCache: Appointment[] = [];
 const FALLBACK_APPOINTMENTS: Appointment[] = Array.isArray(fallbackAppointmentsJson) ? (fallbackAppointmentsJson as Appointment[]) : [];
+
+/**
+ * Get base seed from URL parameter
+ */
+const getBaseSeedFromUrl = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search);
+  const seedParam = params.get("seed");
+  if (seedParam) {
+    const parsed = Number.parseInt(seedParam, 10);
+    if (Number.isFinite(parsed)) {
+      return clampBaseSeed(parsed);
+    }
+  }
+  return null;
+};
 
 
 async function loadAppointmentsFromDataset(v2SeedValue?: number | null): Promise<Appointment[]> {
@@ -29,13 +46,24 @@ async function loadAppointmentsFromDataset(v2SeedValue?: number | null): Promise
 }
 
 export async function initializeAppointments(doctors?: Doctor[], v2SeedValue?: number | null): Promise<Appointment[]> {
-  if (isDbLoadModeEnabled()) {
+  const dbModeEnabled = isDbLoadModeEnabled();
+  const aiGenerateEnabled = isDataGenerationAvailable();
+  
+  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+    console.log("[autohealth] Base seed is 1, using original appointments data (skipping DB/AI modes)");
+    appointmentsCache = FALLBACK_APPOINTMENTS;
+    return appointmentsCache;
+  }
+  
+  if (dbModeEnabled) {
     if (appointmentsCache.length > 0) return appointmentsCache;
     appointmentsCache = await loadAppointmentsFromDataset(v2SeedValue);
     return appointmentsCache;
   }
 
-  if (!isDataGenerationAvailable()) {
+  if (!aiGenerateEnabled) {
     appointmentsCache = FALLBACK_APPOINTMENTS;
     return appointmentsCache;
   }
