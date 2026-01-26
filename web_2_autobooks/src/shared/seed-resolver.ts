@@ -85,7 +85,7 @@ function resolveSeedsLocal(baseSeed: number, enabledFlags?: { v1: boolean; v2: b
   }
   // V2: usar seed base directamente (sin derivación)
   if (flags.v2) {
-    resolved.v2 = safeSeed;
+    resolved.v2 = ((safeSeed * 53 + 17) % 300) + 1;
   }
   if (flags.v3) {
     resolved.v3 = ((safeSeed * 71 + 3) % 100) + 1;

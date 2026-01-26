@@ -57,19 +57,24 @@ const getBaseSeedFromUrl = (): number | null => {
 };
 
 const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number => {
-  // Si V2 está deshabilitado, siempre usar seed=1 (equivalente a datos originales)
   if (!dbModeEnabled) {
     return 1;
   }
   
-  // Si se proporciona un seed específico, usarlo directamente
+  // Si se proporciona un seed específico (ya derivado), usarlo directamente
   if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
     return clampSeed(seedValue);
   }
   
-  // Obtener seed base de la URL y usarlo directamente (sin derivación)
+  // Obtener seed base de la URL y derivar el V2 seed
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed !== null) {
+    // Derivar V2 seed usando la fórmula: ((baseSeed * 53 + 17) % 300) + 1
+    const resolvedSeeds = resolveSeedsSync(baseSeed);
+    if (resolvedSeeds.v2 !== null) {
+      return resolvedSeeds.v2;
+    }
+    // Si V2 no está habilitado, usar el base seed
     return clampSeed(baseSeed);
   }
   
@@ -116,16 +121,7 @@ const buildPosterPath = (imagePath?: string): string => {
   if (imagePath.startsWith("/")) {
     return imagePath;
   }
-  // Ensure the path doesn't have -sm-web suffix (remove if present)
-  let cleanPath = imagePath;
-  if (cleanPath.includes('-sm-web')) {
-    cleanPath = cleanPath.replace(/-sm-web\.(jpg|jpeg|png)$/i, '.$1');
-  }
-  // Normalize the path: remove 'gallery/' prefix if present, we'll add it back
-  if (cleanPath.startsWith('gallery/')) {
-    cleanPath = cleanPath.replace('gallery/', '');
-  }
-  return `/media/gallery/${cleanPath}`;
+  return `/media/${imagePath}`;
 };
 
 const generateFallbackId = (): string => {
@@ -215,28 +211,27 @@ export async function initializeMovies(v2SeedValue?: number | null, limit = 300)
     return moviesCache;
   }
 
-  // Priority 1: DB mode or V2 disabled - fetch from /datasets/load endpoint
-  // When V2 is disabled, fetchSeededSelection will use seed=1 automatically
-  if (dbModeEnabled || !dbModeEnabled) {
+  // Priority 1: DB mode - fetch from /datasets/load endpoint
+  if (dbModeEnabled) {
     // Si no se proporciona seed, leerlo de la URL
     if (typeof window !== "undefined" && v2SeedValue == null) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
-    const effectiveSeed = dbModeEnabled ? resolveSeed(dbModeEnabled, v2SeedValue) : 1;
+    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
 
     try {
       const movies = await fetchSeededSelection<DatasetMovie>({
         projectKey: "web_1_autocinema",
         entityType: "movies",
         seedValue: effectiveSeed,
-        limit: 50, // Fixed limit of 50 items
+        limit: 50, // Fixed limit of 50 items for DB mode
         method: "distribute",
         filterKey: "category",
       });
 
       if (Array.isArray(movies) && movies.length > 0) {
         console.log(
-          `[autocinema] Loaded ${movies.length} movies from dataset (seed=${effectiveSeed}, v2_disabled=${!dbModeEnabled})`
+          `[autocinema] Loaded ${movies.length} movies from dataset (seed=${effectiveSeed})`
         );
         moviesCache = movies.map(normalizeMovie);
         return moviesCache;
