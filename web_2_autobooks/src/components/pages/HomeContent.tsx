@@ -12,6 +12,7 @@ import { cn } from "@/library/utils";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { useSeed } from "@/context/SeedContext";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { logEvent, EVENT_TYPES } from "@/library/events";
 
 export function HomeContent() {
   const router = useSeedRouter();
@@ -223,7 +224,13 @@ export function HomeContent() {
                             type="search"
                             id={dyn.v3.getVariant("search-input", ID_VARIANTS_MAP, "search-input")}
                             value={searchQuery}
-                            onChange={(event) => setSearchQuery(event.target.value)}
+                            onChange={(event) => {
+                              const value = event.target.value;
+                              setSearchQuery(value);
+                              if (value.trim()) {
+                                logEvent(EVENT_TYPES.SEARCH_BOOK, { query: value });
+                              }
+                            }}
                             placeholder={dyn.v3.getVariant("search_placeholder", undefined, "Search authors, titles, or keywords")}
                             className={cn(
                               "pl-12 h-14 w-full min-w-0 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base",
