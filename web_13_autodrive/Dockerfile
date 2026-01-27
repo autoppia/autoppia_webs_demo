@@ -19,7 +19,7 @@ RUN set -e; for i in 1 2 3; do npm ci && exit 0 || echo "Attempt $i failed, retr
 
 COPY web_13_autodrive/ .
 # Copy original dataset files for fallback
-COPY webs_server/initial_data/web_13_autodrive/original/trips_1.json src/data/original/trips_1.json
+COPY webs_server/initial_data/web_13_autodrive/original/ src/data/original/
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions
