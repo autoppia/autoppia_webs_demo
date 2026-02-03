@@ -4,6 +4,14 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
@@ -26,6 +34,7 @@ export function QuickAppointmentHero() {
     specialty: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
   const [filteredSpecialties, setFilteredSpecialties] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const specialtyInputRef = useRef<HTMLInputElement>(null);
@@ -85,7 +94,7 @@ export function QuickAppointmentHero() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       alert("Please fill in all required fields.");
       return;
@@ -94,48 +103,18 @@ export function QuickAppointmentHero() {
     setIsSubmitting(true);
 
     try {
-      // Log the quick appointment request
-      logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
-        source: "quick_appointment_hero",
+      await logEvent(EVENT_TYPES.REQUEST_QUICK_APPOINTMENT, {
         patientName: formData.name,
         patientEmail: formData.email,
         patientPhone: formData.phone,
         specialty: formData.specialty || "General",
-        action: "redirect_to_filtered_appointments"
       });
 
-      // Save form data to localStorage so it can be pre-filled in the booking modal
-      if (typeof window !== 'undefined') {
-        const quickFormData = {
-          patientName: formData.name,
-          patientEmail: formData.email,
-          patientPhone: formData.phone,
-        };
-        localStorage.setItem('quick_appointment_form_data', JSON.stringify(quickFormData));
-      }
-
-      // Redirect immediately to appointments page with specialty filter if provided
-      // User will select the appointment from the filtered list
-      // Add source as query param to preserve the booking origin
-      const baseParams = new URLSearchParams();
-      if (formData.specialty.trim()) {
-        baseParams.set("specialty", formData.specialty.trim());
-      }
-      baseParams.set("source", "quick_appointment_hero");
-      const redirectUrl = `/appointments?${baseParams.toString()}`;
-      
-      window.location.href = redirectUrl;
+      setShowConfirmationPopup(true);
+      setFormData({ name: "", email: "", phone: "", specialty: "" });
     } catch (error) {
-      console.error("Error redirecting to appointments:", error);
-      // Still redirect even if logging fails
-      // Add source as query param to preserve the booking origin
-      const baseParams = new URLSearchParams();
-      if (formData.specialty.trim()) {
-        baseParams.set("specialty", formData.specialty.trim());
-      }
-      baseParams.set("source", "quick_appointment_hero");
-      const redirectUrl = `/appointments?${baseParams.toString()}`;
-      window.location.href = redirectUrl;
+      console.error("Error submitting request:", error);
+      alert("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -279,6 +258,7 @@ export function QuickAppointmentHero() {
                     className={cn("w-full bg-emerald-600 hover:bg-emerald-700 text-white", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
                     size="lg"
                     disabled={isSubmitting || !validateForm()}
+                    data-testid="request-appointment-submit"
                   >
                     {isSubmitting 
                       ? dyn.v3.getVariant("sending", TEXT_VARIANTS_MAP, "Submitting...") 
@@ -290,6 +270,26 @@ export function QuickAppointmentHero() {
           </div>
         </div>
       </div>
+
+      <Dialog open={showConfirmationPopup} onOpenChange={setShowConfirmationPopup}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Request received</DialogTitle>
+            <DialogDescription>
+              We will contact you as soon as possible.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              type="button"
+              onClick={() => setShowConfirmationPopup(false)}
+              data-testid="quick-appointment-confirmation-close"
+            >
+              OK
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }

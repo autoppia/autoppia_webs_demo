@@ -4,7 +4,6 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { useEffect, useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
@@ -19,12 +18,14 @@ import { QuickAppointmentHero } from "@/components/quick-appointment-hero";
 
 export default function Home() {
   const dyn = useDynamicSystem();
-  const [isLoading, setIsLoading] = useState(true);
+  const useAiGeneration = isDataGenerationAvailable() && !isDbLoadModeEnabled();
+  // Only start loading if we actually need AI generation; otherwise render immediately
+  const [isLoading, setIsLoading] = useState(useAiGeneration);
   const nav = [
-    { href: "/appointments", title: "Appointments", desc: "Find a slot and book online", event: EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED },
-    { href: "/doctors", title: "Doctors", desc: "Browse specialists and ratings", event: EVENT_TYPES.BROWSE_DOCTORS_CLICKED },
-    { href: "/prescriptions", title: "Prescriptions", desc: "View your medications", event: EVENT_TYPES.BROWSE_PRESCRIPTIONS_CLICKED },
-    { href: "/medical-records", title: "Medical Records", desc: "Upload and review files", event: EVENT_TYPES.BROWSE_MEDICAL_RECORDS_CLICKED },
+    { href: "/appointments", title: "Appointments", desc: "Find a slot and book online" },
+    { href: "/doctors", title: "Doctors", desc: "Browse specialists and ratings" },
+    { href: "/prescriptions", title: "Prescriptions", desc: "View your medications" },
+    { href: "/medical-records", title: "Medical Analysis", desc: "Search and review analysis" },
   ];
   const orderedNav = useMemo(() => {
     const order = dyn.v1.changeOrderElements("home-nav", nav.length);
@@ -40,7 +41,6 @@ export default function Home() {
     const order = dyn.v1.changeOrderElements("home-hero", heroParts.length);
     return order.map((idx) => heroParts[idx]);
   }, [dyn.seed, heroParts]);
-  const useAiGeneration = isDataGenerationAvailable() && !isDbLoadModeEnabled();
 
   useEffect(() => {
     if (!useAiGeneration) {
@@ -49,6 +49,7 @@ export default function Home() {
     }
     let mounted = true;
     // Initialize doctors first, then use them for other data types
+    // Don't block render - run async without blocking
     (async () => {
       try {
         const doctors = await initializeDoctors();
@@ -115,7 +116,6 @@ export default function Home() {
                         id={dyn.v3.getVariant("hero-cta", ID_VARIANTS_MAP, "hero-cta")}
                         className={cn("size-lg", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
                         size="lg"
-                        onClick={() => logEvent(EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED, { source: "homepage_cta_button" })}
                       >
                         {dyn.v3.getVariant("browse_appointments", TEXT_VARIANTS_MAP, "Browse Appointments")}
                       </Button>
@@ -134,11 +134,6 @@ export default function Home() {
             <SeedLink key={n.href} href={n.href}>
               <Card 
                 className={cn("h-full transition hover:shadow-md", dyn.v3.getVariant("nav-card", CLASS_VARIANTS_MAP, ""))}
-                onClick={() => logEvent(n.event, { 
-                  source: "homepage_card", 
-                  destination: n.href,
-                  title: n.title 
-                })}
               >
                 <CardHeader>
                   <CardTitle className={cn(dyn.v3.getVariant("homepage-card-title", CLASS_VARIANTS_MAP, ""))}>

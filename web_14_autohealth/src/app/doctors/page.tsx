@@ -17,6 +17,9 @@ import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MEDICAL_SPECIALTIES } from "@/data/medical-specialties";
+import { Pagination } from "@/components/ui/pagination";
+
+const DOCTORS_PAGE_SIZE = 9;
 
 function Stars({ value }: { value: number }) {
   const stars = Array.from({ length: 5 }).map((_, i) => {
@@ -34,25 +37,39 @@ export default function DoctorsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchName, setSearchName] = useState("");
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>("");
+  const [appliedSearchName, setAppliedSearchName] = useState("");
+  const [appliedSpecialty, setAppliedSpecialty] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState(1);
   const useAiGeneration = isDataGenerationAvailable() && !isDbLoadModeEnabled();
 
-  const handleBookNow = (doctor: Doctor) => {
-    // Log the book now event
-    logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
-      appointmentId: `temp-${doctor.id}`,
-      doctorId: doctor.id,
-      doctorName: doctor.name,
-      specialty: doctor.specialty,
-      rating: doctor.rating,
-      date: new Date().toISOString().split('T')[0],
-      time: "10:00 AM",
-      action: "redirect_to_appointments",
-      source: "doctors_page"
-    });
+  const handleSearch = () => {
+    const nameFilter = searchName.trim();
+    const specialtyFilter = selectedSpecialty;
+    setAppliedSearchName(nameFilter);
+    setAppliedSpecialty(specialtyFilter);
+    setCurrentPage(1);
 
-    // Redirect to appointments page filtered by this doctor
-    // Add source as query param to preserve the booking origin
-    window.location.href = `/appointments?doctorId=${encodeURIComponent(doctor.id)}&source=doctors_page`;
+    // Result list with current filters (same logic as filteredDoctors) for event payload
+    let resultDoctors = doctorList;
+    if (nameFilter) {
+      const term = nameFilter.toLowerCase();
+      resultDoctors = resultDoctors.filter((d) => d.name.toLowerCase().includes(term));
+    }
+    if (specialtyFilter) {
+      resultDoctors = resultDoctors.filter(
+        (d) => d.specialty.toLowerCase() === specialtyFilter.toLowerCase()
+      );
+    }
+
+    const hasSearch = nameFilter.length > 0;
+    const hasSpecialty = specialtyFilter.length > 0;
+    if (hasSearch || hasSpecialty) {
+      logEvent(EVENT_TYPES.SEARCH_DOCTORS, {
+        searchTerm: nameFilter || null,
+        specialty: specialtyFilter || null,
+        doctors: resultDoctors,
+      });
+    }
   };
 
   useEffect(() => {
@@ -63,32 +80,41 @@ export default function DoctorsPage() {
     return () => { mounted = false; };
   }, []);
   
-  // Filter doctors by name and specialty
+  // Filter doctors by applied name and specialty (set when user clicks Search)
   const filteredDoctors = useMemo(() => {
     let filtered = doctorList;
 
-    // Filter by name (case-insensitive)
-    if (searchName.trim()) {
-      const searchTerm = searchName.toLowerCase();
+    if (appliedSearchName) {
+      const searchTerm = appliedSearchName.toLowerCase();
       filtered = filtered.filter(doctor =>
         doctor.name.toLowerCase().includes(searchTerm)
       );
     }
 
-    // Filter by specialty
-    if (selectedSpecialty) {
+    if (appliedSpecialty) {
       filtered = filtered.filter(doctor =>
-        doctor.specialty.toLowerCase() === selectedSpecialty.toLowerCase()
+        doctor.specialty.toLowerCase() === appliedSpecialty.toLowerCase()
       );
     }
 
     return filtered;
-  }, [doctorList, searchName, selectedSpecialty]);
+  }, [doctorList, appliedSearchName, appliedSpecialty]);
 
   const orderedDoctors = useMemo(() => {
     const order = dyn.v1.changeOrderElements("doctors-list", filteredDoctors.length);
     return order.map((idx) => filteredDoctors[idx]);
   }, [dyn.seed, filteredDoctors]);
+
+  // Reset to page 1 when applied filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [appliedSearchName, appliedSpecialty]);
+
+  const totalDoctors = orderedDoctors.length;
+  const paginatedDoctors = useMemo(() => {
+    const start = (currentPage - 1) * DOCTORS_PAGE_SIZE;
+    return orderedDoctors.slice(start, start + DOCTORS_PAGE_SIZE);
+  }, [orderedDoctors, currentPage]);
 
   if (useAiGeneration && isLoading) {
     return (
@@ -130,7 +156,7 @@ export default function DoctorsPage() {
             
             {/* Search and Filter Section */}
             <div className="p-4 md:p-6">
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-4 md:grid-cols-[1fr_1fr_auto] items-end">
                 {/* Name Search */}
                 <div className="space-y-2">
                   <Label htmlFor="doctor-name-search" className="text-sm font-medium text-white">Search by Name</Label>
@@ -140,7 +166,9 @@ export default function DoctorsPage() {
                     placeholder="Enter doctor's name..."
                     value={searchName}
                     onChange={(e) => setSearchName(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                     className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
+                    data-testid="doctor-name-search"
                   />
                 </div>
 
@@ -155,22 +183,33 @@ export default function DoctorsPage() {
                       "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                       dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "")
                     )}
+                    data-testid="doctor-specialty-filter"
                   >
                     <option value="">All Specialties</option>
-                    {MEDICAL_SPECIALTIES.sort().map((specialty) => (
+                    {[...MEDICAL_SPECIALTIES].sort().map((specialty: string) => (
                       <option key={specialty} value={specialty}>
                         {specialty}
                       </option>
                     ))}
                   </select>
                 </div>
+
+                {/* Search button: applies filters and fires SEARCH_DOCTORS */}
+                <Button
+                  type="button"
+                  onClick={handleSearch}
+                  className={cn("bg-emerald-600 hover:bg-emerald-700 h-10", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+                  data-testid="doctors-search-button"
+                >
+                  {dyn.v3.getVariant("search", TEXT_VARIANTS_MAP, "Search")}
+                </Button>
               </div>
 
               {/* Results count */}
               <div className="mt-4 text-sm text-white">
-                Showing {orderedDoctors.length} of {doctorList.length} doctors
-                {searchName && ` matching "${searchName}"`}
-                {selectedSpecialty && ` in ${selectedSpecialty}`}
+                {totalDoctors} of {doctorList.length} doctors
+                {appliedSearchName && ` matching "${appliedSearchName}"`}
+                {appliedSpecialty && ` in ${appliedSpecialty}`}
               </div>
             </div>
           </div>
@@ -179,9 +218,15 @@ export default function DoctorsPage() {
 
       {/* Doctors Grid */}
       <div className="container py-10">
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {orderedDoctors.map((d, i) => (
+      <Pagination
+        totalItems={totalDoctors}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        itemsPerPage={DOCTORS_PAGE_SIZE}
+        data-testid="doctors-pagination"
+      />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-4">
+        {paginatedDoctors.map((d, i) => (
           dyn.v1.addWrapDecoy(`doctor-card-${i}`, (
             <Card key={d.id} className={cn("flex flex-col w-full", dyn.v3.getVariant("doctor-card", CLASS_VARIANTS_MAP, ""))}>
               <CardHeader className="flex-row items-center gap-4">
@@ -201,38 +246,32 @@ export default function DoctorsPage() {
                 <Stars value={d.rating} />
                 <p className="mt-3 text-sm text-muted-foreground">{d.bio}</p>
               </CardContent>
-              <CardFooter className="mt-auto flex gap-2">
+              <CardFooter className="mt-auto flex items-center justify-end pt-2">
                 <SeedLink href={`/doctors/${d.id}`}>
                   {dyn.v1.addWrapDecoy(`view-profile-button-${i}`, (
-                    <Button 
+                    <Button
                       id={dyn.v3.getVariant("view-profile-button", ID_VARIANTS_MAP, `view-profile-button-${i}`)}
-                      className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
-                      variant="outline"
-                      onClick={() => logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
-                        doctorId: d.id,
-                        doctorName: d.name,
-                        specialty: d.specialty,
-                        rating: d.rating
-                      })}
+                      className={cn("bg-green-600 hover:bg-green-700 text-white", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+                      data-testid="view-doctor-profile-btn"
+                      onClick={() => logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, { doctor: d })}
                     >
                       {dyn.v3.getVariant("view_profile", TEXT_VARIANTS_MAP, "View Profile")}
                     </Button>
                   ))}
                 </SeedLink>
-                {dyn.v1.addWrapDecoy(`book-now-button-${i}`, (
-                  <Button 
-                    id={dyn.v3.getVariant("book-now-button", ID_VARIANTS_MAP, `book-now-button-${i}`)}
-                    className={cn("bg-green-600 hover:bg-green-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
-                    onClick={() => handleBookNow(d)}
-                  >
-                    {dyn.v3.getVariant("book_now", TEXT_VARIANTS_MAP, "Book Now")}
-                  </Button>
-                ))}
               </CardFooter>
             </Card>
           ), `doctor-card-${i}`)
         ))}
       </div>
+      <Pagination
+        totalItems={totalDoctors}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        itemsPerPage={DOCTORS_PAGE_SIZE}
+        className="mt-6"
+        data-testid="doctors-pagination-bottom"
+      />
       </div>
     </>
   );

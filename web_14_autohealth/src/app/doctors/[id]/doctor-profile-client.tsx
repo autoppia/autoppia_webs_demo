@@ -7,13 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, Phone, Mail, MapPin, Clock, Award, BookOpen, Stethoscope } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { ContactDoctorModal } from "@/components/contact-doctor-modal";
 import { DoctorReviewsModal } from "@/components/doctor-reviews-modal";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
-import { initializeDoctorReviews } from "@/data/reviews-enhanced";
 
 function Stars({ value }: { value: number }) {
   const stars = Array.from({ length: 5 }).map((_, i) => {
@@ -30,66 +29,20 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
-  const [aiReviews, setAiReviews] = useState<Array<{ rating: number; comment: string; patientName: string; date: string }>>([]);
-  const [isReviewsLoading, setIsReviewsLoading] = useState(false);
-
-  const handleBookAppointment = () => {
-    logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
-      appointmentId: `temp-${doctor.id}`,
-      doctorId: doctor.id,
-      doctorName: doctor.name,
-      specialty: doctor.specialty,
-      rating: doctor.rating,
-      date: new Date().toISOString().split('T')[0],
-      time: "10:00 AM",
-      action: "redirect_to_appointments",
-      source: "doctor_profile_page"
-    });
-    // Redirect to appointments page filtered by this doctor
-    // Add source as query param to preserve the booking origin
-    window.location.href = `/appointments?doctorId=${encodeURIComponent(doctor.id)}&source=doctor_profile_page`;
-  };
 
   const handleContactDoctor = () => {
-    // REMOVED: Do not log CONTACT_DOCTOR when opening modal
-    // Reason: According to .cursorrules, events should be logged only when the action is completed
-    // (when the message is sent), not when the modal is opened. The event will be logged in
-    // ContactDoctorModal.handleSubmitContact when the user confirms the contact.
+    logEvent(EVENT_TYPES.OPEN_CONTACT_DOCTOR_FORM, { doctor });
     setIsContactModalOpen(true);
   };
 
   const handleViewReviews = () => {
-    logEvent(EVENT_TYPES.VIEW_REVIEWS_CLICKED, {
-      doctorId: doctor.id,
-      doctorName: doctor.name,
-      specialty: doctor.specialty,
-      rating: doctor.rating
-    });
     setIsReviewsModalOpen(true);
   };
-
-  // Load AI reviews when the Reviews tab is activated
-  useEffect(() => {
-    let mounted = true;
-    if (activeTab !== "reviews") return;
-    (async () => {
-      try {
-        setIsReviewsLoading(true);
-        const data = await initializeDoctorReviews({ id: doctor.id, name: doctor.name, specialty: doctor.specialty });
-        if (mounted) setAiReviews(Array.isArray(data) ? data : []);
-      } finally {
-        if (mounted) setIsReviewsLoading(false);
-      }
-    })();
-    return () => { mounted = false; };
-  }, [activeTab, doctor.id, doctor.name, doctor.specialty]);
 
   const tabs = [
     { id: "overview", label: "Overview" },
     { id: "education", label: "Education & Certifications" },
-    { id: "availability", label: "Availability" },
-    { id: "reviews", label: "Reviews" },
-    { id: "procedures", label: "Procedures" }
+    { id: "availability", label: "Availability" }
   ];
   const orderedTabs = useMemo(() => {
     const order = dyn.v1.changeOrderElements("doctor-profile-tabs", tabs.length);
@@ -197,7 +150,12 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
                 id={dyn.v3.getVariant(`profile-tab-${tab.id}`, ID_VARIANTS_MAP, `profile-tab-${tab.id}`)}
                 className={cn("rounded-b-none", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
                 variant={activeTab === tab.id ? "default" : "ghost"}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  if (tab.id === "education") {
+                    logEvent(EVENT_TYPES.VIEW_DOCTOR_EDUCATION, { doctor });
+                  }
+                }}
               >
                 {tab.label}
               </Button>
@@ -274,6 +232,25 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
                     <li key={award} className="flex items-center gap-2">
                       <span className="text-yellow-500">🏆</span>
                       <span className="text-sm">{award}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Stethoscope className="h-5 w-5" />
+                  Procedures & Services
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2">
+                  {(doctor.procedures || []).map((procedure, index) => (
+                    <li key={index} className="flex items-center gap-2">
+                      <span className="text-blue-500">🔬</span>
+                      <span className="text-sm">{procedure}</span>
                     </li>
                   ))}
                 </ul>
@@ -363,83 +340,18 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
             </CardContent>
           </Card>
         )}
-
-        {activeTab === "reviews" && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Star className="h-5 w-5" />
-                Patient Reviews
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {isReviewsLoading && (
-                  <div className="text-sm text-muted-foreground">Loading reviews…</div>
-                )}
-                {(!isReviewsLoading && (doctor.patientReviews || []).length + aiReviews.length === 0) && (
-                  <div className="text-sm text-muted-foreground">No reviews available yet.</div>
-                )}
-                {[...(doctor.patientReviews || []), ...aiReviews].map((review, index) => (
-                  <div key={index} className="border-b pb-4 last:border-b-0">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <Stars value={review.rating} />
-                        <span className="font-medium">{review.patientName}</span>
-                      </div>
-                      <span className="text-sm text-muted-foreground">{review.date}</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{review.comment}</p>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {activeTab === "procedures" && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Stethoscope className="h-5 w-5" />
-                Procedures & Services
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {(doctor.procedures || []).map((procedure, index) => (
-                  <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded">
-                    <span className="text-blue-500">🔬</span>
-                    <span className="text-sm">{procedure}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
       </div>
 
       {/* Action Buttons */}
       <div className="mt-8 flex flex-col sm:flex-row gap-4">
         {(() => {
           const actions = [
-            { key: 'book', node: (
-              dyn.v1.addWrapDecoy("book-appointment-button", (
-                <Button 
-                  id={dyn.v3.getVariant("book-appointment-button", ID_VARIANTS_MAP, "book-appointment-button")}
-                  className={cn("flex-1 bg-blue-600 hover:bg-blue-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
-                  onClick={handleBookAppointment}
-                >
-                  {dyn.v3.getVariant("book_appointment", TEXT_VARIANTS_MAP, "Book Appointment")}
-                </Button>
-              ))
-            ) },
             { key: 'contact', node: (
               dyn.v1.addWrapDecoy("contact-doctor-button", (
                 <Button 
                   id={dyn.v3.getVariant("contact-doctor-button", ID_VARIANTS_MAP, "contact-doctor-button")}
-                  className={cn("flex-1", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
-                  variant="outline" 
+                  className={cn("flex-1 bg-green-600 hover:bg-green-700 text-white", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+                  data-testid="open-contact-doctor-form-btn"
                   onClick={handleContactDoctor}
                 >
                   {dyn.v3.getVariant("contact_doctor", TEXT_VARIANTS_MAP, "Contact Doctor")}

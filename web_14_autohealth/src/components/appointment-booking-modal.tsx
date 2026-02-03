@@ -97,53 +97,26 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment, sourc
     setIsSubmitting(true);
 
     try {
-      // Log the appointment booking event (single generic event with all information)
-      // According to .cursorrules: "Generic Use Cases: We do not create unique events for every UI path"
-      // Differences are captured in metadata, not in the event name
-      logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
-        // Source: indicates where the booking was initiated from (metadata context)
-        source: source,
-        
-        // Appointment data (constraints for benchmark verification)
-        appointmentId: appointment.id,
-        doctorId: appointment.doctorId, // Added for complete verification
-        doctorName: appointment.doctorName,
-        specialty: appointment.specialty,
-        date: appointment.date,
-        time: appointment.time,
-        
-        // Patient Information
+      // Simulate API call (only after success do we log APPOINTMENT_BOOKED_SUCCESSFULLY)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Log only after reservation succeeded: clear separation from OPEN_APPOINTMENT_FORM (button click).
+      logEvent(EVENT_TYPES.APPOINTMENT_BOOKED_SUCCESSFULLY, {
+        appointment,
         patientName: formData.patientName,
         patientEmail: formData.patientEmail,
         patientPhone: formData.patientPhone,
         reasonForVisit: formData.reasonForVisit,
-        
-        // Insurance Information
         insuranceProvider: formData.insuranceProvider,
         insuranceNumber: formData.insuranceNumber,
         hasInsurance: !!formData.insuranceProvider,
-        
-        // Emergency Contact
         emergencyContact: formData.emergencyContact,
         emergencyPhone: formData.emergencyPhone,
         hasEmergencyContact: !!formData.emergencyContact,
-        
-        // Additional Information
         notes: formData.notes,
         hasNotes: !!formData.notes,
-        
-        // Action metadata
-        action: "confirm_booking",
-        success: true, // Indicate success in the same event (do not create separate event)
-        bookingTimestamp: new Date().toISOString()
+        bookingTimestamp: new Date().toISOString(),
       });
-
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // REMOVED: Do not log APPOINTMENT_BOOKED_SUCCESSFULLY
-      // Reason: According to .cursorrules, we use generic events. Success is indicated with success: true
-      // in the same BOOK_APPOINTMENT event, not by creating a separate event.
 
       alert("Appointment booked successfully!");
       
@@ -175,13 +148,6 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment, sourc
   };
 
   const handleCancel = () => {
-    logEvent(EVENT_TYPES.CANCEL_BOOK_APPOINTMENT, {
-      appointmentId: appointment?.id,
-      doctorName: appointment?.doctorName,
-      specialty: appointment?.specialty,
-      date: appointment?.date,
-      time: appointment?.time
-    });
     onOpenChange(false);
   };
 

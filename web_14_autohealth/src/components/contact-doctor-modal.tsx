@@ -79,27 +79,15 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
       // According to .cursorrules: "Generic Use Cases: We do not create unique events for every UI path"
       // Differences are captured in metadata, not in the event name
       logEvent(EVENT_TYPES.CONTACT_DOCTOR, {
-        // Doctor Information (constraints for benchmark verification)
-        doctorId: doctor.id,
-        doctorName: doctor.name,
-        specialty: doctor.specialty,
-        
-        // Patient Information
+        doctor,
         patientName: formData.patientName,
         patientEmail: formData.patientEmail,
         patientPhone: formData.patientPhone,
-        
-        // Message Information (constraints for benchmark verification)
         subject: formData.subject,
         message: formData.message,
         urgency: formData.urgency,
         preferredContactMethod: formData.preferredContactMethod,
         appointmentRequest: formData.appointmentRequest,
-        
-        // Action metadata
-        action: "send_message",
-        success: true, // Indicate success in the same event (do not create separate event)
-        contactTimestamp: new Date().toISOString()
       });
 
       // Simulate API call
@@ -132,11 +120,6 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
   };
 
   const handleCancel = () => {
-    logEvent(EVENT_TYPES.CANCEL_CONTACT_DOCTOR, {
-      doctorId: doctor?.id,
-      doctorName: doctor?.name,
-      specialty: doctor?.specialty
-    });
     onOpenChange(false);
   };
 
@@ -293,6 +276,7 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
             <Button 
               id={dyn.v3.getVariant("contact-doctor-button", ID_VARIANTS_MAP, "send-message-button")}
               className={cn("bg-blue-600 hover:bg-blue-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+              data-testid="contact-doctor-submit-btn"
               onClick={handleSubmitContact} 
               disabled={isSubmitting || !validateForm()}
             >

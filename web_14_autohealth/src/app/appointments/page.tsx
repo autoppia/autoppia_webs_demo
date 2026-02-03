@@ -17,6 +17,7 @@ import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MEDICAL_SPECIALTIES, filterSpecialties } from "@/data/medical-specialties";
+import { Pagination, PAGINATION_PAGE_SIZE } from "@/components/ui/pagination";
 
 function AppointmentsPageContent() {
   const dyn = useDynamicSystem();
@@ -29,11 +30,15 @@ function AppointmentsPageContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDoctors, setIsLoadingDoctors] = useState(true);
   
-  // Filter states
+  // Filter input state (what user types/selects)
   const [selectedDoctorId, setSelectedDoctorId] = useState<string>("");
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>("");
   const [dateFilter, setDateFilter] = useState<string>("");
-  
+  // Applied filter state (used for filtering list; set when user clicks Search)
+  const [appliedDoctorId, setAppliedDoctorId] = useState<string>("");
+  const [appliedSpecialty, setAppliedSpecialty] = useState<string>("");
+  const [appliedDateFilter, setAppliedDateFilter] = useState<string>("");
+
   // Autocomplete states for doctors
   const [doctorSearchText, setDoctorSearchText] = useState<string>("");
   const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
@@ -47,24 +52,23 @@ function AppointmentsPageContent() {
   const [showSpecialtySuggestions, setShowSpecialtySuggestions] = useState(false);
   const specialtyInputRef = useRef<HTMLInputElement>(null);
   const specialtySuggestionsRef = useRef<HTMLDivElement>(null);
-  
+  const [currentPage, setCurrentPage] = useState(1);
+
   const useAiGeneration = isDataGenerationAvailable() && !isDbLoadModeEnabled();
   const isInitialMount = useRef(true);
 
-  // Initialize filters from URL params on mount
+  // Sync filters from URL so that landing with ?doctorId= (e.g. from Doctors page) preloads filter and applied state
   useEffect(() => {
     const doctorId = searchParams.get("doctorId") || "";
     const specialty = searchParams.get("specialty") || "";
     const date = searchParams.get("date") || "";
-    // Read source from query params (preserves the booking origin)
-    const bookingSource = searchParams.get("source") || "appointments_table";
-    
     setSelectedDoctorId(doctorId);
     setSelectedSpecialty(specialty);
     setDateFilter(date);
-    // Source is read directly from searchParams when needed
-    isInitialMount.current = false;
-  }, []); // Only run on mount
+    setAppliedDoctorId(doctorId);
+    setAppliedSpecialty(specialty);
+    setAppliedDateFilter(date);
+  }, [searchParams]);
 
   // Initialize search text from selected values after doctors are loaded
   useEffect(() => {
@@ -82,40 +86,28 @@ function AppointmentsPageContent() {
     }
   }, [selectedSpecialty]);
 
-  // Update URL when filters change (but not on initial mount)
+  // Update URL when applied filters change (skip first run so we don't overwrite URL params on mount)
   useEffect(() => {
-    if (isInitialMount.current) return;
-    
-    const params = new URLSearchParams();
-    if (selectedDoctorId) params.set("doctorId", selectedDoctorId);
-    if (selectedSpecialty) params.set("specialty", selectedSpecialty);
-    if (dateFilter) params.set("date", dateFilter);
-    // Preserve source if it exists in current query params
-    const currentSource = searchParams.get("source");
-    if (currentSource) {
-      params.set("source", currentSource);
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
     }
-    
+    const params = new URLSearchParams();
+    if (appliedDoctorId) params.set("doctorId", appliedDoctorId);
+    if (appliedSpecialty) params.set("specialty", appliedSpecialty);
+    if (appliedDateFilter) params.set("date", appliedDateFilter);
+    const currentSource = searchParams.get("source");
+    if (currentSource) params.set("source", currentSource);
     const newUrl = params.toString() ? `/appointments?${params.toString()}` : "/appointments";
     router.replace(newUrl, { scroll: false });
-  }, [selectedDoctorId, selectedSpecialty, dateFilter, router, searchParams]);
+  }, [appliedDoctorId, appliedSpecialty, appliedDateFilter, router, searchParams]);
 
   const handleBookAppointment = (appointment: Appointment) => {
-    // Detect source from query params (preserves the booking origin)
-    const bookingSource = searchParams.get("source") || "appointments_table";
-    
-    // Log the initial booking attempt (when modal opens)
-    // This is a different event from confirmation (action: "confirm_booking")
-    logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
-      appointmentId: appointment.id,
-      doctorId: appointment.doctorId,
-      doctorName: appointment.doctorName,
-      specialty: appointment.specialty,
-      date: appointment.date,
-      time: appointment.time,
-      action: "open_booking_modal",
-      source: bookingSource, // Use source detected from query params
-      modalOpenTime: new Date().toISOString()
+    const doctor = doctorList.find((d) => d.id === appointment.doctorId);
+
+    logEvent(EVENT_TYPES.OPEN_APPOINTMENT_FORM, {
+      appointment,
+      ...(doctor && { doctor }),
     });
 
     setSelectedAppointment(appointment);
@@ -192,68 +184,86 @@ function AppointmentsPageContent() {
     return order.map((idx) => columns[idx]);
   }, [dyn.seed, columns]);
 
-  // Get available dates from filtered appointments (before date filter)
+  // Get available dates from filtered appointments (by applied doctor/specialty only)
   const availableDates = useMemo(() => {
     let filtered = appointmentList;
-
-    // Filter by specialty
-    if (selectedSpecialty) {
+    if (appliedSpecialty) {
       filtered = filtered.filter(
-        appointment => appointment.specialty.toLowerCase() === selectedSpecialty.toLowerCase()
+        (a) => a.specialty.toLowerCase() === appliedSpecialty.toLowerCase()
       );
     }
-
-    // Filter by doctorId
-    if (selectedDoctorId) {
+    if (appliedDoctorId) {
       filtered = filtered.filter(
-        appointment => appointment.doctorId.toLowerCase() === selectedDoctorId.toLowerCase()
+        (a) => a.doctorId.toLowerCase() === appliedDoctorId.toLowerCase()
       );
     }
+    return Array.from(new Set(filtered.map((a) => a.date))).sort();
+  }, [appointmentList, appliedSpecialty, appliedDoctorId]);
 
-    // Get unique dates
-    const dates = Array.from(new Set(filtered.map(a => a.date))).sort();
-    return dates;
-  }, [appointmentList, selectedSpecialty, selectedDoctorId]);
-
-  // Filter appointments by specialty, doctorId, and/or date if filters are provided
+  // Filter appointments by applied filters only (applied when user clicks Search)
   const filteredAppointments = useMemo(() => {
     let filtered = appointmentList;
-
-    // Filter by specialty
-    if (selectedSpecialty) {
+    if (appliedSpecialty) {
       filtered = filtered.filter(
-        appointment => appointment.specialty.toLowerCase() === selectedSpecialty.toLowerCase()
+        (a) => a.specialty.toLowerCase() === appliedSpecialty.toLowerCase()
       );
     }
-
-    // Filter by doctorId
-    if (selectedDoctorId) {
+    if (appliedDoctorId) {
       filtered = filtered.filter(
-        appointment => appointment.doctorId.toLowerCase() === selectedDoctorId.toLowerCase()
+        (a) => a.doctorId.toLowerCase() === appliedDoctorId.toLowerCase()
       );
     }
-
-    // Filter by date
-    if (dateFilter) {
-      filtered = filtered.filter(
-        appointment => appointment.date === dateFilter
-      );
+    if (appliedDateFilter) {
+      filtered = filtered.filter((a) => a.date === appliedDateFilter);
     }
-
     return filtered;
-  }, [appointmentList, selectedSpecialty, selectedDoctorId, dateFilter]);
+  }, [appointmentList, appliedSpecialty, appliedDoctorId, appliedDateFilter]);
 
   const orderedRows = useMemo(() => {
     const order = dyn.v1.changeOrderElements("appointments-rows", filteredAppointments.length);
     return order.map((idx) => filteredAppointments[idx]);
   }, [dyn.seed, filteredAppointments]);
 
-  // Get doctor name for display if filtering by doctorId
+  // Reset to page 1 when applied filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [appliedDoctorId, appliedSpecialty, appliedDateFilter]);
+
+  const totalAppointments = orderedRows.length;
+  const paginatedRows = useMemo(() => {
+    const start = (currentPage - 1) * PAGINATION_PAGE_SIZE;
+    return orderedRows.slice(start, start + PAGINATION_PAGE_SIZE);
+  }, [orderedRows, currentPage]);
+
+  // Get doctor name for display when filtering by doctorId (use applied)
   const filteredDoctorName = useMemo(() => {
-    if (!selectedDoctorId) return null;
-    const doctor = doctorList.find(d => d.id.toLowerCase() === selectedDoctorId.toLowerCase());
+    if (!appliedDoctorId) return null;
+    const doctor = doctorList.find((d) => d.id.toLowerCase() === appliedDoctorId.toLowerCase());
     return doctor?.name || null;
-  }, [doctorList, selectedDoctorId]);
+  }, [doctorList, appliedDoctorId]);
+
+  const handleSearch = () => {
+    setAppliedDoctorId(selectedDoctorId);
+    setAppliedSpecialty(selectedSpecialty);
+    setAppliedDateFilter(dateFilter);
+    setCurrentPage(1);
+
+    const doctor = selectedDoctorId
+      ? doctorList.find((d) => d.id === selectedDoctorId)
+      : null;
+    logEvent(EVENT_TYPES.SEARCH_APPOINTMENT, {
+      filterType: selectedDoctorId
+        ? "doctor"
+        : selectedSpecialty
+          ? "specialty"
+          : dateFilter
+            ? "date"
+            : "none",
+      ...(doctor && { doctor }),
+      ...(selectedSpecialty && { specialty: selectedSpecialty }),
+      ...(dateFilter && { date: dateFilter }),
+    });
+  };
 
   // Handle doctor search input
   const handleDoctorSearchChange = (value: string) => {
@@ -286,7 +296,6 @@ function AppointmentsPageContent() {
     }
   };
 
-  // Handle doctor selection
   const handleDoctorSelect = (doctor: Doctor) => {
     setSelectedDoctorId(doctor.id);
     setDoctorSearchText(`${doctor.name} - ${doctor.specialty}`);
@@ -319,7 +328,6 @@ function AppointmentsPageContent() {
     }
   };
 
-  // Handle specialty selection
   const handleSpecialtySelect = (specialty: string) => {
     setSelectedSpecialty(specialty);
     setSpecialtySearchText(specialty);
@@ -363,14 +371,14 @@ function AppointmentsPageContent() {
             <h1 className="text-2xl md:text-3xl font-bold text-white mb-4 text-center">
               {filteredDoctorName
                 ? `Available Appointments - ${filteredDoctorName}`
-                : selectedSpecialty 
-                ? `Available Appointments - ${selectedSpecialty}`
-                : "Available Appointments"}
+                : appliedSpecialty
+                  ? `Available Appointments - ${appliedSpecialty}`
+                  : "Available Appointments"}
             </h1>
-            
+
             {/* Filters */}
             <div className="p-4 md:p-6">
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid gap-4 md:grid-cols-[1fr_1fr_1fr_auto] items-end">
                 {/* Doctor Filter */}
                 <div className="space-y-2 relative">
                   <Label htmlFor="doctor-filter" className="text-sm font-medium text-white">
@@ -389,6 +397,7 @@ function AppointmentsPageContent() {
                       }}
                       placeholder="Search doctor by name or specialty..."
                       className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
+                      data-testid="filter-appointment-doctor"
                     />
                     {showDoctorSuggestions && filteredDoctors.length > 0 && (
                       <div
@@ -429,6 +438,7 @@ function AppointmentsPageContent() {
                       }}
                       placeholder="Search specialty..."
                       className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
+                      data-testid="filter-appointment-specialty"
                     />
                     {showSpecialtySuggestions && filteredSpecialties.length > 0 && (
                       <div
@@ -460,23 +470,40 @@ function AppointmentsPageContent() {
                     type="date"
                     value={dateFilter}
                     onChange={(e) => setDateFilter(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleSearch())}
                     className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
+                    data-testid="filter-appointment-date"
                   />
                 </div>
+
+                {/* Search button: applies filters and fires SEARCH_APPOINTMENT */}
+                <Button
+                  type="button"
+                  onClick={handleSearch}
+                  className={cn("bg-emerald-600 hover:bg-emerald-700 h-10", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+                  data-testid="appointments-search-button"
+                >
+                  {dyn.v3.getVariant("search", TEXT_VARIANTS_MAP, "Search")}
+                </Button>
               </div>
 
               {/* Clear Filters Button */}
-              {(selectedDoctorId || selectedSpecialty || dateFilter) && (
+              {(appliedDoctorId || appliedSpecialty || appliedDateFilter) && (
                 <div className="mt-4 flex justify-end">
                   <Button
                     type="button"
                     variant="outline"
+                    data-testid="filter-appointment-clear"
                     onClick={() => {
                       setSelectedDoctorId("");
                       setSelectedSpecialty("");
                       setDateFilter("");
+                      setAppliedDoctorId("");
+                      setAppliedSpecialty("");
+                      setAppliedDateFilter("");
                       setDoctorSearchText("");
                       setSpecialtySearchText("");
+                      setCurrentPage(1);
                     }}
                     className="text-sm"
                   >
@@ -487,7 +514,7 @@ function AppointmentsPageContent() {
 
               {/* Results Count */}
               <div className="mt-4 text-sm text-white">
-                Showing {filteredAppointments.length} appointment{filteredAppointments.length !== 1 ? 's' : ''}
+                {filteredAppointments.length} appointment{filteredAppointments.length !== 1 ? "s" : ""}
               </div>
             </div>
           </div>
@@ -496,7 +523,14 @@ function AppointmentsPageContent() {
 
       {/* Appointments Table */}
       <div className="container py-10">
-      <div className="mt-6">
+      <Pagination
+        totalItems={totalAppointments}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        itemsPerPage={PAGINATION_PAGE_SIZE}
+        data-testid="appointments-pagination"
+      />
+      <div className="mt-4">
         {dyn.v1.addWrapDecoy("appointments-table", (
           <Table>
             <TableHeader>
@@ -509,7 +543,7 @@ function AppointmentsPageContent() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {orderedRows.map((a, ri) => (
+              {paginatedRows.map((a, ri) => (
                 <TableRow key={a.id}>
                   {orderedColumns.map((c) => {
                     if (c.key === 'doctor') return <TableCell key={c.key}>{a.doctorName}</TableCell>;
@@ -537,6 +571,14 @@ function AppointmentsPageContent() {
           </Table>
         ), "appointments-table-wrap")}
       </div>
+      <Pagination
+        totalItems={totalAppointments}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        itemsPerPage={PAGINATION_PAGE_SIZE}
+        className="mt-6"
+        data-testid="appointments-pagination-bottom"
+      />
 
       <AppointmentBookingModal
         open={isModalOpen}

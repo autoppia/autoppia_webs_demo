@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState, useMemo } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useEffect, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { initializeMedicalRecords } from "@/data/medical-records-enhanced";
 import type { MedicalRecord } from "@/data/types";
@@ -14,41 +14,29 @@ import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynami
 import { cn } from "@/library/utils";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { Pagination } from "@/components/ui/pagination";
+
+const RECORDS_PAGE_SIZE = 9;
 
 export default function MedicalRecordsPage() {
   const dyn = useDynamicSystem();
-  const [files, setFiles] = useState<File[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedRecord, setSelectedRecord] = useState<MedicalRecord | null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
   const [recordsList, setRecordsList] = useState<MedicalRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Search input state (what user types)
+  const [searchTitle, setSearchTitle] = useState<string>("");
+  const [searchDoctor, setSearchDoctor] = useState<string>("");
+  // Applied search state (used for filtering; set when user clicks Search)
+  const [appliedSearchTitle, setAppliedSearchTitle] = useState<string>("");
+  const [appliedSearchDoctor, setAppliedSearchDoctor] = useState<string>("");
+
   const useAiGeneration = isDataGenerationAvailable() && !isDbLoadModeEnabled();
 
-  function addFiles(newFiles: FileList | null) {
-    if (!newFiles) return;
-    const arr = Array.from(newFiles);
-    setFiles((prev) => [...prev, ...arr]);
-    
-    // Log upload event
-    logEvent(EVENT_TYPES.UPLOAD_HEALTH_DATA, {
-      files: arr.map((f) => ({ 
-        name: f.name, 
-        type: f.type, 
-        size: f.size 
-      }))
-    });
-    
-    if (fileRef.current) fileRef.current.value = "";
-  }
-
   const handleViewRecord = (record: MedicalRecord) => {
-    logEvent(EVENT_TYPES.VIEW_HEALTH_METRICS, {
-      recordId: record.id,
-      recordType: record.type,
-      recordTitle: record.title,
-      recordDate: record.date
-    });
+    logEvent(EVENT_TYPES.VIEW_MEDICAL_ANALYSIS, { record });
     setSelectedRecord(record);
   };
 
@@ -88,13 +76,52 @@ export default function MedicalRecordsPage() {
       .finally(() => { if (mounted) setIsLoading(false); });
     return () => { mounted = false; };
   }, []);
-  const filteredRecords = selectedCategory === "all" 
-    ? recordsList 
-    : recordsList.filter(record => record.category === selectedCategory);
+
+  const handleSearch = () => {
+    setAppliedSearchTitle(searchTitle.trim());
+    setAppliedSearchDoctor(searchDoctor.trim());
+    setCurrentPage(1);
+    logEvent(EVENT_TYPES.SEARCH_MEDICAL_ANALYSIS, {
+      source: "medical_records_page",
+      action: "search",
+      title: searchTitle.trim() || undefined,
+      doctor: searchDoctor.trim() || undefined,
+    });
+  };
+
+  const filteredRecords = useMemo(() => {
+    let filtered = recordsList;
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter((record) => record.category === selectedCategory);
+    }
+    if (appliedSearchTitle) {
+      const term = appliedSearchTitle.toLowerCase();
+      filtered = filtered.filter((record) => record.title.toLowerCase().includes(term));
+    }
+    if (appliedSearchDoctor) {
+      const term = appliedSearchDoctor.toLowerCase();
+      filtered = filtered.filter(
+        (record) => (record.doctorName ?? "").toLowerCase().includes(term)
+      );
+    }
+    return filtered;
+  }, [recordsList, selectedCategory, appliedSearchTitle, appliedSearchDoctor]);
+
   const orderedRecords = useMemo(() => {
     const order = dyn.v1.changeOrderElements("medical-records-list", filteredRecords.length);
     return order.map((idx) => filteredRecords[idx]);
   }, [dyn.seed, filteredRecords]);
+
+  // Reset to page 1 when filter or applied search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, appliedSearchTitle, appliedSearchDoctor]);
+
+  const totalRecords = orderedRecords.length;
+  const paginatedRecords = useMemo(() => {
+    const start = (currentPage - 1) * RECORDS_PAGE_SIZE;
+    return orderedRecords.slice(start, start + RECORDS_PAGE_SIZE);
+  }, [orderedRecords, currentPage]);
 
   if (useAiGeneration && isLoading) {
     return (
@@ -109,14 +136,14 @@ export default function MedicalRecordsPage() {
   if (isLoading) {
     return (
       <div className="container py-20 flex items-center justify-center">
-        <div className="text-muted-foreground">Loading medical records…</div>
+        <div className="text-muted-foreground">Loading medical analysis…</div>
       </div>
     );
   }
 
   return (
     <div className="container py-10">
-      <h1 className="text-2xl font-semibold">Medical Records</h1>
+      <h1 className="text-2xl font-semibold">Medical Analysis</h1>
 
       {/* Category Filter */}
       <div className="mt-6 flex flex-wrap gap-2">
@@ -128,10 +155,7 @@ export default function MedicalRecordsPage() {
               className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
               variant={selectedCategory === category ? "default" : "outline"}
               size="sm"
-              onClick={() => {
-                setSelectedCategory(category);
-                logEvent(EVENT_TYPES.FILTER_BY_CATEGORY, { category });
-              }}
+              onClick={() => setSelectedCategory(category)}
             >
               {dyn.v3.getVariant(`filter_${category}`, TEXT_VARIANTS_MAP, category.charAt(0).toUpperCase() + category.slice(1))}
             </Button>
@@ -139,38 +163,56 @@ export default function MedicalRecordsPage() {
         ))}
       </div>
 
-      {/* Upload Section */}
-      {dyn.v1.addWrapDecoy("upload-section", (
-        <div className="mt-8 max-w-xl space-y-2">
-          <Label htmlFor={dyn.v3.getVariant("records-upload-input", ID_VARIANTS_MAP, "records-upload-input")}>Upload additional files (PDF or images)</Label>
-          <div className="flex gap-2">
-            {dyn.v1.addWrapDecoy("records-upload-input-container", (
-              <Input 
-                id={dyn.v3.getVariant("records-upload-input", ID_VARIANTS_MAP, "records-upload-input")} 
-                type="file" 
-                accept="application/pdf,image/*" 
-                multiple 
-                ref={fileRef}
-                className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
-              />
-            ))}
-            {dyn.v1.addWrapDecoy("upload-record-button", (
-              <Button 
-                id={dyn.v3.getVariant("upload-record-button", ID_VARIANTS_MAP, "upload-record-button")}
-                className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
-                onClick={() => addFiles(fileRef.current?.files ?? null)}
-              >
-                {dyn.v3.getVariant("upload_record", TEXT_VARIANTS_MAP, "Upload Record")}
-              </Button>
-            ))}
+      {/* Search: Title & Doctor */}
+      <div className="mt-6 rounded-lg border bg-card p-4">
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+          <div className="space-y-2">
+            <Label htmlFor="search-record-title">Title</Label>
+            <Input
+              id="search-record-title"
+              placeholder="Record title..."
+              value={searchTitle}
+              onChange={(e) => setSearchTitle(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleSearch())}
+              className="h-10"
+              data-testid="search-record-title"
+            />
           </div>
-          <p className="text-sm text-muted-foreground">Files are not stored. They only appear in the list below for this session.</p>
+          <div className="space-y-2">
+            <Label htmlFor="search-record-doctor">Doctor</Label>
+            <Input
+              id="search-record-doctor"
+              placeholder="Doctor name..."
+              value={searchDoctor}
+              onChange={(e) => setSearchDoctor(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleSearch())}
+              className="h-10"
+              data-testid="search-record-doctor"
+            />
+          </div>
+          <div className="flex items-end">
+            <Button
+              type="button"
+              onClick={handleSearch}
+              className="h-10 bg-emerald-600 hover:bg-emerald-700"
+              data-testid="medical-records-search-button"
+            >
+              Search
+            </Button>
+          </div>
         </div>
-      ))}
+      </div>
 
-      {/* Medical Records Grid */}
-      <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {orderedRecords.map((record, i) => (
+      <Pagination
+        totalItems={totalRecords}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        itemsPerPage={RECORDS_PAGE_SIZE}
+        data-testid="records-pagination"
+      />
+      {/* Medical Analysis Grid */}
+      <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {paginatedRecords.map((record, i) => (
           dyn.v1.addWrapDecoy(`record-card-${i}`, (
             <Card key={record.id} className={cn("hover:shadow-md transition-shadow", dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, ""))}>
               <CardHeader className="pb-3">
@@ -197,8 +239,9 @@ export default function MedicalRecordsPage() {
                     className={cn("w-full", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
                     size="sm"
                     onClick={() => handleViewRecord(record)}
+                    data-testid="view-record-btn"
                   >
-                    {dyn.v3.getVariant("view_record", TEXT_VARIANTS_MAP, "View Details")}
+                    {dyn.v3.getVariant("view_record", TEXT_VARIANTS_MAP, "View Analysis")}
                   </Button>
                 ))}
               </CardContent>
@@ -206,40 +249,14 @@ export default function MedicalRecordsPage() {
           ), `record-card-${i}`)
         ))}
       </div>
-
-      {/* Uploaded Files Section */}
-      {files.length > 0 && (
-        <div className="mt-8">
-          <h2 className="text-lg font-semibold mb-4">Uploaded Files</h2>
-          <ul className="divide-y rounded-md border">
-            {files.map((f, idx) => (
-              <li key={`${f.name}-${idx}`} className="flex items-center justify-between gap-4 p-4">
-                <div className="min-w-0">
-                  <div className="truncate font-medium">{f.name}</div>
-                  <div className="truncate text-sm text-muted-foreground">{f.type || "unknown"} • {(f.size / 1024).toFixed(1)} KB</div>
-                </div>
-                {dyn.v1.addWrapDecoy(`view-uploaded-record-button-${idx}`, (
-                  <Button
-                    id={dyn.v3.getVariant("view-record-button", ID_VARIANTS_MAP, `view-record-button-${idx}`)}
-                    className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
-                    variant="outline"
-                    onClick={() => {
-                      logEvent(EVENT_TYPES.VIEW_HEALTH_METRICS, { 
-                        index: idx, 
-                        fileName: f.name,
-                        fileType: f.type,
-                        fileSize: f.size
-                      });
-                    }}
-                  >
-                    {dyn.v3.getVariant("view_record", TEXT_VARIANTS_MAP, "View Record")}
-                  </Button>
-                ))}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <Pagination
+        totalItems={totalRecords}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        itemsPerPage={RECORDS_PAGE_SIZE}
+        className="mt-6"
+        data-testid="records-pagination-bottom"
+      />
 
       {/* Record Detail Modal */}
       {selectedRecord && (
