@@ -17,12 +17,14 @@
 #   --webs_data_path=PATH         Host dir to bind at /app/data (default: $DEMOS_DIR/webs_server/initial_data)
 #   -y, --yes                     Force Docker cleanup (remove all containers/images/volumes) before deploy
 #   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
+#   --parallel=N                  Max concurrent web project deployments when --demo=all (default: 3)
 #   -h, --help                    Show this help and exit
 #
 # Examples:
 #   ./setup.sh --demo=automail  # v1,v3 enabled by default (seeds + layout variants + HTML structure)
 #   ./setup.sh --enabled_dynamic_versions=v2  # v2: DB Mode
 #   ./setup.sh --enabled_dynamic_versions=v1,v2  # v1 + v2: Layouts + DB Mode
+#   ./setup.sh --demo=all --parallel=4  # Deploy all demos with max 4 concurrent
 #------------------------------------------------------------
 set -euo pipefail
 
@@ -49,12 +51,14 @@ Options:
   --enable_ai_generation_mode=BOOL  Enable AI generation mode (for v2: generate data on-the-fly using AI)
   --webs_data_path=PATH         Host dir to bind at /app/data (default: \$DEMOS_DIR/webs_server/initial_data)
   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
+  --parallel=N                  Max concurrent web project deployments when --demo=all (default: 3)
   -h, --help                    Show this help and exit
 
 Examples:
   ./setup.sh --demo=automail  # v1,v3 enabled by default (seeds + layout variants + HTML structure)
   ./setup.sh --enabled_dynamic_versions=v2  # v2: DB Mode
   ./setup.sh --enabled_dynamic_versions=v1,v2  # v1 + v2: Layouts + DB Mode
+  ./setup.sh --demo=all --parallel=4  # Deploy all demos with max 4 concurrent
 USAGE
 }
 
@@ -87,6 +91,7 @@ for ARG in "$@"; do
     --webs_data_path=*)  WEBS_DATA_PATH="${ARG#*=}" ;;
     -h|--help)           print_usage; exit 0 ;;
     --fast=*)            FAST_MODE="${ARG#*=}" ;;
+    --parallel=*)        PARALLEL_JOBS="${ARG#*=}" ;;
     *) ;;
   esac
 done
@@ -98,6 +103,7 @@ WEBS_PORT="${WEBS_PORT:-8090}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-5437}"
 WEB_DEMO="${WEB_DEMO:-all}"
 FAST_MODE="${FAST_MODE:-false}"
+PARALLEL_JOBS="${PARALLEL_JOBS:-3}"
 ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-v1,v2,v3}"
 
 # Initialize dynamic version flags (will be set by version mapping)
@@ -212,6 +218,14 @@ if ! is_valid_demo "$WEB_DEMO"; then
   exit 1
 fi
 
+# Validate parallel jobs (used only when --demo=all)
+if [ "$WEB_DEMO" = "all" ]; then
+  if ! is_integer "$PARALLEL_JOBS" || [ "$PARALLEL_JOBS" -lt 1 ]; then
+    echo "❌ Invalid --parallel value: $PARALLEL_JOBS. Use a positive integer (e.g., 3)."
+    exit 1
+  fi
+fi
+
 # ============================================================================
 # 6. SHOW CONFIGURATION
 # ============================================================================
@@ -236,6 +250,7 @@ echo "      V3 (HTML structure)  →  $ENABLE_DYNAMIC_V3"
 echo "      V4 (seed HTML)       →  $ENABLE_DYNAMIC_V4"
 echo "    Enabled versions       →  ${ENABLED_DYNAMIC_VERSIONS:-<none>}"
 echo "    Fast mode              →  $FAST_MODE"
+[ "$WEB_DEMO" = "all" ] && echo "    Parallel jobs           →  $PARALLEL_JOBS"
 echo "    Host data path         →  ${WEBS_DATA_PATH:-<default: ~/webs_data (copied from repo)>}"
 echo ""
 
@@ -535,6 +550,22 @@ fi
   echo ""
 }
 
+# Semaphore for limiting concurrent jobs (used only when --demo=all)
+PARALLEL_PIDS=()
+open_sem() {
+  local n="$1"
+  mkfifo /tmp/sem.$$
+  exec 3<>/tmp/sem.$$
+  rm -f /tmp/sem.$$
+  for ((i=0;i<n;i++)); do echo; done >&3
+}
+
+run_with_limit() {
+  read -u 3
+  { set +e; "$@"; ret=$?; echo >&3; exit $ret; } &
+  PARALLEL_PIDS+=($!)
+}
+
 # ============================================================================
 # 8. DOCKER SETUP
 # ============================================================================
@@ -604,20 +635,28 @@ case "$WEB_DEMO" in
     ;;
   all)
     deploy_webs_server
-    deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
-    deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
-    deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
-    deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
-    deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
-    deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
-    deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
-    deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
-    deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
-    deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
-    deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
-    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
-    deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
+    echo "📦 Deploying all web projects in parallel (max $PARALLEL_JOBS concurrent)..."
+    open_sem "$PARALLEL_JOBS"
+    run_with_limit deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
+    run_with_limit deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
+    run_with_limit deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
+    run_with_limit deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
+    run_with_limit deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
+    run_with_limit deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
+    run_with_limit deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
+    run_with_limit deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
+    run_with_limit deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
+    run_with_limit deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+    run_with_limit deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
+    run_with_limit deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+    run_with_limit deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
+    run_with_limit deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
+    failed=0
+    for pid in "${PARALLEL_PIDS[@]}"; do
+      wait "$pid" || failed=1
+    done
+    exec 3>&-
+    [ $failed -eq 0 ] || exit 1
     ;;
   *)
     echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."
