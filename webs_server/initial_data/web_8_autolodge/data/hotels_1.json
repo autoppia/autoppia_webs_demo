@@ -695,53 +695,48 @@
     ]
   },
   {
-    "id": 16,
-    "image": "/images/aman-tokyo.jpg",
-    "title": "Aman-Tokyo",
-    "location": "Tokyo, Japan",
-    "rating": 4.9,
-    "reviews": 4200,
-    "guests": 2,
-    "maxGuests": 2,
-    "bedrooms": 1,
-    "beds": 2,
-    "baths": 1,
-    "datesFrom": "2025-06-01",
-    "datesTo": "2025-12-31",
-    "price": 850,
-    "host": {
-      "name": "Robert",
-      "since": 1,
-      "avatar": "https://randomuser.me/api/portraits/men/4.jpg"
-    },
-    "amenities": [
-      {
-        "icon": "🧺",
-        "title": "Washer & dryer",
-        "desc": "In-unit laundry for longer stays."
-      },
-      {
-        "icon": "🌅",
-        "title": "Balcony views",
-        "desc": "Terrace with seating and sunset views."
-      },
-      {
-        "icon": "🐾",
-        "title": "Pet friendly",
-        "desc": "Well-behaved pets welcome."
-      },
-      {
-        "icon": "🛁",
-        "title": "Hot tub",
-        "desc": "Private hot tub for guests."
-      },
-      {
-        "icon": "💻",
-        "title": "Dedicated workspace",
-        "desc": "Desk and fast wifi for remote work."
-      }
-    ]
+  "id": 16,
+  "image": "/images/fairmont-royal-york.jpg",
+  "title": "Fairmont Royal York",
+  "location": "Toronto, Canada",
+  "rating": 4.6,
+  "reviews": 2100,
+  "guests": 2,
+  "maxGuests": 3,
+  "bedrooms": 1,
+  "beds": 2,
+  "baths": 1,
+  "datesFrom": "2025-05-01",
+  "datesTo": "2025-11-30",
+  "price": 420,
+  "host": {
+    "name": "Sophia",
+    "since": 5,
+    "avatar": "https://randomuser.me/api/portraits/women/5.jpg"
   },
+  "amenities": [
+    {
+      "icon": "🏊‍♂️",
+      "title": "Indoor Pool",
+      "desc": "Heated pool open year-round."
+    },
+    {
+      "icon": "🍽️",
+      "title": "Restaurant",
+      "desc": "On-site fine dining options."
+    },
+    {
+      "icon": "💻",
+      "title": "High-speed Wifi",
+      "desc": "Fast internet for work and leisure."
+    },
+    {
+      "icon": "🅿️",
+      "title": "Parking",
+      "desc": "Secure on-site parking available."
+    }
+  ]
+},
   {
     "id": 17,
     "image": "/images/belmond-hotel-splendido.jpg",
