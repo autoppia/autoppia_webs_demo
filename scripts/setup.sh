@@ -65,6 +65,7 @@ USAGE
 # Paths
 DEMOS_DIR="$(dirname "$SCRIPT_DIR")"
 EXTERNAL_NET="apps_net"
+WEBS_PROJECTS="web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive web_14_autohealth"
 
 echo "📂 Script directory: $SCRIPT_DIR"
 echo "📂 Demos root:      $DEMOS_DIR"
@@ -474,7 +475,7 @@ deploy_webs_server() {
   fi
   mkdir -p "$WEBS_DATA_PATH"
   
-  for project in web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
+  for project in $WEBS_PROJECTS; do
     if [ ! -f "$WEBS_DATA_PATH/$project/main.json" ]; then
       echo "  → Initializing $project master pool (100 records)..."
       mkdir -p "$WEBS_DATA_PATH/$project/data"
@@ -493,30 +494,28 @@ echo "✅ Master pools ready"
 
 # If DB mode (v2) is disabled, we won't sync into repo; originals will be copied directly into the container later
 
-# Copy data to container if webs_server is running (and avoid touching repo data)
+# Copy data from repo to container (repo is always up to date)
 if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
-  echo "📦 Copying data pools to webs_server container..."
-  for project in web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
-    SRC_MAIN="$WEBS_DATA_PATH/$project/main.json"
-    SRC_ORIG_DIR="$WEBS_DATA_PATH/$project/original"
-    SRC_DATA_DIR="$WEBS_DATA_PATH/$project/data"
-    FALLBACK_ORIG_DIR="$DEMOS_DIR/webs_server/initial_data/$project/original"
+  REPO_DATA_DIR="$DEMOS_DIR/webs_server/initial_data"
+  echo "📦 Copying data pools from repo to webs_server container..."
+  for project in $WEBS_PROJECTS; do
+    SRC_MAIN="$REPO_DATA_DIR/$project/main.json"
+    SRC_ORIG_DIR="$REPO_DATA_DIR/$project/original"
+    SRC_DATA_DIR="$REPO_DATA_DIR/$project/data"
 
     if [ -f "$SRC_MAIN" ]; then
-      echo "  → Copying $project to container..."
+      echo "  → Copying $project to container (from repo)..."
       docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data /app/data/$project/original 2>/dev/null || true
       docker cp "$SRC_MAIN" webs_server-app-1:/app/data/$project/main.json 2>/dev/null || true
       # Prefer originals if DB mode is disabled; otherwise copy data files
       if [ "$ENABLE_DYNAMIC_V2_DB_MODE" = false ]; then
-        ORIG_SRC="$SRC_ORIG_DIR"
-        if [ ! -d "$ORIG_SRC" ] || ! ls "$ORIG_SRC"/*.json >/dev/null 2>&1; then
-          ORIG_SRC="$FALLBACK_ORIG_DIR"
+        if [ -d "$SRC_ORIG_DIR" ] && ls "$SRC_ORIG_DIR"/*.json >/dev/null 2>&1; then
+          for data_file in "$SRC_ORIG_DIR"/*.json; do
+            if [ -f "$data_file" ]; then
+              docker cp "$data_file" webs_server-app-1:/app/data/$project/original/ 2>/dev/null || true
+            fi
+          done
         fi
-        for data_file in "$ORIG_SRC"/*.json; do
-          if [ -f "$data_file" ]; then
-            docker cp "$data_file" webs_server-app-1:/app/data/$project/original/ 2>/dev/null || true
-          fi
-        done
       elif [ -d "$SRC_DATA_DIR" ]; then
         for data_file in "$SRC_DATA_DIR"/*.json; do
           if [ -f "$data_file" ]; then
