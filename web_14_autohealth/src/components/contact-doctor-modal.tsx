@@ -253,7 +253,7 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
             <h4 className="font-medium mb-2">Doctor Information</h4>
             <div className="text-sm text-muted-foreground space-y-1">
               <p><strong>Name:</strong> {doctor.name}</p>
-              <p><strong>Specialty:</strong> {doctor.specialty}</p>
+              <p><strong>Speciality:</strong> {doctor.specialty}</p>
               <p><strong>Office:</strong> {doctor.officeLocation}</p>
               <p><strong>Phone:</strong> {doctor.phone}</p>
               <p><strong>Email:</strong> {doctor.email}</p>

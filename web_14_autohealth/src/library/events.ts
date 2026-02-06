@@ -18,8 +18,9 @@ export const EVENT_TYPES = {
   REFILL_PRESCRIPTION: "REFILL_PRESCRIPTION",
 
   // Doctor Events
-  /** Fired when user clicks Search on the Doctors page (applies name/specialty filters). */
+  /** Fired when user clicks Search on the Doctors page (applies name, speciality, and language filters). */
   SEARCH_DOCTORS: "SEARCH_DOCTORS",
+  /** Fired when user views a doctor profile (name, rating, speciality, consultation fee, languages). */
   VIEW_DOCTOR_PROFILE: "VIEW_DOCTOR_PROFILE",
   /** Fired when user opens the Education & Certifications tab on a doctor profile. */
   VIEW_DOCTOR_EDUCATION: "VIEW_DOCTOR_EDUCATION",

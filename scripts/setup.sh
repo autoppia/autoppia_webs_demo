@@ -592,7 +592,7 @@ case "$WEB_DEMO" in
     deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
     deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
     deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
-#    deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
+    deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     ;;
   *)
     echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."

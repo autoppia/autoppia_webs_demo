@@ -173,7 +173,7 @@ function AppointmentsPageContent() {
   // Column definitions (keys drive order of headers/cells)
   const columns = useMemo(() => [
     { key: 'doctor', header: 'Doctor' },
-    { key: 'specialty', header: 'Specialty' },
+    { key: 'specialty', header: 'Speciality' },
     { key: 'date', header: 'Date' },
     { key: 'time', header: 'Time' },
     { key: 'action', header: 'Action', align: 'right' as const },
@@ -395,7 +395,7 @@ function AppointmentsPageContent() {
                           setShowDoctorSuggestions(true);
                         }
                       }}
-                      placeholder="Search doctor by name or specialty..."
+                      placeholder="Search doctor by name or speciality..."
                       className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
                       data-testid="filter-appointment-doctor"
                     />
@@ -420,10 +420,10 @@ function AppointmentsPageContent() {
                   </div>
                 </div>
 
-                {/* Specialty Filter */}
+                {/* Speciality Filter */}
                 <div className="space-y-2 relative">
                   <Label htmlFor="specialty-filter" className="text-sm font-medium text-white">
-                    Filter by Specialty
+                    Filter by Speciality
                   </Label>
                   <div className="relative">
                     <Input
@@ -436,7 +436,7 @@ function AppointmentsPageContent() {
                           setShowSpecialtySuggestions(true);
                         }
                       }}
-                      placeholder="Search specialty..."
+                      placeholder="Search speciality..."
                       className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
                       data-testid="filter-appointment-specialty"
                     />

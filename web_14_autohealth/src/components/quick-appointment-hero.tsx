@@ -215,7 +215,7 @@ export function QuickAppointmentHero() {
                     htmlFor={dyn.v3.getVariant("quick-specialty-input", ID_VARIANTS_MAP, "quick-specialty")}
                     className="text-gray-700"
                   >
-                    Specialty (optional)
+                    Speciality (optional)
                   </Label>
                   <div className="relative">
                     <Input
