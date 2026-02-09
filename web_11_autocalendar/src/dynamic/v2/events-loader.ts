@@ -58,7 +58,7 @@ export async function initializeEvents(
       projectKey: PROJECT_KEY,
       entityType: ENTITY_TYPE,
       seedValue: effectiveSeed,
-      limit: 200,
+      limit: 50,
       method: "shuffle",
     });
     if (Array.isArray(events) && events.length > 0) {

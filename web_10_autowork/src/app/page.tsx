@@ -1016,7 +1016,7 @@ export default function Home() {
 		}
 	}, [hasSeenInitialLoad, isLoading, jobs.length, hires.length, experts.length]);
 
-	const showInitialLoading = !hasSeenInitialLoad && (isLoading || Boolean(statusMessage));
+	const showInitialLoading = !hasSeenInitialLoad && isLoading;
 
 	// Persist combined dataset once loaded
 	useEffect(() => {

@@ -65,6 +65,10 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
   }
   
   if (typeof v2SeedValue === "number" && Number.isFinite(v2SeedValue)) {
+    const resolvedSeeds = resolveSeedsSync(v2SeedValue);
+    if (resolvedSeeds.v2 !== null) {
+      return clampSeed(resolvedSeeds.v2);
+    }
     return clampSeed(v2SeedValue);
   }
   

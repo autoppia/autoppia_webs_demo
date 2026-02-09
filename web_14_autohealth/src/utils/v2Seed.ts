@@ -1,4 +1,5 @@
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { resolveSeedsSync } from "@/shared/seed-resolver";
 
 const clampSeed = (value: number, fallback = 1): number => {
   if (!Number.isFinite(value)) return fallback;
@@ -21,7 +22,10 @@ export const getRuntimeV2Seed = (): number | null => {
 export const resolveDatasetSeed = (seedValue?: number | null): number => {
   if (!isDbLoadModeEnabled()) return 1;
   if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
-    return clampSeed(seedValue);
+    const resolved = resolveSeedsSync(seedValue);
+    if (resolved.v2 !== null) {
+      return clampSeed(resolved.v2);
+    }
   }
   const runtime = getRuntimeV2Seed();
   if (runtime !== null) {
