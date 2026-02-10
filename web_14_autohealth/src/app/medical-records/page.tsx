@@ -17,6 +17,7 @@ import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { Pagination } from "@/components/ui/pagination";
 
 const RECORDS_PAGE_SIZE = 9;
+const CATEGORIES = ["all", "diagnostic", "preventive", "treatment", "monitoring"] as const;
 
 export default function MedicalRecordsPage() {
   const dyn = useDynamicSystem();
@@ -64,11 +65,10 @@ export default function MedicalRecordsPage() {
     }
   };
 
-  const categories = ["all", "diagnostic", "preventive", "treatment", "monitoring"];
   const orderedCategories = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("medical-records-categories", categories.length);
-    return order.map((idx) => categories[idx]);
-  }, [dyn.seed, categories]);
+    const order = dyn.v1.changeOrderElements("medical-records-categories", CATEGORIES.length);
+    return order.map((idx) => CATEGORIES[idx]);
+  }, [dyn.v1]);
   useEffect(() => {
     let mounted = true;
     initializeMedicalRecords()
@@ -110,7 +110,7 @@ export default function MedicalRecordsPage() {
   const orderedRecords = useMemo(() => {
     const order = dyn.v1.changeOrderElements("medical-records-list", filteredRecords.length);
     return order.map((idx) => filteredRecords[idx]);
-  }, [dyn.seed, filteredRecords]);
+  }, [dyn.v1, filteredRecords]);
 
   // Reset to page 1 when filter or applied search changes
   useEffect(() => {
@@ -201,6 +201,28 @@ export default function MedicalRecordsPage() {
             </Button>
           </div>
         </div>
+
+        {/* Clear Filters Button */}
+        {(selectedCategory !== "all" || appliedSearchTitle || appliedSearchDoctor) && (
+          <div className="mt-4 flex justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              data-testid="filter-medical-records-clear"
+              onClick={() => {
+                setSearchTitle("");
+                setSearchDoctor("");
+                setAppliedSearchTitle("");
+                setAppliedSearchDoctor("");
+                setSelectedCategory("all");
+                setCurrentPage(1);
+              }}
+              className="text-sm"
+            >
+              Clear All Filters
+            </Button>
+          </div>
+        )}
       </div>
 
       <Pagination

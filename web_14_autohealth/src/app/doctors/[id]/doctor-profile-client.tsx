@@ -14,6 +14,23 @@ import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
 
+const TABS = [
+  { id: "overview", label: "Overview" },
+  { id: "education", label: "Education & Certifications" },
+  { id: "availability", label: "Availability" },
+] as const;
+
+const HEADER_PARTS = [
+  { key: "avatar" },
+  { key: "details" },
+] as const;
+
+const CONTACT_INFO_KEYS = ["location", "phone", "email", "fee"] as const;
+type ContactInfoKey = (typeof CONTACT_INFO_KEYS)[number];
+
+const ACTION_KEYS = ["contact", "reviews"] as const;
+type ActionKey = (typeof ACTION_KEYS)[number];
+
 function Stars({ value }: { value: number }) {
   const stars = Array.from({ length: 5 }).map((_, i) => {
     const active = value >= i + 1 - 1e-6 || value > i && value < i + 1;
@@ -30,6 +47,26 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
 
+  const orderedTabs = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("doctor-profile-tabs", TABS.length);
+    return order.map((idx) => TABS[idx]);
+  }, [dyn.v1]);
+
+  const orderedHeaderParts = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("doctor-profile-header", HEADER_PARTS.length);
+    return order.map((idx) => HEADER_PARTS[idx]);
+  }, [dyn.v1]);
+
+  const orderedContactKeys = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("doctor-contact-info", CONTACT_INFO_KEYS.length);
+    return order.map((idx) => CONTACT_INFO_KEYS[idx]);
+  }, [dyn.v1]);
+
+  const orderedActionKeys = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("doctor-profile-actions", ACTION_KEYS.length);
+    return order.map((idx) => ACTION_KEYS[idx]);
+  }, [dyn.v1]);
+
   const handleContactDoctor = () => {
     logEvent(EVENT_TYPES.OPEN_CONTACT_DOCTOR_FORM, { doctor });
     setIsContactModalOpen(true);
@@ -39,34 +76,38 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
     setIsReviewsModalOpen(true);
   };
 
-  const tabs = [
-    { id: "overview", label: "Overview" },
-    { id: "education", label: "Education & Certifications" },
-    { id: "availability", label: "Availability" }
-  ];
-  const orderedTabs = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("doctor-profile-tabs", tabs.length);
-    return order.map((idx) => tabs[idx]);
-  }, [dyn.seed, tabs]);
+  const contactInfoItemByKey: Record<ContactInfoKey, { icon: React.ReactNode; label: string; value: string }> = {
+    location: {
+      icon: <MapPin className="h-4 w-4 text-muted-foreground" />,
+      label: "Office Location",
+      value: doctor.officeLocation || "N/A",
+    },
+    phone: {
+      icon: <Phone className="h-4 w-4 text-muted-foreground" />,
+      label: "Phone",
+      value: doctor.phone || "N/A",
+    },
+    email: {
+      icon: <Mail className="h-4 w-4 text-muted-foreground" />,
+      label: "Email",
+      value: doctor.email || "N/A",
+    },
+    fee: {
+      icon: <span className="text-lg">💰</span>,
+      label: "Consultation Fee",
+      value: doctor.consultationFee != null ? `$${doctor.consultationFee}` : "N/A",
+    },
+  };
 
   return (
     <div className="container py-10">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex flex-col md:flex-row gap-6">
-          {(() => {
-            const headerParts = [
-              { key: 'avatar' },
-              { key: 'details' },
-            ];
-            const orderedHeader = useMemo(() => {
-              const order = dyn.v1.changeOrderElements("doctor-profile-header", headerParts.length);
-              return order.map((idx) => headerParts[idx]);
-            }, [dyn.seed, headerParts]);
-            return orderedHeader.map((p, i) => (
-              dyn.v1.addWrapDecoy(`profile-header-${p.key}`, (
-                <div key={p.key} className={p.key === 'avatar' ? 'flex-shrink-0' : 'flex-1'}>
-                {p.key === 'avatar' && (
+          {orderedHeaderParts.map((p, i) => (
+            dyn.v1.addWrapDecoy(`profile-header-${p.key}`, (
+              <div key={p.key} className={p.key === "avatar" ? "flex-shrink-0" : "flex-1"}>
+                {p.key === "avatar" && (
                   <Avatar 
                     src={`/images/doctors/${doctor.id}.jpg`}
                     alt={`${doctor.name} profile photo`}
@@ -76,7 +117,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
                     data-agent-id="doctor-profile-header-image"
                   />
                 )}
-                {p.key === 'details' && (
+                {p.key === "details" && (
                   <div>
                     <h1 className="text-3xl font-bold">{doctor.name}</h1>
                     <p className="text-xl text-muted-foreground mb-2">{doctor.specialty}</p>
@@ -96,10 +137,9 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
                     </div>
                   </div>
                 )}
-                </div>
-              ), `profile-header-${p.key}-${i}`)
-            ));
-          })()}
+              </div>
+            ), `profile-header-${p.key}-${i}`)
+          ))}
         </div>
       </div>
 
@@ -113,29 +153,18 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {(() => {
-              const info = [
-                { key: 'location', icon: <MapPin className="h-4 w-4 text-muted-foreground" />, label: 'Office Location', value: doctor.officeLocation || 'N/A' },
-                { key: 'phone', icon: <Phone className="h-4 w-4 text-muted-foreground" />, label: 'Phone', value: doctor.phone || 'N/A' },
-                { key: 'email', icon: <Mail className="h-4 w-4 text-muted-foreground" />, label: 'Email', value: doctor.email || 'N/A' },
-                { key: 'fee', icon: <span className="text-lg">💰</span>, label: 'Consultation Fee', value: doctor.consultationFee != null ? `$${doctor.consultationFee}` : 'N/A' },
-              ];
-              const orderedInfo = useMemo(() => {
-                const order = dyn.v1.changeOrderElements("doctor-contact-info", info.length);
-                return order.map((idx) => info[idx]);
-              }, [dyn.seed, info]);
-              return orderedInfo.map((it, i) => (
-                dyn.v1.addWrapDecoy(`contact-item-${i}`, (
-                  <div key={it.key} className="flex items-center gap-3">
-                  {it.icon}
+            {orderedContactKeys.map((key, i) => {
+              const item = contactInfoItemByKey[key];
+              return dyn.v1.addWrapDecoy(`contact-item-${i}`, (
+                <div key={key} className="flex items-center gap-3">
+                  {item.icon}
                   <div>
-                    <p className="font-medium">{it.label}</p>
-                    <p className="text-sm text-muted-foreground">{it.value}</p>
+                    <p className="font-medium">{item.label}</p>
+                    <p className="text-sm text-muted-foreground">{item.value}</p>
                   </div>
                 </div>
-              ), `contact-item-${i}`)
-              ));
-            })()}
+              ), `contact-item-${i}`);
+            })}
           </div>
         </CardContent>
       </Card>
@@ -154,6 +183,9 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
                   setActiveTab(tab.id);
                   if (tab.id === "education") {
                     logEvent(EVENT_TYPES.VIEW_DOCTOR_EDUCATION, { doctor });
+                  }
+                  if (tab.id === "availability") {
+                    logEvent(EVENT_TYPES.VIEW_DOCTOR_AVAILABILITY, { doctor });
                   }
                 }}
               >
@@ -344,22 +376,26 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
 
       {/* Action Buttons */}
       <div className="mt-8 flex flex-col sm:flex-row gap-4">
-        {(() => {
-          const actions = [
-            { key: 'contact', node: (
-              dyn.v1.addWrapDecoy("contact-doctor-button", (
-                <Button 
-                  id={dyn.v3.getVariant("contact-doctor-button", ID_VARIANTS_MAP, "contact-doctor-button")}
-                  className={cn("flex-1 bg-green-600 hover:bg-green-700 text-white", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
-                  data-testid="open-contact-doctor-form-btn"
-                  onClick={handleContactDoctor}
-                >
-                  {dyn.v3.getVariant("contact_doctor", TEXT_VARIANTS_MAP, "Contact Doctor")}
-                </Button>
-              ))
-            ) },
-            { key: 'reviews', node: (
-              dyn.v1.addWrapDecoy("view-reviews-button", (
+        {orderedActionKeys.map((key: ActionKey, i) => {
+          if (key === "contact") {
+            return dyn.v1.addWrapDecoy(`profile-action-${i}`, (
+              <div key={key}>
+                {dyn.v1.addWrapDecoy("contact-doctor-button", (
+                  <Button 
+                    id={dyn.v3.getVariant("contact-doctor-button", ID_VARIANTS_MAP, "contact-doctor-button")}
+                    className={cn("flex-1 bg-green-600 hover:bg-green-700 text-white", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+                    data-testid="open-contact-doctor-form-btn"
+                    onClick={handleContactDoctor}
+                  >
+                    {dyn.v3.getVariant("contact_doctor", TEXT_VARIANTS_MAP, "Contact Doctor")}
+                  </Button>
+                ))}
+              </div>
+            ), `profile-action-${i}`);
+          }
+          return dyn.v1.addWrapDecoy(`profile-action-${i}`, (
+            <div key={key}>
+              {dyn.v1.addWrapDecoy("view-reviews-button", (
                 <Button 
                   id={dyn.v3.getVariant("view-reviews-button", ID_VARIANTS_MAP, "view-reviews-button")}
                   className={cn("flex-1", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
@@ -368,21 +404,10 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
                 >
                   {dyn.v3.getVariant("view_reviews", TEXT_VARIANTS_MAP, "View All Reviews")}
                 </Button>
-              ))
-            ) },
-          ];
-          const orderedActions = useMemo(() => {
-            const order = dyn.v1.changeOrderElements("doctor-profile-actions", actions.length);
-            return order.map((idx) => actions[idx]);
-          }, [dyn.seed, actions]);
-          return orderedActions.map((a, i) => (
-            dyn.v1.addWrapDecoy(`profile-action-${i}`, (
-              <div key={a.key}>
-                {a.node}
-              </div>
-            ), `profile-action-${i}`)
-          ));
-        })()}
+              ))}
+            </div>
+          ), `profile-action-${i}`);
+        })}
       </div>
 
       {/* Modals */}

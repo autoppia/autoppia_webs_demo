@@ -131,7 +131,7 @@ export default function DoctorsPage() {
       list = order.map((idx) => list[idx]);
     }
     return list;
-  }, [dyn.seed, filteredDoctors, sortBy, sortOrder]);
+  }, [dyn.v1, filteredDoctors, sortBy, sortOrder]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -246,6 +246,30 @@ export default function DoctorsPage() {
                   {dyn.v3.getVariant("search", TEXT_VARIANTS_MAP, "Search")}
                 </Button>
               </div>
+
+              {/* Clear Filters Button */}
+              {(appliedSearchName || appliedSpecialty || appliedLanguage) && (
+                <div className="mt-4 flex justify-end">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    data-testid="filter-doctors-clear"
+                    onClick={() => {
+                      setSearchName("");
+                      setSelectedSpecialty("");
+                      setSelectedLanguage("");
+                      setAppliedSearchName("");
+                      setAppliedSpecialty("");
+                      setAppliedLanguage("");
+                      setCurrentPage(1);
+                    }}
+                    className="text-sm"
+                  >
+                    Clear All Filters
+                  </Button>
+                </div>
+              )}
+
               <div className="mt-4 text-sm text-white">
                 {totalDoctors} of {doctorList.length} doctors
                 {appliedSearchName && ` matching "${appliedSearchName}"`}

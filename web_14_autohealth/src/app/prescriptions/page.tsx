@@ -66,7 +66,7 @@ export default function PrescriptionsPage() {
   const orderedStatuses = useMemo(() => {
     const order = dyn.v1.changeOrderElements("prescriptions-statuses", statuses.length);
     return order.map((idx) => statuses[idx]);
-  }, [dyn.seed, statuses]);
+  }, [dyn.v1, statuses]);
 
   useEffect(() => {
     let mounted = true;
@@ -114,7 +114,7 @@ export default function PrescriptionsPage() {
   const orderedRows = useMemo(() => {
     const order = dyn.v1.changeOrderElements("prescriptions-rows", filteredPrescriptions.length);
     return order.map((idx) => filteredPrescriptions[idx]);
-  }, [dyn.seed, filteredPrescriptions]);
+  }, [dyn.v1, filteredPrescriptions]);
 
   // Reset to page 1 when filter or applied search changes
   useEffect(() => {
@@ -139,7 +139,7 @@ export default function PrescriptionsPage() {
   const orderedColumns = useMemo(() => {
     const order = dyn.v1.changeOrderElements("prescriptions-columns", columns.length);
     return order.map((idx) => columns[idx]);
-  }, [dyn.seed, columns]);
+  }, [dyn.v1, columns]);
 
   if (useAiGeneration && isLoading) {
     return (
@@ -201,6 +201,28 @@ export default function PrescriptionsPage() {
             </Button>
           </div>
         </div>
+
+        {/* Clear Filters Button */}
+        {(selectedStatus !== "all" || appliedSearchMedicine || appliedSearchDoctor) && (
+          <div className="mt-4 flex justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              data-testid="filter-prescriptions-clear"
+              onClick={() => {
+                setSearchMedicine("");
+                setSearchDoctor("");
+                setAppliedSearchMedicine("");
+                setAppliedSearchDoctor("");
+                setSelectedStatus("all");
+                setCurrentPage(1);
+              }}
+              className="text-sm"
+            >
+              Clear All Filters
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Status Filter */}

@@ -24,6 +24,8 @@ export const EVENT_TYPES = {
   VIEW_DOCTOR_PROFILE: "VIEW_DOCTOR_PROFILE",
   /** Fired when user opens the Education & Certifications tab on a doctor profile. */
   VIEW_DOCTOR_EDUCATION: "VIEW_DOCTOR_EDUCATION",
+  /** Fired when user opens the Availability tab on a doctor profile. */
+  VIEW_DOCTOR_AVAILABILITY: "VIEW_DOCTOR_AVAILABILITY",
   /** Fired when user clicks Contact Doctor and opens the contact form modal. */
   OPEN_CONTACT_DOCTOR_FORM: "OPEN_CONTACT_DOCTOR_FORM",
   CONTACT_DOCTOR: "CONTACT_DOCTOR",
