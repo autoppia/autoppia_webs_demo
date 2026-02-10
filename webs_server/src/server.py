@@ -842,7 +842,7 @@ async def load_dataset_endpoint(
     """
     try:
         # Load from file-based storage under /app/data only (files-only mode)
-        file_data_pool = load_all_data(project_key, entity_type)
+        file_data_pool = load_all_data(project_key, entity_type, seed_value=seed_value)
 
         if not file_data_pool:
             raise HTTPException(
@@ -851,7 +851,8 @@ async def load_dataset_endpoint(
             )
 
         # If V2 DB mode is disabled, return full pool (original dataset) without seeded selection
-        if os.getenv("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() in {"false", "0", "no", "off"}:
+        if os.getenv("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() in {"false", "0", "no", "off"} or seed_value == 1:
+            logger.info("v2 db mode enabled but seed value is 1. So returning fallback data.")
             metadata = {
                 "source": "file_storage",
                 "projectKey": project_key,
