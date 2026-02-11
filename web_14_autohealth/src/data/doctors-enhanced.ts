@@ -5,7 +5,7 @@ import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loade
 import { resolveDatasetSeed, waitForDatasetSeed } from "@/utils/v2Seed";
 
 
-const CACHE_KEY = 'autohealth_doctors_v1';
+const CACHE_KEY = 'autohealth_doctors_v2';
 const PROJECT_KEY = 'web_14_autohealth';
 let doctorsCache: Doctor[] = [];
 const FALLBACK_DOCTORS: Doctor[] = Array.isArray(fallbackDoctorsJson) ? (fallbackDoctorsJson as Doctor[]) : [];
@@ -45,7 +45,7 @@ export async function initializeDoctors(v2SeedValue?: number | null): Promise<Do
       try {
         doctorsCache = JSON.parse(raw) as Doctor[];
         if (doctorsCache.length > 0) return doctorsCache;
-      } catch {}
+      } catch { }
     }
   }
 
