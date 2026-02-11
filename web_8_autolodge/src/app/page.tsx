@@ -8,7 +8,7 @@ import { DateRangePopover } from "@/components/DateRangePopover";
 import { GuestSelectorPopover } from "@/components/GuestSelectorPopover";
 import { PropertyCard } from "@/components/PropertyCard";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeedLayout } from "@/library/utils";
@@ -40,8 +40,10 @@ function parseDateParam(value: string | null): Date | null {
 }
 
 function normalizeHotelDates(hotel: Hotel): Hotel {
+  // Make sure we preserve the exact ID without any modification
   return {
     ...hotel,
+    id: hotel.id, // Explicitly preserve ID
     datesFrom: hotel.datesFrom,
     datesTo: hotel.datesTo,
   };
@@ -101,6 +103,16 @@ function HomeContent() {
   const [minRating, setMinRating] = useState<number>(0);
   const [region, setRegion] = useState<string>("all");
 
+  // Log V2 status for debugging
+  useEffect(() => {
+    console.log("[autolodge] V2 Status:", {
+      enabled: dyn.v2.isEnabled(),
+      dbMode: dyn.v2.isDbModeEnabled(),
+      aiMode: dyn.v2.isAiGenerateEnabled(),
+      fallbackMode: dyn.v2.isFallbackMode(),
+    });
+  }, [dyn]);
+
   useEffect(() => {
     const urlSearch = searchParams.get("search") ?? "";
     const urlFrom = parseDateParam(searchParams.get("from")) ?? null;
@@ -134,8 +146,16 @@ function HomeContent() {
         await dynamicDataProvider.whenReady();
 
         const providerHotels = dynamicDataProvider.getHotels();
-        setHotels(providerHotels.map(normalizeHotelDates));
+        const normalizedHotels = providerHotels.map(normalizeHotelDates);
+        setHotels(normalizedHotels);
         console.log('[HomeContent] Hotels loaded:', providerHotels.length);
+        if (providerHotels.length > 0) {
+          console.log('[HomeContent] First 5 hotel IDs:', providerHotels.slice(0, 5).map(h => ({ 
+            id: h.id, 
+            idType: typeof h.id,
+            title: h.title 
+          })));
+        }
       } catch (error) {
         console.error('[HomeContent] Error loading hotels:', error);
       } finally {
@@ -143,16 +163,24 @@ function HomeContent() {
       }
     };
 
-    const handleDataRefresh = () => {
+    const handleDataRefresh = async () => {
       console.log('[HomeContent] Handling v2-seed change event');
-      // Add small delay to ensure DynamicDataProvider has finished refreshing
-      setTimeout(() => {
-        const providerHotels = dynamicDataProvider.getHotels();
-        if (providerHotels.length > 0) {
-          setHotels(providerHotels.map(normalizeHotelDates));
-          console.log('[HomeContent] Hotels refreshed:', providerHotels.length);
-        }
-      }, 100);
+      // Wait for provider to be ready after seed change
+      await dynamicDataProvider.whenReady();
+      // Add small delay to ensure data is fully synced
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
+      const providerHotels = dynamicDataProvider.getHotels();
+      if (providerHotels.length > 0) {
+        const normalizedHotels = providerHotels.map(normalizeHotelDates);
+        setHotels(normalizedHotels);
+        console.log('[HomeContent] Hotels refreshed:', providerHotels.length);
+        console.log('[HomeContent] First 5 hotel IDs after refresh:', providerHotels.slice(0, 5).map(h => ({ 
+          id: h.id, 
+          idType: typeof h.id,
+          title: h.title 
+        })));
+      }
     };
 
     // Initial load

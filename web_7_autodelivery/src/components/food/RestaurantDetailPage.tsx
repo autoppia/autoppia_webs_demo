@@ -11,6 +11,7 @@ import { useLayout } from "@/contexts/LayoutProvider";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useSeed } from "@/context/SeedContext";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -144,10 +145,31 @@ export default function RestaurantDetailPage({
   const seedStructure = layout.seed;
   const dyn = useDynamicSystem();
   const router = useSeedRouter();
-  const { restaurants, isLoading } = useRestaurants();
+  const { restaurants, isLoading, getRestaurantById } = useRestaurants();
+  const { seed } = useSeed();
   const restaurant = useMemo(() => {
-    return restaurants.find((r) => r.id === restaurantId);
-  }, [restaurantId, restaurants]);
+    const found = getRestaurantById(restaurantId);
+    console.log(`[autodelivery] Searching for restaurant ${restaurantId} in ${restaurants.length} restaurants`);
+    if (found) {
+      console.log(`[autodelivery] Restaurant ${restaurantId} found:`, found.name);
+    } else {
+      console.log(`[autodelivery] Restaurant ${restaurantId} not found. Available restaurants (${restaurants.length}):`,
+        restaurants.slice(0, 5).map(r => ({ id: r.id, name: r.name }))
+      );
+    }
+    return found;
+  }, [restaurantId, restaurants, getRestaurantById]);
+
+  // Log V2 status for debugging
+  useEffect(() => {
+    console.log("[autodelivery] V2 Status:", {
+      seed,
+      v2Enabled: dyn.v2.isEnabled(),
+      dbMode: dyn.v2.isDbModeEnabled(),
+      aiMode: dyn.v2.isAiGenerateEnabled(),
+      fallback: dyn.v2.isFallbackMode(),
+    });
+  }, [seed, dyn]);
 
   const addToCart = useCartStore((state) => state.addToCart);
   const [modalOpen, setModalOpen] = useState(false);

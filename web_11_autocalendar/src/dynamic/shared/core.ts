@@ -58,23 +58,26 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
 }
 
 /**
- * Centralized hook that unifies V1 (wrappers/decoy) and V3 (attributes/text)
+ * Centralized hook that unifies V1 (wrappers/decoy), V2 (data loading), and V3 (attributes/text)
  *
  * Usage:
  *   const dyn = useDynamicSystem();
  *   dyn.v1.addWrapDecoy()         // V1: Adds wrappers and decoys
  *   dyn.v1.changeOrderElements()  // V1: Changes element order
+ *   dyn.v2.whenReady()            // V2: Wait for data to be ready
  *   dyn.v3.getVariant()           // V3: Gets variants (IDs, classes, texts)
  *
- * It behaves the same even if V1/V3 are OFF:
+ * It behaves the same even if V1/V2/V3 are OFF:
  * - If V1 is OFF: dyn.v1.addWrapDecoy() returns children unchanged
- * - If V3 is OFF: dyn.getVariant() returns the fallback or key
+ * - If V2 is OFF: dyn.v2 status methods return false
+ * - If V3 is OFF: dyn.v3.getVariant() returns the fallback or key
  *
  * The seed is read automatically from SeedContext (which reads it from the URL).
  * You do not need to pass the seed manually.
  */
 export function useDynamicSystem() {
-  const { seed } = useSeed();
+  const { seed, resolvedSeeds } = useSeed();
+  const { dynamicDataProvider } = require("../v2");
 
   return useMemo(() => ({
     seed,
@@ -112,6 +115,52 @@ export function useDynamicSystem() {
     },
 
     /**
+     * V2: Data loading
+     * Provides access to dynamic data provider
+     */
+    v2: {
+      /**
+       * Wait for data to be ready
+       * @returns Promise that resolves when data is loaded
+       */
+      whenReady: () => dynamicDataProvider.whenReady(),
+      
+      /**
+       * Check if DB mode is enabled
+       */
+      isDbModeEnabled: () => {
+        const { isDbLoadModeEnabled } = require("@/shared/seeded-loader");
+        return isDbLoadModeEnabled();
+      },
+      
+      /**
+       * Check if AI generation mode is enabled
+       */
+      isAiGenerateEnabled: () => {
+        const { isV2AiGenerateEnabled } = require("./flags");
+        return isV2AiGenerateEnabled();
+      },
+      
+      /**
+       * Check if fallback mode is active
+       */
+      isFallbackMode: () => {
+        const { isDbLoadModeEnabled } = require("@/shared/seeded-loader");
+        const { isV2AiGenerateEnabled } = require("./flags");
+        return !isDbLoadModeEnabled() && !isV2AiGenerateEnabled();
+      },
+      
+      /**
+       * Check if V2 is enabled (any mode)
+       */
+      isEnabled: () => {
+        const { isDbLoadModeEnabled } = require("@/shared/seeded-loader");
+        const { isV2AiGenerateEnabled } = require("./flags");
+        return isDbLoadModeEnabled() || isV2AiGenerateEnabled();
+      },
+    },
+
+    /**
      * V3: Variants (IDs, classes, texts)
      * Single function for everything - same logic, same structure
      */
@@ -146,5 +195,5 @@ export function useDynamicSystem() {
      */
     selectVariantIndex: (key: string, count: number) =>
       selectVariantIndex(seed, key, count),
-  }), [seed]);
+  }), [seed, resolvedSeeds]);
 }

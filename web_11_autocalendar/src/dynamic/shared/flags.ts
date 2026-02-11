@@ -1,7 +1,8 @@
 /**
- * FLAGS - Enablement control for V1 and V3
+ * FLAGS - Enablement control for V1, V2, and V3
  *
  * V1: DOM structure (wrappers, decoys) - Breaks XPath
+ * V2: Data loading - Loads different data subsets based on seed
  * V3: Attributes and text (IDs, classes, texts) - Anti-memorization
  */
 
@@ -41,4 +42,23 @@ export function isV3Enabled(): boolean {
   }
 
   return enabled;
+}
+
+/**
+ * Checks whether V2 AI generation mode is enabled
+ * V2 AI generation generates data on-the-fly using OpenAI
+ */
+export function isV2AiGenerateEnabled(): boolean {
+  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE;
+  const enabled = value === "true" || value === true;
+  return enabled;
+}
+
+/**
+ * Checks whether V2 DB load mode is enabled
+ * V2 DB mode loads pre-generated data from backend
+ */
+export function isV2DbLoadModeEnabled(): boolean {
+  const { isDbLoadModeEnabled } = require("@/shared/seeded-loader");
+  return isDbLoadModeEnabled();
 }

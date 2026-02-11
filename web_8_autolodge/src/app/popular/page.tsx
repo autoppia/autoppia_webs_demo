@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { PropertyCard } from "@/components/PropertyCard";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useWishlist } from "@/hooks/useWishlist";
 import type { Hotel } from "@/types/hotel";

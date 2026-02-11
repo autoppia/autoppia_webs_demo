@@ -9,7 +9,7 @@
 import { useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
 import { applyV1Wrapper } from "../v1/add-wrap-decoy";
-import { isV3Enabled } from "./flags";
+import { isV3Enabled, isV2DbModeEnabled, isV2AiGenerateEnabled, isV2Enabled } from "./flags";
 import { getVariant, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "../v3/utils/variant-selector";
 import { generateDynamicOrder } from "../v1/change-order-elements";
 import type { ReactNode } from "react";
@@ -66,17 +66,20 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
 // ============================================================================
 
 /**
- * Centralized hook that unifies V1 (wrappers/decoy) and V3 (attributes/text)
+ * Centralized hook that unifies V1 (wrappers/decoy), V2 (data loading), and V3 (attributes/text)
  * 
  * Usage:
  *   const dyn = useDynamicSystem();
  *   dyn.v1.addWrapDecoy()         // V1: Adds wrappers and decoys
  *   dyn.v1.changeOrderElements()  // V1: Changes element order
+ *   dyn.v2.isDbModeEnabled()      // V2: Check if DB mode is enabled
+ *   dyn.v2.isAiGenerateEnabled()  // V2: Check if AI generation mode is enabled
  *   dyn.v3.getVariant()           // V3: Gets variants (IDs, classes, texts)
  * 
- * It behaves the same even if V1/V3 are OFF:
+ * It behaves the same even if V1/V2/V3 are OFF:
  * - If V1 is OFF: dyn.v1.addWrapDecoy() returns children unchanged
- * - If V3 is OFF: dyn.getVariant() returns the fallback or key
+ * - If V2 is OFF: dyn.v2 status methods return false
+ * - If V3 is OFF: dyn.v3.getVariant() returns the fallback or key
  * 
  * The seed is read automatically from SeedContext (which reads it from the URL).
  * You do not need to pass the seed manually.
@@ -117,6 +120,35 @@ export function useDynamicSystem() {
        */
       changeOrderElements: (key: string, count: number) => 
         generateDynamicOrder(seed, key, count),
+    },
+    
+    /**
+     * V2: Data loading (DB mode, AI generation, fallback)
+     * Provides status information about V2 modes
+     */
+    v2: {
+      /**
+       * Check if V2 is enabled (either DB mode or AI generation mode)
+       */
+      isEnabled: () => isV2Enabled(),
+      
+      /**
+       * Check if V2 DB mode is enabled
+       * DB mode loads pre-generated data from backend /datasets/load endpoint
+       */
+      isDbModeEnabled: () => isV2DbModeEnabled(),
+      
+      /**
+       * Check if V2 AI generation mode is enabled
+       * AI generation mode generates data on-the-fly using OpenAI
+       */
+      isAiGenerateEnabled: () => isV2AiGenerateEnabled(),
+      
+      /**
+       * Check if V2 fallback mode is active
+       * Fallback mode uses original local JSON data when other modes are disabled or fail
+       */
+      isFallbackMode: () => !isV2Enabled(),
     },
     
     /**

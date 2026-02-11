@@ -13,10 +13,11 @@ import {
   TeamOutlined,
 } from "@ant-design/icons";
 import { Calendar, Popover, Modal } from "antd";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { loadTasks, RemoteTask } from "@/data/tasks";
+import { dynamicDataProvider } from "@/dynamic/v2";
+import type { RemoteTask } from "@/data/tasks-enhanced";
 import { TeamsProvider, useTeams } from "@/context/TeamsContext";
 import { ProjectsProvider } from "@/context/ProjectsContext";
 import { useDynamicSystem } from "@/dynamic/shared";
@@ -640,8 +641,6 @@ export default function Home() {
   const reorderElements = <T,>(items: T[], key: string) => items;
   const [showForm, setShowForm] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [tasksLoading, setTasksLoading] = useState(true);
-  const [tasksError, setTasksError] = useState<string | null>(null);
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [selectedView, setSelectedView] = useState<ViewMode>("inbox");
@@ -649,45 +648,75 @@ export default function Home() {
   const [chatDrafts, setChatDrafts] = useState<Record<string, string>>({});
   const [snackbar, setSnackbar] = useState<{ message: string; visible: boolean }>({ message: "", visible: false });
 
+  // V2: Subscribe to dynamic tasks from data provider
+  const [v2Tasks, setV2Tasks] = useState<RemoteTask[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [userTasks, setUserTasks] = useState<Task[]>([]); // User-created/edited tasks
+  
+  // Subscribe to V2 tasks
   useEffect(() => {
-    let cancelled = false;
-
-    async function fetchTasks() {
-      setTasksLoading(true);
-      setTasksError(null);
-      try {
-        const result = await loadTasks(v2Seed ?? undefined);
-        if (cancelled) return;
-        
-        if (result.error) {
-          setTasksError(result.error);
-        }
-        
-        const normalized = result.tasks.map((task, index) =>
-          normalizeRemoteTask(task, index)
-        );
-        const initialActive = normalized.filter((task) => !task.completedAt);
-        const initialCompleted = normalized.filter((task) => task.completedAt);
-        setTasks(initialActive);
-        setCompletedTasks(initialCompleted);
-      } catch (error) {
-        if (cancelled) return;
-        console.error("[autolist] Failed to load tasks", error);
-        setTasksError(
-          error instanceof Error ? error.message : "Failed to load tasks"
-        );
-      } finally {
-        if (!cancelled) {
-          setTasksLoading(false);
-        }
+    // Wait for data to be ready
+    dyn.v2.whenReady().then(() => {
+      const tasks = dynamicDataProvider.getTasks();
+      setV2Tasks(tasks);
+      setIsLoading(false);
+    });
+    
+    // Subscribe to tasks updates
+    const unsubscribe = dynamicDataProvider.subscribeTasks((updatedTasks) => {
+      // If tasks array is empty, it means data was cleared (seed change in progress)
+      if (updatedTasks.length === 0) {
+        console.log(`[autolist] Tasks array is empty - seed change in progress, clearing tasks state`);
+        setV2Tasks([]);
+        setIsLoading(true);
+        return;
       }
-    }
-
-    fetchTasks();
-    return () => {
-      cancelled = true;
+      
+      setV2Tasks(updatedTasks);
+      setIsLoading(false);
+    });
+    
+    // Listen for seed changes
+    const handleSeedChange = () => {
+      console.log(`[autolist] Seed changed, reloading tasks...`);
+      setV2Tasks([]);
+      setIsLoading(true);
+      // Clear user tasks when seed changes (they belong to old seed)
+      setUserTasks([]);
     };
-  }, [v2Seed]);
+    
+    if (typeof window !== "undefined") {
+      window.addEventListener("autolist:v2SeedChange", handleSeedChange);
+    }
+    
+    return () => {
+      unsubscribe();
+      if (typeof window !== "undefined") {
+        window.removeEventListener("autolist:v2SeedChange", handleSeedChange);
+      }
+    };
+  }, [dyn.v2]);
+  
+  // Combine V2 tasks with user-created tasks
+  const allTasks = useMemo(() => {
+    // Normalize V2 tasks
+    const normalizedV2Tasks = v2Tasks.map((task, index) =>
+      normalizeRemoteTask(task, index)
+    );
+    
+    // Merge V2 tasks with user tasks, avoiding duplicates
+    const v2TaskIds = new Set(normalizedV2Tasks.map(t => t.id));
+    const uniqueUserTasks = userTasks.filter(t => !v2TaskIds.has(t.id));
+    return [...normalizedV2Tasks, ...uniqueUserTasks];
+  }, [v2Tasks, userTasks]);
+  
+  // Separate active and completed tasks from allTasks
+  useEffect(() => {
+    const initialActive = allTasks.filter((task) => !task.completedAt);
+    const initialCompleted = allTasks.filter((task) => task.completedAt);
+    setTasks(initialActive);
+    setCompletedTasks(initialCompleted);
+  }, [allTasks]);
 
   // Initialize chat messages when switching to a chat
   useEffect(() => {
@@ -705,14 +734,29 @@ export default function Home() {
     date: Dayjs | null;
     priority: number;
   }) {
+    const v2TaskIds = new Set(v2Tasks.map(t => t.id?.toString()));
+    
     if (editIndex !== null) {
-      setTasks((tasks) =>
-        tasks.map((t, i) => (i === editIndex ? { ...newTask, id: t.id } : t))
-      );
+      const currentTask = tasks[editIndex];
+      const isV2Task = currentTask && v2TaskIds.has(currentTask.id);
+      
+      if (isV2Task) {
+        // Editing a V2 task - add as new user task
+        setUserTasks((prev) => [
+          ...prev,
+          { ...newTask, id: Date.now().toString() },
+        ]);
+      } else {
+        // Editing a user task - update it
+        setUserTasks((prev) =>
+          prev.map((t) => (t.id === currentTask.id ? { ...newTask, id: t.id } : t))
+        );
+      }
       setEditIndex(null);
     } else {
-      setTasks((tasks) => [
-        ...tasks,
+      // Adding new task - always add to userTasks
+      setUserTasks((prev) => [
+        ...prev,
         { ...newTask, id: Date.now().toString() },
       ]);
     }
@@ -721,13 +765,25 @@ export default function Home() {
     setEditIndex(tasks.findIndex((t) => t.id === id));
   }
   function handleDeleteTask(id: string) {
-    setTasks((tasks) => tasks.filter((t) => t.id !== id));
+    const v2TaskIds = new Set(v2Tasks.map(t => t.id?.toString()));
+    
+    if (v2TaskIds.has(id)) {
+      // Can't delete V2 tasks, just remove from UI by filtering
+      setTasks((tasks) => tasks.filter((t) => t.id !== id));
+    } else {
+      // Delete user task
+      setUserTasks((prev) => prev.filter((t) => t.id !== id));
+    }
+    
     if (editIndex !== null && tasks[editIndex]?.id === id) setEditIndex(null);
     // Show snackbar
     setSnackbar({ message: "Task deleted", visible: true });
     setTimeout(() => setSnackbar({ message: "", visible: false }), 3000);
   }
   function handleCompleteTask(id: string) {
+    const v2TaskIds = new Set(v2Tasks.map(t => t.id?.toString()));
+    const isV2Task = v2TaskIds.has(id);
+    
     setTasks((tasks) => {
       const idx = tasks.findIndex((t) => t.id === id);
       if (idx === -1) return tasks;
@@ -739,6 +795,21 @@ export default function Home() {
       );
       return tasks.filter((v, i) => i !== idx);
     });
+    
+    // If it's a V2 task, mark as completed in userTasks to persist the state
+    if (isV2Task) {
+      const task = allTasks.find(t => t.id === id);
+      if (task) {
+        setUserTasks((prev) => {
+          const exists = prev.find(t => t.id === id);
+          if (exists) {
+            return prev.map(t => t.id === id ? { ...t, completedAt: new Date().toISOString() } : t);
+          }
+          return [...prev, { ...task, completedAt: new Date().toISOString() }];
+        });
+      }
+    }
+    
     // Show snackbar
     setSnackbar({ message: "Task done successfully", visible: true });
     setTimeout(() => setSnackbar({ message: "", visible: false }), 3000);
@@ -1373,15 +1444,6 @@ function renderChatPlaceholder(chatId: string) {
                       <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes("heading-inbox", 0)}>
                         {getText("heading-inbox", "Add Tasks To Your Todo List")}
                       </h1>
-                      {tasksError && (
-                        <div className={`${dynClasses.card} mb-6 px-6 py-4 text-blue-800 text-sm max-w-2xl`}>
-                          <div className="font-semibold mb-1">ℹ️ Usando datos locales</div>
-                          <div className="text-blue-700">{tasksError}</div>
-                          <div className="mt-3 text-xs text-blue-600">
-                            <p>Las tareas se están cargando desde el archivo JSON local. Si quieres usar el backend, asegúrate de que esté corriendo.</p>
-                          </div>
-                        </div>
-                      )}
                       <Modal
                         open={editIndex !== null}
                         footer={null}
@@ -1396,17 +1458,12 @@ function renderChatPlaceholder(chatId: string) {
                         )}
                       </Modal>
                       {showForm && <AddTaskCard onCancel={() => setShowForm(false)} onAdd={handleAddTask} />}
-                      {tasksLoading && (
+                      {isLoading && (
                         <div className={`${dynClasses.panel} w-full max-w-md mx-auto mt-6 border-dashed px-6 py-4 text-sm text-gray-600`}>
                           Loading tasks...
                         </div>
                       )}
-                      {tasksError && (
-                        <div className="w-full max-w-md mx-auto mt-6 bg-white rounded-2xl border border-red-200 px-6 py-4 text-sm text-red-600">
-                          {tasksError}
-                        </div>
-                      )}
-                      {!showForm && !tasksLoading && tasks.length === 0 && (
+                      {!showForm && !isLoading && tasks.length === 0 && (
                         <div className={`${dynClasses.card} w-full max-w-md mx-auto mt-6 px-8 py-10 flex flex-col items-center`}>
                           <div className="mb-6">
                             <svg width="56" height="56" fill="none" className="mx-auto mb-2">

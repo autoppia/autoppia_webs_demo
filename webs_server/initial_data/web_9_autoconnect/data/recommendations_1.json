@@ -1,1467 +1,3598 @@
 [
   {
     "id": "r1",
-    "type": "user",
-    "title": "Sarah Chen - UX Designer",
-    "description": "Senior UX Designer at Google with 8+ years of mobile design experience.",
-    "reason": "Based on your interest in design and mobile development",
+    "type": "job",
+    "title": "Senior Data Analyst",
+    "description": "Conduct research and develop ML models. Work on data analysis and visualization.",
+    "reason": "Based on your data science background and expertise",
     "relevanceScore": 0.92,
-    "category": "Design",
-    "image": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop&crop=face&auto=format&q=80",
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:da.com",
     "metadata": {
-      "location": "San Francisco, CA",
-      "company": "Google",
-      "skills": [
-        "Figma",
-        "User Research",
-        "Mobile Design"
-      ]
+      "location": "Charlotte, NC",
+      "company": "Tableau",
+      "salary": "$100,000 - $135,000",
+      "experience": "3+ years"
     }
   },
   {
     "id": "r2",
     "type": "job",
-    "title": "Senior Product Manager",
-    "description": "Lead product strategy for a high-growth fintech startup.",
-    "reason": "Matches your product management background and fintech interest",
-    "relevanceScore": 0.88,
-    "category": "Product Management",
-    "image": "https://images.unsplash.com/photo-1551434678-e076c223a692?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "UI Designer",
+    "description": "Build design systems and component libraries. Collaborate with product and engineering teams.",
+    "reason": "Aligned with your design interests and skills",
+    "relevanceScore": 0.91,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:ud.com",
     "metadata": {
-      "location": "New York, NY",
-      "company": "FinTech Startup",
-      "salary": "$140,000 - $180,000",
-      "experience": "5+ years"
+      "location": "Phoenix, AZ",
+      "company": "Google",
+      "salary": "$120,000 - $150,000",
+      "experience": "4+ years"
     }
   },
   {
     "id": "r3",
-    "type": "user",
-    "title": "John Doe - Data Scientist",
-    "description": "Experienced Data Scientist specializing in machine learning and AI solutions.",
-    "reason": "Aligned with your interests in data analysis and machine learning",
-    "relevanceScore": 0.91,
-    "category": "User",
-    "image": "https://images.unsplash.com/photo-1584697964170-4b9c5c1e5c4f?w=300&h=300&fit=crop&crop=face&auto=format&q=80",
+    "type": "job",
+    "title": "Security Engineer",
+    "description": "Protect systems and user data through security audits and best practices. Conduct penetration testing and respond to incidents.",
+    "reason": "Matches your security background and React and TypeScript interest",
+    "relevanceScore": 0.86,
+    "category": "Security",
+    "image": "https://logos-api.apistemic.com/domain:se.com",
     "metadata": {
-      "location": "Austin, TX",
-      "company": "Tech Innovations",
-      "skills": [
-        "Python",
-        "Machine Learning",
-        "Data Visualization"
-      ]
+      "location": "Miami, FL",
+      "company": "Cybersecurity Firm",
+      "salary": "$110,000 - $145,000",
+      "experience": "4+ years"
     }
   },
   {
     "id": "r4",
     "type": "job",
-    "title": "Software Engineer",
-    "description": "Join a dynamic team to develop innovative software solutions.",
-    "reason": "Fits your software development experience and interest in tech startups",
-    "relevanceScore": 0.85,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1521747116042-5a810fda9664?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Program Manager",
+    "description": "Develop scalable and performant applications using Kubernetes and Docker. Collaborate with cross-functional teams.",
+    "reason": "Matches your development background and Kubernetes and Docker interest",
+    "relevanceScore": 0.88,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Innovatech",
-      "salary": "$100,000 - $130,000",
+      "location": "San Jose, CA",
+      "company": "Product Design Studio",
+      "salary": "$100,000 - $135,000",
       "experience": "3+ years"
     }
   },
   {
     "id": "r5",
-    "type": "learning",
-    "title": "Advanced Python Programming",
-    "description": "Deepen your Python skills with this advanced course focused on real-world applications.",
-    "reason": "Recommended based on your current learning path in programming",
-    "relevanceScore": 0.87,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Benjamin Harrison - UI Designer",
+    "description": "Senior UI Designer with 9+ years of experience. Specializes in accessibility and inclusive design.",
+    "reason": "Shared interest in design and accessibility",
+    "relevanceScore": 0.9,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:b.com",
     "metadata": {
-      "provider": "Online Academy",
-      "duration": "6 weeks",
-      "level": "Advanced"
+      "location": "Burlington, VT",
+      "company": "Cybersecurity Firm",
+      "skills": [
+        "User Research",
+        "Usability Testing",
+        "Qualitative Research",
+        "Data Analysis"
+      ]
     }
   },
   {
     "id": "r6",
-    "type": "event",
-    "title": "Tech Conference 2023",
-    "description": "Join industry leaders at the annual Tech Conference to discuss future trends.",
-    "reason": "Relevant to your interests in technology and networking opportunities",
-    "relevanceScore": 0.89,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Kevin Daniels - Frontend Developer",
+    "description": "Senior Frontend Developer with 9+ years of experience in modern web technologies. Building robust and performant systems.",
+    "reason": "Similar development expertise and background",
+    "relevanceScore": 0.82,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:k.com",
     "metadata": {
-      "location": "Los Angeles, CA",
-      "date": "2023-11-15",
-      "duration": "2 days"
+      "location": "Las Vegas, NV",
+      "company": "Social Media App",
+      "skills": [
+        "React",
+        "TypeScript",
+        "JavaScript",
+        "Node.js"
+      ]
     }
   },
   {
     "id": "r7",
     "type": "job",
-    "title": "Marketing Specialist",
-    "description": "Develop and execute marketing strategies for a leading e-commerce platform.",
-    "reason": "Matches your background in marketing and interest in e-commerce",
-    "relevanceScore": 0.84,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Site Reliability Engineer",
+    "description": "Manage cloud infrastructure and automation. Ensure high availability and performance.",
+    "reason": "Matches your devops skills and career goals",
+    "relevanceScore": 0.85,
+    "category": "DevOps",
+    "image": "https://logos-api.apistemic.com/domain:sr.com",
     "metadata": {
-      "location": "Chicago, IL",
-      "company": "E-Com Solutions",
-      "salary": "$70,000 - $90,000",
-      "experience": "2+ years"
+      "location": "Dallas, TX",
+      "company": "User Experience Agency",
+      "salary": "$140,000 - $180,000",
+      "experience": "6+ years"
     }
   },
   {
     "id": "r8",
-    "type": "learning",
-    "title": "Data Science Bootcamp",
-    "description": "Intensive program to master data analysis, visualization, and machine learning.",
-    "reason": "Aligned with your interest in data-driven decision making",
-    "relevanceScore": 0.92,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Scarlett Howard - Technical Lead",
+    "description": "Experienced Technical Lead with expertise in team management and technical architecture. Focuses on team development.",
+    "reason": "Aligned with your interests in management and SaaS products",
+    "relevanceScore": 0.84,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:s.com",
     "metadata": {
-      "provider": "Data Academy",
-      "duration": "12 weeks",
-      "level": "Intermediate"
+      "location": "Las Vegas, NV",
+      "company": "Software Development",
+      "skills": [
+        "Engineering Management",
+        "Team Development",
+        "Technical Strategy",
+        "Process Improvement"
+      ]
     }
   },
   {
     "id": "r9",
-    "type": "event",
-    "title": "AI Innovations Summit",
-    "description": "Explore the latest advancements in artificial intelligence with top experts.",
-    "reason": "Relevant to your career in tech and AI interests",
-    "relevanceScore": 0.91,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Program Manager",
+    "description": "Build Kubernetes and Docker applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Matches your development experience and SaaS interest",
+    "relevanceScore": 0.88,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
     "metadata": {
-      "location": "San Francisco, CA",
-      "date": "2023-12-05",
-      "duration": "3 days"
+      "location": "Burlington, VT",
+      "company": "Dropbox",
+      "salary": "$100,000 - $135,000",
+      "experience": "7+ years"
     }
   },
   {
     "id": "r10",
-    "type": "job",
-    "title": "Software Engineer",
-    "description": "Design and implement software solutions for a growing tech startup.",
-    "reason": "Matches your skills in software development and agile methodologies",
-    "relevanceScore": 0.88,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Tyler Peterson - UX Designer",
+    "description": "UX Designer creating intuitive and delightful user experiences. Specializes in accessibility.",
+    "reason": "Based on your interest in design and scalable systems",
+    "relevanceScore": 0.85,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:t.com",
     "metadata": {
-      "location": "New York, NY",
-      "company": "Tech Innovators",
-      "salary": "$90,000 - $120,000",
-      "experience": "3+ years"
+      "location": "Los Gatos, CA",
+      "company": "Airbnb",
+      "skills": [
+        "Figma",
+        "Sketch",
+        "Adobe XD",
+        "Prototyping"
+      ]
     }
   },
   {
     "id": "r11",
-    "type": "learning",
-    "title": "Introduction to Cybersecurity",
-    "description": "Learn the fundamentals of cybersecurity and how to protect networks and systems.",
-    "reason": "Recommended based on your interest in IT security",
-    "relevanceScore": 0.85,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "UI Designer",
+    "description": "Create intuitive user experiences for web and mobile applications. Conduct user research and design user flows.",
+    "reason": "Matches your design experience and mobile applications interest",
+    "relevanceScore": 0.94,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:ud.com",
     "metadata": {
-      "provider": "Cyber Academy",
-      "duration": "8 weeks",
-      "level": "Beginner"
+      "location": "Seattle, WA",
+      "company": "Auth0",
+      "salary": "$90,000 - $120,000",
+      "experience": "6+ years"
     }
   },
   {
     "id": "r12",
-    "type": "event",
-    "title": "Annual Marketing Expo",
-    "description": "Network with marketing professionals and learn about the latest trends.",
-    "reason": "Relevant to your career in marketing and networking goals",
-    "relevanceScore": 0.87,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Senior ML Engineer",
+    "description": "Create innovative solutions using Kubernetes and Docker. Work on high-impact projects with modern technologies.",
+    "reason": "Matches your development background and Kubernetes and Docker interest",
+    "relevanceScore": 0.94,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:me.com",
     "metadata": {
-      "location": "Miami, FL",
-      "date": "2023-09-20",
-      "duration": "1 day"
+      "location": "Dallas, TX",
+      "company": "Freshworks",
+      "salary": "$130,000 - $170,000",
+      "experience": "5+ years"
     }
   },
   {
     "id": "r13",
     "type": "job",
-    "title": "Graphic Designer",
-    "description": "Create visual concepts to communicate ideas that inspire, inform, or captivate consumers.",
-    "reason": "Fits your creative skills and experience in design",
-    "relevanceScore": 0.86,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Senior UX Designer",
+    "description": "Design beautiful and functional interfaces. Work on user-centered design and accessibility.",
+    "reason": "Matches your design background and Kubernetes and Docker interest",
+    "relevanceScore": 0.89,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:ud.com",
     "metadata": {
-      "location": "Austin, TX",
-      "company": "Creative Agency",
-      "salary": "$60,000 - $80,000",
-      "experience": "2+ years"
+      "location": "Los Gatos, CA",
+      "company": "Auth0",
+      "salary": "$150,000 - $200,000",
+      "experience": "3+ years"
     }
   },
   {
     "id": "r14",
-    "type": "learning",
-    "title": "Web Development Bootcamp",
-    "description": "Learn front-end and back-end web development in a fast-paced environment.",
-    "reason": "Aligned with your goal to enter the tech industry",
-    "relevanceScore": 0.93,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Morgan Collins - Technical Lead",
+    "description": "Senior Technical Lead with 10+ years of experience. Works on team leadership and technical strategy.",
+    "reason": "Similar management expertise and background",
+    "relevanceScore": 0.88,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:m.com",
     "metadata": {
-      "provider": "Web Academy",
-      "duration": "10 weeks",
-      "level": "Beginner"
+      "location": "Portland, OR",
+      "company": "Reddit",
+      "skills": [
+        "Engineering Management",
+        "Team Development",
+        "Technical Strategy",
+        "Process Improvement"
+      ]
     }
   },
   {
     "id": "r15",
-    "type": "event",
-    "title": "Startup Pitch Night",
-    "description": "Watch startups pitch their ideas to investors and network with entrepreneurs.",
-    "reason": "Relevant to your interest in startups and entrepreneurship",
-    "relevanceScore": 0.9,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Program Manager",
+    "description": "Build modern web technologies applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Based on your development background and expertise",
+    "relevanceScore": 0.87,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
     "metadata": {
-      "location": "Seattle, WA",
-      "date": "2023-10-10",
-      "duration": "1 evening"
+      "location": "Austin, TX",
+      "company": "Reddit",
+      "salary": "$160,000 - $200,000",
+      "experience": "4+ years"
     }
   },
   {
     "id": "r16",
     "type": "job",
-    "title": "Data Analyst",
-    "description": "Analyze data to help drive business decisions and improve performance.",
-    "reason": "Matches your analytical skills and experience in data management",
-    "relevanceScore": 0.89,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Senior Engineering Manager",
+    "description": "Manage engineering teams and deliver high-quality software. Focus on team development and technical architecture.",
+    "reason": "Aligned with your management skills and interests",
+    "relevanceScore": 0.8,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:em.com",
     "metadata": {
-      "location": "Boston, MA",
-      "company": "Data Solutions Inc.",
-      "salary": "$70,000 - $90,000",
-      "experience": "2+ years"
+      "location": "Columbus, OH",
+      "company": "Workday",
+      "salary": "$110,000 - $145,000",
+      "experience": "4+ years"
     }
   },
   {
     "id": "r17",
-    "type": "learning",
-    "title": "Digital Marketing Fundamentals",
-    "description": "Understand the principles of digital marketing and how to apply them effectively.",
-    "reason": "Recommended based on your interest in marketing strategies",
-    "relevanceScore": 0.84,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Senior ML Engineer",
+    "description": "Build Kubernetes and Docker applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Aligned with your development interests and skills",
+    "relevanceScore": 0.82,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:me.com",
     "metadata": {
-      "provider": "Marketing Academy",
-      "duration": "4 weeks",
-      "level": "Beginner"
+      "location": "Miami, FL",
+      "company": "Cisco",
+      "salary": "$110,000 - $145,000",
+      "experience": "6+ years"
     }
   },
   {
     "id": "r18",
-    "type": "event",
-    "title": "Blockchain Technology Forum",
-    "description": "Discuss the future of blockchain technology with industry leaders.",
-    "reason": "Relevant to your interests in blockchain and innovation",
-    "relevanceScore": 0.95,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Operations Manager",
+    "description": "Build robust applications and APIs using React and TypeScript. Focus on performance optimization and reliability.",
+    "reason": "Aligned with your development interests and skills",
+    "relevanceScore": 0.93,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:om.com",
     "metadata": {
-      "location": "New York, NY",
-      "date": "2023-11-25",
-      "duration": "2 days"
+      "location": "Menlo Park, CA",
+      "company": "Tableau",
+      "salary": "$110,000 - $145,000",
+      "experience": "5+ years"
     }
   },
   {
     "id": "r19",
-    "type": "job",
-    "title": "UX/UI Designer",
-    "description": "Design user-friendly interfaces and enhance user experience for apps and websites.",
-    "reason": "Fits your design background and interest in user experience",
-    "relevanceScore": 0.88,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Levi Rodriguez - UX Researcher",
+    "description": "UX Researcher creating intuitive and delightful user experiences. Specializes in accessibility.",
+    "reason": "Similar design expertise and background",
+    "relevanceScore": 0.91,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
     "metadata": {
-      "location": "San Diego, CA",
-      "company": "Design Hub",
-      "salary": "$75,000 - $95,000",
-      "experience": "3+ years"
+      "location": "Boulder, CO",
+      "company": "Software Development",
+      "skills": [
+        "Figma",
+        "User Research",
+        "Mobile Design",
+        "Accessibility"
+      ]
     }
   },
   {
     "id": "r20",
-    "type": "learning",
-    "title": "Machine Learning Basics",
-    "description": "Get introduced to machine learning concepts and algorithms.",
-    "reason": "Aligned with your interest in AI and data science",
-    "relevanceScore": 0.91,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Program Manager",
+    "description": "Build robust applications and APIs using Node.js and Python. Focus on performance optimization and reliability.",
+    "reason": "Matches your development experience and mobile applications interest",
+    "relevanceScore": 0.81,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
     "metadata": {
-      "provider": "AI Academy",
-      "duration": "6 weeks",
-      "level": "Beginner"
+      "location": "Redmond, WA",
+      "company": "Twitter",
+      "salary": "$130,000 - $170,000",
+      "experience": "2+ years"
     }
   },
   {
     "id": "r21",
-    "type": "event",
-    "title": "Women in Tech Conference",
-    "description": "Empower women in technology through networking and mentorship.",
-    "reason": "Relevant to your interests in diversity and inclusion in tech",
-    "relevanceScore": 0.89,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "iOS Developer",
+    "description": "Build robust applications and APIs using Node.js and Python. Focus on performance optimization and reliability.",
+    "reason": "Matches your development background and Node.js and Python interest",
+    "relevanceScore": 0.93,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:id.com",
     "metadata": {
-      "location": "Chicago, IL",
-      "date": "2023-10-30",
-      "duration": "1 day"
+      "location": "Cambridge, MA",
+      "company": "Okta",
+      "salary": "$100,000 - $135,000",
+      "experience": "7+ years"
     }
   },
   {
     "id": "r22",
     "type": "job",
-    "title": "Content Writer",
-    "description": "Create engaging content for blogs, websites, and social media.",
-    "reason": "Matches your writing skills and interest in content marketing",
-    "relevanceScore": 0.87,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Associate Product Manager",
+    "description": "Define product requirements and manage product development. Conduct user research and analysis.",
+    "reason": "Aligned with your product management skills and interests",
+    "relevanceScore": 0.93,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Content Creators Ltd.",
-      "salary": "$50,000 - $70,000",
-      "experience": "1+ years"
+      "location": "Charlotte, NC",
+      "company": "Salesforce",
+      "salary": "$130,000 - $170,000",
+      "experience": "2+ years"
     }
   },
   {
     "id": "r23",
-    "type": "learning",
-    "title": "Cloud Computing Essentials",
-    "description": "Learn the basics of cloud computing and its applications.",
-    "reason": "Recommended based on your interest in cloud technologies",
-    "relevanceScore": 0.85,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Olivia Vasquez - Frontend Developer",
+    "description": "Frontend Developer specializing in scalable systems. Building scalable applications and mentoring junior developers.",
+    "reason": "Similar development expertise and background",
+    "relevanceScore": 0.9,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:o.com",
     "metadata": {
-      "provider": "Cloud Academy",
-      "duration": "5 weeks",
-      "level": "Beginner"
+      "location": "Charlotte, NC",
+      "company": "Mailchimp",
+      "skills": [
+        "React",
+        "Vue.js",
+        "Angular",
+        "TypeScript"
+      ]
     }
   },
   {
     "id": "r24",
-    "type": "event",
-    "title": "Tech Job Fair",
-    "description": "Meet recruiters and explore job opportunities in the tech industry.",
-    "reason": "Relevant to your job search in technology",
-    "relevanceScore": 0.9,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Jennifer Pearce - Data Scientist",
+    "description": "Senior Data Scientist with 5+ years of experience. Specializes in React and Node.js and data visualization.",
+    "reason": "Shared interest in data science and mobile design",
+    "relevanceScore": 0.91,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:j.com",
     "metadata": {
-      "location": "Los Angeles, CA",
-      "date": "2023-11-12",
-      "duration": "1 day"
+      "location": "Los Gatos, CA",
+      "company": "Red Hat",
+      "skills": [
+        "Python",
+        "Machine Learning",
+        "Deep Learning",
+        "TensorFlow"
+      ]
     }
   },
   {
     "id": "r25",
     "type": "job",
-    "title": "SEO Specialist",
-    "description": "Optimize website content to improve search engine rankings.",
-    "reason": "Fits your skills in digital marketing and SEO strategies",
-    "relevanceScore": 0.86,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Senior Security Engineer",
+    "description": "Identify and mitigate security vulnerabilities. Implement security best practices for applications.",
+    "reason": "Matches your security skills and career goals",
+    "relevanceScore": 0.9,
+    "category": "Security",
+    "image": "https://logos-api.apistemic.com/domain:se.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Marketing Pros",
-      "salary": "$60,000 - $80,000",
-      "experience": "2+ years"
+      "location": "Houston, TX",
+      "company": "Pinterest",
+      "salary": "$120,000 - $150,000",
+      "experience": "4+ years"
     }
   },
   {
     "id": "r26",
-    "type": "learning",
-    "title": "Introduction to Graphic Design",
-    "description": "Learn the basics of graphic design and visual communication.",
-    "reason": "Recommended based on your interest in design",
-    "relevanceScore": 0.83,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Lucas Kennedy - UX Researcher",
+    "description": "Experienced UX Researcher with expertise in user research and design systems. Focuses on mobile design.",
+    "reason": "Based on your design experience and skills",
+    "relevanceScore": 0.91,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
     "metadata": {
-      "provider": "Design Academy",
-      "duration": "4 weeks",
-      "level": "Beginner"
+      "location": "Menlo Park, CA",
+      "company": "Stripe",
+      "skills": [
+        "Figma",
+        "Sketch",
+        "Adobe XD",
+        "Prototyping"
+      ]
     }
   },
   {
     "id": "r27",
-    "type": "event",
-    "title": "Cybersecurity Awareness Month",
-    "description": "Join us for workshops and seminars on cybersecurity best practices.",
-    "reason": "Relevant to your interest in cybersecurity",
-    "relevanceScore": 0.88,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Casey Bowen - QA Engineer",
+    "description": "Experienced QA Engineer with expertise in React and Node.js. Works on high-impact projects with modern technologies.",
+    "reason": "Similar technical background and interests in React and Node.js",
+    "relevanceScore": 0.94,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:c.com",
     "metadata": {
-      "location": "Virtual",
-      "date": "2023-10-01",
-      "duration": "1 month"
+      "location": "Philadelphia, PA",
+      "company": "Databricks",
+      "skills": [
+        "Python",
+        "Django",
+        "Flask",
+        "PostgreSQL"
+      ]
     }
   },
   {
     "id": "r28",
     "type": "job",
-    "title": "Project Manager",
-    "description": "Oversee projects from inception to completion, ensuring timely delivery.",
-    "reason": "Matches your experience in project management",
-    "relevanceScore": 0.92,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Security Engineer",
+    "description": "Build secure systems and protect user data. Focus on security best practices and compliance.",
+    "reason": "Matches your security skills and career goals",
+    "relevanceScore": 0.91,
+    "category": "Security",
+    "image": "https://logos-api.apistemic.com/domain:se.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Project Solutions",
-      "salary": "$80,000 - $100,000",
+      "location": "Boston, MA",
+      "company": "Product Design Studio",
+      "salary": "$120,000 - $150,000",
       "experience": "5+ years"
     }
   },
   {
     "id": "r29",
-    "type": "learning",
-    "title": "Social Media Marketing",
-    "description": "Learn how to effectively market on social media platforms.",
-    "reason": "Recommended based on your interest in digital marketing",
-    "relevanceScore": 0.89,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Product Owner",
+    "description": "Manage product lifecycle from conception to launch. Work with design, engineering, and business teams.",
+    "reason": "Aligned with your product management interests and skills",
+    "relevanceScore": 0.86,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:po.com",
     "metadata": {
-      "provider": "Marketing Academy",
-      "duration": "6 weeks",
-      "level": "Intermediate"
+      "location": "New York, NY",
+      "company": "Salesforce",
+      "salary": "$150,000 - $200,000",
+      "experience": "2+ years"
     }
   },
   {
     "id": "r30",
-    "type": "event",
-    "title": "Tech Innovations Workshop",
-    "description": "Hands-on workshop to explore the latest tech innovations.",
-    "reason": "Relevant to your interests in technology and hands-on learning",
-    "relevanceScore": 0.94,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Levi Davis - Security Engineer",
+    "description": "Experienced Security Engineer with expertise in security audits and best practices. Conducts penetration testing.",
+    "reason": "Based on your interest in security and React and Node.js",
+    "relevanceScore": 0.8,
+    "category": "Security",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
     "metadata": {
-      "location": "Boston, MA",
-      "date": "2023-12-10",
-      "duration": "2 days"
+      "location": "Seattle, WA",
+      "company": "Snapchat",
+      "skills": [
+        "Security Architecture",
+        "Threat Modeling",
+        "Incident Response",
+        "Compliance"
+      ]
     }
   },
   {
     "id": "r31",
-    "type": "job",
-    "title": "Business Analyst",
-    "description": "Analyze business processes and recommend solutions for improvement.",
-    "reason": "Fits your analytical skills and experience in business analysis",
-    "relevanceScore": 0.85,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Matthew Diaz - Software Architect",
+    "description": "Senior Software Architect with 7+ years of experience in modern web technologies. Building robust and performant systems.",
+    "reason": "Similar technical background and interests in modern web technologies",
+    "relevanceScore": 0.88,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:m.com",
     "metadata": {
-      "location": "Atlanta, GA",
-      "company": "Business Insights",
-      "salary": "$70,000 - $90,000",
-      "experience": "3+ years"
+      "location": "Los Angeles, CA",
+      "company": "Intercom",
+      "skills": [
+        "Python",
+        "Django",
+        "Flask",
+        "PostgreSQL"
+      ]
     }
   },
   {
     "id": "r32",
-    "type": "learning",
-    "title": "Introduction to Data Visualization",
-    "description": "Learn how to present data visually using various tools and techniques.",
-    "reason": "Recommended based on your interest in data analysis",
-    "relevanceScore": 0.86,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Claire Willis - UI Designer",
+    "description": "Senior UI Designer with 3+ years of experience. Specializes in mobile design and inclusive design.",
+    "reason": "Aligned with your interests in design and web platforms",
+    "relevanceScore": 0.89,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:c.com",
     "metadata": {
-      "provider": "Data Academy",
-      "duration": "5 weeks",
-      "level": "Intermediate"
+      "location": "Charlotte, NC",
+      "company": "AI Research Lab",
+      "skills": [
+        "Figma",
+        "User Research",
+        "Mobile Design",
+        "Accessibility"
+      ]
     }
   },
   {
     "id": "r33",
-    "type": "event",
-    "title": "Entrepreneurship Workshop",
-    "description": "Learn the essentials of starting and running a successful business.",
-    "reason": "Relevant to your interests in entrepreneurship",
-    "relevanceScore": 0.93,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Senior Data Scientist",
+    "description": "Work on cutting-edge machine learning projects. Develop models and analyze large datasets to drive insights.",
+    "reason": "Aligned with your data science skills and interests",
+    "relevanceScore": 0.86,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:ds.com",
     "metadata": {
-      "location": "Denver, CO",
-      "date": "2023-11-15",
-      "duration": "1 day"
+      "location": "Raleigh, NC",
+      "company": "Red Hat",
+      "salary": "$100,000 - $135,000",
+      "experience": "3+ years"
     }
   },
   {
     "id": "r34",
     "type": "job",
-    "title": "Network Administrator",
-    "description": "Manage and maintain computer networks for organizations.",
-    "reason": "Matches your technical skills and experience in IT",
-    "relevanceScore": 0.87,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "DevOps Engineer",
+    "description": "Manage cloud infrastructure and automation. Ensure high availability and performance.",
+    "reason": "Matches your devops skills and career goals",
+    "relevanceScore": 0.93,
+    "category": "DevOps",
+    "image": "https://logos-api.apistemic.com/domain:de.com",
     "metadata": {
-      "location": "Houston, TX",
-      "company": "Tech Solutions",
-      "salary": "$70,000 - $90,000",
-      "experience": "3+ years"
+      "location": "Redwood City, CA",
+      "company": "Okta",
+      "salary": "$140,000 - $180,000",
+      "experience": "5+ years"
     }
   },
   {
     "id": "r35",
-    "type": "learning",
-    "title": "Advanced SQL for Data Science",
-    "description": "Enhance your SQL skills for data analysis and management.",
-    "reason": "Recommended based on your interest in data science",
-    "relevanceScore": 0.9,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Senior QA Engineer",
+    "description": "Build Node.js and Python applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Matches your development background and Node.js and Python interest",
+    "relevanceScore": 0.81,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:qe.com",
     "metadata": {
-      "provider": "Data Academy",
-      "duration": "6 weeks",
-      "level": "Advanced"
+      "location": "Menlo Park, CA",
+      "company": "Red Hat",
+      "salary": "$100,000 - $135,000",
+      "experience": "4+ years"
     }
   },
   {
     "id": "r36",
-    "type": "event",
-    "title": "Virtual Reality Expo",
-    "description": "Discover the latest in virtual reality technology and applications.",
-    "reason": "Relevant to your interests in VR and gaming",
-    "relevanceScore": 0.91,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Lisa Mendez - QA Engineer",
+    "description": "Senior QA Engineer with 6+ years of experience in React and Node.js. Building robust and performant systems.",
+    "reason": "Shared interest in development and design systems",
+    "relevanceScore": 0.8,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
     "metadata": {
       "location": "Austin, TX",
-      "date": "2023-12-01",
-      "duration": "2 days"
+      "company": "Tesla",
+      "skills": [
+        "Go",
+        "Docker",
+        "Kubernetes",
+        "Cloud Technologies"
+      ]
     }
   },
   {
     "id": "r37",
     "type": "job",
-    "title": "Sales Manager",
-    "description": "Lead sales teams and develop strategies to increase revenue.",
-    "reason": "Fits your leadership skills and experience in sales",
-    "relevanceScore": 0.89,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Senior Security Engineer",
+    "description": "Conduct security audits and implement security architecture. Work on threat detection and response.",
+    "reason": "Matches your security experience and e-commerce interest",
+    "relevanceScore": 0.87,
+    "category": "Security",
+    "image": "https://logos-api.apistemic.com/domain:se.com",
     "metadata": {
-      "location": "Philadelphia, PA",
-      "company": "Sales Corp",
-      "salary": "$80,000 - $100,000",
-      "experience": "5+ years"
+      "location": "Los Angeles, CA",
+      "company": "Zoom",
+      "salary": "$100,000 - $135,000",
+      "experience": "6+ years"
     }
   },
   {
     "id": "r38",
-    "type": "learning",
-    "title": "Ethical Hacking Fundamentals",
-    "description": "Learn the basics of ethical hacking and cybersecurity measures.",
-    "reason": "Recommended based on your interest in security",
-    "relevanceScore": 0.88,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
-    "metadata": {
-      "provider": "Cyber Academy",
-      "duration": "8 weeks",
-      "level": "Beginner"
-    }
-  },
-  {
-    "id": "r39",
-    "type": "event",
-    "title": "Global Tech Summit",
-    "description": "Join leaders from around the world to discuss technology's future.",
-    "reason": "Relevant to your interests in global tech trends",
-    "relevanceScore": 0.94,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
-    "metadata": {
-      "location": "Toronto, Canada",
-      "date": "2023-11-20",
-      "duration": "3 days"
-    }
-  },
-  {
-    "id": "r40",
     "type": "job",
-    "title": "Human Resources Specialist",
-    "description": "Manage recruitment and employee relations for the organization.",
-    "reason": "Matches your experience in human resources",
-    "relevanceScore": 0.85,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Technical Lead",
+    "description": "Manage engineering teams and deliver high-quality software. Focus on team development and technical architecture.",
+    "reason": "Matches your management background and Node.js and Python interest",
+    "relevanceScore": 0.8,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:te.com",
     "metadata": {
-      "location": "Remote",
-      "company": "HR Solutions",
-      "salary": "$60,000 - $80,000",
+      "location": "Miami, FL",
+      "company": "Google",
+      "salary": "$140,000 - $180,000",
       "experience": "3+ years"
     }
   },
   {
-    "id": "r41",
-    "type": "learning",
-    "title": "Intro to Python for Data Science",
-    "description": "Learn Python programming specifically for data science applications.",
-    "reason": "Recommended based on your interest in programming and data",
-    "relevanceScore": 0.92,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "id": "r39",
+    "type": "user",
+    "title": "Robert Johnston - Security Engineer",
+    "description": "Security Engineer specializing in secure coding practices and security architecture.",
+    "reason": "Similar security expertise and background",
+    "relevanceScore": 0.91,
+    "category": "Security",
+    "image": "https://logos-api.apistemic.com/domain:r.com",
     "metadata": {
-      "provider": "Data Academy",
-      "duration": "8 weeks",
-      "level": "Beginner"
+      "location": "Charlotte, NC",
+      "company": "Snowflake",
+      "skills": [
+        "Security Architecture",
+        "Threat Modeling",
+        "Incident Response",
+        "Compliance"
+      ]
+    }
+  },
+  {
+    "id": "r40",
+    "type": "user",
+    "title": "Benjamin Mullins - Frontend Developer",
+    "description": "Senior Frontend Developer with 5+ years of experience in cloud technologies. Building robust and performant systems.",
+    "reason": "Aligned with your interests in development and web platforms",
+    "relevanceScore": 0.81,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:b.com",
+    "metadata": {
+      "location": "Mountain View, CA",
+      "company": "HubSpot",
+      "skills": [
+        "Go",
+        "Docker",
+        "Kubernetes",
+        "Cloud Technologies"
+      ]
+    }
+  },
+  {
+    "id": "r41",
+    "type": "job",
+    "title": "Product Owner",
+    "description": "Drive product initiatives and work with stakeholders. Deliver value to users and business.",
+    "reason": "Matches your product management background and React and TypeScript interest",
+    "relevanceScore": 0.81,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:po.com",
+    "metadata": {
+      "location": "Boulder, CO",
+      "company": "GitHub",
+      "salary": "$110,000 - $145,000",
+      "experience": "4+ years"
     }
   },
   {
     "id": "r42",
-    "type": "event",
-    "title": "Digital Marketing Summit",
-    "description": "Explore the latest trends in digital marketing with industry experts.",
-    "reason": "Relevant to your interests in marketing and digital strategies",
-    "relevanceScore": 0.93,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Product Manager",
+    "description": "Drive product initiatives and work with stakeholders. Deliver value to users and business.",
+    "reason": "Matches your product management experience and e-commerce interest",
+    "relevanceScore": 0.86,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
     "metadata": {
-      "location": "Las Vegas, NV",
-      "date": "2023-10-25",
-      "duration": "2 days"
+      "location": "Boston, MA",
+      "company": "Netflix",
+      "salary": "$160,000 - $200,000",
+      "experience": "5+ years"
     }
   },
   {
     "id": "r43",
-    "type": "job",
-    "title": "IT Support Specialist",
-    "description": "Provide technical support and troubleshooting for IT systems.",
-    "reason": "Fits your technical skills and experience in IT support",
-    "relevanceScore": 0.86,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Jack Barrett - Product Manager",
+    "description": "Product Manager focused on building products that users love. Balances user needs, business goals, and technical constraints.",
+    "reason": "Based on your product management experience and skills",
+    "relevanceScore": 0.83,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:j.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Tech Support Co.",
-      "salary": "$50,000 - $70,000",
-      "experience": "1+ years"
+      "location": "Portland, OR",
+      "company": "Microsoft",
+      "skills": [
+        "Product Strategy",
+        "User Research",
+        "Roadmap Planning",
+        "Stakeholder Management"
+      ]
     }
   },
   {
     "id": "r44",
-    "type": "learning",
-    "title": "Intro to JavaScript",
-    "description": "Learn the fundamentals of JavaScript programming for web development.",
-    "reason": "Recommended based on your interest in web technologies",
-    "relevanceScore": 0.91,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Olivia Williams - Design Lead",
+    "description": "Design Lead focused on understanding user needs and behaviors. Bridges research and design through insights.",
+    "reason": "Similar technical background and interests in cloud technologies",
+    "relevanceScore": 0.89,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:o.com",
     "metadata": {
-      "provider": "Web Academy",
-      "duration": "6 weeks",
-      "level": "Beginner"
+      "location": "Los Angeles, CA",
+      "company": "Okta",
+      "skills": [
+        "Figma",
+        "User Research",
+        "Mobile Design",
+        "Accessibility"
+      ]
     }
   },
   {
     "id": "r45",
-    "type": "event",
-    "title": "Artificial Intelligence Workshop",
-    "description": "Hands-on workshop exploring AI applications in various industries.",
-    "reason": "Relevant to your interests in AI and practical learning",
-    "relevanceScore": 0.95,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Layla Adams - Machine Learning Engineer",
+    "description": "Machine Learning Engineer focused on SaaS products. Building predictive models and extracting insights from data.",
+    "reason": "Based on your interest in data science and modern web technologies",
+    "relevanceScore": 0.91,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
     "metadata": {
-      "location": "San Francisco, CA",
-      "date": "2023-11-18",
-      "duration": "2 days"
+      "location": "Miami, FL",
+      "company": "Intel",
+      "skills": [
+        "PyTorch",
+        "Neural Networks",
+        "NLP",
+        "Computer Vision"
+      ]
     }
   },
   {
     "id": "r46",
     "type": "job",
-    "title": "Financial Analyst",
-    "description": "Analyze financial data to support business decisions.",
-    "reason": "Matches your analytical skills and experience in finance",
-    "relevanceScore": 0.87,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Senior UX Designer",
+    "description": "Create engaging user experiences. Focus on user research and usability testing.",
+    "reason": "Matches your design background and Kubernetes and Docker interest",
+    "relevanceScore": 0.88,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:ud.com",
     "metadata": {
-      "location": "New York, NY",
-      "company": "Finance Corp",
-      "salary": "$70,000 - $90,000",
+      "location": "Miami, FL",
+      "company": "Snowflake",
+      "salary": "$140,000 - $180,000",
       "experience": "3+ years"
     }
   },
   {
     "id": "r47",
-    "type": "learning",
-    "title": "Advanced Excel for Data Analysis",
-    "description": "Master Excel for advanced data analysis and visualization techniques.",
-    "reason": "Recommended based on your interest in data management",
-    "relevanceScore": 0.92,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Security Engineer",
+    "description": "Identify and mitigate security vulnerabilities. Implement security best practices for applications.",
+    "reason": "Matches your security skills and career goals",
+    "relevanceScore": 0.85,
+    "category": "Security",
+    "image": "https://logos-api.apistemic.com/domain:se.com",
     "metadata": {
-      "provider": "Data Academy",
-      "duration": "4 weeks",
-      "level": "Advanced"
+      "location": "Boston, MA",
+      "company": "Tech Startup",
+      "salary": "$160,000 - $200,000",
+      "experience": "7+ years"
     }
   },
   {
     "id": "r48",
-    "type": "event",
-    "title": "Tech for Good Summit",
-    "description": "Explore how technology can drive social change and impact.",
-    "reason": "Relevant to your interests in social impact and technology",
-    "relevanceScore": 0.93,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Senior Security Engineer",
+    "description": "Identify and mitigate security vulnerabilities. Implement security best practices for applications.",
+    "reason": "Aligned with your security interests and skills",
+    "relevanceScore": 0.87,
+    "category": "Security",
+    "image": "https://logos-api.apistemic.com/domain:se.com",
     "metadata": {
-      "location": "Washington, DC",
-      "date": "2023-12-15",
-      "duration": "2 days"
+      "location": "Austin, TX",
+      "company": "Square",
+      "salary": "$110,000 - $145,000",
+      "experience": "5+ years"
     }
   },
   {
     "id": "r49",
     "type": "job",
-    "title": "Operations Manager",
-    "description": "Oversee daily operations and improve efficiency for the organization.",
-    "reason": "Fits your management experience and skills",
-    "relevanceScore": 0.88,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Associate Product Manager",
+    "description": "Drive product initiatives and work with stakeholders. Deliver value to users and business.",
+    "reason": "Aligned with your product management skills and interests",
+    "relevanceScore": 0.86,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
     "metadata": {
-      "location": "Chicago, IL",
-      "company": "Operations Inc.",
-      "salary": "$80,000 - $100,000",
-      "experience": "5+ years"
+      "location": "Dallas, TX",
+      "company": "Cybersecurity Firm",
+      "salary": "$120,000 - $150,000",
+      "experience": "2+ years"
     }
   },
   {
     "id": "r50",
-    "type": "learning",
-    "title": "Introduction to R for Data Science",
-    "description": "Learn R programming for data analysis and visualization.",
-    "reason": "Recommended based on your interest in data science",
-    "relevanceScore": 0.91,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Brandon Swanson - Marketing Manager",
+    "description": "Marketing Manager specializing in scalable systems. Building scalable applications and mentoring junior developers.",
+    "reason": "Shared interest in development and design systems",
+    "relevanceScore": 0.84,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:b.com",
     "metadata": {
-      "provider": "Data Academy",
-      "duration": "6 weeks",
-      "level": "Beginner"
+      "location": "Redwood City, CA",
+      "company": "Auth0",
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "Microservices",
+        "Kubernetes"
+      ]
     }
   },
   {
     "id": "r51",
-    "type": "event",
-    "title": "Future of Work Conference",
-    "description": "Discuss the evolving landscape of work and technology's impact.",
-    "reason": "Relevant to your interests in workplace trends",
-    "relevanceScore": 0.92,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Luna Bryant - Data Analyst",
+    "description": "Data Analyst focused on mobile applications. Building predictive models and extracting insights from data.",
+    "reason": "Similar data science expertise and background",
+    "relevanceScore": 0.84,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
     "metadata": {
-      "location": "Las Vegas, NV",
-      "date": "2023-11-30",
-      "duration": "2 days"
+      "location": "Seattle, WA",
+      "company": "Mailchimp",
+      "skills": [
+        "Python",
+        "Machine Learning",
+        "Deep Learning",
+        "TensorFlow"
+      ]
     }
   },
   {
     "id": "r52",
     "type": "job",
-    "title": "Quality Assurance Tester",
-    "description": "Ensure software products meet quality standards before release.",
-    "reason": "Matches your attention to detail and experience in testing",
-    "relevanceScore": 0.89,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Marketing Director",
+    "description": "Create innovative solutions using modern web technologies. Work on high-impact projects with modern technologies.",
+    "reason": "Based on your development background and expertise",
+    "relevanceScore": 0.91,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:md.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Quality Assurance Co.",
-      "salary": "$60,000 - $80,000",
-      "experience": "2+ years"
+      "location": "Portland, ME",
+      "company": "Google",
+      "salary": "$130,000 - $170,000",
+      "experience": "5+ years"
     }
   },
   {
     "id": "r53",
-    "type": "learning",
-    "title": "Introduction to DevOps",
-    "description": "Learn the principles of DevOps and how to implement them.",
-    "reason": "Recommended based on your interest in software development",
-    "relevanceScore": 0.9,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Jordan Porter - Full Stack Developer",
+    "description": "Full Stack Developer focused on scalable systems. Creating innovative solutions and contributing to technical architecture.",
+    "reason": "Similar development expertise and background",
+    "relevanceScore": 0.81,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:j.com",
     "metadata": {
-      "provider": "DevOps Academy",
-      "duration": "8 weeks",
-      "level": "Beginner"
+      "location": "Tampa, FL",
+      "company": "Adobe",
+      "skills": [
+        "React",
+        "TypeScript",
+        "JavaScript",
+        "Node.js"
+      ]
     }
   },
   {
     "id": "r54",
-    "type": "event",
-    "title": "Tech Careers Expo",
-    "description": "Explore various career opportunities in the tech industry.",
-    "reason": "Relevant to your job search in technology",
-    "relevanceScore": 0.86,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Senior UX Researcher",
+    "description": "Build modern web technologies applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Matches your development skills and career goals",
+    "relevanceScore": 0.95,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:ur.com",
     "metadata": {
-      "location": "Miami, FL",
-      "date": "2023-10-15",
-      "duration": "1 day"
+      "location": "San Diego, CA",
+      "company": "Developer Tools",
+      "salary": "$130,000 - $170,000",
+      "experience": "5+ years"
     }
   },
   {
     "id": "r55",
     "type": "job",
-    "title": "Data Scientist",
-    "description": "Utilize statistical methods and machine learning to analyze complex data.",
-    "reason": "Fits your background in data analysis and statistics",
-    "relevanceScore": 0.91,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Senior Product Manager",
+    "description": "Manage product lifecycle from conception to launch. Work with design, engineering, and business teams.",
+    "reason": "Matches your product management skills and career goals",
+    "relevanceScore": 0.81,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Data Insights",
-      "salary": "$100,000 - $120,000",
-      "experience": "3+ years"
+      "location": "San Jose, CA",
+      "company": "TikTok",
+      "salary": "$90,000 - $120,000",
+      "experience": "4+ years"
     }
   },
   {
     "id": "r56",
-    "type": "learning",
-    "title": "Blockchain Basics",
-    "description": "Understand the fundamentals of blockchain technology.",
-    "reason": "Recommended based on your interest in emerging technologies",
-    "relevanceScore": 0.88,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Senior UX Designer",
+    "description": "Create intuitive user experiences for web and mobile applications. Conduct user research and design user flows.",
+    "reason": "Aligned with your design skills and interests",
+    "relevanceScore": 0.84,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:ud.com",
     "metadata": {
-      "provider": "Blockchain Academy",
-      "duration": "6 weeks",
-      "level": "Beginner"
+      "location": "Miami, FL",
+      "company": "Atlassian",
+      "salary": "$100,000 - $135,000",
+      "experience": "7+ years"
     }
   },
   {
     "id": "r57",
-    "type": "event",
-    "title": "Data Science Symposium",
-    "description": "Join experts in data science to discuss trends and innovations.",
-    "reason": "Relevant to your interests in data science and networking",
-    "relevanceScore": 0.92,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Benjamin Ellis - Operations Manager",
+    "description": "Senior Operations Manager with 12+ years of experience in scalable systems. Building robust and performant systems.",
+    "reason": "Based on your development experience and skills",
+    "relevanceScore": 0.89,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:b.com",
     "metadata": {
-      "location": "Boston, MA",
-      "date": "2023-12-20",
-      "duration": "2 days"
+      "location": "Minneapolis, MN",
+      "company": "Asana",
+      "skills": [
+        "Python",
+        "Django",
+        "Flask",
+        "PostgreSQL"
+      ]
     }
   },
   {
     "id": "r58",
-    "type": "job",
-    "title": "Technical Writer",
-    "description": "Create documentation and guides for technical products.",
-    "reason": "Matches your writing skills and interest in technology",
-    "relevanceScore": 0.86,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Elizabeth Patel - Data Scientist",
+    "description": "Senior Data Scientist with 3+ years of experience. Specializes in cloud technologies and data visualization.",
+    "reason": "Based on your interest in data science and cloud technologies",
+    "relevanceScore": 0.89,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:e.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Tech Writers Inc.",
-      "salary": "$55,000 - $75,000",
-      "experience": "2+ years"
+      "location": "New York, NY",
+      "company": "User Experience Agency",
+      "skills": [
+        "PyTorch",
+        "Neural Networks",
+        "NLP",
+        "Computer Vision"
+      ]
     }
   },
   {
     "id": "r59",
-    "type": "learning",
-    "title": "Introduction to Agile Methodologies",
-    "description": "Learn the principles of Agile project management.",
-    "reason": "Recommended based on your interest in project management",
-    "relevanceScore": 0.9,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Sales Manager",
+    "description": "Develop scalable and performant applications using Node.js and Python. Collaborate with cross-functional teams.",
+    "reason": "Aligned with your development interests and skills",
+    "relevanceScore": 0.92,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:sm.com",
     "metadata": {
-      "provider": "Project Management Academy",
-      "duration": "4 weeks",
-      "level": "Beginner"
+      "location": "Denver, CO",
+      "company": "Intercom",
+      "salary": "$100,000 - $135,000",
+      "experience": "3+ years"
     }
   },
   {
     "id": "r60",
-    "type": "event",
-    "title": "Data Analytics Conference",
-    "description": "Explore the latest trends in data analytics and its applications.",
-    "reason": "Relevant to your interests in data analytics",
-    "relevanceScore": 0.91,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "DevOps Engineer",
+    "description": "Optimize deployments and infrastructure. Focus on infrastructure as code and automation.",
+    "reason": "Matches your devops skills and career goals",
+    "relevanceScore": 0.94,
+    "category": "DevOps",
+    "image": "https://logos-api.apistemic.com/domain:de.com",
     "metadata": {
-      "location": "San Francisco, CA",
-      "date": "2023-11-05",
-      "duration": "2 days"
+      "location": "Columbus, OH",
+      "company": "Creative Agency",
+      "salary": "$120,000 - $150,000",
+      "experience": "6+ years"
     }
   },
   {
     "id": "r61",
     "type": "job",
-    "title": "Web Developer",
-    "description": "Build and maintain websites for various clients.",
-    "reason": "Matches your skills in web development and design",
-    "relevanceScore": 0.89,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Data Scientist",
+    "description": "Build predictive models and analyze complex datasets. Work with engineering teams to deploy ML solutions.",
+    "reason": "Aligned with your data science skills and interests",
+    "relevanceScore": 0.92,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:ds.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Web Solutions",
-      "salary": "$70,000 - $90,000",
-      "experience": "2+ years"
+      "location": "Phoenix, AZ",
+      "company": "Microsoft",
+      "salary": "$160,000 - $200,000",
+      "experience": "6+ years"
     }
   },
   {
     "id": "r62",
-    "type": "learning",
-    "title": "Introduction to SQL",
-    "description": "Learn the basics of SQL for database management.",
-    "reason": "Recommended based on your interest in data management",
-    "relevanceScore": 0.85,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "QA Engineer",
+    "description": "Build Node.js and Python applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Aligned with your development interests and skills",
+    "relevanceScore": 0.93,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:qe.com",
     "metadata": {
-      "provider": "Database Academy",
-      "duration": "4 weeks",
-      "level": "Beginner"
+      "location": "Atlanta, GA",
+      "company": "Zoom",
+      "salary": "$120,000 - $150,000",
+      "experience": "2+ years"
     }
   },
   {
     "id": "r63",
-    "type": "event",
-    "title": "Tech Skills Workshop",
-    "description": "Hands-on workshop to develop essential tech skills.",
-    "reason": "Relevant to your interests in skill development",
-    "relevanceScore": 0.92,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Morgan Miller - Marketing Manager",
+    "description": "Marketing Manager focused on modern web technologies. Creating innovative solutions and contributing to technical architecture.",
+    "reason": "Based on your development experience and skills",
+    "relevanceScore": 0.9,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:m.com",
     "metadata": {
-      "location": "Chicago, IL",
-      "date": "2023-12-02",
-      "duration": "1 day"
+      "location": "Remote",
+      "company": "Zendesk",
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "Microservices",
+        "Kubernetes"
+      ]
     }
   },
   {
     "id": "r64",
     "type": "job",
-    "title": "Marketing Manager",
-    "description": "Develop and execute marketing strategies for the organization.",
-    "reason": "Fits your experience in marketing and leadership",
-    "relevanceScore": 0.9,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Senior Data Scientist",
+    "description": "Work on cutting-edge machine learning projects. Develop models and analyze large datasets to drive insights.",
+    "reason": "Matches your data science background and modern web technologies interest",
+    "relevanceScore": 0.94,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:ds.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Marketing Experts",
-      "salary": "$75,000 - $95,000",
+      "location": "Los Angeles, CA",
+      "company": "User Experience Agency",
+      "salary": "$150,000 - $200,000",
       "experience": "4+ years"
     }
   },
   {
     "id": "r65",
-    "type": "learning",
-    "title": "Introduction to Data Science",
-    "description": "Learn the fundamentals of data science and its applications.",
-    "reason": "Recommended based on your interest in data analysis",
-    "relevanceScore": 0.94,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Data Scientist",
+    "description": "Conduct research and develop ML models. Work on data analysis and visualization.",
+    "reason": "Aligned with your data science skills and interests",
+    "relevanceScore": 0.93,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:ds.com",
     "metadata": {
-      "provider": "Data Academy",
-      "duration": "6 weeks",
-      "level": "Beginner"
+      "location": "Cupertino, CA",
+      "company": "SAP",
+      "salary": "$120,000 - $150,000",
+      "experience": "6+ years"
     }
   },
   {
     "id": "r66",
-    "type": "event",
-    "title": "Innovation in Tech Conference",
-    "description": "Explore the latest innovations in technology and their impact.",
-    "reason": "Relevant to your interests in tech innovation",
-    "relevanceScore": 0.95,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Evelyn Powell - Frontend Developer",
+    "description": "Senior Frontend Developer with 12+ years of experience in scalable systems. Building robust and performant systems.",
+    "reason": "Shared interest in development and design systems",
+    "relevanceScore": 0.84,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:e.com",
     "metadata": {
-      "location": "New York, NY",
-      "date": "2023-11-22",
-      "duration": "2 days"
+      "location": "Charlotte, NC",
+      "company": "Tech Startup",
+      "skills": [
+        "Swift",
+        "iOS",
+        "UIKit",
+        "SwiftUI"
+      ]
     }
   },
   {
     "id": "r67",
     "type": "job",
-    "title": "Cloud Engineer",
-    "description": "Design and manage cloud infrastructure for organizations.",
-    "reason": "Matches your skills in cloud technologies and engineering",
-    "relevanceScore": 0.91,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Backend Developer",
+    "description": "Create innovative solutions using Kubernetes and Docker. Work on high-impact projects with modern technologies.",
+    "reason": "Matches your development experience and mobile applications interest",
+    "relevanceScore": 0.89,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:bd.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Cloud Solutions",
-      "salary": "$90,000 - $110,000",
-      "experience": "3+ years"
+      "location": "Columbus, OH",
+      "company": "VMware",
+      "salary": "$110,000 - $145,000",
+      "experience": "2+ years"
     }
   },
   {
     "id": "r68",
-    "type": "learning",
-    "title": "Python for Data Analysis",
-    "description": "Learn how to use Python for data analysis and visualization.",
-    "reason": "Recommended based on your interest in data science",
-    "relevanceScore": 0.92,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Jacob Martinez - Senior Frontend Developer",
+    "description": "Senior Senior Frontend Developer with 4+ years of experience in modern web technologies. Building robust and performant systems.",
+    "reason": "Similar technical background and interests in modern web technologies",
+    "relevanceScore": 0.83,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:j.com",
     "metadata": {
-      "provider": "Data Academy",
-      "duration": "6 weeks",
-      "level": "Intermediate"
+      "location": "New York, NY",
+      "company": "HubSpot",
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "Microservices",
+        "Kubernetes"
+      ]
     }
   },
   {
     "id": "r69",
-    "type": "event",
-    "title": "AI and Ethics Symposium",
-    "description": "Discuss the ethical implications of AI technologies.",
-    "reason": "Relevant to your interests in ethics and AI",
+    "type": "user",
+    "title": "Sophia Guerra - Operations Manager",
+    "description": "Experienced Operations Manager with expertise in React and Node.js. Works on high-impact projects with modern technologies.",
+    "reason": "Aligned with your interests in development and SaaS products",
     "relevanceScore": 0.94,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:s.com",
     "metadata": {
-      "location": "Washington, DC",
-      "date": "2023-12-05",
-      "duration": "1 day"
+      "location": "Los Gatos, CA",
+      "company": "Tech Startup",
+      "skills": [
+        "Kotlin",
+        "Android",
+        "Jetpack",
+        "Material Design"
+      ]
     }
   },
   {
     "id": "r70",
     "type": "job",
-    "title": "Mobile App Developer",
-    "description": "Create and maintain mobile applications for iOS and Android.",
-    "reason": "Fits your skills in mobile development and app design",
-    "relevanceScore": 0.9,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Backend Developer",
+    "description": "Develop scalable and performant applications using modern web technologies. Collaborate with cross-functional teams.",
+    "reason": "Aligned with your development interests and skills",
+    "relevanceScore": 0.88,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:bd.com",
     "metadata": {
-      "location": "Remote",
-      "company": "App Solutions",
-      "salary": "$80,000 - $100,000",
-      "experience": "3+ years"
+      "location": "Dallas, TX",
+      "company": "Workday",
+      "salary": "$140,000 - $180,000",
+      "experience": "7+ years"
     }
   },
   {
     "id": "r71",
-    "type": "learning",
-    "title": "Data Mining Techniques",
-    "description": "Learn techniques for extracting useful information from large datasets.",
-    "reason": "Recommended based on your interest in data science",
-    "relevanceScore": 0.91,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Carter Price - UI Designer",
+    "description": "UI Designer focused on understanding user needs and behaviors. Bridges research and design through insights.",
+    "reason": "Based on your interest in design and cloud technologies",
+    "relevanceScore": 0.83,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:c.com",
     "metadata": {
-      "provider": "Data Academy",
-      "duration": "6 weeks",
-      "level": "Intermediate"
+      "location": "Raleigh, NC",
+      "company": "Social Media App",
+      "skills": [
+        "Figma",
+        "Sketch",
+        "Adobe XD",
+        "Prototyping"
+      ]
     }
   },
   {
     "id": "r72",
-    "type": "event",
-    "title": "Tech for Change Forum",
-    "description": "Explore how technology can drive social change and innovation.",
-    "reason": "Relevant to your interests in tech and social impact",
-    "relevanceScore": 0.93,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Sarah Hunt - Data Analyst",
+    "description": "Senior Data Analyst with 4+ years of experience. Specializes in cloud technologies and data visualization.",
+    "reason": "Shared interest in data science and user research",
+    "relevanceScore": 0.92,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:s.com",
     "metadata": {
-      "location": "Los Angeles, CA",
-      "date": "2023-10-28",
-      "duration": "1 day"
+      "location": "Los Gatos, CA",
+      "company": "Auth0",
+      "skills": [
+        "Python",
+        "Pandas",
+        "NumPy",
+        "Scikit-learn"
+      ]
     }
   },
   {
     "id": "r73",
-    "type": "job",
-    "title": "Product Manager",
-    "description": "Lead product development and strategy for the organization.",
-    "reason": "Fits your experience in product management and leadership",
-    "relevanceScore": 0.88,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Sarah Butler - Security Engineer",
+    "description": "Senior Security Engineer with 12+ years of experience. Works on security audits and incident response.",
+    "reason": "Based on your security experience and skills",
+    "relevanceScore": 0.94,
+    "category": "Security",
+    "image": "https://logos-api.apistemic.com/domain:s.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Product Solutions",
-      "salary": "$90,000 - $110,000",
-      "experience": "5+ years"
+      "location": "Phoenix, AZ",
+      "company": "Nvidia",
+      "skills": [
+        "Penetration Testing",
+        "Vulnerability Assessment",
+        "Security Audits",
+        "OWASP"
+      ]
     }
   },
   {
     "id": "r74",
-    "type": "learning",
-    "title": "Introduction to Internet of Things (IoT)",
-    "description": "Learn about IoT devices and their applications.",
-    "reason": "Recommended based on your interest in emerging technologies",
-    "relevanceScore": 0.92,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Mateo Tate - Technical Lead",
+    "description": "Experienced Technical Lead with expertise in team management and technical architecture. Focuses on team development.",
+    "reason": "Based on your interest in management and scalable systems",
+    "relevanceScore": 0.95,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:m.com",
     "metadata": {
-      "provider": "IoT Academy",
-      "duration": "6 weeks",
-      "level": "Beginner"
+      "location": "Las Vegas, NV",
+      "company": "Asana",
+      "skills": [
+        "Team Leadership",
+        "Agile Methodologies",
+        "Technical Architecture",
+        "Project Management"
+      ]
     }
   },
   {
     "id": "r75",
-    "type": "event",
-    "title": "Tech Networking Night",
-    "description": "Network with industry professionals and explore opportunities.",
-    "reason": "Relevant to your interests in networking and technology",
-    "relevanceScore": 0.9,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Kevin Griffith - UX Designer",
+    "description": "Senior UX Designer with 11+ years of experience. Specializes in accessibility and inclusive design.",
+    "reason": "Aligned with your interests in design and SaaS products",
+    "relevanceScore": 0.89,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:k.com",
     "metadata": {
-      "location": "San Jose, CA",
-      "date": "2023-11-10",
-      "duration": "1 evening"
+      "location": "Portland, OR",
+      "company": "Nvidia",
+      "skills": [
+        "Figma",
+        "User Research",
+        "Mobile Design",
+        "Accessibility"
+      ]
     }
   },
   {
     "id": "r76",
     "type": "job",
-    "title": "Database Administrator",
-    "description": "Manage and maintain database systems for organizations.",
-    "reason": "Matches your skills in database management",
-    "relevanceScore": 0.89,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "QA Engineer",
+    "description": "Create innovative solutions using Node.js and Python. Work on high-impact projects with modern technologies.",
+    "reason": "Matches your development skills and career goals",
+    "relevanceScore": 0.88,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:qe.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Database Solutions",
-      "salary": "$70,000 - $90,000",
-      "experience": "3+ years"
-    }
-  },
-  {
-    "id": "r77",
-    "type": "learning",
-    "title": "Advanced Data Analysis Techniques",
-    "description": "Learn advanced techniques for data analysis and interpretation.",
-    "reason": "Recommended based on your interest in data science",
-    "relevanceScore": 0.91,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
-    "metadata": {
-      "provider": "Data Academy",
-      "duration": "6 weeks",
-      "level": "Advanced"
-    }
-  },
-  {
-    "id": "r78",
-    "type": "event",
-    "title": "Future of AI Conference",
-    "description": "Discuss the future trends and ethical implications of AI.",
-    "reason": "Relevant to your interests in AI and technology",
-    "relevanceScore": 0.94,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
-    "metadata": {
-      "location": "San Francisco, CA",
-      "date": "2023-12-12",
-      "duration": "2 days"
-    }
-  },
-  {
-    "id": "r79",
-    "type": "job",
-    "title": "Marketing Analyst",
-    "description": "Analyze marketing data to inform business strategies.",
-    "reason": "Fits your analytical skills and experience in marketing",
-    "relevanceScore": 0.87,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
-    "metadata": {
-      "location": "Remote",
-      "company": "Marketing Insights",
-      "salary": "$60,000 - $80,000",
+      "location": "Boulder, CO",
+      "company": "Amazon",
+      "salary": "$150,000 - $200,000",
       "experience": "2+ years"
     }
   },
   {
-    "id": "r80",
-    "type": "learning",
-    "title": "Introduction to Quantum Computing",
-    "description": "Learn the basics of quantum computing and its potential applications.",
-    "reason": "Recommended based on your interest in cutting-edge technology",
-    "relevanceScore": 0.93,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "id": "r77",
+    "type": "job",
+    "title": "Operations Manager",
+    "description": "Build React and TypeScript applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Matches your development experience and mobile applications interest",
+    "relevanceScore": 0.84,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:om.com",
     "metadata": {
-      "provider": "Quantum Academy",
-      "duration": "8 weeks",
-      "level": "Beginner"
+      "location": "Chicago, IL",
+      "company": "Intercom",
+      "salary": "$90,000 - $120,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r78",
+    "type": "job",
+    "title": "Senior Product Manager",
+    "description": "Define product requirements and manage product development. Conduct user research and analysis.",
+    "reason": "Matches your product management background and modern web technologies interest",
+    "relevanceScore": 0.82,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
+    "metadata": {
+      "location": "Remote",
+      "company": "Tech Innovations",
+      "salary": "$160,000 - $200,000",
+      "experience": "7+ years"
+    }
+  },
+  {
+    "id": "r79",
+    "type": "user",
+    "title": "Luke Graham - Mobile Developer",
+    "description": "Senior Mobile Developer with 12+ years of experience in cloud technologies. Building robust and performant systems.",
+    "reason": "Similar development expertise and background",
+    "relevanceScore": 0.8,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
+    "metadata": {
+      "location": "Portland, OR",
+      "company": "Spotify",
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "Microservices",
+        "Kubernetes"
+      ]
+    }
+  },
+  {
+    "id": "r80",
+    "type": "user",
+    "title": "Justin Herrera - Technical Writer",
+    "description": "Experienced Technical Writer with expertise in modern web technologies. Works on high-impact projects with modern technologies.",
+    "reason": "Based on your development experience and skills",
+    "relevanceScore": 0.89,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:j.com",
+    "metadata": {
+      "location": "Seattle, WA",
+      "company": "GitHub",
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "Microservices",
+        "Kubernetes"
+      ]
     }
   },
   {
     "id": "r81",
-    "type": "event",
-    "title": "Tech for Good Hackathon",
-    "description": "Collaborate on projects that leverage technology for social good.",
-    "reason": "Relevant to your interests in technology and social impact",
-    "relevanceScore": 0.95,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Senior Data Scientist",
+    "description": "Conduct research and develop ML models. Work on data analysis and visualization.",
+    "reason": "Aligned with your data science skills and interests",
+    "relevanceScore": 0.81,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:ds.com",
     "metadata": {
-      "location": "Remote",
-      "date": "2023-11-14",
-      "duration": "1 day"
+      "location": "Mountain View, CA",
+      "company": "Microsoft",
+      "salary": "$100,000 - $135,000",
+      "experience": "5+ years"
     }
   },
   {
     "id": "r82",
-    "type": "job",
-    "title": "E-commerce Manager",
-    "description": "Oversee online sales strategies and manage e-commerce platforms.",
-    "reason": "Fits your experience in e-commerce and digital marketing",
-    "relevanceScore": 0.88,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Abigail Curtis - Design Lead",
+    "description": "Design Lead creating intuitive and delightful user experiences. Specializes in accessibility.",
+    "reason": "Aligned with your interests in design and fintech",
+    "relevanceScore": 0.86,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:a.com",
     "metadata": {
-      "location": "Remote",
-      "company": "E-Com Solutions",
-      "salary": "$70,000 - $90,000",
-      "experience": "3+ years"
+      "location": "Orlando, FL",
+      "company": "Databricks",
+      "skills": [
+        "Design Systems",
+        "Component Libraries",
+        "Visual Design",
+        "Interaction Design"
+      ]
     }
   },
   {
     "id": "r83",
-    "type": "learning",
-    "title": "Introduction to Cloud Security",
-    "description": "Learn about security measures for cloud computing environments.",
-    "reason": "Recommended based on your interest in cloud technologies",
-    "relevanceScore": 0.89,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Justin Ramirez - Engineering Manager",
+    "description": "Engineering Manager specializing in agile methodologies and process improvement. Helps teams deliver exceptional results.",
+    "reason": "Shared interest in management and accessibility",
+    "relevanceScore": 0.93,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:j.com",
     "metadata": {
-      "provider": "Cloud Academy",
-      "duration": "6 weeks",
-      "level": "Beginner"
+      "location": "Burlington, VT",
+      "company": "Slack",
+      "skills": [
+        "Team Leadership",
+        "Agile Methodologies",
+        "Technical Architecture",
+        "Project Management"
+      ]
     }
   },
   {
     "id": "r84",
-    "type": "event",
-    "title": "Tech Leadership Summit",
-    "description": "Discuss leadership strategies in technology with industry leaders.",
-    "reason": "Relevant to your interests in tech leadership",
-    "relevanceScore": 0.92,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Growth Marketing Manager",
+    "description": "Build Kubernetes and Docker applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Aligned with your development interests and skills",
+    "relevanceScore": 0.83,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:gm.com",
     "metadata": {
-      "location": "New York, NY",
-      "date": "2023-11-28",
-      "duration": "1 day"
+      "location": "Nashville, TN",
+      "company": "Tech Startup",
+      "salary": "$160,000 - $200,000",
+      "experience": "5+ years"
     }
   },
   {
     "id": "r85",
     "type": "job",
-    "title": "Research Scientist",
-    "description": "Conduct research and analysis in various scientific fields.",
-    "reason": "Fits your background in research and analysis",
-    "relevanceScore": 0.9,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Data Analyst",
+    "description": "Work on cutting-edge machine learning projects. Develop models and analyze large datasets to drive insights.",
+    "reason": "Matches your data science background and React and TypeScript interest",
+    "relevanceScore": 0.92,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:da.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Research Labs",
-      "salary": "$80,000 - $100,000",
-      "experience": "5+ years"
+      "location": "Los Gatos, CA",
+      "company": "Netflix",
+      "salary": "$90,000 - $120,000",
+      "experience": "2+ years"
     }
   },
   {
     "id": "r86",
-    "type": "learning",
-    "title": "Advanced Data Visualization",
-    "description": "Master advanced techniques for visualizing complex data.",
-    "reason": "Recommended based on your interest in data analysis",
-    "relevanceScore": 0.91,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "UX Researcher",
+    "description": "Create innovative solutions using Node.js and Python. Work on high-impact projects with modern technologies.",
+    "reason": "Matches your development experience and fintech interest",
+    "relevanceScore": 0.85,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:ur.com",
     "metadata": {
-      "provider": "Data Academy",
-      "duration": "6 weeks",
-      "level": "Advanced"
+      "location": "Remote",
+      "company": "Cloud Services Inc",
+      "salary": "$160,000 - $200,000",
+      "experience": "4+ years"
     }
   },
   {
     "id": "r87",
-    "type": "event",
-    "title": "AI and Society Forum",
-    "description": "Discuss the impact of AI on society and ethical considerations.",
-    "reason": "Relevant to your interests in AI and social issues",
-    "relevanceScore": 0.93,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Sales Manager",
+    "description": "Build modern web technologies applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Based on your development background and expertise",
+    "relevanceScore": 0.88,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:sm.com",
     "metadata": {
-      "location": "Los Angeles, CA",
-      "date": "2023-12-08",
-      "duration": "1 day"
+      "location": "San Francisco, CA",
+      "company": "Snapchat",
+      "salary": "$110,000 - $145,000",
+      "experience": "6+ years"
     }
   },
   {
     "id": "r88",
     "type": "job",
-    "title": "Cybersecurity Analyst",
-    "description": "Monitor and protect systems from cyber threats.",
-    "reason": "Fits your skills in cybersecurity and IT",
-    "relevanceScore": 0.88,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Marketing Director",
+    "description": "Build Kubernetes and Docker applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Matches your development skills and career goals",
+    "relevanceScore": 0.86,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:md.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Security Solutions",
-      "salary": "$70,000 - $90,000",
-      "experience": "2+ years"
+      "location": "New York, NY",
+      "company": "Cybersecurity Firm",
+      "salary": "$120,000 - $150,000",
+      "experience": "7+ years"
     }
   },
   {
     "id": "r89",
-    "type": "learning",
-    "title": "Data Ethics and Privacy",
-    "description": "Understand the ethical considerations in data handling and privacy.",
-    "reason": "Recommended based on your interest in data ethics",
-    "relevanceScore": 0.9,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Mobile Developer (iOS/Android)",
+    "description": "Build Kubernetes and Docker applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Aligned with your development interests and skills",
+    "relevanceScore": 0.93,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:md.com",
     "metadata": {
-      "provider": "Ethics Academy",
-      "duration": "4 weeks",
-      "level": "Beginner"
+      "location": "Atlanta, GA",
+      "company": "Red Hat",
+      "salary": "$110,000 - $145,000",
+      "experience": "2+ years"
     }
   },
   {
     "id": "r90",
-    "type": "event",
-    "title": "Future Tech Expo",
-    "description": "Explore the latest advancements in technology and innovation.",
-    "reason": "Relevant to your interests in future technologies",
-    "relevanceScore": 0.94,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "job",
+    "title": "Senior DevOps Engineer",
+    "description": "Scale cloud infrastructure and optimize deployment pipelines. Work with Kubernetes and Docker and modern DevOps tools.",
+    "reason": "Based on your devops background and expertise",
+    "relevanceScore": 0.85,
+    "category": "DevOps",
+    "image": "https://logos-api.apistemic.com/domain:de.com",
     "metadata": {
-      "location": "San Francisco, CA",
-      "date": "2023-12-15",
-      "duration": "2 days"
+      "location": "Boulder, CO",
+      "company": "Tesla",
+      "salary": "$150,000 - $200,000",
+      "experience": "7+ years"
     }
   },
   {
     "id": "r91",
     "type": "job",
-    "title": "Cloud Security Engineer",
-    "description": "Implement security measures for cloud environments.",
-    "reason": "Matches your skills in cloud security and engineering",
-    "relevanceScore": 0.9,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Associate Product Manager",
+    "description": "Manage product lifecycle from conception to launch. Work with design, engineering, and business teams.",
+    "reason": "Matches your product management background and modern web technologies interest",
+    "relevanceScore": 0.89,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Cloud Security Co.",
-      "salary": "$90,000 - $110,000",
+      "location": "Detroit, MI",
+      "company": "FinTech Solutions",
+      "salary": "$160,000 - $200,000",
       "experience": "3+ years"
     }
   },
   {
     "id": "r92",
-    "type": "learning",
-    "title": "Introduction to Data Structures",
-    "description": "Learn about data structures and their applications in programming.",
-    "reason": "Recommended based on your interest in computer science",
-    "relevanceScore": 0.89,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Elizabeth Mitchell - Full Stack Developer",
+    "description": "Full Stack Developer focused on React and Node.js. Creating innovative solutions and contributing to technical architecture.",
+    "reason": "Based on your interest in development and React and Node.js",
+    "relevanceScore": 0.82,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:e.com",
     "metadata": {
-      "provider": "Computer Science Academy",
-      "duration": "6 weeks",
-      "level": "Beginner"
+      "location": "Portland, ME",
+      "company": "HubSpot",
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "Microservices",
+        "Kubernetes"
+      ]
     }
   },
   {
     "id": "r93",
-    "type": "event",
-    "title": "Tech Innovations Showcase",
-    "description": "Showcase of innovative tech solutions and startups.",
-    "reason": "Relevant to your interests in technology and innovation",
-    "relevanceScore": 0.91,
-    "category": "Event",
-    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Jackson Anderson - Machine Learning Engineer",
+    "description": "Machine Learning Engineer focused on fintech. Building predictive models and extracting insights from data.",
+    "reason": "Shared interest in data science and user research",
+    "relevanceScore": 0.86,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:j.com",
     "metadata": {
-      "location": "Austin, TX",
-      "date": "2023-12-20",
-      "duration": "1 day"
+      "location": "Palo Alto, CA",
+      "company": "Figma",
+      "skills": [
+        "Python",
+        "Machine Learning",
+        "Deep Learning",
+        "TensorFlow"
+      ]
     }
   },
   {
     "id": "r94",
     "type": "job",
-    "title": "Information Security Manager",
-    "description": "Manage information security programs and policies.",
-    "reason": "Fits your experience in information security and management",
-    "relevanceScore": 0.92,
-    "category": "Job",
-    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "title": "Data Scientist",
+    "description": "Build predictive models and analyze complex datasets. Work with engineering teams to deploy ML solutions.",
+    "reason": "Matches your data science background and React and TypeScript interest",
+    "relevanceScore": 0.85,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:ds.com",
     "metadata": {
-      "location": "Remote",
-      "company": "Security Management Inc.",
-      "salary": "$100,000 - $120,000",
-      "experience": "5+ years"
+      "location": "Minneapolis, MN",
+      "company": "Tableau",
+      "salary": "$130,000 - $170,000",
+      "experience": "3+ years"
     }
   },
   {
     "id": "r95",
-    "type": "learning",
-    "title": "Advanced Cloud Computing",
-    "description": "Deep dive into advanced cloud computing concepts and practices.",
-    "reason": "Recommended based on your interest in cloud technologies",
-    "relevanceScore": 0.93,
-    "category": "Learning",
-    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "type": "user",
+    "title": "Madison Chen - Backend Developer",
+    "description": "Experienced Backend Developer with expertise in cloud technologies. Works on high-impact projects with modern technologies.",
+    "reason": "Based on your development experience and skills",
+    "relevanceScore": 0.84,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:m.com",
     "metadata": {
-      "provider": "Cloud Academy",
-      "duration": "8 weeks",
-      "level": "Advanced"
+      "location": "Redwood City, CA",
+      "company": "Workday",
+      "skills": [
+        "Swift",
+        "iOS",
+        "UIKit",
+        "SwiftUI"
+      ]
+    }
+  },
+  {
+    "id": "r96",
+    "type": "job",
+    "title": "Backend Developer",
+    "description": "Build Kubernetes and Docker applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Matches your development skills and career goals",
+    "relevanceScore": 0.92,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:bd.com",
+    "metadata": {
+      "location": "Austin, TX",
+      "company": "GitHub",
+      "salary": "$120,000 - $150,000",
+      "experience": "7+ years"
+    }
+  },
+  {
+    "id": "r97",
+    "type": "job",
+    "title": "Business Development Manager",
+    "description": "Develop scalable and performant applications using React and TypeScript. Collaborate with cross-functional teams.",
+    "reason": "Based on your development background and expertise",
+    "relevanceScore": 0.84,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:bd.com",
+    "metadata": {
+      "location": "Phoenix, AZ",
+      "company": "GitHub",
+      "salary": "$90,000 - $120,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r98",
+    "type": "user",
+    "title": "Mateo Porter - Sales Manager",
+    "description": "Sales Manager focused on scalable systems. Creating innovative solutions and contributing to technical architecture.",
+    "reason": "Similar technical background and interests in scalable systems",
+    "relevanceScore": 0.86,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:m.com",
+    "metadata": {
+      "location": "Portland, OR",
+      "company": "Atlassian",
+      "skills": [
+        "Swift",
+        "iOS",
+        "UIKit",
+        "SwiftUI"
+      ]
+    }
+  },
+  {
+    "id": "r99",
+    "type": "job",
+    "title": "Senior UX Designer",
+    "description": "Design beautiful and functional interfaces. Work on user-centered design and accessibility.",
+    "reason": "Aligned with your design interests and skills",
+    "relevanceScore": 0.92,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:ud.com",
+    "metadata": {
+      "location": "Austin, TX",
+      "company": "Dropbox",
+      "salary": "$90,000 - $120,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r100",
+    "type": "job",
+    "title": "Product Owner",
+    "description": "Lead product strategy for innovative products. Work with cross-functional teams to build products users love.",
+    "reason": "Aligned with your product management interests and skills",
+    "relevanceScore": 0.91,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:po.com",
+    "metadata": {
+      "location": "Phoenix, AZ",
+      "company": "User Experience Agency",
+      "salary": "$110,000 - $145,000",
+      "experience": "6+ years"
+    }
+  },
+  {
+    "id": "r101",
+    "type": "job",
+    "title": "Sales Manager",
+    "description": "Build React and TypeScript applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Matches your development experience and e-commerce interest",
+    "relevanceScore": 0.81,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:sm.com",
+    "metadata": {
+      "location": "Denver, CO",
+      "company": "Cloudflare",
+      "salary": "$120,000 - $150,000",
+      "experience": "4+ years"
+    }
+  },
+  {
+    "id": "r102",
+    "type": "user",
+    "title": "Ava Robertson - UX Designer",
+    "description": "Senior UX Designer with 3+ years of experience. Specializes in mobile design and inclusive design.",
+    "reason": "Based on your design experience and skills",
+    "relevanceScore": 0.82,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:a.com",
+    "metadata": {
+      "location": "Houston, TX",
+      "company": "Trello",
+      "skills": [
+        "Figma",
+        "Sketch",
+        "Adobe XD",
+        "Prototyping"
+      ]
+    }
+  },
+  {
+    "id": "r103",
+    "type": "job",
+    "title": "Senior Frontend Developer",
+    "description": "Develop scalable and performant applications using React and TypeScript. Collaborate with cross-functional teams.",
+    "reason": "Matches your development skills and career goals",
+    "relevanceScore": 0.83,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:fd.com",
+    "metadata": {
+      "location": "Austin, TX",
+      "company": "User Experience Agency",
+      "salary": "$120,000 - $150,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r104",
+    "type": "job",
+    "title": "Security Engineer",
+    "description": "Protect systems and user data through security audits and best practices. Conduct penetration testing and respond to incidents.",
+    "reason": "Based on your security background and expertise",
+    "relevanceScore": 0.94,
+    "category": "Security",
+    "image": "https://logos-api.apistemic.com/domain:se.com",
+    "metadata": {
+      "location": "Nashville, TN",
+      "company": "Intercom",
+      "salary": "$160,000 - $200,000",
+      "experience": "7+ years"
+    }
+  },
+  {
+    "id": "r105",
+    "type": "user",
+    "title": "Elizabeth Munoz - Data Analyst",
+    "description": "Data Analyst focused on SaaS products. Building predictive models and extracting insights from data.",
+    "reason": "Similar technical background and interests in scalable systems",
+    "relevanceScore": 0.95,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:e.com",
+    "metadata": {
+      "location": "Atlanta, GA",
+      "company": "B2B SaaS Company",
+      "skills": [
+        "PyTorch",
+        "Neural Networks",
+        "NLP",
+        "Computer Vision"
+      ]
+    }
+  },
+  {
+    "id": "r106",
+    "type": "user",
+    "title": "Lucas Richardson - Senior Frontend Developer",
+    "description": "Senior Frontend Developer focused on scalable systems. Creating innovative solutions and contributing to technical architecture.",
+    "reason": "Shared interest in development and user research",
+    "relevanceScore": 0.93,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
+    "metadata": {
+      "location": "Houston, TX",
+      "company": "Airbnb",
+      "skills": [
+        "Swift",
+        "iOS",
+        "UIKit",
+        "SwiftUI"
+      ]
+    }
+  },
+  {
+    "id": "r107",
+    "type": "user",
+    "title": "Kevin Ellis - Engineering Manager",
+    "description": "Senior Engineering Manager with 4+ years of experience. Works on team leadership and technical strategy.",
+    "reason": "Similar management expertise and background",
+    "relevanceScore": 0.82,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:k.com",
+    "metadata": {
+      "location": "Phoenix, AZ",
+      "company": "Apple",
+      "skills": [
+        "Engineering Management",
+        "Team Development",
+        "Technical Strategy",
+        "Process Improvement"
+      ]
+    }
+  },
+  {
+    "id": "r108",
+    "type": "job",
+    "title": "Data Analyst",
+    "description": "Build predictive models and analyze complex datasets. Work with engineering teams to deploy ML solutions.",
+    "reason": "Aligned with your data science interests and skills",
+    "relevanceScore": 0.91,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:da.com",
+    "metadata": {
+      "location": "Seattle, WA",
+      "company": "Developer Tools",
+      "salary": "$90,000 - $120,000",
+      "experience": "4+ years"
+    }
+  },
+  {
+    "id": "r109",
+    "type": "job",
+    "title": "Software Architect",
+    "description": "Build robust applications and APIs using React and TypeScript. Focus on performance optimization and reliability.",
+    "reason": "Aligned with your development skills and interests",
+    "relevanceScore": 0.9,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:sa.com",
+    "metadata": {
+      "location": "San Diego, CA",
+      "company": "Twitter",
+      "salary": "$130,000 - $170,000",
+      "experience": "5+ years"
+    }
+  },
+  {
+    "id": "r110",
+    "type": "user",
+    "title": "Aria Collins - DevOps Engineer",
+    "description": "Senior DevOps Engineer with 7+ years of experience. Works on infrastructure as code and automation.",
+    "reason": "Based on your interest in devops and modern web technologies",
+    "relevanceScore": 0.89,
+    "category": "DevOps",
+    "image": "https://logos-api.apistemic.com/domain:a.com",
+    "metadata": {
+      "location": "Columbus, OH",
+      "company": "Creative Agency",
+      "skills": [
+        "Monitoring",
+        "Logging",
+        "Infrastructure as Code",
+        "Automation"
+      ]
+    }
+  },
+  {
+    "id": "r111",
+    "type": "user",
+    "title": "Victoria Washington - Product Manager",
+    "description": "Product Manager focused on building products that users love. Balances user needs, business goals, and technical constraints.",
+    "reason": "Similar product management expertise and background",
+    "relevanceScore": 0.85,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:v.com",
+    "metadata": {
+      "location": "Redwood City, CA",
+      "company": "Snapchat",
+      "skills": [
+        "Product Strategy",
+        "User Research",
+        "Roadmap Planning",
+        "Stakeholder Management"
+      ]
+    }
+  },
+  {
+    "id": "r112",
+    "type": "user",
+    "title": "Samantha Bishop - Full Stack Developer",
+    "description": "Senior Full Stack Developer with 8+ years of experience in cloud technologies. Building robust and performant systems.",
+    "reason": "Based on your interest in development and cloud technologies",
+    "relevanceScore": 0.86,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:s.com",
+    "metadata": {
+      "location": "Raleigh, NC",
+      "company": "MongoDB",
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "Microservices",
+        "Kubernetes"
+      ]
+    }
+  },
+  {
+    "id": "r113",
+    "type": "job",
+    "title": "Growth Marketing Manager",
+    "description": "Create innovative solutions using Kubernetes and Docker. Work on high-impact projects with modern technologies.",
+    "reason": "Matches your development experience and fintech interest",
+    "relevanceScore": 0.9,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:gm.com",
+    "metadata": {
+      "location": "Indianapolis, IN",
+      "company": "Palantir",
+      "salary": "$90,000 - $120,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r114",
+    "type": "user",
+    "title": "Jonathan Moreno - Cloud Engineer",
+    "description": "Experienced Cloud Engineer with expertise in scalable systems. Optimizing deployments and ensuring high availability.",
+    "reason": "Based on your devops experience and skills",
+    "relevanceScore": 0.82,
+    "category": "DevOps",
+    "image": "https://logos-api.apistemic.com/domain:j.com",
+    "metadata": {
+      "location": "Los Angeles, CA",
+      "company": "Trello",
+      "skills": [
+        "Terraform",
+        "Ansible",
+        "Jenkins",
+        "GitLab CI"
+      ]
+    }
+  },
+  {
+    "id": "r115",
+    "type": "user",
+    "title": "Melissa Jackson - Security Engineer",
+    "description": "Senior Security Engineer with 9+ years of experience. Works on security audits and incident response.",
+    "reason": "Based on your interest in security and modern web technologies",
+    "relevanceScore": 0.8,
+    "category": "Security",
+    "image": "https://logos-api.apistemic.com/domain:m.com",
+    "metadata": {
+      "location": "Cupertino, CA",
+      "company": "LinkedIn",
+      "skills": [
+        "Penetration Testing",
+        "Vulnerability Assessment",
+        "Security Audits",
+        "OWASP"
+      ]
+    }
+  },
+  {
+    "id": "r116",
+    "type": "user",
+    "title": "Lucas Stevens - Full Stack Developer",
+    "description": "Full Stack Developer focused on cloud technologies. Creating innovative solutions and contributing to technical architecture.",
+    "reason": "Based on your interest in development and cloud technologies",
+    "relevanceScore": 0.94,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
+    "metadata": {
+      "location": "Phoenix, AZ",
+      "company": "Digital Solutions",
+      "skills": [
+        "React",
+        "TypeScript",
+        "JavaScript",
+        "Node.js"
+      ]
+    }
+  },
+  {
+    "id": "r117",
+    "type": "user",
+    "title": "Aaron Thomas - Sales Manager",
+    "description": "Experienced Sales Manager with expertise in cloud technologies. Works on high-impact projects with modern technologies.",
+    "reason": "Similar development expertise and background",
+    "relevanceScore": 0.84,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:a.com",
+    "metadata": {
+      "location": "Tampa, FL",
+      "company": "Trello",
+      "skills": [
+        "Swift",
+        "iOS",
+        "UIKit",
+        "SwiftUI"
+      ]
+    }
+  },
+  {
+    "id": "r118",
+    "type": "job",
+    "title": "Senior Full Stack Developer",
+    "description": "Build React and TypeScript applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Matches your development background and React and TypeScript interest",
+    "relevanceScore": 0.93,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:fs.com",
+    "metadata": {
+      "location": "Minneapolis, MN",
+      "company": "Stripe",
+      "salary": "$90,000 - $120,000",
+      "experience": "4+ years"
+    }
+  },
+  {
+    "id": "r119",
+    "type": "job",
+    "title": "Associate Product Manager",
+    "description": "Manage product lifecycle from conception to launch. Work with design, engineering, and business teams.",
+    "reason": "Matches your product management experience and e-commerce interest",
+    "relevanceScore": 0.85,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
+    "metadata": {
+      "location": "Phoenix, AZ",
+      "company": "ServiceNow",
+      "salary": "$150,000 - $200,000",
+      "experience": "6+ years"
+    }
+  },
+  {
+    "id": "r120",
+    "type": "job",
+    "title": "Business Development Manager",
+    "description": "Build robust applications and APIs using Kubernetes and Docker. Focus on performance optimization and reliability.",
+    "reason": "Matches your development skills and career goals",
+    "relevanceScore": 0.92,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:bd.com",
+    "metadata": {
+      "location": "Remote",
+      "company": "Microsoft",
+      "salary": "$90,000 - $120,000",
+      "experience": "4+ years"
+    }
+  },
+  {
+    "id": "r121",
+    "type": "user",
+    "title": "Scarlett Castro - Design Lead",
+    "description": "Design Lead focused on understanding user needs and behaviors. Bridges research and design through insights.",
+    "reason": "Aligned with your interests in design and SaaS products",
+    "relevanceScore": 0.93,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:s.com",
+    "metadata": {
+      "location": "Phoenix, AZ",
+      "company": "Canva",
+      "skills": [
+        "Figma",
+        "Sketch",
+        "Adobe XD",
+        "Prototyping"
+      ]
+    }
+  },
+  {
+    "id": "r122",
+    "type": "user",
+    "title": "Henry Phelps - Senior Frontend Developer",
+    "description": "Senior Frontend Developer specializing in modern web technologies. Building scalable applications and mentoring junior developers.",
+    "reason": "Based on your development experience and skills",
+    "relevanceScore": 0.9,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:h.com",
+    "metadata": {
+      "location": "Columbus, OH",
+      "company": "Airtable",
+      "skills": [
+        "React",
+        "TypeScript",
+        "JavaScript",
+        "Node.js"
+      ]
+    }
+  },
+  {
+    "id": "r123",
+    "type": "job",
+    "title": "Senior Product Manager",
+    "description": "Manage product lifecycle from conception to launch. Work with design, engineering, and business teams.",
+    "reason": "Based on your product management background and expertise",
+    "relevanceScore": 0.93,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
+    "metadata": {
+      "location": "Las Vegas, NV",
+      "company": "Salesforce",
+      "salary": "$120,000 - $150,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r124",
+    "type": "user",
+    "title": "Rebecca Hayes - UI Designer",
+    "description": "UI Designer creating intuitive and delightful user experiences. Specializes in accessibility.",
+    "reason": "Aligned with your interests in design and fintech",
+    "relevanceScore": 0.88,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:r.com",
+    "metadata": {
+      "location": "Cambridge, MA",
+      "company": "Palantir",
+      "skills": [
+        "Figma",
+        "Sketch",
+        "Adobe XD",
+        "Prototyping"
+      ]
+    }
+  },
+  {
+    "id": "r125",
+    "type": "user",
+    "title": "Luke Griffith - Technical Lead",
+    "description": "Experienced Technical Lead with expertise in team management and technical architecture. Focuses on team development.",
+    "reason": "Shared interest in management and accessibility",
+    "relevanceScore": 0.92,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
+    "metadata": {
+      "location": "Detroit, MI",
+      "company": "Palantir",
+      "skills": [
+        "Engineering Management",
+        "Team Development",
+        "Technical Strategy",
+        "Process Improvement"
+      ]
+    }
+  },
+  {
+    "id": "r126",
+    "type": "user",
+    "title": "Wyatt Lewis - Marketing Director",
+    "description": "Experienced Marketing Director with expertise in cloud technologies. Works on high-impact projects with modern technologies.",
+    "reason": "Based on your development experience and skills",
+    "relevanceScore": 0.83,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:w.com",
+    "metadata": {
+      "location": "Miami, FL",
+      "company": "Tech Startup",
+      "skills": [
+        "React",
+        "Vue.js",
+        "Angular",
+        "TypeScript"
+      ]
+    }
+  },
+  {
+    "id": "r127",
+    "type": "user",
+    "title": "Logan Wilson - QA Engineer",
+    "description": "QA Engineer focused on modern web technologies. Creating innovative solutions and contributing to technical architecture.",
+    "reason": "Shared interest in development and accessibility",
+    "relevanceScore": 0.84,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
+    "metadata": {
+      "location": "Redwood City, CA",
+      "company": "Software Development",
+      "skills": [
+        "Go",
+        "Docker",
+        "Kubernetes",
+        "Cloud Technologies"
+      ]
+    }
+  },
+  {
+    "id": "r128",
+    "type": "user",
+    "title": "Matthew Christensen - Engineering Manager",
+    "description": "Senior Engineering Manager with 4+ years of experience. Works on team leadership and technical strategy.",
+    "reason": "Similar technical background and interests in scalable systems",
+    "relevanceScore": 0.92,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:m.com",
+    "metadata": {
+      "location": "Nashville, TN",
+      "company": "Cybersecurity Firm",
+      "skills": [
+        "Engineering Management",
+        "Team Development",
+        "Technical Strategy",
+        "Process Improvement"
+      ]
+    }
+  },
+  {
+    "id": "r129",
+    "type": "user",
+    "title": "Riley Hansen - Product Manager",
+    "description": "Product Manager focused on building products that users love. Balances user needs, business goals, and technical constraints.",
+    "reason": "Similar technical background and interests in modern web technologies",
+    "relevanceScore": 0.87,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:r.com",
+    "metadata": {
+      "location": "Menlo Park, CA",
+      "company": "Nvidia",
+      "skills": [
+        "Agile",
+        "Scrum",
+        "Product Planning",
+        "Analytics"
+      ]
+    }
+  },
+  {
+    "id": "r130",
+    "type": "user",
+    "title": "Brandon Wallace - Technical Lead",
+    "description": "Experienced Technical Lead with expertise in team management and technical architecture. Focuses on team development.",
+    "reason": "Shared interest in management and accessibility",
+    "relevanceScore": 0.82,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:b.com",
+    "metadata": {
+      "location": "Houston, TX",
+      "company": "Reddit",
+      "skills": [
+        "Team Leadership",
+        "Agile Methodologies",
+        "Technical Architecture",
+        "Project Management"
+      ]
+    }
+  },
+  {
+    "id": "r131",
+    "type": "user",
+    "title": "Aiden Cobb - Senior Frontend Developer",
+    "description": "Senior Frontend Developer focused on React and Node.js. Creating innovative solutions and contributing to technical architecture.",
+    "reason": "Similar technical background and interests in React and Node.js",
+    "relevanceScore": 0.94,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:a.com",
+    "metadata": {
+      "location": "Austin, TX",
+      "company": "Auth0",
+      "skills": [
+        "Python",
+        "Django",
+        "Flask",
+        "PostgreSQL"
+      ]
+    }
+  },
+  {
+    "id": "r132",
+    "type": "job",
+    "title": "Sales Director",
+    "description": "Build React and TypeScript applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Based on your development background and expertise",
+    "relevanceScore": 0.86,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:sd.com",
+    "metadata": {
+      "location": "Burlington, VT",
+      "company": "Creative Agency",
+      "salary": "$120,000 - $150,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r133",
+    "type": "user",
+    "title": "Benjamin Thornton - Operations Manager",
+    "description": "Experienced Operations Manager with expertise in modern web technologies. Works on high-impact projects with modern technologies.",
+    "reason": "Similar development expertise and background",
+    "relevanceScore": 0.94,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:b.com",
+    "metadata": {
+      "location": "Las Vegas, NV",
+      "company": "Trello",
+      "skills": [
+        "Swift",
+        "iOS",
+        "UIKit",
+        "SwiftUI"
+      ]
+    }
+  },
+  {
+    "id": "r134",
+    "type": "user",
+    "title": "Adam Martinez - Mobile Developer",
+    "description": "Mobile Developer specializing in scalable systems. Building scalable applications and mentoring junior developers.",
+    "reason": "Based on your interest in development and scalable systems",
+    "relevanceScore": 0.83,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:a.com",
+    "metadata": {
+      "location": "Cambridge, MA",
+      "company": "Databricks",
+      "skills": [
+        "Go",
+        "Docker",
+        "Kubernetes",
+        "Cloud Technologies"
+      ]
+    }
+  },
+  {
+    "id": "r135",
+    "type": "job",
+    "title": "Senior ML Engineer",
+    "description": "Develop scalable and performant applications using React and TypeScript. Collaborate with cross-functional teams.",
+    "reason": "Matches your development skills and career goals",
+    "relevanceScore": 0.93,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:me.com",
+    "metadata": {
+      "location": "Cupertino, CA",
+      "company": "Google",
+      "salary": "$160,000 - $200,000",
+      "experience": "6+ years"
+    }
+  },
+  {
+    "id": "r136",
+    "type": "user",
+    "title": "Christopher Pena - Software Architect",
+    "description": "Senior Software Architect with 3+ years of experience in modern web technologies. Building robust and performant systems.",
+    "reason": "Similar development expertise and background",
+    "relevanceScore": 0.81,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:c.com",
+    "metadata": {
+      "location": "San Jose, CA",
+      "company": "Canva",
+      "skills": [
+        "Python",
+        "Django",
+        "Flask",
+        "PostgreSQL"
+      ]
+    }
+  },
+  {
+    "id": "r137",
+    "type": "user",
+    "title": "Hudson Curtis - Data Scientist",
+    "description": "Data Scientist focused on fintech. Building predictive models and extracting insights from data.",
+    "reason": "Similar technical background and interests in cloud technologies",
+    "relevanceScore": 0.87,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:h.com",
+    "metadata": {
+      "location": "Washington, DC",
+      "company": "PayPal",
+      "skills": [
+        "PyTorch",
+        "Neural Networks",
+        "NLP",
+        "Computer Vision"
+      ]
+    }
+  },
+  {
+    "id": "r138",
+    "type": "user",
+    "title": "Victoria Larson - Mobile Developer",
+    "description": "Mobile Developer focused on React and Node.js. Creating innovative solutions and contributing to technical architecture.",
+    "reason": "Similar development expertise and background",
+    "relevanceScore": 0.86,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:v.com",
+    "metadata": {
+      "location": "Portland, OR",
+      "company": "PayPal",
+      "skills": [
+        "Python",
+        "Django",
+        "Flask",
+        "PostgreSQL"
+      ]
+    }
+  },
+  {
+    "id": "r139",
+    "type": "user",
+    "title": "Lucas Carter - Engineering Manager",
+    "description": "Senior Engineering Manager with 3+ years of experience. Works on team leadership and technical strategy.",
+    "reason": "Shared interest in management and mobile design",
+    "relevanceScore": 0.82,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
+    "metadata": {
+      "location": "Denver, CO",
+      "company": "Stripe",
+      "skills": [
+        "Team Leadership",
+        "Agile Methodologies",
+        "Technical Architecture",
+        "Project Management"
+      ]
+    }
+  },
+  {
+    "id": "r140",
+    "type": "job",
+    "title": "Marketing Director",
+    "description": "Build robust applications and APIs using Kubernetes and Docker. Focus on performance optimization and reliability.",
+    "reason": "Matches your development experience and fintech interest",
+    "relevanceScore": 0.88,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:md.com",
+    "metadata": {
+      "location": "San Francisco, CA",
+      "company": "Netflix",
+      "salary": "$160,000 - $200,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r141",
+    "type": "user",
+    "title": "Lucas Santos - Marketing Director",
+    "description": "Marketing Director specializing in scalable systems. Building scalable applications and mentoring junior developers.",
+    "reason": "Based on your interest in development and scalable systems",
+    "relevanceScore": 0.93,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
+    "metadata": {
+      "location": "Indianapolis, IN",
+      "company": "Atlassian",
+      "skills": [
+        "React",
+        "Vue.js",
+        "Angular",
+        "TypeScript"
+      ]
+    }
+  },
+  {
+    "id": "r142",
+    "type": "job",
+    "title": "Frontend Developer",
+    "description": "Develop scalable and performant applications using React and TypeScript. Collaborate with cross-functional teams.",
+    "reason": "Aligned with your development skills and interests",
+    "relevanceScore": 0.9,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:fd.com",
+    "metadata": {
+      "location": "Denver, CO",
+      "company": "Databricks",
+      "salary": "$100,000 - $135,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r143",
+    "type": "user",
+    "title": "Jessica Johnson - UI Designer",
+    "description": "UI Designer focused on understanding user needs and behaviors. Bridges research and design through insights.",
+    "reason": "Based on your design experience and skills",
+    "relevanceScore": 0.91,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:j.com",
+    "metadata": {
+      "location": "Charlotte, NC",
+      "company": "GitHub",
+      "skills": [
+        "Design Systems",
+        "Component Libraries",
+        "Visual Design",
+        "Interaction Design"
+      ]
+    }
+  },
+  {
+    "id": "r144",
+    "type": "job",
+    "title": "Operations Manager",
+    "description": "Build robust applications and APIs using React and TypeScript. Focus on performance optimization and reliability.",
+    "reason": "Aligned with your development interests and skills",
+    "relevanceScore": 0.89,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:om.com",
+    "metadata": {
+      "location": "Houston, TX",
+      "company": "HubSpot",
+      "salary": "$90,000 - $120,000",
+      "experience": "4+ years"
+    }
+  },
+  {
+    "id": "r145",
+    "type": "job",
+    "title": "Technical Lead",
+    "description": "Drive technical decisions and lead engineering initiatives. Help engineers grow in their careers.",
+    "reason": "Aligned with your management skills and interests",
+    "relevanceScore": 0.89,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:te.com",
+    "metadata": {
+      "location": "Tampa, FL",
+      "company": "Snapchat",
+      "salary": "$130,000 - $170,000",
+      "experience": "6+ years"
+    }
+  },
+  {
+    "id": "r146",
+    "type": "user",
+    "title": "Michelle Matthews - Sales Manager",
+    "description": "Sales Manager specializing in cloud technologies. Building scalable applications and mentoring junior developers.",
+    "reason": "Shared interest in development and mobile design",
+    "relevanceScore": 0.84,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:m.com",
+    "metadata": {
+      "location": "San Jose, CA",
+      "company": "Google",
+      "skills": [
+        "Kotlin",
+        "Android",
+        "Jetpack",
+        "Material Design"
+      ]
+    }
+  },
+  {
+    "id": "r147",
+    "type": "job",
+    "title": "Senior Product Manager",
+    "description": "Define product requirements and manage product development. Conduct user research and analysis.",
+    "reason": "Matches your product management experience and e-commerce interest",
+    "relevanceScore": 0.95,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
+    "metadata": {
+      "location": "Los Angeles, CA",
+      "company": "Square",
+      "salary": "$150,000 - $200,000",
+      "experience": "6+ years"
+    }
+  },
+  {
+    "id": "r148",
+    "type": "user",
+    "title": "Christopher Hamilton - Marketing Manager",
+    "description": "Experienced Marketing Manager with expertise in cloud technologies. Works on high-impact projects with modern technologies.",
+    "reason": "Based on your development experience and skills",
+    "relevanceScore": 0.83,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:c.com",
+    "metadata": {
+      "location": "Detroit, MI",
+      "company": "Okta",
+      "skills": [
+        "Swift",
+        "iOS",
+        "UIKit",
+        "SwiftUI"
+      ]
+    }
+  },
+  {
+    "id": "r149",
+    "type": "user",
+    "title": "Madison Boyd - Backend Developer",
+    "description": "Experienced Backend Developer with expertise in modern web technologies. Works on high-impact projects with modern technologies.",
+    "reason": "Similar technical background and interests in modern web technologies",
+    "relevanceScore": 0.82,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:m.com",
+    "metadata": {
+      "location": "Menlo Park, CA",
+      "company": "Canva",
+      "skills": [
+        "React",
+        "TypeScript",
+        "JavaScript",
+        "Node.js"
+      ]
+    }
+  },
+  {
+    "id": "r150",
+    "type": "job",
+    "title": "Associate Product Manager",
+    "description": "Manage product lifecycle from conception to launch. Work with design, engineering, and business teams.",
+    "reason": "Based on your product management background and expertise",
+    "relevanceScore": 0.87,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
+    "metadata": {
+      "location": "Palo Alto, CA",
+      "company": "Netflix",
+      "salary": "$120,000 - $150,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r151",
+    "type": "user",
+    "title": "Kevin Santiago - Sales Manager",
+    "description": "Sales Manager specializing in scalable systems. Building scalable applications and mentoring junior developers.",
+    "reason": "Aligned with your interests in development and mobile applications",
+    "relevanceScore": 0.85,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:k.com",
+    "metadata": {
+      "location": "Minneapolis, MN",
+      "company": "Elastic",
+      "skills": [
+        "Python",
+        "Django",
+        "Flask",
+        "PostgreSQL"
+      ]
+    }
+  },
+  {
+    "id": "r152",
+    "type": "user",
+    "title": "Aria Campbell - Marketing Manager",
+    "description": "Experienced Marketing Manager with expertise in React and Node.js. Works on high-impact projects with modern technologies.",
+    "reason": "Shared interest in development and design systems",
+    "relevanceScore": 0.91,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:a.com",
+    "metadata": {
+      "location": "Atlanta, GA",
+      "company": "Oracle",
+      "skills": [
+        "Swift",
+        "iOS",
+        "UIKit",
+        "SwiftUI"
+      ]
+    }
+  },
+  {
+    "id": "r153",
+    "type": "job",
+    "title": "Engineering Manager",
+    "description": "Manage engineering teams and deliver high-quality software. Focus on team development and technical architecture.",
+    "reason": "Aligned with your management interests and skills",
+    "relevanceScore": 0.85,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:em.com",
+    "metadata": {
+      "location": "Austin, TX",
+      "company": "Developer Tools",
+      "salary": "$130,000 - $170,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r154",
+    "type": "user",
+    "title": "Casey Kim - Backend Developer",
+    "description": "Senior Backend Developer with 9+ years of experience in modern web technologies. Building robust and performant systems.",
+    "reason": "Based on your development experience and skills",
+    "relevanceScore": 0.82,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:c.com",
+    "metadata": {
+      "location": "Los Gatos, CA",
+      "company": "Workday",
+      "skills": [
+        "React",
+        "TypeScript",
+        "JavaScript",
+        "Node.js"
+      ]
+    }
+  },
+  {
+    "id": "r155",
+    "type": "job",
+    "title": "Senior Data Scientist",
+    "description": "Work on cutting-edge machine learning projects. Develop models and analyze large datasets to drive insights.",
+    "reason": "Aligned with your data science interests and skills",
+    "relevanceScore": 0.81,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:ds.com",
+    "metadata": {
+      "location": "San Jose, CA",
+      "company": "Asana",
+      "salary": "$160,000 - $200,000",
+      "experience": "4+ years"
+    }
+  },
+  {
+    "id": "r156",
+    "type": "job",
+    "title": "Full Stack Developer",
+    "description": "Build robust applications and APIs using React and TypeScript. Focus on performance optimization and reliability.",
+    "reason": "Matches your development experience and e-commerce interest",
+    "relevanceScore": 0.82,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:fs.com",
+    "metadata": {
+      "location": "New York, NY",
+      "company": "Dropbox",
+      "salary": "$150,000 - $200,000",
+      "experience": "5+ years"
+    }
+  },
+  {
+    "id": "r157",
+    "type": "job",
+    "title": "Digital Marketing Manager",
+    "description": "Develop scalable and performant applications using Kubernetes and Docker. Collaborate with cross-functional teams.",
+    "reason": "Matches your development skills and career goals",
+    "relevanceScore": 0.89,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:dm.com",
+    "metadata": {
+      "location": "Washington, DC",
+      "company": "Trello",
+      "salary": "$160,000 - $200,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r158",
+    "type": "user",
+    "title": "Hudson Santos - DevOps Engineer",
+    "description": "Experienced DevOps Engineer with expertise in cloud technologies. Optimizing deployments and ensuring high availability.",
+    "reason": "Based on your devops experience and skills",
+    "relevanceScore": 0.94,
+    "category": "DevOps",
+    "image": "https://logos-api.apistemic.com/domain:h.com",
+    "metadata": {
+      "location": "Charlotte, NC",
+      "company": "VMware",
+      "skills": [
+        "Monitoring",
+        "Logging",
+        "Infrastructure as Code",
+        "Automation"
+      ]
+    }
+  },
+  {
+    "id": "r159",
+    "type": "user",
+    "title": "Rachel Foster - Technical Lead",
+    "description": "Technical Lead specializing in agile methodologies and process improvement. Helps teams deliver exceptional results.",
+    "reason": "Similar technical background and interests in modern web technologies",
+    "relevanceScore": 0.84,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:r.com",
+    "metadata": {
+      "location": "Palo Alto, CA",
+      "company": "Intercom",
+      "skills": [
+        "Team Leadership",
+        "Agile Methodologies",
+        "Technical Architecture",
+        "Project Management"
+      ]
+    }
+  },
+  {
+    "id": "r160",
+    "type": "job",
+    "title": "Product Manager",
+    "description": "Drive product initiatives and work with stakeholders. Deliver value to users and business.",
+    "reason": "Aligned with your product management skills and interests",
+    "relevanceScore": 0.93,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
+    "metadata": {
+      "location": "Detroit, MI",
+      "company": "Intel",
+      "salary": "$150,000 - $200,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r161",
+    "type": "job",
+    "title": "Data Scientist",
+    "description": "Work on cutting-edge machine learning projects. Develop models and analyze large datasets to drive insights.",
+    "reason": "Matches your data science experience and e-commerce interest",
+    "relevanceScore": 0.9,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:ds.com",
+    "metadata": {
+      "location": "Indianapolis, IN",
+      "company": "AI Research Lab",
+      "salary": "$130,000 - $170,000",
+      "experience": "6+ years"
+    }
+  },
+  {
+    "id": "r162",
+    "type": "user",
+    "title": "Tyler Buchanan - Machine Learning Engineer",
+    "description": "Senior Machine Learning Engineer with 10+ years of experience. Specializes in cloud technologies and data visualization.",
+    "reason": "Similar technical background and interests in cloud technologies",
+    "relevanceScore": 0.86,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:t.com",
+    "metadata": {
+      "location": "Columbus, OH",
+      "company": "Figma",
+      "skills": [
+        "SQL",
+        "Data Analysis",
+        "Statistical Modeling",
+        "Data Visualization"
+      ]
+    }
+  },
+  {
+    "id": "r163",
+    "type": "user",
+    "title": "Megan Wheeler - Product Manager",
+    "description": "Product Manager focused on building products that users love. Balances user needs, business goals, and technical constraints.",
+    "reason": "Similar technical background and interests in React and Node.js",
+    "relevanceScore": 0.89,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:m.com",
+    "metadata": {
+      "location": "Cupertino, CA",
+      "company": "Shopify",
+      "skills": [
+        "Product Strategy",
+        "User Research",
+        "Roadmap Planning",
+        "Stakeholder Management"
+      ]
+    }
+  },
+  {
+    "id": "r164",
+    "type": "user",
+    "title": "Olivia Rios - Software Architect",
+    "description": "Software Architect specializing in modern web technologies. Building scalable applications and mentoring junior developers.",
+    "reason": "Similar development expertise and background",
+    "relevanceScore": 0.92,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:o.com",
+    "metadata": {
+      "location": "Portland, OR",
+      "company": "Intel",
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "Microservices",
+        "Kubernetes"
+      ]
+    }
+  },
+  {
+    "id": "r165",
+    "type": "user",
+    "title": "Lincoln Washington - Technical Lead",
+    "description": "Senior Technical Lead with 11+ years of experience. Works on team leadership and technical strategy.",
+    "reason": "Similar management expertise and background",
+    "relevanceScore": 0.84,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
+    "metadata": {
+      "location": "Phoenix, AZ",
+      "company": "IBM",
+      "skills": [
+        "Team Leadership",
+        "Agile Methodologies",
+        "Technical Architecture",
+        "Project Management"
+      ]
+    }
+  },
+  {
+    "id": "r166",
+    "type": "job",
+    "title": "Associate Product Manager",
+    "description": "Lead product strategy for innovative products. Work with cross-functional teams to build products users love.",
+    "reason": "Matches your product management experience and e-commerce interest",
+    "relevanceScore": 0.9,
+    "category": "Product Management",
+    "image": "https://logos-api.apistemic.com/domain:pm.com",
+    "metadata": {
+      "location": "Houston, TX",
+      "company": "Okta",
+      "salary": "$140,000 - $180,000",
+      "experience": "4+ years"
+    }
+  },
+  {
+    "id": "r167",
+    "type": "job",
+    "title": "Data Scientist",
+    "description": "Develop recommendation systems and personalization algorithms. Extract insights from data.",
+    "reason": "Matches your data science experience and e-commerce interest",
+    "relevanceScore": 0.89,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:ds.com",
+    "metadata": {
+      "location": "Remote",
+      "company": "VMware",
+      "salary": "$160,000 - $200,000",
+      "experience": "7+ years"
+    }
+  },
+  {
+    "id": "r168",
+    "type": "job",
+    "title": "Site Reliability Engineer",
+    "description": "Scale cloud infrastructure and optimize deployment pipelines. Work with modern web technologies and modern DevOps tools.",
+    "reason": "Matches your devops background and modern web technologies interest",
+    "relevanceScore": 0.92,
+    "category": "DevOps",
+    "image": "https://logos-api.apistemic.com/domain:sr.com",
+    "metadata": {
+      "location": "Chicago, IL",
+      "company": "Cloud Services Inc",
+      "salary": "$160,000 - $200,000",
+      "experience": "5+ years"
+    }
+  },
+  {
+    "id": "r169",
+    "type": "job",
+    "title": "Frontend Developer",
+    "description": "Build robust applications and APIs using React and TypeScript. Focus on performance optimization and reliability.",
+    "reason": "Based on your development background and expertise",
+    "relevanceScore": 0.8,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:fd.com",
+    "metadata": {
+      "location": "Tampa, FL",
+      "company": "AI Research Lab",
+      "salary": "$150,000 - $200,000",
+      "experience": "7+ years"
+    }
+  },
+  {
+    "id": "r170",
+    "type": "user",
+    "title": "Aaron Roberts - UI Designer",
+    "description": "Experienced UI Designer with expertise in user research and design systems. Focuses on design systems.",
+    "reason": "Based on your design experience and skills",
+    "relevanceScore": 0.85,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:a.com",
+    "metadata": {
+      "location": "Salt Lake City, UT",
+      "company": "Asana",
+      "skills": [
+        "Design Systems",
+        "Component Libraries",
+        "Visual Design",
+        "Interaction Design"
+      ]
+    }
+  },
+  {
+    "id": "r171",
+    "type": "job",
+    "title": "Sales Director",
+    "description": "Build robust applications and APIs using Node.js and Python. Focus on performance optimization and reliability.",
+    "reason": "Aligned with your development interests and skills",
+    "relevanceScore": 0.83,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:sd.com",
+    "metadata": {
+      "location": "Washington, DC",
+      "company": "Intercom",
+      "salary": "$160,000 - $200,000",
+      "experience": "7+ years"
+    }
+  },
+  {
+    "id": "r172",
+    "type": "job",
+    "title": "Senior QA Engineer",
+    "description": "Create innovative solutions using modern web technologies. Work on high-impact projects with modern technologies.",
+    "reason": "Based on your development background and expertise",
+    "relevanceScore": 0.88,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:qe.com",
+    "metadata": {
+      "location": "Burlington, VT",
+      "company": "Salesforce",
+      "salary": "$110,000 - $145,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r173",
+    "type": "job",
+    "title": "UX Designer",
+    "description": "Design beautiful and functional interfaces. Work on user-centered design and accessibility.",
+    "reason": "Aligned with your design skills and interests",
+    "relevanceScore": 0.86,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:ud.com",
+    "metadata": {
+      "location": "Palo Alto, CA",
+      "company": "Square",
+      "salary": "$130,000 - $170,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r174",
+    "type": "job",
+    "title": "Technical Lead",
+    "description": "Drive technical decisions and lead engineering initiatives. Help engineers grow in their careers.",
+    "reason": "Based on your management background and expertise",
+    "relevanceScore": 0.84,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:te.com",
+    "metadata": {
+      "location": "Chicago, IL",
+      "company": "Elastic",
+      "salary": "$160,000 - $200,000",
+      "experience": "4+ years"
+    }
+  },
+  {
+    "id": "r175",
+    "type": "job",
+    "title": "Digital Marketing Manager",
+    "description": "Build modern web technologies applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Based on your development background and expertise",
+    "relevanceScore": 0.88,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:dm.com",
+    "metadata": {
+      "location": "Houston, TX",
+      "company": "Tech Startup",
+      "salary": "$130,000 - $170,000",
+      "experience": "6+ years"
+    }
+  },
+  {
+    "id": "r176",
+    "type": "user",
+    "title": "Jordan Smith - QA Engineer",
+    "description": "QA Engineer specializing in React and Node.js. Building scalable applications and mentoring junior developers.",
+    "reason": "Based on your development experience and skills",
+    "relevanceScore": 0.92,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:j.com",
+    "metadata": {
+      "location": "Phoenix, AZ",
+      "company": "Reddit",
+      "skills": [
+        "Kotlin",
+        "Android",
+        "Jetpack",
+        "Material Design"
+      ]
+    }
+  },
+  {
+    "id": "r177",
+    "type": "user",
+    "title": "Brian Kramer - UI Designer",
+    "description": "Experienced UI Designer with expertise in user research and design systems. Focuses on design systems.",
+    "reason": "Similar technical background and interests in cloud technologies",
+    "relevanceScore": 0.92,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:b.com",
+    "metadata": {
+      "location": "Denver, CO",
+      "company": "Cloud Services Inc",
+      "skills": [
+        "User Research",
+        "Usability Testing",
+        "Qualitative Research",
+        "Data Analysis"
+      ]
+    }
+  },
+  {
+    "id": "r178",
+    "type": "user",
+    "title": "Zachary Pearce - Technical Lead",
+    "description": "Technical Lead leading development teams and delivering high-quality software. Manages performance and drives technical decisions.",
+    "reason": "Shared interest in management and user research",
+    "relevanceScore": 0.94,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:z.com",
+    "metadata": {
+      "location": "Boulder, CO",
+      "company": "SAP",
+      "skills": [
+        "Engineering Management",
+        "Team Development",
+        "Technical Strategy",
+        "Process Improvement"
+      ]
+    }
+  },
+  {
+    "id": "r179",
+    "type": "job",
+    "title": "Operations Manager",
+    "description": "Build Node.js and Python applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Matches your development skills and career goals",
+    "relevanceScore": 0.87,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:om.com",
+    "metadata": {
+      "location": "Portland, ME",
+      "company": "Nvidia",
+      "salary": "$110,000 - $145,000",
+      "experience": "7+ years"
+    }
+  },
+  {
+    "id": "r180",
+    "type": "user",
+    "title": "Nicholas Rhodes - Mobile Developer",
+    "description": "Senior Mobile Developer with 5+ years of experience in React and Node.js. Building robust and performant systems.",
+    "reason": "Based on your interest in development and React and Node.js",
+    "relevanceScore": 0.84,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:n.com",
+    "metadata": {
+      "location": "Cambridge, MA",
+      "company": "Google",
+      "skills": [
+        "React",
+        "Vue.js",
+        "Angular",
+        "TypeScript"
+      ]
+    }
+  },
+  {
+    "id": "r181",
+    "type": "job",
+    "title": "Senior UX Designer",
+    "description": "Build design systems and component libraries. Collaborate with product and engineering teams.",
+    "reason": "Matches your design background and React and TypeScript interest",
+    "relevanceScore": 0.9,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:ud.com",
+    "metadata": {
+      "location": "Menlo Park, CA",
+      "company": "Stripe",
+      "salary": "$100,000 - $135,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r182",
+    "type": "user",
+    "title": "Ashley Lowe - Software Architect",
+    "description": "Senior Software Architect with 10+ years of experience in React and Node.js. Building robust and performant systems.",
+    "reason": "Based on your interest in development and React and Node.js",
+    "relevanceScore": 0.93,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:a.com",
+    "metadata": {
+      "location": "Atlanta, GA",
+      "company": "Red Hat",
+      "skills": [
+        "Go",
+        "Docker",
+        "Kubernetes",
+        "Cloud Technologies"
+      ]
+    }
+  },
+  {
+    "id": "r183",
+    "type": "job",
+    "title": "UI Designer",
+    "description": "Create engaging user experiences. Focus on user research and usability testing.",
+    "reason": "Matches your design experience and e-commerce interest",
+    "relevanceScore": 0.86,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:ud.com",
+    "metadata": {
+      "location": "Palo Alto, CA",
+      "company": "Zoom",
+      "salary": "$130,000 - $170,000",
+      "experience": "4+ years"
+    }
+  },
+  {
+    "id": "r184",
+    "type": "user",
+    "title": "Luke Swanson - DevOps Engineer",
+    "description": "Experienced DevOps Engineer with expertise in modern web technologies. Optimizing deployments and ensuring high availability.",
+    "reason": "Aligned with your interests in devops and SaaS products",
+    "relevanceScore": 0.87,
+    "category": "DevOps",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
+    "metadata": {
+      "location": "Columbus, OH",
+      "company": "SAP",
+      "skills": [
+        "AWS",
+        "GCP",
+        "Azure",
+        "Cloud Infrastructure"
+      ]
+    }
+  },
+  {
+    "id": "r185",
+    "type": "user",
+    "title": "Logan Thomas - UX Researcher",
+    "description": "UX Researcher creating intuitive and delightful user experiences. Specializes in user research.",
+    "reason": "Based on your design experience and skills",
+    "relevanceScore": 0.93,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
+    "metadata": {
+      "location": "Atlanta, GA",
+      "company": "Spotify",
+      "skills": [
+        "Design Systems",
+        "Component Libraries",
+        "Visual Design",
+        "Interaction Design"
+      ]
+    }
+  },
+  {
+    "id": "r186",
+    "type": "user",
+    "title": "David Medina - Data Scientist",
+    "description": "Data Scientist specializing in machine learning and AI solutions. Works on SaaS products and personalization.",
+    "reason": "Similar technical background and interests in modern web technologies",
+    "relevanceScore": 0.85,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:d.com",
+    "metadata": {
+      "location": "San Jose, CA",
+      "company": "Zendesk",
+      "skills": [
+        "Python",
+        "Pandas",
+        "NumPy",
+        "Scikit-learn"
+      ]
+    }
+  },
+  {
+    "id": "r187",
+    "type": "user",
+    "title": "Amy Wilcox - Data Scientist",
+    "description": "Data Scientist focused on SaaS products. Building predictive models and extracting insights from data.",
+    "reason": "Shared interest in data science and design systems",
+    "relevanceScore": 0.88,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:a.com",
+    "metadata": {
+      "location": "Portland, ME",
+      "company": "Workday",
+      "skills": [
+        "PyTorch",
+        "Neural Networks",
+        "NLP",
+        "Computer Vision"
+      ]
+    }
+  },
+  {
+    "id": "r188",
+    "type": "job",
+    "title": "Sales Director",
+    "description": "Develop scalable and performant applications using modern web technologies. Collaborate with cross-functional teams.",
+    "reason": "Matches your development background and modern web technologies interest",
+    "relevanceScore": 0.84,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:sd.com",
+    "metadata": {
+      "location": "Nashville, TN",
+      "company": "Tesla",
+      "salary": "$110,000 - $145,000",
+      "experience": "4+ years"
+    }
+  },
+  {
+    "id": "r189",
+    "type": "job",
+    "title": "Digital Marketing Manager",
+    "description": "Build modern web technologies applications with a talented team. Work on products that scale and impact millions of users.",
+    "reason": "Aligned with your development skills and interests",
+    "relevanceScore": 0.9,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:dm.com",
+    "metadata": {
+      "location": "Dallas, TX",
+      "company": "Software Development",
+      "salary": "$90,000 - $120,000",
+      "experience": "5+ years"
+    }
+  },
+  {
+    "id": "r190",
+    "type": "user",
+    "title": "Matthew Bates - Machine Learning Engineer",
+    "description": "Senior Machine Learning Engineer with 9+ years of experience. Specializes in React and Node.js and data visualization.",
+    "reason": "Similar technical background and interests in React and Node.js",
+    "relevanceScore": 0.81,
+    "category": "Data Science",
+    "image": "https://logos-api.apistemic.com/domain:m.com",
+    "metadata": {
+      "location": "Las Vegas, NV",
+      "company": "Social Media App",
+      "skills": [
+        "SQL",
+        "Data Analysis",
+        "Statistical Modeling",
+        "Data Visualization"
+      ]
+    }
+  },
+  {
+    "id": "r191",
+    "type": "user",
+    "title": "Logan Cooper - Engineering Manager",
+    "description": "Engineering Manager leading development teams and delivering high-quality software. Manages performance and drives technical decisions.",
+    "reason": "Similar management expertise and background",
+    "relevanceScore": 0.9,
+    "category": "Management",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
+    "metadata": {
+      "location": "Seattle, WA",
+      "company": "Salesforce",
+      "skills": [
+        "Engineering Management",
+        "Team Development",
+        "Technical Strategy",
+        "Process Improvement"
+      ]
+    }
+  },
+  {
+    "id": "r192",
+    "type": "user",
+    "title": "Mia Rodriguez - UI Designer",
+    "description": "Senior UI Designer with 6+ years of experience. Specializes in accessibility and inclusive design.",
+    "reason": "Shared interest in design and accessibility",
+    "relevanceScore": 0.88,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:m.com",
+    "metadata": {
+      "location": "Seattle, WA",
+      "company": "Oracle",
+      "skills": [
+        "Figma",
+        "User Research",
+        "Mobile Design",
+        "Accessibility"
+      ]
+    }
+  },
+  {
+    "id": "r193",
+    "type": "job",
+    "title": "UI Designer",
+    "description": "Create engaging user experiences. Focus on user research and usability testing.",
+    "reason": "Aligned with your design interests and skills",
+    "relevanceScore": 0.87,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:ud.com",
+    "metadata": {
+      "location": "Phoenix, AZ",
+      "company": "FinTech Solutions",
+      "salary": "$140,000 - $180,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r194",
+    "type": "user",
+    "title": "Olivia Medina - UI Designer",
+    "description": "Senior UI Designer with 8+ years of experience. Specializes in design systems and inclusive design.",
+    "reason": "Shared interest in design and design systems",
+    "relevanceScore": 0.89,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:o.com",
+    "metadata": {
+      "location": "Cambridge, MA",
+      "company": "B2B SaaS Company",
+      "skills": [
+        "Figma",
+        "Sketch",
+        "Adobe XD",
+        "Prototyping"
+      ]
+    }
+  },
+  {
+    "id": "r195",
+    "type": "user",
+    "title": "Maria Cole - UI Designer",
+    "description": "UI Designer focused on understanding user needs and behaviors. Bridges research and design through insights.",
+    "reason": "Shared interest in design and user research",
+    "relevanceScore": 0.84,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:m.com",
+    "metadata": {
+      "location": "Seattle, WA",
+      "company": "HubSpot",
+      "skills": [
+        "Figma",
+        "Sketch",
+        "Adobe XD",
+        "Prototyping"
+      ]
+    }
+  },
+  {
+    "id": "r196",
+    "type": "job",
+    "title": "UX Researcher",
+    "description": "Develop scalable and performant applications using React and TypeScript. Collaborate with cross-functional teams.",
+    "reason": "Matches your development experience and fintech interest",
+    "relevanceScore": 0.9,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:ur.com",
+    "metadata": {
+      "location": "Mountain View, CA",
+      "company": "Cloud Services Inc",
+      "salary": "$100,000 - $135,000",
+      "experience": "7+ years"
+    }
+  },
+  {
+    "id": "r197",
+    "type": "job",
+    "title": "Sales Director",
+    "description": "Develop scalable and performant applications using modern web technologies. Collaborate with cross-functional teams.",
+    "reason": "Matches your development skills and career goals",
+    "relevanceScore": 0.94,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:sd.com",
+    "metadata": {
+      "location": "Nashville, TN",
+      "company": "Intel",
+      "salary": "$130,000 - $170,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r198",
+    "type": "user",
+    "title": "Lauren Howard - Marketing Manager",
+    "description": "Experienced Marketing Manager with expertise in scalable systems. Works on high-impact projects with modern technologies.",
+    "reason": "Aligned with your interests in development and mobile applications",
+    "relevanceScore": 0.94,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:l.com",
+    "metadata": {
+      "location": "Cupertino, CA",
+      "company": "Palantir",
+      "skills": [
+        "Kotlin",
+        "Android",
+        "Jetpack",
+        "Material Design"
+      ]
+    }
+  },
+  {
+    "id": "r199",
+    "type": "job",
+    "title": "Full Stack Developer",
+    "description": "Build robust applications and APIs using modern web technologies. Focus on performance optimization and reliability.",
+    "reason": "Matches your development skills and career goals",
+    "relevanceScore": 0.91,
+    "category": "Development",
+    "image": "https://logos-api.apistemic.com/domain:fs.com",
+    "metadata": {
+      "location": "Portland, ME",
+      "company": "Tech Innovations",
+      "salary": "$90,000 - $120,000",
+      "experience": "6+ years"
+    }
+  },
+  {
+    "id": "r200",
+    "type": "user",
+    "title": "Taylor Gray - Design Lead",
+    "description": "Experienced Design Lead with expertise in user research and design systems. Focuses on design systems.",
+    "reason": "Similar technical background and interests in scalable systems",
+    "relevanceScore": 0.83,
+    "category": "Design",
+    "image": "https://logos-api.apistemic.com/domain:t.com",
+    "metadata": {
+      "location": "Salt Lake City, UT",
+      "company": "Canva",
+      "skills": [
+        "User Research",
+        "Usability Testing",
+        "Qualitative Research",
+        "Data Analysis"
+      ]
     }
   }
 ]

@@ -1,0 +1,17 @@
+export {
+  dynamicDataProvider,
+  isDynamicModeEnabled,
+  getDoctors,
+  getDoctorById,
+  subscribeDoctors,
+  getAppointments,
+  getAppointmentById,
+  subscribeAppointments,
+  getPrescriptions,
+  getPrescriptionById,
+  subscribePrescriptions,
+  getMedicalRecords,
+  getMedicalRecordById,
+  subscribeMedicalRecords,
+  whenReady,
+} from "./data-provider";

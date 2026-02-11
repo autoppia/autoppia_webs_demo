@@ -8,7 +8,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import dayjs from "dayjs";
 import { countries } from "@/library/dataset";
-import { initializeRestaurants, getRestaurants } from "@/dynamic/v2-data";
+import { getRestaurantById, dynamicDataProvider } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { SeedLink } from "@/components/ui/SeedLink";
@@ -31,7 +31,7 @@ type RestaurantView = {
 export default function Page() {
   const params = useParams();
   const searchParams = useSearchParams();
-  const { seed: baseSeed, resolvedSeeds } = useSeed();
+  const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
 
   const restaurantId = params.restaurantId as string;
@@ -60,6 +60,18 @@ export default function Page() {
   const [email, setEmail] = useState("user_name@gmail.com");
   const dyn = useDynamicSystem();
 
+  // Debug: Verify V2 status
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[booking/[restaurantId]/[time]/page] V2 status:", {
+        v2Enabled: dyn.v2.isEnabled(),
+        v2DbMode: dyn.v2.isDbModeEnabled(),
+        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2Fallback: dyn.v2.isFallbackMode(),
+      });
+    }
+  }, [dyn.v2]);
+
   const [data, setData] = useState<RestaurantView | null>(null);
 
   const restaurantInfo = {
@@ -74,29 +86,50 @@ export default function Page() {
   };
 
   useEffect(() => {
-    initializeRestaurants(v2Seed ?? undefined).then(() => {
-      const list = getRestaurants();
-      const found = list.find((x) => x.id === restaurantId) || list[0];
-      if (found) {
-        const mapped: RestaurantView = {
-          id: found.id,
-          name: found.name,
-          image: found.image,
-          rating: Number(found.stars ?? 4),
-          reviews: Number(found.reviews ?? 0),
-          bookings: Number(found.bookings ?? 0),
-          price: String(found.price ?? "$$"),
-          cuisine: String(found.cuisine ?? "International"),
-          desc: `Enjoy a delightful experience at ${
-            found.name
-          }, offering a fusion of flavors in the heart of ${
-            found.area ?? "Downtown"
-          }.`,
-        };
-        setData(mapped);
+    let mounted = true;
+    const run = async () => {
+      try {
+        // Wait for data to be ready
+        await dynamicDataProvider.whenReady();
+        
+        // Reload if seed changed - pass seed explicitly
+        await dynamicDataProvider.reload(seed ?? undefined);
+        
+        if (!mounted) return;
+        
+        // Get restaurant directly using getRestaurantById
+        const found = getRestaurantById(restaurantId);
+        if (found) {
+          const mapped: RestaurantView = {
+            id: found.id,
+            name: found.name,
+            image: found.image,
+            rating: Number(found.stars ?? 4),
+            reviews: Number(found.reviews ?? 0),
+            bookings: Number(found.bookings ?? 0),
+            price: String(found.price ?? "$$"),
+            cuisine: String(found.cuisine ?? "International"),
+            desc: `Enjoy a delightful experience at ${
+              found.name
+            }, offering a fusion of flavors in the heart of ${
+              found.area ?? "Downtown"
+            }.`,
+          };
+          setData(mapped);
+        } else {
+          setData(null);
+        }
+      } catch (error) {
+        console.error("[booking/[restaurantId]/[time]/page] Failed to load restaurant", error);
+        if (!mounted) return;
+        setData(null);
       }
-    });
-  }, [restaurantId, v2Seed]);
+    };
+    run();
+    return () => {
+      mounted = false;
+    };
+  }, [restaurantId, seed, v2Seed]);
 
   useEffect(() => {
     const computedFullDate = reservationDateParam

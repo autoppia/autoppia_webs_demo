@@ -1,0 +1,325 @@
+import type { Doctor, Appointment, Prescription, MedicalRecord } from "@/data/types";
+import { initializeDoctors } from "@/data/doctors-enhanced";
+import { initializeAppointments } from "@/data/appointments-enhanced";
+import { initializePrescriptions } from "@/data/prescriptions-enhanced";
+import { initializeMedicalRecords } from "@/data/medical-records-enhanced";
+import { clampBaseSeed } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
+
+const BASE_SEED_STORAGE_KEY = "autohealth_seed_base";
+
+export class DynamicDataProvider {
+  private static instance: DynamicDataProvider;
+  private doctors: Doctor[] = [];
+  private appointments: Appointment[] = [];
+  private prescriptions: Prescription[] = [];
+  private medicalRecords: MedicalRecord[] = [];
+  private isEnabled = false;
+  private ready = false;
+  private readyPromise: Promise<void>;
+  private resolveReady!: () => void;
+  private currentSeed: number = 1;
+  private loadingPromise: Promise<void> | null = null;
+  private reloadPromise: Promise<void> | null = null;
+  private subscribers: {
+    doctors: ((doctors: Doctor[]) => void)[];
+    appointments: ((appointments: Appointment[]) => void)[];
+    prescriptions: ((prescriptions: Prescription[]) => void)[];
+    medicalRecords: ((records: MedicalRecord[]) => void)[];
+  } = {
+    doctors: [],
+    appointments: [],
+    prescriptions: [],
+    medicalRecords: [],
+  };
+
+  private constructor() {
+    this.isEnabled = isV2Enabled();
+    if (typeof window === "undefined") {
+      this.ready = true;
+      this.readyPromise = Promise.resolve();
+      return;
+    }
+    this.readyPromise = this.initialize();
+  }
+
+  public static getInstance(): DynamicDataProvider {
+    if (!DynamicDataProvider.instance) {
+      DynamicDataProvider.instance = new DynamicDataProvider();
+    }
+    return DynamicDataProvider.instance;
+  }
+
+  private getBaseSeed(): number {
+    if (typeof window === "undefined") {
+      return clampBaseSeed(1);
+    }
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get("seed");
+      if (raw) {
+        const parsed = clampBaseSeed(Number.parseInt(raw, 10));
+        window.localStorage.setItem(BASE_SEED_STORAGE_KEY, parsed.toString());
+        return parsed;
+      }
+      const stored = window.localStorage.getItem(BASE_SEED_STORAGE_KEY);
+      if (stored) {
+        return clampBaseSeed(Number.parseInt(stored, 10));
+      }
+    } catch (error) {
+      console.warn("[autohealth] Failed to resolve base seed from URL/localStorage", error);
+    }
+    return clampBaseSeed(1);
+  }
+
+  private async initialize(): Promise<void> {
+    this.ready = false;
+    this.readyPromise = new Promise<void>((resolve) => {
+      this.resolveReady = resolve;
+    });
+
+    const seed = this.getBaseSeed();
+    this.currentSeed = seed;
+
+    try {
+      console.log("[autohealth/data-provider] Initializing data - seed:", seed);
+      // Initialize doctors first, then use them for other data types
+      const doctors = await initializeDoctors(seed);
+      this.setDoctors(doctors);
+
+      // Initialize other data types in parallel
+      const [appointments, prescriptions, medicalRecords] = await Promise.all([
+        initializeAppointments(doctors, seed),
+        initializePrescriptions(doctors, seed),
+        initializeMedicalRecords(doctors, seed),
+      ]);
+
+      this.setAppointments(appointments);
+      this.setPrescriptions(prescriptions);
+      this.setMedicalRecords(medicalRecords);
+
+      console.log("[autohealth/data-provider] ✅ Data initialized:", {
+        doctors: doctors.length,
+        appointments: appointments.length,
+        prescriptions: prescriptions.length,
+        medicalRecords: medicalRecords.length,
+      });
+    } catch (error) {
+      console.error("[autohealth/data-provider] Failed to initialize data:", error);
+    } finally {
+      this.ready = true;
+      this.resolveReady();
+    }
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("autohealth:v2SeedChange", this.handleSeedEvent.bind(this));
+    }
+  }
+
+  private handleSeedEvent = () => {
+    console.log("[autohealth/data-provider] Seed change event received");
+    this.reload();
+  };
+
+  public async reload(seedValue?: number | null): Promise<void> {
+    // If already reloading, return the existing promise
+    if (this.reloadPromise) {
+      return this.reloadPromise;
+    }
+
+    this.reloadPromise = (async () => {
+      try {
+        const targetSeed = seedValue !== undefined && seedValue !== null
+          ? clampBaseSeed(seedValue)
+          : this.getBaseSeed();
+
+        if (targetSeed === this.currentSeed && this.ready) {
+          console.log(`[autohealth] No seed change detected (${targetSeed}), skipping reload.`);
+          this.reloadPromise = null;
+          return;
+        }
+
+        console.log(`[autohealth] Reloading data for seed=${targetSeed}...`);
+        this.currentSeed = targetSeed;
+        this.ready = false;
+        
+        // Clear existing data
+        this.doctors = [];
+        this.appointments = [];
+        this.prescriptions = [];
+        this.medicalRecords = [];
+        
+        // Notify subscribers with empty arrays
+        this.notifySubscribers();
+
+        // Reload data
+        const doctors = await initializeDoctors(targetSeed);
+        this.setDoctors(doctors);
+
+        const [appointments, prescriptions, medicalRecords] = await Promise.all([
+          initializeAppointments(doctors, targetSeed),
+          initializePrescriptions(doctors, targetSeed),
+          initializeMedicalRecords(doctors, targetSeed),
+        ]);
+
+        this.setAppointments(appointments);
+        this.setPrescriptions(prescriptions);
+        this.setMedicalRecords(medicalRecords);
+
+        console.log(`[autohealth] Data reloaded: ${doctors.length} doctors, ${appointments.length} appointments, ${prescriptions.length} prescriptions, ${medicalRecords.length} medical records`);
+      } catch (error) {
+        console.error("[autohealth/data-provider] Failed to reload data:", error);
+      } finally {
+        this.ready = true;
+        this.reloadPromise = null;
+      }
+    })();
+    
+    await this.reloadPromise;
+  }
+
+  public isReady(): boolean {
+    return this.ready;
+  }
+
+  public whenReady(): Promise<void> {
+    // If currently reloading, wait for that to complete
+    if (this.reloadPromise) {
+      return this.reloadPromise;
+    }
+    // Otherwise return the initial ready promise
+    return this.readyPromise;
+  }
+
+  public isDynamicModeEnabled(): boolean {
+    return this.isEnabled;
+  }
+
+  // Doctors
+  public getDoctors(): Doctor[] {
+    return [...this.doctors];
+  }
+
+  public setDoctors(newDoctors: Doctor[]): void {
+    this.doctors = newDoctors;
+    this.notifyDoctorsSubscribers();
+  }
+
+  public subscribeDoctors(callback: (doctors: Doctor[]) => void): () => void {
+    this.subscribers.doctors.push(callback);
+    callback(this.doctors);
+    return () => {
+      this.subscribers.doctors = this.subscribers.doctors.filter((sub) => sub !== callback);
+    };
+  }
+
+  private notifyDoctorsSubscribers(): void {
+    this.subscribers.doctors.forEach((callback) => callback(this.doctors));
+  }
+
+  public getDoctorById(id: string): Doctor | undefined {
+    return this.doctors.find((doctor) => doctor.id === id);
+  }
+
+  // Appointments
+  public getAppointments(): Appointment[] {
+    return [...this.appointments];
+  }
+
+  public setAppointments(newAppointments: Appointment[]): void {
+    this.appointments = newAppointments;
+    this.notifyAppointmentsSubscribers();
+  }
+
+  public subscribeAppointments(callback: (appointments: Appointment[]) => void): () => void {
+    this.subscribers.appointments.push(callback);
+    callback(this.appointments);
+    return () => {
+      this.subscribers.appointments = this.subscribers.appointments.filter((sub) => sub !== callback);
+    };
+  }
+
+  private notifyAppointmentsSubscribers(): void {
+    this.subscribers.appointments.forEach((callback) => callback(this.appointments));
+  }
+
+  public getAppointmentById(id: string): Appointment | undefined {
+    return this.appointments.find((appointment) => appointment.id === id);
+  }
+
+  // Prescriptions
+  public getPrescriptions(): Prescription[] {
+    return [...this.prescriptions];
+  }
+
+  public setPrescriptions(newPrescriptions: Prescription[]): void {
+    this.prescriptions = newPrescriptions;
+    this.notifyPrescriptionsSubscribers();
+  }
+
+  public subscribePrescriptions(callback: (prescriptions: Prescription[]) => void): () => void {
+    this.subscribers.prescriptions.push(callback);
+    callback(this.prescriptions);
+    return () => {
+      this.subscribers.prescriptions = this.subscribers.prescriptions.filter((sub) => sub !== callback);
+    };
+  }
+
+  private notifyPrescriptionsSubscribers(): void {
+    this.subscribers.prescriptions.forEach((callback) => callback(this.prescriptions));
+  }
+
+  public getPrescriptionById(id: string): Prescription | undefined {
+    return this.prescriptions.find((prescription) => prescription.id === id);
+  }
+
+  // Medical Records
+  public getMedicalRecords(): MedicalRecord[] {
+    return [...this.medicalRecords];
+  }
+
+  public setMedicalRecords(newRecords: MedicalRecord[]): void {
+    this.medicalRecords = newRecords;
+    this.notifyMedicalRecordsSubscribers();
+  }
+
+  public subscribeMedicalRecords(callback: (records: MedicalRecord[]) => void): () => void {
+    this.subscribers.medicalRecords.push(callback);
+    callback(this.medicalRecords);
+    return () => {
+      this.subscribers.medicalRecords = this.subscribers.medicalRecords.filter((sub) => sub !== callback);
+    };
+  }
+
+  private notifyMedicalRecordsSubscribers(): void {
+    this.subscribers.medicalRecords.forEach((callback) => callback(this.medicalRecords));
+  }
+
+  public getMedicalRecordById(id: string): MedicalRecord | undefined {
+    return this.medicalRecords.find((record) => record.id === id);
+  }
+
+  private notifySubscribers(): void {
+    this.notifyDoctorsSubscribers();
+    this.notifyAppointmentsSubscribers();
+    this.notifyPrescriptionsSubscribers();
+    this.notifyMedicalRecordsSubscribers();
+  }
+}
+
+export const dynamicDataProvider = DynamicDataProvider.getInstance();
+
+export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
+export const getDoctors = () => dynamicDataProvider.getDoctors();
+export const getDoctorById = (id: string) => dynamicDataProvider.getDoctorById(id);
+export const subscribeDoctors = (callback: (doctors: Doctor[]) => void) => dynamicDataProvider.subscribeDoctors(callback);
+export const getAppointments = () => dynamicDataProvider.getAppointments();
+export const getAppointmentById = (id: string) => dynamicDataProvider.getAppointmentById(id);
+export const subscribeAppointments = (callback: (appointments: Appointment[]) => void) => dynamicDataProvider.subscribeAppointments(callback);
+export const getPrescriptions = () => dynamicDataProvider.getPrescriptions();
+export const getPrescriptionById = (id: string) => dynamicDataProvider.getPrescriptionById(id);
+export const subscribePrescriptions = (callback: (prescriptions: Prescription[]) => void) => dynamicDataProvider.subscribePrescriptions(callback);
+export const getMedicalRecords = () => dynamicDataProvider.getMedicalRecords();
+export const getMedicalRecordById = (id: string) => dynamicDataProvider.getMedicalRecordById(id);
+export const subscribeMedicalRecords = (callback: (records: MedicalRecord[]) => void) => dynamicDataProvider.subscribeMedicalRecords(callback);
+export const whenReady = () => dynamicDataProvider.whenReady();

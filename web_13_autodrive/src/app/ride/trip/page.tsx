@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import GlobalHeader from "@/components/GlobalHeader";
@@ -8,7 +8,13 @@ import DynamicLayout from "../../../components/DynamicLayout";
 import SiteElements from "../../../components/SiteElements";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
-const PLACES = [
+import { getPlaces, subscribePlaces, getRides, subscribeRides, whenReady } from "@/dynamic/v2";
+import type { Place } from "@/data/places-enhanced";
+import type { Ride } from "@/data/rides-enhanced";
+import { useSeed } from "@/context/SeedContext";
+
+// Fallback places (used during SSR or before data loads)
+const FALLBACK_PLACES: Place[] = [
     {
         "label": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
         "main": "1 Hotel San Francisco",
@@ -180,6 +186,59 @@ function PlaceSelect({
   const ref = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [inputWidth, setInputWidth] = useState<number | null>(null);
+  const { seed } = useSeed();
+  
+  // Get places from data provider (dynamic based on seed)
+  const [places, setPlaces] = useState<Place[]>(() => {
+    try {
+      const dynamicPlaces = getPlaces();
+      return dynamicPlaces.length > 0 ? dynamicPlaces : FALLBACK_PLACES;
+    } catch (error) {
+      console.warn("[PlaceSelect] Failed to get places, using fallback:", error);
+      return FALLBACK_PLACES;
+    }
+  });
+
+  // Subscribe to places changes when seed changes
+  useEffect(() => {
+    // Update places when seed changes
+    const updatePlaces = () => {
+      try {
+        const dynamicPlaces = getPlaces();
+        if (dynamicPlaces.length > 0) {
+          setPlaces(dynamicPlaces);
+        }
+      } catch (error) {
+        console.warn("[PlaceSelect] Failed to update places:", error);
+      }
+    };
+
+    // Subscribe to places changes
+    const unsubscribe = subscribePlaces((newPlaces) => {
+      if (newPlaces.length > 0) {
+        setPlaces(newPlaces);
+      }
+    });
+
+    // Also listen to seed change events
+    const handleSeedChange = () => {
+      updatePlaces();
+    };
+    
+    if (typeof window !== "undefined") {
+      window.addEventListener("autodrive:v2SeedChange", handleSeedChange);
+    }
+
+    // Initial update
+    updatePlaces();
+
+    return () => {
+      unsubscribe();
+      if (typeof window !== "undefined") {
+        window.removeEventListener("autodrive:v2SeedChange", handleSeedChange);
+      }
+    };
+  }, [seed]);
 
   useEffect(() => {
     function handle(e: MouseEvent) {
@@ -268,7 +327,7 @@ function PlaceSelect({
               e.preventDefault();
               
               // Check if there's an exact match
-              const exactMatch = PLACES.find(option => 
+              const exactMatch = places.find(option => 
                 option.label.toLowerCase() === searchValue.toLowerCase()
               );
               
@@ -355,7 +414,7 @@ function PlaceSelect({
                   ? EVENT_TYPES.SEARCH_LOCATION 
                   : EVENT_TYPES.SEARCH_DESTINATION;
                 
-                const matchedResults = PLACES.filter((option) => 
+                const matchedResults = places.filter((option) => 
                   option.label.toLowerCase().includes(newValue.toLowerCase()) ||
                   option.main.toLowerCase().includes(newValue.toLowerCase()) ||
                   option.sub.toLowerCase().includes(newValue.toLowerCase())
@@ -450,7 +509,7 @@ function PlaceSelect({
           }}
         >
 {(() => {
-            const filteredOptions = PLACES.filter((option) => {
+            const filteredOptions = places.filter((option) => {
               if (!isTyping || !searchValue.trim()) {
                 return true; // Show all options when not typing or search is empty
               }
@@ -739,9 +798,11 @@ export default function RideTripPage() {
   const [showRides, setShowRides] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedRideIdx, setSelectedRideIdx] = useState<number | null>(null);
-  const [rides, setRides] = useState(() =>
-    generateSeededRides(v2Seed ?? 1)
-  );
+  const [selectedRide, setSelectedRide] = useState<Ride | null>(null);
+  const [rides, setRides] = useState<Ride[]>(() => {
+    // Start with fallback, will be updated when data loads
+    return generateSeededRides(v2Seed ?? 1);
+  });
   const [stats, setStats] = useState({
     totalTrips: 0,
     activeRiders: 0,
@@ -749,8 +810,78 @@ export default function RideTripPage() {
   });
 
   useEffect(() => {
-    setRides(generateSeededRides(v2Seed ?? 1));
-    setSelectedRideIdx(null);
+    let isMounted = true;
+    let unsubscribe: (() => void) | null = null;
+    let handleSeedChange: (() => void) | null = null;
+
+    // Wait for data provider to be ready, then subscribe
+    const setupRides = async () => {
+      try {
+        // Wait for data provider to finish loading
+        await whenReady();
+        
+        if (!isMounted) return;
+
+        // Get initial rides after data is ready
+        const initialRides = getRides();
+        if (initialRides.length > 0) {
+          setRides(initialRides);
+          setSelectedRideIdx(null);
+        }
+
+        // Subscribe to rides changes
+        unsubscribe = subscribeRides((newRides) => {
+          if (!isMounted) return;
+          // Always update when subscription fires, even if empty (to clear old data)
+          setRides(newRides.length > 0 ? newRides : generateSeededRides(v2Seed ?? 1));
+          setSelectedRideIdx(null);
+          setSelectedRide(null);
+        });
+
+        // Also listen to seed change events
+        handleSeedChange = () => {
+          if (!isMounted) return;
+          // Use setTimeout to handle async operation
+          setTimeout(async () => {
+            if (!isMounted) return;
+            try {
+              // Wait a bit for data to reload
+              await new Promise(resolve => setTimeout(resolve, 100));
+              const dynamicRides = getRides();
+              if (dynamicRides.length > 0) {
+                setRides(dynamicRides);
+                setSelectedRideIdx(null);
+                setSelectedRide(null);
+              }
+            } catch (error) {
+              console.warn("[RideTripPage] Failed to update rides:", error);
+            }
+          }, 0);
+        };
+        
+        if (typeof window !== "undefined" && handleSeedChange) {
+          window.addEventListener("autodrive:v2SeedChange", handleSeedChange);
+        }
+      } catch (error) {
+        console.warn("[RideTripPage] Failed to setup rides:", error);
+        // Fallback to generated rides
+        if (isMounted) {
+          setRides(generateSeededRides(v2Seed ?? 1));
+        }
+      }
+    };
+
+    setupRides();
+    
+    return () => {
+      isMounted = false;
+      if (unsubscribe) {
+        unsubscribe();
+      }
+      if (typeof window !== "undefined" && handleSeedChange) {
+        window.removeEventListener("autodrive:v2SeedChange", handleSeedChange);
+      }
+    };
   }, [v2Seed]);
 
   useEffect(() => {
@@ -1036,6 +1167,7 @@ export default function RideTripPage() {
                 key={ride.name}
                 onClick={() => {
               setSelectedRideIdx(idx);
+              setSelectedRide(ride); // Store the complete ride object
               // 🔹 log the SELECT_CAR event
               logEvent(EVENT_TYPES.SELECT_CAR, {
                 rideId: idx,
@@ -1199,36 +1331,39 @@ export default function RideTripPage() {
               }`}
               disabled={selectedRideIdx === null}
               onClick={() => {
-                if (selectedRideIdx !== null) {
-                  const selectedRide = rides[selectedRideIdx];
+                // Use the stored selectedRide if available, otherwise fallback to getting from array
+                const rideToReserve = selectedRide || (selectedRideIdx !== null ? rides[selectedRideIdx] : null);
+                if (rideToReserve && selectedRideIdx !== null) {
                   // 🔹 log the RESERVE_RIDE event
                   const reserveRideEventData = {
                     rideId: selectedRideIdx,
-                    rideName: selectedRide.name,
-                    rideType: selectedRide.name,
-                    price: selectedRide.price,
-                    oldPrice: selectedRide.oldPrice,
-                    seats: selectedRide.seats,
-                    eta: selectedRide.eta,
+                    rideName: rideToReserve.name,
+                    rideType: rideToReserve.name,
+                    image: rideToReserve.image,
+                    icon: rideToReserve.icon,
+                    price: rideToReserve.price,
+                    oldPrice: rideToReserve.oldPrice,
+                    seats: rideToReserve.seats,
+                    eta: rideToReserve.eta,
                     pickup,
                     dropoff,
                     scheduled: pickupScheduled
                       ? `${pickupScheduled.date} ${pickupScheduled.time}`
                       : "now",
                     timestamp: new Date().toISOString(),
-                    priceDifference: selectedRide.oldPrice - selectedRide.price,
-                    discountPercentage: ((selectedRide.oldPrice - selectedRide.price) / selectedRide.oldPrice * 100).toFixed(2),
-                    isRecommended: selectedRide.recommended || false,
+                    priceDifference: rideToReserve.oldPrice - rideToReserve.price,
+                    discountPercentage: ((rideToReserve.oldPrice - rideToReserve.price) / rideToReserve.oldPrice * 100).toFixed(2),
+                    isRecommended: rideToReserve.recommended || false,
                     tripDetails: {
                       pickup,
                       dropoff,
                       scheduled: pickupScheduled
                         ? `${pickupScheduled.date} ${pickupScheduled.time}`
                         : "now",
-                      rideType: selectedRide.name,
-                      price: selectedRide.price,
-                      totalSeats: selectedRide.seats,
-                      estimatedArrival: selectedRide.eta
+                      rideType: rideToReserve.name,
+                      price: rideToReserve.price,
+                      totalSeats: rideToReserve.seats,
+                      estimatedArrival: rideToReserve.eta
                     },
                   };
                   

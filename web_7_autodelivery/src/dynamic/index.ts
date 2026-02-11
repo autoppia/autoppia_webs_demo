@@ -7,7 +7,7 @@
  */
 
 // V2: Data loading
-export * from "./v2-data";
+export * from "./v2";
 
 // V1, V3 y Shared (incluye useDynamic hook)
 export * from "./v1";

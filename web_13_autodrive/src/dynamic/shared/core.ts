@@ -9,9 +9,11 @@
 import { useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
 import { applyV1Wrapper } from "../v1/add-wrap-decoy";
-import { isV3Enabled } from "./flags";
+import { isV3Enabled, isV2AiGenerateEnabled } from "./flags";
 import { getVariant, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "../v3/utils/variant-selector";
 import { generateDynamicOrder } from "../v1/change-order-elements";
+import { dynamicDataProvider } from "../v2/data-provider";
+import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import type { ReactNode } from "react";
 
 // ============================================================================
@@ -66,16 +68,18 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
 // ============================================================================
 
 /**
- * Centralized hook that unifies V1 (wrappers/decoy) and V3 (attributes/text)
+ * Centralized hook that unifies V1 (wrappers/decoy), V2 (data loading), and V3 (attributes/text)
  * 
  * Usage:
  *   const dyn = useDynamicSystem();
  *   dyn.v1.addWrapDecoy()         // V1: Adds wrappers and decoys
  *   dyn.v1.changeOrderElements()  // V1: Changes element order
+ *   dyn.v2.whenReady()            // V2: Wait for data to be ready
  *   dyn.v3.getVariant()           // V3: Gets variants (IDs, classes, texts)
  * 
- * It behaves the same even if V1/V3 are OFF:
+ * It behaves the same even if V1/V2/V3 are OFF:
  * - If V1 is OFF: dyn.v1.addWrapDecoy() returns children unchanged
+ * - If V2 is OFF: dyn.v2.whenReady() resolves immediately
  * - If V3 is OFF: dyn.getVariant() returns the fallback or key
  * 
  * The seed is read automatically from SeedContext (which reads it from the URL).
@@ -117,6 +121,38 @@ export function useDynamicSystem() {
        */
       changeOrderElements: (key: string, count: number) => 
         generateDynamicOrder(seed, key, count),
+    },
+    
+    /**
+     * V2: Data loading
+     * Provides access to dynamic data provider
+     */
+    v2: {
+      /**
+       * Wait for data to be ready
+       * @returns Promise that resolves when data is loaded
+       */
+      whenReady: () => dynamicDataProvider.whenReady(),
+      
+      /**
+       * Check if DB mode is enabled
+       */
+      isDbModeEnabled: () => isDbLoadModeEnabled(),
+      
+      /**
+       * Check if AI generation mode is enabled
+       */
+      isAiGenerateEnabled: () => isV2AiGenerateEnabled(),
+      
+      /**
+       * Check if fallback mode is active
+       */
+      isFallbackMode: () => !isDbLoadModeEnabled() && !isV2AiGenerateEnabled(),
+      
+      /**
+       * Check if V2 is enabled (any mode)
+       */
+      isEnabled: () => isDbLoadModeEnabled() || isV2AiGenerateEnabled(),
     },
     
     /**

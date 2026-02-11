@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Avatar from "@/components/Avatar";
 import UserSearchBar from "./UserSearchBar";
 import { useSeed } from "@/context/SeedContext";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import type { User } from "@/library/dataset";
 import Link from "next/link";
 import { EVENT_TYPES, logEvent } from "@/library/events";

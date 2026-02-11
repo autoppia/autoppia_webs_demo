@@ -1,62 +1,73 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import Image from "next/image";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
+
+// Move variant objects outside component to avoid recreation
+const localIdVariants: Record<string, string[]> = {
+  "search-input": ["search-input", "user-search", "people-search"],
+  "search-results": ["search-results", "user-results", "results-panel"],
+};
+
+const localClassVariants: Record<string, string[]> = {
+  "search-input": [
+    "w-full rounded-full border border-gray-300 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50",
+    "w-full rounded-full border border-gray-200 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white",
+    "w-full rounded-full border border-gray-300 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-100",
+  ],
+  "search-result-item": [
+    "flex items-center gap-3 w-full px-2 py-2 hover:bg-blue-50 rounded text-left",
+    "flex items-center gap-3 w-full px-2 py-2 hover:bg-gray-50 rounded text-left",
+    "flex items-center gap-3 w-full px-2 py-2 hover:bg-indigo-50 rounded text-left",
+  ],
+};
+
+const localTextVariants: Record<string, string[]> = {
+  "search_placeholder": [
+    "Search users",
+    "Find people",
+    "Look up professionals",
+  ],
+  "search_result_name": ["Name", "Full name", "Profile name"],
+  "search_result_title": ["Title", "Role", "Position"],
+};
 
 export default function UserSearchBar() {
   const [q, setQ] = useState("");
   const [focus, setFocus] = useState(false);
   const dyn = useDynamicSystem();
-  const matches = q.length === 0 ? [] : dynamicDataProvider.searchUsers(q);
   const router = useSeedRouter();
-
-  const localIdVariants: Record<string, string[]> = {
-    "search-input": ["search-input", "user-search", "people-search"],
-    "search-results": ["search-results", "user-results", "results-panel"],
-  };
-
-  const localClassVariants: Record<string, string[]> = {
-    "search-input": [
-      "w-full rounded-full border border-gray-300 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50",
-      "w-full rounded-full border border-gray-200 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white",
-      "w-full rounded-full border border-gray-300 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-100",
-    ],
-    "search-result-item": [
-      "flex items-center gap-3 w-full px-2 py-2 hover:bg-blue-50 rounded text-left",
-      "flex items-center gap-3 w-full px-2 py-2 hover:bg-gray-50 rounded text-left",
-      "flex items-center gap-3 w-full px-2 py-2 hover:bg-indigo-50 rounded text-left",
-    ],
-  };
-
-  const localTextVariants: Record<string, string[]> = {
-    "search_placeholder": [
-      "Search users",
-      "Find people",
-      "Look up professionals",
-    ],
-    "search_result_name": ["Name", "Full name", "Profile name"],
-    "search_result_title": ["Title", "Role", "Position"],
-  };
-
-  const withClass = (key: string, base: string) =>
-    cn(base, dyn.v3.getVariant(key, CLASS_VARIANTS_MAP, ""), dyn.v3.getVariant(key, localClassVariants, ""));
+  
+  // Memoize dyn.v3 to avoid reference changes
+  const dynV3 = useMemo(() => dyn.v3, [dyn.seed]);
+  
+  // Memoize matches to avoid recalculation
+  const matches = useMemo(() => {
+    if (q.length === 0) return [];
+    return dynamicDataProvider.searchUsers(q);
+  }, [q]);
+  
+  // Memoize withClass function to avoid recreation
+  const withClass = useCallback((key: string, base: string) => {
+    return cn(base, dynV3.getVariant(key, CLASS_VARIANTS_MAP, ""), dynV3.getVariant(key, localClassVariants, ""));
+  }, [dynV3]);
 
   return (
     <div className="relative flex-1 max-w-lg">
       <input
-        id={dyn.v3.getVariant("search-input", localIdVariants, "search-input")}
+        id={dynV3.getVariant("search-input", localIdVariants, "search-input")}
         type="text"
-        aria-label={dyn.v3.getVariant("search_placeholder", localTextVariants, "Search users")}
+        aria-label={dynV3.getVariant("search_placeholder", localTextVariants, "Search users")}
         className={withClass(
           "search-input",
           "w-full rounded-full border border-gray-300 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
         )}
-        placeholder={dyn.v3.getVariant("search_placeholder", localTextVariants, "Search users")}
+        placeholder={dynV3.getVariant("search_placeholder", localTextVariants, "Search users")}
         value={q}
         onChange={(e) => {
           const val = e.target.value;
@@ -84,13 +95,13 @@ export default function UserSearchBar() {
       {/* Results Dropdown */}
       {focus && q.trim().length >= 2 && matches.length > 0 && (
         <div
-          id={dyn.v3.getVariant("search-results", localIdVariants, "search-results")}
+          id={dynV3.getVariant("search-results", localIdVariants, "search-results")}
           className="absolute left-0 top-12 w-full bg-white border z-30 rounded-lg shadow p-2"
         >
           {matches.map((u, idx) => (
             <div key={u.username}>
               <button
-                id={dyn.v3.getVariant(
+                id={dynV3.getVariant(
                   `search_result_item_${idx}`,
                   localIdVariants,
                   `search_result_item_${idx}`

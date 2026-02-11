@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { initializePrescriptions } from "@/data/prescriptions-enhanced";
+import { getPrescriptions, subscribePrescriptions, whenReady } from "@/dynamic/v2";
 import type { Prescription } from "@/data/types";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -70,10 +70,38 @@ export default function PrescriptionsPage() {
 
   useEffect(() => {
     let mounted = true;
-    initializePrescriptions()
-      .then((data) => { if (mounted) setPrescriptionList(data); })
-      .finally(() => { if (mounted) setIsLoading(false); });
-    return () => { mounted = false; };
+    let unsubscribe: (() => void) | null = null;
+    
+    const loadPrescriptions = async () => {
+      try {
+        await whenReady();
+        if (!mounted) return;
+        
+        // Get initial data
+        const prescriptions = getPrescriptions();
+        if (mounted) {
+          setPrescriptionList(prescriptions);
+          setIsLoading(false);
+        }
+        
+        // Subscribe to updates
+        unsubscribe = subscribePrescriptions((prescriptions) => {
+          if (mounted) {
+            setPrescriptionList(prescriptions);
+          }
+        });
+      } catch (error) {
+        console.error("[PrescriptionsPage] Failed to load prescriptions:", error);
+        if (mounted) setIsLoading(false);
+      }
+    };
+    
+    loadPrescriptions();
+    
+    return () => {
+      mounted = false;
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   // Normalize status for comparison (API/dataset may use "Refill Needed" or "refill_needed")

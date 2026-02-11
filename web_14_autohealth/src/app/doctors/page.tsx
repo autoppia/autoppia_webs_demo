@@ -2,7 +2,7 @@
 
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useEffect, useState, useMemo } from "react";
-import { initializeDoctors } from "@/data/doctors-enhanced";
+import { getDoctors, subscribeDoctors, whenReady } from "@/dynamic/v2";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import type { Doctor } from "@/data/types";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -84,12 +84,40 @@ export default function DoctorsPage() {
 
   useEffect(() => {
     let mounted = true;
-    initializeDoctors()
-      .then((data) => { if (mounted) setDoctorList(data); })
-      .finally(() => { if (mounted) setIsLoading(false); });
-    return () => { mounted = false; };
+    let unsubscribe: (() => void) | null = null;
+
+    const loadDoctors = async () => {
+      try {
+        await whenReady();
+        if (!mounted) return;
+
+        // Get initial data
+        const doctors = getDoctors();
+        if (mounted) {
+          setDoctorList(doctors);
+          setIsLoading(false);
+        }
+
+        // Subscribe to updates
+        unsubscribe = subscribeDoctors((doctors) => {
+          if (mounted) {
+            setDoctorList(doctors);
+          }
+        });
+      } catch (error) {
+        console.error("[DoctorsPage] Failed to load doctors:", error);
+        if (mounted) setIsLoading(false);
+      }
+    };
+
+    loadDoctors();
+
+    return () => {
+      mounted = false;
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
-  
+
   // Unique languages from doctor list for filter dropdown
   const availableLanguages = useMemo(() => {
     const set = new Set<string>();
@@ -164,7 +192,7 @@ export default function DoctorsPage() {
   return (
     <>
       {/* Hero Section with Filters */}
-      <section 
+      <section
         className="relative min-h-[280px] flex items-center justify-center bg-cover bg-no-repeat"
         style={{
           backgroundImage: "url('/images/doctors.jpg')",
@@ -173,14 +201,14 @@ export default function DoctorsPage() {
       >
         {/* Dark overlay for better readability */}
         <div className="absolute inset-0 bg-black/60" />
-        
+
         {/* Content */}
         <div className="relative z-10 container mx-auto px-4 py-6">
           <div className="max-w-6xl mx-auto">
             {dyn.v1.addWrapDecoy("doctors-page-header", (
               <h1 className="text-2xl md:text-3xl font-bold text-white mb-4 text-center">Doctors</h1>
             ))}
-            
+
             {/* Search and Filter Section: Name, Speciality, Language only */}
             <div className="p-4 md:p-6">
               <div className="grid gap-4 md:grid-cols-[1fr_1fr_1fr_auto] items-end">
@@ -283,90 +311,102 @@ export default function DoctorsPage() {
 
       {/* Doctors Grid + Sort by Rating / Price */}
       <div className="container py-10">
-      <div className="flex flex-wrap items-center gap-4 mb-4">
-        <span className="text-sm font-medium text-muted-foreground">Sort by</span>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy((e.target.value || "") as "rating" | "price" | "")}
-          className={cn(
-            "flex h-9 min-w-[120px] rounded-md border border-input bg-background px-3 py-1 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-            dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "")
-          )}
-          data-testid="doctors-sort-by"
-        >
-          <option value="">Default</option>
-          <option value="rating">Rating</option>
-          <option value="price">Price</option>
-        </select>
-        {sortBy && (
+        <div className="flex flex-wrap items-center gap-4 mb-4">
+          <span className="text-sm font-medium text-muted-foreground">Sort by</span>
           <select
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
+            value={sortBy}
+            onChange={(e) => setSortBy((e.target.value || "") as "rating" | "price" | "")}
             className={cn(
-              "flex h-9 min-w-[100px] rounded-md border border-input bg-background px-3 py-1 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              "flex h-9 min-w-[120px] rounded-md border border-input bg-background px-3 py-1 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "")
             )}
-            data-testid="doctors-sort-order"
+            data-testid="doctors-sort-by"
           >
-            <option value="desc">{sortBy === "rating" ? "Highest first" : "Highest first"}</option>
-            <option value="asc">{sortBy === "rating" ? "Lowest first" : "Lowest first"}</option>
+            <option value="">Default</option>
+            <option value="rating">Rating</option>
+            <option value="price">Price</option>
           </select>
-        )}
-      </div>
-      <Pagination
-        totalItems={totalDoctors}
-        currentPage={currentPage}
-        onPageChange={setCurrentPage}
-        itemsPerPage={DOCTORS_PAGE_SIZE}
-        data-testid="doctors-pagination"
-      />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-4">
-        {paginatedDoctors.map((d, i) => (
-          dyn.v1.addWrapDecoy(`doctor-card-${i}`, (
-            <Card key={d.id} className={cn("flex flex-col w-full", dyn.v3.getVariant("doctor-card", CLASS_VARIANTS_MAP, ""))}>
-              <CardHeader className="flex-row items-center gap-4">
-                <Avatar 
-                  src={`/images/doctors/${d.id}.jpg`}
-                  alt={`${d.name} profile photo`}
-                  name={d.name}
-                  data-testid={`doctor-avatar-${d.id}`}
-                  data-agent-id={`doctor-profile-image-${d.id}`}
-                />
-                <div>
-                  <CardTitle className="text-lg">{d.name}</CardTitle>
-                  <div className="text-sm text-muted-foreground">{d.specialty}</div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <Stars value={d.rating} />
-                <p className="mt-3 text-sm text-muted-foreground">{d.bio}</p>
-              </CardContent>
-              <CardFooter className="mt-auto flex items-center justify-end pt-2">
-                <SeedLink href={`/doctors/${d.id}`}>
-                  {dyn.v1.addWrapDecoy(`view-profile-button-${i}`, (
-                    <Button
-                      id={dyn.v3.getVariant("view-profile-button", ID_VARIANTS_MAP, `view-profile-button-${i}`)}
-                      className={cn("bg-green-600 hover:bg-green-700 text-white", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
-                      data-testid="view-doctor-profile-btn"
-                      onClick={() => logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, { doctor: d })}
-                    >
-                      {dyn.v3.getVariant("view_profile", TEXT_VARIANTS_MAP, "View Profile")}
-                    </Button>
-                  ))}
-                </SeedLink>
-              </CardFooter>
-            </Card>
-          ), `doctor-card-${i}`)
-        ))}
-      </div>
-      <Pagination
-        totalItems={totalDoctors}
-        currentPage={currentPage}
-        onPageChange={setCurrentPage}
-        itemsPerPage={DOCTORS_PAGE_SIZE}
-        className="mt-6"
-        data-testid="doctors-pagination-bottom"
-      />
+          {sortBy && (
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
+              className={cn(
+                "flex h-9 min-w-[100px] rounded-md border border-input bg-background px-3 py-1 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "")
+              )}
+              data-testid="doctors-sort-order"
+            >
+              <option value="desc">{sortBy === "rating" ? "Highest first" : "Highest first"}</option>
+              <option value="asc">{sortBy === "rating" ? "Lowest first" : "Lowest first"}</option>
+            </select>
+          )}
+        </div>
+        <Pagination
+          totalItems={totalDoctors}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          itemsPerPage={DOCTORS_PAGE_SIZE}
+          data-testid="doctors-pagination"
+        />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-4">
+          {paginatedDoctors.map((d, i) => (
+            dyn.v1.addWrapDecoy(`doctor-card-${i}`, (
+              <Card key={d.id} className={cn("flex flex-col w-full", dyn.v3.getVariant("doctor-card", CLASS_VARIANTS_MAP, ""))}>
+                <CardHeader className="flex-row items-center gap-4">
+                  <Avatar
+                    src={`/images/doctors/${d.id}.jpg`}
+                    alt={`${d.name} profile photo`}
+                    name={d.name}
+                    data-testid={`doctor-avatar-${d.id}`}
+                    data-agent-id={`doctor-profile-image-${d.id}`}
+                  />
+                  <div>
+                    <CardTitle className="text-lg">{d.name}</CardTitle>
+                    <div className="text-sm text-muted-foreground">{d.specialty}</div>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <Stars value={d.rating} />
+                  <p className="mt-3 text-sm text-muted-foreground">{d.bio}</p>
+                </CardContent>
+                <CardFooter className="mt-auto flex items-center justify-end pt-2">
+                  <SeedLink href={`/doctors/${d.id}`}>
+                    {dyn.v1.addWrapDecoy(`view-profile-button-${i}`, (
+                      <Button
+                        id={dyn.v3.getVariant("view-profile-button", ID_VARIANTS_MAP, `view-profile-button-${i}`)}
+                        className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+                        variant="outline"
+                        onClick={() => {
+                          // Store index and seed in sessionStorage for fallback lookup
+                          if (typeof window !== 'undefined') {
+                            const indexData = JSON.stringify({ index: i, seed: dyn.seed });
+                            sessionStorage.setItem(`__autohealth_doctor_index_${d.id}`, indexData);
+                          }
+                          logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
+                            doctorId: d.id,
+                            doctorName: d.name,
+                            specialty: d.specialty,
+                            rating: d.rating
+                          });
+                        }}
+                      >
+                        {dyn.v3.getVariant("view_profile", TEXT_VARIANTS_MAP, "View Profile")}
+                      </Button>
+                    ))}
+                  </SeedLink>
+                </CardFooter>
+              </Card>
+            ), `doctor-card-${i}`)
+          ))}
+        </div>
+        <Pagination
+          totalItems={totalDoctors}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          itemsPerPage={DOCTORS_PAGE_SIZE}
+          className="mt-6"
+          data-testid="doctors-pagination-bottom"
+        />
       </div>
     </>
   );

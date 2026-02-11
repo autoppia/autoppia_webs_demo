@@ -3,7 +3,7 @@ import { useState, useMemo, useEffect } from "react";
 import JobCard from "@/components/JobCard";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import type { Job } from "@/library/dataset";
 import {
@@ -99,7 +99,8 @@ function JobsContent() {
 
       if (currentFilters.salary && job.salary) {
         const salaryRange = currentFilters.salary;
-        const jobSalary = job.salary.replace(/[$,]/g, "");
+        // Ensure job.salary is a string before calling replace
+        const jobSalary = String(job.salary).replace(/[$,]/g, "");
         const salaryMatch = jobSalary.match(/(\d+)/g);
 
         if (salaryMatch && salaryMatch.length >= 2) {

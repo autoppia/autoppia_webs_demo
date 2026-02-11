@@ -12,7 +12,7 @@ import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { logEvent, EVENT_TYPES } from "@/events";
 import { Suspense } from "react";
-import { getProductById } from "@/dynamic/v2-data";
+import { getProductById } from "@/dynamic/v2";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useSeed } from "@/context/SeedContext";
 import {
@@ -59,6 +59,18 @@ function ProductContent() {
 
   const t = (key: string, fallback: string) =>
     dyn.v3.getVariant(key, TEXT_VARIANTS_MAP, fallback);
+  
+  // Debug: Verify V2 status
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[productId/page] V2 status:", {
+        v2Enabled: dyn.v2.isEnabled(),
+        v2DbMode: dyn.v2.isDbModeEnabled(),
+        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2Fallback: dyn.v2.isFallbackMode(),
+      });
+    }
+  }, [dyn.v2]);
   
   useEffect(() => {
     // Set delivery date on client side to avoid hydration mismatch

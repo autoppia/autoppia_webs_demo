@@ -29,7 +29,7 @@ function AppointmentsPageContent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDoctors, setIsLoadingDoctors] = useState(true);
-  
+
   // Filter input state (what user types/selects)
   const [selectedDoctorId, setSelectedDoctorId] = useState<string>("");
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>("");
@@ -46,7 +46,7 @@ function AppointmentsPageContent() {
   const [showDoctorSuggestions, setShowDoctorSuggestions] = useState(false);
   const doctorInputRef = useRef<HTMLInputElement>(null);
   const doctorSuggestionsRef = useRef<HTMLDivElement>(null);
-  
+
   // Autocomplete states for specialties
   const [specialtySearchText, setSpecialtySearchText] = useState<string>("");
   const [filteredSpecialties, setFilteredSpecialties] = useState<string[]>([]);
@@ -117,16 +117,35 @@ function AppointmentsPageContent() {
 
   useEffect(() => {
     let mounted = true;
-    initializeAppointments()
-      .then((data) => { if (mounted) setAppointmentList(data); })
-      .finally(() => { if (mounted) setIsLoading(false); });
-    return () => { mounted = false; };
+    let unsubscribe: (() => void) | null = null;
+
+    const loadAppointments = async () => {
+      try {
+        if (!mounted) return;
+
+        // Get initial data
+        const appointments = await initializeAppointments();
+        if (mounted) {
+          setAppointmentList(appointments);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error("[AppointmentsPage] Failed to load appointments:", error);
+        if (mounted) setIsLoading(false);
+      }
+    };
+
+    loadAppointments();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   useEffect(() => {
     let mounted = true;
     initializeDoctors()
-      .then((data) => { 
+      .then((data) => {
         if (mounted) {
           setDoctorList(data);
           setFilteredDoctors(data);
@@ -153,7 +172,7 @@ function AppointmentsPageContent() {
       ) {
         setShowDoctorSuggestions(false);
       }
-      
+
       // Specialty suggestions
       if (
         specialtySuggestionsRef.current &&
@@ -286,14 +305,14 @@ function AppointmentsPageContent() {
   // Handle doctor search input
   const handleDoctorSearchChange = (value: string) => {
     setDoctorSearchText(value);
-    
+
     if (!value.trim()) {
       setFilteredDoctors(doctorList);
       setShowDoctorSuggestions(false);
       setSelectedDoctorId("");
       return;
     }
-    
+
     const searchTerm = value.toLowerCase();
     const filtered = doctorList.filter(doctor =>
       doctor.name.toLowerCase().includes(searchTerm) ||
@@ -301,7 +320,7 @@ function AppointmentsPageContent() {
     );
     setFilteredDoctors(filtered);
     setShowDoctorSuggestions(filtered.length > 0);
-    
+
     // If exact match found, select it
     const exactMatch = doctorList.find(doctor =>
       doctor.name.toLowerCase() === searchTerm ||
@@ -323,18 +342,18 @@ function AppointmentsPageContent() {
   // Handle specialty search input
   const handleSpecialtySearchChange = (value: string) => {
     setSpecialtySearchText(value);
-    
+
     if (!value.trim()) {
       setFilteredSpecialties([...MEDICAL_SPECIALTIES].sort());
       setShowSpecialtySuggestions(false);
       setSelectedSpecialty("");
       return;
     }
-    
+
     const filtered = filterSpecialties(value);
     setFilteredSpecialties(filtered);
     setShowSpecialtySuggestions(filtered.length > 0);
-    
+
     // If exact match found, select it
     const exactMatch = MEDICAL_SPECIALTIES.find(specialty =>
       specialty.toLowerCase() === value.toLowerCase()
@@ -374,7 +393,7 @@ function AppointmentsPageContent() {
   return (
     <>
       {/* Hero Section with Filters */}
-      <section 
+      <section
         className="relative min-h-[280px] flex items-center justify-center bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: "url('/images/consulta.jpg')",
@@ -382,18 +401,18 @@ function AppointmentsPageContent() {
       >
         {/* Dark overlay for better readability */}
         <div className="absolute inset-0 bg-black/60" />
-        
+
         {/* Content */}
-              <div className="relative z-10 container mx-auto px-4 py-6">
+        <div className="relative z-10 container mx-auto px-4 py-6">
           <div className="max-w-6xl mx-auto">
             <h1 className="text-2xl md:text-3xl font-bold text-white mb-4 text-center">
               {filteredDoctorLabel
                 ? `Available Appointments - ${filteredDoctorLabel}`
                 : filteredDoctorQueryLabel
                   ? `Available Appointments - ${filteredDoctorQueryLabel}`
-                : appliedSpecialty
-                  ? `Available Appointments - ${appliedSpecialty}`
-                  : "Available Appointments"}
+                  : appliedSpecialty
+                    ? `Available Appointments - ${appliedSpecialty}`
+                    : "Available Appointments"}
             </h1>
 
             {/* Filters */}
@@ -544,69 +563,69 @@ function AppointmentsPageContent() {
 
       {/* Appointments Table */}
       <div className="container py-10">
-      <Pagination
-        totalItems={totalAppointments}
-        currentPage={currentPage}
-        onPageChange={setCurrentPage}
-        itemsPerPage={PAGINATION_PAGE_SIZE}
-        data-testid="appointments-pagination"
-      />
-      <div className="mt-4">
-        {dyn.v1.addWrapDecoy("appointments-table", (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {orderedColumns.map((c, ci) => (
-                  <TableHead key={c.key} className={c.align === 'right' ? 'text-right' : undefined}>
-                    {c.header}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {paginatedRows.map((a, ri) => (
-                <TableRow key={a.id}>
-                  {orderedColumns.map((c) => {
-                    if (c.key === 'doctor') return <TableCell key={c.key}>{a.doctorName}</TableCell>;
-                    if (c.key === 'specialty') return <TableCell key={c.key}>{a.specialty}</TableCell>;
-                    if (c.key === 'date') return <TableCell key={c.key}>{a.date}</TableCell>;
-                    if (c.key === 'time') return <TableCell key={c.key}>{a.time}</TableCell>;
-                    if (c.key === 'action') return (
-                      <TableCell key={c.key} className="text-right">
-                        {dyn.v1.addWrapDecoy(`book-appointment-button-${ri}`, (
-                          <Button 
-                            id={dyn.v3.getVariant("book-appointment-button", ID_VARIANTS_MAP, `book-appointment-button-${ri}`)}
-                            className={cn("bg-emerald-600 hover:bg-emerald-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
-                            onClick={() => handleBookAppointment(a)}
-                          >
-                            {dyn.v3.getVariant("book_appointment", TEXT_VARIANTS_MAP, "Book Appointment")}
-                          </Button>
-                        ))}
-                      </TableCell>
-                    );
-                    return null;
-                  })}
+        <Pagination
+          totalItems={totalAppointments}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          itemsPerPage={PAGINATION_PAGE_SIZE}
+          data-testid="appointments-pagination"
+        />
+        <div className="mt-4">
+          {dyn.v1.addWrapDecoy("appointments-table", (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  {orderedColumns.map((c, ci) => (
+                    <TableHead key={c.key} className={c.align === 'right' ? 'text-right' : undefined}>
+                      {c.header}
+                    </TableHead>
+                  ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        ), "appointments-table-wrap")}
-      </div>
-      <Pagination
-        totalItems={totalAppointments}
-        currentPage={currentPage}
-        onPageChange={setCurrentPage}
-        itemsPerPage={PAGINATION_PAGE_SIZE}
-        className="mt-6"
-        data-testid="appointments-pagination-bottom"
-      />
+              </TableHeader>
+              <TableBody>
+                {paginatedRows.map((a, ri) => (
+                  <TableRow key={a.id}>
+                    {orderedColumns.map((c) => {
+                      if (c.key === 'doctor') return <TableCell key={c.key}>{a.doctorName}</TableCell>;
+                      if (c.key === 'specialty') return <TableCell key={c.key}>{a.specialty}</TableCell>;
+                      if (c.key === 'date') return <TableCell key={c.key}>{a.date}</TableCell>;
+                      if (c.key === 'time') return <TableCell key={c.key}>{a.time}</TableCell>;
+                      if (c.key === 'action') return (
+                        <TableCell key={c.key} className="text-right">
+                          {dyn.v1.addWrapDecoy(`book-appointment-button-${ri}`, (
+                            <Button
+                              id={dyn.v3.getVariant("book-appointment-button", ID_VARIANTS_MAP, `book-appointment-button-${ri}`)}
+                              className={cn("bg-emerald-600 hover:bg-emerald-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+                              onClick={() => handleBookAppointment(a)}
+                            >
+                              {dyn.v3.getVariant("book_appointment", TEXT_VARIANTS_MAP, "Book Appointment")}
+                            </Button>
+                          ))}
+                        </TableCell>
+                      );
+                      return null;
+                    })}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ), "appointments-table-wrap")}
+        </div>
+        <Pagination
+          totalItems={totalAppointments}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          itemsPerPage={PAGINATION_PAGE_SIZE}
+          className="mt-6"
+          data-testid="appointments-pagination-bottom"
+        />
 
-      <AppointmentBookingModal
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        appointment={selectedAppointment}
-        source={searchParams.get("source") || "appointments_table"} // Use source from query params or default
-      />
+        <AppointmentBookingModal
+          open={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          appointment={selectedAppointment}
+          source={searchParams.get("source") || "appointments_table"} // Use source from query params or default
+        />
       </div>
     </>
   );

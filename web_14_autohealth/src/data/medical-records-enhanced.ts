@@ -3,12 +3,29 @@ import fallbackMedicalRecordsJson from "@/data/original/medical-records_1.json";
 import { isDataGenerationAvailable, generateMedicalRecords } from "@/utils/healthDataGenerator";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { resolveDatasetSeed, waitForDatasetSeed } from "@/utils/v2Seed";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 
 const CACHE_KEY = 'autohealth_medical_records_v1';
 const DOCTORS_CACHE_KEY = 'autohealth_doctors_v1';
 const PROJECT_KEY = 'web_14_autohealth';
 let recordsCache: MedicalRecord[] = [];
 const FALLBACK_MEDICAL_RECORDS: MedicalRecord[] = Array.isArray(fallbackMedicalRecordsJson) ? (fallbackMedicalRecordsJson as MedicalRecord[]) : [];
+
+/**
+ * Get base seed from URL parameter
+ */
+const getBaseSeedFromUrl = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search);
+  const seedParam = params.get("seed");
+  if (seedParam) {
+    const parsed = Number.parseInt(seedParam, 10);
+    if (Number.isFinite(parsed)) {
+      return clampBaseSeed(parsed);
+    }
+  }
+  return null;
+};
 
 async function loadMedicalRecordsFromDataset(v2SeedValue?: number | null): Promise<MedicalRecord[]> {
   await waitForDatasetSeed(v2SeedValue);
@@ -17,7 +34,7 @@ async function loadMedicalRecordsFromDataset(v2SeedValue?: number | null): Promi
     projectKey: PROJECT_KEY,
     entityType: "medical-records",
     seedValue: effectiveSeed,
-    limit: 60,
+    limit: 50,
     method: "distribute",
     filterKey: "type",
   });
@@ -28,13 +45,24 @@ async function loadMedicalRecordsFromDataset(v2SeedValue?: number | null): Promi
 }
 
 export async function initializeMedicalRecords(doctors?: Doctor[], v2SeedValue?: number | null): Promise<MedicalRecord[]> {
-  if (isDbLoadModeEnabled()) {
+  const dbModeEnabled = isDbLoadModeEnabled();
+  const aiGenerateEnabled = isDataGenerationAvailable();
+  
+  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+    console.log("[autohealth] Base seed is 1, using original medical records data (skipping DB/AI modes)");
+    recordsCache = FALLBACK_MEDICAL_RECORDS;
+    return recordsCache;
+  }
+  
+  if (dbModeEnabled) {
     if (recordsCache.length > 0) return recordsCache;
     recordsCache = await loadMedicalRecordsFromDataset(v2SeedValue);
     return recordsCache;
   }
 
-  if (!isDataGenerationAvailable()) {
+  if (!aiGenerateEnabled) {
     recordsCache = FALLBACK_MEDICAL_RECORDS;
     return recordsCache;
   }

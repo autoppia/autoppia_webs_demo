@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { initializeMedicalRecords } from "@/data/medical-records-enhanced";
+import { getMedicalRecords, subscribeMedicalRecords, whenReady } from "@/dynamic/v2";
 import type { MedicalRecord } from "@/data/types";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
@@ -71,10 +71,38 @@ export default function MedicalRecordsPage() {
   }, [dyn.v1]);
   useEffect(() => {
     let mounted = true;
-    initializeMedicalRecords()
-      .then((data) => { if (mounted) setRecordsList(data); })
-      .finally(() => { if (mounted) setIsLoading(false); });
-    return () => { mounted = false; };
+    let unsubscribe: (() => void) | null = null;
+    
+    const loadMedicalRecords = async () => {
+      try {
+        await whenReady();
+        if (!mounted) return;
+        
+        // Get initial data
+        const records = getMedicalRecords();
+        if (mounted) {
+          setRecordsList(records);
+          setIsLoading(false);
+        }
+        
+        // Subscribe to updates
+        unsubscribe = subscribeMedicalRecords((records) => {
+          if (mounted) {
+            setRecordsList(records);
+          }
+        });
+      } catch (error) {
+        console.error("[MedicalRecordsPage] Failed to load medical records:", error);
+        if (mounted) setIsLoading(false);
+      }
+    };
+    
+    loadMedicalRecords();
+    
+    return () => {
+      mounted = false;
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   const handleSearch = () => {

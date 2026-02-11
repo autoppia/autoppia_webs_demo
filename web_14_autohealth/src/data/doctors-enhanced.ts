@@ -3,12 +3,29 @@ import fallbackDoctorsJson from "@/data/original/doctors_1.json";
 import { isDataGenerationAvailable, generateDoctors } from "@/utils/healthDataGenerator";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { resolveDatasetSeed, waitForDatasetSeed } from "@/utils/v2Seed";
-
+import { clampBaseSeed } from "@/shared/seed-resolver";
 
 const CACHE_KEY = 'autohealth_doctors_v2';
 const PROJECT_KEY = 'web_14_autohealth';
 let doctorsCache: Doctor[] = [];
+let lastSeed: number | null = null;
 const FALLBACK_DOCTORS: Doctor[] = Array.isArray(fallbackDoctorsJson) ? (fallbackDoctorsJson as Doctor[]) : [];
+
+/**
+ * Get base seed from URL parameter
+ */
+const getBaseSeedFromUrl = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search);
+  const seedParam = params.get("seed");
+  if (seedParam) {
+    const parsed = Number.parseInt(seedParam, 10);
+    if (Number.isFinite(parsed)) {
+      return clampBaseSeed(parsed);
+    }
+  }
+  return null;
+};
 
 async function loadDoctorsFromDataset(v2SeedValue?: number | null): Promise<Doctor[]> {
   await waitForDatasetSeed(v2SeedValue);
@@ -17,7 +34,7 @@ async function loadDoctorsFromDataset(v2SeedValue?: number | null): Promise<Doct
     projectKey: PROJECT_KEY,
     entityType: "doctors",
     seedValue: effectiveSeed,
-    limit: 40,
+    limit: 50,
     method: "distribute",
     filterKey: "specialty",
   });
@@ -28,13 +45,35 @@ async function loadDoctorsFromDataset(v2SeedValue?: number | null): Promise<Doct
 }
 
 export async function initializeDoctors(v2SeedValue?: number | null): Promise<Doctor[]> {
-  if (isDbLoadModeEnabled()) {
-    if (doctorsCache.length > 0) return doctorsCache;
+  const dbModeEnabled = isDbLoadModeEnabled();
+  const aiGenerateEnabled = isDataGenerationAvailable();
+  
+  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+    console.log("[autohealth] Base seed is 1, using original data (skipping DB/AI modes)");
+    doctorsCache = FALLBACK_DOCTORS;
+    lastSeed = 1;
+    return doctorsCache;
+  }
+  
+  // Clear cache if seed changed
+  const currentSeed = v2SeedValue ?? null;
+  if (lastSeed !== null && currentSeed !== null && lastSeed !== currentSeed) {
+    doctorsCache = [];
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(CACHE_KEY);
+    }
+  }
+  lastSeed = currentSeed;
+
+  if (dbModeEnabled) {
+    if (doctorsCache.length > 0 && lastSeed === currentSeed) return doctorsCache;
     doctorsCache = await loadDoctorsFromDataset(v2SeedValue);
     return doctorsCache;
   }
 
-  if (!isDataGenerationAvailable()) {
+  if (!aiGenerateEnabled) {
     doctorsCache = FALLBACK_DOCTORS;
     return doctorsCache;
   }

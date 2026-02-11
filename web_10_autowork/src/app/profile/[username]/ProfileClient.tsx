@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { useAutoworkData } from "@/hooks/useAutoworkData";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
@@ -33,9 +33,36 @@ export default function ProfileClient({ username }: { username: string }) {
   const router = useSeedRouter();
   const dyn = useDynamicSystem();
   const { getElementAttributes, getText } = useSeedLayout();
-  const jobsState = useAutoworkData<any>("web_10_autowork_jobs", 6);
-  const hiresState = useAutoworkData<any>("web_10_autowork_hires", 6);
-  const expertsState = useAutoworkData<any>("web_10_autowork_experts", 6);
+  
+  // Use V2 dynamic data provider
+  const [jobs, setJobs] = useState<any[]>([]);
+  const [hires, setHires] = useState<any[]>([]);
+  const [experts, setExperts] = useState<any[]>([]);
+  
+  // Subscribe to data changes
+  useEffect(() => {
+    dyn.v2.whenReady().then(() => {
+      setJobs(dynamicDataProvider.getJobs().slice(0, 6));
+      setHires(dynamicDataProvider.getHires().slice(0, 6));
+      setExperts(dynamicDataProvider.getExperts().slice(0, 6));
+    });
+    
+    const unsubscribeJobs = dynamicDataProvider.subscribeJobs((updatedJobs) => {
+      setJobs(updatedJobs.slice(0, 6));
+    });
+    const unsubscribeHires = dynamicDataProvider.subscribeHires((updatedHires) => {
+      setHires(updatedHires.slice(0, 6));
+    });
+    const unsubscribeExperts = dynamicDataProvider.subscribeExperts((updatedExperts) => {
+      setExperts(updatedExperts.slice(0, 6));
+    });
+    
+    return () => {
+      unsubscribeJobs();
+      unsubscribeHires();
+      unsubscribeExperts();
+    };
+  }, [dyn.v2]);
   
   const [userJobs, setUserJobs] = useState<any[]>([]);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
@@ -115,20 +142,20 @@ export default function ProfileClient({ username }: { username: string }) {
 
   // Get favorite experts
   const favoriteExperts = useMemo(() => {
-    return expertsState.data.filter((expert: any) => favorites.has(expert.name));
-  }, [expertsState.data, favorites]);
+    return experts.filter((expert: any) => favorites.has(expert.name));
+  }, [experts, favorites]);
 
   // Combine user jobs with fetched jobs
   const allJobs = useMemo(() => {
-    return [...userJobs, ...jobsState.data];
-  }, [userJobs, jobsState.data]);
+    return [...userJobs, ...jobs];
+  }, [userJobs, jobs]);
 
   // Get stats
   const stats = useMemo(() => {
     const totalJobs = allJobs.length;
     const completedJobs = allJobs.filter((j: any) => j.status === "Completed").length;
     const inProgressJobs = allJobs.filter((j: any) => j.status === "In progress").length;
-    const totalHires = hiresState.data.length;
+    const totalHires = hires.length;
     const favoriteCount = favorites.size;
     
     return {
@@ -138,7 +165,7 @@ export default function ProfileClient({ username }: { username: string }) {
       totalHires,
       favoriteCount,
     };
-  }, [allJobs, hiresState.data, favorites]);
+  }, [allJobs, hires, favorites]);
 
   const handleSaveAbout = () => {
     localStorage.setItem(`profile_about_${username}`, aboutText);

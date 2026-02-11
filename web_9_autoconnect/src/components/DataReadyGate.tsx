@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { dynamicDataProvider } from "@/dynamic/v2";
 
 interface DataReadyGateProps {
   children: React.ReactNode;
@@ -15,19 +15,61 @@ export function DataReadyGate({ children, fallback }: DataReadyGateProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
+    
     const checkDataReady = async () => {
       try {
         await dynamicDataProvider.whenReady();
+        if (!mounted) return;
         setIsReady(true);
         setIsLoading(false);
       } catch (error) {
         console.error('❌ Data loading failed:', error);
+        if (!mounted) return;
         setIsReady(true); // Still render children even if data loading failed
         setIsLoading(false);
       }
     };
 
     checkDataReady();
+    
+    // Subscribe to data updates
+    const unsubscribeUsers = dynamicDataProvider.subscribeUsers(() => {
+      if (!mounted) return;
+      if (dynamicDataProvider.isReady()) {
+        setIsReady(true);
+        setIsLoading(false);
+      }
+    });
+    
+    const unsubscribePosts = dynamicDataProvider.subscribePosts(() => {
+      if (!mounted) return;
+      if (dynamicDataProvider.isReady()) {
+        setIsReady(true);
+        setIsLoading(false);
+      }
+    });
+    
+    // Listen for seed changes
+    const handleSeedChange = () => {
+      if (!mounted) return;
+      setIsLoading(true);
+      setIsReady(false);
+      checkDataReady();
+    };
+    
+    if (typeof window !== "undefined") {
+      window.addEventListener("autoconnect:v2SeedChange", handleSeedChange);
+    }
+    
+    return () => {
+      mounted = false;
+      unsubscribeUsers();
+      unsubscribePosts();
+      if (typeof window !== "undefined") {
+        window.removeEventListener("autoconnect:v2SeedChange", handleSeedChange);
+      }
+    };
   }, []);
 
   if (isLoading) {

@@ -56,21 +56,6 @@ export function clampBaseSeed(seed: number): number {
   return seed;
 }
 
-function getApiBaseUrl(): string {
-  const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
-  const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
-  const envIsLocal = envUrl && (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"));
-  const originIsLocal = origin && (origin.includes("localhost") || origin.includes("127.0.0.1"));
-
-  if (envUrl && (!(envIsLocal) || originIsLocal)) {
-    return envUrl;
-  }
-  if (origin) {
-    return `${origin}/api`;
-  }
-  return envUrl || "http://app:8090";
-}
-
 function resolveSeedsLocal(baseSeed: number, enabledFlags?: { v1: boolean; v2: boolean; v3: boolean }): ResolvedSeeds {
   const safeSeed = clampBaseSeed(baseSeed);
   const flags = enabledFlags || getEnabledFlagsInternal();
@@ -81,7 +66,7 @@ function resolveSeedsLocal(baseSeed: number, enabledFlags?: { v1: boolean; v2: b
     v3: null,
   };
   if (flags.v1) {
-    resolved.v1 = ((safeSeed * 29 + 7) % 300) + 1;
+    resolved.v1 = ((safeSeed * 37 + 11) % 10) + 1;
   }
   if (flags.v2) {
     resolved.v2 = ((safeSeed * 53 + 17) % 300) + 1;
@@ -92,49 +77,6 @@ function resolveSeedsLocal(baseSeed: number, enabledFlags?: { v1: boolean; v2: b
   return resolved;
 }
 
-export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
-  const safeSeed = clampBaseSeed(baseSeed);
-  const enabledFlags = getEnabledFlagsInternal();
-  if (typeof window === "undefined") {
-    return resolveSeedsLocal(safeSeed, enabledFlags);
-  }
-  try {
-    const apiUrl = getApiBaseUrl();
-    const url = new URL(`${apiUrl}/seeds/resolve`);
-    url.searchParams.set("seed", safeSeed.toString());
-    url.searchParams.set("v1_enabled", String(enabledFlags.v1));
-    url.searchParams.set("v2_enabled", String(enabledFlags.v2));
-    url.searchParams.set("v3_enabled", String(enabledFlags.v3));
-
-    const response = await fetch(url.toString(), {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    if (!response.ok) {
-      throw new Error(`Seed resolution API failed: ${response.status}`);
-    }
-    const data = await response.json();
-    return {
-      base: data.base ?? safeSeed,
-      v1: data.v1 ?? null,
-      v2: data.v2 ?? null,
-      v3: data.v3 ?? null,
-    };
-  } catch (error) {
-    console.warn("[seed-resolver] API call failed, using local fallback:", error);
-    return resolveSeedsLocal(safeSeed, enabledFlags);
-  }
-}
-
 export function resolveSeedsSync(baseSeed: number): ResolvedSeeds {
   return resolveSeedsLocal(baseSeed, getEnabledFlagsInternal());
 }
-
-export function getEnabledFlags(): { v1: boolean; v2: boolean; v3: boolean } {
-  return getEnabledFlagsInternal();
-}
-
-export const seedResolverConfig = {
-  base: BASE_SEED,
-  getEnabledFlags,
-};

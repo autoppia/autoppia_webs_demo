@@ -3,12 +3,29 @@ import fallbackPrescriptionsJson from "@/data/original/prescriptions_1.json";
 import { isDataGenerationAvailable, generatePrescriptions } from "@/utils/healthDataGenerator";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { resolveDatasetSeed, waitForDatasetSeed } from "@/utils/v2Seed";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 
 const CACHE_KEY = 'autohealth_prescriptions_v1';
 const DOCTORS_CACHE_KEY = 'autohealth_doctors_v1';
 const PROJECT_KEY = 'web_14_autohealth';
 let prescriptionsCache: Prescription[] = [];
 const FALLBACK_PRESCRIPTIONS: Prescription[] = Array.isArray(fallbackPrescriptionsJson) ? (fallbackPrescriptionsJson as Prescription[]) : [];
+
+/**
+ * Get base seed from URL parameter
+ */
+const getBaseSeedFromUrl = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search);
+  const seedParam = params.get("seed");
+  if (seedParam) {
+    const parsed = Number.parseInt(seedParam, 10);
+    if (Number.isFinite(parsed)) {
+      return clampBaseSeed(parsed);
+    }
+  }
+  return null;
+};
 
 async function loadPrescriptionsFromDataset(v2SeedValue?: number | null): Promise<Prescription[]> {
   await waitForDatasetSeed(v2SeedValue);
@@ -17,7 +34,7 @@ async function loadPrescriptionsFromDataset(v2SeedValue?: number | null): Promis
     projectKey: PROJECT_KEY,
     entityType: "prescriptions",
     seedValue: effectiveSeed,
-    limit: 60,
+    limit: 50,
     method: "distribute",
     filterKey: "category",
   });
@@ -28,13 +45,24 @@ async function loadPrescriptionsFromDataset(v2SeedValue?: number | null): Promis
 }
 
 export async function initializePrescriptions(doctors?: Doctor[], v2SeedValue?: number | null): Promise<Prescription[]> {
-  if (isDbLoadModeEnabled()) {
+  const dbModeEnabled = isDbLoadModeEnabled();
+  const aiGenerateEnabled = isDataGenerationAvailable();
+  
+  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+    console.log("[autohealth] Base seed is 1, using original prescriptions data (skipping DB/AI modes)");
+    prescriptionsCache = FALLBACK_PRESCRIPTIONS;
+    return prescriptionsCache;
+  }
+  
+  if (dbModeEnabled) {
     if (prescriptionsCache.length > 0) return prescriptionsCache;
     prescriptionsCache = await loadPrescriptionsFromDataset(v2SeedValue);
     return prescriptionsCache;
   }
 
-  if (!isDataGenerationAvailable()) {
+  if (!aiGenerateEnabled) {
     prescriptionsCache = FALLBACK_PRESCRIPTIONS;
     return prescriptionsCache;
   }

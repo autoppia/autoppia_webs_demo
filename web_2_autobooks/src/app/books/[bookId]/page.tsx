@@ -10,7 +10,7 @@ import {
   type CommentEntry,
 } from "@/components/books/CommentsPanel";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { getBookById, getRelatedBooks } from "@/dynamic/v2-data";
+import { getBookById, getRelatedBooks } from "@/dynamic/v2";
 import { SeedLink } from "@/components/ui/SeedLink";
 import type { Book } from "@/data/books";
 import { useAuth } from "@/context/AuthContext";

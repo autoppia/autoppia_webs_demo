@@ -4,33 +4,12 @@ import { usePathname } from "next/navigation";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { ToastContainer, toast } from "react-toastify";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
-import { useAutoworkData } from "@/hooks/useAutoworkData";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { writeJson } from "@/shared/storage";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
-const POPULAR_SKILLS = [
-  "JavaScript",
-  "TypeScript",
-  "Python",
-  "Java",
-  "C#",
-  "C++",
-  "Ruby",
-  "Go",
-  "Swift",
-  "Kotlin",
-  "Objective-C",
-  "PHP",
-  "HTML",
-  "CSS",
-  "React",
-  "Angular",
-  "Vue.js",
-  "Node.js",
-  "Django",
-  "Flask",
-] as const;
+// POPULAR_SKILLS removed - now using V2 dynamic skills from dynamicDataProvider
 
 const SCOPE_SIZE_OPTIONS = ["Large", "Medium", "Small"] as const;
 const SCOPE_DURATION_OPTIONS = ["More than 6 months", "3 to 6 months"] as const;
@@ -65,9 +44,36 @@ function PostJobWizard({
   });
   const totalSteps = 5;
 
+  // V2: Subscribe to dynamic skills from data provider
+  const [v2Skills, setV2Skills] = useState<string[]>([]);
+  
+  useEffect(() => {
+    // Wait for data to be ready
+    dyn.v2.whenReady().then(() => {
+      const skills = dynamicDataProvider.getSkills();
+      setV2Skills(skills);
+    });
+    
+    // Subscribe to skills updates
+    const unsubscribe = dynamicDataProvider.subscribeSkills((updatedSkills) => {
+      setV2Skills(updatedSkills);
+    });
+    
+    return () => {
+      unsubscribe();
+    };
+  }, [dyn.v2]);
+
+  // Use V2 skills with shuffle for consistent ordering per seed
   const popularSkillOptions = useMemo(
-    () => shuffleList([...POPULAR_SKILLS], "postjob_popular_skills"),
-    [shuffleList]
+    () => {
+      if (v2Skills.length > 0) {
+        return shuffleList([...v2Skills], "postjob_popular_skills");
+      }
+      // Fallback to empty array if skills not loaded yet
+      return [];
+    },
+    [v2Skills, shuffleList]
   );
   const scopeSizeOptions = useMemo(
     () => shuffleList([...SCOPE_SIZE_OPTIONS], "postjob_scope_size"),
@@ -929,9 +935,39 @@ export default function Home() {
 	const [userJobs, setUserJobs] = useState<any[]>([]);
 	const { layout, getElementAttributes, getText, dyn } = useSeedLayout();
 
-	const jobsState = useAutoworkData<any>("web_10_autowork_jobs", 6);
-	const hiresState = useAutoworkData<any>("web_10_autowork_hires", 6);
-	const expertsState = useAutoworkData<any>("web_10_autowork_experts", 6);
+	// Use V2 dynamic data provider
+	const [jobs, setJobs] = useState<any[]>([]);
+	const [hires, setHires] = useState<any[]>([]);
+	const [experts, setExperts] = useState<any[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
+	
+	// Subscribe to data changes
+	useEffect(() => {
+		// Wait for data to be ready
+		dyn.v2.whenReady().then(() => {
+			setJobs(dynamicDataProvider.getJobs().slice(0, 6));
+			setHires(dynamicDataProvider.getHires().slice(0, 6));
+			setExperts(dynamicDataProvider.getExperts().slice(0, 6));
+			setIsLoading(false);
+		});
+		
+		// Subscribe to updates
+		const unsubscribeJobs = dynamicDataProvider.subscribeJobs((updatedJobs) => {
+			setJobs(updatedJobs.slice(0, 6));
+		});
+		const unsubscribeHires = dynamicDataProvider.subscribeHires((updatedHires) => {
+			setHires(updatedHires.slice(0, 6));
+		});
+		const unsubscribeExperts = dynamicDataProvider.subscribeExperts((updatedExperts) => {
+			setExperts(updatedExperts.slice(0, 6));
+		});
+		
+		return () => {
+			unsubscribeJobs();
+			unsubscribeHires();
+			unsubscribeExperts();
+		};
+	}, [dyn.v2]);
 
 	// Load user jobs from localStorage
 	useEffect(() => {
@@ -949,12 +985,8 @@ export default function Home() {
 
 	// Combine user jobs with fetched jobs (user jobs first)
 	const allJobs = useMemo(() => {
-		return [...userJobs, ...jobsState.data];
-	}, [userJobs, jobsState.data]);
-
-	const isLoading = jobsState.isLoading || hiresState.isLoading || expertsState.isLoading;
-	const errorMessage = jobsState.error || hiresState.error || expertsState.error;
-	const statusMessage = jobsState.statusMessage || hiresState.statusMessage || expertsState.statusMessage;
+		return [...userJobs, ...jobs];
+	}, [userJobs, jobs]);
 
 	useEffect(() => {
 		if (typeof window === "undefined") return;
@@ -971,9 +1003,9 @@ export default function Home() {
 		if (
 			!hasSeenInitialLoad &&
 			!isLoading &&
-			jobsState.data.length > 0 &&
-			hiresState.data.length > 0 &&
-			expertsState.data.length > 0
+			jobs.length > 0 &&
+			hires.length > 0 &&
+			experts.length > 0
 		) {
 			setHasSeenInitialLoad(true);
 			try {
@@ -982,7 +1014,7 @@ export default function Home() {
 				// ignore storage access errors
 			}
 		}
-	}, [hasSeenInitialLoad, isLoading, jobsState.data.length, hiresState.data.length, expertsState.data.length]);
+	}, [hasSeenInitialLoad, isLoading, jobs.length, hires.length, experts.length]);
 
 	const showInitialLoading = !hasSeenInitialLoad && (isLoading || Boolean(statusMessage));
 
@@ -990,18 +1022,18 @@ export default function Home() {
 	useEffect(() => {
 		if (!isLoading) {
 			const combined = {
-				jobs: jobsState.data,
-				hires: hiresState.data,
-				experts: expertsState.data,
+				jobs: jobs,
+				hires: hires,
+				experts: experts,
 			};
 			writeJson("autowork_all", combined);
 			
 			// Also save experts separately for ExpertProfileClient
-			if (expertsState.data.length > 0) {
-				window.localStorage.setItem("autowork_experts", JSON.stringify(expertsState.data));
+			if (experts.length > 0) {
+				window.localStorage.setItem("autowork_experts", JSON.stringify(experts));
 			}
 		}
-	}, [isLoading, jobsState.data, hiresState.data, expertsState.data]);
+	}, [isLoading, jobs, hires, experts]);
 
 	// Create section components
 	const JobsSection = () => {
@@ -1192,15 +1224,32 @@ export default function Home() {
 		};
 
 		// Helper function to handle navigation to expert profile
-		const handleViewProfile = (hire: any) => {
-			const slug = hire.slug || generateSlug(hire.name);
+		const handleViewProfile = async (hire: any) => {
+			// Wait for data to be ready
+			await dyn.v2.whenReady();
+			await new Promise(resolve => setTimeout(resolve, 100));
+			
+			// First, verify the hire exists in the current hires data (compare hires with hires)
+			const matchingHire = dynamicDataProvider.getHireByName(hire.name);
+			
+			if (!matchingHire) {
+				console.log(`[autowork] handleViewProfile: ❌ Hire "${hire.name}" not found in hires data`);
+				return;
+			}
+			
+			// Now try to find the expert by name (using the hire's name)
+			const matchingExpert = dynamicDataProvider.getExpertByName(matchingHire.name);
+			
+			// Use expert's slug if found, otherwise generate from hire name
+			const slug = matchingExpert?.slug || matchingHire.slug || generateSlug(matchingHire.name);
+			console.log(`[autowork] handleViewProfile: hire="${matchingHire.name}", found expert="${matchingExpert?.name || 'none'}", using slug="${slug}"`);
 			router.push(`/expert/${slug}`);
 		};
 
-		const totalHires = hiresState.data.length;
-		const availableHires = hiresState.data.filter((h: any) => h.rehire).length;
-		const avgRating = hiresState.data.length > 0
-			? (hiresState.data.reduce((acc: number, h: any) => acc + Number.parseFloat(h.rating || 0), 0) / hiresState.data.length).toFixed(1)
+		const totalHires = hires.length;
+		const availableHires = hires.filter((h: any) => h.rehire).length;
+		const avgRating = hires.length > 0
+			? (hires.reduce((acc: number, h: any) => acc + Number.parseFloat(h.rating || 0), 0) / hires.length).toFixed(1)
 			: "0.0";
 
 		return dyn.v1.addWrapDecoy("hires-section", (
@@ -1262,7 +1311,7 @@ export default function Home() {
 
 				{/* Hire Cards Grid */}
 				<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-					{hiresState.data.map((hire: any, i: number) => (
+					{hires.map((hire: any, i: number) => (
 						dyn.v1.addWrapDecoy("rehire-expert-card", (
 							<div
 								key={hire.name}
@@ -1405,9 +1454,9 @@ export default function Home() {
     };
 		
 		
-		const totalExperts = expertsState.data.length;
-		const avgRating = expertsState.data.length > 0
-			? (expertsState.data.reduce((acc: number, e: any) => acc + Number.parseFloat(e.rating || 0), 0) / expertsState.data.length).toFixed(1)
+		const totalExperts = experts.length;
+		const avgRating = experts.length > 0
+			? (experts.reduce((acc: number, e: any) => acc + Number.parseFloat(e.rating || 0), 0) / experts.length).toFixed(1)
 			: "0.0";
 
 		const handleViewExpert = (expert: any) => {
@@ -1460,7 +1509,7 @@ export default function Home() {
 
 				{/* Expert Cards Grid */}
 				<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-					{expertsState.data.map((expert: any, i: number) => {
+					{experts.map((expert: any, i: number) => {
 						const isFavorite = favorites.has(expert.name);
 						return (
 							dyn.v1.addWrapDecoy("expert-card", (
@@ -1598,16 +1647,6 @@ export default function Home() {
 					<div className="w-14 h-14 rounded-full border-4 border-[#08b4ce] border-t-transparent animate-spin mb-5" aria-label="Loading" />
 					<div className="text-xl font-semibold text-[#253037] mb-2">Generating data with AI</div>
 					<div className="text-sm text-gray-600">It may take some time. Please wait…</div>
-				</div>
-			)}
-			{statusMessage && (
-				<div className="mb-6 rounded-lg border border-[#08b4ce30] bg-[#e6f9fb] text-[#056b79] px-4 py-3 text-sm">
-					{statusMessage}
-				</div>
-			)}
-			{errorMessage && (
-				<div className="mb-6 rounded-lg border border-red-200 bg-red-50 text-red-700 px-4 py-3 text-sm">
-					{errorMessage}
 				</div>
 			)}
 			{renderSections()}

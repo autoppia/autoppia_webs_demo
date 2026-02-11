@@ -9,6 +9,9 @@ import {
   fetchSeededSelection,
   isDbLoadModeEnabled,
 } from "@/shared/seeded-loader";
+import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
+import { getApiBaseUrl } from "@/shared/data-generator";
 import fallbackRestaurants from "./original/restaurants_1.json";
 
 export interface RestaurantGenerated {
@@ -24,16 +27,72 @@ export interface RestaurantGenerated {
   bookings?: number;
 }
 
+type DatasetRestaurant = {
+  id?: string;
+  name?: string;
+  namepool?: string;
+  image?: string;
+  cuisine?: string;
+  area?: string;
+  reviews?: number;
+  rating?: number;
+  stars?: number;
+  price?: string;
+  bookings?: number;
+};
+
+const clampSeed = (value: number, fallback = 1): number =>
+  value >= 1 && value <= 300 ? value : fallback;
+
+const getBaseSeedFromUrl = (): number | null => {
+  if (typeof window === "undefined") return null;
+  // Leer seed base de la URL
+  const params = new URLSearchParams(window.location.search);
+  const seedParam = params.get("seed");
+  if (seedParam) {
+    const parsed = Number.parseInt(seedParam, 10);
+    if (Number.isFinite(parsed)) {
+      return clampBaseSeed(parsed);
+    }
+  }
+  return null;
+};
+
+const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number => {
+  if (!dbModeEnabled) {
+    return 1;
+  }
+  
+  // Si se proporciona un seed específico (ya derivado), usarlo directamente
+  if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
+    return clampSeed(seedValue);
+  }
+  
+  // Obtener seed base de la URL y derivar el V2 seed
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed !== null) {
+    // Derivar V2 seed usando la fórmula: ((baseSeed * 53 + 17) % 300) + 1
+    const resolvedSeeds = resolveSeedsSync(baseSeed);
+    if (resolvedSeeds.v2 !== null) {
+      return resolvedSeeds.v2;
+    }
+    // Si V2 no está habilitado, usar el base seed
+    return clampSeed(baseSeed);
+  }
+  
+  return 1;
+};
+
 // Cache for loaded restaurants
 export let dynamicRestaurants: RestaurantGenerated[] = [];
 
 /**
  * Normalize restaurant data from server
  */
-function normalizeRestaurants(
-  items: RestaurantGenerated[]
-): RestaurantGenerated[] {
-  return items.map((r, index) => {
+function normalizeRestaurantWithIndex(
+  r: DatasetRestaurant,
+  index = 0
+): RestaurantGenerated {
     const fallbackName = (r as any)?.namepool;
     const normalizedName =
       typeof r.name === "string" && r.name.trim().length > 0
@@ -70,7 +129,51 @@ function normalizeRestaurants(
       price,
       bookings,
     };
-  });
+}
+
+function normalizeRestaurants(
+  items: DatasetRestaurant[]
+): RestaurantGenerated[] {
+  return items.map((r, index) => normalizeRestaurantWithIndex(r, index));
+}
+
+/**
+ * Fetch AI generated restaurants from /datasets/generate-smart endpoint
+ */
+async function fetchAiGeneratedRestaurants(count: number): Promise<DatasetRestaurant[]> {
+  const baseUrl = getApiBaseUrl();
+  const url = `${baseUrl}/datasets/generate-smart`;
+  
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        project_key: "web_4_autodining",
+        entity_type: "restaurants",
+        count: 50, // Fixed count of 50
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "");
+      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
+    }
+
+    const result = await response.json();
+    const generatedData = result?.generated_data ?? [];
+    
+    if (!Array.isArray(generatedData) || generatedData.length === 0) {
+      throw new Error("No data returned from AI generation endpoint");
+    }
+
+    return generatedData as DatasetRestaurant[];
+  } catch (error) {
+    console.error("[autodining] AI generation failed:", error);
+    throw error;
+  }
 }
 
 /**
@@ -101,61 +204,79 @@ export function getRestaurants(): RestaurantGenerated[] {
  * Initialize restaurants from server using seeded selection
  */
 export async function initializeRestaurants(
-  seedValue?: number | null
+  v2SeedValue?: number | null,
+  limit = 300
 ): Promise<RestaurantGenerated[]> {
-  // Check if v2 (DB mode) is enabled
-  let dbModeEnabled = false;
-  try {
-    dbModeEnabled = isDbLoadModeEnabled();
-  } catch {}
-
-  // Determine the seed to use
-  let effectiveSeed: number;
-  effectiveSeed = dbModeEnabled ? seedValue ?? 1 : 1;
-
-  if (!dbModeEnabled) {
-    dynamicRestaurants = normalizeRestaurants(
-      fallbackRestaurants as RestaurantGenerated[]
-    );
+  const dbModeEnabled = isDbLoadModeEnabled();
+  const aiGenerateEnabled = isV2AiGenerateEnabled();
+  
+  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+    console.log("[autodining] Base seed is 1, using original data (skipping DB/AI modes)");
+    dynamicRestaurants = normalizeRestaurants(fallbackRestaurants as DatasetRestaurant[]);
     return dynamicRestaurants;
   }
 
-  // Load from DB with the determined seed
-  try {
-    // Clear existing restaurants to force fresh load
-    dynamicRestaurants = [];
-    const fromDb = await fetchSeededSelection<RestaurantGenerated>({
-      projectKey: "web_4_autodining",
-      entityType: "restaurants",
-      seedValue: effectiveSeed,
-      limit: 100,
-      method: "distribute",
-      filterKey: "cuisine",
-    });
-
-    console.log(
-      `[autodining] Fetched from DB with seed=${effectiveSeed}:`,
-      fromDb
-    );
-
-    if (fromDb && fromDb.length > 0) {
-      dynamicRestaurants = normalizeRestaurants(fromDb);
-      // Don't cache when using seeds to ensure each seed gets fresh data
-      return dynamicRestaurants;
-    } else {
-      console.warn(
-        `[autodining] No data returned from DB with seed=${effectiveSeed}`
-      );
-      throw new Error(`[autodining] No data found for seed=${effectiveSeed}`);
+  // Priority 1: DB mode - fetch from /datasets/load endpoint
+  if (dbModeEnabled) {
+    // Si no se proporciona seed, leerlo de la URL
+    if (typeof window !== "undefined" && v2SeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
-  } catch (err) {
-    console.error(
-      `[autodining] Failed to load from DB with seed=${effectiveSeed}:`,
-      err
-    );
-    dynamicRestaurants = normalizeRestaurants(
-      fallbackRestaurants as RestaurantGenerated[]
-    );
-    return dynamicRestaurants;
+    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+
+    try {
+      const restaurants = await fetchSeededSelection<DatasetRestaurant>({
+        projectKey: "web_4_autodining",
+        entityType: "restaurants",
+        seedValue: effectiveSeed,
+        limit: 50, // Fixed limit of 50 items for DB mode
+        method: "distribute",
+        filterKey: "cuisine",
+      });
+
+      if (Array.isArray(restaurants) && restaurants.length > 0) {
+        console.log(
+          `[autodining] Loaded ${restaurants.length} restaurants from dataset (seed=${effectiveSeed})`
+        );
+        dynamicRestaurants = normalizeRestaurants(restaurants);
+        return dynamicRestaurants;
+      }
+
+      // If no restaurants returned from backend, fallback to local JSON
+      console.warn(`[autodining] No restaurants returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+    } catch (error) {
+      // If backend fails, fallback to local JSON
+      console.warn("[autodining] Backend unavailable, falling back to local JSON:", error);
+    }
   }
+  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
+  else if (aiGenerateEnabled) {
+    try {
+      console.log("[autodining] AI generation mode enabled, generating restaurants...");
+      const generatedRestaurants = await fetchAiGeneratedRestaurants(limit);
+      
+      if (Array.isArray(generatedRestaurants) && generatedRestaurants.length > 0) {
+        console.log(`[autodining] Generated ${generatedRestaurants.length} restaurants via AI`);
+        dynamicRestaurants = normalizeRestaurants(generatedRestaurants);
+        return dynamicRestaurants;
+      }
+      
+      console.warn("[autodining] No restaurants generated, falling back to local JSON");
+    } catch (error) {
+      // If AI generation fails, fallback to local JSON
+      console.warn("[autodining] AI generation failed, falling back to local JSON:", error);
+    }
+  }
+  // Priority 3: Fallback - use original local JSON data
+  else {
+    console.log("[autodining] V2 modes disabled, loading from local JSON");
+  }
+
+  // Fallback to local JSON
+  dynamicRestaurants = normalizeRestaurants(fallbackRestaurants as DatasetRestaurant[]);
+  return dynamicRestaurants;
 }
+
+export const getCachedRestaurants = () => dynamicRestaurants;

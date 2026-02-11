@@ -83,6 +83,7 @@ function resolveSeedsLocal(baseSeed: number, enabledFlags?: { v1: boolean; v2: b
   if (flags.v1) {
     resolved.v1 = ((safeSeed * 37 + 11) % 10) + 1;
   }
+  // V2: usar seed base directamente (sin derivación)
   if (flags.v2) {
     resolved.v2 = ((safeSeed * 53 + 17) % 300) + 1;
   }
@@ -133,8 +134,3 @@ export function resolveSeedsSync(baseSeed: number): ResolvedSeeds {
 export function getEnabledFlags(): { v1: boolean; v2: boolean; v3: boolean } {
   return getEnabledFlagsInternal();
 }
-
-export const seedResolverConfig = {
-  base: BASE_SEED,
-  getEnabledFlags,
-};

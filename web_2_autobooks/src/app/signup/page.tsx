@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { getBooks } from "@/dynamic/v2-data";
+import { getBooks } from "@/dynamic/v2";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { BookOpen, UserPlus, Lock, User, Book as BookIcon } from "lucide-react";
 import { useDynamicSystem } from "@/dynamic/shared";

@@ -12,6 +12,7 @@ import { applyV1Wrapper } from "../v1/add-wrap-decoy";
 import { isV3Enabled } from "./flags";
 import { getVariant, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "../v3/utils/variant-selector";
 import { generateDynamicOrder } from "../v1/change-order-elements";
+import { dynamicDataProvider } from "../v2";
 import type { ReactNode } from "react";
 
 // ============================================================================
@@ -154,5 +155,26 @@ export function useDynamicSystem() {
      */
     selectVariantIndex: (key: string, count: number) => 
       selectVariantIndex(seed, key, count),
+    
+    /**
+     * V2: Data loading (DB, AI, fallback)
+     * Provides access to dynamic data provider
+     */
+    v2: {
+      /**
+       * Get the dynamic data provider instance
+       */
+      provider: dynamicDataProvider,
+      
+      /**
+       * Check if data is ready
+       */
+      isReady: () => dynamicDataProvider.isReady(),
+      
+      /**
+       * Wait for data to be ready
+       */
+      whenReady: () => dynamicDataProvider.whenReady(),
+    },
   }), [seed]);
 }

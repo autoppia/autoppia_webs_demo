@@ -31,6 +31,18 @@ function DashboardContent() {
   
   const dyn = useDynamicSystem();
 
+  // Debug: Verify V2 status
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[page] V2 status:", {
+        v2Enabled: dyn.v2.isEnabled(),
+        v2DbMode: dyn.v2.isDbModeEnabled(),
+        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2Fallback: dyn.v2.isFallbackMode(),
+      });
+    }
+  }, [dyn.v2]);
+
   // Load dynamic counts for all entities (with cleanup to avoid duplicate loads)
   const lastV2SeedForDataRef = useRef<number | null>(null);
   const [dataSeed, setDataSeed] = useState<number | undefined>(v2Seed);
