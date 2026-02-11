@@ -37,16 +37,20 @@ const nextConfig = {
         ? 'http://localhost:8090' 
         : 'http://app:8090');
     
-    return [
-      {
-        source: '/api/log-event',
-        destination: `${destination}/save_events/`,
-      },
-      {
-        source: '/api/:path*',
-        destination: `${destination}/:path*`,
-      },
-    ];
+    return {
+      beforeFiles: [],
+      afterFiles: [
+        {
+          source: '/api/log-event',
+          destination: `${destination}/save_events/`,
+        },
+        {
+          source: '/api/:path*',
+          destination: `${destination}/:path*`,
+        },
+      ],
+      fallback: [],
+    };
   },
 
   allowedDevOrigins: ["*.preview.same-app.com"],

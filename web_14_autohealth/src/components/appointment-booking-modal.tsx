@@ -15,6 +15,7 @@ interface AppointmentBookingModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   appointment: Appointment | null;
+  source?: string; // Source indicates where the modal was opened from (appointments_table, doctor_card, doctor_profile_page, quick_appointment_hero)
 }
 
 interface BookingFormData {
@@ -29,7 +30,9 @@ interface BookingFormData {
   notes: string;
 }
 
-export function AppointmentBookingModal({ open, onOpenChange, appointment }: AppointmentBookingModalProps) {
+const QUICK_FORM_DATA_KEY = 'quick_appointment_form_data';
+
+export function AppointmentBookingModal({ open, onOpenChange, appointment, source = "appointments_table" }: AppointmentBookingModalProps) {
   const dyn = useDynamicSystem();
   const [formData, setFormData] = React.useState<BookingFormData>({
     patientName: "",
@@ -44,6 +47,26 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
   });
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  // Load pre-filled data from quick appointment form when modal opens
+  React.useEffect(() => {
+    if (open && typeof window !== 'undefined') {
+      try {
+        const savedData = localStorage.getItem(QUICK_FORM_DATA_KEY);
+        if (savedData) {
+          const parsed = JSON.parse(savedData);
+          setFormData(prev => ({
+            ...prev,
+            patientName: parsed.patientName || prev.patientName,
+            patientEmail: parsed.patientEmail || prev.patientEmail,
+            patientPhone: parsed.patientPhone || prev.patientPhone,
+          }));
+        }
+      } catch (error) {
+        console.error("Error loading pre-filled form data:", error);
+      }
+    }
+  }, [open]);
 
   const handleInputChange = (field: keyof BookingFormData, value: string) => {
     setFormData(prev => ({
@@ -74,67 +97,34 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
     setIsSubmitting(true);
 
     try {
-      // Log the appointment booking event
-      logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
-        appointmentId: appointment.id,
-        doctorName: appointment.doctorName,
-        specialty: appointment.specialty,
-        date: appointment.date,
-        time: appointment.time,
-        // Patient Information
-        patientName: formData.patientName,
-        patientEmail: formData.patientEmail,
-        patientPhone: formData.patientPhone,
-        reasonForVisit: formData.reasonForVisit,
-        // Insurance Information
-        insuranceProvider: formData.insuranceProvider,
-        insuranceNumber: formData.insuranceNumber,
-        hasInsurance: !!formData.insuranceProvider,
-        // Emergency Contact
-        emergencyContact: formData.emergencyContact,
-        emergencyPhone: formData.emergencyPhone,
-        hasEmergencyContact: !!formData.emergencyContact,
-        // Additional Information
-        notes: formData.notes,
-        hasNotes: !!formData.notes,
-        // Form completion
-        action: "confirm_booking",
-        formCompletionTime: new Date().toISOString()
-      });
-
-      // Simulate API call
+      // Simulate API call (only after success do we log APPOINTMENT_BOOKED_SUCCESSFULLY)
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Log successful booking
+      // Log only after reservation succeeded: clear separation from OPEN_APPOINTMENT_FORM (button click).
       logEvent(EVENT_TYPES.APPOINTMENT_BOOKED_SUCCESSFULLY, {
-        appointmentId: appointment.id,
-        doctorId: appointment.doctorId,
-        doctorName: appointment.doctorName,
-        specialty: appointment.specialty,
-        date: appointment.date,
-        time: appointment.time,
-        // Patient Information
+        appointment,
         patientName: formData.patientName,
         patientEmail: formData.patientEmail,
         patientPhone: formData.patientPhone,
         reasonForVisit: formData.reasonForVisit,
-        // Insurance Information
         insuranceProvider: formData.insuranceProvider,
         insuranceNumber: formData.insuranceNumber,
         hasInsurance: !!formData.insuranceProvider,
-        // Emergency Contact
         emergencyContact: formData.emergencyContact,
         emergencyPhone: formData.emergencyPhone,
         hasEmergencyContact: !!formData.emergencyContact,
-        // Additional Information
         notes: formData.notes,
         hasNotes: !!formData.notes,
-        // Success metadata
         bookingTimestamp: new Date().toISOString(),
-        success: true
       });
 
       alert("Appointment booked successfully!");
+      
+      // Clear saved quick form data from localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(QUICK_FORM_DATA_KEY);
+      }
+      
       onOpenChange(false);
       
       // Reset form
@@ -158,13 +148,6 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
   };
 
   const handleCancel = () => {
-    logEvent(EVENT_TYPES.CANCEL_BOOK_APPOINTMENT, {
-      appointmentId: appointment?.id,
-      doctorName: appointment?.doctorName,
-      specialty: appointment?.specialty,
-      date: appointment?.date,
-      time: appointment?.time
-    });
     onOpenChange(false);
   };
 
@@ -320,6 +303,8 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
               className={cn("bg-blue-600 hover:bg-blue-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
               onClick={handleConfirmAppointment} 
               disabled={isSubmitting || !validateForm()}
+              data-testid="confirm-appointment-btn" // For agent navigation according to .cursorrules
+              data-agent-id="confirm-appointment-button" // Additional identifier for agent
             >
               {isSubmitting ? dyn.v3.getVariant("booking", TEXT_VARIANTS_MAP, "Booking...") : dyn.v3.getVariant("confirm_appointment", TEXT_VARIANTS_MAP, "Confirm Appointment")}
             </Button>
