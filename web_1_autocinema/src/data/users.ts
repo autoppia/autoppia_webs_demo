@@ -13,7 +13,7 @@ export const USERS: UserRecord[] = Array.from({ length: TOTAL_USERS }, (_, index
   const movieIndex = (index % MOVIE_POOL_SIZE) + 1;
   return {
     username: `user${index + 1}`,
-    password: "PASSWORD",
+    password: "Passw0rd!",
     allowedMovies: [`movie-v2-${padMovieId(movieIndex)}`],
   };
 });

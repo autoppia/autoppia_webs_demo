@@ -13,7 +13,7 @@ export const USERS: UserRecord[] = Array.from({ length: TOTAL_USERS }, (_, index
   const bookIndex = (index % BOOK_POOL_SIZE) + 1;
   return {
     username: `user${index + 1}`,
-    password: "PASSWORD",
+    password: "Passw0rd!",
     allowedBooks: [buildBookId(bookIndex)],
   };
 });
