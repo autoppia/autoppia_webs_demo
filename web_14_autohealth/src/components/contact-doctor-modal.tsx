@@ -75,40 +75,27 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
     setIsSubmitting(true);
 
     try {
-      // Log the contact doctor event
+      // Log the contact doctor event (single generic event with all information)
+      // According to .cursorrules: "Generic Use Cases: We do not create unique events for every UI path"
+      // Differences are captured in metadata, not in the event name
       logEvent(EVENT_TYPES.CONTACT_DOCTOR, {
-        doctorId: doctor.id,
-        doctorName: doctor.name,
-        specialty: doctor.specialty,
-        action: "contact_doctor_submit",
-        urgency: formData.urgency,
-        preferredContactMethod: formData.preferredContactMethod,
-        appointmentRequest: formData.appointmentRequest,
-        subject: formData.subject
-      });
-
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Log successful contact
-      logEvent(EVENT_TYPES.DOCTOR_CONTACTED_SUCCESSFULLY, {
-        doctorId: doctor.id,
-        doctorName: doctor.name,
-        specialty: doctor.specialty,
-        // Patient Information
+        doctor,
         patientName: formData.patientName,
         patientEmail: formData.patientEmail,
         patientPhone: formData.patientPhone,
-        // Message Information
         subject: formData.subject,
         message: formData.message,
         urgency: formData.urgency,
         preferredContactMethod: formData.preferredContactMethod,
         appointmentRequest: formData.appointmentRequest,
-        // Success metadata
-        contactTimestamp: new Date().toISOString(),
-        success: true
       });
+
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // REMOVED: Do not log DOCTOR_CONTACTED_SUCCESSFULLY
+      // Reason: According to .cursorrules, we use generic events. Success is indicated with success: true
+      // in the same CONTACT_DOCTOR event, not by creating a separate event.
 
       alert("Your message has been sent successfully! The doctor will contact you within 24 hours.");
       onOpenChange(false);
@@ -133,11 +120,6 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
   };
 
   const handleCancel = () => {
-    logEvent(EVENT_TYPES.CANCEL_CONTACT_DOCTOR, {
-      doctorId: doctor?.id,
-      doctorName: doctor?.name,
-      specialty: doctor?.specialty
-    });
     onOpenChange(false);
   };
 
@@ -271,7 +253,7 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
             <h4 className="font-medium mb-2">Doctor Information</h4>
             <div className="text-sm text-muted-foreground space-y-1">
               <p><strong>Name:</strong> {doctor.name}</p>
-              <p><strong>Specialty:</strong> {doctor.specialty}</p>
+              <p><strong>Speciality:</strong> {doctor.specialty}</p>
               <p><strong>Office:</strong> {doctor.officeLocation}</p>
               <p><strong>Phone:</strong> {doctor.phone}</p>
               <p><strong>Email:</strong> {doctor.email}</p>
@@ -294,6 +276,7 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
             <Button 
               id={dyn.v3.getVariant("contact-doctor-button", ID_VARIANTS_MAP, "send-message-button")}
               className={cn("bg-blue-600 hover:bg-blue-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+              data-testid="contact-doctor-submit-btn"
               onClick={handleSubmitContact} 
               disabled={isSubmitting || !validateForm()}
             >

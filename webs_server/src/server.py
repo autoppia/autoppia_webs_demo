@@ -66,7 +66,7 @@ def trim_url_to_origin(url: str) -> str:
 def extract_json_from_content(content: str) -> str:
     """
     Extracts JSON array from OpenAI response that may be wrapped in markdown code blocks.
-    
+
     Handles cases like:
     - Direct JSON: [{"id": "1", ...}]
     - Markdown code block: ```json\n[{"id": "1", ...}]\n```
@@ -76,42 +76,42 @@ def extract_json_from_content(content: str) -> str:
     """
     if not content:
         return content
-    
+
     content = content.strip()
-    
+
     # Try direct parsing first (most common case)
-    if content.startswith('[') and content.endswith(']'):
+    if content.startswith("[") and content.endswith("]"):
         return content
-    
+
     # Try to extract from markdown code blocks
     # Match ```json ... ``` or ``` ... ``` (non-greedy, multiline)
-    markdown_pattern = r'```(?:json)?\s*\n?(.*?)\n?```'
+    markdown_pattern = r"```(?:json)?\s*\n?(.*?)\n?```"
     matches = list(re.finditer(markdown_pattern, content, re.DOTALL))
     if matches:
         # Try each match, return the first one that looks like a JSON array
         for match in matches:
             extracted = match.group(1).strip()
-            if extracted.startswith('[') and extracted.endswith(']'):
+            if extracted.startswith("[") and extracted.endswith("]"):
                 return extracted
         # If none start with [, return the last match (most likely to be the data)
         if matches:
             return matches[-1].group(1).strip()
-    
+
     # Try to find JSON array by finding first [ and last ]
     # This handles cases where there's text before/after the JSON
-    first_bracket = content.find('[')
+    first_bracket = content.find("[")
     if first_bracket != -1:
         # Find the matching closing bracket
         bracket_count = 0
         for i in range(first_bracket, len(content)):
-            if content[i] == '[':
+            if content[i] == "[":
                 bracket_count += 1
-            elif content[i] == ']':
+            elif content[i] == "]":
                 bracket_count -= 1
                 if bracket_count == 0:
-                    extracted = content[first_bracket:i + 1]
+                    extracted = content[first_bracket : i + 1]
                     return extracted
-    
+
     # Return original content if no pattern matches
     return content
 
@@ -605,7 +605,7 @@ Output strictly a JSON array only.
 
         # Extract JSON from content (handles markdown code blocks)
         json_content = extract_json_from_content(content)
-        
+
         try:
             data = orjson.loads(json_content)
             if not isinstance(data, list):
@@ -811,7 +811,7 @@ class DatasetLoadRequest(BaseModel):
 class DatasetLoadResponse(BaseModel):
     message: str
     metadata: Dict[str, Any]
-    data: List[Dict[str, Any]]
+    data: List[Dict[str, Any]] | List[str]
     count: int
 
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
@@ -11,10 +10,10 @@ import { useMemo } from "react";
 export default function Navbar() {
   const dyn = useDynamicSystem();
   const links = [
-    { href: "/appointments", title: "Appointments", event: EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED },
-    { href: "/doctors", title: "Doctors", event: EVENT_TYPES.BROWSE_DOCTORS_CLICKED },
-    { href: "/prescriptions", title: "Prescriptions", event: EVENT_TYPES.BROWSE_PRESCRIPTIONS_CLICKED },
-    { href: "/medical-records", title: "Medical Records", event: EVENT_TYPES.BROWSE_MEDICAL_RECORDS_CLICKED },
+    { href: "/appointments", title: "Appointments" },
+    { href: "/doctors", title: "Doctors" },
+    { href: "/prescriptions", title: "Prescriptions" },
+    { href: "/medical-records", title: "Medical Analysis" },
   ];
   const orderedLinks = useMemo(() => {
     const order = dyn.v1.changeOrderElements("navbar-links", links.length);
@@ -32,7 +31,6 @@ export default function Navbar() {
       id={dyn.v3.getVariant("nav-logo", ID_VARIANTS_MAP, "nav-logo")}
       href="/" 
       className={cn("font-semibold text-emerald-700", dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, ""))}
-      onClick={() => logEvent(EVENT_TYPES.BROWSE_HOME_CLICKED, { source: "navbar_logo" })}
     >
       AutoHealth
     </SeedLink>
@@ -47,7 +45,6 @@ export default function Navbar() {
             id={dyn.v3.getVariant("nav-link", ID_VARIANTS_MAP, `nav-link-${i}`)}
             href={n.href}
             className={cn("text-sm text-muted-foreground hover:text-foreground", dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, ""))}
-            onClick={() => logEvent(n.event, { source: "navbar_link" })}
           >
             {dyn.v3.getVariant(`nav_${n.href.substring(1)}`, TEXT_VARIANTS_MAP, n.title)}
           </SeedLink>
@@ -62,7 +59,6 @@ export default function Navbar() {
         id={dyn.v3.getVariant("nav-cta", ID_VARIANTS_MAP, "nav-cta")}
         className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
         size="sm"
-        onClick={() => logEvent(EVENT_TYPES.BOOK_NOW_CLICKED, { source: "navbar_cta_button" })}
       >
         {dyn.v3.getVariant("book_now", TEXT_VARIANTS_MAP, "Book now")}
       </Button>

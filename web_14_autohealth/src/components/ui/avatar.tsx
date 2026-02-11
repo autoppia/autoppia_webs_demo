@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import Image from "next/image";
 import { cn } from "@/library/utils";
@@ -20,6 +22,29 @@ type AvatarProps = React.HTMLAttributes<HTMLDivElement> & {
 };
 
 function Avatar({ className, src, alt, name, size = 44, ...props }: AvatarProps) {
+  const [error, setError] = React.useState(false);
+
+  const processedSrc = React.useMemo(() => {
+    if (!src) return src;
+
+    // Check for doctor ID pattern (d + numbers) anywhere in the URL
+    const match = src.match(/d(\d+)\.(jpg|jpeg|png|webp)$/i);
+    if (match) {
+      const numericPart = parseInt(match[1], 10);
+      if (!isNaN(numericPart)) {
+        // Map any numeric ID to the available 1-50 range
+        const imageNumber = ((numericPart - 1) % 50) + 1;
+        const newSrc = `/images/doctors/d${imageNumber}.jpg`;
+        return newSrc;
+      }
+    }
+    return src;
+  }, [src]);
+
+  React.useEffect(() => {
+    setError(false);
+  }, [processedSrc]);
+
   return (
     <div
       className={cn(
@@ -29,13 +54,14 @@ function Avatar({ className, src, alt, name, size = 44, ...props }: AvatarProps)
       style={{ width: size, height: size }}
       {...props}
     >
-      {src ? (
+      {processedSrc && !error ? (
         <Image
-          src={src}
+          src={processedSrc}
           alt={alt || name || "avatar"}
           fill
           sizes={`${size}px`}
           className="object-cover"
+          onError={() => setError(true)}
         />
       ) : (
         <span className="text-sm font-medium text-muted-foreground">

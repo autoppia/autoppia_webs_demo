@@ -24,7 +24,7 @@
     "lastReview": {
       "title": "Built e-commerce platform from scratch",
       "stars": 5,
-      "text": "\"Excellent work! Sarah delivered a robust, scalable solution ahead of schedule. Highly professional and great communication throughout the project.\"",
+      "text": "Excellent work! Sarah delivered a robust, scalable solution ahead of schedule. Highly professional and great communication throughout the project.",
       "price": "$4,500",
       "rate": "$75/hr",
       "time": "60 hours",
@@ -57,7 +57,7 @@
     "lastReview": {
       "title": "Migrated infrastructure to Kubernetes",
       "stars": 5,
-      "text": "\"Michael's expertise in Kubernetes was invaluable. Smooth migration with zero downtime. Would definitely hire again!\"",
+      "text": "Michael's expertise in Kubernetes was invaluable. Smooth migration with zero downtime. Would definitely hire again!",
       "price": "$3,900",
       "rate": "$65/hr",
       "time": "60 hours",
@@ -89,7 +89,7 @@
     "lastReview": {
       "title": "Led product strategy for mobile app launch",
       "stars": 5,
-      "text": "\"Emily has excellent product sense and great communication skills. She helped us define a clear roadmap and prioritize features effectively.\"",
+      "text": "Emily has excellent product sense and great communication skills. She helped us define a clear roadmap and prioritize features effectively.",
       "price": "$3,500",
       "rate": "$70/hr",
       "time": "50 hours",
@@ -121,7 +121,7 @@
     "lastReview": {
       "title": "Built recommendation system using deep learning",
       "stars": 5,
-      "text": "\"David's expertise in ML is outstanding. The recommendation system improved our conversion rate by 35%. Highly recommend!\"",
+      "text": "David's expertise in ML is outstanding. The recommendation system improved our conversion rate by 35%. Highly recommend!",
       "price": "$4,800",
       "rate": "$80/hr",
       "time": "60 hours",
@@ -153,7 +153,7 @@
     "lastReview": {
       "title": "Redesigned mobile app interface",
       "stars": 5,
-      "text": "\"Lisa's design work is exceptional. The new interface is intuitive and beautiful. Great attention to detail and user needs.\"",
+      "text": "Lisa's design work is exceptional. The new interface is intuitive and beautiful. Great attention to detail and user needs.",
       "price": "$3,000",
       "rate": "$60/hr",
       "time": "50 hours",
@@ -184,7 +184,7 @@
     "lastReview": {
       "title": "Built payment processing API",
       "stars": 5,
-      "text": "\"James built a robust, secure payment API that processes thousands of transactions daily. Excellent work and very reliable.\"",
+      "text": "James built a robust, secure payment API that processes thousands of transactions daily. Excellent work and very reliable.",
       "price": "$4,320",
       "rate": "$72/hr",
       "time": "60 hours",
@@ -216,7 +216,7 @@
     "lastReview": {
       "title": "Built React component library",
       "stars": 5,
-      "text": "\"Maria delivered a comprehensive component library that saved us months of development time. Great code quality!\"",
+      "text": "Maria delivered a comprehensive component library that saved us months of development time. Great code quality!",
       "price": "$3,300",
       "rate": "$55/hr",
       "time": "60 hours",
@@ -248,7 +248,7 @@
     "lastReview": {
       "title": "Developed iOS app for fitness tracking",
       "stars": 5,
-      "text": "\"Robert's mobile development skills are top-notch. The app is smooth, performant, and beautifully designed. Highly professional!\"",
+      "text": "Robert's mobile development skills are top-notch. The app is smooth, performant, and beautifully designed. Highly professional!",
       "price": "$4,080",
       "rate": "$68/hr",
       "time": "60 hours",
@@ -279,7 +279,7 @@
     "lastReview": {
       "title": "Set up automated testing infrastructure",
       "stars": 5,
-      "text": "\"Jennifer's test automation setup caught dozens of bugs before production. Excellent work and very thorough!\"",
+      "text": "Jennifer's test automation setup caught dozens of bugs before production. Excellent work and very thorough!",
       "price": "$3,000",
       "rate": "$50/hr",
       "time": "60 hours",
@@ -310,7 +310,7 @@
     "lastReview": {
       "title": "Conducted security audit and penetration testing",
       "stars": 5,
-      "text": "\"William's security expertise is exceptional. Found critical vulnerabilities we didn't know about. Highly recommend for security audits!\"",
+      "text": "William's security expertise is exceptional. Found critical vulnerabilities we didn't know about. Highly recommend for security audits!",
       "price": "$5,100",
       "rate": "$85/hr",
       "time": "60 hours",
@@ -341,7 +341,7 @@
     "lastReview": {
       "title": "Designed complete UI for SaaS platform",
       "stars": 5,
-      "text": "\"Amanda's design work is beautiful and professional. The new UI is both elegant and highly functional. Great to work with!\"",
+      "text": "Amanda's design work is beautiful and professional. The new UI is both elegant and highly functional. Great to work with!",
       "price": "$3,480",
       "rate": "$58/hr",
       "time": "60 hours",
@@ -374,7 +374,7 @@
     "lastReview": {
       "title": "Built full-stack web application",
       "stars": 5,
-      "text": "\"Chris delivered a complete, production-ready application. Great code quality and excellent communication. Highly recommended!\"",
+      "text": "Chris delivered a complete, production-ready application. Great code quality and excellent communication. Highly recommended!",
       "price": "$3,720",
       "rate": "$62/hr",
       "time": "60 hours",
@@ -405,7 +405,7 @@
     "lastReview": {
       "title": "Conducted comprehensive user research study",
       "stars": 5,
-      "text": "\"Nicole's research insights were invaluable. She helped us understand our users better and make data-driven design decisions.\"",
+      "text": "Nicole's research insights were invaluable. She helped us understand our users better and make data-driven design decisions.",
       "price": "$3,250",
       "rate": "$65/hr",
       "time": "50 hours",
@@ -436,7 +436,7 @@
     "lastReview": {
       "title": "Wrote comprehensive API documentation",
       "stars": 5,
-      "text": "\"Daniel's documentation is clear, thorough, and well-organized. It made our API much easier for developers to use. Excellent work!\"",
+      "text": "Daniel's documentation is clear, thorough, and well-organized. It made our API much easier for developers to use. Excellent work!",
       "price": "$2,700",
       "rate": "$45/hr",
       "time": "60 hours",
@@ -468,7 +468,7 @@
     "lastReview": {
       "title": "Set up cloud infrastructure on AWS",
       "stars": 5,
-      "text": "\"Sophia's infrastructure setup is solid and well-architected. Everything is automated and scalable. Great expertise!\"",
+      "text": "Sophia's infrastructure setup is solid and well-architected. Everything is automated and scalable. Great expertise!",
       "price": "$4,200",
       "rate": "$70/hr",
       "time": "60 hours",

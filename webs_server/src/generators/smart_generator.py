@@ -142,7 +142,22 @@ def get_project_entity_metadata(project_key: str, entity_type: str) -> Dict[str,
         "web_2_autobooks": {
             "books": {
                 "description": "Book catalog entries",
-                "categories": ["Adventure", "Drama", "Education", "Fantasy", "Fiction", "Historical Fiction", "Horror", "Literary", "Mystery", "Nonfiction", "Romance", "Science", "Sci-Fi", "Thriller"],
+                "categories": [
+                    "Adventure",
+                    "Drama",
+                    "Education",
+                    "Fantasy",
+                    "Fiction",
+                    "Historical Fiction",
+                    "Horror",
+                    "Literary",
+                    "Mystery",
+                    "Nonfiction",
+                    "Romance",
+                    "Science",
+                    "Sci-Fi",
+                    "Thriller",
+                ],
                 "requirements": "Include realistic book titles, descriptions, years (1900-2025), durations (pages: 200-1000), ratings (0-5), authors (director field), cast arrays (optional), purchase URLs (trailer_url field), image paths, genres arrays, and optional price field.",
             }
         },
@@ -233,7 +248,7 @@ def get_project_entity_metadata(project_key: str, entity_type: str) -> Dict[str,
             "calendar_events": {
                 "description": "Calendar events with recurrence and attendees",
                 "categories": ["Work", "Personal", "Wellness", "Friends", "Family"],
-                "requirements": "Each event must include a unique id, date, numeric start and end hours, label, calendar category, color, startTime and endTime arrays, description, location, allDay flag, recurrence type with optional recurrenceEndDate, attendees list, reminder offsets in minutes, busy status, visibility level, and an optional meeting link."
+                "requirements": "Each event must include a unique id, date, numeric start and end hours, label, calendar category, color, startTime and endTime arrays, description, location, allDay flag, recurrence type with optional recurrenceEndDate, attendees list, reminder offsets in minutes, busy status, visibility level, and an optional meeting link.",
             }
         },
         "web_12_autolist": {

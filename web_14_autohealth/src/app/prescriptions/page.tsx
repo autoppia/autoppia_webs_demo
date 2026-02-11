@@ -6,12 +6,15 @@ import type { Prescription } from "@/data/types";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { Pagination, PAGINATION_PAGE_SIZE } from "@/components/ui/pagination";
 
 export default function PrescriptionsPage() {
   const dyn = useDynamicSystem();
@@ -19,18 +22,19 @@ export default function PrescriptionsPage() {
   const [prescriptionList, setPrescriptionList] = useState<Prescription[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Search input state (what user types)
+  const [searchMedicine, setSearchMedicine] = useState<string>("");
+  const [searchDoctor, setSearchDoctor] = useState<string>("");
+  // Applied search state (used for filtering; set when user clicks Search)
+  const [appliedSearchMedicine, setAppliedSearchMedicine] = useState<string>("");
+  const [appliedSearchDoctor, setAppliedSearchDoctor] = useState<string>("");
+
   const useAiGeneration = isDataGenerationAvailable() && !isDbLoadModeEnabled();
 
   const handleViewPrescription = (prescription: Prescription) => {
-    logEvent(EVENT_TYPES.VIEW_PRESCRIPTION, {
-      prescriptionId: prescription.id,
-      medicineName: prescription.medicineName,
-      dosage: prescription.dosage,
-      doctorName: prescription.doctorName,
-      startDate: prescription.startDate,
-      status: prescription.status,
-      category: prescription.category
-    });
+    logEvent(EVENT_TYPES.VIEW_PRESCRIPTION, { prescription });
     setSelectedPrescription(prescription);
   };
 
@@ -62,7 +66,7 @@ export default function PrescriptionsPage() {
   const orderedStatuses = useMemo(() => {
     const order = dyn.v1.changeOrderElements("prescriptions-statuses", statuses.length);
     return order.map((idx) => statuses[idx]);
-  }, [dyn.seed, statuses]);
+  }, [dyn.v1, statuses]);
 
   useEffect(() => {
     let mounted = true;
@@ -100,16 +104,56 @@ export default function PrescriptionsPage() {
     };
   }, []);
 
+  // Normalize status for comparison (API/dataset may use "Refill Needed" or "refill_needed")
+  const normalizeStatus = (s: string | undefined) =>
+    (s ?? "").toLowerCase().trim().replace(/\s+/g, "_");
+
+  const handleSearch = () => {
+    setAppliedSearchMedicine(searchMedicine.trim());
+    setAppliedSearchDoctor(searchDoctor.trim());
+    setCurrentPage(1);
+    logEvent(EVENT_TYPES.SEARCH_PRESCRIPTION, {
+      medicine: searchMedicine.trim() || undefined,
+      doctor: searchDoctor.trim() || undefined,
+    });
+  };
+
   const filteredPrescriptions = useMemo(() => {
-    return selectedStatus === "all" 
-      ? prescriptionList 
-      : prescriptionList.filter(p => p.status === selectedStatus);
-  }, [selectedStatus, prescriptionList]);
+    let filtered = prescriptionList;
+    if (selectedStatus !== "all") {
+      const want = normalizeStatus(selectedStatus);
+      filtered = filtered.filter((p) => normalizeStatus(p.status) === want);
+    }
+    if (appliedSearchMedicine) {
+      const term = appliedSearchMedicine.toLowerCase();
+      filtered = filtered.filter(
+        (p) =>
+          p.medicineName.toLowerCase().includes(term) ||
+          (p.genericName?.toLowerCase().includes(term) ?? false)
+      );
+    }
+    if (appliedSearchDoctor) {
+      const term = appliedSearchDoctor.toLowerCase();
+      filtered = filtered.filter((p) => p.doctorName.toLowerCase().includes(term));
+    }
+    return filtered;
+  }, [prescriptionList, selectedStatus, appliedSearchMedicine, appliedSearchDoctor]);
 
   const orderedRows = useMemo(() => {
     const order = dyn.v1.changeOrderElements("prescriptions-rows", filteredPrescriptions.length);
     return order.map((idx) => filteredPrescriptions[idx]);
-  }, [dyn.seed, filteredPrescriptions]);
+  }, [dyn.v1, filteredPrescriptions]);
+
+  // Reset to page 1 when filter or applied search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedStatus, appliedSearchMedicine, appliedSearchDoctor]);
+
+  const totalPrescriptions = orderedRows.length;
+  const paginatedRows = useMemo(() => {
+    const start = (currentPage - 1) * PAGINATION_PAGE_SIZE;
+    return orderedRows.slice(start, start + PAGINATION_PAGE_SIZE);
+  }, [orderedRows, currentPage]);
 
   const columns = useMemo(() => [
     { key: 'medicine', header: 'Medicine' },
@@ -123,7 +167,7 @@ export default function PrescriptionsPage() {
   const orderedColumns = useMemo(() => {
     const order = dyn.v1.changeOrderElements("prescriptions-columns", columns.length);
     return order.map((idx) => columns[idx]);
-  }, [dyn.seed, columns]);
+  }, [dyn.v1, columns]);
 
   if (useAiGeneration && isLoading) {
     return (
@@ -147,6 +191,68 @@ export default function PrescriptionsPage() {
     <div className="container py-10">
       <h1 className="text-2xl font-semibold">Prescriptions</h1>
 
+      {/* Search: Medicine & Doctor */}
+      <div className="mt-6 rounded-lg border bg-card p-4">
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+          <div className="space-y-2">
+            <Label htmlFor="search-prescription-medicine">Medicine</Label>
+            <Input
+              id="search-prescription-medicine"
+              placeholder="Medicine name..."
+              value={searchMedicine}
+              onChange={(e) => setSearchMedicine(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleSearch())}
+              className="h-10"
+              data-testid="search-prescription-medicine"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="search-prescription-doctor">Doctor</Label>
+            <Input
+              id="search-prescription-doctor"
+              placeholder="Doctor name..."
+              value={searchDoctor}
+              onChange={(e) => setSearchDoctor(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleSearch())}
+              className="h-10"
+              data-testid="search-prescription-doctor"
+            />
+          </div>
+          <div className="flex items-end">
+            <Button
+              type="button"
+              onClick={handleSearch}
+              className="h-10 bg-emerald-600 hover:bg-emerald-700"
+              data-testid="prescriptions-search-button"
+            >
+              Search
+            </Button>
+          </div>
+        </div>
+
+        {/* Clear Filters Button */}
+        {(selectedStatus !== "all" || appliedSearchMedicine || appliedSearchDoctor) && (
+          <div className="mt-4 flex justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              data-testid="filter-prescriptions-clear"
+              onClick={() => {
+                setSearchMedicine("");
+                setSearchDoctor("");
+                setAppliedSearchMedicine("");
+                setAppliedSearchDoctor("");
+                setSelectedStatus("all");
+                setCurrentPage(1);
+              }}
+              className="text-sm"
+            >
+              Clear All Filters
+            </Button>
+          </div>
+        )}
+      </div>
+
       {/* Status Filter */}
       <div className="mt-6 flex flex-wrap gap-2">
         {orderedStatuses.map((status, i) => (
@@ -157,10 +263,7 @@ export default function PrescriptionsPage() {
               className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
               variant={selectedStatus === status ? "default" : "outline"}
               size="sm"
-              onClick={() => {
-                setSelectedStatus(status);
-                logEvent(EVENT_TYPES.FILTER_BY_SPECIALTY, { status });
-              }}
+              onClick={() => setSelectedStatus(status)}
             >
               {dyn.v3.getVariant(`filter_${status}`, TEXT_VARIANTS_MAP, status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' '))}
             </Button>
@@ -168,7 +271,14 @@ export default function PrescriptionsPage() {
         ))}
       </div>
 
-      <div className="mt-6">
+      <Pagination
+        totalItems={totalPrescriptions}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        itemsPerPage={PAGINATION_PAGE_SIZE}
+        data-testid="prescriptions-pagination"
+      />
+      <div className="mt-4">
         <Table>
           <TableHeader>
             <TableRow>
@@ -178,7 +288,7 @@ export default function PrescriptionsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {orderedRows.map((p, ri) => (
+            {paginatedRows.map((p, ri) => (
               <TableRow key={p.id}>
                 {orderedColumns.map((c) => {
                   if (c.key === 'medicine') return (
@@ -212,6 +322,7 @@ export default function PrescriptionsPage() {
                           className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
                           onClick={() => handleViewPrescription(p)} 
                           size="sm"
+                          data-testid="view-prescription-btn"
                         >
                           {dyn.v3.getVariant("view_prescription", TEXT_VARIANTS_MAP, "View Prescription")}
                         </Button>
@@ -225,11 +336,29 @@ export default function PrescriptionsPage() {
           </TableBody>
         </Table>
       </div>
+      <Pagination
+        totalItems={totalPrescriptions}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        itemsPerPage={PAGINATION_PAGE_SIZE}
+        className="mt-6"
+        data-testid="prescriptions-pagination-bottom"
+      />
 
       {/* Prescription Detail Modal */}
       {selectedPrescription && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          onClick={() => setSelectedPrescription(null)}
+          role="presentation"
+          aria-label="Close modal"
+        >
+          <div
+            className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+          >
             <div className="flex items-start justify-between mb-6">
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{getCategoryIcon(selectedPrescription.category)}</span>
@@ -334,12 +463,12 @@ export default function PrescriptionsPage() {
               <Button 
                 onClick={() => {
                   logEvent(EVENT_TYPES.REFILL_PRESCRIPTION, {
-                    prescriptionId: selectedPrescription.id,
-                    medicineName: selectedPrescription.medicineName
+                    prescription: selectedPrescription,
                   });
                 }}
                 disabled={selectedPrescription.refillsRemaining === 0}
                 className="w-full"
+                data-testid="request-refill-btn"
               >
                 Request Refill
               </Button>

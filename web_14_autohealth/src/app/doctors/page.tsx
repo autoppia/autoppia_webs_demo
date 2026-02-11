@@ -10,11 +10,16 @@ import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Star } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { MEDICAL_SPECIALTIES } from "@/data/medical-specialties";
+import { Pagination } from "@/components/ui/pagination";
+
+const DOCTORS_PAGE_SIZE = 9;
 
 function Stars({ value }: { value: number }) {
   const stars = Array.from({ length: 5 }).map((_, i) => {
@@ -29,46 +34,70 @@ function Stars({ value }: { value: number }) {
 export default function DoctorsPage() {
   const dyn = useDynamicSystem();
   const [doctorList, setDoctorList] = useState<Doctor[]>([]);
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchName, setSearchName] = useState("");
+  const [selectedSpecialty, setSelectedSpecialty] = useState<string>("");
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("");
+  const [appliedSearchName, setAppliedSearchName] = useState("");
+  const [appliedSpecialty, setAppliedSpecialty] = useState<string>("");
+  const [appliedLanguage, setAppliedLanguage] = useState<string>("");
+  const [sortBy, setSortBy] = useState<"rating" | "price" | "">("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [currentPage, setCurrentPage] = useState(1);
   const useAiGeneration = isDataGenerationAvailable() && !isDbLoadModeEnabled();
 
-  const handleBookNow = (doctor: Doctor) => {
-    // Log the book now event
-    logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
-      appointmentId: `temp-${doctor.id}`,
-      doctorId: doctor.id,
-      doctorName: doctor.name,
-      specialty: doctor.specialty,
-      rating: doctor.rating,
-      date: new Date().toISOString().split('T')[0],
-      time: "10:00 AM",
-      action: "open_booking_modal",
-      source: "doctors_page",
-      modalOpenTime: new Date().toISOString()
-    });
+  const handleSearch = () => {
+    const nameFilter = searchName.trim();
+    const specialtyFilter = selectedSpecialty;
+    const languageFilter = selectedLanguage;
+    setAppliedSearchName(nameFilter);
+    setAppliedSpecialty(specialtyFilter);
+    setAppliedLanguage(languageFilter);
+    setCurrentPage(1);
 
-    setSelectedDoctor(doctor);
-    setIsBookingModalOpen(true);
+    let resultDoctors = doctorList;
+    if (nameFilter) {
+      const term = nameFilter.toLowerCase();
+      resultDoctors = resultDoctors.filter((d) => d.name.toLowerCase().includes(term));
+    }
+    if (specialtyFilter) {
+      resultDoctors = resultDoctors.filter(
+        (d) => d.specialty.toLowerCase() === specialtyFilter.toLowerCase()
+      );
+    }
+    if (languageFilter) {
+      resultDoctors = resultDoctors.filter((d) =>
+        (d.languages || []).some((l) => l.toLowerCase() === languageFilter.toLowerCase())
+      );
+    }
+
+    const hasSearch = nameFilter.length > 0 || specialtyFilter.length > 0 || languageFilter.length > 0;
+    if (hasSearch) {
+      logEvent(EVENT_TYPES.SEARCH_DOCTORS, {
+        searchTerm: nameFilter || null,
+        specialty: specialtyFilter || null,
+        language: languageFilter || null,
+        doctors: resultDoctors,
+      });
+    }
   };
 
   useEffect(() => {
     let mounted = true;
     let unsubscribe: (() => void) | null = null;
-    
+
     const loadDoctors = async () => {
       try {
         await whenReady();
         if (!mounted) return;
-        
+
         // Get initial data
         const doctors = getDoctors();
         if (mounted) {
           setDoctorList(doctors);
           setIsLoading(false);
         }
-        
+
         // Subscribe to updates
         unsubscribe = subscribeDoctors((doctors) => {
           if (mounted) {
@@ -80,19 +109,67 @@ export default function DoctorsPage() {
         if (mounted) setIsLoading(false);
       }
     };
-    
+
     loadDoctors();
-    
+
     return () => {
       mounted = false;
       if (unsubscribe) unsubscribe();
     };
   }, []);
-  
+
+  // Unique languages from doctor list for filter dropdown
+  const availableLanguages = useMemo(() => {
+    const set = new Set<string>();
+    doctorList.forEach((d) => (d.languages || []).forEach((l) => set.add(l)));
+    return [...set].sort();
+  }, [doctorList]);
+
+  // Filter doctors by applied name, speciality, language
+  const filteredDoctors = useMemo(() => {
+    let filtered = doctorList;
+    if (appliedSearchName) {
+      const searchTerm = appliedSearchName.toLowerCase();
+      filtered = filtered.filter(doctor =>
+        doctor.name.toLowerCase().includes(searchTerm)
+      );
+    }
+    if (appliedSpecialty) {
+      filtered = filtered.filter(doctor =>
+        doctor.specialty.toLowerCase() === appliedSpecialty.toLowerCase()
+      );
+    }
+    if (appliedLanguage) {
+      filtered = filtered.filter((d) =>
+        (d.languages || []).some((l) => l.toLowerCase() === appliedLanguage.toLowerCase())
+      );
+    }
+    return filtered;
+  }, [doctorList, appliedSearchName, appliedSpecialty, appliedLanguage]);
+
+  // Sort then apply dynamic order
   const orderedDoctors = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("doctors-list", doctorList.length);
-    return order.map((idx) => doctorList[idx]);
-  }, [dyn.seed, doctorList]);
+    let list = [...filteredDoctors];
+    if (sortBy === "rating") {
+      list.sort((a, b) => (sortOrder === "desc" ? b.rating - a.rating : a.rating - b.rating));
+    } else if (sortBy === "price") {
+      list.sort((a, b) => (sortOrder === "desc" ? b.consultationFee - a.consultationFee : a.consultationFee - b.consultationFee));
+    } else {
+      const order = dyn.v1.changeOrderElements("doctors-list", list.length);
+      list = order.map((idx) => list[idx]);
+    }
+    return list;
+  }, [dyn.v1, filteredDoctors, sortBy, sortOrder]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [appliedSearchName, appliedSpecialty, appliedLanguage, sortBy, sortOrder]);
+
+  const totalDoctors = orderedDoctors.length;
+  const paginatedDoctors = useMemo(() => {
+    const start = (currentPage - 1) * DOCTORS_PAGE_SIZE;
+    return orderedDoctors.slice(start, start + DOCTORS_PAGE_SIZE);
+  }, [orderedDoctors, currentPage]);
 
   if (useAiGeneration && isLoading) {
     return (
@@ -113,78 +190,224 @@ export default function DoctorsPage() {
   }
 
   return (
-    <div className="container py-10">
-      {dyn.v1.addWrapDecoy("doctors-page-header", (
-        <h1 className="text-2xl font-semibold">Doctors</h1>
-      ))}
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {orderedDoctors.map((d, i) => (
-          dyn.v1.addWrapDecoy(`doctor-card-${i}`, (
-            <Card key={d.id} className={cn("flex flex-col w-full", dyn.v3.getVariant("doctor-card", CLASS_VARIANTS_MAP, ""))}>
-              <CardHeader className="flex-row items-center gap-4">
-                <Avatar name={d.name} />
-                <div>
-                  <CardTitle className="text-lg">{d.name}</CardTitle>
-                  <div className="text-sm text-muted-foreground">{d.specialty}</div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <Stars value={d.rating} />
-                <p className="mt-3 text-sm text-muted-foreground">{d.bio}</p>
-              </CardContent>
-              <CardFooter className="mt-auto flex gap-2">
-                <SeedLink href={`/doctors/${d.id}`}>
-                  {dyn.v1.addWrapDecoy(`view-profile-button-${i}`, (
-                    <Button 
-                      id={dyn.v3.getVariant("view-profile-button", ID_VARIANTS_MAP, `view-profile-button-${i}`)}
-                      className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
-                      variant="outline"
-                      onClick={() => {
-                        // Store index and seed in sessionStorage for fallback lookup
-                        if (typeof window !== 'undefined') {
-                          const indexData = JSON.stringify({ index: i, seed: dyn.seed });
-                          sessionStorage.setItem(`__autohealth_doctor_index_${d.id}`, indexData);
-                        }
-                        logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
-                          doctorId: d.id,
-                          doctorName: d.name,
-                          specialty: d.specialty,
-                          rating: d.rating
-                        });
-                      }}
-                    >
-                      {dyn.v3.getVariant("view_profile", TEXT_VARIANTS_MAP, "View Profile")}
-                    </Button>
-                  ))}
-                </SeedLink>
-                {dyn.v1.addWrapDecoy(`book-now-button-${i}`, (
-                  <Button 
-                    id={dyn.v3.getVariant("book-now-button", ID_VARIANTS_MAP, `book-now-button-${i}`)}
-                    className={cn("bg-green-600 hover:bg-green-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
-                    onClick={() => handleBookNow(d)}
-                  >
-                    {dyn.v3.getVariant("book_now", TEXT_VARIANTS_MAP, "Book Now")}
-                  </Button>
-                ))}
-              </CardFooter>
-            </Card>
-          ), `doctor-card-${i}`)
-        ))}
-      </div>
+    <>
+      {/* Hero Section with Filters */}
+      <section
+        className="relative min-h-[280px] flex items-center justify-center bg-cover bg-no-repeat"
+        style={{
+          backgroundImage: "url('/images/doctors.jpg')",
+          backgroundPosition: "center top",
+        }}
+      >
+        {/* Dark overlay for better readability */}
+        <div className="absolute inset-0 bg-black/60" />
 
-      {/* Appointment Booking Modal */}
-      <AppointmentBookingModal
-        open={isBookingModalOpen}
-        onOpenChange={setIsBookingModalOpen}
-        appointment={selectedDoctor ? {
-          id: `temp-${selectedDoctor.id}`,
-          doctorId: selectedDoctor.id,
-          doctorName: selectedDoctor.name,
-          specialty: selectedDoctor.specialty,
-          date: new Date().toISOString().split('T')[0],
-          time: "10:00 AM"
-        } : null}
-      />
-    </div>
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-4 py-6">
+          <div className="max-w-6xl mx-auto">
+            {dyn.v1.addWrapDecoy("doctors-page-header", (
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-4 text-center">Doctors</h1>
+            ))}
+
+            {/* Search and Filter Section: Name, Speciality, Language only */}
+            <div className="p-4 md:p-6">
+              <div className="grid gap-4 md:grid-cols-[1fr_1fr_1fr_auto] items-end">
+                <div className="space-y-2">
+                  <Label htmlFor="doctor-name-search" className="text-sm font-medium text-white">Search by Name</Label>
+                  <Input
+                    id="doctor-name-search"
+                    type="text"
+                    placeholder="Enter doctor's name..."
+                    value={searchName}
+                    onChange={(e) => setSearchName(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                    className={cn(dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, ""))}
+                    data-testid="doctor-name-search"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="doctor-specialty-filter" className="text-sm font-medium text-white">Filter by Speciality</Label>
+                  <select
+                    id="doctor-specialty-filter"
+                    value={selectedSpecialty}
+                    onChange={(e) => setSelectedSpecialty(e.target.value)}
+                    className={cn(
+                      "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                      dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "")
+                    )}
+                    data-testid="doctor-specialty-filter"
+                  >
+                    <option value="">All Specialties</option>
+                    {[...MEDICAL_SPECIALTIES].sort().map((specialty: string) => (
+                      <option key={specialty} value={specialty}>
+                        {specialty}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="doctor-language-filter" className="text-sm font-medium text-white">Filter by Language</Label>
+                  <select
+                    id="doctor-language-filter"
+                    value={selectedLanguage}
+                    onChange={(e) => setSelectedLanguage(e.target.value)}
+                    className={cn(
+                      "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                      dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "")
+                    )}
+                    data-testid="doctor-language-filter"
+                  >
+                    <option value="">All Languages</option>
+                    {availableLanguages.map((lang) => (
+                      <option key={lang} value={lang}>
+                        {lang}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <Button
+                  type="button"
+                  onClick={handleSearch}
+                  className={cn("bg-emerald-600 hover:bg-emerald-700 h-10", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
+                  data-testid="doctors-search-button"
+                >
+                  {dyn.v3.getVariant("search", TEXT_VARIANTS_MAP, "Search")}
+                </Button>
+              </div>
+
+              {/* Clear Filters Button */}
+              {(appliedSearchName || appliedSpecialty || appliedLanguage) && (
+                <div className="mt-4 flex justify-end">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    data-testid="filter-doctors-clear"
+                    onClick={() => {
+                      setSearchName("");
+                      setSelectedSpecialty("");
+                      setSelectedLanguage("");
+                      setAppliedSearchName("");
+                      setAppliedSpecialty("");
+                      setAppliedLanguage("");
+                      setCurrentPage(1);
+                    }}
+                    className="text-sm"
+                  >
+                    Clear All Filters
+                  </Button>
+                </div>
+              )}
+
+              <div className="mt-4 text-sm text-white">
+                {totalDoctors} of {doctorList.length} doctors
+                {appliedSearchName && ` matching "${appliedSearchName}"`}
+                {appliedSpecialty && ` in ${appliedSpecialty}`}
+                {appliedLanguage && ` speaking ${appliedLanguage}`}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Doctors Grid + Sort by Rating / Price */}
+      <div className="container py-10">
+        <div className="flex flex-wrap items-center gap-4 mb-4">
+          <span className="text-sm font-medium text-muted-foreground">Sort by</span>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy((e.target.value || "") as "rating" | "price" | "")}
+            className={cn(
+              "flex h-9 min-w-[120px] rounded-md border border-input bg-background px-3 py-1 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "")
+            )}
+            data-testid="doctors-sort-by"
+          >
+            <option value="">Default</option>
+            <option value="rating">Rating</option>
+            <option value="price">Price</option>
+          </select>
+          {sortBy && (
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
+              className={cn(
+                "flex h-9 min-w-[100px] rounded-md border border-input bg-background px-3 py-1 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                dyn.v3.getVariant("input", CLASS_VARIANTS_MAP, "")
+              )}
+              data-testid="doctors-sort-order"
+            >
+              <option value="desc">{sortBy === "rating" ? "Highest first" : "Highest first"}</option>
+              <option value="asc">{sortBy === "rating" ? "Lowest first" : "Lowest first"}</option>
+            </select>
+          )}
+        </div>
+        <Pagination
+          totalItems={totalDoctors}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          itemsPerPage={DOCTORS_PAGE_SIZE}
+          data-testid="doctors-pagination"
+        />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-4">
+          {paginatedDoctors.map((d, i) => (
+            dyn.v1.addWrapDecoy(`doctor-card-${i}`, (
+              <Card key={d.id} className={cn("flex flex-col w-full", dyn.v3.getVariant("doctor-card", CLASS_VARIANTS_MAP, ""))}>
+                <CardHeader className="flex-row items-center gap-4">
+                  <Avatar
+                    src={`/images/doctors/${d.id}.jpg`}
+                    alt={`${d.name} profile photo`}
+                    name={d.name}
+                    data-testid={`doctor-avatar-${d.id}`}
+                    data-agent-id={`doctor-profile-image-${d.id}`}
+                  />
+                  <div>
+                    <CardTitle className="text-lg">{d.name}</CardTitle>
+                    <div className="text-sm text-muted-foreground">{d.specialty}</div>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <Stars value={d.rating} />
+                  <p className="mt-3 text-sm text-muted-foreground">{d.bio}</p>
+                </CardContent>
+                <CardFooter className="mt-auto flex items-center justify-end pt-2">
+                  <SeedLink href={`/doctors/${d.id}`}>
+                    {dyn.v1.addWrapDecoy(`view-profile-button-${i}`, (
+                      <Button
+                        id={dyn.v3.getVariant("view-profile-button", ID_VARIANTS_MAP, `view-profile-button-${i}`)}
+                        className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
+                        variant="outline"
+                        onClick={() => {
+                          // Store index and seed in sessionStorage for fallback lookup
+                          if (typeof window !== 'undefined') {
+                            const indexData = JSON.stringify({ index: i, seed: dyn.seed });
+                            sessionStorage.setItem(`__autohealth_doctor_index_${d.id}`, indexData);
+                          }
+                          logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
+                            doctorId: d.id,
+                            doctorName: d.name,
+                            specialty: d.specialty,
+                            rating: d.rating
+                          });
+                        }}
+                      >
+                        {dyn.v3.getVariant("view_profile", TEXT_VARIANTS_MAP, "View Profile")}
+                      </Button>
+                    ))}
+                  </SeedLink>
+                </CardFooter>
+              </Card>
+            ), `doctor-card-${i}`)
+          ))}
+        </div>
+        <Pagination
+          totalItems={totalDoctors}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          itemsPerPage={DOCTORS_PAGE_SIZE}
+          className="mt-6"
+          data-testid="doctors-pagination-bottom"
+        />
+      </div>
+    </>
   );
 }
