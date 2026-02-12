@@ -1,7 +1,5 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
-import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
-import { getApiBaseUrl } from "@/shared/data-generator";
 import { CalendarEvent, EVENTS_DATASET } from "@/library/dataset";
 
 const PROJECT_KEY = "web_11_autocalendar";
@@ -48,52 +46,10 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
   return 1;
 };
 
-/**
- * Fetch AI generated events from /datasets/generate-smart endpoint
- */
-async function fetchAiGeneratedEvents(count: number): Promise<CalendarEvent[]> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/generate-smart`;
-  
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        project_key: PROJECT_KEY,
-        entity_type: ENTITY_TYPE,
-        count: 50, // Fixed count of 50
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => "");
-      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
-    }
-
-    const result = await response.json();
-    const generatedData = result?.generated_data ?? [];
-    
-    if (!Array.isArray(generatedData) || generatedData.length === 0) {
-      throw new Error("No data returned from AI generation endpoint");
-    }
-
-    return generatedData as CalendarEvent[];
-  } catch (error) {
-    console.error("[autocalendar] AI generation failed:", error);
-    throw error;
-  }
-}
-
 export async function initializeEvents(v2SeedValue?: number | null, limit = 200): Promise<CalendarEvent[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isV2AiGenerateEnabled();
-  
-  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+  if (baseSeed === 1 && dbModeEnabled) {
     console.log("[autocalendar] Base seed is 1, using original data (skipping DB/AI modes)");
     return EVENTS_DATASET.map((e) => ({ ...e }));
   }
@@ -128,27 +84,6 @@ export async function initializeEvents(v2SeedValue?: number | null, limit = 200)
       // If backend fails, fallback to local JSON
       console.warn("[autocalendar] Backend unavailable, falling back to local JSON:", error);
     }
-  }
-  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
-  else if (aiGenerateEnabled) {
-    try {
-      console.log("[autocalendar] AI generation mode enabled, generating events...");
-      const generatedEvents = await fetchAiGeneratedEvents(limit);
-      
-      if (Array.isArray(generatedEvents) && generatedEvents.length > 0) {
-        console.log(`[autocalendar] Generated ${generatedEvents.length} events via AI`);
-        return generatedEvents;
-      }
-      
-      console.warn("[autocalendar] No events generated, falling back to local JSON");
-    } catch (error) {
-      // If AI generation fails, fallback to local JSON
-      console.warn("[autocalendar] AI generation failed, falling back to local JSON:", error);
-    }
-  }
-  // Priority 3: Fallback - use original local JSON data
-  else {
-    console.log("[autocalendar] V2 modes disabled, loading from local JSON");
   }
 
   // Fallback to local JSON

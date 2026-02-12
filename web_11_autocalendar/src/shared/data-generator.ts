@@ -144,16 +144,9 @@ export async function generateProjectData(
   }
 }
 
+/** Data generation disabled - AI generate removed */
 export function isDataGenerationEnabled(): boolean {
-  const val = (
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE ??
-    process.env.ENABLE_DYNAMIC_V2_AI_GENERATE ??
-    ""
-  )
-    .toString()
-    .toLowerCase();
-  const enabled = ["true", "1", "yes", "on"].includes(val);
-  return enabled;
+  return false;
 }
 
 export function getApiBaseUrl(): string {

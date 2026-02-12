@@ -1,5 +1,4 @@
 import { isDbLoadModeEnabled, fetchSeededSelection } from "@/shared/seeded-loader";
-import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
 import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
 import { jobs, hires, experts, popularSkills } from "@/library/dataset";
 import type { AutoworkJob, AutoworkHire, AutoworkExpert } from "@/shared/data-generator";
@@ -106,150 +105,6 @@ const getRuntimeV2Seed = (): number | null => {
   }
   return null;
 };
-
-function getApiBaseUrl(): string {
-  const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
-  const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
-  const envIsLocal = envUrl && (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"));
-  const originIsLocal = origin && (origin.includes("localhost") || origin.includes("127.0.0.1"));
-
-  if (envUrl && (!(envIsLocal) || originIsLocal)) {
-    return envUrl;
-  }
-  if (origin) {
-    return `${origin}/api`;
-  }
-  return envUrl || "http://app:8090";
-}
-
-/**
- * Fetch AI generated jobs from /datasets/generate-smart endpoint
- */
-async function fetchAiGeneratedJobs(count: number): Promise<AutoworkJob[]> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/generate-smart`;
-  
-  console.log("[autowork] fetchAiGeneratedJobs - URL:", url, "count:", count);
-  
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        project_key: "web_10_autowork",
-        entity_type: "jobs",
-        count,
-      }),
-    });
-
-    console.log("[autowork] fetchAiGeneratedJobs - Response status:", response.status);
-
-    if (!response.ok) {
-      throw new Error(`AI generation failed: ${response.status}`);
-    }
-
-    const json = await response.json();
-    console.log("[autowork] fetchAiGeneratedJobs - Response keys:", Object.keys(json || {}));
-    console.log("[autowork] fetchAiGeneratedJobs - Response data:", json?.generated_data?.length || 0, "jobs");
-    
-    const generatedData = json?.generated_data ?? [];
-    if (!Array.isArray(generatedData) || generatedData.length === 0) {
-      console.error("[autowork] fetchAiGeneratedJobs - Invalid or empty generated data");
-      throw new Error("No data returned from AI generation endpoint");
-    }
-    
-    return generatedData as AutoworkJob[];
-  } catch (error) {
-    console.error("[autowork] fetchAiGeneratedJobs error:", error);
-    throw error;
-  }
-}
-
-/**
- * Fetch AI generated hires from /datasets/generate-smart endpoint
- */
-async function fetchAiGeneratedHires(count: number): Promise<AutoworkHire[]> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/generate-smart`;
-  
-  console.log("[autowork] fetchAiGeneratedHires - URL:", url, "count:", count);
-  
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        project_key: "web_10_autowork",
-        entity_type: "hires",
-        count,
-      }),
-    });
-
-    console.log("[autowork] fetchAiGeneratedHires - Response status:", response.status);
-
-    if (!response.ok) {
-      throw new Error(`AI generation failed: ${response.status}`);
-    }
-
-    const json = await response.json();
-    console.log("[autowork] fetchAiGeneratedHires - Response keys:", Object.keys(json || {}));
-    console.log("[autowork] fetchAiGeneratedHires - Response data:", json?.generated_data?.length || 0, "hires");
-    
-    const generatedData = json?.generated_data ?? [];
-    if (!Array.isArray(generatedData) || generatedData.length === 0) {
-      console.error("[autowork] fetchAiGeneratedHires - Invalid or empty generated data");
-      throw new Error("No data returned from AI generation endpoint");
-    }
-    
-    return generatedData as AutoworkHire[];
-  } catch (error) {
-    console.error("[autowork] fetchAiGeneratedHires error:", error);
-    throw error;
-  }
-}
-
-/**
- * Fetch AI generated experts from /datasets/generate-smart endpoint
- */
-async function fetchAiGeneratedExperts(count: number): Promise<AutoworkExpert[]> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/generate-smart`;
-  
-  console.log("[autowork] fetchAiGeneratedExperts - URL:", url, "count:", count);
-  
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        project_key: "web_10_autowork",
-        entity_type: "experts",
-        count,
-      }),
-    });
-
-    console.log("[autowork] fetchAiGeneratedExperts - Response status:", response.status);
-
-    if (!response.ok) {
-      throw new Error(`AI generation failed: ${response.status}`);
-    }
-
-    const json = await response.json();
-    console.log("[autowork] fetchAiGeneratedExperts - Response keys:", Object.keys(json || {}));
-    console.log("[autowork] fetchAiGeneratedExperts - Response data:", json?.generated_data?.length || 0, "experts");
-    
-    const generatedData = json?.generated_data ?? [];
-    if (!Array.isArray(generatedData) || generatedData.length === 0) {
-      console.error("[autowork] fetchAiGeneratedExperts - Invalid or empty generated data");
-      throw new Error("No data returned from AI generation endpoint");
-    }
-    
-    return generatedData as AutoworkExpert[];
-  } catch (error) {
-    console.error("[autowork] fetchAiGeneratedExperts error:", error);
-    throw error;
-  }
-}
 
 /**
  * Load jobs from DB
@@ -390,9 +245,8 @@ async function loadSkillsFromDb(seedValue?: number | null): Promise<string[]> {
 export async function initializeJobs(v2SeedValue?: number | null): Promise<AutoworkJob[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isV2AiGenerateEnabled();
   
-  console.log("[autowork] initializeJobs - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled, "aiGenerateEnabled:", aiGenerateEnabled);
+  console.log("[autowork] initializeJobs - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled);
   
   // Special case: if baseSeed = 1, ALWAYS use fallback data directly (skip API calls)
   if (baseSeed === 1) {
@@ -409,21 +263,6 @@ export async function initializeJobs(v2SeedValue?: number | null): Promise<Autow
     }
   }
   
-  // Try AI generation if enabled (and DB mode didn't return data)
-  if (aiGenerateEnabled && !dbModeEnabled) {
-    try {
-      const runtimeSeed = getRuntimeV2Seed();
-      const seed = v2SeedValue ?? runtimeSeed ?? 1;
-      const aiJobs = await fetchAiGeneratedJobs(50);
-      if (aiJobs.length > 0) {
-        console.log("[autowork] initializeJobs: ✅ Generated", aiJobs.length, "jobs via AI");
-        return aiJobs;
-      }
-    } catch (error) {
-      console.error("[autowork] initializeJobs: AI generation failed:", error);
-    }
-  }
-  
   // Fallback to original data
   console.log("[autowork] initializeJobs: Using fallback data (", fallbackJobs.length, "jobs)");
   return fallbackJobs;
@@ -435,9 +274,8 @@ export async function initializeJobs(v2SeedValue?: number | null): Promise<Autow
 export async function initializeHires(v2SeedValue?: number | null): Promise<AutoworkHire[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isV2AiGenerateEnabled();
   
-  console.log("[autowork] initializeHires - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled, "aiGenerateEnabled:", aiGenerateEnabled);
+  console.log("[autowork] initializeHires - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled);
   
   // Special case: if baseSeed = 1, ALWAYS use fallback data directly (skip API calls)
   if (baseSeed === 1) {
@@ -454,21 +292,6 @@ export async function initializeHires(v2SeedValue?: number | null): Promise<Auto
     }
   }
   
-  // Try AI generation if enabled (and DB mode didn't return data)
-  if (aiGenerateEnabled && !dbModeEnabled) {
-    try {
-      const runtimeSeed = getRuntimeV2Seed();
-      const seed = v2SeedValue ?? runtimeSeed ?? 1;
-      const aiHires = await fetchAiGeneratedHires(50);
-      if (aiHires.length > 0) {
-        console.log("[autowork] initializeHires: ✅ Generated", aiHires.length, "hires via AI");
-        return aiHires;
-      }
-    } catch (error) {
-      console.error("[autowork] initializeHires: AI generation failed:", error);
-    }
-  }
-  
   // Fallback to original data
   console.log("[autowork] initializeHires: Using fallback data (", fallbackHires.length, "hires)");
   return fallbackHires;
@@ -480,9 +303,8 @@ export async function initializeHires(v2SeedValue?: number | null): Promise<Auto
 export async function initializeExperts(v2SeedValue?: number | null): Promise<AutoworkExpert[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isV2AiGenerateEnabled();
   
-  console.log("[autowork] initializeExperts - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled, "aiGenerateEnabled:", aiGenerateEnabled);
+  console.log("[autowork] initializeExperts - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled);
   
   // Special case: if baseSeed = 1, ALWAYS use fallback data directly (skip API calls)
   if (baseSeed === 1) {
@@ -496,21 +318,6 @@ export async function initializeExperts(v2SeedValue?: number | null): Promise<Au
     if (dbExperts.length > 0) {
       console.log("[autowork] initializeExperts: ✅ Loaded", dbExperts.length, "experts from DB");
       return dbExperts;
-    }
-  }
-  
-  // Try AI generation if enabled (and DB mode didn't return data)
-  if (aiGenerateEnabled && !dbModeEnabled) {
-    try {
-      const runtimeSeed = getRuntimeV2Seed();
-      const seed = v2SeedValue ?? runtimeSeed ?? 1;
-      const aiExperts = await fetchAiGeneratedExperts(50);
-      if (aiExperts.length > 0) {
-        console.log("[autowork] initializeExperts: ✅ Generated", aiExperts.length, "experts via AI");
-        return aiExperts;
-      }
-    } catch (error) {
-      console.error("[autowork] initializeExperts: AI generation failed:", error);
     }
   }
   

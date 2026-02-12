@@ -1,7 +1,6 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
-import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
-import { getApiBaseUrl } from "@/shared/data-generator";
+import { clampBaseSeed, getSeedForLoad } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 import fallbackMovies from "./original/movies_1.json";
 
 export interface Movie {
@@ -39,46 +38,15 @@ type DatasetMovie = {
 
 const DEFAULT_POSTER = "/media/gallery/default_movie.png";
 
-const clampSeed = (value: number, fallback = 1): number =>
-  value >= 1 && value <= 300 ? value : fallback;
-
 const getBaseSeedFromUrl = (): number | null => {
   if (typeof window === "undefined") return null;
-  // Leer seed base de la URL
   const params = new URLSearchParams(window.location.search);
   const seedParam = params.get("seed");
   if (seedParam) {
     const parsed = Number.parseInt(seedParam, 10);
-    if (Number.isFinite(parsed)) {
-      return clampBaseSeed(parsed);
-    }
+    if (Number.isFinite(parsed)) return clampBaseSeed(parsed);
   }
   return null;
-};
-
-const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number => {
-  if (!dbModeEnabled) {
-    return 1;
-  }
-  
-  // Si se proporciona un seed específico (ya derivado), usarlo directamente
-  if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
-    return clampSeed(seedValue);
-  }
-  
-  // Obtener seed base de la URL y derivar el V2 seed
-  const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed !== null) {
-    // Derivar V2 seed usando la fórmula: ((baseSeed * 53 + 17) % 300) + 1
-    const resolvedSeeds = resolveSeedsSync(baseSeed);
-    if (resolvedSeeds.v2 !== null) {
-      return resolvedSeeds.v2;
-    }
-    // Si V2 no está habilitado, usar el base seed
-    return clampSeed(baseSeed);
-  }
-  
-  return 1;
 };
 
 const coerceNumber = (value: unknown, fallback = 0): number => {
@@ -160,52 +128,10 @@ const normalizeMovie = (movie: DatasetMovie): Movie => {
 
 let moviesCache: Movie[] = [];
 
-/**
- * Fetch AI generated movies from /datasets/generate-smart endpoint
- */
-async function fetchAiGeneratedMovies(count: number): Promise<DatasetMovie[]> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/generate-smart`;
-  
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        project_key: "web_1_autocinema",
-        entity_type: "movies",
-        count: 50, // Fixed count of 50
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => "");
-      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
-    }
-
-    const result = await response.json();
-    const generatedData = result?.generated_data ?? [];
-    
-    if (!Array.isArray(generatedData) || generatedData.length === 0) {
-      throw new Error("No data returned from AI generation endpoint");
-    }
-
-    return generatedData as DatasetMovie[];
-  } catch (error) {
-    console.error("[autocinema] AI generation failed:", error);
-    throw error;
-  }
-}
-
 export async function initializeMovies(v2SeedValue?: number | null, limit = 300): Promise<Movie[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isV2AiGenerateEnabled();
-  
-  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+  if (baseSeed === 1 && dbModeEnabled) {
     console.log("[autocinema] Base seed is 1, using original data (skipping DB/AI modes)");
     moviesCache = (fallbackMovies as DatasetMovie[]).map(normalizeMovie);
     return moviesCache;
@@ -217,7 +143,7 @@ export async function initializeMovies(v2SeedValue?: number | null, limit = 300)
     if (typeof window !== "undefined" && v2SeedValue == null) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
-    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+    const effectiveSeed = getSeedForLoad(v2SeedValue ?? getBaseSeedFromUrl() ?? 1);
 
     try {
       const movies = await fetchSeededSelection<DatasetMovie>({
@@ -243,28 +169,6 @@ export async function initializeMovies(v2SeedValue?: number | null, limit = 300)
       // If backend fails, fallback to local JSON
       console.warn("[autocinema] Backend unavailable, falling back to local JSON:", error);
     }
-  }
-  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
-  else if (aiGenerateEnabled) {
-    try {
-      console.log("[autocinema] AI generation mode enabled, generating movies...");
-      const generatedMovies = await fetchAiGeneratedMovies(limit);
-      
-      if (Array.isArray(generatedMovies) && generatedMovies.length > 0) {
-        console.log(`[autocinema] Generated ${generatedMovies.length} movies via AI`);
-        moviesCache = generatedMovies.map(normalizeMovie);
-        return moviesCache;
-      }
-      
-      console.warn("[autocinema] No movies generated, falling back to local JSON");
-    } catch (error) {
-      // If AI generation fails, fallback to local JSON
-      console.warn("[autocinema] AI generation failed, falling back to local JSON:", error);
-    }
-  }
-  // Priority 3: Fallback - use original local JSON data
-  else {
-    console.log("[autocinema] V2 modes disabled, loading from local JSON");
   }
 
   // Fallback to local JSON

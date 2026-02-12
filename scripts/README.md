@@ -218,7 +218,7 @@ The script uses a unified versioning system where you specify which dynamic feat
 3. **Normalize Versions**: Validates and normalizes version strings (e.g., `"v1,v2"`)
 4. **Map Versions to Flags**: Converts version tokens to feature flags:
    - `v1` → `ENABLE_DYNAMIC_V1=true`
-   - `v2` → `ENABLE_DYNAMIC_V2_AI_GENERATE=true` (or `ENABLE_DYNAMIC_V2_DB_MODE=true` if DB mode)
+   - `v2` → `ENABLE_DYNAMIC_V2=true`
    - `v3` → `ENABLE_DYNAMIC_V3=true`
 5. **Set DB Mode Defaults**: If v2 + DB mode, sets `DATA_SEED_VALUE=1` if not specified
 6. **Export to Docker**: Passes flags as environment variables to Docker containers
@@ -229,16 +229,14 @@ The script uses a unified versioning system where you specify which dynamic feat
 **Django Apps (web_1, web_2):**
 
 - `ENABLE_DYNAMIC_V1`
-- `ENABLE_DYNAMIC_V2_AI_GENERATE` (for v2)
+- `ENABLE_DYNAMIC_V2` (for v2)
 
 **Next.js Apps (web_3+):**
 
 - `ENABLE_DYNAMIC_V1`
 - `NEXT_PUBLIC_ENABLE_DYNAMIC_V1`
-- `ENABLE_DYNAMIC_V2_AI_GENERATE`
-- `NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE`
-- `ENABLE_DYNAMIC_V2_DB_MODE`
-- `NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE`
+- `ENABLE_DYNAMIC_V2`
+- `NEXT_PUBLIC_ENABLE_DYNAMIC_V2`
 - `ENABLE_DYNAMIC_V3`
 - `NEXT_PUBLIC_ENABLE_DYNAMIC_V3`
 - `ENABLE_DYNAMIC_V4`

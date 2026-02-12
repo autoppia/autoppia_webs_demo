@@ -1,7 +1,6 @@
 import { isDbLoadModeEnabled, fetchSeededSelection, getSeedValueFromEnv } from "@/shared/seeded-loader";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import { Hotel } from "@/types/hotel";
-import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
 import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
 
 // Import fallback data - check if original directory exists
@@ -88,91 +87,19 @@ function getApiBaseUrl(): string {
   return envUrl || "http://app:8090";
 }
 
-/**
- * Fetch AI generated hotels from /datasets/generate-smart endpoint
- */
-async function fetchAiGeneratedHotels(count: number): Promise<Hotel[]> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/generate-smart`;
-  
-  console.log("[autolodge] fetchAiGeneratedHotels - URL:", url, "count:", count);
-  
-  try {
-    console.log("[autolodge] Sending AI generation request...");
-    const requestBody = {
-      project_key: "web_8_autolodge",
-      entity_type: "hotels",
-      count: 50, // Fixed count of 50
-    };
-    console.log("[autolodge] Request body:", requestBody);
-    
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    console.log("[autolodge] AI generation response status:", response.status, response.statusText);
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => "");
-      console.error("[autolodge] AI generation request failed - Status:", response.status, "Error:", errorText);
-      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
-    }
-
-    console.log("[autolodge] Parsing AI generation response...");
-    const result = await response.json();
-    console.log("[autolodge] AI generation response keys:", Object.keys(result));
-    
-    const generatedData = result?.generated_data ?? [];
-    console.log("[autolodge] Generated data length:", generatedData.length, "isArray:", Array.isArray(generatedData));
-    
-    if (!Array.isArray(generatedData) || generatedData.length === 0) {
-      console.error("[autolodge] Invalid generated data:", generatedData);
-      throw new Error("No data returned from AI generation endpoint");
-    }
-
-    console.log("[autolodge] Successfully fetched", generatedData.length, "hotels from AI generation");
-    return generatedData as Hotel[];
-  } catch (error) {
-    console.error("[autolodge] AI generation failed with error:", error);
-    if (error instanceof Error) {
-      console.error("[autolodge] Error message:", error.message);
-      console.error("[autolodge] Error stack:", error.stack);
-    }
-    throw error;
-  }
-}
-
 // Dynamic hotels array
 let dynamicHotels: Hotel[] = [];
 
 /**
- * Initialize hotels with V2 system (DB mode, AI generation, or fallback)
+ * Initialize hotels with V2 system (DB mode or fallback)
  */
 export async function initializeHotels(v2SeedValue?: number | null, baseSeedOverride?: number | null): Promise<Hotel[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isV2AiGenerateEnabled();
-  
-  console.log("[autolodge] initializeHotels - dbModeEnabled:", dbModeEnabled, "aiGenerateEnabled:", aiGenerateEnabled, "v2SeedValue:", v2SeedValue);
-  
-  // Get base seed - use override if provided, otherwise read from URL
   const baseSeed = baseSeedOverride !== undefined && baseSeedOverride !== null
     ? baseSeedOverride
-    : getBaseSeedFromUrl(); // This now returns null if no seed in URL
+    : getBaseSeedFromUrl();
 
-  console.log("[autolodge] initializeHotels - seed check:", {
-    baseSeed,
-    v2SeedValue,
-    dbModeEnabled,
-    aiGenerateEnabled,
-    shouldUseOriginal: baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)
-  });
-
-  // IMPORTANT: If baseSeed = 1 and V2 is enabled (DB mode or AI generation), use original data
-  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+  if (baseSeed === 1 && dbModeEnabled) {
     console.log("[autolodge] Base seed is 1 and V2 enabled, using original data (skipping DB/AI modes)");
     dynamicHotels = (fallbackHotels as Hotel[]).map((h) => ({ ...h }));
     console.log("[autolodge] Loaded original hotels:", dynamicHotels.length);
@@ -228,34 +155,6 @@ export async function initializeHotels(v2SeedValue?: number | null, baseSeedOver
         console.error("[autolodge] Error stack:", error.stack);
       }
     }
-  }
-  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
-  // Only try AI generation if DB mode is not enabled (AI is fallback when DB is off)
-  if (aiGenerateEnabled && !dbModeEnabled) {
-    try {
-      console.log("[autolodge] AI generation mode enabled, generating hotels...");
-      const generatedHotels = await fetchAiGeneratedHotels(50);
-      console.log("[autolodge] fetchAiGeneratedHotels returned:", generatedHotels?.length, "hotels");
-      
-      if (Array.isArray(generatedHotels) && generatedHotels.length > 0) {
-        console.log(`[autolodge] ✅ Generated ${generatedHotels.length} hotels via AI`);
-        dynamicHotels = generatedHotels.map((h) => ({ ...h }));
-        console.log("[autolodge] Normalized hotels count:", dynamicHotels.length);
-        return dynamicHotels;
-      }
-      
-      console.warn("[autolodge] No hotels generated, falling back to local JSON. generatedHotels:", generatedHotels);
-    } catch (error) {
-      console.error("[autolodge] AI generation failed, falling back to local JSON. Error details:", error);
-      if (error instanceof Error) {
-        console.error("[autolodge] Error message:", error.message);
-        console.error("[autolodge] Error stack:", error.stack);
-      }
-    }
-  }
-  // Priority 3: Fallback - use original local JSON data
-  else {
-    console.log("[autolodge] V2 modes disabled, loading from local JSON");
   }
 
   // Fallback to local JSON

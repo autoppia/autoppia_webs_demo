@@ -22,7 +22,7 @@ services:
       DATABASE_URL: "postgresql://webs_user:autoppia_2025@db:5432/autoppia_db"
       DB_POOL_MIN: 10
       DB_POOL_MAX: 50
-      ENABLE_DYNAMIC_V2_DB_MODE: ${ENABLE_DYNAMIC_V2_DB_MODE:-false}
+      ENABLE_DYNAMIC_V2: ${ENABLE_DYNAMIC_V2:-false}
 
       # Minimum response size (in bytes) before applying GZIP compression
       GZIP_MIN_SIZE: 1000

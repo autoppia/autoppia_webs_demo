@@ -134,29 +134,19 @@ export function useDynamicSystem() {
       },
       
       /**
-       * Check if AI generation mode is enabled
-       */
-      isAiGenerateEnabled: () => {
-        const { isV2AiGenerateEnabled } = require("./flags");
-        return isV2AiGenerateEnabled();
-      },
-      
-      /**
        * Check if fallback mode is active
        */
       isFallbackMode: () => {
         const { isDbLoadModeEnabled } = require("@/shared/seeded-loader");
-        const { isV2AiGenerateEnabled } = require("./flags");
-        return !isDbLoadModeEnabled() && !isV2AiGenerateEnabled();
+        return !isDbLoadModeEnabled();
       },
       
       /**
-       * Check if V2 is enabled (any mode)
+       * Check if V2 is enabled (DB mode)
        */
       isEnabled: () => {
         const { isDbLoadModeEnabled } = require("@/shared/seeded-loader");
-        const { isV2AiGenerateEnabled } = require("./flags");
-        return isDbLoadModeEnabled() || isV2AiGenerateEnabled();
+        return isDbLoadModeEnabled();
       },
     },
 

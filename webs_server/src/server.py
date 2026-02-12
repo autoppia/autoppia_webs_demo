@@ -851,7 +851,7 @@ async def load_dataset_endpoint(
             )
 
         # If V2 DB mode is disabled, return full pool (original dataset) without seeded selection
-        if os.getenv("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() in {"false", "0", "no", "off"} or seed_value == 1:
+        if os.getenv("ENABLE_DYNAMIC_V2", "false").lower() in {"false", "0", "no", "off"} or seed_value == 1:
             logger.info("v2 db mode enabled but seed value is 1. So returning fallback data.")
             metadata = {
                 "source": "file_storage",

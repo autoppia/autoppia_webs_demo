@@ -10,12 +10,7 @@ import {
   Suspense,
 } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import {
-  resolveSeeds,
-  resolveSeedsSync,
-  clampBaseSeed,
-  type ResolvedSeeds,
-} from "@/shared/seed-resolver";
+import { clampBaseSeed, getSeedForLoad } from "@/shared/seed-resolver";
 
 declare global {
   interface Window {
@@ -30,14 +25,15 @@ interface SeedContextType {
   seed: number;
   setSeed: (seed: number) => void;
   getNavigationUrl: (path: string) => string;
-  resolvedSeeds: ResolvedSeeds;
+  /** Seed que se envía a /datasets/load: v2 activo → seed URL, si no → 1 */
+  seedForData: number;
 }
 
 const SeedContext = createContext<SeedContextType>({
   seed: 1,
   setSeed: () => {},
   getNavigationUrl: (path: string) => path,
-  resolvedSeeds: resolveSeedsSync(1),
+  seedForData: 1,
 });
 
 const DEFAULT_SEED = 1;
@@ -87,11 +83,9 @@ function SeedInitializer({
 
 export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   const [seed, setSeedState] = useState<number>(() => DEFAULT_SEED);
-  const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() =>
-    resolveSeedsSync(DEFAULT_SEED)
-  );
   const [isInitialized, setIsInitialized] = useState(false);
   const [urlSeedProcessed, setUrlSeedProcessed] = useState(false);
+  const seedForData = getSeedForLoad(seed);
 
   // Initialize seed from localStorage on mount (client-side only)
   useEffect(() => {
@@ -125,27 +119,7 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [urlSeedProcessed]);
 
-  // Update derived seeds + persist base seed
-  // Re-run when seed OR enable_dynamic changes
   useEffect(() => {
-    let cancelled = false;
-    
-    // Use sync version for immediate update
-    const syncResolved = resolveSeedsSync(seed);
-    setResolvedSeeds(syncResolved);
-    
-    // Fetch from centralized service (async, updates when ready)
-    resolveSeeds(seed).then((resolved) => {
-      // Only update if this effect hasn't been cancelled (seed hasn't changed)
-      if (!cancelled) {
-        setResolvedSeeds(resolved);
-      }
-    }).catch((error) => {
-      if (!cancelled) {
-        console.warn("[SeedContext:web12] Failed to resolve seeds from API, using local:", error);
-      }
-    });
-    
     if (typeof window !== "undefined") {
       try {
         localStorage.setItem("autolist_seed_base", seed.toString());
@@ -153,21 +127,13 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
         console.error("Error saving seed to localStorage:", error);
       }
     }
-    
-    // Cleanup: cancel if seed changes before async completes
-    return () => {
-      cancelled = true;
-    };
   }, [seed]);
 
-  // Sync v2Seed to window for backward compatibility with dynamicDataProvider
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
-    window.__autolistV2Seed = v2Seed ?? null;
-    window.dispatchEvent(new CustomEvent("autolist:v2SeedChange", { detail: { seed: v2Seed ?? null } }));
-    console.log("[SeedContext:web12] v2-seed synced to window:", v2Seed);
-  }, [resolvedSeeds.v2, resolvedSeeds.base]);
+    window.__autolistV2Seed = seedForData;
+    window.dispatchEvent(new CustomEvent("autolist:v2SeedChange", { detail: { seed: seedForData } }));
+  }, [seedForData]);
 
   const setSeed = useCallback((newSeed: number) => {
     setSeedState(clampBaseSeed(newSeed));
@@ -203,7 +169,7 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   }, [seed]);
 
   return (
-    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, resolvedSeeds }}>
+    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, seedForData }}>
       <Suspense fallback={null}>
         <SeedInitializer onSeedFromUrl={handleSeedFromUrl} />
       </Suspense>

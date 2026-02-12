@@ -1,8 +1,6 @@
 import type { Product } from "@/context/CartContext";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
-import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
-import { getApiBaseUrl } from "@/shared/data-generator";
 import fallbackProducts from "./original/products_1.json";
 
 const clampSeed = (value: number, fallback = 1): number =>
@@ -105,45 +103,6 @@ type DatasetProduct = {
   careInstructions?: string;
 };
 
-/**
- * Fetch AI generated products from /datasets/generate-smart endpoint
- */
-async function fetchAiGeneratedProducts(count: number): Promise<DatasetProduct[]> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/generate-smart`;
-  
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        project_key: "web_3_autozone",
-        entity_type: "products",
-        count: 50, // Fixed count of 50
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => "");
-      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
-    }
-
-    const result = await response.json();
-    const generatedData = result?.generated_data ?? [];
-    
-    if (!Array.isArray(generatedData) || generatedData.length === 0) {
-      throw new Error("No data returned from AI generation endpoint");
-    }
-
-    return generatedData as DatasetProduct[];
-  } catch (error) {
-    console.error("[autozone] AI generation failed:", error);
-    throw error;
-  }
-}
-
 const normalizeProduct = (product: DatasetProduct): Product => {
   return {
     id: product.id || `product-${Math.random().toString(36).slice(2, 10)}`,
@@ -168,11 +127,8 @@ export async function initializeProducts(
   limit = 100
 ): Promise<Product[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isV2AiGenerateEnabled();
-  
-  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+  if (baseSeed === 1 && dbModeEnabled) {
     console.log("[autozone] Base seed is 1, using original data (skipping DB/AI modes)");
     const fallbackData = (fallbackProducts as DatasetProduct[]).map(normalizeProduct);
     dynamicProducts = normalizeProductImages(fallbackData);
@@ -211,28 +167,6 @@ export async function initializeProducts(
       // If backend fails, fallback to local JSON
       console.warn("[autozone] Backend unavailable, falling back to local JSON:", error);
     }
-  }
-  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
-  else if (aiGenerateEnabled) {
-    try {
-      console.log("[autozone] AI generation mode enabled, generating products...");
-      const generatedProducts = await fetchAiGeneratedProducts(limit);
-      
-      if (Array.isArray(generatedProducts) && generatedProducts.length > 0) {
-        console.log(`[autozone] Generated ${generatedProducts.length} products via AI`);
-        dynamicProducts = normalizeProductImages(generatedProducts.map(normalizeProduct));
-        return dynamicProducts;
-      }
-      
-      console.warn("[autozone] No products generated, falling back to local JSON");
-    } catch (error) {
-      // If AI generation fails, fallback to local JSON
-      console.warn("[autozone] AI generation failed, falling back to local JSON:", error);
-    }
-  }
-  // Priority 3: Fallback - use original local JSON data
-  else {
-    console.log("[autozone] V2 modes disabled, loading from local JSON");
   }
 
   // Fallback to local JSON

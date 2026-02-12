@@ -15,8 +15,8 @@ const coerceBool = (value: string | undefined | null): boolean => {
 
 export function isDbLoadModeEnabled(): boolean {
   return coerceBool(
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE ||
-      process.env.ENABLE_DYNAMIC_V2_DB_MODE ||
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 ||
+      process.env.ENABLE_DYNAMIC_V2 ||
       ""
   );
 }

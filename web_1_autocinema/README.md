@@ -15,10 +15,10 @@ Autocinema is a Next.js demo that recreates the experience of `web_1_demo_movies
    npm install
    ```
 2. **Expose the datasets API** (default is `http://localhost:8090`, override with `NEXT_PUBLIC_API_URL`).
-3. **Enable dataset mode** by exporting `NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE=true` (or `ENABLE_DYNAMIC_V2_DB_MODE=true` in Docker) so the app fetches from `/datasets/load`.
+3. **Enable dataset mode** by exporting `NEXT_PUBLIC_ENABLE_DYNAMIC_V2=true` (or `ENABLE_DYNAMIC_V2=true` in Docker) so the app fetches from `/datasets/load`.
 4. **Start the dev server** on port 8000:
    ```bash
-   NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE=true npm run dev
+   NEXT_PUBLIC_ENABLE_DYNAMIC_V2=true npm run dev
    ```
 5. Open [http://localhost:8000](http://localhost:8000) and pass `?seed=XYZ` to explore different variants. The v2 seed for data loading is automatically derived from the base seed.
 

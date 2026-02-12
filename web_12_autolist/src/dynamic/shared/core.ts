@@ -9,7 +9,7 @@
 import { useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
 import { applyV1Wrapper } from "../v1/add-wrap-decoy";
-import { isV3Enabled, isV2AiGenerateEnabled } from "./flags";
+import { isV3Enabled } from "./flags";
 import { getVariant, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "../v3/utils/variant-selector";
 import { generateDynamicOrder } from "../v1/change-order-elements";
 import { dynamicDataProvider } from "../v2/data-provider";
@@ -68,7 +68,7 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
  * The seed is read automatically from SeedContext (which reads it from the URL).
  */
 export function useDynamicSystem() {
-  const { seed, resolvedSeeds } = useSeed();
+  const { seed } = useSeed();
 
   return useMemo(() => ({
     seed,
@@ -100,19 +100,14 @@ export function useDynamicSystem() {
       isDbModeEnabled: () => isDbLoadModeEnabled(),
       
       /**
-       * Check if AI generation mode is enabled
-       */
-      isAiGenerateEnabled: () => isV2AiGenerateEnabled(),
-      
-      /**
        * Check if fallback mode is active
        */
-      isFallbackMode: () => !isDbLoadModeEnabled() && !isV2AiGenerateEnabled(),
+      isFallbackMode: () => !isDbLoadModeEnabled(),
       
       /**
-       * Check if V2 is enabled (any mode)
+       * Check if V2 is enabled (DB mode)
        */
-      isEnabled: () => isDbLoadModeEnabled() || isV2AiGenerateEnabled(),
+      isEnabled: () => isDbLoadModeEnabled(),
     },
 
     v3: {

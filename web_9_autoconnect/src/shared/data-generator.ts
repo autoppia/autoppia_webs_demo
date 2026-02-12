@@ -378,13 +378,10 @@ export async function generateProjectData(
 
 
 /**
- * Check if data generation is enabled
+ * Check if data generation is enabled (disabled - AI generate removed)
  */
 export function isDataGenerationEnabled(): boolean {
-  const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE ??
-               process.env.ENABLE_DYNAMIC_V2_AI_GENERATE ??
-               '').toString().toLowerCase();
-  return raw === 'true' || raw === '1' || raw === 'yes' || raw === 'on';
+  return false;
 }
 
 /**

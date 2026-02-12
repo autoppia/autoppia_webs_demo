@@ -565,8 +565,8 @@ function AddTaskCard({
 
 export default function Home() {
   const dyn = useDynamicSystem();
-  const { resolvedSeeds } = useSeed();
-  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base ?? 1;
+  const { seedForData } = useSeed();
+  const v2Seed = seedForData;
   const dynIds = {
     appShell: "app-shell",
     heroTitle: dyn.v3.getVariant("hero-title", ID_VARIANTS_MAP, "hero-title"),

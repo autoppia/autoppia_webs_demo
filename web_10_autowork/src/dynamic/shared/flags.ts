@@ -26,16 +26,6 @@ export function isV1Enabled(): boolean {
 }
 
 /**
- * Checks whether V2 AI generation is enabled
- * V2 AI generation creates data via AI endpoint
- */
-export function isV2AiGenerateEnabled(): boolean {
-  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE ?? process.env.ENABLE_DYNAMIC_V2_AI_GENERATE;
-  const enabled = value === "true" || value === true || value === "1" || value === 1;
-  return enabled;
-}
-
-/**
  * Checks whether V2 DB load mode is enabled
  * V2 DB load mode loads data from database
  */

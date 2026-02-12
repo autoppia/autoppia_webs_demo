@@ -1,7 +1,5 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
-import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
-import { getApiBaseUrl } from "@/shared/data-generator";
 import fallbackBooks from "./original/books_1.json";
 
 export interface Book {
@@ -191,52 +189,10 @@ const normalizeBook = (book: DatasetBook): Book => {
 
 let booksCache: Book[] = [];
 
-/**
- * Fetch AI generated books from /datasets/generate-smart endpoint
- */
-async function fetchAiGeneratedBooks(count: number): Promise<DatasetBook[]> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/generate-smart`;
-  
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        project_key: "web_2_autobooks",
-        entity_type: "books",
-        count: 50, // Fixed count of 50
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => "");
-      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
-    }
-
-    const result = await response.json();
-    const generatedData = result?.generated_data ?? [];
-    
-    if (!Array.isArray(generatedData) || generatedData.length === 0) {
-      throw new Error("No data returned from AI generation endpoint");
-    }
-
-    return generatedData as DatasetBook[];
-  } catch (error) {
-    console.error("[autobooks] AI generation failed:", error);
-    throw error;
-  }
-}
-
 export async function initializeBooks(v2SeedValue?: number | null, limit = 300): Promise<Book[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isV2AiGenerateEnabled();
-  
-  // Get base seed from URL - if seed = 1, use original data for both DB and AI modes
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+  if (baseSeed === 1 && dbModeEnabled) {
     console.log("[autobooks] Base seed is 1, using original data from original/books_1.json (skipping DB/AI modes)");
     booksCache = (fallbackBooks as DatasetBook[]).map(normalizeBook);
     return booksCache;
@@ -274,28 +230,6 @@ export async function initializeBooks(v2SeedValue?: number | null, limit = 300):
       // If backend fails, fallback to original data
       console.warn("[autobooks] Backend unavailable, falling back to original data:", error);
     }
-  }
-  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
-  else if (aiGenerateEnabled) {
-    try {
-      console.log("[autobooks] AI generation mode enabled, generating books...");
-      const generatedBooks = await fetchAiGeneratedBooks(limit);
-      
-      if (Array.isArray(generatedBooks) && generatedBooks.length > 0) {
-        console.log(`[autobooks] Generated ${generatedBooks.length} books via AI`);
-        booksCache = generatedBooks.map(normalizeBook);
-        return booksCache;
-      }
-      
-      console.warn("[autobooks] No books generated, falling back to original data");
-    } catch (error) {
-      // If AI generation fails, fallback to original data
-      console.warn("[autobooks] AI generation failed, falling back to original data:", error);
-    }
-  }
-  // Priority 3: Fallback - use original local JSON data
-  else {
-    console.log("[autobooks] V2 modes disabled, loading from original data");
   }
 
   // Fallback to original data (original/books_1.json)

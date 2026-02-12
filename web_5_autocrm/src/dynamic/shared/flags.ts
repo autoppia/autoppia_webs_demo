@@ -52,33 +52,16 @@ export function isV3Enabled(): boolean {
  * Checks whether V2 DB mode is enabled
  * DB mode loads pre-generated data from backend /datasets/load endpoint
  */
-export function isV2DbModeEnabled(): boolean {
-  if (typeof window === "undefined") {
-    const value = process.env.ENABLE_DYNAMIC_V2_DB_MODE;
-    return value === "true" || value === true;
-  }
-  
-  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE;
-  return value === "true" || value === true;
-}
-
-/**
- * Checks whether V2 AI generation mode is enabled
- * AI generation mode generates data on-the-fly using OpenAI
- */
-export function isV2AiGenerateEnabled(): boolean {
-  if (typeof window === "undefined") {
-    const value = process.env.ENABLE_DYNAMIC_V2_AI_GENERATE;
-    return value === "true" || value === true;
-  }
-  
-  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE;
-  return value === "true" || value === true;
-}
-
-/**
- * Checks whether V2 is enabled (either DB mode or AI generation mode)
- */
 export function isV2Enabled(): boolean {
-  return isV2DbModeEnabled() || isV2AiGenerateEnabled();
+  if (typeof window === "undefined") {
+    const value = process.env.ENABLE_DYNAMIC_V2;
+    return value === "true" || value === true;
+  }
+  
+  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2;
+  return value === "true" || value === true;
 }
+
+/**
+ * Checks whether V2 is enabled
+ */

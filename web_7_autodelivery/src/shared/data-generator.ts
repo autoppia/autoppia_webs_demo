@@ -157,13 +157,10 @@ CRITICAL: Follow the exact data structure:
 };
 
 /**
- * Check if data generation is enabled via environment variables
+ * Check if data generation is enabled via environment variables (disabled - AI generate removed)
  */
 export function isDataGenerationEnabled(): boolean {
-  if (typeof window !== 'undefined') {
-    return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE === 'true';
-  }
-  return process.env.ENABLE_DYNAMIC_V2_AI_GENERATE === 'true';
+  return false;
 }
 
 /**

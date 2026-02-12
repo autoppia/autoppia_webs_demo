@@ -270,16 +270,9 @@ export async function generateProjectData(
   }
 }
 
-/**
- * Check if data generation is enabled
- */
+/** Data generation disabled - AI generate removed */
 export function isDataGenerationEnabled(): boolean {
-  const raw = (
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE ??
-    process.env.ENABLE_DYNAMIC_V2_AI_GENERATE ??
-    ''
-  ).toString().toLowerCase();
-  return ['true', '1', 'yes', 'on'].includes(raw);
+  return false;
 }
 
 /**

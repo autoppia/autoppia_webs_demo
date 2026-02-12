@@ -120,8 +120,8 @@ def load_all_data(
     Otherwise, loads from data/ directory as referenced in main.json.
     """
     # Check if V2 DB mode is disabled - if so, load from original/ directory
-    # v2_disabled is True when ENABLE_DYNAMIC_V2_DB_MODE is "false", "0", "no", or "off"
-    v2_disabled_env_flag = os.getenv("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() in {"false", "0", "no", "off"}
+    # v2_disabled is True when ENABLE_DYNAMIC_V2 is "false", "0", "no", or "off"
+    v2_disabled_env_flag = os.getenv("ENABLE_DYNAMIC_V2", "false").lower() in {"false", "0", "no", "off"}
     force_seed_disabled = seed_value == 1
     v2_disabled = v2_disabled_env_flag or force_seed_disabled
 

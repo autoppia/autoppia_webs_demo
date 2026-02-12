@@ -9,7 +9,7 @@
 import { useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
 import { applyV1Wrapper } from "../v1/add-wrap-decoy";
-import { isV3Enabled, isV2DbModeEnabled, isV2AiGenerateEnabled, isV2Enabled, isV2FallbackMode } from "./flags";
+import { isV3Enabled, isV2Enabled, isV2FallbackMode } from "./flags";
 import { getVariant, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "../v3/utils/variant-selector";
 import { generateDynamicOrder } from "../v1/change-order-elements";
 import type { ReactNode } from "react";
@@ -127,15 +127,10 @@ export function useDynamicSystem() {
       /**
        * Check if V2 DB mode is enabled
        */
-      isDbModeEnabled: () => isV2DbModeEnabled(),
+      isDbModeEnabled: () => isV2Enabled(),
       
       /**
-       * Check if V2 AI generation mode is enabled
-       */
-      isAiGenerateEnabled: () => isV2AiGenerateEnabled(),
-      
-      /**
-       * Check if V2 is enabled (either DB mode or AI generation mode)
+       * Check if V2 is enabled (DB mode)
        */
       isEnabled: () => isV2Enabled(),
       

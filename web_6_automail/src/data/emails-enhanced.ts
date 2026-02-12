@@ -15,8 +15,6 @@ import {
 } from "@/utils/emailDataGenerator";
 import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
-import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
-import { getApiBaseUrl } from "@/shared/data-generator";
 import { systemLabels as importedSystemLabels, userLabels as importedUserLabels } from "@/library/dataset";
 import fallbackEmails from "./original/emails_1.json";
 
@@ -320,79 +318,14 @@ const getRuntimeV2Seed = (): number | null => {
 };
 
 /**
- * Fetch AI generated emails from /datasets/generate-smart endpoint
- */
-async function fetchAiGeneratedEmails(count: number): Promise<any[]> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/generate-smart`;
-  
-  console.log("[automail] fetchAiGeneratedEmails - URL:", url, "count:", count);
-  
-  try {
-    console.log("[automail] Sending AI generation request...");
-    const requestBody = {
-      project_key: "web_6_automail",
-      entity_type: "emails",
-      count: 50, // Fixed count of 50
-    };
-    console.log("[automail] Request body:", requestBody);
-    
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    console.log("[automail] AI generation response status:", response.status, response.statusText);
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => "");
-      console.error("[automail] AI generation request failed - Status:", response.status, "Error:", errorText);
-      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
-    }
-
-    console.log("[automail] Parsing AI generation response...");
-    const result = await response.json();
-    console.log("[automail] AI generation response keys:", Object.keys(result));
-    
-    const generatedData = result?.generated_data ?? [];
-    console.log("[automail] Generated data length:", generatedData.length, "isArray:", Array.isArray(generatedData));
-    
-    if (!Array.isArray(generatedData) || generatedData.length === 0) {
-      console.error("[automail] Invalid generated data:", generatedData);
-      throw new Error("No data returned from AI generation endpoint");
-    }
-
-    console.log("[automail] Successfully fetched", generatedData.length, "emails from AI generation");
-    return generatedData;
-  } catch (error) {
-    console.error("[automail] AI generation failed with error:", error);
-    if (error instanceof Error) {
-      console.error("[automail] Error message:", error.message);
-      console.error("[automail] Error stack:", error.stack);
-    }
-    throw error;
-  }
-}
-
-/**
- * Initialize emails with V2 system (DB mode, AI generation, or fallback)
+ * Initialize emails with V2 system (DB mode or fallback)
  */
 export async function initializeEmails(v2SeedValue?: number | null): Promise<Email[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isV2AiGenerateEnabled();
-  
-  console.log("[automail] initializeEmails - dbModeEnabled:", dbModeEnabled, "aiGenerateEnabled:", aiGenerateEnabled, "v2SeedValue:", v2SeedValue);
-  
-  // Get base seed from URL to check if seed = 1
   const baseSeed = getBaseSeedFromUrl();
   
-  // Check if seed = 1 - if so, use original data for both DB and AI modes
-  // Also check v2SeedValue directly if provided (from data-provider)
   if (baseSeed === 1 || v2SeedValue === 1) {
-    if (dbModeEnabled || aiGenerateEnabled) {
+    if (dbModeEnabled) {
       console.log("[automail] Base seed is 1, using original data (skipping DB/AI modes)");
       dynamicEmails = normalizeEmailTimestamps(fallbackEmails as Email[]);
       return dynamicEmails;
@@ -448,34 +381,6 @@ export async function initializeEmails(v2SeedValue?: number | null): Promise<Ema
         console.error("[automail] Error stack:", error.stack);
       }
     }
-  }
-  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
-  // Only try AI generation if DB mode is not enabled (AI is fallback when DB is off)
-  if (aiGenerateEnabled && !dbModeEnabled) {
-    try {
-      console.log("[automail] AI generation mode enabled, generating emails...");
-      const generatedEmails = await fetchAiGeneratedEmails(50);
-      console.log("[automail] fetchAiGeneratedEmails returned:", generatedEmails?.length, "emails");
-      
-      if (Array.isArray(generatedEmails) && generatedEmails.length > 0) {
-        console.log(`[automail] Generated ${generatedEmails.length} emails via AI`);
-        dynamicEmails = normalizeEmailTimestamps(generatedEmails as Email[]);
-        console.log("[automail] Normalized emails count:", dynamicEmails.length);
-        return dynamicEmails;
-      }
-      
-      console.warn("[automail] No emails generated, falling back to local JSON. generatedEmails:", generatedEmails);
-    } catch (error) {
-      console.error("[automail] AI generation failed, falling back to local JSON. Error details:", error);
-      if (error instanceof Error) {
-        console.error("[automail] Error message:", error.message);
-        console.error("[automail] Error stack:", error.stack);
-      }
-    }
-  }
-  // Priority 3: Fallback - use original local JSON data
-  else {
-    console.log("[automail] V2 modes disabled, loading from local JSON");
   }
 
   // Fallback to local JSON

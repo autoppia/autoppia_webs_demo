@@ -34,7 +34,7 @@ The system automatically derives V2 seeds from base URL seeds (using `?seed=X` p
 **Requirements:**
 - Backend server running on port 8090
 - Dataset files available in `webs_server/initial_data/web_1_autocinema/data/movies_*.json`
-- Backend `ENABLE_DYNAMIC_V2_DB_MODE=true` environment variable set
+- Backend `ENABLE_DYNAMIC_V2=true` environment variable set
 
 ### AI Generation Mode (Generate Data via OpenAI)
 
@@ -69,17 +69,12 @@ The system automatically derives V2 seeds from base URL seeds (using `?seed=X` p
 
 The system follows this priority order:
 
-1. **DB Mode** (if `NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE=true`):
+1. **DB Mode** (if `NEXT_PUBLIC_ENABLE_DYNAMIC_V2=true`):
    - Fetches data from `/datasets/load` endpoint
    - Uses seed-derived selection from backend dataset
    - Falls back to local JSON if backend unavailable
 
-2. **AI Generation Mode** (if `NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE=true` and DB mode disabled):
-   - Calls `/datasets/generate-smart` endpoint
-   - Backend uses OpenAI to generate data based on example structure
-   - Falls back to local JSON if generation fails
-
-3. **Fallback Mode** (if both modes disabled):
+2. **Fallback Mode** (if DB mode disabled):
    - Loads from `src/data/original/movies_1.json`
    - Always available as last resort
 
@@ -96,12 +91,9 @@ The system follows this priority order:
 - `src/data/movies.ts`: Main data initialization logic
   - `initializeMovies()`: Entry point for loading movies
   - `fetchSeededSelection()`: Fetches from `/datasets/load` (DB mode)
-  - `fetchAiGeneratedMovies()`: Fetches from `/datasets/generate-smart` (AI mode)
-  
 - `src/dynamic/shared/flags.ts`: Feature flags
   - `isV2DbModeEnabled()`: Checks if DB mode is enabled
-  - `isV2AiGenerateEnabled()`: Checks if AI generation mode is enabled
-  - `isV2Enabled()`: Checks if either mode is enabled
+  - `isV2Enabled()`: Same as DB mode (AI generate removed)
 
 - `src/dynamic/v2/data-provider.ts`: Singleton data provider
   - `getMovies()`: Returns cached movies
@@ -112,7 +104,6 @@ The system follows this priority order:
 #### Backend Endpoints
 
 - `POST /datasets/load`: Returns seeded selection from dataset files
-- `POST /datasets/generate-smart`: Generates data using OpenAI based on examples
 
 ## Configuration
 
@@ -122,15 +113,14 @@ The system follows this priority order:
 
 | Variable | Description | Required For |
 |----------|-------------|--------------|
-| `NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE` | Enable DB mode | DB Mode |
-| `NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE` | Enable AI generation mode | AI Mode |
-| `NEXT_PUBLIC_API_URL` | Backend API URL (default: `http://localhost:8090`) | Both modes |
+| `NEXT_PUBLIC_ENABLE_DYNAMIC_V2` | Enable DB mode | DB Mode |
+| `NEXT_PUBLIC_API_URL` | Backend API URL (default: `http://localhost:8090`) | DB mode |
 
 #### Backend (webs_server)
 
 | Variable | Description | Required For |
 |----------|-------------|--------------|
-| `ENABLE_DYNAMIC_V2_DB_MODE` | Enable DB mode in backend | DB Mode |
+| `ENABLE_DYNAMIC_V2` | Enable DB mode in backend | DB Mode |
 | `OPENAI_API_KEY` | OpenAI API key for data generation | AI Mode |
 | `BASE_DATA_PATH` | Base path for dataset files (default: `/app/data`) | DB Mode |
 
@@ -167,28 +157,6 @@ Backend: /datasets/load endpoint
 Backend: Reads from initial_data/web_1_autocinema/data/movies_*.json
   ↓
 Backend: Applies seeded selection/distribution
-  ↓
-Frontend: Receives and caches movies
-  ↓
-UI: Displays movies
-```
-
-### AI Generation Mode Flow
-
-```
-URL (?seed=42)
-  ↓
-Frontend: fetchAiGeneratedMovies()
-  ↓
-Backend: /datasets/generate-smart endpoint
-  ↓
-Backend: Reads examples from movies_1.json
-  ↓
-Backend: Infers TypeScript interface from examples
-  ↓
-Backend: Calls OpenAI API with examples + interface
-  ↓
-Backend: Parses and returns generated data
   ↓
 Frontend: Receives and caches movies
   ↓

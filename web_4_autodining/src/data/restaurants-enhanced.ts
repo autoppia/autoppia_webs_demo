@@ -10,8 +10,6 @@ import {
   isDbLoadModeEnabled,
 } from "@/shared/seeded-loader";
 import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
-import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
-import { getApiBaseUrl } from "@/shared/data-generator";
 import fallbackRestaurants from "./original/restaurants_1.json";
 
 export interface RestaurantGenerated {
@@ -138,45 +136,6 @@ function normalizeRestaurants(
 }
 
 /**
- * Fetch AI generated restaurants from /datasets/generate-smart endpoint
- */
-async function fetchAiGeneratedRestaurants(count: number): Promise<DatasetRestaurant[]> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/generate-smart`;
-  
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        project_key: "web_4_autodining",
-        entity_type: "restaurants",
-        count: 50, // Fixed count of 50
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => "");
-      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
-    }
-
-    const result = await response.json();
-    const generatedData = result?.generated_data ?? [];
-    
-    if (!Array.isArray(generatedData) || generatedData.length === 0) {
-      throw new Error("No data returned from AI generation endpoint");
-    }
-
-    return generatedData as DatasetRestaurant[];
-  } catch (error) {
-    console.error("[autodining] AI generation failed:", error);
-    throw error;
-  }
-}
-
-/**
  * Get restaurants (from cache or static fallback)
  */
 export function getRestaurants(): RestaurantGenerated[] {
@@ -208,11 +167,8 @@ export async function initializeRestaurants(
   limit = 300
 ): Promise<RestaurantGenerated[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isV2AiGenerateEnabled();
-  
-  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+  if (baseSeed === 1 && dbModeEnabled) {
     console.log("[autodining] Base seed is 1, using original data (skipping DB/AI modes)");
     dynamicRestaurants = normalizeRestaurants(fallbackRestaurants as DatasetRestaurant[]);
     return dynamicRestaurants;
@@ -250,28 +206,6 @@ export async function initializeRestaurants(
       // If backend fails, fallback to local JSON
       console.warn("[autodining] Backend unavailable, falling back to local JSON:", error);
     }
-  }
-  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
-  else if (aiGenerateEnabled) {
-    try {
-      console.log("[autodining] AI generation mode enabled, generating restaurants...");
-      const generatedRestaurants = await fetchAiGeneratedRestaurants(limit);
-      
-      if (Array.isArray(generatedRestaurants) && generatedRestaurants.length > 0) {
-        console.log(`[autodining] Generated ${generatedRestaurants.length} restaurants via AI`);
-        dynamicRestaurants = normalizeRestaurants(generatedRestaurants);
-        return dynamicRestaurants;
-      }
-      
-      console.warn("[autodining] No restaurants generated, falling back to local JSON");
-    } catch (error) {
-      // If AI generation fails, fallback to local JSON
-      console.warn("[autodining] AI generation failed, falling back to local JSON:", error);
-    }
-  }
-  // Priority 3: Fallback - use original local JSON data
-  else {
-    console.log("[autodining] V2 modes disabled, loading from local JSON");
   }
 
   // Fallback to local JSON

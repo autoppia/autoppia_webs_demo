@@ -31,7 +31,7 @@ function getEnabledFlagsInternal(): { v1: boolean; v2: boolean; v3: boolean } {
   if (fromUrl) return fromUrl;
   return {
     v1: boolFromEnv(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) || boolFromEnv(process.env.ENABLE_DYNAMIC_V1),
-    v2: boolFromEnv(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE) || boolFromEnv(process.env.ENABLE_DYNAMIC_V2_DB_MODE),
+    v2: boolFromEnv(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2) || boolFromEnv(process.env.ENABLE_DYNAMIC_V2),
     v3: boolFromEnv(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) || boolFromEnv(process.env.ENABLE_DYNAMIC_V3),
   };
 }
@@ -83,9 +83,8 @@ function resolveSeedsLocal(baseSeed: number, enabledFlags?: { v1: boolean; v2: b
   if (flags.v1) {
     resolved.v1 = ((safeSeed * 37 + 11) % 10) + 1;
   }
-  // V2: usar seed base directamente (sin derivación)
   if (flags.v2) {
-    resolved.v2 = ((safeSeed * 53 + 17) % 300) + 1;
+    resolved.v2 = safeSeed;
   }
   if (flags.v3) {
     resolved.v3 = ((safeSeed * 71 + 3) % 100) + 1;

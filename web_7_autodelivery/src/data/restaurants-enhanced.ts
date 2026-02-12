@@ -7,8 +7,6 @@
 
 import type { Restaurant } from "@/data/restaurants";
 import { fetchSeededSelection, isDbLoadModeEnabled, getSeedValueFromEnv } from "@/shared/seeded-loader";
-import { getApiBaseUrl } from "@/shared/data-generator";
-import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
 import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
 import fallbackRestaurants from "./original/restaurants_1.json";
 
@@ -138,91 +136,19 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
   return 1;
 };
 
-/**
- * Fetch AI generated restaurants from /datasets/generate-smart endpoint
- */
-async function fetchAiGeneratedRestaurants(count: number): Promise<Restaurant[]> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/generate-smart`;
-  
-  console.log("[autodelivery] fetchAiGeneratedRestaurants - URL:", url, "count:", count);
-  
-  try {
-    console.log("[autodelivery] Sending AI generation request...");
-    const requestBody = {
-      project_key: "web_7_autodelivery",
-      entity_type: "restaurants",
-      count: 50, // Fixed count of 50
-    };
-    console.log("[autodelivery] Request body:", requestBody);
-    
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    console.log("[autodelivery] AI generation response status:", response.status, response.statusText);
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => "");
-      console.error("[autodelivery] AI generation request failed - Status:", response.status, "Error:", errorText);
-      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
-    }
-
-    console.log("[autodelivery] Parsing AI generation response...");
-    const result = await response.json();
-    console.log("[autodelivery] AI generation response keys:", Object.keys(result));
-    
-    const generatedData = result?.generated_data ?? [];
-    console.log("[autodelivery] Generated data length:", generatedData.length, "isArray:", Array.isArray(generatedData));
-    
-    if (!Array.isArray(generatedData) || generatedData.length === 0) {
-      console.error("[autodelivery] Invalid generated data:", generatedData);
-      throw new Error("No data returned from AI generation endpoint");
-    }
-
-    console.log("[autodelivery] Successfully fetched", generatedData.length, "restaurants from AI generation");
-    return generatedData;
-  } catch (error) {
-    console.error("[autodelivery] AI generation failed with error:", error);
-    if (error instanceof Error) {
-      console.error("[autodelivery] Error message:", error.message);
-      console.error("[autodelivery] Error stack:", error.stack);
-    }
-    throw error;
-  }
-}
-
 // Dynamic restaurants array
 let dynamicRestaurants: Restaurant[] = [];
 
 /**
- * Initialize restaurants with V2 system (DB mode, AI generation, or fallback)
+ * Initialize restaurants with V2 system (DB mode or fallback)
  */
 export async function initializeRestaurants(v2SeedValue?: number | null, baseSeedOverride?: number | null): Promise<Restaurant[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isV2AiGenerateEnabled();
-  
-  console.log("[autodelivery] initializeRestaurants - dbModeEnabled:", dbModeEnabled, "aiGenerateEnabled:", aiGenerateEnabled, "v2SeedValue:", v2SeedValue);
-  
-  // Get base seed - use override if provided, otherwise read from URL
   const baseSeed = baseSeedOverride !== undefined && baseSeedOverride !== null
     ? baseSeedOverride
-    : getBaseSeedFromUrl(); // This now returns null if no seed in URL
+    : getBaseSeedFromUrl();
 
-  console.log("[autodelivery] initializeRestaurants - seed check:", {
-    baseSeed,
-    v2SeedValue,
-    dbModeEnabled,
-    aiGenerateEnabled,
-    shouldUseOriginal: baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)
-  });
-
-  // IMPORTANT: If baseSeed = 1 and V2 is enabled (DB mode or AI generation), use original data
-  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+  if (baseSeed === 1 && dbModeEnabled) {
     console.log("[autodelivery] Base seed is 1 and V2 enabled, using original data (skipping DB/AI modes)");
     dynamicRestaurants = normalizeRestaurantImages(fallbackRestaurants as Restaurant[]);
     console.log("[autodelivery] Loaded original restaurants:", dynamicRestaurants.length);
@@ -278,35 +204,6 @@ export async function initializeRestaurants(v2SeedValue?: number | null, baseSee
         console.error("[autodelivery] Error stack:", error.stack);
       }
     }
-  }
-  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
-  // Only try AI generation if DB mode is not enabled (AI is fallback when DB is off)
-  if (aiGenerateEnabled && !dbModeEnabled) {
-    try {
-      console.log("[autodelivery] AI generation mode enabled, generating restaurants...");
-      const generatedRestaurants = await fetchAiGeneratedRestaurants(50);
-      console.log("[autodelivery] fetchAiGeneratedRestaurants returned:", generatedRestaurants?.length, "restaurants");
-      
-      if (Array.isArray(generatedRestaurants) && generatedRestaurants.length > 0) {
-        console.log(`[autodelivery] ✅ Generated ${generatedRestaurants.length} restaurants via AI`);
-        dynamicRestaurants = normalizeRestaurantImages(generatedRestaurants as Restaurant[]);
-        console.log("[autodelivery] ✅ Normalized restaurants count:", dynamicRestaurants.length);
-        console.log("[autodelivery] ✅ Returning generated restaurants, ready to display");
-        return dynamicRestaurants;
-      }
-      
-      console.warn("[autodelivery] No restaurants generated, falling back to local JSON. generatedRestaurants:", generatedRestaurants);
-    } catch (error) {
-      console.error("[autodelivery] AI generation failed, falling back to local JSON. Error details:", error);
-      if (error instanceof Error) {
-        console.error("[autodelivery] Error message:", error.message);
-        console.error("[autodelivery] Error stack:", error.stack);
-      }
-    }
-  }
-  // Priority 3: Fallback - use original local JSON data
-  else {
-    console.log("[autodelivery] V2 modes disabled, loading from local JSON");
   }
 
   // Fallback to local JSON

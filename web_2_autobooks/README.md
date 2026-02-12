@@ -15,7 +15,7 @@ Autobooks mirrors the behaviour of `web_2_demo_books` but runs entirely on the c
    npm install
    ```
 2. **Expose the datasets API**. All data is fetched from `http://localhost:8090/datasets/load` (override with `NEXT_PUBLIC_API_URL`). If you use Docker, bring up `webs_server` first: `docker compose -p webs_server up -d`.
-3. **Enable dataset mode** by exporting `NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE=true` (or `ENABLE_DYNAMIC_V2_DB_MODE=true` inside Docker) so the client requests the DB-backed pools.
+3. **Enable dataset mode** by exporting `NEXT_PUBLIC_ENABLE_DYNAMIC_V2=true` (or `ENABLE_DYNAMIC_V2=true` inside Docker) so the client requests the DB-backed pools.
 4. **Start the dev server** (defaults to port `8002`; pass `-p` to change it if you are running another demo on the same port):
    ```bash
    npm run dev

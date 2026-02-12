@@ -45,16 +45,6 @@ export function isV3Enabled(): boolean {
 }
 
 /**
- * Checks whether V2 AI generation mode is enabled
- * V2 AI generation generates data on-the-fly using OpenAI
- */
-export function isV2AiGenerateEnabled(): boolean {
-  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE;
-  const enabled = value === "true" || value === true;
-  return enabled;
-}
-
-/**
  * Checks whether V2 DB load mode is enabled
  * V2 DB mode loads pre-generated data from backend
  */

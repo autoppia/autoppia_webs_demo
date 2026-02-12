@@ -1,6 +1,5 @@
-import { fetchSeededSelection, isDbLoadModeEnabled, getApiBaseUrl } from "@/shared/seeded-loader";
+import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
-import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
 import fallbackRidesData from "./original/rides_1.json";
 
 const PROJECT_KEY = "web_13_autodrive";
@@ -147,45 +146,6 @@ function generateDeterministicRides(seed: number): Ride[] {
 }
 
 /**
- * Fetch AI generated rides from /datasets/generate-smart endpoint
- */
-async function fetchAiGeneratedRides(count: number): Promise<Ride[]> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/generate-smart`;
-  
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        project_key: PROJECT_KEY,
-        entity_type: ENTITY_TYPE,
-        count: 50, // Fixed count of 50
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => "");
-      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
-    }
-
-    const result = await response.json();
-    const generatedData = result?.generated_data ?? [];
-    
-    if (!Array.isArray(generatedData) || generatedData.length === 0) {
-      throw new Error("No data returned from AI generation endpoint");
-    }
-
-    return generatedData as Ride[];
-  } catch (error) {
-    console.error("[autodrive] AI generation failed for rides:", error);
-    throw error;
-  }
-}
-
-/**
  * Initialize rides data for Web13.
  * Priority: DB → AI → Fallback (deterministic)
  */
@@ -194,11 +154,8 @@ export async function initializeRides(
   limit: number = 10
 ): Promise<Ride[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isV2AiGenerateEnabled();
-  
-  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+  if (baseSeed === 1 && dbModeEnabled) {
     console.log("[autodrive] Base seed is 1, using original rides data (skipping DB/AI modes)");
     return generateDeterministicRides(1);
   }
@@ -239,29 +196,7 @@ export async function initializeRides(
       console.warn("[autodrive] Backend unavailable for rides, falling back to deterministic generation:", error);
     }
   }
-  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
-  else if (aiGenerateEnabled) {
-    try {
-      console.log("[autodrive] AI generation mode enabled, generating rides...");
-      const generatedRides = await fetchAiGeneratedRides(limit);
-      
-      if (Array.isArray(generatedRides) && generatedRides.length > 0) {
-        console.log(`[autodrive] Generated ${generatedRides.length} rides via AI`);
-        // Ensure at least one is recommended
-        const ridesWithRecommended = generatedRides.map((ride, idx) => ({
-          ...ride,
-          recommended: idx === 0 || ride.recommended || false,
-        }));
-        return ridesWithRecommended;
-      }
-      
-      console.warn("[autodrive] No rides generated, falling back to deterministic generation");
-    } catch (error) {
-      // If AI generation fails, fallback to deterministic generation
-      console.warn("[autodrive] AI generation failed for rides, falling back to deterministic generation:", error);
-    }
-  }
-  // Priority 3: Fallback - use deterministic generation
+  // Priority 2: Fallback - use deterministic generation
   else {
     console.log("[autodrive] V2 modes disabled for rides, using deterministic generation");
   }

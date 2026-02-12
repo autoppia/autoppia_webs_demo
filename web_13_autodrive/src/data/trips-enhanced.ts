@@ -1,6 +1,5 @@
-import { fetchSeededSelection, isDbLoadModeEnabled, getApiBaseUrl } from "@/shared/seeded-loader";
+import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
-import { isV2AiGenerateEnabled } from "@/dynamic/shared/flags";
 import fallbackTripsData from "./original/trips_1.json";
 
 const PROJECT_KEY = "web_13_autodrive";
@@ -296,45 +295,6 @@ function generateDeterministicTrips(seed: number, limit: number): Trip[] {
 }
 
 /**
- * Fetch AI generated trips from /datasets/generate-smart endpoint
- */
-async function fetchAiGeneratedTrips(count: number): Promise<Trip[]> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/generate-smart`;
-  
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        project_key: PROJECT_KEY,
-        entity_type: ENTITY_TYPE,
-        count: 50, // Fixed count of 50
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => "");
-      throw new Error(`AI generation request failed: ${response.status} - ${errorText.slice(0, 200)}`);
-    }
-
-    const result = await response.json();
-    const generatedData = result?.generated_data ?? [];
-    
-    if (!Array.isArray(generatedData) || generatedData.length === 0) {
-      throw new Error("No data returned from AI generation endpoint");
-    }
-
-    return generatedData as Trip[];
-  } catch (error) {
-    console.error("[autodrive] AI generation failed:", error);
-    throw error;
-  }
-}
-
-/**
  * Initialize trips data for Web13 with deterministic pools.
  * Priority: DB → AI → Fallback (deterministic)
  */
@@ -343,11 +303,8 @@ export async function initializeTrips(
   limit: number = 30
 ): Promise<Trip[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isV2AiGenerateEnabled();
-  
-  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
+  if (baseSeed === 1 && dbModeEnabled) {
     console.log("[autodrive] Base seed is 1, using original trips data (skipping DB/AI modes)");
     // Return normalized trips from JSON
     return (fallbackTripsData as any[]).map(normalizeTrip);
@@ -384,24 +341,7 @@ export async function initializeTrips(
       console.warn("[autodrive] Backend unavailable, falling back to original data:", error);
     }
   }
-  // Priority 2: AI generation mode - generate data via /datasets/generate-smart endpoint
-  else if (aiGenerateEnabled) {
-    try {
-      console.log("[autodrive] AI generation mode enabled, generating trips...");
-      const generatedTrips = await fetchAiGeneratedTrips(limit);
-      
-      if (Array.isArray(generatedTrips) && generatedTrips.length > 0) {
-        console.log(`[autodrive] Generated ${generatedTrips.length} trips via AI`);
-        return generatedTrips;
-      }
-      
-      console.warn("[autodrive] No trips generated, falling back to original data");
-    } catch (error) {
-      // If AI generation fails, fallback to original JSON data
-      console.warn("[autodrive] AI generation failed, falling back to original data:", error);
-    }
-  }
-  // Priority 3: Fallback - use original JSON data
+  // Priority 2: Fallback - use original JSON data
   else {
     console.log("[autodrive] V2 modes disabled, using original data");
   }

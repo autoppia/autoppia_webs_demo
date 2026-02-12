@@ -19,25 +19,6 @@ export async function loadDataOrGenerate<T>({ projectKey, entityType, generateCo
     return await fetchSeededSelection<T>({ projectKey, entityType, seedValue: seed })
   }
 
-  const genFlag = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE || process.env.ENABLE_DYNAMIC_V2_AI_GENERATE || '').toString().toLowerCase()
-  const isGen = genFlag === 'true' || genFlag === '1' || genFlag === 'yes' || genFlag === 'on'
-  const uniqueFlag = (process.env.NEXT_PUBLIC_DATA_GENERATION_UNIQUE || process.env.DATA_GENERATION_UNIQUE || '').toString().toLowerCase()
-  const isUnique = uniqueFlag === 'true' || uniqueFlag === '1' || uniqueFlag === 'yes' || uniqueFlag === 'on'
-
-  if (isGen) {
-    const key = buildStorageKey({ projectKey, entityType, mode: 'gen', version })
-    if (!isUnique) {
-      const cached = readJson<{ data: T[]; savedAt: number }>(key)
-      if (cached && (!ttlMs || (Date.now() - cached.savedAt) < ttlMs)) return cached.data
-    }
-    const resp = await generateProjectData(projectKey, generateCount, categories)
-    const data = (resp.success ? resp.data : []) as T[]
-    if (!isUnique) {
-      writeJson(key, { data, savedAt: Date.now() })
-    }
-    return data
-  }
-
   if (fallback) return await Promise.resolve(fallback())
   return []
 }
@@ -64,7 +45,7 @@ export function useProjectData<T>(params: Parameters<typeof loadDataOrGenerate<T
     version: params.version,
     ttlMs: params.ttlMs,
     seedValue: params.seedValue ?? null,
-    flags: { gen: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE, db: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE },
+    flags: { db: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 },
   })])
   return state
 }

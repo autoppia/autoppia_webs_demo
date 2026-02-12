@@ -1,6 +1,6 @@
 import type { RemoteTask } from "@/data/tasks-enhanced";
 import { initializeTasks } from "@/data/tasks-enhanced";
-import { clampBaseSeed, resolveSeedsSync } from "@/shared/seed-resolver";
+import { clampBaseSeed, getSeedForLoad } from "@/shared/seed-resolver";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 type AutolistWindow = Window & {
@@ -55,7 +55,7 @@ export class DynamicDataProvider {
   private getRuntimeV2Seed(): number | null {
     if (typeof window === "undefined") return null;
     const value = (window as AutolistWindow).__autolistV2Seed;
-    if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+    if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 999) {
       return value;
     }
     return null;
@@ -70,19 +70,10 @@ export class DynamicDataProvider {
     
     const baseSeed = this.getBaseSeedFromUrl();
     const runtimeSeed = this.getRuntimeV2Seed();
-    
-    // Resolve V2 seed from base seed
-    let v2Seed: number | null = null;
-    if (baseSeed !== null) {
-      const resolvedSeeds = resolveSeedsSync(baseSeed);
-      v2Seed = resolvedSeeds.v2;
-    }
-    if (v2Seed === null) {
-      v2Seed = runtimeSeed;
-    }
-    if (v2Seed === null) {
-      v2Seed = 1;
-    }
+    const v2Seed =
+      baseSeed !== null
+        ? getSeedForLoad(baseSeed)
+        : (runtimeSeed ?? 1);
     
     this.currentSeed = v2Seed;
     
@@ -140,20 +131,12 @@ export class DynamicDataProvider {
       try {
         const baseSeed = this.getBaseSeedFromUrl();
         const runtimeSeed = this.getRuntimeV2Seed();
-        
-        let v2Seed: number | null = null;
-        if (seedValue !== undefined && seedValue !== null) {
-          v2Seed = seedValue;
-        } else if (baseSeed !== null) {
-          const resolvedSeeds = resolveSeedsSync(baseSeed);
-          v2Seed = resolvedSeeds.v2;
-        }
-        if (v2Seed === null) {
-          v2Seed = runtimeSeed;
-        }
-        if (v2Seed === null) {
-          v2Seed = 1;
-        }
+        const v2Seed =
+          seedValue !== undefined && seedValue !== null
+            ? clampBaseSeed(seedValue)
+            : baseSeed !== null
+              ? getSeedForLoad(baseSeed)
+              : (runtimeSeed ?? 1);
         
         // If base seed = 1, use fallback data directly
         if (baseSeed === 1) {

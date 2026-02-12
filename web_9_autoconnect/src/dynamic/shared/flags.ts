@@ -29,26 +29,14 @@ export function isV1Enabled(): boolean {
  * Checks whether V2 DB mode is enabled
  * V2 DB mode loads data from the server database
  */
-export function isV2DbModeEnabled(): boolean {
-  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE;
-  return value === "true";
-}
-
-/**
- * Checks whether V2 AI generation mode is enabled
- * V2 AI generation mode generates data using AI
- */
-export function isV2AiGenerateEnabled(): boolean {
-  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE;
-  return value === "true";
-}
-
-/**
- * Checks whether V2 is enabled (either DB mode or AI generation)
- */
 export function isV2Enabled(): boolean {
-  return isV2DbModeEnabled() || isV2AiGenerateEnabled();
+  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2;
+  return value === "true";
 }
+
+/**
+ * Checks whether V2 is enabled
+ */
 
 /**
  * Checks whether V2 fallback mode is active

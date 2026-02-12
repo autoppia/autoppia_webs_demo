@@ -9,7 +9,7 @@
 import { useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
 import { applyV1Wrapper } from "../v1/add-wrap-decoy";
-import { isV3Enabled, isV2DbModeEnabled, isV2AiGenerateEnabled, isV2Enabled } from "./flags";
+import { isV3Enabled, isV2Enabled } from "./flags";
 import { getVariant, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "../v3/utils/variant-selector";
 import { generateDynamicOrder } from "../v1/change-order-elements";
 import type { ReactNode } from "react";
@@ -73,7 +73,6 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
  *   dyn.v1.addWrapDecoy()         // V1: Adds wrappers and decoys
  *   dyn.v1.changeOrderElements()  // V1: Changes element order
  *   dyn.v2.isDbModeEnabled()      // V2: Check if DB mode is enabled
- *   dyn.v2.isAiGenerateEnabled()  // V2: Check if AI generation mode is enabled
  *   dyn.v3.getVariant()           // V3: Gets variants (IDs, classes, texts)
  * 
  * It behaves the same even if V1/V2/V3 are OFF:
@@ -136,17 +135,11 @@ export function useDynamicSystem() {
        * Check if V2 DB mode is enabled
        * DB mode loads pre-generated data from backend /datasets/load endpoint
        */
-      isDbModeEnabled: () => isV2DbModeEnabled(),
-      
-      /**
-       * Check if V2 AI generation mode is enabled
-       * AI generation mode generates data on-the-fly using OpenAI
-       */
-      isAiGenerateEnabled: () => isV2AiGenerateEnabled(),
+      isDbModeEnabled: () => isV2Enabled(),
       
       /**
        * Check if V2 fallback mode is active
-       * Fallback mode uses original local JSON data when other modes are disabled or fail
+       * Fallback mode uses original local JSON data when V2 is disabled or fails
        */
       isFallbackMode: () => !isV2Enabled(),
     },

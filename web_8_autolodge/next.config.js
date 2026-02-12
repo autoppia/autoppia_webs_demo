@@ -33,10 +33,6 @@ console.log("  isLocalDev:", isLocalDev);
 console.log("  isDockerBuild:", isDockerBuild);
 console.log("  API_URL:", process.env.API_URL);
 console.log("  ENABLE_DYNAMIC_V1:", process.env.ENABLE_DYNAMIC_V1);
-console.log(
-  "  ENABLE_DYNAMIC_V2_AI_GENERATE:",
-  process.env.ENABLE_DYNAMIC_V2_AI_GENERATE
-);
 console.log("  NEXT_PUBLIC_API_URL:", process.env.NEXT_PUBLIC_API_URL);
 console.log(
   "  ENABLE_DYNAMIC_V2_DB_MODE:",
@@ -114,9 +110,6 @@ const nextConfig = {
   env: {
     ENABLE_DYNAMIC_V1: process.env.ENABLE_DYNAMIC_V1,
     NEXT_PUBLIC_ENABLE_DYNAMIC_V1: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1,
-    ENABLE_DYNAMIC_V2_AI_GENERATE: process.env.ENABLE_DYNAMIC_V2_AI_GENERATE,
-    NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE:
-      process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE,
     ENABLE_DYNAMIC_V2_DB_MODE: process.env.ENABLE_DYNAMIC_V2_DB_MODE,
     NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE:
       process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE,

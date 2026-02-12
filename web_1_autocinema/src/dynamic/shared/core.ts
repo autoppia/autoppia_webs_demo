@@ -9,7 +9,7 @@
 import { useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
 import { applyV1Wrapper } from "../v1/add-wrap-decoy";
-import { isV2DbModeEnabled, isV2AiGenerateEnabled, isV2Enabled, isV3Enabled } from "./flags";
+import { isV2Enabled, isV3Enabled } from "./flags";
 import { getVariant, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "../v3/utils/variant-selector";
 import { generateDynamicOrder } from "../v1/change-order-elements";
 import type { ReactNode } from "react";
@@ -73,7 +73,6 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
  *   dyn.v1.addWrapDecoy()         // V1: Adds wrappers and decoys
  *   dyn.v1.changeOrderElements()  // V1: Changes element order
  *   dyn.v2.isDbModeEnabled()      // V2: Check if DB mode is enabled
- *   dyn.v2.isAiGenerateEnabled()  // V2: Check if AI generation mode is enabled
  *   dyn.v3.getVariant()           // V3: Gets variants (IDs, classes, texts)
  * 
  * It behaves the same even if V1/V2/V3 are OFF:
@@ -130,20 +129,18 @@ export function useDynamicSystem() {
       /**
        * Check if DB mode is enabled
        */
-      isDbModeEnabled: () => isV2DbModeEnabled(),
+      isDbModeEnabled: () => isV2Enabled(),
       
       /**
        * Check if AI generation mode is enabled
        */
-      isAiGenerateEnabled: () => isV2AiGenerateEnabled(),
-      
       /**
-       * Check if V2 is enabled (either mode)
+       * Check if V2 is enabled (DB mode)
        */
       isEnabled: () => isV2Enabled(),
       
       /**
-       * Check if using fallback (original data) - both modes disabled
+       * Check if using fallback (original data) - V2 disabled
        */
       isFallbackMode: () => !isV2Enabled(),
     },
