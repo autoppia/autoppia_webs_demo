@@ -394,9 +394,9 @@ export async function initializeJobs(v2SeedValue?: number | null): Promise<Autow
   
   console.log("[autowork] initializeJobs - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled, "aiGenerateEnabled:", aiGenerateEnabled);
   
-  // Special case: if baseSeed = 1, use fallback data directly
-  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
-    console.log("[autowork] initializeJobs: baseSeed=1, using fallback data");
+  // Special case: if baseSeed = 1, ALWAYS use fallback data directly (skip API calls)
+  if (baseSeed === 1) {
+    console.log("[autowork] initializeJobs: baseSeed=1, using fallback data (skipping API calls)");
     return fallbackJobs;
   }
   
@@ -439,9 +439,9 @@ export async function initializeHires(v2SeedValue?: number | null): Promise<Auto
   
   console.log("[autowork] initializeHires - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled, "aiGenerateEnabled:", aiGenerateEnabled);
   
-  // Special case: if baseSeed = 1, use fallback data directly
-  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
-    console.log("[autowork] initializeHires: baseSeed=1, using fallback data");
+  // Special case: if baseSeed = 1, ALWAYS use fallback data directly (skip API calls)
+  if (baseSeed === 1) {
+    console.log("[autowork] initializeHires: baseSeed=1, using fallback data (skipping API calls)");
     return fallbackHires;
   }
   
@@ -484,9 +484,9 @@ export async function initializeExperts(v2SeedValue?: number | null): Promise<Au
   
   console.log("[autowork] initializeExperts - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled, "aiGenerateEnabled:", aiGenerateEnabled);
   
-  // Special case: if baseSeed = 1, use fallback data directly
-  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
-    console.log("[autowork] initializeExperts: baseSeed=1, using fallback data");
+  // Special case: if baseSeed = 1, ALWAYS use fallback data directly (skip API calls)
+  if (baseSeed === 1) {
+    console.log("[autowork] initializeExperts: baseSeed=1, using fallback data (skipping API calls)");
     return fallbackExperts;
   }
   
@@ -528,9 +528,9 @@ export async function initializeSkills(v2SeedValue?: number | null): Promise<str
   
   console.log("[autowork] initializeSkills - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled);
   
-  // Special case: if baseSeed = 1, use fallback data directly
-  if (baseSeed === 1 && dbModeEnabled) {
-    console.log("[autowork] initializeSkills: baseSeed=1, using fallback data");
+  // Special case: if baseSeed = 1, ALWAYS use fallback data directly (skip API calls)
+  if (baseSeed === 1) {
+    console.log("[autowork] initializeSkills: baseSeed=1, using fallback data (skipping API calls)");
     return fallbackSkills;
   }
   

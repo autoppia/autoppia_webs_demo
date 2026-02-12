@@ -4,13 +4,22 @@ function getApiBaseUrl(): string {
   const envIsLocal = envUrl && (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"));
   const originIsLocal = origin && (origin.includes("localhost") || origin.includes("127.0.0.1"));
 
+  let baseUrl: string;
+  
   if (envUrl && (!(envIsLocal) || originIsLocal)) {
-    return envUrl;
+    baseUrl = envUrl;
+  } else if (origin) {
+    baseUrl = `${origin}/api`;
+  } else {
+    baseUrl = envUrl || "http://app:8090";
   }
-  if (origin) {
-    return `${origin}/api`;
+  
+  // Log the resolved API URL for debugging (only in browser)
+  if (typeof window !== "undefined") {
+    console.log(`[seeded-loader] Resolved API base URL: ${baseUrl} (envUrl: ${envUrl || 'none'}, origin: ${origin || 'none'})`);
   }
-  return envUrl || "http://app:8090";
+  
+  return baseUrl;
 }
 
 export interface SeededLoadOptions {
@@ -57,25 +66,46 @@ export async function fetchSeededSelection<T = any>(options: SeededLoadOptions):
   }
 
   const url = `${baseUrl}/datasets/load?${params.toString()}`;
-  const resp = await fetch(url, { method: "GET" });
-  if (!resp.ok) {
-    throw new Error(`Seeded selection request failed: ${resp.status}`);
-  }
-  const json = await resp.json();
   
-  // Check if API returned an error in the response body (common pattern: {detail: "error message"})
-  if (json?.detail && typeof json.detail === 'string' && !json?.data) {
-    throw new Error(`API error: ${json.detail}`);
-  }
+  // Add timeout to prevent infinite hanging (10 seconds)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
   
-  // Check if data is missing or empty
-  if (!json?.data || !Array.isArray(json.data)) {
-    const errorMsg = json?.detail || `No data returned from API for ${options.entityType}`;
-    throw new Error(errorMsg);
+  try {
+    const resp = await fetch(url, { 
+      method: "GET",
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+    
+    if (!resp.ok) {
+      throw new Error(`Seeded selection request failed: ${resp.status}`);
+    }
+    const json = await resp.json();
+    
+    // Check if API returned an error in the response body (common pattern: {detail: "error message"})
+    if (json?.detail && typeof json.detail === 'string' && !json?.data) {
+      throw new Error(`API error: ${json.detail}`);
+    }
+    
+    // Check if data is missing or empty
+    if (!json?.data || !Array.isArray(json.data)) {
+      const errorMsg = json?.detail || `No data returned from API for ${options.entityType}`;
+      throw new Error(errorMsg);
+    }
+    
+    // Return data even if empty array - let caller decide if empty is acceptable
+    return json.data as T[];
+  } catch (error: any) {
+    clearTimeout(timeoutId);
+    // If it's an abort (timeout), provide a clearer error message
+    if (error.name === 'AbortError' || error.message?.includes('aborted')) {
+      console.error(`[seeded-loader] API request timed out after 10s for ${options.entityType} (seed=${seed})`);
+      throw new Error(`API request timed out for ${options.entityType}. The backend service may be unavailable.`);
+    }
+    // Re-throw other errors
+    throw error;
   }
-  
-  // Return data even if empty array - let caller decide if empty is acceptable
-  return json.data as T[];
 }
 
 
@@ -87,15 +117,30 @@ export async function fetchPoolInfo(projectKey: string, entityType: string): Pro
   }
   const baseUrl = getApiBaseUrl();
   const url = `${baseUrl}/datasets/pool/info?project_key=${encodeURIComponent(projectKey)}&entity_type=${encodeURIComponent(entityType)}`;
+  
+  // Add timeout to prevent infinite hanging (5 seconds for pool info)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
+  
   try {
-    const resp = await fetch(url, { method: "GET" });
+    const resp = await fetch(url, { 
+      method: "GET",
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+    
     if (!resp.ok) return null;
     const json = await resp.json();
     if (json && typeof json.pool_size === "number") {
       return { pool_size: json.pool_size as number };
     }
     return null;
-  } catch {
+  } catch (error: any) {
+    clearTimeout(timeoutId);
+    // Silently fail for pool info (it's optional)
+    if (error.name === 'AbortError' || error.message?.includes('aborted')) {
+      console.warn(`[seeded-loader] Pool info request timed out for ${entityType}`);
+    }
     return null;
   }
 }

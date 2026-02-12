@@ -106,7 +106,12 @@ def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], ent
     return file_path
 
 
-def load_all_data(web_name: str, entity_type: Optional[str] = None) -> List[Dict[str, Any]]:
+def load_all_data(
+    web_name: str,
+    entity_type: Optional[str] = None,
+    *,
+    seed_value: Optional[int] = None,
+) -> List[Dict[str, Any]]:
     """
     Load and return all JSON objects referenced in main.json for a given web_name.
     If entity_type is provided, only load files listed under that entity key.
@@ -116,7 +121,9 @@ def load_all_data(web_name: str, entity_type: Optional[str] = None) -> List[Dict
     """
     # Check if V2 DB mode is disabled - if so, load from original/ directory
     # v2_disabled is True when ENABLE_DYNAMIC_V2_DB_MODE is "false", "0", "no", or "off"
-    v2_disabled = os.getenv("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() in {"false", "0", "no", "off"}
+    v2_disabled_env_flag = os.getenv("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() in {"false", "0", "no", "off"}
+    force_seed_disabled = seed_value == 1
+    v2_disabled = v2_disabled_env_flag or force_seed_disabled
 
     logger.info(
         "Loading data",
@@ -125,6 +132,7 @@ def load_all_data(web_name: str, entity_type: Optional[str] = None) -> List[Dict
             "entity_type": entity_type,
             "base_path": BASE_PATH,
             "v2_disabled": v2_disabled,
+            "seed_value": seed_value,
         },
     )
 

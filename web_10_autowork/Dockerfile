@@ -87,6 +87,6 @@ RUN npm ci --omit=dev --ignore-scripts
 
 # app artifacts
 COPY --from=builder /app/.next ./.next
-#COPY --from=builder /app/public ./public
+COPY --from=builder /app/public ./public
 
 CMD ["npm", "start"]

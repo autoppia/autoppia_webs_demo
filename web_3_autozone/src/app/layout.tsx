@@ -28,23 +28,25 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-        <SeedProvider>
-          <CartProvider>
-            <Suspense fallback={null}>
-              <SeedRedirect />
-            </Suspense>
-            <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
-              <Header />
-            </Suspense>
-            <DataReadyGate>
-              <BodyWrapper>
-                {children}
-              </BodyWrapper>
-            </DataReadyGate>
-            <DynamicDebug />
-            <Footer />
-          </CartProvider>
-        </SeedProvider>
+        <div suppressHydrationWarning>
+          <SeedProvider>
+            <CartProvider>
+              <Suspense fallback={null}>
+                <SeedRedirect />
+              </Suspense>
+              <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
+                <Header />
+              </Suspense>
+              <DataReadyGate>
+                <BodyWrapper>
+                  {children}
+                </BodyWrapper>
+              </DataReadyGate>
+              <DynamicDebug />
+              <Footer />
+            </CartProvider>
+          </SeedProvider>
+        </div>
       </body>
     </html>
   );
