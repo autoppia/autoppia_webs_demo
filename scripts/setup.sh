@@ -10,10 +10,8 @@
 #   --webs_port=PORT              Set webs_server port (default: 8090)
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
 #   --demo=NAME                   Deploy specific demo: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all (default: all)
-#   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v3)
-#                                            v2 enables data generation (AI generation or DB mode)
-#   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
-#   --enable_ai_generation_mode=BOOL  Enable AI generation mode (for v2: generate data on-the-fly using AI)
+#   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v2,v3)
+#                                            v2 = carga de datos por seed (dataset por ?seed=X)
 #   --webs_data_path=PATH         Host dir to bind at /app/data (default: $DEMOS_DIR/webs_server/initial_data)
 #   -y, --yes                     Force Docker cleanup (remove all containers/images/volumes) before deploy
 #   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
@@ -45,10 +43,7 @@ Options:
   --webs_port=PORT              Set webs_server port (default: 8090)
   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
   --demo=NAME                   One of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, all (default: all)
-  --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v3)
-                                            v2 enables data generation (AI generation or DB mode)
-  --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
-  --enable_ai_generation_mode=BOOL  Enable AI generation mode (for v2: generate data on-the-fly using AI)
+  --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v2,v3). v2 = datos por seed.
   --webs_data_path=PATH         Host dir to bind at /app/data (default: \$DEMOS_DIR/webs_server/initial_data)
   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
   --parallel=N                  Max concurrent web project deployments when --demo=all (default: 3)
@@ -85,8 +80,6 @@ for ARG in "$@"; do
     --webs_port=*)       WEBS_PORT="${ARG#*=}" ;;
     --webs_postgres=*)   WEBS_PG_PORT="${ARG#*=}" ;;
     --demo=*)            WEB_DEMO="${ARG#*=}" ;;
-    --enable_db_mode=*)  ENABLE_DYNAMIC_V2_DB_MODE="${ARG#*=}" ;;
-    --enable_ai_generation_mode=*)  ENABLE_DYNAMIC_V2_AI_GENERATE="${ARG#*=}" ;;
     --enabled_dynamic_versions=*) ENABLED_DYNAMIC_VERSIONS="${ARG#*=}" ;;
     --webs_data_path=*)  WEBS_DATA_PATH="${ARG#*=}" ;;
     -h|--help)           print_usage; exit 0 ;;
@@ -108,17 +101,9 @@ ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-v1,v2,v3}"
 
 # Initialize dynamic version flags (will be set by version mapping)
 ENABLE_DYNAMIC_V1="${ENABLE_DYNAMIC_V1:-false}"
-ENABLE_DYNAMIC_V2_AI_GENERATE="${ENABLE_DYNAMIC_V2_AI_GENERATE:-false}"
-ENABLE_DYNAMIC_V2_DB_MODE="${ENABLE_DYNAMIC_V2_DB_MODE:-false}"
+ENABLE_DYNAMIC_V2="${ENABLE_DYNAMIC_V2:-}"
 ENABLE_DYNAMIC_V3="${ENABLE_DYNAMIC_V3:-false}"
 ENABLE_DYNAMIC_V4="${ENABLE_DYNAMIC_V4:-false}"
-
-# ============================================================================
-# FORCE AI GENERATION MODE TO DISABLED (Hardcoded for now)
-# TODO: Make this dynamic via environment variable in the future
-# ============================================================================
-ENABLE_DYNAMIC_V2_AI_GENERATE=false
-echo "[INFO] AI generation mode is currently disabled (hardcoded in setup.sh)"
 
 # ============================================================================
 # 3. NORMALIZE VALUES
@@ -136,7 +121,7 @@ ENABLED_DYNAMIC_VERSIONS="$ENABLED_DYNAMIC_VERSIONS_NORMALIZED"
 # 4. MAP DYNAMIC VERSIONS TO FLAGS
 # ============================================================================
 # v1 -> ENABLE_DYNAMIC_V1 (seeds + layout variants)
-# v2 -> ENABLE_DYNAMIC_V2_DB_MODE (loads pre-generated data from DB via ?v2-seed=X in URL)
+# v2 -> ENABLE_DYNAMIC_V2 (datos por seed)
 # v3 -> ENABLE_DYNAMIC_V3 (changes classes, IDs, structure)
 # v4 -> ENABLE_DYNAMIC_V4
 
@@ -149,21 +134,8 @@ if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
         echo "[INFO] v1 enabled: seeds + layout variants"
         ;;
       v2)
-        # v2 mode selection: DB mode by default when v2 is specified
-        # NOTE: AI generation mode is currently disabled (hardcoded to false in setup.sh)
-        # If --enable_db_mode=false explicitly passed, disable DB mode
-        # Otherwise, enable DB mode by default when v2 is in the list
-        if [ "$(normalize_bool "${ENABLE_DYNAMIC_V2_DB_MODE:-true}")" = "false" ]; then
-          # User explicitly disabled DB mode
-          ENABLE_DYNAMIC_V2_DB_MODE=false
-          ENABLE_DYNAMIC_V2_AI_GENERATE=false
-          echo "[INFO] v2 enabled: DB mode explicitly disabled, using fallback original data"
-        else
-          # Default: enable DB mode when v2 is specified
-          ENABLE_DYNAMIC_V2_DB_MODE=true
-          ENABLE_DYNAMIC_V2_AI_GENERATE=false
-          echo "[INFO] v2 enabled: DB mode (use ?v2-seed=X in URL)"
-        fi
+        ENABLE_DYNAMIC_V2=true
+        echo "[INFO] v2 enabled: data by seed"
         ;;
       v3)
         ENABLE_DYNAMIC_V3=true
@@ -183,16 +155,12 @@ else
 fi
 
 # Normalize all boolean flags AFTER version mapping (so mapped values are preserved)
-for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2_AI_GENERATE ENABLE_DYNAMIC_V2_DB_MODE ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
+for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2 ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
   eval "$var=\$(normalize_bool \"\$$var\")"
 done
 
-# Force AI generation mode to false (override any previous settings)
-# This ensures AI generation mode is always disabled regardless of terminal input
-ENABLE_DYNAMIC_V2_AI_GENERATE=false
-
 # Check for invalid booleans
-for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2_AI_GENERATE ENABLE_DYNAMIC_V2_DB_MODE ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
+for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2 ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
   if [ "$(eval echo \$$var)" = "__INVALID__" ]; then
     echo "❌ Invalid boolean flag: $var. Use true/false (or yes/no, 1/0)."
     exit 1
@@ -244,8 +212,7 @@ echo "      webs_server DB      →  $WEBS_PG_PORT"
 echo "    Demo:                  →  $WEB_DEMO"
 echo "    Dynamic versions:"
 echo "      V1 (seeds/layouts)   →  $ENABLE_DYNAMIC_V1"
-echo "      V2 AI generate       →  $ENABLE_DYNAMIC_V2_AI_GENERATE"
-echo "      V2 DB mode          →  $ENABLE_DYNAMIC_V2_DB_MODE"
+echo "      V2 (data by seed)    →  $ENABLE_DYNAMIC_V2"
 echo "      V3 (HTML structure)  →  $ENABLE_DYNAMIC_V3"
 echo "      V4 (seed HTML)       →  $ENABLE_DYNAMIC_V4"
 echo "    Enabled versions       →  ${ENABLED_DYNAMIC_VERSIONS:-<none>}"
@@ -331,10 +298,10 @@ export_env_vars() {
     GIT_COMMIT_HASH="$git_hash" \
     ENABLE_DYNAMIC_V1="$ENABLE_DYNAMIC_V1" \
     NEXT_PUBLIC_ENABLE_DYNAMIC_V1="$ENABLE_DYNAMIC_V1" \
-    ENABLE_DYNAMIC_V2_AI_GENERATE="$ENABLE_DYNAMIC_V2_AI_GENERATE" \
-    NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE="$ENABLE_DYNAMIC_V2_AI_GENERATE" \
-    ENABLE_DYNAMIC_V2_DB_MODE="$ENABLE_DYNAMIC_V2_DB_MODE" \
-    NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE="$ENABLE_DYNAMIC_V2_DB_MODE" \
+    ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
+    NEXT_PUBLIC_ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
+    ENABLE_DYNAMIC_V2_DB_MODE="$ENABLE_DYNAMIC_V2" \
+    NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE="$ENABLE_DYNAMIC_V2" \
     ENABLE_DYNAMIC_V3="$ENABLE_DYNAMIC_V3" \
     NEXT_PUBLIC_ENABLE_DYNAMIC_V3="$ENABLE_DYNAMIC_V3" \
     ENABLE_DYNAMIC_V4="$ENABLE_DYNAMIC_V4" \
@@ -446,9 +413,10 @@ deploy_webs_server() {
       WEB_PORT="$WEBS_PORT" \
       POSTGRES_PORT="$WEBS_PG_PORT" \
       OPENAI_API_KEY="${OPENAI_API_KEY:-}" \
-      ENABLE_DYNAMIC_V2_DB_MODE="$ENABLE_DYNAMIC_V2_DB_MODE" \
-      NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE="$ENABLE_DYNAMIC_V2_DB_MODE" \
-      NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE="$ENABLE_DYNAMIC_V2_AI_GENERATE" \
+      ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
+      NEXT_PUBLIC_ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
+      ENABLE_DYNAMIC_V2_DB_MODE="$ENABLE_DYNAMIC_V2" \
+      NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE="$ENABLE_DYNAMIC_V2" \
       HOST_UID=$(id -u) \
       HOST_GID=$(id -g) \
       WEBS_DATA_PATH="$WEBS_DATA_ABS_PATH"
@@ -523,7 +491,7 @@ if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
       docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data /app/data/$project/original 2>/dev/null || true
       docker cp "$SRC_MAIN" webs_server-app-1:/app/data/$project/main.json 2>/dev/null || true
       # Prefer originals if DB mode is disabled; otherwise copy data files
-      if [ "$ENABLE_DYNAMIC_V2_DB_MODE" = false ]; then
+      if [ "$ENABLE_DYNAMIC_V2" = false ]; then
         if [ -d "$SRC_ORIG_DIR" ] && ls "$SRC_ORIG_DIR"/*.json >/dev/null 2>&1; then
           for data_file in "$SRC_ORIG_DIR"/*.json; do
             if [ -f "$data_file" ]; then
