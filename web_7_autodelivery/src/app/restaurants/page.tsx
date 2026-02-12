@@ -17,7 +17,7 @@ export default function RestaurantsPage() {
       seed,
       v2Enabled: dyn.v2.isEnabled(),
       dbMode: dyn.v2.isDbModeEnabled(),
-      aiMode: dyn.v2.isAiGenerateEnabled(),
+      aiMode: dyn.v2.isEnabled(),
       fallback: dyn.v2.isFallbackMode(),
     });
   }, [seed, dyn]);

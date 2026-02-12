@@ -95,7 +95,7 @@ export function useDynamicSystem() {
       whenReady: () => dynamicDataProvider.whenReady(),
       
       /**
-       * Check if DB mode is enabled
+       * Check if V2 is enabled
        */
       isDbModeEnabled: () => isDbLoadModeEnabled(),
       
@@ -105,7 +105,7 @@ export function useDynamicSystem() {
       isFallbackMode: () => !isDbLoadModeEnabled(),
       
       /**
-       * Check if V2 is enabled (DB mode)
+       * Check if V2 is enabled
        */
       isEnabled: () => isDbLoadModeEnabled(),
     },

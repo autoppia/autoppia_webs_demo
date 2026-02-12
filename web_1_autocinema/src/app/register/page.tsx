@@ -49,7 +49,7 @@ export default function RegisterPage() {
       console.log("[register/page] V2 status:", {
         v2Enabled: dyn.v2.isEnabled(),
         v2DbMode: dyn.v2.isDbModeEnabled(),
-        v2AiGenerate: dyn.v2.isAiGenerateEnabled(),
+        v2AiGenerate: dyn.v2.isEnabled(),
         v2Fallback: dyn.v2.isFallbackMode(),
       });
     }

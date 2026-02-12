@@ -1,4 +1,4 @@
-import { isV2DbModeEnabled } from "@/dynamic/shared/flags";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 function getApiBaseUrl(): string {
   const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
@@ -27,7 +27,7 @@ export interface SeededLoadOptions {
 
 /** Delegates to flags so env is read in one place only */
 export function isDbLoadModeEnabled(): boolean {
-  return isV2DbModeEnabled();
+  return isV2Enabled();
 }
 
 export function getSeedValueFromEnv(defaultSeed: number = 1): number {

@@ -415,7 +415,7 @@ function PropertyDetailContent() {
     console.log("[autolodge] V2 Status:", {
       enabled: dyn.v2.isEnabled(),
       dbMode: dyn.v2.isDbModeEnabled(),
-      aiMode: dyn.v2.isAiGenerateEnabled(),
+      aiMode: dyn.v2.isEnabled(),
       fallbackMode: dyn.v2.isFallbackMode(),
     });
   }, [dyn]);

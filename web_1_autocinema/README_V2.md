@@ -92,7 +92,7 @@ The system follows this priority order:
   - `initializeMovies()`: Entry point for loading movies
   - `fetchSeededSelection()`: Fetches from `/datasets/load` (DB mode)
 - `src/dynamic/shared/flags.ts`: Feature flags
-  - `isV2DbModeEnabled()`: Checks if DB mode is enabled
+  - `isV2Enabled()`: Checks if DB mode is enabled
   - `isV2Enabled()`: Same as DB mode (AI generate removed)
 
 - `src/dynamic/v2/data-provider.ts`: Singleton data provider

@@ -72,7 +72,7 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
  *   const dyn = useDynamicSystem();
  *   dyn.v1.addWrapDecoy()         // V1: Adds wrappers and decoys
  *   dyn.v1.changeOrderElements()  // V1: Changes element order
- *   dyn.v2.isDbModeEnabled()      // V2: Check if DB mode is enabled
+ *   dyn.v2.isDbModeEnabled()      // V2: Check if V2 is enabled
  *   dyn.v3.getVariant()           // V3: Gets variants (IDs, classes, texts)
  * 
  * It behaves the same even if V1/V2/V3 are OFF:
@@ -122,18 +122,18 @@ export function useDynamicSystem() {
     },
     
     /**
-     * V2: Data loading (DB mode, AI generation, fallback)
+     * V2: Data loading (V2, AI generation, fallback)
      * Provides status information about V2 modes
      */
     v2: {
       /**
-       * Check if V2 is enabled (either DB mode or AI generation mode)
+       * Check if V2 is enabled (either V2 or enabled)
        */
       isEnabled: () => isV2Enabled(),
       
       /**
-       * Check if V2 DB mode is enabled
-       * DB mode loads pre-generated data from backend /datasets/load endpoint
+       * Check if V2 V2 is enabled
+       * V2 loads pre-generated data from backend /datasets/load endpoint
        */
       isDbModeEnabled: () => isV2Enabled(),
       

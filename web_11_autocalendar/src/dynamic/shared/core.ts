@@ -126,7 +126,7 @@ export function useDynamicSystem() {
       whenReady: () => dynamicDataProvider.whenReady(),
       
       /**
-       * Check if DB mode is enabled
+       * Check if V2 is enabled
        */
       isDbModeEnabled: () => {
         const { isDbLoadModeEnabled } = require("@/shared/seeded-loader");
@@ -142,7 +142,7 @@ export function useDynamicSystem() {
       },
       
       /**
-       * Check if V2 is enabled (DB mode)
+       * Check if V2 is enabled
        */
       isEnabled: () => {
         const { isDbLoadModeEnabled } = require("@/shared/seeded-loader");
