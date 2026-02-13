@@ -118,11 +118,11 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     let cancelled = false;
     
-    // Use sync version for immediate update
-    const syncResolved = resolveSeedsSync(seed);
-    setResolvedSeeds(syncResolved);
+    // Set default values immediately (will be updated when API responds)
+    const defaultResolved = resolveSeedsSync(seed);
+    setResolvedSeeds(defaultResolved);
     
-    // Fetch from centralized service (async, updates when ready)
+    // Always fetch from centralized service (async, updates when ready)
     resolveSeeds(seed).then((resolved) => {
       // Only update if this effect hasn't been cancelled (seed hasn't changed)
       if (!cancelled) {
@@ -130,7 +130,8 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }).catch((error) => {
       if (!cancelled) {
-        console.warn("[SeedContext:web11] Failed to resolve seeds from API, using local:", error);
+        console.error("[SeedContext:web11] Failed to resolve seeds from API:", error);
+        // Keep default values (with seed 1 for v1/v2/v3) - will retry on next seed change
       }
     });
     

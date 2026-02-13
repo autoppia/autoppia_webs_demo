@@ -1,6 +1,6 @@
 /**
  * Centralized seed resolution service client.
- * Calls webs_server API to resolve seeds, with local fallback for SSR/offline.
+ * Always calls webs_server API to resolve seeds - no local fallback.
  */
 
 const TRUE_VALUES = ["true", "1", "yes", "y", "on"];
@@ -75,36 +75,53 @@ export function clampBaseSeed(seed: number): number {
   return seed;
 }
 
-function resolveSeedsLocal(
-  baseSeed: number,
-  enabledFlags?: { v1: boolean; v2: boolean; v3: boolean }
-): ResolvedSeeds {
+/**
+ * Default resolved seeds when API is not available (SSR or error).
+ * Returns seed 1 for all versions as fallback.
+ */
+function getDefaultResolvedSeeds(baseSeed: number): ResolvedSeeds {
   const safeSeed = clampBaseSeed(baseSeed);
-  const flags = enabledFlags || getEnabledFlagsInternal();
-  const resolved: ResolvedSeeds = {
+  return {
     base: safeSeed,
-    v1: null,
-    v2: null,
-    v3: null,
+    v1: 1,
+    v2: 1,
+    v3: 1,
   };
-  if (flags.v1) {
-    resolved.v1 = ((safeSeed * 29 + 7) % 300) + 1;
-  }
-  if (flags.v2) {
-    resolved.v2 = safeSeed;
-  }
-  if (flags.v3) {
-    resolved.v3 = ((safeSeed * 71 + 3) % 100) + 1;
-  }
-  return resolved;
+}
+
+/**
+ * Get resolved seeds for seed = 1 (original/default seed).
+ * Returns seed 1 for all versions (enabled or disabled) without calling the API.
+ * If a version is disabled, it still receives seed 1.
+ */
+function getSeedOneResolvedSeeds(): ResolvedSeeds {
+  return {
+    base: 1,
+    v1: 1,  // Always 1, even if V1 is disabled
+    v2: 1,  // Always 1, even if V2 is disabled
+    v3: 1,  // Always 1, even if V3 is disabled
+  };
 }
 
 export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
   const safeSeed = clampBaseSeed(baseSeed);
   const enabledFlags = getEnabledFlagsInternal();
+  
+  // During SSR, return default values (will be resolved on client-side)
   if (typeof window === "undefined") {
-    return resolveSeedsLocal(safeSeed, enabledFlags);
+    // For seed = 1, return known values; otherwise return defaults
+    if (safeSeed === 1) {
+      return getSeedOneResolvedSeeds();
+    }
+    return getDefaultResolvedSeeds(safeSeed);
   }
+
+  // Skip API call for seed = 1 - return known values directly
+  if (safeSeed === 1) {
+    console.log("[seed-resolver] Seed is 1, skipping API call and returning seed 1 for all versions");
+    return getSeedOneResolvedSeeds();
+  }
+
   try {
     const apiUrl = getApiBaseUrl();
     const url = new URL(`${apiUrl}/seeds/resolve`);
@@ -120,19 +137,27 @@ export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
       throw new Error(`Seed resolution API failed: ${response.status}`);
     }
     const data = await response.json();
+    
+    // If a version is disabled, always return seed 1
+    // If a version is enabled, use the API response (or 1 as fallback)
     return {
       base: data.base ?? safeSeed,
-      v1: data.v1 ?? null,
-      v2: data.v2 ?? null,
-      v3: data.v3 ?? null,
+      v1: enabledFlags.v1 ? (data.v1 ?? 1) : 1,  // If disabled: 1, if enabled: use API value or 1
+      v2: enabledFlags.v2 ? (data.v2 ?? 1) : 1,  // If disabled: 1, if enabled: use API value or 1
+      v3: enabledFlags.v3 ? (data.v3 ?? 1) : 1,  // If disabled: 1, if enabled: use API value or 1
     };
   } catch (error) {
-    console.warn("[seed-resolver] API call failed, using local fallback:", error);
-    return resolveSeedsLocal(safeSeed, enabledFlags);
+    console.error("[seed-resolver] API call failed, returning seed 1 for all versions:", error);
+    // Return seed 1 for all versions instead of null
+    return getDefaultResolvedSeeds(safeSeed);
   }
 }
 
 export function resolveSeedsSync(baseSeed: number): ResolvedSeeds {
-  const enabledFlags = getEnabledFlagsInternal();
-  return resolveSeedsLocal(baseSeed, enabledFlags);
+  const safeSeed = clampBaseSeed(baseSeed);
+  // For seed = 1, return known values; otherwise return defaults
+  if (safeSeed === 1) {
+    return getSeedOneResolvedSeeds();
+  }
+  return getDefaultResolvedSeeds(baseSeed);
 }

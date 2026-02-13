@@ -76,8 +76,11 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let cancelled = false;
-    const syncResolved = resolveSeedsSync(seed);
-    setResolvedSeeds(syncResolved);
+    // Set default values immediately (will be updated when API responds)
+    const defaultResolved = resolveSeedsSync(seed);
+    setResolvedSeeds(defaultResolved);
+    
+    // Always fetch from centralized service (async, updates when ready)
     resolveSeeds(seed)
       .then((resolved) => {
         if (!cancelled) {
@@ -86,7 +89,8 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
       })
       .catch((error) => {
         if (!cancelled) {
-          console.warn("[autohealth][seed] Falling back to local resolver", error);
+          console.error("[autohealth][seed] Failed to resolve seeds from API:", error);
+          // Keep default values (with seed 1 for v1/v2/v3) - will retry on next seed change
         }
       });
     return () => {

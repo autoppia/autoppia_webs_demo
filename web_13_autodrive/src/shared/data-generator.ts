@@ -260,106 +260,16 @@ export async function generateProjectData(
   const startTime = Date.now();
   const clampCount = Math.max(1, Math.min(500, Math.floor(count)));
 
-  // If no data generation allowed in env, return local simulated data immediately
-  if (!isDataGenerationEnabled()) {
-    console.log('[web13][data-generator] Data generation disabled via env, using local simulated data.');
-    const localData = generateLocalSimulatedTrips(clampCount);
-    const generationTime = (Date.now() - startTime) / 1000;
-    return {
-      success: true,
-      data: localData,
-      count: localData.length,
-      generationTime
-    };
-  }
-
-  try {
-    const baseUrl = getApiBaseUrl();
-    console.log('[web13][data-generator] Attempting AI generation via API', { baseUrl, clampCount });
-    // Attach a unique request identifier to encourage non-cached generation server-side
-    const request_id = `${projectKey}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-
-    // Build a dynamic diversity hint so drivers and locations vary between runs
-    const shuffledCities = [...CITY_HINTS].sort(() => Math.random() - 0.5).slice(0, 8);
-    const diversityHint = `Use diverse pickup/dropoff locations across these cities (mix them randomly, do not repeat the same city pairs): ${shuffledCities.join(", ")}. Vary driver nationalities and names across locales.`;
-
-    // Randomize categories order to encourage ride variety
-    const categoriesPayload = (categories && categories.length > 0)
-      ? categories
-      : [...config.categories].sort(() => Math.random() - 0.5);
-
-    const resp = await fetch(`${baseUrl}/datasets/generate`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        interface_definition: config.interfaceDefinition,
-        examples: config.examples,
-        count: clampCount,
-        categories: categoriesPayload,
-        additional_requirements: `${config.additionalRequirements}\n\n${diversityHint}\n- Do NOT reuse the same pickup/dropoff addresses across items.\n- Use different street names and numbers per trip; mix cities.\n- Ensure at least 6 distinct drivers with varied names/nationalities.\n- Vary ride types and prices; include economy, comfort, xl, electric, business.\n- No two trips should have identical (pickup, dropoff).\nRANDOMIZATION_SALT=${request_id}`,
-        naming_rules: config.namingRules,
-        project_key: projectKey,
-        entity_type: config.dataType,
-        save_to_db: false,
-        request_id
-      })
-    });
-
-    if (!resp.ok) {
-      console.warn('[web13][data-generator] API error, falling back to local data', resp.status, resp.statusText);
-      // fallback to local data if server fails
-      const fallback = generateLocalSimulatedTrips(clampCount);
-      const generationTime = (Date.now() - startTime) / 1000;
-      return {
-        success: false,
-        data: fallback,
-        count: fallback.length,
-        generationTime,
-        error: `API request failed: ${resp.status} ${resp.statusText} — returned fallback local data`
-      };
-    }
-
-    const result = await resp.json();
-    console.log('[web13][data-generator] API response received', { keys: Object.keys(result || {}) });
-
-    const generationTime = (Date.now() - startTime) / 1000;
-
-    // If API returns generated_data (convention), use it — otherwise try a sensible fallback
-    const generated = result.generated_data ?? result.data ?? [];
-    if (!Array.isArray(generated) || generated.length === 0) {
-      console.warn('[web13][data-generator] API returned empty data, using local fallback');
-      const fallback = generateLocalSimulatedTrips(clampCount);
-      return {
-        success: true,
-        data: fallback,
-        count: fallback.length,
-        generationTime,
-        error: 'API returned no generated items; returned local fallback data'
-      };
-    }
-
-    console.log('[web13][data-generator] Generated items', generated.length);
-    return {
-      success: true,
-      data: generated,
-      count: generated.length,
-      generationTime
-    };
-  } catch (err) {
-    console.error('[web13][data-generator] Generation try/catch error, using local fallback', err);
-    const generationTime = (Date.now() - startTime) / 1000;
-    // on network / runtime error, return local simulated dataset as fallback
-    const fallback = generateLocalSimulatedTrips(clampCount);
-    return {
-      success: false,
-      data: fallback,
-      count: fallback.length,
-      generationTime,
-      error: err instanceof Error ? err.message : 'Unknown error'
-    };
-  }
+  // Always use local simulated data (AI generation removed)
+  console.log('[web13][data-generator] Using local simulated data.');
+  const localData = generateLocalSimulatedTrips(clampCount);
+  const generationTime = (Date.now() - startTime) / 1000;
+  return {
+    success: true,
+    data: localData,
+    count: localData.length,
+    generationTime
+  };
 }
 
 /* ---------- Env helpers ---------- */

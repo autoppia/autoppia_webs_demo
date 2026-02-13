@@ -1,5 +1,4 @@
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { resolveSeedsSync } from "@/shared/seed-resolver";
 
 const clampSeed = (value: number, fallback = 1): number => {
   if (!Number.isFinite(value)) return fallback;
@@ -21,12 +20,36 @@ export const getRuntimeV2Seed = (): number | null => {
 
 export const resolveDatasetSeed = (seedValue?: number | null): number => {
   if (!isDbLoadModeEnabled()) return 1;
+  
   if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
-    const resolved = resolveSeedsSync(seedValue);
-    if (resolved.v2 !== null) {
-      return clampSeed(resolved.v2);
-    }
+    return clampSeed(seedValue);
   }
+  
+  // Get base seed from URL
+  const getBaseSeedFromUrl = (): number | null => {
+    if (typeof window === "undefined") return null;
+    const params = new URLSearchParams(window.location.search);
+    const seedParam = params.get("seed");
+    if (seedParam) {
+      const parsed = Number.parseInt(seedParam, 10);
+      if (Number.isFinite(parsed) && parsed >= 1 && parsed <= 999) {
+        return parsed;
+      }
+    }
+    return null;
+  };
+  
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed !== null) {
+    // If base seed is 1, v2 should also be 1
+    if (baseSeed === 1) {
+      return 1;
+    }
+    
+    // For other seeds, use base seed directly (v2 seed = base seed)
+    return clampSeed(baseSeed);
+  }
+  
   const runtime = getRuntimeV2Seed();
   if (runtime !== null) {
     return runtime;

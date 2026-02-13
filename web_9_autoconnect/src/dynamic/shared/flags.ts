@@ -2,7 +2,7 @@
  * FLAGS - Enablement control for V1, V2, and V3
  * 
  * V1: DOM structure (wrappers, decoys) - Breaks XPath
- * V2: Data loading (DB mode, AI generation) - Dynamic data
+ * V2: Data loading (DB mode) - Dynamic data
  * V3: Attributes and text (IDs, classes, texts) - Anti-memorization
  */
 

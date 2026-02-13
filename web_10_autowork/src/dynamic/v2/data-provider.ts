@@ -1,7 +1,6 @@
 import type { AutoworkJob, AutoworkHire, AutoworkExpert } from "@/shared/data-generator";
 import { initializeJobs, initializeHires, initializeExperts, initializeSkills } from "@/data/autowork-enhanced";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
 
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
@@ -41,8 +40,8 @@ export class DynamicDataProvider {
     const seedParam = params.get("seed");
     if (seedParam) {
       const parsed = Number.parseInt(seedParam, 10);
-      if (Number.isFinite(parsed)) {
-        return clampBaseSeed(parsed);
+      if (Number.isFinite(parsed) && parsed >= 1 && parsed <= 300) {
+        return parsed;
       }
     }
     return null;
@@ -58,7 +57,7 @@ export class DynamicDataProvider {
   }
 
   private async initialize(): Promise<void> {
-    // Reset ready state when initializing
+    // Reset ready state when initializing (in case of seed change)
     this.ready = false;
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
@@ -67,30 +66,41 @@ export class DynamicDataProvider {
     const baseSeed = this.getBaseSeedFromUrl();
     const runtimeSeed = this.getRuntimeV2Seed();
     
-    // Resolve V2 seed from base seed
-    let v2Seed: number | null = null;
-    if (baseSeed !== null) {
-      const resolvedSeeds = resolveSeedsSync(baseSeed);
-      v2Seed = resolvedSeeds.v2;
-    }
-    if (v2Seed === null) {
-      v2Seed = runtimeSeed;
-    }
-    if (v2Seed === null) {
-      v2Seed = 1;
-    }
-    
-    this.currentSeed = v2Seed;
-    
     try {
-      console.log("[autowork/data-provider] Initializing data - baseSeed:", baseSeed, "v2Seed:", v2Seed);
+      // If base seed = 1, use fallback data directly (skip DB mode)
+      if (baseSeed === 1) {
+        console.log("[autowork/data-provider] Base seed is 1, using fallback data");
+        const [jobs, hires, experts, skills] = await Promise.all([
+          initializeJobs(runtimeSeed ?? undefined),
+          initializeHires(runtimeSeed ?? undefined),
+          initializeExperts(runtimeSeed ?? undefined),
+          initializeSkills(runtimeSeed ?? undefined),
+        ]);
+        this.setJobs(jobs);
+        this.setHires(hires);
+        this.setExperts(experts);
+        this.setSkills(skills);
+        return;
+      }
       
-      // Initialize all data types
+      this.currentSeed = runtimeSeed ?? 1;
+      
+      // Check if DB mode is enabled - only try DB if enabled
+      const dbModeEnabled = isDbLoadModeEnabled();
+      console.log("[autowork/data-provider] DB mode enabled:", dbModeEnabled, "runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
+      
+      if (dbModeEnabled) {
+        // Try DB mode first if enabled
+        console.log("[autowork/data-provider] Attempting to load from DB...");
+        // Let initializeJobs/Hires/etc handle DB loading
+      }
+      
+      // Initialize all data types (they handle DB mode internally)
       const [jobs, hires, experts, skills] = await Promise.all([
-        initializeJobs(v2Seed),
-        initializeHires(v2Seed),
-        initializeExperts(v2Seed),
-        initializeSkills(v2Seed),
+        initializeJobs(runtimeSeed ?? undefined),
+        initializeHires(runtimeSeed ?? undefined),
+        initializeExperts(runtimeSeed ?? undefined),
+        initializeSkills(runtimeSeed ?? undefined),
       ]);
       
       this.setJobs(jobs);
@@ -106,9 +116,25 @@ export class DynamicDataProvider {
       });
     } catch (error) {
       console.error("[autowork/data-provider] Failed to initialize data:", error);
-      // Mark as ready even on error to prevent infinite loading
-      this.ready = true;
-      this.resolveReady();
+      // Even if there's an error, we should mark as ready with fallback data
+      // to prevent infinite loading state
+      try {
+        const [jobs, hires, experts, skills] = await Promise.all([
+          initializeJobs(runtimeSeed ?? undefined),
+          initializeHires(runtimeSeed ?? undefined),
+          initializeExperts(runtimeSeed ?? undefined),
+          initializeSkills(runtimeSeed ?? undefined),
+        ]);
+        this.setJobs(jobs);
+        this.setHires(hires);
+        this.setExperts(experts);
+        this.setSkills(skills);
+      } catch (fallbackError) {
+        console.error("[autowork/data-provider] Failed to initialize fallback data:", fallbackError);
+        // Last resort: mark as ready to prevent infinite loading
+        this.ready = true;
+        this.resolveReady();
+      }
     }
     
     // Listen for seed changes
