@@ -24,6 +24,14 @@ export class DynamicDataProvider {
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
     });
+    
+    // Set up event listener BEFORE initialization to catch seed changes
+    if (typeof window !== "undefined") {
+      window.addEventListener("autowork:v2SeedChange", (event) => {
+        this.handleSeedEvent(event);
+      });
+    }
+    
     this.initialize();
   }
 
@@ -136,16 +144,13 @@ export class DynamicDataProvider {
         this.resolveReady();
       }
     }
-    
-    // Listen for seed changes
-    if (typeof window !== "undefined") {
-      window.addEventListener("autowork:v2SeedChange", this.handleSeedEvent.bind(this));
-    }
   }
 
-  private handleSeedEvent = () => {
+  private handleSeedEvent = (event?: Event) => {
     console.log("[autowork/data-provider] Seed change event received");
-    this.reload();
+    const customEvent = event as CustomEvent<{ seed: number | null }> | undefined;
+    const seedFromEvent = customEvent?.detail?.seed;
+    this.reloadIfSeedChanged(seedFromEvent);
   };
 
   /**
