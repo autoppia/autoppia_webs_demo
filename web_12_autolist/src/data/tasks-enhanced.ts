@@ -64,7 +64,7 @@ export async function initializeTasks(v2SeedValue?: number | null, limit = 80): 
   const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed === 1 && dbModeEnabled) {
-    console.log("[autolist] Base seed is 1, using original data (skipping DB/AI modes)");
+    console.log("[autolist] Base seed is 1, using original data (skipping DB mode)");
     return await loadTasksFromLocal(limit);
   }
 

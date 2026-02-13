@@ -11,7 +11,6 @@ import { useSeed } from "@/context/SeedContext";
 import { applyV1Wrapper } from "../v1/add-wrap-decoy";
 import { isV2Enabled, isV3Enabled } from "./flags";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { isDataGenerationEnabled } from "@/shared/data-generator";
 import { getVariant } from "../v3/utils/variant-selector";
 import { generateDynamicOrder } from "../v1/change-order-elements";
 import type { ReactNode } from "react";

@@ -36,10 +36,12 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
   
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed !== null) {
-    const resolvedSeeds = resolveSeedsSync(baseSeed);
-    if (resolvedSeeds.v2 !== null) {
-      return resolvedSeeds.v2;
+    // If base seed is 1, v2 should also be 1
+    if (baseSeed === 1) {
+      return 1;
     }
+    
+    // For other seeds, use base seed directly (v2 seed = base seed)
     return clampSeed(baseSeed);
   }
   

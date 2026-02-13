@@ -120,7 +120,7 @@ export function useDynamicSystem() {
     },
     
     /**
-     * V2: Data loading (V2, AI generation, fallback)
+     * V2: Data loading (V2, fallback)
      * Provides status of V2 enablement
      */
     v2: {

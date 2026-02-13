@@ -1,6 +1,6 @@
 /**
  * Centralized seed resolution service client.
- * Calls webs_server API to resolve seeds, with local fallback for SSR/offline.
+ * Always calls webs_server API to resolve seeds - no local fallback.
  * 
  * Supports enable_dynamic URL parameter: ?enable_dynamic=v1,v2
  */
@@ -93,40 +93,36 @@ export function clampBaseSeed(seed: number): number {
 }
 
 /**
- * Local fallback seed resolution (same formulas as webs_server).
- * Used when API is unavailable or during SSR.
+ * Default resolved seeds when API is not available (SSR or error).
+ * Returns seed 1 for all versions as fallback.
  */
-function resolveSeedsLocal(
-  baseSeed: number,
-  enabledFlags?: { v1: boolean; v2: boolean; v3: boolean }
-): ResolvedSeeds {
+function getDefaultResolvedSeeds(baseSeed: number): ResolvedSeeds {
   const safeSeed = clampBaseSeed(baseSeed);
-  const flags = enabledFlags || getEnabledFlagsInternal();
-
-  const resolved: ResolvedSeeds = {
+  return {
     base: safeSeed,
-    v1: null,
-    v2: null,
-    v3: null,
+    v1: 1,
+    v2: 1,
+    v3: 1,
   };
+}
 
-  // Same formulas as webs_server/src/seed_resolver.py
-  if (flags.v1) {
-    resolved.v1 = ((safeSeed * 29 + 7) % 300) + 1;
-  }
-  if (flags.v2) {
-    resolved.v2 = safeSeed;
-  }
-  if (flags.v3) {
-    resolved.v3 = ((safeSeed * 71 + 3) % 100) + 1;
-  }
-
-  return resolved;
+/**
+ * Get resolved seeds for seed = 1 (original/default seed).
+ * Returns seed 1 for all versions (enabled or disabled) without calling the API.
+ * If a version is disabled, it still receives seed 1.
+ */
+function getSeedOneResolvedSeeds(): ResolvedSeeds {
+  return {
+    base: 1,
+    v1: 1,  // Always 1, even if V1 is disabled
+    v2: 1,  // Always 1, even if V2 is disabled
+    v3: 1,  // Always 1, even if V3 is disabled
+  };
 }
 
 /**
  * Resolve seeds using centralized webs_server API.
- * Falls back to local calculation if API is unavailable.
+ * Skips API call for seed = 1 and returns known values directly.
  * 
  * Enabled flags are determined from URL parameter ?enable_dynamic=v1,v2
  * or from environment variables if URL parameter is not present.
@@ -135,9 +131,19 @@ export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
   const safeSeed = clampBaseSeed(baseSeed);
   const enabledFlags = getEnabledFlagsInternal();
 
-  // During SSR or if API URL is not available, use local fallback
+  // During SSR, return default values (will be resolved on client-side)
   if (typeof window === "undefined") {
-    return resolveSeedsLocal(safeSeed, enabledFlags);
+    // For seed = 1, return known values; otherwise return defaults
+    if (safeSeed === 1) {
+      return getSeedOneResolvedSeeds();
+    }
+    return getDefaultResolvedSeeds(safeSeed);
+  }
+
+  // Skip API call for seed = 1 - return known values directly
+  if (safeSeed === 1) {
+    console.log("[seed-resolver] Seed is 1, skipping API call and returning seed 1 for all versions");
+    return getSeedOneResolvedSeeds();
   }
 
   try {
@@ -160,25 +166,35 @@ export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
     }
 
     const data = await response.json();
+    
+    // If a version is disabled, always return seed 1
+    // If a version is enabled, use the API response (or 1 as fallback)
     return {
       base: data.base ?? safeSeed,
-      v1: data.v1 ?? null,
-      v2: data.v2 ?? null,
-      v3: data.v3 ?? null,
+      v1: enabledFlags.v1 ? (data.v1 ?? 1) : 1,  // If disabled: 1, if enabled: use API value or 1
+      v2: enabledFlags.v2 ? (data.v2 ?? 1) : 1,  // If disabled: 1, if enabled: use API value or 1
+      v3: enabledFlags.v3 ? (data.v3 ?? 1) : 1,  // If disabled: 1, if enabled: use API value or 1
     };
   } catch (error) {
-    console.warn("[seed-resolver] API call failed, using local fallback:", error);
-    return resolveSeedsLocal(safeSeed, enabledFlags);
+    console.error("[seed-resolver] API call failed, returning seed 1 for all versions:", error);
+    // Return seed 1 for all versions instead of null
+    return getDefaultResolvedSeeds(safeSeed);
   }
 }
 
 /**
- * Synchronous version for immediate use (uses local calculation).
- * Use this when you need seeds synchronously (e.g., during initial render).
+ * Synchronous version that returns default values.
+ * For seed = 1, returns known values directly.
+ * Seeds will be resolved asynchronously via resolveSeeds() for other seeds.
+ * Use this only for initial state - actual resolution happens via resolveSeeds().
  */
 export function resolveSeedsSync(baseSeed: number): ResolvedSeeds {
-  const enabledFlags = getEnabledFlagsInternal();
-  return resolveSeedsLocal(baseSeed, enabledFlags);
+  const safeSeed = clampBaseSeed(baseSeed);
+  // For seed = 1, return known values; otherwise return defaults
+  if (safeSeed === 1) {
+    return getSeedOneResolvedSeeds();
+  }
+  return getDefaultResolvedSeeds(baseSeed);
 }
 
 /**
@@ -193,4 +209,3 @@ export const seedResolverConfig = {
   base: BASE_SEED,
   getEnabledFlags,
 };
-

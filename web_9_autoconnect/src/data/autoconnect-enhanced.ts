@@ -72,11 +72,44 @@ const getRuntimeV2Seed = (): number | null => {
   return null;
 };
 
+const clampSeed = (seed: number): number => {
+  if (Number.isNaN(seed)) return 1;
+  if (seed < 1) return 1;
+  if (seed > 300) return 300;
+  return seed;
+};
+
+const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number => {
+  if (!dbModeEnabled) {
+    return 1;
+  }
+  
+  if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
+    return clampSeed(seedValue);
+  }
+  
+  const baseSeed = getBaseSeedFromUrl();
+  if (baseSeed !== null) {
+    // If base seed is 1, v2 should also be 1
+    if (baseSeed === 1) {
+      return 1;
+    }
+    
+    // For other seeds, resolveSeedsSync returns defaults (v2: 1)
+    // But we need the actual resolved seed, so use base seed directly
+    // The backend will resolve it properly, and v2 seed is typically same as base seed
+    return clampSeed(baseSeed);
+  }
+  
+  return 1;
+};
+
 /**
  * Load users from DB
  */
 async function loadUsersFromDb(seedValue?: number | null): Promise<User[]> {
   const baseSeed = getBaseSeedFromUrl();
+  const dbModeEnabled = isDbLoadModeEnabled();
   
   // If seed = 1, return empty to force fallback
   if (baseSeed === 1 || seedValue === 1) {
@@ -84,16 +117,14 @@ async function loadUsersFromDb(seedValue?: number | null): Promise<User[]> {
     return [];
   }
   
-  const runtimeSeed = getRuntimeV2Seed();
-  const seed = seedValue ?? runtimeSeed ?? 1;
-  
-  console.log("[autoconnect] loadUsersFromDb - seed:", seed);
+  const effectiveSeed = resolveSeed(dbModeEnabled, seedValue);
+  console.log("[autoconnect] loadUsersFromDb - effectiveSeed:", effectiveSeed);
   
   try {
     const users = await fetchSeededSelection<User>({
       projectKey: "web_9_autoconnect",
       entityType: "users",
-      seedValue: seed,
+      seedValue: effectiveSeed,
       limit: 50,
     });
     
@@ -110,6 +141,7 @@ async function loadUsersFromDb(seedValue?: number | null): Promise<User[]> {
  */
 async function loadPostsFromDb(seedValue?: number | null): Promise<Post[]> {
   const baseSeed = getBaseSeedFromUrl();
+  const dbModeEnabled = isDbLoadModeEnabled();
   
   // If seed = 1, return empty to force fallback
   if (baseSeed === 1 || seedValue === 1) {
@@ -117,16 +149,14 @@ async function loadPostsFromDb(seedValue?: number | null): Promise<Post[]> {
     return [];
   }
   
-  const runtimeSeed = getRuntimeV2Seed();
-  const seed = seedValue ?? runtimeSeed ?? 1;
-  
-  console.log("[autoconnect] loadPostsFromDb - seed:", seed);
+  const effectiveSeed = resolveSeed(dbModeEnabled, seedValue);
+  console.log("[autoconnect] loadPostsFromDb - effectiveSeed:", effectiveSeed);
   
   try {
     const posts = await fetchSeededSelection<Post>({
       projectKey: "web_9_autoconnect",
       entityType: "posts",
-      seedValue: seed,
+      seedValue: effectiveSeed,
       limit: 50,
     });
     
@@ -143,6 +173,7 @@ async function loadPostsFromDb(seedValue?: number | null): Promise<Post[]> {
  */
 async function loadJobsFromDb(seedValue?: number | null): Promise<Job[]> {
   const baseSeed = getBaseSeedFromUrl();
+  const dbModeEnabled = isDbLoadModeEnabled();
   
   // If seed = 1, return empty to force fallback
   if (baseSeed === 1 || seedValue === 1) {
@@ -150,16 +181,14 @@ async function loadJobsFromDb(seedValue?: number | null): Promise<Job[]> {
     return [];
   }
   
-  const runtimeSeed = getRuntimeV2Seed();
-  const seed = seedValue ?? runtimeSeed ?? 1;
-  
-  console.log("[autoconnect] loadJobsFromDb - seed:", seed);
+  const effectiveSeed = resolveSeed(dbModeEnabled, seedValue);
+  console.log("[autoconnect] loadJobsFromDb - effectiveSeed:", effectiveSeed);
   
   try {
     const jobs = await fetchSeededSelection<Job>({
       projectKey: "web_9_autoconnect",
       entityType: "jobs",
-      seedValue: seed,
+      seedValue: effectiveSeed,
       limit: 50,
     });
     
@@ -176,6 +205,7 @@ async function loadJobsFromDb(seedValue?: number | null): Promise<Job[]> {
  */
 async function loadRecommendationsFromDb(seedValue?: number | null): Promise<Recommendation[]> {
   const baseSeed = getBaseSeedFromUrl();
+  const dbModeEnabled = isDbLoadModeEnabled();
   
   // If seed = 1, return empty to force fallback
   if (baseSeed === 1 || seedValue === 1) {
@@ -183,17 +213,15 @@ async function loadRecommendationsFromDb(seedValue?: number | null): Promise<Rec
     return [];
   }
   
-  const runtimeSeed = getRuntimeV2Seed();
-  const seed = seedValue ?? runtimeSeed ?? 1;
-  
-  console.log("[autoconnect] loadRecommendationsFromDb - seed:", seed, "baseSeed:", baseSeed);
+  const effectiveSeed = resolveSeed(dbModeEnabled, seedValue);
+  console.log("[autoconnect] loadRecommendationsFromDb - effectiveSeed:", effectiveSeed, "baseSeed:", baseSeed);
   console.log("[autoconnect] loadRecommendationsFromDb - Calling fetchSeededSelection...");
   
   try {
     const recommendations = await fetchSeededSelection<Recommendation>({
       projectKey: "web_9_autoconnect",
       entityType: "recommendations",
-      seedValue: seed,
+      seedValue: effectiveSeed,
       limit: 50,
     });
     
@@ -216,28 +244,60 @@ async function loadRecommendationsFromDb(seedValue?: number | null): Promise<Rec
  * Initialize users with V2 logic
  */
 export async function initializeUsers(v2SeedValue?: number | null): Promise<User[]> {
-  const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
-  console.log("[autoconnect] initializeUsers - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled);
-  
-  // Special case: if baseSeed = 1, use fallback data directly
+  const baseSeed = getBaseSeedFromUrl();
+
   if (baseSeed === 1 && dbModeEnabled) {
-    console.log("[autoconnect] initializeUsers: baseSeed=1, using fallback data");
+    console.log("[autoconnect] Base seed is 1 and V2 enabled, using original data (skipping DB mode)");
     return fallbackUsers;
   }
-  
-  // Try DB mode first if enabled
+
+  // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
-    const dbUsers = await loadUsersFromDb(v2SeedValue);
-    if (dbUsers.length > 0) {
-      console.log("[autoconnect] initializeUsers: ✅ Loaded", dbUsers.length, "users from DB");
-      return dbUsers;
+    console.log("[autoconnect] DB mode enabled, attempting to load from DB...");
+    console.log("[autoconnect] baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue);
+    
+    if (typeof window !== "undefined" && v2SeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+    console.log("[autoconnect] Effective seed for DB load:", effectiveSeed);
+
+    try {
+      console.log("[autoconnect] Calling fetchSeededSelection with:", {
+        projectKey: "web_9_autoconnect",
+        entityType: "users",
+        seedValue: effectiveSeed,
+        limit: 50,
+      });
+      
+      const users = await fetchSeededSelection<User>({
+        projectKey: "web_9_autoconnect",
+        entityType: "users",
+        seedValue: effectiveSeed,
+        limit: 50,
+      });
+
+      console.log("[autoconnect] fetchSeededSelection returned:", users?.length, "users");
+
+      if (Array.isArray(users) && users.length > 0) {
+        console.log(
+          `[autoconnect] ✅ Successfully loaded ${users.length} users from dataset (seed=${effectiveSeed})`
+        );
+        return users;
+      }
+
+      console.warn(`[autoconnect] ⚠️ No users returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+    } catch (error) {
+      console.error("[autoconnect] ❌ Backend unavailable, falling back to local JSON. Error:", error);
+      if (error instanceof Error) {
+        console.error("[autoconnect] Error message:", error.message);
+        console.error("[autoconnect] Error stack:", error.stack);
+      }
     }
   }
-  
-  // Fallback to original data
-  console.log("[autoconnect] initializeUsers: Using fallback data (", fallbackUsers.length, "users)");
+
+  // Fallback to local JSON
   return fallbackUsers;
 }
 
@@ -245,28 +305,47 @@ export async function initializeUsers(v2SeedValue?: number | null): Promise<User
  * Initialize posts with V2 logic
  */
 export async function initializePosts(v2SeedValue?: number | null): Promise<Post[]> {
-  const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
-  console.log("[autoconnect] initializePosts - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled);
-  
-  // Special case: if baseSeed = 1, use fallback data directly
+  const baseSeed = getBaseSeedFromUrl();
+
   if (baseSeed === 1 && dbModeEnabled) {
-    console.log("[autoconnect] initializePosts: baseSeed=1, using fallback data");
+    console.log("[autoconnect] Base seed is 1 and V2 enabled, using original data (skipping DB mode)");
     return fallbackPosts;
   }
-  
-  // Try DB mode first if enabled
+
+  // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
-    const dbPosts = await loadPostsFromDb(v2SeedValue);
-    if (dbPosts.length > 0) {
-      console.log("[autoconnect] initializePosts: ✅ Loaded", dbPosts.length, "posts from DB");
-      return dbPosts;
+    console.log("[autoconnect] DB mode enabled, attempting to load from DB...");
+    console.log("[autoconnect] baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue);
+    
+    if (typeof window !== "undefined" && v2SeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+    console.log("[autoconnect] Effective seed for DB load:", effectiveSeed);
+
+    try {
+      const posts = await fetchSeededSelection<Post>({
+        projectKey: "web_9_autoconnect",
+        entityType: "posts",
+        seedValue: effectiveSeed,
+        limit: 50,
+      });
+
+      if (Array.isArray(posts) && posts.length > 0) {
+        console.log(
+          `[autoconnect] ✅ Successfully loaded ${posts.length} posts from dataset (seed=${effectiveSeed})`
+        );
+        return posts.map((p) => ({ ...p, comments: p.comments || [] }));
+      }
+
+      console.warn(`[autoconnect] ⚠️ No posts returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+    } catch (error) {
+      console.error("[autoconnect] ❌ Backend unavailable, falling back to local JSON. Error:", error);
     }
   }
-  
-  // Fallback to original data
-  console.log("[autoconnect] initializePosts: Using fallback data (", fallbackPosts.length, "posts)");
+
+  // Fallback to local JSON
   return fallbackPosts;
 }
 
@@ -274,28 +353,47 @@ export async function initializePosts(v2SeedValue?: number | null): Promise<Post
  * Initialize jobs with V2 logic
  */
 export async function initializeJobs(v2SeedValue?: number | null): Promise<Job[]> {
-  const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
-  console.log("[autoconnect] initializeJobs - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled);
-  
-  // Special case: if baseSeed = 1, use fallback data directly
+  const baseSeed = getBaseSeedFromUrl();
+
   if (baseSeed === 1 && dbModeEnabled) {
-    console.log("[autoconnect] initializeJobs: baseSeed=1, using fallback data");
+    console.log("[autoconnect] Base seed is 1 and V2 enabled, using original data (skipping DB mode)");
     return fallbackJobs;
   }
-  
-  // Try DB mode first if enabled
+
+  // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
-    const dbJobs = await loadJobsFromDb(v2SeedValue);
-    if (dbJobs.length > 0) {
-      console.log("[autoconnect] initializeJobs: ✅ Loaded", dbJobs.length, "jobs from DB");
-      return dbJobs;
+    console.log("[autoconnect] DB mode enabled, attempting to load from DB...");
+    console.log("[autoconnect] baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue);
+    
+    if (typeof window !== "undefined" && v2SeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+    console.log("[autoconnect] Effective seed for DB load:", effectiveSeed);
+
+    try {
+      const jobs = await fetchSeededSelection<Job>({
+        projectKey: "web_9_autoconnect",
+        entityType: "jobs",
+        seedValue: effectiveSeed,
+        limit: 50,
+      });
+
+      if (Array.isArray(jobs) && jobs.length > 0) {
+        console.log(
+          `[autoconnect] ✅ Successfully loaded ${jobs.length} jobs from dataset (seed=${effectiveSeed})`
+        );
+        return jobs;
+      }
+
+      console.warn(`[autoconnect] ⚠️ No jobs returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+    } catch (error) {
+      console.error("[autoconnect] ❌ Backend unavailable, falling back to local JSON. Error:", error);
     }
   }
-  
-  // Fallback to original data
-  console.log("[autoconnect] initializeJobs: Using fallback data (", fallbackJobs.length, "jobs)");
+
+  // Fallback to local JSON
   return fallbackJobs;
 }
 
@@ -303,33 +401,46 @@ export async function initializeJobs(v2SeedValue?: number | null): Promise<Job[]
  * Initialize recommendations with V2 logic
  */
 export async function initializeRecommendations(v2SeedValue?: number | null): Promise<Recommendation[]> {
-  const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
-  console.log("[autoconnect] initializeRecommendations - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled);
-  
-  // Special case: if baseSeed = 1, use fallback data directly
+  const baseSeed = getBaseSeedFromUrl();
+
   if (baseSeed === 1 && dbModeEnabled) {
-    console.log("[autoconnect] initializeRecommendations: baseSeed=1, using fallback data");
+    console.log("[autoconnect] Base seed is 1 and V2 enabled, using original data (skipping DB mode)");
     return fallbackRecommendations;
   }
-  
-  // Try DB mode first if enabled
+
+  // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
-    console.log("[autoconnect] initializeRecommendations: DB mode enabled, calling loadRecommendationsFromDb...");
-    const dbRecommendations = await loadRecommendationsFromDb(v2SeedValue);
-    console.log("[autoconnect] initializeRecommendations: loadRecommendationsFromDb returned", dbRecommendations.length, "recommendations");
-    if (dbRecommendations.length > 0) {
-      console.log("[autoconnect] initializeRecommendations: ✅ Loaded", dbRecommendations.length, "recommendations from DB");
-      return dbRecommendations;
-    } else {
-      console.log("[autoconnect] initializeRecommendations: ⚠️ DB returned empty array, will try fallback");
+    console.log("[autoconnect] DB mode enabled, attempting to load from DB...");
+    console.log("[autoconnect] baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue);
+    
+    if (typeof window !== "undefined" && v2SeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
-  } else {
-    console.log("[autoconnect] initializeRecommendations: DB mode not enabled");
+    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+    console.log("[autoconnect] Effective seed for DB load:", effectiveSeed);
+
+    try {
+      const recommendations = await fetchSeededSelection<Recommendation>({
+        projectKey: "web_9_autoconnect",
+        entityType: "recommendations",
+        seedValue: effectiveSeed,
+        limit: 50,
+      });
+
+      if (Array.isArray(recommendations) && recommendations.length > 0) {
+        console.log(
+          `[autoconnect] ✅ Successfully loaded ${recommendations.length} recommendations from dataset (seed=${effectiveSeed})`
+        );
+        return recommendations;
+      }
+
+      console.warn(`[autoconnect] ⚠️ No recommendations returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+    } catch (error) {
+      console.error("[autoconnect] ❌ Backend unavailable, falling back to local JSON. Error:", error);
+    }
   }
-  
-  // Fallback to original data
-  console.log("[autoconnect] initializeRecommendations: Using fallback data (", fallbackRecommendations.length, "recommendations)");
+
+  // Fallback to local JSON
   return fallbackRecommendations;
 }

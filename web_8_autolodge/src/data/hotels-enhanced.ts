@@ -100,7 +100,7 @@ export async function initializeHotels(v2SeedValue?: number | null, baseSeedOver
     : getBaseSeedFromUrl();
 
   if (baseSeed === 1 && dbModeEnabled) {
-    console.log("[autolodge] Base seed is 1 and V2 enabled, using original data (skipping DB/AI modes)");
+    console.log("[autolodge] Base seed is 1 and V2 enabled, using original data (skipping DB mode)");
     dynamicHotels = (fallbackHotels as Hotel[]).map((h) => ({ ...h }));
     console.log("[autolodge] Loaded original hotels:", dynamicHotels.length);
     return dynamicHotels;

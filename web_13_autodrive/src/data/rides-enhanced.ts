@@ -1,5 +1,5 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 import fallbackRidesData from "./original/rides_1.json";
 
 const PROJECT_KEY = "web_13_autodrive";
@@ -78,26 +78,25 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
   }
   
   if (typeof v2SeedValue === "number" && Number.isFinite(v2SeedValue)) {
-    const resolvedSeeds = resolveSeedsSync(v2SeedValue);
-    if (resolvedSeeds.v2 !== null) {
-      return clampSeed(resolvedSeeds.v2);
-    }
     return clampSeed(v2SeedValue);
   }
   
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed !== null) {
-    const resolvedSeeds = resolveSeedsSync(baseSeed);
-    if (resolvedSeeds.v2 !== null) {
-      return resolvedSeeds.v2;
+    // If base seed is 1, v2 should also be 1
+    if (baseSeed === 1) {
+      return 1;
     }
+    
+    // For other seeds, use base seed directly (v2 seed = base seed)
     return clampSeed(baseSeed);
   }
   
+  // Fallback to runtime seed if available
   if (typeof window !== "undefined") {
     const fromClient = getRuntimeV2Seed();
     if (typeof fromClient === "number") {
-      return fromClient;
+      return clampSeed(fromClient);
     }
   }
   
@@ -189,11 +188,11 @@ export async function initializeRides(
         return ridesWithRecommended;
       }
 
-      // If no rides returned from backend, fallback to deterministic generation
-      console.warn(`[autodrive] No rides returned from backend (seed=${effectiveSeed}), falling back to deterministic generation`);
+      // If no rides returned from backend, fallback to local data
+      console.warn(`[autodrive] No rides returned from backend (seed=${effectiveSeed}), falling back to local data`);
     } catch (error) {
-      // If backend fails, fallback to deterministic generation
-      console.warn("[autodrive] Backend unavailable for rides, falling back to deterministic generation:", error);
+      // If backend fails, fallback to local data
+      console.warn("[autodrive] Backend unavailable for rides, falling back to local data:", error);
     }
   }
   // Priority 2: Fallback - use deterministic generation

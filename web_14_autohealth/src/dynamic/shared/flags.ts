@@ -2,12 +2,11 @@
  * FLAGS - Enablement control for V1, V2, and V3
  * 
  * V1: DOM structure (wrappers, decoys) - Breaks XPath
- * V2: Data loading (DB mode, AI generation, fallback)
+ * V2: Data loading (DB mode, fallback)
  * V3: Attributes and text (IDs, classes, texts) - Anti-memorization
  */
 
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { isDataGenerationEnabled } from "@/shared/data-generator";
 
 /**
  * Checks whether V1 is enabled
@@ -49,10 +48,8 @@ export function isV3Enabled(): boolean {
 
 /**
  * Checks whether V2 is enabled
- * V2 enables dynamic data loading (DB mode or AI generation mode)
+ * V2 enables dynamic data loading (DB mode)
  */
 export function isV2Enabled(): boolean {
-  const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerationEnabled = isDataGenerationEnabled();
-  return dbModeEnabled || aiGenerationEnabled;
+  return isDbLoadModeEnabled();
 }

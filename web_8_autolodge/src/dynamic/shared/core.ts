@@ -120,12 +120,12 @@ export function useDynamicSystem() {
     },
     
     /**
-     * V2: Data loading/generation (V2, enabled)
+     * V2: Data loading (V2 enabled)
      * Dynamic data loading based on seed
      */
     v2: {
       /**
-       * Check if V2 V2 is enabled
+       * Check if V2 is enabled (DB mode)
        */
       isDbModeEnabled: () => isV2Enabled(),
       

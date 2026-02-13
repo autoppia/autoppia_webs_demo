@@ -1,5 +1,5 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 import fallbackTripsData from "./original/trips_1.json";
 
 const PROJECT_KEY = "web_13_autodrive";
@@ -149,26 +149,25 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
   }
   
   if (typeof v2SeedValue === "number" && Number.isFinite(v2SeedValue)) {
-    const resolvedSeeds = resolveSeedsSync(v2SeedValue);
-    if (resolvedSeeds.v2 !== null) {
-      return clampSeed(resolvedSeeds.v2);
-    }
     return clampSeed(v2SeedValue);
   }
   
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed !== null) {
-    const resolvedSeeds = resolveSeedsSync(baseSeed);
-    if (resolvedSeeds.v2 !== null) {
-      return resolvedSeeds.v2;
+    // If base seed is 1, v2 should also be 1
+    if (baseSeed === 1) {
+      return 1;
     }
+    
+    // For other seeds, use base seed directly (v2 seed = base seed)
     return clampSeed(baseSeed);
   }
   
+  // Fallback to runtime seed if available
   if (typeof window !== "undefined") {
     const fromClient = getRuntimeV2Seed();
     if (typeof fromClient === "number") {
-      return fromClient;
+      return clampSeed(fromClient);
     }
   }
   

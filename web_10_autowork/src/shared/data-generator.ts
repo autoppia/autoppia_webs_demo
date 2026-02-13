@@ -347,9 +347,8 @@ export async function generateProjectData(
   }
 
   const dbMode = isDbLoadModeEnabled();
-  const aiEnabled = isDataGenerationEnabled();
   const resolvedBaseUrl = getApiBaseUrl();
-  console.log(`[Autowork] Generation flags -> aiEnabled=${aiEnabled}, dbMode=${dbMode}, apiBaseUrl=${resolvedBaseUrl}`);
+  console.log(`[Autowork] Generation flags -> dbMode=${dbMode}, apiBaseUrl=${resolvedBaseUrl}`);
 
   // If DB mode is enabled, prefer seeded first for determinism (only if pool is available)
   if (dbMode) {
@@ -367,63 +366,6 @@ export async function generateProjectData(
       }
     } catch (e) {
       console.warn(`[Autowork] Seeded load skipped/failed in DB mode:`, e);
-    }
-  }
-
-  // Primary: AI generation
-  if (aiEnabled) {
-    try {
-      console.log(`[Autowork] Using AI data generation...`);
-      const baseUrl = resolvedBaseUrl;
-
-      // Per-session entropy salt to diversify outputs across sessions
-      let entropySalt = '';
-      if (typeof window !== 'undefined') {
-        try {
-          const key = 'autowork_entropy_v1';
-          const existing = localStorage.getItem(key);
-          if (existing) {
-            entropySalt = existing;
-          } else {
-            entropySalt = Math.random().toString(36).slice(2) + Date.now().toString(36);
-            localStorage.setItem(key, entropySalt);
-          }
-        } catch {}
-      }
-
-      const response = await fetch(`${baseUrl}/datasets/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          interface_definition: config.interfaceDefinition,
-          examples: config.examples,
-          count: Math.max(1, Math.min(200, count)),
-          categories: categories || config.categories,
-          additional_requirements: `${config.additionalRequirements}\n\nUse this entropy token to vary names, locations and values: ${entropySalt}`,
-          naming_rules: config.namingRules,
-          project_key: projectKey,
-          entity_type: config.dataType,
-          save_to_db: true,
-        }),
-      });
-      if (!response.ok) {
-        let bodyText = '';
-        try { bodyText = await response.text(); } catch {}
-        console.warn(`[Autowork] AI request failed`, { status: response.status, body: bodyText.slice(0, 400) });
-        throw new Error(`API request failed: ${response.status}`);
-      }
-      const result = await response.json();
-      const rawData = (result?.generated_data ?? []) as any[];
-      const validated = validateAutoworkData(projectKey, rawData);
-      const generationTime = (Date.now() - startTime) / 1000;
-      console.log(`[Autowork] Using AI data generation... count: ${validated.length} generationTime: ${generationTime}s`);
-      if (validated.length > 0) {
-        setCachedData(cacheKey, validated);
-        console.log(`[Autowork] Cache set: ${cacheKey} (count: ${validated.length}) generationTime: ${generationTime}s`);
-        return { success: true, data: validated, count: validated.length, generationTime };
-      }
-    } catch (e) {
-      console.warn(`[Autowork] AI generation failed:`, e);
     }
   }
 
@@ -460,7 +402,7 @@ export async function generateProjectData(
     data: [],
     count: 0,
     generationTime,
-    error: 'All tiers failed: cache miss, AI and seeded generation failed, and no valid examples.'
+    error: 'All tiers failed: cache miss, seeded generation failed, and no valid examples.'
   };
 }
 
