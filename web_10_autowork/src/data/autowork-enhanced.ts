@@ -124,11 +124,15 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
 
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed !== null) {
+    // Use resolveSeedsSync to get the resolved v2 seed
+    const resolvedSeeds = resolveSeedsSync(baseSeed);
+    if (resolvedSeeds.v2 !== null) {
+      return resolvedSeeds.v2;
+    }
     // If base seed is 1, v2 should also be 1
     if (baseSeed === 1) {
       return 1;
     }
-
     // For other seeds, use base seed directly (v2 seed = base seed)
     return clampSeed(baseSeed);
   }
@@ -282,7 +286,20 @@ export async function initializeJobs(v2SeedValue?: number | null): Promise<Autow
 
   // Try DB mode first if enabled
   if (dbModeEnabled) {
-    const dbJobs = await loadJobsFromDb(v2SeedValue);
+    // Wait for SeedContext to set the seed if v2SeedValue is null on client side
+    let effectiveSeedValue = v2SeedValue;
+    if (typeof window !== "undefined" && effectiveSeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      // Retry getting the seed after waiting
+      effectiveSeedValue = getRuntimeV2Seed();
+      // If still null, try getting from baseSeed
+      if (effectiveSeedValue == null && baseSeed != null) {
+        const resolvedSeeds = resolveSeedsSync(baseSeed);
+        effectiveSeedValue = resolvedSeeds.v2 ?? baseSeed;
+      }
+    }
+
+    const dbJobs = await loadJobsFromDb(effectiveSeedValue);
     if (dbJobs.length > 0) {
       console.log("[autowork] initializeJobs: ✅ Loaded", dbJobs.length, "jobs from DB");
       return dbJobs;
@@ -311,7 +328,20 @@ export async function initializeHires(v2SeedValue?: number | null): Promise<Auto
 
   // Try DB mode first if enabled
   if (dbModeEnabled) {
-    const dbHires = await loadHiresFromDb(v2SeedValue);
+    // Wait for SeedContext to set the seed if v2SeedValue is null on client side
+    let effectiveSeedValue = v2SeedValue;
+    if (typeof window !== "undefined" && effectiveSeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      // Retry getting the seed after waiting
+      effectiveSeedValue = getRuntimeV2Seed();
+      // If still null, try getting from baseSeed
+      if (effectiveSeedValue == null && baseSeed != null) {
+        const resolvedSeeds = resolveSeedsSync(baseSeed);
+        effectiveSeedValue = resolvedSeeds.v2 ?? baseSeed;
+      }
+    }
+
+    const dbHires = await loadHiresFromDb(effectiveSeedValue);
     if (dbHires.length > 0) {
       console.log("[autowork] initializeHires: ✅ Loaded", dbHires.length, "hires from DB");
       return dbHires;
@@ -340,7 +370,20 @@ export async function initializeExperts(v2SeedValue?: number | null): Promise<Au
 
   // Try DB mode first if enabled
   if (dbModeEnabled) {
-    const dbExperts = await loadExpertsFromDb(v2SeedValue);
+    // Wait for SeedContext to set the seed if v2SeedValue is null on client side
+    let effectiveSeedValue = v2SeedValue;
+    if (typeof window !== "undefined" && effectiveSeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      // Retry getting the seed after waiting
+      effectiveSeedValue = getRuntimeV2Seed();
+      // If still null, try getting from baseSeed
+      if (effectiveSeedValue == null && baseSeed != null) {
+        const resolvedSeeds = resolveSeedsSync(baseSeed);
+        effectiveSeedValue = resolvedSeeds.v2 ?? baseSeed;
+      }
+    }
+
+    const dbExperts = await loadExpertsFromDb(effectiveSeedValue);
     if (dbExperts.length > 0) {
       console.log("[autowork] initializeExperts: ✅ Loaded", dbExperts.length, "experts from DB");
       return dbExperts;
@@ -369,7 +412,20 @@ export async function initializeSkills(v2SeedValue?: number | null): Promise<str
 
   // Try DB mode first if enabled
   if (dbModeEnabled) {
-    const dbSkills = await loadSkillsFromDb(v2SeedValue);
+    // Wait for SeedContext to set the seed if v2SeedValue is null on client side
+    let effectiveSeedValue = v2SeedValue;
+    if (typeof window !== "undefined" && effectiveSeedValue == null) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      // Retry getting the seed after waiting
+      effectiveSeedValue = getRuntimeV2Seed();
+      // If still null, try getting from baseSeed
+      if (effectiveSeedValue == null && baseSeed != null) {
+        const resolvedSeeds = resolveSeedsSync(baseSeed);
+        effectiveSeedValue = resolvedSeeds.v2 ?? baseSeed;
+      }
+    }
+
+    const dbSkills = await loadSkillsFromDb(effectiveSeedValue);
     if (dbSkills.length > 0) {
       console.log("[autowork] initializeSkills: ✅ Loaded", dbSkills.length, "skills from DB");
       return dbSkills;

@@ -24,6 +24,14 @@ export class DynamicDataProvider {
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
     });
+
+    // Set up event listener BEFORE initialization to catch seed changes
+    if (typeof window !== "undefined") {
+      window.addEventListener("autowork:v2SeedChange", (event) => {
+        this.handleSeedEvent(event);
+      });
+    }
+
     this.initialize();
   }
 
@@ -136,16 +144,13 @@ export class DynamicDataProvider {
         this.resolveReady();
       }
     }
-
-    // Listen for seed changes
-    if (typeof window !== "undefined") {
-      window.addEventListener("autowork:v2SeedChange", this.handleSeedEvent.bind(this));
-    }
   }
 
-  private handleSeedEvent = () => {
+  private handleSeedEvent = (event?: Event) => {
     console.log("[autowork/data-provider] Seed change event received");
-    this.reload();
+    const customEvent = event as CustomEvent<{ seed: number | null }> | undefined;
+    const seedFromEvent = customEvent?.detail?.seed;
+    this.reloadIfSeedChanged(seedFromEvent);
   };
 
   /**
@@ -369,17 +374,17 @@ export class DynamicDataProvider {
       const expertName = String(e.name || "").trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       return expertName === normalizedSearch;
     });
-
+    
     if (found) return found;
-
+    
     // Strategy 3: Partial match by slug
     found = this.experts.find((e) => {
       const expertSlug = String(e.slug || "").trim().toLowerCase();
       return expertSlug.includes(searchSlug) || searchSlug.includes(expertSlug);
     });
-
+    
     if (found) return found;
-
+    
     // Strategy 4: Partial match by name
     found = this.experts.find((e) => {
       const expertName = String(e.name || "").trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -388,36 +393,36 @@ export class DynamicDataProvider {
       return expertName.includes(normalizedSearch) || normalizedSearch.includes(expertName) ||
              expertNameNoDots === normalizedSearchNoDots;
     });
-
+    
     return found;
   }
-
+  
   public getExpertByName(name: string): AutoworkExpert | undefined {
     const searchName = String(name || "").trim().toLowerCase();
-
+    
     // Strategy 1: Exact match by name
     let found = this.experts.find((e) => {
       const expertName = String(e.name || "").trim().toLowerCase();
       return expertName === searchName;
     });
-
+    
     if (found) return found;
-
+    
     // Strategy 2: Match without dots or special chars
     const normalizedSearch = searchName.replace(/[^a-z0-9]+/g, '').replace(/\./g, '');
     found = this.experts.find((e) => {
       const expertName = String(e.name || "").trim().toLowerCase().replace(/[^a-z0-9]+/g, '').replace(/\./g, '');
       return expertName === normalizedSearch;
     });
-
+    
     if (found) return found;
-
+    
     // Strategy 3: Partial match
     found = this.experts.find((e) => {
       const expertName = String(e.name || "").trim().toLowerCase();
       return expertName.includes(searchName) || searchName.includes(expertName);
     });
-
+    
     return found;
   }
 
