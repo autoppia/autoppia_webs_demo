@@ -69,25 +69,17 @@ const inflight = new Map<number, Promise<ResolvedSeeds>>();
 
 function getFallbackResolved(seed: number): ResolvedSeeds {
   const safeSeed = clampBaseSeed(seed);
-  return { base: safeSeed, v1: null, v2: null, v3: null };
+  // v1 and v3 mirror the URL/base seed; only v2 can differ
+  return { base: safeSeed, v1: safeSeed, v2: null, v3: safeSeed };
 }
 
-function shouldSkipSeedResolution(
-  seed: number,
-  flags: { v1: boolean; v2: boolean; v3: boolean }
-): { skip: boolean; reason?: string } {
+function shouldSkipSeedResolution(seed: number, flags: { v2: boolean }): { skip: boolean; reason?: string } {
   if (seed === 1) {
     return { skip: true, reason: "base seed is 1 (use defaults)" };
   }
-
-  const disabled = Object.entries(flags)
-    .filter(([, enabled]) => !enabled)
-    .map(([version]) => version.toUpperCase());
-
-  if (disabled.length > 0) {
-    return { skip: true, reason: `disabled versions: ${disabled.join(", ")}` };
+  if (!flags.v2) {
+    return { skip: true, reason: "v2 disabled (use base seed for all)" };
   }
-
   return { skip: false };
 }
 
@@ -111,7 +103,7 @@ export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
   if (inflight.has(safeSeed)) return inflight.get(safeSeed)!;
 
   const flags = getEnabledFlagsInternal();
-  const skip = shouldSkipSeedResolution(safeSeed, flags);
+  const skip = shouldSkipSeedResolution(safeSeed, { v2: flags.v2 });
   if (skip.skip) {
     const fallback = getFallbackResolved(safeSeed);
     resolvedCache.set(safeSeed, fallback);
@@ -133,9 +125,9 @@ export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
       const data = await response.json();
       const resolved: ResolvedSeeds = {
         base: data.base ?? safeSeed,
-        v1: data.v1 ?? null,
+        v1: safeSeed, // v1 mirrors base/url seed
         v2: data.v2 ?? null,
-        v3: data.v3 ?? null,
+        v3: safeSeed, // v3 mirrors base/url seed
       };
       resolvedCache.set(safeSeed, resolved);
       return resolved;

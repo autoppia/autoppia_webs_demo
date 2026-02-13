@@ -94,7 +94,7 @@ export function clampBaseSeed(seed: number): number {
 
 function getFallbackResolved(seed: number): ResolvedSeeds {
   const safeSeed = clampBaseSeed(seed);
-  return { base: safeSeed, v1: null, v2: null, v3: null };
+  return { base: safeSeed, v1: safeSeed, v2: null, v3: safeSeed };
 }
 
 function shouldSkipSeedResolution(
@@ -105,12 +105,8 @@ function shouldSkipSeedResolution(
     return { skip: true, reason: "base seed is 1 (use defaults)" };
   }
 
-  const disabled = Object.entries(flags)
-    .filter(([, enabled]) => !enabled)
-    .map(([version]) => version.toUpperCase());
-
-  if (disabled.length > 0) {
-    return { skip: true, reason: `disabled versions: ${disabled.join(", ")}` };
+  if (!flags.v2) {
+    return { skip: true, reason: "v2 disabled (use base seed for all)" };
   }
 
   return { skip: false };
@@ -169,7 +165,7 @@ export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
 
   // During SSR or if API URL is not available, use local fallback
   if (typeof window === "undefined") {
-    return resolveSeedsLocal(safeSeed, enabledFlags);
+    return getFallbackResolved(safeSeed);
   }
 
   try {
@@ -194,13 +190,13 @@ export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
     const data = await response.json();
     return {
       base: data.base ?? safeSeed,
-      v1: data.v1 ?? null,
+      v1: safeSeed,
       v2: data.v2 ?? null,
-      v3: data.v3 ?? null,
+      v3: safeSeed,
     };
   } catch (error) {
     console.warn("[seed-resolver] API call failed, using local fallback:", error);
-    return resolveSeedsLocal(safeSeed, enabledFlags);
+    return getFallbackResolved(safeSeed);
   }
 }
 
@@ -215,5 +211,5 @@ export function resolveSeedsSync(baseSeed: number): ResolvedSeeds {
   if (skip.skip) {
     return getFallbackResolved(safeSeed);
   }
-  return resolveSeedsLocal(safeSeed, enabledFlags);
+  return getFallbackResolved(safeSeed);
 }
