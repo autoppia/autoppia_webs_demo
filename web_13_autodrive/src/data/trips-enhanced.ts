@@ -1,5 +1,5 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 import fallbackTripsData from "./original/trips_1.json";
 
 const PROJECT_KEY = "web_13_autodrive";
@@ -130,19 +130,6 @@ const getRuntimeV2Seed = (): number | null => {
   return null;
 };
 
-const getBaseSeedFromUrl = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const params = new URLSearchParams(window.location.search);
-  const seedParam = params.get("seed");
-  if (seedParam) {
-    const parsed = Number.parseInt(seedParam, 10);
-    if (Number.isFinite(parsed)) {
-      return clampBaseSeed(parsed);
-    }
-  }
-  return null;
-};
-
 const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): number => {
   if (!dbModeEnabled) {
     return 1;
@@ -153,7 +140,7 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
   }
 
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed !== null) {
+  if (baseSeed !== undefined) {
     // If base seed is 1, v2 should also be 1
     if (baseSeed === 1) {
       return 1;

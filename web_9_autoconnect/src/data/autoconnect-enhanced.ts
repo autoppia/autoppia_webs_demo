@@ -1,6 +1,6 @@
 import { isDbLoadModeEnabled, fetchSeededSelection } from "@/shared/seeded-loader";
 import type { User, Post, Job, Recommendation } from "@/library/dataset";
-import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 
 // Import fallback data - check if original directory exists
 let fallbackUsers: User[] = [];
@@ -43,22 +43,6 @@ try {
 } catch (e) {
   console.log("[autoconnect] Original recommendations data not found");
 }
-
-/**
- * Get base seed from URL
- */
-const getBaseSeedFromUrl = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const params = new URLSearchParams(window.location.search);
-  const seedParam = params.get("seed");
-  if (seedParam) {
-    const parsed = Number.parseInt(seedParam, 10);
-    if (Number.isFinite(parsed)) {
-      return clampBaseSeed(parsed);
-    }
-  }
-  return null;
-};
 
 /**
  * Get v2 seed from window (synchronized by SeedContext)

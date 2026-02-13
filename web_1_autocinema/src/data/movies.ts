@@ -1,5 +1,6 @@
-import { clampBaseSeed } from "@/shared/seed-resolver";
-import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
+import { fetchSeededSelection } from "@/shared/seeded-loader";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 export interface Movie {
   id: string;
@@ -113,46 +114,38 @@ const normalizeMovie = (movie: DatasetMovie): Movie => {
   };
 };
 
+
+let moviesCache: Movie[] = [];
+
 /**
  * Initialize movies from base seed data (local JSON only). Optional seed for reload consistency.
  */
 export async function initializeMovies(seedOverride?: number | null): Promise<Movie[]> {
-  const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
   const effectiveSeed = clampBaseSeed(seedOverride ?? baseSeed ?? 1);
-  if (effectiveSeed === 1 && dbModeEnabled) {
-    console.log("[autocinema] Base seed is 1, using original data (skipping DB/AI modes)");
-    moviesCache = (fallbackMovies as DatasetMovie[]).map(normalizeMovie);
-    return moviesCache;
-  }
 
-  // Priority 1: DB mode - fetch from /datasets/load endpoint
-  if (dbModeEnabled) {
-    try {
-      const movies = await fetchSeededSelection<DatasetMovie>({
-        projectKey: "web_1_autocinema",
-        entityType: "movies",
-        seedValue: effectiveSeed,
-        limit: 50, // Fixed limit of 50 items for DB mode
-        method: "distribute",
-        filterKey: "category",
-      });
+  try {
+    const movies = await fetchSeededSelection<DatasetMovie>({
+      projectKey: "web_1_autocinema",
+      entityType: "movies",
+      seedValue: effectiveSeed,
+      limit: 50, // Fixed limit of 50 items for DB mode
+      method: "distribute",
+      filterKey: "category",
+    });
 
-      if (Array.isArray(movies) && movies.length > 0) {
-        console.log(
-          `[autocinema] Loaded ${movies.length} movies from dataset (seed=${effectiveSeed})`
-        );
-        moviesCache = movies.map(normalizeMovie);
-        return moviesCache;
-      }
-
-      // If no movies returned from backend, fallback to local JSON
-      console.warn(`[autocinema] No movies returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
-    } catch (error) {
-      // If backend fails, fallback to local JSON
-      console.warn("[autocinema] Backend unavailable, falling back to local JSON:", error);
+    if (Array.isArray(movies) && movies.length > 0) {
+      console.log(
+        `[autocinema] Loaded ${movies.length} movies from dataset (seed=${effectiveSeed})`
+      );
+      moviesCache = movies.map(normalizeMovie);
+      return moviesCache;
     }
+
+    // If no movies returned from backend, fallback to local JSON
+    console.warn(`[autocinema] No movies returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+  } catch (error) {
+    // If backend fails, fallback to local JSON
+    console.warn("[autocinema] Backend unavailable, falling back to local JSON:", error);
   }
-
 }
-

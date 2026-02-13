@@ -72,22 +72,8 @@ function normalizeMatter(matter: any, index: number): any {
   };
 }
 
-const getBaseSeedFromUrl = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const params = new URLSearchParams(window.location.search);
-  const seedParam = params.get("seed");
-  if (seedParam) {
-    const parsed = Number.parseInt(seedParam, 10);
-    if (Number.isFinite(parsed)) {
-      return clampBaseSeed(parsed);
-    }
-  }
-  return null;
-};
-
 const resolveSeed = (seedValue?: number | null): number => {
-  const baseSeed = getBaseSeedFromUrl();
-  return clampBaseSeed(seedValue ?? baseSeed ?? 1);
+  return clampBaseSeed(seedValue ?? getBaseSeedFromUrl());
 };
 
 /**

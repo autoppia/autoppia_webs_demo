@@ -1,4 +1,4 @@
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import { Hotel } from "@/types/hotel";
 
@@ -18,7 +18,7 @@ let hotelsCache: Hotel[] = [];
  * Initialize hotels from base seed data (local JSON only).
  */
 export async function initializeHotels(seedOverride?: number | null): Promise<Hotel[]> {
-  const _seed = clampBaseSeed(seedOverride ?? 1);
+  const _seed = clampBaseSeed(seedOverride ?? getBaseSeedFromUrl());
   hotelsCache = (fallbackHotels as Hotel[]).map((h) => ({ ...h }));
   return hotelsCache;
 }

@@ -3,29 +3,13 @@ import fallbackPrescriptionsJson from "@/data/original/prescriptions_1.json";
 import { isDataGenerationAvailable, generatePrescriptions } from "@/utils/healthDataGenerator";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { resolveDatasetSeed, waitForDatasetSeed } from "@/utils/v2Seed";
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 
 const CACHE_KEY = 'autohealth_prescriptions_v1';
 const DOCTORS_CACHE_KEY = 'autohealth_doctors_v1';
 const PROJECT_KEY = 'web_14_autohealth';
 let prescriptionsCache: Prescription[] = [];
 const FALLBACK_PRESCRIPTIONS: Prescription[] = Array.isArray(fallbackPrescriptionsJson) ? (fallbackPrescriptionsJson as Prescription[]) : [];
-
-/**
- * Get base seed from URL parameter
- */
-const getBaseSeedFromUrl = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const params = new URLSearchParams(window.location.search);
-  const seedParam = params.get("seed");
-  if (seedParam) {
-    const parsed = Number.parseInt(seedParam, 10);
-    if (Number.isFinite(parsed)) {
-      return clampBaseSeed(parsed);
-    }
-  }
-  return null;
-};
 
 async function loadPrescriptionsFromDataset(v2SeedValue?: number | null): Promise<Prescription[]> {
   await waitForDatasetSeed(v2SeedValue);

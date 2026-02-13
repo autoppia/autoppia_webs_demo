@@ -1,4 +1,5 @@
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { getBaseSeedFromUrl } from "@/shared/seed-resolver";
 
 const clampSeed = (value: number, fallback = 1): number => {
   if (!Number.isFinite(value)) return fallback;
@@ -24,20 +25,6 @@ export const resolveDatasetSeed = (seedValue?: number | null): number => {
   if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
     return clampSeed(seedValue);
   }
-
-  // Get base seed from URL
-  const getBaseSeedFromUrl = (): number | null => {
-    if (typeof window === "undefined") return null;
-    const params = new URLSearchParams(window.location.search);
-    const seedParam = params.get("seed");
-    if (seedParam) {
-      const parsed = Number.parseInt(seedParam, 10);
-      if (Number.isFinite(parsed) && parsed >= 1 && parsed <= 999) {
-        return parsed;
-      }
-    }
-    return null;
-  };
 
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed !== null) {

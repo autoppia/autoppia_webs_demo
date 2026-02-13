@@ -1,5 +1,3 @@
-import { isV2Enabled } from "@/dynamic/shared/flags";
-
 function getApiBaseUrl(): string {
   const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
   const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
@@ -25,25 +23,9 @@ export interface SeededLoadOptions {
   filterValues?: string[];
 }
 
-/** Delegates to flags so env is read in one place only */
-export function isDbLoadModeEnabled(): boolean {
-  return isV2Enabled();
-}
-
-export function getSeedValueFromEnv(defaultSeed = 1): number {
-  // Dataset seed is derived at runtime; env fallback only matters for SSR.
-  return defaultSeed;
-}
-
 export async function fetchSeededSelection<T = unknown>(options: SeededLoadOptions): Promise<T[]> {
-  // If DB mode is disabled, DO NOT make any HTTP calls
-  if (!isDbLoadModeEnabled()) {
-    console.log(`[seeded-loader] DB mode disabled, skipping API call for ${options.entityType}`);
-    return [] as T[];
-  }
-
   const baseUrl = getApiBaseUrl();
-  const seed = options.seedValue ?? getSeedValueFromEnv(1);
+  const seed = options.seedValue ?? 1;
   const limit = options.limit ?? 50;
   const method = options.method ?? "select";
   const params = new URLSearchParams({

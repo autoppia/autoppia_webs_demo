@@ -9,7 +9,7 @@ import {
   fetchSeededSelection,
   isDbLoadModeEnabled,
 } from "@/shared/seeded-loader";
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 import fallbackRestaurants from "./original/restaurants_1.json";
 
 export interface RestaurantGenerated {
@@ -37,20 +37,6 @@ type DatasetRestaurant = {
   stars?: number;
   price?: string;
   bookings?: number;
-};
-
-const getBaseSeedFromUrl = (): number | null => {
-  if (typeof window === "undefined") return null;
-  // Leer seed base de la URL
-  const params = new URLSearchParams(window.location.search);
-  const seedParam = params.get("seed");
-  if (seedParam) {
-    const parsed = Number.parseInt(seedParam, 10);
-    if (Number.isFinite(parsed)) {
-      return clampBaseSeed(parsed);
-    }
-  }
-  return null;
 };
 
 // Cache for loaded restaurants

@@ -1,4 +1,4 @@
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 import tasksData from "./original/tasks_1.json";
 
 export interface RemoteTask {
@@ -39,7 +39,7 @@ let tasksCache: RemoteTask[] = [];
  * Initialize tasks from base seed data (local JSON only).
  */
 export async function initializeTasks(seedOverride?: number | null, limit = 80): Promise<RemoteTask[]> {
-  const _seed = clampBaseSeed(seedOverride ?? 1);
+  const _seed = clampBaseSeed(seedOverride ?? getBaseSeedFromUrl());
   tasksCache = loadTasksFromLocal(limit);
   return tasksCache;
 }

@@ -10,3 +10,18 @@ export function clampBaseSeed(seed: number): number {
   if (seed > BASE_SEED.max) return BASE_SEED.max;
   return seed;
 }
+
+export function getBaseSeedFromUrl(): number {
+  if (typeof window === "undefined") return BASE_SEED.defaultValue;
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get("seed");
+    if (raw) {
+      const parsed = Number.parseInt(raw, 10);
+      if (Number.isFinite(parsed)) return clampBaseSeed(parsed);
+    }
+  } catch {
+    // ignore
+  }
+  return BASE_SEED.defaultValue;
+}

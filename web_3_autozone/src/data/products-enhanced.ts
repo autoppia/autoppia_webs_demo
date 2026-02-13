@@ -1,21 +1,7 @@
 import type { Product } from "@/context/CartContext";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 import fallbackProducts from "./original/products_1.json";
-
-const getBaseSeedFromUrl = (): number | null => {
-  if (typeof window === "undefined") return null;
-  // Leer seed base de la URL
-  const params = new URLSearchParams(window.location.search);
-  const seedParam = params.get("seed");
-  if (seedParam) {
-    const parsed = Number.parseInt(seedParam, 10);
-    if (Number.isFinite(parsed)) {
-      return clampBaseSeed(parsed);
-    }
-  }
-  return null;
-};
 
 const normalizeImageUrl = (image?: string, category?: string): string => {
   const DEFAULT = "/images/homepage_categories/coffee_machine.jpg";

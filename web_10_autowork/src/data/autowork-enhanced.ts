@@ -1,5 +1,5 @@
 import { isDbLoadModeEnabled, fetchSeededSelection } from "@/shared/seeded-loader";
-import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 import { jobs, hires, experts, popularSkills } from "@/library/dataset";
 import type { AutoworkJob, AutoworkHire, AutoworkExpert } from "@/shared/data-generator";
 
@@ -77,22 +77,6 @@ try {
   console.log("[autowork] Original skills data not found, using library dataset");
   fallbackSkills = [...popularSkills];
 }
-
-/**
- * Get base seed from URL
- */
-const getBaseSeedFromUrl = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const params = new URLSearchParams(window.location.search);
-  const seedParam = params.get("seed");
-  if (seedParam) {
-    const parsed = Number.parseInt(seedParam, 10);
-    if (Number.isFinite(parsed)) {
-      return clampBaseSeed(parsed);
-    }
-  }
-  return null;
-};
 
 /**
  * Get v2 seed from window (synchronized by SeedContext)

@@ -8,7 +8,7 @@
 import type { Email, Label } from "@/types/email";
 import { readJson, writeJson } from "@/shared/storage";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 import fallbackEmails from "./original/emails_1.json";
 
 // Helper function to normalize email timestamps
@@ -195,22 +195,8 @@ export function writeCachedEmails(emailsToCache: Email[]): void {
   writeJson("automail_generated_emails_v1", emailsToCache);
 }
 
-const getBaseSeedFromUrl = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const params = new URLSearchParams(window.location.search);
-  const seedParam = params.get("seed");
-  if (seedParam) {
-    const parsed = Number.parseInt(seedParam, 10);
-    if (Number.isFinite(parsed)) {
-      return clampBaseSeed(parsed);
-    }
-  }
-  return null;
-};
-
 const resolveSeed = (seedOverride?: number | null): number => {
-  const baseSeed = getBaseSeedFromUrl();
-  return clampBaseSeed(seedOverride ?? baseSeed ?? 1);
+  return clampBaseSeed(seedOverride ?? getBaseSeedFromUrl());
 };
 
 /**

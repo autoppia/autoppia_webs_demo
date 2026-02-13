@@ -1,4 +1,4 @@
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 import baseBooks from "./original/books_1.json";
 
 export interface Book {
@@ -141,7 +141,7 @@ let booksCache: Book[] = [];
  * Initialize books from base seed data (local JSON only).
  */
 export async function initializeBooks(seedOverride?: number | null): Promise<Book[]> {
-  const _seed = clampBaseSeed(seedOverride ?? 1);
+  const _seed = clampBaseSeed(seedOverride ?? getBaseSeedFromUrl());
   booksCache = (baseBooks as DatasetBook[]).map(normalizeBook);
   return booksCache;
 }

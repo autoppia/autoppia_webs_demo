@@ -7,7 +7,7 @@
 
 import type { Restaurant } from "@/data/restaurants";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 import fallbackRestaurants from "./original/restaurants_1.json";
 
 // Helper function to normalize restaurant images
@@ -79,25 +79,8 @@ function normalizeRestaurantImages(restaurants: Restaurant[]): Restaurant[] {
   });
 }
 
-/**
- * Get base seed from URL
- */
-const getBaseSeedFromUrl = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const params = new URLSearchParams(window.location.search);
-  const seedParam = params.get("seed");
-  if (seedParam) {
-    const parsed = Number.parseInt(seedParam, 10);
-    if (Number.isFinite(parsed)) {
-      return clampBaseSeed(parsed);
-    }
-  }
-  return null;
-};
-
 const resolveSeed = (seedValue?: number | null): number => {
-  const baseSeed = getBaseSeedFromUrl();
-  return clampBaseSeed(seedValue ?? baseSeed ?? 1);
+  return clampBaseSeed(seedValue ?? getBaseSeedFromUrl());
 };
 
 // Dynamic restaurants array

@@ -850,25 +850,26 @@ async def load_dataset_endpoint(
                 detail=f"No file-based data found for project={project_key}. Generate data first.",
             )
 
-        # If V2 DB mode is disabled, return full pool (original dataset) without seeded selection
+        # If V2 DB mode is disabled, or seed is 1: return a limited subset (respect frontend limit).
         if os.getenv("ENABLE_DYNAMIC_V2", "false").lower() in {"false", "0", "no", "off"} or seed_value == 1:
-            logger.info("v2 db mode enabled but seed value is 1. So returning fallback data.")
+            logger.info("v2 db mode disabled or seed value is 1; returning fallback data (respecting limit).")
+            limited = file_data_pool[:limit]
             metadata = {
                 "source": "file_storage",
                 "projectKey": project_key,
                 "entityType": entity_type,
                 "seed": seed_value,
-                "limit": len(file_data_pool),
+                "limit": limit,
                 "method": "full",
                 "filterKey": filter_key,
                 "filterValues": None,
                 "totalAvailable": len(file_data_pool),
             }
             return DatasetLoadResponse(
-                message=f"DB mode disabled; returning full dataset ({len(file_data_pool)} items)",
+                message=f"DB mode disabled or seed=1; returning {len(limited)} items (limit={limit}, pool={len(file_data_pool)})",
                 metadata=metadata,
-                data=file_data_pool,
-                count=len(file_data_pool),
+                data=limited,
+                count=len(limited),
             )
 
         # Apply seeded selection based on requested method
