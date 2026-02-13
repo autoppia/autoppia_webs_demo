@@ -5,7 +5,7 @@ function getApiBaseUrl(): string {
   const originIsLocal = origin && (origin.includes("localhost") || origin.includes("127.0.0.1"));
 
   let baseUrl: string;
-  
+
   if (envUrl && (!(envIsLocal) || originIsLocal)) {
     baseUrl = envUrl;
   } else if (origin) {
@@ -13,12 +13,12 @@ function getApiBaseUrl(): string {
   } else {
     baseUrl = envUrl || "http://app:8090";
   }
-  
+
   // Log the resolved API URL for debugging (only in browser)
   if (typeof window !== "undefined") {
     console.log(`[seeded-loader] Resolved API base URL: ${baseUrl} (envUrl: ${envUrl || 'none'}, origin: ${origin || 'none'})`);
   }
-  
+
   return baseUrl;
 }
 
@@ -66,34 +66,34 @@ export async function fetchSeededSelection<T = any>(options: SeededLoadOptions):
   }
 
   const url = `${baseUrl}/datasets/load?${params.toString()}`;
-  
+
   // Add timeout to prevent infinite hanging (10 seconds)
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000);
-  
+
   try {
-    const resp = await fetch(url, { 
+    const resp = await fetch(url, {
       method: "GET",
       signal: controller.signal,
     });
     clearTimeout(timeoutId);
-    
+
     if (!resp.ok) {
       throw new Error(`Seeded selection request failed: ${resp.status}`);
     }
     const json = await resp.json();
-    
+
     // Check if API returned an error in the response body (common pattern: {detail: "error message"})
     if (json?.detail && typeof json.detail === 'string' && !json?.data) {
       throw new Error(`API error: ${json.detail}`);
     }
-    
+
     // Check if data is missing or empty
     if (!json?.data || !Array.isArray(json.data)) {
       const errorMsg = json?.detail || `No data returned from API for ${options.entityType}`;
       throw new Error(errorMsg);
     }
-    
+
     // Return data even if empty array - let caller decide if empty is acceptable
     return json.data as T[];
   } catch (error: any) {
@@ -117,18 +117,18 @@ export async function fetchPoolInfo(projectKey: string, entityType: string): Pro
   }
   const baseUrl = getApiBaseUrl();
   const url = `${baseUrl}/datasets/pool/info?project_key=${encodeURIComponent(projectKey)}&entity_type=${encodeURIComponent(entityType)}`;
-  
+
   // Add timeout to prevent infinite hanging (5 seconds for pool info)
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 5000);
-  
+
   try {
-    const resp = await fetch(url, { 
+    const resp = await fetch(url, {
       method: "GET",
       signal: controller.signal,
     });
     clearTimeout(timeoutId);
-    
+
     if (!resp.ok) return null;
     const json = await resp.json();
     if (json && typeof json.pool_size === "number") {
@@ -144,5 +144,3 @@ export async function fetchPoolInfo(projectKey: string, entityType: string): Pro
     return null;
   }
 }
-
-

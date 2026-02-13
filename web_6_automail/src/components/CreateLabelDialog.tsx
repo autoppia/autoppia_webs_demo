@@ -43,7 +43,7 @@ export function CreateLabelDialog({ trigger }: CreateLabelDialogProps) {
       logEvent(EVENT_TYPES.CREATE_LABEL, {
         label_name: labelName.trim(),
         label_color: selectedColor
-      });  
+      });
       setLabelName('');
       setSelectedColor(LABEL_COLORS[0]);
       setOpen(false);

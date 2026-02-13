@@ -68,8 +68,8 @@ function pad(num: number) {
 
 export default function CalendarPage() {
   const { getText, getId } = useDynamicStructure();
-  const { resolvedSeeds } = useSeed();
-  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const { seed } = useSeed();
+  const v2Seed = seed;
   const { data, isLoading, error } = useProjectData<any>({
     projectKey: "web_5_autocrm",
     entityType: "events",

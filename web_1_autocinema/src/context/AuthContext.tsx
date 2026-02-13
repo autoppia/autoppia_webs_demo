@@ -238,7 +238,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const addAllowedMovie = useCallback(
     (movieId: string) => {
       if (!currentUser) return;
-      
+
       // Check if movie is already in the list
       if (currentUser.allowedMovies.includes(movieId)) {
         return;
@@ -249,7 +249,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         ...currentUser,
         allowedMovies: [...currentUser.allowedMovies, movieId],
       };
-      
+
       // Update state and localStorage
       setCurrentUser(updatedUser);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
@@ -259,7 +259,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const customUserIndex = customUsers.findIndex(
         (user) => user.username.toLowerCase() === currentUser.username.toLowerCase()
       );
-      
+
       if (customUserIndex !== -1) {
         const updatedCustomUsers = [...customUsers];
         updatedCustomUsers[customUserIndex] = {
@@ -290,7 +290,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const removeAllowedMovie = useCallback(
     (movieId: string) => {
       if (!currentUser) return;
-      
+
       // Check if movie is in the list
       if (!currentUser.allowedMovies.includes(movieId)) {
         return;
@@ -301,7 +301,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         ...currentUser,
         allowedMovies: currentUser.allowedMovies.filter((id) => id !== movieId),
       };
-      
+
       // Update state and localStorage
       setCurrentUser(updatedUser);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
@@ -311,7 +311,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const customUserIndex = customUsers.findIndex(
         (user) => user.username.toLowerCase() === currentUser.username.toLowerCase()
       );
-      
+
       if (customUserIndex !== -1) {
         const updatedCustomUsers = [...customUsers];
         updatedCustomUsers[customUserIndex] = {
@@ -342,9 +342,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const addToWatchlist = useCallback(
     (movieId: string) => {
       if (!currentUser) return;
-      
+
       const watchlist = currentUser.watchlist || [];
-      
+
       // Check if movie is already in the list
       if (watchlist.includes(movieId)) {
         return;
@@ -355,7 +355,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         ...currentUser,
         watchlist: [...watchlist, movieId],
       };
-      
+
       // Update state and localStorage
       setCurrentUser(updatedUser);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
@@ -366,9 +366,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const removeFromWatchlist = useCallback(
     (movieId: string) => {
       if (!currentUser) return;
-      
+
       const watchlist = currentUser.watchlist || [];
-      
+
       // Check if movie is in the list
       if (!watchlist.includes(movieId)) {
         return;
@@ -379,7 +379,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         ...currentUser,
         watchlist: watchlist.filter((id) => id !== movieId),
       };
-      
+
       // Update state and localStorage
       setCurrentUser(updatedUser);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));

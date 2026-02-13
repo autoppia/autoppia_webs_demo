@@ -17,7 +17,7 @@ The dynamic layout system changes the DOM structure and element positioning base
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 
 ### Installation
@@ -48,7 +48,7 @@ http://localhost:3000/?seed=10
 - Navigation order reversed
 - Standard feed order
 
-### Seed 2: Vertical Layout  
+### Seed 2: Vertical Layout
 - Header positioned on the left
 - Sidebar at the top
 - Search in sidebar
@@ -139,7 +139,7 @@ interface LayoutConfig {
 All event tracking remains fully functional across all layout variations:
 
 - **POST_STATUS** - Post creation events
-- **LIKE_POST** - Post like/unlike events  
+- **LIKE_POST** - Post like/unlike events
 - **COMMENT_ON_POST** - Comment events
 - **SEARCH_USERS** - User search events
 - **SEARCH_JOBS** - Job search events

@@ -3,13 +3,13 @@
 import type React from "react";
 import { createContext, useContext, useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { resolveSeeds, resolveSeedsSync, clampBaseSeed, type ResolvedSeeds } from "@/shared/seed-resolver";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 
 interface SeedContextType {
   seed: number;
   setSeed: (seed: number) => void;
   getNavigationUrl: (path: string) => string;
-  resolvedSeeds: ResolvedSeeds;
+  isSeedReady: boolean;
 }
 
 const DEFAULT_SEED = 1;
@@ -18,13 +18,14 @@ const SeedContext = createContext<SeedContextType>({
   seed: DEFAULT_SEED,
   setSeed: () => {},
   getNavigationUrl: (path: string) => path,
-  resolvedSeeds: resolveSeedsSync(DEFAULT_SEED),
+  isSeedReady: false,
 });
 
 const STORAGE_KEY = "autohealth_seed_base";
 
 function SeedInitializer({ onSeedFromUrl }: { onSeedFromUrl: (seed: number | null) => void }) {
   const searchParams = useSearchParams();
+
   useEffect(() => {
     const rawSeed = searchParams.get("seed");
     if (rawSeed) {
@@ -34,76 +35,110 @@ function SeedInitializer({ onSeedFromUrl }: { onSeedFromUrl: (seed: number | nul
       onSeedFromUrl(null);
     }
   }, [searchParams, onSeedFromUrl]);
+
   return null;
 }
 
-export const SeedProvider = ({ children }: { children: React.ReactNode }) => (
-  <Suspense fallback={children}>
-    <SeedProviderInner>{children}</SeedProviderInner>
-  </Suspense>
-);
+export const SeedProvider = ({
+  children,
+  initialSeed,
+}: {
+  children: React.ReactNode;
+  initialSeed?: number;
+}) => {
+  return (
+    <Suspense fallback={children}>
+      <SeedProviderInner initialSeed={initialSeed}>{children}</SeedProviderInner>
+    </Suspense>
+  );
+};
 
-function SeedProviderInner({ children }: { children: React.ReactNode }) {
+function SeedProviderInner({
+  children,
+  initialSeed,
+}: {
+  children: React.ReactNode;
+  initialSeed?: number;
+}) {
   const searchParams = useSearchParams();
-  const [seed, setSeedState] = useState(DEFAULT_SEED);
-  const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() => resolveSeedsSync(DEFAULT_SEED));
-  const [isInitialized, setIsInitialized] = useState(false);
 
-  useEffect(() => {
-    if (isInitialized) return;
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = clampBaseSeed(Number.parseInt(saved, 10));
-        setSeedState(parsed);
+  const getInitialSeed = (): number => {
+    if (typeof window !== "undefined" && (window as any).__INITIAL_SEED__ !== undefined) {
+      const serverSeed = (window as any).__INITIAL_SEED__;
+      if (typeof serverSeed === "number" && Number.isFinite(serverSeed)) {
+        return clampBaseSeed(serverSeed);
       }
-    } catch (error) {
-      console.error("[autohealth][seed] Error loading from storage", error);
     }
-    setIsInitialized(true);
-  }, [isInitialized]);
+    if (initialSeed !== undefined) {
+      return clampBaseSeed(initialSeed);
+    }
+    try {
+      const urlSeed = searchParams.get("seed");
+      if (urlSeed) {
+        return clampBaseSeed(Number.parseInt(urlSeed, 10));
+      }
+    } catch {
+      // useSearchParams can fail during SSR
+    }
+    if (typeof window !== "undefined") {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const urlSeed = params.get("seed");
+        if (urlSeed) {
+          return clampBaseSeed(Number.parseInt(urlSeed, 10));
+        }
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          return clampBaseSeed(Number.parseInt(saved, 10));
+        }
+      } catch {
+        // Ignore
+      }
+    }
+    return DEFAULT_SEED;
+  };
+
+  const [seed, setSeedState] = useState<number>(getInitialSeed);
+  const [isSeedReady, setIsSeedReady] = useState<boolean>(false);
 
   const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
     if (urlSeed !== null) {
       setSeedState(urlSeed);
-      try {
-        localStorage.setItem(STORAGE_KEY, urlSeed.toString());
-      } catch (error) {
-        console.error("[autohealth][seed] Error saving seed", error);
+      setIsSeedReady(true);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(STORAGE_KEY, urlSeed.toString());
+        } catch (error) {
+          console.error("Error saving seed to localStorage:", error);
+        }
       }
+    } else {
+      setIsSeedReady(true);
     }
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
-    // Set default values immediately (will be updated when API responds)
-    const defaultResolved = resolveSeedsSync(seed);
-    setResolvedSeeds(defaultResolved);
-    
-    // Always fetch from centralized service (async, updates when ready)
-    resolveSeeds(seed)
-      .then((resolved) => {
-        if (!cancelled) {
-          setResolvedSeeds(resolved);
+    const urlSeed = searchParams.get("seed");
+    if (urlSeed) {
+      const parsed = clampBaseSeed(Number.parseInt(urlSeed, 10));
+      if (parsed !== seed) {
+        setSeedState(parsed);
+      }
+      setIsSeedReady(true);
+    } else {
+      if (typeof window !== "undefined" && (window as any).__INITIAL_SEED__ !== undefined) {
+        const initial = clampBaseSeed((window as any).__INITIAL_SEED__);
+        if (initial !== seed) {
+          setSeedState(initial);
         }
-      })
-      .catch((error) => {
-        if (!cancelled) {
-          console.error("[autohealth][seed] Failed to resolve seeds from API:", error);
-          // Keep default values (with seed 1 for v1/v2/v3) - will retry on next seed change
-        }
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [seed, searchParams]);
+      }
+      setIsSeedReady(true);
+    }
+  }, [searchParams, seed]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base ?? null;
-    (window as any).__autohealthV2Seed = v2Seed;
-    window.dispatchEvent(new CustomEvent("autohealth:v2SeedChange", { detail: { seed: v2Seed } }));
-  }, [resolvedSeeds.v2, resolvedSeeds.base]);
+    setIsSeedReady(true);
+  }, []);
 
   const setSeed = useCallback((newSeed: number) => {
     setSeedState(clampBaseSeed(newSeed));
@@ -129,7 +164,7 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, resolvedSeeds }}>
+    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, isSeedReady }}>
       <SeedInitializer onSeedFromUrl={handleSeedFromUrl} />
       {children}
     </SeedContext.Provider>

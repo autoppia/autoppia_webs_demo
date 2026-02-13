@@ -106,12 +106,12 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
       okText={dyn.v3.getVariant("save-team-button", TEXT_VARIANTS_MAP, "Save Team")}
       cancelText={dyn.v3.getVariant("cancel_action", TEXT_VARIANTS_MAP, "Cancel")}
       className={modalClass}
-      okButtonProps={{ 
-        id: dyn.v3.getVariant("create-team-button", ID_VARIANTS_MAP, "create-team-button"), 
+      okButtonProps={{
+        id: dyn.v3.getVariant("create-team-button", ID_VARIANTS_MAP, "create-team-button"),
         loading,
         className: dyn.v3.getVariant("save-team-button-class", CLASS_VARIANTS_MAP, "")
       }}
-      cancelButtonProps={{ 
+      cancelButtonProps={{
         id: dyn.v3.getVariant("cancel-team-button", ID_VARIANTS_MAP, "cancel-team-button"),
         className: dyn.v3.getVariant("cancel-team-button-class", CLASS_VARIANTS_MAP, "")
       }}

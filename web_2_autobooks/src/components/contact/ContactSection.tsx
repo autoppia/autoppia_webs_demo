@@ -111,8 +111,8 @@ export function ContactSection() {
                     </span>
                   </h2>
                   <p className="text-lg text-white/70 leading-relaxed">
-                    Whether you're looking for a specific book, have suggestions for improving our search engine, 
-                    or want to report something, we're here to help. Your feedback helps us make the book discovery 
+                    Whether you're looking for a specific book, have suggestions for improving our search engine,
+                    or want to report something, we're here to help. Your feedback helps us make the book discovery
                     experience even better.
                   </p>
                 </div>

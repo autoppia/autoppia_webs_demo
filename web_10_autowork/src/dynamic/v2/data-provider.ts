@@ -13,7 +13,7 @@ export class DynamicDataProvider {
   private resolveReady: () => void = () => {};
   private currentSeed: number | null = null;
   private loadingPromise: Promise<void> | null = null;
-  
+
   // Subscribers
   private jobSubscribers: Array<(data: AutoworkJob[]) => void> = [];
   private hireSubscribers: Array<(data: AutoworkHire[]) => void> = [];
@@ -62,10 +62,10 @@ export class DynamicDataProvider {
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
     });
-    
+
     const baseSeed = this.getBaseSeedFromUrl();
     const runtimeSeed = this.getRuntimeV2Seed();
-    
+
     try {
       // If base seed = 1, use fallback data directly (skip DB mode)
       if (baseSeed === 1) {
@@ -82,19 +82,19 @@ export class DynamicDataProvider {
         this.setSkills(skills);
         return;
       }
-      
+
       this.currentSeed = runtimeSeed ?? 1;
-      
+
       // Check if DB mode is enabled - only try DB if enabled
       const dbModeEnabled = isDbLoadModeEnabled();
       console.log("[autowork/data-provider] DB mode enabled:", dbModeEnabled, "runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
-      
+
       if (dbModeEnabled) {
         // Try DB mode first if enabled
         console.log("[autowork/data-provider] Attempting to load from DB...");
         // Let initializeJobs/Hires/etc handle DB loading
       }
-      
+
       // Initialize all data types (they handle DB mode internally)
       const [jobs, hires, experts, skills] = await Promise.all([
         initializeJobs(runtimeSeed ?? undefined),
@@ -102,12 +102,12 @@ export class DynamicDataProvider {
         initializeExperts(runtimeSeed ?? undefined),
         initializeSkills(runtimeSeed ?? undefined),
       ]);
-      
+
       this.setJobs(jobs);
       this.setHires(hires);
       this.setExperts(experts);
       this.setSkills(skills);
-      
+
       console.log("[autowork/data-provider] ✅ Data initialized:", {
         jobs: jobs.length,
         hires: hires.length,
@@ -136,7 +136,7 @@ export class DynamicDataProvider {
         this.resolveReady();
       }
     }
-    
+
     // Listen for seed changes
     if (typeof window !== "undefined") {
       window.addEventListener("autowork:v2SeedChange", this.handleSeedEvent.bind(this));
@@ -168,15 +168,15 @@ export class DynamicDataProvider {
     if (this.loadingPromise) {
       return this.loadingPromise;
     }
-    
+
     this.loadingPromise = (async () => {
       try {
         const baseSeed = this.getBaseSeedFromUrl();
         const runtimeSeed = this.getRuntimeV2Seed();
         const v2Seed = seedValue ?? runtimeSeed ?? 1;
-        
+
         console.log(`[autowork/data-provider] Reload: Seed changing from ${this.currentSeed} to ${v2Seed}`);
-        
+
         // If base seed = 1, use fallback data directly
         if (baseSeed === 1) {
           console.log("[autowork/data-provider] Reload: Base seed is 1, using fallback data");
@@ -184,13 +184,13 @@ export class DynamicDataProvider {
         } else {
           this.currentSeed = v2Seed;
         }
-        
+
         // Reset ready state FIRST
         this.ready = false;
         this.readyPromise = new Promise<void>((resolve) => {
           this.resolveReady = resolve;
         });
-        
+
         // CRITICAL: Clear all existing data BEFORE loading new data
         // This ensures no old seed data is preserved
         console.log("[autowork/data-provider] Clearing old data before loading new seed data...");
@@ -198,16 +198,16 @@ export class DynamicDataProvider {
         this.hires = [];
         this.experts = [];
         this.skills = [];
-        
+
         // Notify all subscribers with empty arrays to clear UI immediately
         this.notifyJobs();
         this.notifyHires();
         this.notifyExperts();
         this.notifySkills();
-        
+
         // Small delay to ensure subscribers have processed the clear
         await new Promise(resolve => setTimeout(resolve, 50));
-        
+
         // Now load new data for the new seed
         const [jobs, hires, experts, skills] = await Promise.all([
           initializeJobs(v2Seed),
@@ -215,13 +215,13 @@ export class DynamicDataProvider {
           initializeExperts(v2Seed),
           initializeSkills(v2Seed),
         ]);
-        
+
         // Set new data (this will notify subscribers again with new data)
         this.setJobs(jobs);
         this.setHires(hires);
         this.setExperts(experts);
         this.setSkills(skills);
-        
+
         console.log("[autowork/data-provider] ✅ Data reloaded for seed", v2Seed, ":", {
           jobs: jobs.length,
           hires: hires.length,
@@ -237,7 +237,7 @@ export class DynamicDataProvider {
         this.loadingPromise = null;
       }
     })();
-    
+
     return this.loadingPromise;
   }
 
@@ -293,7 +293,7 @@ export class DynamicDataProvider {
   public getJobById(id: string): AutoworkJob | undefined {
     // Try exact match first
     let job = this.jobs.find((job) => job.id === id);
-    
+
     // If not found, try string conversion
     if (!job) {
       const numId = Number(id);
@@ -304,12 +304,12 @@ export class DynamicDataProvider {
         });
       }
     }
-    
+
     // If still not found, try partial match
     if (!job) {
       job = this.jobs.find((j) => String(j.id).includes(String(id)) || String(id).includes(String(j.id)));
     }
-    
+
     return job;
   }
 
@@ -354,32 +354,32 @@ export class DynamicDataProvider {
 
   public getExpertBySlug(slug: string): AutoworkExpert | undefined {
     const searchSlug = String(slug || "").trim().toLowerCase();
-    
+
     // Strategy 1: Exact match by slug
     let found = this.experts.find((e) => {
       const expertSlug = String(e.slug || "").trim().toLowerCase();
       return expertSlug === searchSlug;
     });
-    
+
     if (found) return found;
-    
+
     // Strategy 2: Match by name (normalized)
     const normalizedSearch = searchSlug.replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     found = this.experts.find((e) => {
       const expertName = String(e.name || "").trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       return expertName === normalizedSearch;
     });
-    
+
     if (found) return found;
-    
+
     // Strategy 3: Partial match by slug
     found = this.experts.find((e) => {
       const expertSlug = String(e.slug || "").trim().toLowerCase();
       return expertSlug.includes(searchSlug) || searchSlug.includes(expertSlug);
     });
-    
+
     if (found) return found;
-    
+
     // Strategy 4: Partial match by name
     found = this.experts.find((e) => {
       const expertName = String(e.name || "").trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -388,36 +388,36 @@ export class DynamicDataProvider {
       return expertName.includes(normalizedSearch) || normalizedSearch.includes(expertName) ||
              expertNameNoDots === normalizedSearchNoDots;
     });
-    
+
     return found;
   }
-  
+
   public getExpertByName(name: string): AutoworkExpert | undefined {
     const searchName = String(name || "").trim().toLowerCase();
-    
+
     // Strategy 1: Exact match by name
     let found = this.experts.find((e) => {
       const expertName = String(e.name || "").trim().toLowerCase();
       return expertName === searchName;
     });
-    
+
     if (found) return found;
-    
+
     // Strategy 2: Match without dots or special chars
     const normalizedSearch = searchName.replace(/[^a-z0-9]+/g, '').replace(/\./g, '');
     found = this.experts.find((e) => {
       const expertName = String(e.name || "").trim().toLowerCase().replace(/[^a-z0-9]+/g, '').replace(/\./g, '');
       return expertName === normalizedSearch;
     });
-    
+
     if (found) return found;
-    
+
     // Strategy 3: Partial match
     found = this.experts.find((e) => {
       const expertName = String(e.name || "").trim().toLowerCase();
       return expertName.includes(searchName) || searchName.includes(expertName);
     });
-    
+
     return found;
   }
 

@@ -46,19 +46,19 @@ function PostJobWizard({
 
   // V2: Subscribe to dynamic skills from data provider
   const [v2Skills, setV2Skills] = useState<string[]>([]);
-  
+
   useEffect(() => {
     // Wait for data to be ready
     dyn.v2.whenReady().then(() => {
       const skills = dynamicDataProvider.getSkills();
       setV2Skills(skills);
     });
-    
+
     // Subscribe to skills updates
     const unsubscribe = dynamicDataProvider.subscribeSkills((updatedSkills) => {
       setV2Skills(updatedSkills);
     });
-    
+
     return () => {
       unsubscribe();
     };
@@ -107,10 +107,10 @@ function PostJobWizard({
 
   // Stepper progress text
   const progress = `${step}/${totalSteps}`;
-  
+
   // Fixed step sequence for post job wizard (consistent across all seeds)
   const fixedStepSequence = ['skills', 'scope', 'title', 'budget', 'description'];
-  
+
   // Get current step key based on fixed sequence
   const currentStepKey = fixedStepSequence[step - 1];
   const stepTitle = (() => {
@@ -134,10 +134,10 @@ function PostJobWizard({
 
   const getButtonTitle = (step: number): string => {
     if (step === totalSteps) return "Submit Job Post";
-    
+
     const currentStepKey = fixedStepSequence[step - 1];
     const nextStepKey = fixedStepSequence[step];
-    
+
     if (nextStepKey) {
       return `Next: ${nextStepKey.charAt(0).toUpperCase() + nextStepKey.slice(1)}`;
     }
@@ -238,7 +238,7 @@ function PostJobWizard({
       {dyn.v1.addWrapDecoy("postjob-overlay", (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4" onClick={close}>
           {dyn.v1.addWrapDecoy("postjob-surface", (
-            <div 
+            <div
               className="bg-white rounded-2xl shadow-2xl w-[900px] h-[700px] flex flex-col overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
@@ -894,7 +894,7 @@ function PostJobWizard({
                 }
 
                 toast.success("Job Submitted successfully!");
-                
+
                 // Close wizard and reset form
                 setTimeout(() => {
                   close();
@@ -940,7 +940,7 @@ export default function Home() {
 	const [hires, setHires] = useState<any[]>([]);
 	const [experts, setExperts] = useState<any[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
-	
+
 	// Subscribe to data changes
 	useEffect(() => {
 		// Wait for data to be ready
@@ -950,7 +950,7 @@ export default function Home() {
 			setExperts(dynamicDataProvider.getExperts().slice(0, 6));
 			setIsLoading(false);
 		});
-		
+
 		// Subscribe to updates
 		const unsubscribeJobs = dynamicDataProvider.subscribeJobs((updatedJobs) => {
 			setJobs(updatedJobs.slice(0, 6));
@@ -961,7 +961,7 @@ export default function Home() {
 		const unsubscribeExperts = dynamicDataProvider.subscribeExperts((updatedExperts) => {
 			setExperts(updatedExperts.slice(0, 6));
 		});
-		
+
 		return () => {
 			unsubscribeJobs();
 			unsubscribeHires();
@@ -1027,7 +1027,7 @@ export default function Home() {
 				experts: experts,
 			};
 			writeJson("autowork_all", combined);
-			
+
 			// Also save experts separately for ExpertProfileClient
 			if (experts.length > 0) {
 				window.localStorage.setItem("autowork_experts", JSON.stringify(experts));
@@ -1040,7 +1040,7 @@ export default function Home() {
 		const totalJobs = allJobs.length;
 		const completedJobs = allJobs.filter((j: any) => j.status === "Completed").length;
 		const inProgressJobs = allJobs.filter((j: any) => j.status === "In progress").length;
-		
+
 		const getStatusColor = (status: string) => {
 			switch (status) {
 				case "Completed":
@@ -1107,7 +1107,7 @@ export default function Home() {
 							</button>
 						), "create-posting-button-wrap")}
 					</div>
-					
+
 					{/* Stats Cards */}
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
 						<div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 shadow-sm">
@@ -1123,7 +1123,7 @@ export default function Home() {
 								</div>
 							</div>
 						</div>
-						
+
 						<div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200 shadow-sm">
 							<div className="flex items-center justify-between">
 								<div>
@@ -1137,7 +1137,7 @@ export default function Home() {
 								</div>
 							</div>
 						</div>
-						
+
 						<div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 shadow-sm">
 							<div className="flex items-center justify-between">
 								<div>
@@ -1174,7 +1174,7 @@ export default function Home() {
 										{job.status}
 									</span>
 								</div>
-								
+
 								<div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
 									<svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -1214,7 +1214,7 @@ export default function Home() {
 
 	const HiresSection = () => {
 		const router = useSeedRouter();
-		
+
 		// Helper function to generate slug from name
 		const generateSlug = (name: string): string => {
 			return name
@@ -1228,18 +1228,18 @@ export default function Home() {
 			// Wait for data to be ready
 			await dyn.v2.whenReady();
 			await new Promise(resolve => setTimeout(resolve, 100));
-			
+
 			// First, verify the hire exists in the current hires data (compare hires with hires)
 			const matchingHire = dynamicDataProvider.getHireByName(hire.name);
-			
+
 			if (!matchingHire) {
 				console.log(`[autowork] handleViewProfile: ❌ Hire "${hire.name}" not found in hires data`);
 				return;
 			}
-			
+
 			// Now try to find the expert by name (using the hire's name)
 			const matchingExpert = dynamicDataProvider.getExpertByName(matchingHire.name);
-			
+
 			// Use expert's slug if found, otherwise generate from hire name
 			const slug = matchingExpert?.slug || matchingHire.slug || generateSlug(matchingHire.name);
 			console.log(`[autowork] handleViewProfile: hire="${matchingHire.name}", found expert="${matchingExpert?.name || 'none'}", using slug="${slug}"`);
@@ -1262,7 +1262,7 @@ export default function Home() {
 					>
 						{getText('hires-heading', 'Hires Dashboard')}
 					</h2>
-					
+
 					{/* Stats Cards */}
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
 						<div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 shadow-sm">
@@ -1278,7 +1278,7 @@ export default function Home() {
 								</div>
 							</div>
 						</div>
-						
+
 						<div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200 shadow-sm">
 							<div className="flex items-center justify-between">
 								<div>
@@ -1292,7 +1292,7 @@ export default function Home() {
 								</div>
 							</div>
 						</div>
-						
+
 						<div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 border border-yellow-200 shadow-sm">
 							<div className="flex items-center justify-between">
 								<div>
@@ -1351,7 +1351,7 @@ export default function Home() {
 									</div>
 								</div>
 							</div>
-							
+
 							<div className="flex items-center gap-4 mb-4 pt-3 border-t border-gray-100">
 								<span className="flex items-center gap-1 text-sm">
 									<svg
@@ -1366,7 +1366,7 @@ export default function Home() {
 								<span className="text-sm text-gray-500">•</span>
 								<span className="text-sm text-gray-600">{hire.jobs} jobs</span>
 							</div>
-							
+
 							{hire.rehire ? (
 								<button
 									onClick={() => handleViewProfile(hire)}
@@ -1393,7 +1393,7 @@ export default function Home() {
 	const ExpertsSection = () => {
 		const router = useSeedRouter();
 		const [favorites, setFavorites] = useState<Set<string>>(new Set());
-		
+
 		// Load favorites from localStorage
 		useEffect(() => {
 			if (typeof window === "undefined") return;
@@ -1452,8 +1452,8 @@ export default function Home() {
       }
       saveFavorites(newFavorites);
     };
-		
-		
+
+
 		const totalExperts = experts.length;
 		const avgRating = experts.length > 0
 			? (experts.reduce((acc: number, e: any) => acc + Number.parseFloat(e.rating || 0), 0) / experts.length).toFixed(1)
@@ -1474,7 +1474,7 @@ export default function Home() {
 					>
 						{getText('experts-heading', "Expert one-on-one to review your goals")}
 					</h2>
-					
+
 					{/* Stats Cards */}
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
 						<div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200 shadow-sm">
@@ -1490,7 +1490,7 @@ export default function Home() {
 								</div>
 							</div>
 						</div>
-						
+
 						<div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 border border-yellow-200 shadow-sm">
 							<div className="flex items-center justify-between">
 								<div>
@@ -1650,8 +1650,8 @@ export default function Home() {
 				</div>
 			)}
 			{renderSections()}
-			<PostJobWizard 
-				open={showPostJob} 
+			<PostJobWizard
+				open={showPostJob}
 				onClose={() => setShowPostJob(false)}
 				onJobCreated={(job) => {
 					setUserJobs(prev => [job, ...prev]);

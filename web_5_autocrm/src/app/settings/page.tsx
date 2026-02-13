@@ -37,7 +37,7 @@ export default function SettingsPage() {
       <DynamicElement elementType="header" index={0}>
         <h1 className="text-3xl font-extrabold mb-10 tracking-tight">{getText("settings_title", "Settings")}</h1>
       </DynamicElement>
-      
+
       <DynamicItem index={0} className="bg-white rounded-2xl shadow-card border border-zinc-100 p-7 flex flex-col gap-7">
         <DynamicElement elementType="section" index={1}>
           <h2 className="font-semibold text-lg mb-4">{getText("user_profile", "User Profile")}</h2>
@@ -94,7 +94,7 @@ export default function SettingsPage() {
         </DynamicElement>
         <hr className="border-zinc-100 my-1" />
       </DynamicItem>
-      
+
       <DynamicElement elementType="section" index={2} className="text-xs text-zinc-400 text-center pt-6">
         {getText("settings_note", "Settings Note")}
       </DynamicElement>

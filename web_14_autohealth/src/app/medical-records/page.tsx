@@ -72,19 +72,19 @@ export default function MedicalRecordsPage() {
   useEffect(() => {
     let mounted = true;
     let unsubscribe: (() => void) | null = null;
-    
+
     const loadMedicalRecords = async () => {
       try {
         await whenReady();
         if (!mounted) return;
-        
+
         // Get initial data
         const records = getMedicalRecords();
         if (mounted) {
           setRecordsList(records);
           setIsLoading(false);
         }
-        
+
         // Subscribe to updates
         unsubscribe = subscribeMedicalRecords((records) => {
           if (mounted) {
@@ -96,9 +96,9 @@ export default function MedicalRecordsPage() {
         if (mounted) setIsLoading(false);
       }
     };
-    
+
     loadMedicalRecords();
-    
+
     return () => {
       mounted = false;
       if (unsubscribe) unsubscribe();
@@ -318,17 +318,17 @@ export default function MedicalRecordsPage() {
                 <h2 className="text-xl font-semibold">{selectedRecord.title}</h2>
               </div>
               {dyn.v1.addWrapDecoy("close-modal-button", (
-                <Button 
+                <Button
                   id={dyn.v3.getVariant("close-modal-button", ID_VARIANTS_MAP, "close-modal-button")}
                   className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
-                  variant="outline" 
+                  variant="outline"
                   onClick={() => setSelectedRecord(null)}
                 >
                   {dyn.v3.getVariant("close", TEXT_VARIANTS_MAP, "Close")}
                 </Button>
               ))}
             </div>
-            
+
             <div className="space-y-4">
               {(() => {
                 const infoBlocks = [
@@ -338,7 +338,7 @@ export default function MedicalRecordsPage() {
                 ];
                 const order = dyn.v1.changeOrderElements("record-modal-blocks", infoBlocks.length);
                 const orderedBlocks = order.map((idx) => infoBlocks[idx]);
-                return orderedBlocks.map((b, bi) => 
+                return orderedBlocks.map((b, bi) =>
                   dyn.v1.addWrapDecoy(`record-modal-block-${bi}`, (
                     <div key={b.key}>
                       {b.key === 'meta' && (

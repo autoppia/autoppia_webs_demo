@@ -1,6 +1,6 @@
 /**
  * V2 Data Loading System for web_4_autodining
- * 
+ *
  * Loads different data subsets based on v2 seed.
  */
 
@@ -96,13 +96,13 @@ export class DynamicDataProvider {
       console.log(`[autodining] Seed changed from ${this.currentSeed} to ${newSeed}, reloading restaurants...`);
       this.currentSeed = newSeed;
       this.ready = false;
-      
+
       // If already loading, wait for it
       if (this.loadingPromise) {
         await this.loadingPromise;
         return;
       }
-      
+
       // Start new load
       this.loadingPromise = (async () => {
         try {
@@ -115,7 +115,7 @@ export class DynamicDataProvider {
           this.loadingPromise = null;
         }
       })();
-      
+
       await this.loadingPromise;
     }
   }
@@ -130,26 +130,26 @@ export class DynamicDataProvider {
 
   public async reload(seedValue?: number | null): Promise<void> {
     if (typeof window === "undefined") return;
-    
+
     const runtimeSeed = seedValue !== undefined && seedValue !== null
       ? seedValue
       : this.getRuntimeV2Seed();
     const targetSeed = runtimeSeed !== null ? clampBaseSeed(runtimeSeed) : this.getBaseSeed();
-    
+
     if (targetSeed === this.currentSeed && this.ready) {
       return; // Already loaded with this seed
     }
-    
+
     console.log(`[autodining] Reloading restaurants for base seed=${targetSeed}...`);
     this.currentSeed = targetSeed;
     this.ready = false;
-    
+
     // If already loading, wait for it
     if (this.loadingPromise) {
       await this.loadingPromise;
       return;
     }
-    
+
     // Start new load (initializeRestaurants will derive the V2 seed from the URL)
     this.loadingPromise = (async () => {
       try {
@@ -163,7 +163,7 @@ export class DynamicDataProvider {
         this.loadingPromise = null;
       }
     })();
-    
+
     await this.loadingPromise;
   }
 
@@ -182,20 +182,20 @@ export class DynamicDataProvider {
       console.log("[autodining] getRestaurantById: restaurants array is not valid");
       return undefined;
     }
-    
+
     // Ensure id is a string
     const searchId = String(id || '');
     if (!searchId) {
       console.log("[autodining] getRestaurantById: invalid id provided");
       return undefined;
     }
-    
+
     // Try exact match first
     let found = this.restaurants.find((restaurant) => {
       const restaurantId = String(restaurant.id || '');
       return restaurantId === searchId;
     });
-    
+
     // If not found, try with URL decoding (in case ID was encoded)
     if (!found) {
       try {
@@ -208,7 +208,7 @@ export class DynamicDataProvider {
         // Ignore decode errors
       }
     }
-    
+
     // If still not found, try matching without 'restaurant-' prefix
     if (!found) {
       const idWithoutPrefix = searchId.replace(/^restaurant-/, '');
@@ -218,7 +218,7 @@ export class DynamicDataProvider {
         return restaurantIdWithoutPrefix === idWithoutPrefix || restaurantId === idWithoutPrefix;
       });
     }
-    
+
     return found;
   }
 

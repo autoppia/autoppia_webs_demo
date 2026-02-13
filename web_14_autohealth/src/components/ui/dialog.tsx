@@ -28,8 +28,8 @@ const Dialog = React.forwardRef<
       ref={ref}
       {...props}
     >
-      <div 
-        className="fixed inset-0 bg-black/50" 
+      <div
+        className="fixed inset-0 bg-black/50"
         onClick={() => onOpenChange?.(false)}
       />
       <div className={cn("relative z-50", className)}>

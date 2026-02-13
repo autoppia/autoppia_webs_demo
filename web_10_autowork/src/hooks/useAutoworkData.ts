@@ -62,7 +62,7 @@ function generateDeterministicData<T>(
   limit: number
 ): T[] {
   const rng = seededRandom(seed);
-  
+
   switch (entityType) {
     case "jobs": {
       // Use original dataset first, fallback to library dataset
@@ -104,12 +104,8 @@ export function useAutoworkData<T = any>(projectKey: string, count = 12): UseAut
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [nonce, setNonce] = useState(0);
-  const { resolvedSeeds } = useSeedContext();
-  // Use v2 seed if available, otherwise fall back to base seed
-  // This ensures data changes based on seed even when v2 is not explicitly enabled
-  const v2Seed = resolvedSeeds.v2 !== null && resolvedSeeds.v2 !== undefined 
-    ? resolvedSeeds.v2 
-    : (resolvedSeeds.base ?? 1);
+  const { seed } = useSeedContext();
+  const v2Seed = seed;
   const entityType = useMemo(() => resolveEntityType(projectKey), [projectKey]);
   const selectionMethod = entityType === "skills" ? "select" : "shuffle";
 

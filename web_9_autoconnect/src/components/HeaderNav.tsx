@@ -12,7 +12,7 @@ import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynami
 export default function HeaderNav() {
   const pathname = usePathname();
   const dyn = useDynamicSystem();
-  
+
   // Fix hydration error: use state to get user only on client side
   const [profileUsername, setProfileUsername] = useState<string>("alexsmith");
   const navTextVariants: Record<string, string[]> = {
@@ -27,7 +27,7 @@ export default function HeaderNav() {
     nav_recommendations_link: ["nav_recs_link", "nav_recommendations", "nav-suggestions"],
     nav_profile_link: ["nav_profile_link", "nav_profile", "nav-me"],
   };
-  
+
   useEffect(() => {
     // Only get user on client side to avoid hydration mismatch
     const users = dynamicDataProvider.getUsers();
@@ -52,7 +52,7 @@ export default function HeaderNav() {
     },
     {
       href: "/jobs",
-      label: "Jobs", 
+      label: "Jobs",
       eventType: EVENT_TYPES.JOBS_NAVBAR,
       eventData: { label: "Jobs" },
       idKey: "nav_jobs_link",

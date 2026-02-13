@@ -104,7 +104,7 @@ export async function initializeProducts(seedOverride?: number | null): Promise<
     dynamicProducts = normalizeProductImages(fallbackData);
     return dynamicProducts;
   }
-  
+
   // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
     try {

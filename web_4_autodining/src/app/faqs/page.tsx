@@ -12,7 +12,7 @@ interface FAQItem {
 }
 
 export default function FaqsPage() {
-  const { seed, resolvedSeeds } = useSeed();
+  const { seed } = useSeed();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqs: FAQItem[] = [

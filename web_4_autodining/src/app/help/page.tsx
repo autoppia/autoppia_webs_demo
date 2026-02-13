@@ -17,7 +17,7 @@ interface FAQItem {
 }
 
 export default function HelpPage() {
-  const { seed, resolvedSeeds } = useSeed();
+  const { seed } = useSeed();
   const dyn = useDynamicSystem();
   const searchParams = useSearchParams();
   const hasSeedParam = Boolean(searchParams?.get("seed"));

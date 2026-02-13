@@ -232,7 +232,7 @@ setup_docker() {
     echo "❌ Docker not installed."
     exit 1
   fi
-  
+
   # Check Docker daemon is running
   if ! docker info >/dev/null 2>&1; then
     echo "❌ Docker daemon not running."
@@ -264,12 +264,12 @@ setup_docker() {
 get_git_commit_hash() {
   local web_dir="${1:-}"
   local repo_root="$DEMOS_DIR"
-  
+
   if ! command -v git >/dev/null 2>&1 || [ ! -d "$repo_root/.git" ]; then
     echo "unknown"
     return
   fi
-  
+
   if [ -n "$web_dir" ]; then
     # Get the hash of the last commit that modified files in this web directory
     # This ensures each web gets its own version based on when it was last changed
@@ -352,7 +352,7 @@ deploy_project() {
 deploy_webs_server() {
   local name="webs_server"
   local dir="$DEMOS_DIR/$name"
-  
+
   if [[ ! -d "$dir" ]]; then
     echo "❌ Directory not found: $dir"
     exit 1
@@ -389,10 +389,10 @@ deploy_webs_server() {
     else
       WEBS_DATA_ABS_PATH="$WEBS_DATA_PATH"
     fi
-    
+
     # Source data directory (in repo, read-only)
     INITIAL_DATA_DIR="$DEMOS_DIR/webs_server/initial_data"
-    
+
     # Initialize data directory if it doesn't exist (copy from repo)
     # This copies both 'original/' (high quality, fewer records) and 'data/' (more records)
     # The container will use 'original/' if v2 is disabled, 'data/' if v2 is enabled
@@ -406,7 +406,7 @@ deploy_webs_server() {
         echo "  ✅ Both 'original/' and 'data/' directories are available"
       fi
     fi
-    
+
     export \
       WEB_PORT="$WEBS_PORT" \
       POSTGRES_PORT="$WEBS_PG_PORT" \
@@ -453,7 +453,7 @@ deploy_webs_server() {
     WEBS_DATA_PATH="${HOME}/webs_data"
   fi
   mkdir -p "$WEBS_DATA_PATH"
-  
+
   for project in $WEBS_PROJECTS; do
     if [ ! -f "$WEBS_DATA_PATH/$project/main.json" ]; then
       echo "  → Initializing $project master pool (100 records)..."

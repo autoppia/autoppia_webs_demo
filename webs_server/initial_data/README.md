@@ -166,7 +166,7 @@ Cada archivo `emails_X.json` debe contener 100 emails:
    rm -rf ~/webs_data/web_4_autodining
    rm -rf ~/webs_data/web_5_autocrm
    rm -rf ~/webs_data/web_6_automail
-   
+
    # Levantar de nuevo
    cd scripts
    ./setup.sh --demo=autodining --enabled_dynamic_versions=v2
@@ -201,4 +201,3 @@ curl "http://localhost:8090/datasets/load?project_key=web_4_autodining&entity_ty
 - Ver `seeded_selector.py` para entender cómo funciona la selección con seed
 - Ver `data_handler.py` para entender cómo se cargan los archivos
 - Ver `setup.sh` líneas 364-383 para la lógica de inicialización
-

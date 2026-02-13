@@ -37,11 +37,11 @@ async function loadTasksFromLocal(limit: number = 80): Promise<RemoteTask[]> {
       description: task.description,
       due_date: task.dueDate || task.createdAt || null,
       priority: task.priority || 4,
-      completed_at: task.status === "completed" 
-        ? (task.createdAt || new Date().toISOString()) 
+      completed_at: task.status === "completed"
+        ? (task.createdAt || new Date().toISOString())
         : null,
     }));
-    
+
     console.log(`[autolist] Loaded ${localTasks.length} tasks from local JSON file`);
     return localTasks;
   } catch (error) {
@@ -75,7 +75,7 @@ export async function loadTasks(
   limit: number = 80
 ): Promise<LoadTasksResult> {
   const dbMode = isDbLoadModeEnabled();
-  
+
   // If v2 DB mode is disabled, always load from local JSON
   if (!dbMode) {
     console.log("[autolist] v2 DB mode disabled, loading from local JSON");

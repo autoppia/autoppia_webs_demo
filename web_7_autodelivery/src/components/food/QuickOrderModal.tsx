@@ -30,7 +30,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
   const { restaurants, isLoading } = useRestaurants();
   const dyn = useDynamicSystem();
   const router = useSeedRouter();
-  
+
   // Get popular restaurants (those with high ratings or featured)
   const popularRestaurants = useMemo(
     () =>
@@ -47,7 +47,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
     if (typeof window === "undefined") {
       return [];
     }
-    
+
     try {
       const recent = localStorage.getItem("recent-restaurants");
       if (recent) {
@@ -65,8 +65,8 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
   const recentRestaurants = getRecentRestaurants();
 
   // Filter restaurants based on search
-  const searchResults = searchQuery.trim() 
-    ? restaurants.filter(r => 
+  const searchResults = searchQuery.trim()
+    ? restaurants.filter(r =>
         r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         r.cuisine.toLowerCase().includes(searchQuery.toLowerCase())
       ).slice(0, 6)
@@ -141,7 +141,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
     if (restaurant.menu.length > 0) {
       const popularItem = restaurant.menu[0]; // First item as "popular"
       addToCart(popularItem, restaurant.id);
-      
+
       logEvent(EVENT_TYPES.QUICK_REORDER, {
         itemId: popularItem.id,
         itemName: popularItem.name,
@@ -149,7 +149,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
         restaurantName: restaurant.name,
         source: "quick_order_modal"
       });
-      
+
       alert(`${popularItem.name} from ${restaurant.name} added to cart!`);
     }
   };
@@ -194,8 +194,8 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
               setSearchQuery("");
             }}
             className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
-              activeTab === "popular" 
-                ? "bg-white text-zinc-900 shadow-sm" 
+              activeTab === "popular"
+                ? "bg-white text-zinc-900 shadow-sm"
                 : "text-zinc-600 hover:text-zinc-900"
             }`}
           >
@@ -208,8 +208,8 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
                 setSearchQuery("");
               }}
               className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
-                activeTab === "recent" 
-                  ? "bg-white text-zinc-900 shadow-sm" 
+                activeTab === "recent"
+                  ? "bg-white text-zinc-900 shadow-sm"
                   : "text-zinc-600 hover:text-zinc-900"
               }`}
             >
@@ -220,8 +220,8 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
             <button
               onClick={() => setActiveTab("search")}
               className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
-                activeTab === "search" 
-                  ? "bg-white text-zinc-900 shadow-sm" 
+                activeTab === "search"
+                  ? "bg-white text-zinc-900 shadow-sm"
                   : "text-zinc-600 hover:text-zinc-900"
               }`}
             >
@@ -262,12 +262,12 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
                     <span className="text-sm font-medium">{restaurant.rating}</span>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-2 text-sm text-zinc-600 mb-2">
                   <MapPin className="h-3 w-3" />
                   <span>{restaurant.cuisine}</span>
                 </div>
-                
+
                 <div className="flex items-center gap-4 text-sm text-zinc-600 mb-3">
                   <div className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
@@ -379,4 +379,4 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
     </Dialog>
     ))
   );
-} 
+}

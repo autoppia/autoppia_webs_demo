@@ -133,4 +133,3 @@ export const collectFilmChangeMetadata = (original: FilmPayload, updated: FilmPa
 
   return { changed_fields: changedFields, previous_values };
 };
-

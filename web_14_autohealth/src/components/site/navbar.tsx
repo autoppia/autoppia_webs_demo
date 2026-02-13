@@ -27,9 +27,9 @@ export default function Navbar() {
   }, [dyn.seed]);
 
   const Logo = dyn.v1.addWrapDecoy("nav-logo", (
-    <SeedLink 
+    <SeedLink
       id={dyn.v3.getVariant("nav-logo", ID_VARIANTS_MAP, "nav-logo")}
-      href="/" 
+      href="/"
       className={cn("font-semibold text-emerald-700", dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, ""))}
     >
       AutoHealth
@@ -55,7 +55,7 @@ export default function Navbar() {
 
   const Cta = dyn.v1.addWrapDecoy("nav-cta", (
     <SeedLink href="/appointments">
-      <Button 
+      <Button
         id={dyn.v3.getVariant("nav-cta", ID_VARIANTS_MAP, "nav-cta")}
         className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
         size="sm"

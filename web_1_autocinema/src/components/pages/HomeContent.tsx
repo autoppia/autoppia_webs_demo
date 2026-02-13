@@ -159,7 +159,7 @@ export function HomeContent() {
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
       <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-      
+
       {/* Main Content */}
       <main className="relative mx-auto w-full max-w-7xl px-6 py-16 sm:px-8 lg:px-12">
         <div className="space-y-20">
@@ -169,7 +169,7 @@ export function HomeContent() {
               {/* Background effects */}
               <div className="absolute inset-0 bg-gradient-to-r from-secondary/10 via-transparent to-secondary/10 rounded-3xl blur-3xl" />
               <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/0 rounded-3xl" />
-              
+
               <div
                 id={dyn.v3.getVariant("home-main-container", ID_VARIANTS_MAP, "home-main-container")}
                 className={cn(
@@ -355,12 +355,12 @@ export function HomeContent() {
                     </h2>
                   </div>
                 ))}
-                
+
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {(() => {
                     // Get the first 3 movies
                     const moviesToShow = featuredMovies.slice(0, 3);
-                    
+
                     // Generate dynamic order using the generic function
                     // count = 3 (3 movies)
                     const order = dyn.v1.changeOrderElements("featured-movies", moviesToShow.length);
@@ -386,10 +386,10 @@ export function HomeContent() {
                         >
                           {/* Gradient overlay */}
                           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-                          
+
                           {/* Shine effect on hover */}
                           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                          
+
                           {/* Content overlay */}
                           <div className="absolute inset-0 flex flex-col justify-end p-6 lg:p-8">
                             {/* Badges */}
@@ -420,7 +420,7 @@ export function HomeContent() {
                                 ))}
                               </div>
                             ))}
-                            
+
                             {/* Title */}
                             <h3
                               id={dyn.v3.getVariant(displayIndex > 0 ? `featured-movie-title-${displayIndex}` : "featured-movie-title", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-movie-title-${displayIndex}` : "featured-movie-title")}
@@ -431,7 +431,7 @@ export function HomeContent() {
                             >
                               {movie.title}
                             </h3>
-                            
+
                             {/* Synopsis */}
                             <p
                               id={dyn.v3.getVariant(displayIndex > 0 ? `featured-movie-synopsis-${displayIndex}` : "featured-movie-synopsis", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-movie-synopsis-${displayIndex}` : "featured-movie-synopsis")}
@@ -442,7 +442,7 @@ export function HomeContent() {
                             >
                               {movie.synopsis}
                             </p>
-                            
+
                             {/* Meta info */}
                             <div
                               id={dyn.v3.getVariant(displayIndex > 0 ? `featured-movie-meta-${displayIndex}` : "featured-movie-meta", ID_VARIANTS_MAP, displayIndex > 0 ? `featured-movie-meta-${displayIndex}` : "featured-movie-meta")}
@@ -457,7 +457,7 @@ export function HomeContent() {
                               <span className="text-white/40">•</span>
                               <span className="truncate">{movie.director}</span>
                             </div>
-                            
+
                             {/* CTA Button */}
                             <SeedLink
                               href={`/movies/${movie.id}`}

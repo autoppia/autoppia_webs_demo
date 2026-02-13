@@ -47,7 +47,7 @@ async function loadDoctorsFromDataset(v2SeedValue?: number | null): Promise<Doct
 export async function initializeDoctors(v2SeedValue?: number | null): Promise<Doctor[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const aiGenerateEnabled = isDataGenerationAvailable();
-  
+
   // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
@@ -56,7 +56,7 @@ export async function initializeDoctors(v2SeedValue?: number | null): Promise<Do
     lastSeed = 1;
     return doctorsCache;
   }
-  
+
   // Clear cache if seed changed
   const currentSeed = v2SeedValue ?? null;
   if (lastSeed !== null && currentSeed !== null && lastSeed !== currentSeed) {

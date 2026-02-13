@@ -1,6 +1,6 @@
 /**
  * FLAGS - Enablement control for V1, V2, and V3
- * 
+ *
  * V1: DOM structure (wrappers, decoys) - Breaks XPath
  * V2: Data loading (DB mode) - Dynamic data
  * V3: Attributes and text (IDs, classes, texts) - Anti-memorization
@@ -14,14 +14,14 @@ export function isV1Enabled(): boolean {
   // In Next.js, NEXT_PUBLIC_* variables are available on both server and client
   const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1;
   const enabled = value === "true";
-  
+
   // Debug in development
   if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
     if (!enabled) {
       console.warn("[dynamic] V1 está deshabilitado. Para habilitarlo, configura NEXT_PUBLIC_ENABLE_DYNAMIC_V1=true");
     }
   }
-  
+
   return enabled;
 }
 
@@ -39,23 +39,6 @@ export function isV2Enabled(): boolean {
  */
 
 /**
- * Checks whether V2 fallback mode is active
- * Fallback mode uses original data when seed = 1
- */
-export function isV2FallbackMode(): boolean {
-  if (typeof window === "undefined") return false;
-  const params = new URLSearchParams(window.location.search);
-  const seedParam = params.get("seed");
-  if (seedParam) {
-    const parsed = Number.parseInt(seedParam, 10);
-    if (Number.isFinite(parsed) && parsed === 1) {
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
  * Checks whether V3 is enabled
  * V3 changes IDs, classes, and texts to prevent memorization
  */
@@ -63,13 +46,13 @@ export function isV3Enabled(): boolean {
   // In Next.js, NEXT_PUBLIC_* variables are available on both server and client
   const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3;
   const enabled = value === "true";
-  
+
   // Debug in development
   if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
     if (!enabled) {
       console.warn("[dynamic] V3 está deshabilitado. Para habilitarlo, configura NEXT_PUBLIC_ENABLE_DYNAMIC_V3=true");
     }
   }
-  
+
   return enabled;
 }

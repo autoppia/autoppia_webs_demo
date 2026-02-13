@@ -45,7 +45,7 @@ export default function LoginPage() {
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
       <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-      
+
       <main className="relative mx-auto w-full max-w-md px-6 py-12">
         <div className="space-y-8">
           {/* Header */}
@@ -105,8 +105,8 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 id={dyn.v3.getVariant("login-sign-in-button", ID_VARIANTS_MAP, "login-sign-in-button")}
                 className={cn("w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
                 disabled={isSubmitting}

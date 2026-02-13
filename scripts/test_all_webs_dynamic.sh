@@ -31,18 +31,18 @@ declare -a ERROR_WEBS=()
 test_web() {
     local web_dir="$1"
     local web_name=$(basename "$web_dir")
-    
+
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo -e "${BLUE}Probando: ${web_name}${NC}"
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    
+
     # Verificar si existe el directorio
     if [ ! -d "$web_dir" ]; then
         echo -e "${YELLOW}⚠️  Directorio no encontrado: ${web_dir}${NC}"
         MISSING_WEBS+=("$web_name (directorio no existe)")
         return 1
     fi
-    
+
     # Verificar si existe el test
     local test_file="${web_dir}/tests/test-dynamic-system.js"
     if [ ! -f "$test_file" ]; then
@@ -50,10 +50,10 @@ test_web() {
         MISSING_WEBS+=("$web_name (test no existe)")
         return 1
     fi
-    
+
     # Cambiar al directorio de la web
     cd "$web_dir"
-    
+
     # Verificar si tiene node_modules (necesario para ejecutar el test)
     if [ ! -d "node_modules" ]; then
         echo -e "${YELLOW}⚠️  node_modules no encontrado. Intentando instalar dependencias...${NC}"
@@ -68,7 +68,7 @@ test_web() {
             return 1
         fi
     fi
-    
+
     # Ejecutar el test
     echo ""
     if node tests/test-dynamic-system.js 2>&1; then
@@ -93,14 +93,14 @@ for web_dir in ${BASE_DIR}/web_*; do
     if [ ! -d "$web_dir" ]; then
         continue
     fi
-    
+
     web_name=$(basename "$web_dir")
-    
+
     # Verificar que es un directorio de web (empieza con web_ y tiene un número)
     if [[ ! "$web_name" =~ ^web_[0-9]+_ ]]; then
         continue
     fi
-    
+
     test_web "$web_dir" || true  # || true para que continúe aunque falle
     echo ""
 done

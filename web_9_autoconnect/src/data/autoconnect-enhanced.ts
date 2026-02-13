@@ -83,24 +83,24 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
   if (!dbModeEnabled) {
     return 1;
   }
-  
+
   if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
     return clampSeed(seedValue);
   }
-  
+
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed !== null) {
     // If base seed is 1, v2 should also be 1
     if (baseSeed === 1) {
       return 1;
     }
-    
+
     // For other seeds, resolveSeedsSync returns defaults (v2: 1)
     // But we need the actual resolved seed, so use base seed directly
     // The backend will resolve it properly, and v2 seed is typically same as base seed
     return clampSeed(baseSeed);
   }
-  
+
   return 1;
 };
 
@@ -110,16 +110,16 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
 async function loadUsersFromDb(seedValue?: number | null): Promise<User[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
+
   // If seed = 1, return empty to force fallback
   if (baseSeed === 1 || seedValue === 1) {
     console.log("[autoconnect] loadUsersFromDb: seed=1, returning empty to force fallback");
     return [];
   }
-  
+
   const effectiveSeed = resolveSeed(dbModeEnabled, seedValue);
   console.log("[autoconnect] loadUsersFromDb - effectiveSeed:", effectiveSeed);
-  
+
   try {
     const users = await fetchSeededSelection<User>({
       projectKey: "web_9_autoconnect",
@@ -127,7 +127,7 @@ async function loadUsersFromDb(seedValue?: number | null): Promise<User[]> {
       seedValue: effectiveSeed,
       limit: 50,
     });
-    
+
     console.log("[autoconnect] loadUsersFromDb returned:", users.length, "users");
     return users;
   } catch (error) {
@@ -142,16 +142,16 @@ async function loadUsersFromDb(seedValue?: number | null): Promise<User[]> {
 async function loadPostsFromDb(seedValue?: number | null): Promise<Post[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
+
   // If seed = 1, return empty to force fallback
   if (baseSeed === 1 || seedValue === 1) {
     console.log("[autoconnect] loadPostsFromDb: seed=1, returning empty to force fallback");
     return [];
   }
-  
+
   const effectiveSeed = resolveSeed(dbModeEnabled, seedValue);
   console.log("[autoconnect] loadPostsFromDb - effectiveSeed:", effectiveSeed);
-  
+
   try {
     const posts = await fetchSeededSelection<Post>({
       projectKey: "web_9_autoconnect",
@@ -159,7 +159,7 @@ async function loadPostsFromDb(seedValue?: number | null): Promise<Post[]> {
       seedValue: effectiveSeed,
       limit: 50,
     });
-    
+
     console.log("[autoconnect] loadPostsFromDb returned:", posts.length, "posts");
     return posts.map((p) => ({ ...p, comments: p.comments || [] }));
   } catch (error) {
@@ -174,16 +174,16 @@ async function loadPostsFromDb(seedValue?: number | null): Promise<Post[]> {
 async function loadJobsFromDb(seedValue?: number | null): Promise<Job[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
+
   // If seed = 1, return empty to force fallback
   if (baseSeed === 1 || seedValue === 1) {
     console.log("[autoconnect] loadJobsFromDb: seed=1, returning empty to force fallback");
     return [];
   }
-  
+
   const effectiveSeed = resolveSeed(dbModeEnabled, seedValue);
   console.log("[autoconnect] loadJobsFromDb - effectiveSeed:", effectiveSeed);
-  
+
   try {
     const jobs = await fetchSeededSelection<Job>({
       projectKey: "web_9_autoconnect",
@@ -191,7 +191,7 @@ async function loadJobsFromDb(seedValue?: number | null): Promise<Job[]> {
       seedValue: effectiveSeed,
       limit: 50,
     });
-    
+
     console.log("[autoconnect] loadJobsFromDb returned:", jobs.length, "jobs");
     return jobs;
   } catch (error) {
@@ -206,17 +206,17 @@ async function loadJobsFromDb(seedValue?: number | null): Promise<Job[]> {
 async function loadRecommendationsFromDb(seedValue?: number | null): Promise<Recommendation[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
+
   // If seed = 1, return empty to force fallback
   if (baseSeed === 1 || seedValue === 1) {
     console.log("[autoconnect] loadRecommendationsFromDb: seed=1, returning empty to force fallback");
     return [];
   }
-  
+
   const effectiveSeed = resolveSeed(dbModeEnabled, seedValue);
   console.log("[autoconnect] loadRecommendationsFromDb - effectiveSeed:", effectiveSeed, "baseSeed:", baseSeed);
   console.log("[autoconnect] loadRecommendationsFromDb - Calling fetchSeededSelection...");
-  
+
   try {
     const recommendations = await fetchSeededSelection<Recommendation>({
       projectKey: "web_9_autoconnect",
@@ -224,14 +224,14 @@ async function loadRecommendationsFromDb(seedValue?: number | null): Promise<Rec
       seedValue: effectiveSeed,
       limit: 50,
     });
-    
+
     console.log("[autoconnect] loadRecommendationsFromDb - fetchSeededSelection completed");
     console.log("[autoconnect] loadRecommendationsFromDb returned:", recommendations.length, "recommendations");
-    
+
     if (recommendations.length === 0) {
       console.log("[autoconnect] loadRecommendationsFromDb - WARNING: Empty array returned from server");
     }
-    
+
     return recommendations;
   } catch (error) {
     console.error("[autoconnect] loadRecommendationsFromDb error:", error);
@@ -256,7 +256,7 @@ export async function initializeUsers(v2SeedValue?: number | null): Promise<User
   if (dbModeEnabled) {
     console.log("[autoconnect] DB mode enabled, attempting to load from DB...");
     console.log("[autoconnect] baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue);
-    
+
     if (typeof window !== "undefined" && v2SeedValue == null) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
@@ -270,7 +270,7 @@ export async function initializeUsers(v2SeedValue?: number | null): Promise<User
         seedValue: effectiveSeed,
         limit: 50,
       });
-      
+
       const users = await fetchSeededSelection<User>({
         projectKey: "web_9_autoconnect",
         entityType: "users",
@@ -317,7 +317,7 @@ export async function initializePosts(v2SeedValue?: number | null): Promise<Post
   if (dbModeEnabled) {
     console.log("[autoconnect] DB mode enabled, attempting to load from DB...");
     console.log("[autoconnect] baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue);
-    
+
     if (typeof window !== "undefined" && v2SeedValue == null) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
@@ -365,7 +365,7 @@ export async function initializeJobs(v2SeedValue?: number | null): Promise<Job[]
   if (dbModeEnabled) {
     console.log("[autoconnect] DB mode enabled, attempting to load from DB...");
     console.log("[autoconnect] baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue);
-    
+
     if (typeof window !== "undefined" && v2SeedValue == null) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
@@ -413,7 +413,7 @@ export async function initializeRecommendations(v2SeedValue?: number | null): Pr
   if (dbModeEnabled) {
     console.log("[autoconnect] DB mode enabled, attempting to load from DB...");
     console.log("[autoconnect] baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue);
-    
+
     if (typeof window !== "undefined" && v2SeedValue == null) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }

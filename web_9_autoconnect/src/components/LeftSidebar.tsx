@@ -25,11 +25,11 @@ export default function LeftSidebar() {
       "mt-3 inline-flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:text-blue-500",
     ],
   };
-  
+
   // Get current user inside component to avoid undefined error
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [recentConnections, setRecentConnections] = useState<User[]>([]);
-  
+
   useEffect(() => {
     const users = dynamicDataProvider.getUsers();
     const user = users[2] || users[0];
@@ -71,7 +71,7 @@ export default function LeftSidebar() {
           <UserSearchBar />
         </div>
       )}
-      
+
       {dyn.v1.addWrapDecoy(
         "sidebar-profile",
         <div className="flex flex-col items-center gap-2 mb-4">
@@ -166,9 +166,9 @@ export default function LeftSidebar() {
             {recentConnections.length > 0 ? (
               recentConnections.map((connection) => (
                 <div key={connection.username} className="flex items-center gap-2 text-gray-600">
-                  <Avatar 
-                    src={connection.avatar} 
-                    alt={connection.name} 
+                  <Avatar
+                    src={connection.avatar}
+                    alt={connection.name}
                     size={24}
                     href={`/profile/${connection.username}`}
                   />

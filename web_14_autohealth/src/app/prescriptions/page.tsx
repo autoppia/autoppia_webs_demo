@@ -71,19 +71,19 @@ export default function PrescriptionsPage() {
   useEffect(() => {
     let mounted = true;
     let unsubscribe: (() => void) | null = null;
-    
+
     const loadPrescriptions = async () => {
       try {
         await whenReady();
         if (!mounted) return;
-        
+
         // Get initial data
         const prescriptions = getPrescriptions();
         if (mounted) {
           setPrescriptionList(prescriptions);
           setIsLoading(false);
         }
-        
+
         // Subscribe to updates
         unsubscribe = subscribePrescriptions((prescriptions) => {
           if (mounted) {
@@ -95,9 +95,9 @@ export default function PrescriptionsPage() {
         if (mounted) setIsLoading(false);
       }
     };
-    
+
     loadPrescriptions();
-    
+
     return () => {
       mounted = false;
       if (unsubscribe) unsubscribe();
@@ -317,10 +317,10 @@ export default function PrescriptionsPage() {
                   if (c.key === 'action') return (
                     <TableCell key={c.key} className="text-right">
                       {dyn.v1.addWrapDecoy(`view-prescription-button-${ri}`, (
-                        <Button 
+                        <Button
                           id={dyn.v3.getVariant("view-prescription-button", ID_VARIANTS_MAP, `view-prescription-button-${ri}`)}
                           className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
-                          onClick={() => handleViewPrescription(p)} 
+                          onClick={() => handleViewPrescription(p)}
                           size="sm"
                           data-testid="view-prescription-btn"
                         >
@@ -370,17 +370,17 @@ export default function PrescriptionsPage() {
                 </div>
               </div>
               {dyn.v1.addWrapDecoy("close-modal-button", (
-                <Button 
+                <Button
                   id={dyn.v3.getVariant("close-modal-button", ID_VARIANTS_MAP, "close-modal-button")}
                   className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
-                  variant="outline" 
+                  variant="outline"
                   onClick={() => setSelectedPrescription(null)}
                 >
                   {dyn.v3.getVariant("close", TEXT_VARIANTS_MAP, "Close")}
                 </Button>
               ))}
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {(() => {
                 const sections = [
@@ -389,7 +389,7 @@ export default function PrescriptionsPage() {
                 ];
                 const order = dyn.v1.changeOrderElements("prescription-modal-sections", sections.length);
                 return order.map((idx) => sections[idx]);
-              })().map((s, si) => 
+              })().map((s, si) =>
                 dyn.v1.addWrapDecoy(`prescription-modal-section-${si}`, (
                   <div key={s.key} className="space-y-4">
                     {s.key === 'details' && (
@@ -460,7 +460,7 @@ export default function PrescriptionsPage() {
 
             {/* Action Buttons */}
             <div className="mt-6">
-              <Button 
+              <Button
                 onClick={() => {
                   logEvent(EVENT_TYPES.REFILL_PRESCRIPTION, {
                     prescription: selectedPrescription,

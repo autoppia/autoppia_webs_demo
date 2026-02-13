@@ -112,7 +112,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const addAllowedBook = useCallback(
     (bookId: string) => {
       if (!currentUser) return;
-      
+
       // Check if book is already in the list
       if (currentUser.allowedBooks.includes(bookId)) {
         return;
@@ -123,7 +123,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         ...currentUser,
         allowedBooks: [...currentUser.allowedBooks, bookId],
       };
-      
+
       // Update state and localStorage
       setCurrentUser(updatedUser);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
@@ -137,7 +137,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const userIndex = customUsers.findIndex(
               (user) => user.username.toLowerCase() === currentUser.username.toLowerCase()
             );
-            
+
             if (userIndex !== -1) {
               const updatedCustomUsers = [...customUsers];
               updatedCustomUsers[userIndex] = {
@@ -158,7 +158,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const removeAllowedBook = useCallback(
     (bookId: string) => {
       if (!currentUser) return;
-      
+
       // Check if book is in the list
       if (!currentUser.allowedBooks.includes(bookId)) {
         return;
@@ -169,7 +169,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         ...currentUser,
         allowedBooks: currentUser.allowedBooks.filter((id) => id !== bookId),
       };
-      
+
       // Update state and localStorage
       setCurrentUser(updatedUser);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
@@ -183,7 +183,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const userIndex = customUsers.findIndex(
               (user) => user.username.toLowerCase() === currentUser.username.toLowerCase()
             );
-            
+
             if (userIndex !== -1) {
               const updatedCustomUsers = [...customUsers];
               updatedCustomUsers[userIndex] = {
@@ -204,9 +204,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const addToReadingList = useCallback(
     (bookId: string) => {
       if (!currentUser) return;
-      
+
       const readingList = currentUser.readingList || [];
-      
+
       // Check if book is already in the list
       if (readingList.includes(bookId)) {
         return;
@@ -217,7 +217,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         ...currentUser,
         readingList: [...readingList, bookId],
       };
-      
+
       // Update state and localStorage
       setCurrentUser(updatedUser);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
@@ -228,9 +228,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const removeFromReadingList = useCallback(
     (bookId: string) => {
       if (!currentUser) return;
-      
+
       const readingList = currentUser.readingList || [];
-      
+
       // Check if book is in the list
       if (!readingList.includes(bookId)) {
         return;
@@ -241,7 +241,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         ...currentUser,
         readingList: readingList.filter((id) => id !== bookId),
       };
-      
+
       // Update state and localStorage
       setCurrentUser(updatedUser);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));

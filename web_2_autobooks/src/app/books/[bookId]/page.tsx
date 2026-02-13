@@ -70,7 +70,7 @@ export default function BookDetailPage() {
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-        
+
         <main className="relative mx-auto max-w-4xl px-4 py-16 text-white">
           <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 text-center backdrop-blur-sm shadow-2xl">
             <h1 className="text-3xl font-semibold">Book not found</h1>
@@ -164,7 +164,7 @@ export default function BookDetailPage() {
       setTimeout(() => setReadingListMessage(null), 3000);
       return;
     }
-    
+
     const payload = buildBookDetailPayload(book);
     const isInReadingList = currentUser.readingList?.includes(book.id);
     if (isInReadingList) {
@@ -176,11 +176,11 @@ export default function BookDetailPage() {
       addToReadingList(book.id);
       setReadingListMessage(`"${book.title}" added to reading list`);
     }
-    
+
     // Auto-hide message after 3 seconds
     setTimeout(() => setReadingListMessage(null), 3000);
   };
-  
+
   const isInReadingList = currentUser?.readingList?.includes(book.id) ?? false;
 
   const handleAddToCart = () => {
@@ -237,7 +237,7 @@ export default function BookDetailPage() {
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-        
+
         {dyn.v1.addWrapDecoy("book-detail-content", (
           <main className="relative mx-auto max-w-6xl space-y-8 px-4 py-10 text-white">
             {message && (

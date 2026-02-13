@@ -108,7 +108,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
             dyn.v1.addWrapDecoy(`profile-header-${p.key}`, (
               <div key={p.key} className={p.key === "avatar" ? "flex-shrink-0" : "flex-1"}>
                 {p.key === "avatar" && (
-                  <Avatar 
+                  <Avatar
                     src={`/images/doctors/${doctor.id}.jpg`}
                     alt={`${doctor.name} profile photo`}
                     name={doctor.name}
@@ -381,7 +381,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
             return dyn.v1.addWrapDecoy(`profile-action-${i}`, (
               <div key={key}>
                 {dyn.v1.addWrapDecoy("contact-doctor-button", (
-                  <Button 
+                  <Button
                     id={dyn.v3.getVariant("contact-doctor-button", ID_VARIANTS_MAP, "contact-doctor-button")}
                     className={cn("flex-1 bg-green-600 hover:bg-green-700 text-white", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
                     data-testid="open-contact-doctor-form-btn"
@@ -396,10 +396,10 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
           return dyn.v1.addWrapDecoy(`profile-action-${i}`, (
             <div key={key}>
               {dyn.v1.addWrapDecoy("view-reviews-button", (
-                <Button 
+                <Button
                   id={dyn.v3.getVariant("view-reviews-button", ID_VARIANTS_MAP, "view-reviews-button")}
                   className={cn("flex-1", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
-                  variant="outline" 
+                  variant="outline"
                   onClick={handleViewReviews}
                 >
                   {dyn.v3.getVariant("view_reviews", TEXT_VARIANTS_MAP, "View All Reviews")}
@@ -416,7 +416,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
         onOpenChange={setIsContactModalOpen}
         doctor={doctor}
       />
-      
+
       <DoctorReviewsModal
         open={isReviewsModalOpen}
         onOpenChange={setIsReviewsModalOpen}

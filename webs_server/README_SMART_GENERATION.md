@@ -169,12 +169,12 @@ webs_server/
 
 ## 🎯 Ventajas
 
-✅ **Centralizado**: Un solo endpoint para todo  
-✅ **Automático**: Lee estructura de ejemplos  
-✅ **Inteligente**: Metadata predefinida por proyecto  
-✅ **Flexible**: Agrega requirements adicionales  
-✅ **Reproducible**: Usa seeds opcionales  
-✅ **Extensible**: Agrega nuevos proyectos fácilmente  
+✅ **Centralizado**: Un solo endpoint para todo
+✅ **Automático**: Lee estructura de ejemplos
+✅ **Inteligente**: Metadata predefinida por proyecto
+✅ **Flexible**: Agrega requirements adicionales
+✅ **Reproducible**: Usa seeds opcionales
+✅ **Extensible**: Agrega nuevos proyectos fácilmente
 
 ## 🔧 Troubleshooting
 
@@ -192,4 +192,3 @@ webs_server/
 - Puede ocurrir ocasionalmente con OpenAI
 - Reintenta la petición
 - Ajusta `additional_requirements` para ser más específico
-

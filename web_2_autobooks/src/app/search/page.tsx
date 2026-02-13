@@ -214,7 +214,7 @@ function SearchContent() {
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-        
+
         {dyn.v1.addWrapDecoy("search-content", (
           <main className="relative mx-auto w-full max-w-7xl px-6 py-16 sm:px-8 lg:px-12" id={dyn.v3.getVariant("search-content", ID_VARIANTS_MAP, "search-content")}>
         <div className="mb-8">
@@ -249,7 +249,7 @@ function SearchContent() {
                 </div>
               ), "search-input-container-wrap")}
               {dyn.v1.addWrapDecoy("search-button", (
-                <Button 
+                <Button
                   type="submit"
                   id={dyn.v3.getVariant("search-button", ID_VARIANTS_MAP, "search-button")}
                   className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "h-14 px-8 bg-secondary text-black hover:bg-secondary/90 shadow-lg shadow-secondary/20 font-semibold text-base")}

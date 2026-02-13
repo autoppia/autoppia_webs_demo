@@ -1,6 +1,6 @@
 /**
  * Enhanced Restaurants Data with AI Generation Support
- * 
+ *
  * This file provides both static and dynamic restaurant data generation
  * for the Food Delivery application.
  */
@@ -16,7 +16,7 @@ function normalizeRestaurantImages(restaurants: Restaurant[]): Restaurant[] {
     console.warn('normalizeRestaurantImages: restaurants is not an array:', restaurants);
     return [];
   }
-  
+
   return restaurants.map((restaurant) => {
     if (!restaurant || typeof restaurant !== 'object') {
       console.warn('normalizeRestaurantImages: invalid restaurant object:', restaurant);
@@ -25,7 +25,7 @@ function normalizeRestaurantImages(restaurants: Restaurant[]): Restaurant[] {
 
     // Safely get restaurant image - ensure it's a string
     let image: string = typeof restaurant.image === 'string' ? restaurant.image : String(restaurant.image || '');
-    
+
     // Ensure restaurant image is valid
     if (!image || (!image.startsWith("/images/") && !image.includes("unsplash.com"))) {
       // Default fallback image based on cuisine - safely get cuisine as string
@@ -41,7 +41,7 @@ function normalizeRestaurantImages(restaurants: Restaurant[]): Restaurant[] {
     }
 
     // Safely handle menu items
-    const normalizedMenu = Array.isArray(restaurant.menu) 
+    const normalizedMenu = Array.isArray(restaurant.menu)
       ? restaurant.menu.map((item) => {
           if (!item || typeof item !== 'object') {
             console.warn('normalizeRestaurantImages: invalid menu item:', item);
@@ -132,7 +132,7 @@ export async function initializeRestaurants(seedOverride?: number | null): Promi
         method: "distribute",
         filterKey: "cuisine",
       });
-      
+
       const restaurants = await fetchSeededSelection<Restaurant>({
         projectKey: "web_7_autodelivery",
         entityType: "restaurants",
@@ -174,19 +174,19 @@ export async function loadRestaurantsFromDb(seedOverride?: number | null): Promi
     console.log("[autodelivery] loadRestaurantsFromDb: DB mode not enabled, returning empty array");
     return [];
   }
-  
+
   // Check base seed from URL - if seed = 1, return empty array to trigger fallback
   const baseSeed = getBaseSeedFromUrl();
   const seed = (typeof seedOverride === "number" && seedOverride > 0) ? seedOverride : baseSeed;
-  
+
   console.log("[autodelivery] loadRestaurantsFromDb - baseSeed:", baseSeed, "seedOverride:", seedOverride, "final seed:", seed);
-  
+
   // If seed = 1, return empty array so initializeRestaurants will use fallback data
   if (baseSeed === 1 || seed === 1) {
     console.log("[autodelivery] loadRestaurantsFromDb: seed is 1, returning empty array to use fallback data");
     return [];
   }
-  
+
   try {
     const limit = 50; // Fixed limit of 50 items
     console.log("[autodelivery] loadRestaurantsFromDb: Fetching from server with seed:", seed, "limit:", limit);
@@ -219,7 +219,7 @@ export async function loadRestaurantsFromDb(seedOverride?: number | null): Promi
       console.error("[autodelivery] Error stack:", e.stack);
     }
   }
-  
+
   console.log("[autodelivery] loadRestaurantsFromDb: Returning empty array");
   return [];
 }

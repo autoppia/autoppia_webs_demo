@@ -82,13 +82,13 @@ export class DynamicDataProvider {
       console.log(`[autobooks] Seed changed from ${this.currentSeed} to ${newSeed}, reloading books...`);
       this.currentSeed = newSeed;
       this.ready = false;
-      
+
       // If already loading, wait for it
       if (this.loadingPromise) {
         await this.loadingPromise;
         return;
       }
-      
+
       // Start new load
       this.loadingPromise = (async () => {
         try {
@@ -101,7 +101,7 @@ export class DynamicDataProvider {
           this.loadingPromise = null;
         }
       })();
-      
+
       await this.loadingPromise;
     }
   }
@@ -116,23 +116,23 @@ export class DynamicDataProvider {
 
   public async reload(seedValue?: number | null): Promise<void> {
     if (typeof window === "undefined") return;
-    
+
     const targetSeed = clampBaseSeed(seedValue ?? this.getBaseSeed());
-    
+
     if (targetSeed === this.currentSeed && this.ready) {
       return; // Already loaded with this seed
     }
-    
+
     console.log(`[autobooks] Reloading books for base seed=${targetSeed}...`);
     this.currentSeed = targetSeed;
     this.ready = false;
-    
+
     // If already loading, wait for it
     if (this.loadingPromise) {
       await this.loadingPromise;
       return;
     }
-    
+
     // Start new load with the current base seed
     this.loadingPromise = (async () => {
       try {
@@ -146,7 +146,7 @@ export class DynamicDataProvider {
         this.loadingPromise = null;
       }
     })();
-    
+
     await this.loadingPromise;
   }
 

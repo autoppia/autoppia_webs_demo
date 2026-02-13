@@ -23,11 +23,11 @@ import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
 const HOME_CATEGORIES = ["Kitchen", "Electronics", "Technology", "Home", "Fitness"] as const;
 
 function HomeContent() {
-  const { resolvedSeeds } = useSeed();
+  const { seed } = useSeed();
   const dyn = useDynamicSystem();
   const router = useSeedRouter();
-  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base ?? 1;
-  const seed = getEffectiveSeed(v2Seed);
+  const v2Seed = seed;
+  const effectiveSeed = getEffectiveSeed(v2Seed);
 
   // Debug: Verify V1, V2, and V3 are working
   useEffect(() => {
@@ -36,9 +36,6 @@ function HomeContent() {
         seed: dyn.seed,
         v1Enabled: isV1Enabled(),
         v2Enabled: dyn.v2.isEnabled(),
-        v2DbMode: dyn.v2.isDbModeEnabled(),
-        v2AiGenerate: dyn.v2.isEnabled(),
-        v2Fallback: dyn.v2.isFallbackMode(),
         v3Enabled: isV3Enabled(),
       });
     }
@@ -201,7 +198,7 @@ function HomeContent() {
   }, []);
 
   return (
-    <main 
+    <main
       id={dyn.v3.getVariant("home-main", ID_VARIANTS_MAP, "home-main")}
       className={dyn.v3.getVariant("main-container", CLASS_VARIANTS_MAP, "min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 overflow-x-hidden")}
     >
@@ -211,7 +208,7 @@ function HomeContent() {
         <div className="relative z-10 pb-16">
           {/* Hero Section */}
           {dyn.v1.addWrapDecoy("home-hero-section", (
-            <section 
+            <section
               id={dyn.v3.getVariant("hero-section", ID_VARIANTS_MAP, "hero-section")}
               className={dyn.v3.getVariant("hero-section", CLASS_VARIANTS_MAP, "omnizon-container grid gap-10 pb-12 pt-28 lg:grid-cols-[1.1fr,0.9fr]")}
             >
@@ -244,7 +241,7 @@ function HomeContent() {
                       </span>
                     ))}
                   </div>
-                  
+
                   {/* Popular Categories */}
                   {dyn.v1.addWrapDecoy("home-categories-section", (
                     <div className="pt-4 space-y-3">
@@ -286,8 +283,8 @@ function HomeContent() {
           {/* Wishlist Section */}
           {wishlistItems && wishlistItems.length > 0 && (
             dyn.v1.addWrapDecoy("home-wishlist-section", (
-              <section 
-                id={dyn.v3.getVariant("wishlist-section", ID_VARIANTS_MAP, "wishlist")} 
+              <section
+                id={dyn.v3.getVariant("wishlist-section", ID_VARIANTS_MAP, "wishlist")}
                 className={dyn.v3.getVariant("section-container", CLASS_VARIANTS_MAP, "omnizon-container mt-8 space-y-6")}
               >
                 <SectionHeading
@@ -395,7 +392,7 @@ function HomeContent() {
                     key={config.title}
                     title={config.title}
                     products={config.products}
-                    seed={seed + index}
+                    seed={effectiveSeed + index}
                   />
                 ))}
               </div>

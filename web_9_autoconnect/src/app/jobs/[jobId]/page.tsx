@@ -8,4 +8,4 @@ export default function JobDetailPage({
 }) {
   const { jobId } = use(params);
   return <JobDetailClient jobId={jobId} />;
-} 
+}

@@ -6,7 +6,7 @@ import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
 
 export function DynamicDebug() {
   const dyn = useDynamicSystem();
-  
+
   useEffect(() => {
     // Small delay to ensure DOM is ready
     const timeoutId = setTimeout(() => {
@@ -23,7 +23,7 @@ export function DynamicDebug() {
       const nextData = typeof window !== "undefined" ? (window as Window & { __NEXT_DATA__?: NextData }).__NEXT_DATA__ : undefined;
       console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V1:", nextData?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ?? "SSR");
       console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V3:", nextData?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 ?? "SSR");
-      
+
       // Check elements in the DOM
       const v1Elements = document.querySelectorAll('[data-v1="true"]');
       console.log("V1 elements found:", v1Elements.length);
@@ -37,7 +37,7 @@ export function DynamicDebug() {
           variant: firstElement.getAttribute('data-wrapper-variant') || firstElement.getAttribute('data-decoy-variant'),
         });
       }
-      
+
       // Look for restaurant cards
       const restaurantCards = document.querySelectorAll('[id*="restaurant"], [id*="food-card"], [id*="resto"]');
       console.log("Restaurant cards found (by ID pattern):", restaurantCards.length);
@@ -49,14 +49,14 @@ export function DynamicDebug() {
         console.log("  Classes:", firstCard.className);
         console.log("  Parent wrapper:", firstCard.closest('[data-dyn-wrap]')?.getAttribute('data-dyn-wrap'));
       }
-      
+
       // Search for cards in grids
       const grids = document.querySelectorAll('.grid, [class*="grid"]');
       if (grids.length > 0) {
         console.log("Grids found:", grids.length);
         grids.forEach((grid, gridIdx) => {
-          const cards = Array.from(grid.children).filter(child => 
-            child.querySelector('[id*="restaurant"], [id*="food"], [id*="resto"]') || 
+          const cards = Array.from(grid.children).filter(child =>
+            child.querySelector('[id*="restaurant"], [id*="food"], [id*="resto"]') ||
             child.getAttribute('id')?.includes('restaurant') ||
             child.getAttribute('id')?.includes('food')
           );
@@ -74,7 +74,7 @@ export function DynamicDebug() {
           }
         });
       }
-      
+
       // Check navbar elements
       const navbar = document.querySelector('nav');
       if (navbar) {
@@ -86,7 +86,7 @@ export function DynamicDebug() {
           console.log("  Has V1 wrapper:", navButton.closest('[data-v1="true"]') !== null);
         }
       }
-      
+
       // Check dynamic IDs (find any ID that matches our variant patterns)
       const allElementsWithIds = Array.from(document.querySelectorAll('[id]'));
       const dynamicIds = allElementsWithIds
@@ -94,8 +94,8 @@ export function DynamicDebug() {
           const id = el.id;
           // Look for IDs that match our variant patterns
           return (
-            id.includes('restaurant') || 
-            id.includes('food') || 
+            id.includes('restaurant') ||
+            id.includes('food') ||
             id.includes('resto') ||
             id.includes('order') ||
             id.includes('cart') ||
@@ -103,21 +103,21 @@ export function DynamicDebug() {
           ) && id !== el.tagName.toLowerCase();
         })
         .slice(0, 15)
-        .map(el => ({ 
-          id: el.id, 
+        .map(el => ({
+          id: el.id,
           tag: el.tagName,
           hasV1Wrapper: el.closest('[data-v1="true"]') !== null,
         }));
       console.log("Dynamic IDs found (first 15):", dynamicIds);
-      
+
       // Check dynamic text in buttons and links
       const buttons = Array.from(document.querySelectorAll('button, a[href*="restaurant"]'));
       const textVariants = buttons
         .filter(btn => {
           const text = btn.textContent?.trim() || '';
           return text.length > 0 && (
-            text.includes('Order') || 
-            text.includes('Cart') || 
+            text.includes('Order') ||
+            text.includes('Cart') ||
             text.includes('Menu') ||
             text.includes('Restaurant') ||
             text.includes('Quick')
@@ -130,7 +130,7 @@ export function DynamicDebug() {
           tag: btn.tagName,
         }));
       console.log("Text variants found (first 5):", textVariants);
-      
+
       // Summary
       console.log("--- Summary ---");
       console.log(`V1 Wrappers: ${v1Elements.length}`);
@@ -138,10 +138,9 @@ export function DynamicDebug() {
       console.log(`Dynamic IDs: ${dynamicIds.length}`);
       console.log("========================");
     }, 500);
-    
+
     return () => clearTimeout(timeoutId);
   }, [dyn.seed]);
-  
+
   return null;
 }
-

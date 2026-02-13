@@ -117,22 +117,22 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
   if (!dbModeEnabled) {
     return 1;
   }
-  
+
   if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
     return clampSeed(seedValue);
   }
-  
+
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed !== null) {
     // If base seed is 1, v2 should also be 1
     if (baseSeed === 1) {
       return 1;
     }
-    
+
     // For other seeds, use base seed directly (v2 seed = base seed)
     return clampSeed(baseSeed);
   }
-  
+
   return 1;
 };
 
@@ -142,16 +142,16 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
 async function loadJobsFromDb(seedValue?: number | null): Promise<AutoworkJob[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
+
   // If seed = 1, return empty to force fallback
   if (baseSeed === 1 || seedValue === 1) {
     console.log("[autowork] loadJobsFromDb: seed=1, returning empty to force fallback");
     return [];
   }
-  
+
   const effectiveSeed = resolveSeed(dbModeEnabled, seedValue);
   console.log("[autowork] loadJobsFromDb - effectiveSeed:", effectiveSeed);
-  
+
   try {
     const jobs = await fetchSeededSelection<AutoworkJob>({
       projectKey: "web_10_autowork",
@@ -159,7 +159,7 @@ async function loadJobsFromDb(seedValue?: number | null): Promise<AutoworkJob[]>
       seedValue: effectiveSeed,
       limit: 50,
     });
-    
+
     console.log("[autowork] loadJobsFromDb returned:", jobs.length, "jobs");
     return jobs;
   } catch (error) {
@@ -174,16 +174,16 @@ async function loadJobsFromDb(seedValue?: number | null): Promise<AutoworkJob[]>
 async function loadHiresFromDb(seedValue?: number | null): Promise<AutoworkHire[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
+
   // If seed = 1, return empty to force fallback
   if (baseSeed === 1 || seedValue === 1) {
     console.log("[autowork] loadHiresFromDb: seed=1, returning empty to force fallback");
     return [];
   }
-  
+
   const effectiveSeed = resolveSeed(dbModeEnabled, seedValue);
   console.log("[autowork] loadHiresFromDb - effectiveSeed:", effectiveSeed);
-  
+
   try {
     const hires = await fetchSeededSelection<AutoworkHire>({
       projectKey: "web_10_autowork",
@@ -191,7 +191,7 @@ async function loadHiresFromDb(seedValue?: number | null): Promise<AutoworkHire[
       seedValue: effectiveSeed,
       limit: 50,
     });
-    
+
     console.log("[autowork] loadHiresFromDb returned:", hires.length, "hires");
     return hires;
   } catch (error) {
@@ -206,16 +206,16 @@ async function loadHiresFromDb(seedValue?: number | null): Promise<AutoworkHire[
 async function loadExpertsFromDb(seedValue?: number | null): Promise<AutoworkExpert[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
+
   // If seed = 1, return empty to force fallback
   if (baseSeed === 1 || seedValue === 1) {
     console.log("[autowork] loadExpertsFromDb: seed=1, returning empty to force fallback");
     return [];
   }
-  
+
   const effectiveSeed = resolveSeed(dbModeEnabled, seedValue);
   console.log("[autowork] loadExpertsFromDb - effectiveSeed:", effectiveSeed);
-  
+
   try {
     const experts = await fetchSeededSelection<AutoworkExpert>({
       projectKey: "web_10_autowork",
@@ -223,7 +223,7 @@ async function loadExpertsFromDb(seedValue?: number | null): Promise<AutoworkExp
       seedValue: effectiveSeed,
       limit: 50,
     });
-    
+
     console.log("[autowork] loadExpertsFromDb returned:", experts.length, "experts");
     return experts;
   } catch (error) {
@@ -238,16 +238,16 @@ async function loadExpertsFromDb(seedValue?: number | null): Promise<AutoworkExp
 async function loadSkillsFromDb(seedValue?: number | null): Promise<string[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
+
   // If seed = 1, return empty to force fallback
   if (baseSeed === 1 || seedValue === 1) {
     console.log("[autowork] loadSkillsFromDb: seed=1, returning empty to force fallback");
     return [];
   }
-  
+
   const effectiveSeed = resolveSeed(dbModeEnabled, seedValue);
   console.log("[autowork] loadSkillsFromDb - effectiveSeed:", effectiveSeed);
-  
+
   try {
     const skills = await fetchSeededSelection<string>({
       projectKey: "web_10_autowork",
@@ -256,7 +256,7 @@ async function loadSkillsFromDb(seedValue?: number | null): Promise<string[]> {
       limit: 50,
       method: "select",
     });
-    
+
     console.log("[autowork] loadSkillsFromDb returned:", skills.length, "skills");
     return skills;
   } catch (error) {
@@ -271,15 +271,15 @@ async function loadSkillsFromDb(seedValue?: number | null): Promise<string[]> {
 export async function initializeJobs(v2SeedValue?: number | null): Promise<AutoworkJob[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
+
   console.log("[autowork] initializeJobs - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled);
-  
+
   // Special case: if baseSeed = 1, ALWAYS use fallback data directly (skip API calls)
   if (baseSeed === 1) {
     console.log("[autowork] initializeJobs: baseSeed=1, using fallback data (skipping API calls)");
     return fallbackJobs;
   }
-  
+
   // Try DB mode first if enabled
   if (dbModeEnabled) {
     const dbJobs = await loadJobsFromDb(v2SeedValue);
@@ -288,7 +288,7 @@ export async function initializeJobs(v2SeedValue?: number | null): Promise<Autow
       return dbJobs;
     }
   }
-  
+
   // Fallback to original data
   console.log("[autowork] initializeJobs: Using fallback data (", fallbackJobs.length, "jobs)");
   return fallbackJobs;
@@ -300,15 +300,15 @@ export async function initializeJobs(v2SeedValue?: number | null): Promise<Autow
 export async function initializeHires(v2SeedValue?: number | null): Promise<AutoworkHire[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
+
   console.log("[autowork] initializeHires - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled);
-  
+
   // Special case: if baseSeed = 1, ALWAYS use fallback data directly (skip API calls)
   if (baseSeed === 1) {
     console.log("[autowork] initializeHires: baseSeed=1, using fallback data (skipping API calls)");
     return fallbackHires;
   }
-  
+
   // Try DB mode first if enabled
   if (dbModeEnabled) {
     const dbHires = await loadHiresFromDb(v2SeedValue);
@@ -317,7 +317,7 @@ export async function initializeHires(v2SeedValue?: number | null): Promise<Auto
       return dbHires;
     }
   }
-  
+
   // Fallback to original data
   console.log("[autowork] initializeHires: Using fallback data (", fallbackHires.length, "hires)");
   return fallbackHires;
@@ -329,15 +329,15 @@ export async function initializeHires(v2SeedValue?: number | null): Promise<Auto
 export async function initializeExperts(v2SeedValue?: number | null): Promise<AutoworkExpert[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
+
   console.log("[autowork] initializeExperts - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled);
-  
+
   // Special case: if baseSeed = 1, ALWAYS use fallback data directly (skip API calls)
   if (baseSeed === 1) {
     console.log("[autowork] initializeExperts: baseSeed=1, using fallback data (skipping API calls)");
     return fallbackExperts;
   }
-  
+
   // Try DB mode first if enabled
   if (dbModeEnabled) {
     const dbExperts = await loadExpertsFromDb(v2SeedValue);
@@ -346,7 +346,7 @@ export async function initializeExperts(v2SeedValue?: number | null): Promise<Au
       return dbExperts;
     }
   }
-  
+
   // Fallback to original data
   console.log("[autowork] initializeExperts: Using fallback data (", fallbackExperts.length, "experts)");
   return fallbackExperts;
@@ -358,15 +358,15 @@ export async function initializeExperts(v2SeedValue?: number | null): Promise<Au
 export async function initializeSkills(v2SeedValue?: number | null): Promise<string[]> {
   const baseSeed = getBaseSeedFromUrl();
   const dbModeEnabled = isDbLoadModeEnabled();
-  
+
   console.log("[autowork] initializeSkills - baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue, "dbModeEnabled:", dbModeEnabled);
-  
+
   // Special case: if baseSeed = 1, ALWAYS use fallback data directly (skip API calls)
   if (baseSeed === 1) {
     console.log("[autowork] initializeSkills: baseSeed=1, using fallback data (skipping API calls)");
     return fallbackSkills;
   }
-  
+
   // Try DB mode first if enabled
   if (dbModeEnabled) {
     const dbSkills = await loadSkillsFromDb(v2SeedValue);
@@ -375,7 +375,7 @@ export async function initializeSkills(v2SeedValue?: number | null): Promise<str
       return dbSkills;
     }
   }
-  
+
   // Fallback to original data
   console.log("[autowork] initializeSkills: Using fallback data (", fallbackSkills.length, "skills)");
   return fallbackSkills;

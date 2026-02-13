@@ -16,7 +16,7 @@ export function DataReadyGate({ children, fallback }: DataReadyGateProps) {
 
   useEffect(() => {
     let mounted = true;
-    
+
     const checkDataReady = async () => {
       try {
         await dynamicDataProvider.whenReady();
@@ -32,7 +32,7 @@ export function DataReadyGate({ children, fallback }: DataReadyGateProps) {
     };
 
     checkDataReady();
-    
+
     // Subscribe to data updates
     const unsubscribeUsers = dynamicDataProvider.subscribeUsers(() => {
       if (!mounted) return;
@@ -41,7 +41,7 @@ export function DataReadyGate({ children, fallback }: DataReadyGateProps) {
         setIsLoading(false);
       }
     });
-    
+
     const unsubscribePosts = dynamicDataProvider.subscribePosts(() => {
       if (!mounted) return;
       if (dynamicDataProvider.isReady()) {
@@ -49,7 +49,7 @@ export function DataReadyGate({ children, fallback }: DataReadyGateProps) {
         setIsLoading(false);
       }
     });
-    
+
     // Listen for seed changes
     const handleSeedChange = () => {
       if (!mounted) return;
@@ -57,11 +57,11 @@ export function DataReadyGate({ children, fallback }: DataReadyGateProps) {
       setIsReady(false);
       checkDataReady();
     };
-    
+
     if (typeof window !== "undefined") {
       window.addEventListener("autoconnect:v2SeedChange", handleSeedChange);
     }
-    
+
     return () => {
       mounted = false;
       unsubscribeUsers();

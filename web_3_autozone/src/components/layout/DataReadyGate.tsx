@@ -37,7 +37,7 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
   // Reload data when seed changes
   useEffect(() => {
     if (!mounted) return;
-    
+
     const reloadData = async () => {
       setReady(false);
       try {
@@ -48,7 +48,7 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
         setReady(true);
       }
     };
-    
+
     reloadData();
   }, [seed, mounted]);
 

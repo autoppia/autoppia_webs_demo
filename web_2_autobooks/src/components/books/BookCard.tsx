@@ -11,11 +11,11 @@ interface BookCardProps {
 
 export function BookCard({ book, onSelect }: BookCardProps) {
   const dyn = useDynamicSystem();
-  
+
   return (
     <>
       {dyn.v1.addWrapDecoy("book-card", (
-        <div 
+        <div
           id={dyn.v3.getVariant("book-card", ID_VARIANTS_MAP, "book-card")}
           className={cn(
             "group flex h-full flex-col rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-6 text-white shadow-xl backdrop-blur-sm transition-all duration-300 hover:border-secondary/50 hover:bg-white/15 hover:shadow-2xl hover:shadow-secondary/20 hover:-translate-y-2",
@@ -62,4 +62,3 @@ export function BookCard({ book, onSelect }: BookCardProps) {
     </>
   );
 }
-

@@ -145,10 +145,10 @@ export function DoctorReviewsModal({ open, onOpenChange, doctor }: DoctorReviews
                     <div key={rating} className="flex items-center gap-2 mb-1">
                       <span className="text-sm w-8">{rating}★</span>
                       <div className="flex-1 bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-yellow-400 h-2 rounded-full" 
-                          style={{ 
-                            width: `${allReviews.length > 0 ? (ratingStats[rating as keyof typeof ratingStats] / allReviews.length) * 100 : 0}%` 
+                        <div
+                          className="bg-yellow-400 h-2 rounded-full"
+                          style={{
+                            width: `${allReviews.length > 0 ? (ratingStats[rating as keyof typeof ratingStats] / allReviews.length) * 100 : 0}%`
                           }}
                         />
                       </div>
@@ -244,9 +244,9 @@ export function DoctorReviewsModal({ open, onOpenChange, doctor }: DoctorReviews
 
         <DialogFooter>
           {dyn.v1.addWrapDecoy("close-reviews-button", (
-            <Button 
+            <Button
               className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
-              variant="outline" 
+              variant="outline"
               onClick={handleClose}
             >
               {dyn.v3.getVariant("close", TEXT_VARIANTS_MAP, "Close")}

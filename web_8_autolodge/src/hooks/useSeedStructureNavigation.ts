@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import { useSeed } from "@/context/SeedContext";
 
 export function useSeedStructureNavigation() {
-  const { resolvedSeeds } = useSeed();
-  const v3Seed = resolvedSeeds.v3 ?? resolvedSeeds.base ?? 1;
+  const { seed } = useSeed();
+  const v3Seed = seed;
   const router = useRouter();
 
   const navigateWithSeedStructure = (href: string) => {

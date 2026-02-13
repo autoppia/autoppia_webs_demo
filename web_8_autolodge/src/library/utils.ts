@@ -45,8 +45,7 @@ export function getSeedLayout(_seed?: number, pageType: 'stay' | 'confirm' = 'st
 
 // Hook to get current seed and static layout
 export function useSeedLayout(pageType: 'stay' | 'confirm' = 'stay') {
-  const { resolvedSeeds } = useSeed();
-  const seed = resolvedSeeds.base ?? 1;
+  const { seed } = useSeed();
 
   // Dynamic flag remains for compatibility but layout is static
   const isDynamicEnabled = useMemo(() => false, []);

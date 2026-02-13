@@ -13,7 +13,7 @@ import { useSeed } from "@/context/SeedContext";
  */
 export function useSeedLayout() {
   const dyn = useDynamicSystem();
-  const { resolvedSeeds } = useSeed();
+  const { seed: contextSeed } = useSeed();
 
   const getText = useCallback(
     (key: string, fallback?: string) =>
@@ -54,7 +54,7 @@ export function useSeedLayout() {
 
   return {
     seed: dyn.seed,
-    v2Seed: resolvedSeeds.v2 ?? dyn.seed,
+    v2Seed: contextSeed ?? dyn.seed,
     isDynamicEnabled: isV1Enabled() || isV3Enabled(),
     layout,
     getText,

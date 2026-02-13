@@ -69,4 +69,3 @@ export async function generateDoctorReviews(
   const req = `Generate diverse, natural patient reviews for ${doctor.name}${doctor.specialty ? ` (${doctor.specialty})` : ''}. Mix ratings (3-5), realistic dates (last 12 months), short names (first name + initial).`;
   return await generateProjectData('web_14_autohealth', count, 'doctor_reviews', REVIEW_IFACE, examples, req);
 }
-

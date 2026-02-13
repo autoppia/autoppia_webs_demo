@@ -83,12 +83,12 @@ export function NewEventModal({
             <label htmlFor={labelInputId} className="text-sm font-medium text-zinc-700">
               {dyn.v3.getVariant("event_label_label", undefined, "Event label")}
             </label>
-            <input 
+            <input
               id={labelInputId}
-              value={label} 
-              onChange={(e) => setLabel(e.target.value)} 
-              placeholder={dyn.v3.getVariant("event_label_placeholder", undefined, "Event label")} 
-              required 
+              value={label}
+              onChange={(e) => setLabel(e.target.value)}
+              placeholder={dyn.v3.getVariant("event_label_placeholder", undefined, "Event label")}
+              required
               className={dyn.v3.getVariant(
                 "input",
                 CLASS_VARIANTS_MAP,
@@ -100,11 +100,11 @@ export function NewEventModal({
             <label htmlFor={timeInputId} className="text-sm font-medium text-zinc-700">
               {dyn.v3.getVariant("event_time_label", undefined, "Time")}
             </label>
-            <input 
+            <input
               id={timeInputId}
-              type="time" 
-              value={time} 
-              onChange={(e) => setTime(e.target.value)} 
+              type="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
               className={dyn.v3.getVariant(
                 "input",
                 CLASS_VARIANTS_MAP,
@@ -116,10 +116,10 @@ export function NewEventModal({
             <label htmlFor={colorSelectId} className="text-sm font-medium text-zinc-700">
               {dyn.v3.getVariant("event_color_label", undefined, "Category")}
             </label>
-            <select 
+            <select
               id={colorSelectId}
-              value={color} 
-              onChange={(e) => setColor(e.target.value)} 
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
               className={dyn.v3.getVariant(
                 "input",
                 CLASS_VARIANTS_MAP,

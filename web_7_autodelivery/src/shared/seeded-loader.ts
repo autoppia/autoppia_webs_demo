@@ -59,21 +59,21 @@ export async function fetchSeededSelection<T = unknown>(options: SeededLoadOptio
   const url = `${baseUrl}/datasets/load?${params.toString()}`;
   console.log("[autodelivery/seeded-loader] Fetching from:", url);
   console.log("[autodelivery/seeded-loader] Options:", { projectKey: options.projectKey, entityType: options.entityType, seed, limit, method, filterKey: options.filterKey });
-  
+
   try {
     const resp = await fetch(url, { method: "GET" });
     console.log("[autodelivery/seeded-loader] Response status:", resp.status, resp.statusText);
-    
+
     if (!resp.ok) {
       const errorText = await resp.text().catch(() => "");
       console.error("[autodelivery/seeded-loader] Request failed:", resp.status, errorText);
       throw new Error(`Seeded selection request failed: ${resp.status} - ${errorText.slice(0, 200)}`);
     }
-    
+
     const json = await resp.json();
     console.log("[autodelivery/seeded-loader] Response keys:", Object.keys(json));
     console.log("[autodelivery/seeded-loader] Data length:", json?.data?.length, "isArray:", Array.isArray(json?.data));
-    
+
     const result = (json?.data ?? []) as T[];
     console.log("[autodelivery/seeded-loader] Returning", result.length, "items");
     return result;

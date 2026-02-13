@@ -53,9 +53,6 @@ export default function SearchPage() {
     if (process.env.NODE_ENV === "development") {
       console.log("[SearchPage] V2 status:", {
         v2Enabled: dyn.v2.isEnabled(),
-        v2DbMode: dyn.v2.isDbModeEnabled(),
-        v2AiGenerate: dyn.v2.isEnabled(),
-        v2Fallback: dyn.v2.isFallbackMode(),
       });
     }
   }, [dyn.v2]);
@@ -401,12 +398,12 @@ export default function SearchPage() {
 
   return (
     dyn.v1.addWrapDecoy("page-container", (
-      <section 
+      <section
         id={dyn.v3.getVariant("search-page", ID_VARIANTS_MAP, "search-page")}
         className={dyn.v3.getVariant("section-container", CLASS_VARIANTS_MAP, "omnizon-container grid gap-8 py-28 lg:grid-cols-[280px,1fr]")}
       >
         {dyn.v1.addWrapDecoy("filter-sidebar", (
-          <aside 
+          <aside
             id={dyn.v3.getVariant("filter-sidebar", ID_VARIANTS_MAP, "search-sidebar")}
             className={dyn.v3.getVariant("filter-sidebar", CLASS_VARIANTS_MAP, "space-y-5 rounded-[32px] border border-white/60 bg-white/80 p-5 shadow-sm lg:sticky lg:top-32 self-start")}
           >
@@ -438,8 +435,8 @@ export default function SearchPage() {
                   />
                 ))}
                 {dyn.v1.addWrapDecoy("sidebar-submit", (
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     id={dyn.v3.getVariant("search-button", ID_VARIANTS_MAP)}
                     className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "w-full rounded-full bg-slate-900 text-white")}
                   >

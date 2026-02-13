@@ -24,8 +24,7 @@ interface Filters {
 }
 
 function JobsContent() {
-  const { seed, resolvedSeeds } = useSeed();
-  resolvedSeeds;
+  const { seed } = useSeed();
   const layoutSeed = seed;
   const dyn = useDynamicSystem();
   const [filters, setFilters] = useState<Filters>({

@@ -9,7 +9,7 @@ import { Utensils, Heart, Users, Award, TrendingUp } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export default function AboutPage() {
-  const { seed, resolvedSeeds } = useSeed();
+  const { seed } = useSeed();
   const dyn = useDynamicSystem();
   const searchParams = useSearchParams();
   const hasSeedParam = Boolean(searchParams?.get("seed"));

@@ -107,8 +107,6 @@ function HomeContent() {
   useEffect(() => {
     console.log("[autolodge] V2 Status:", {
       enabled: dyn.v2.isEnabled(),
-      dbMode: dyn.v2.isDbModeEnabled(),
-      fallbackMode: dyn.v2.isFallbackMode(),
     });
   }, [dyn]);
 
@@ -149,10 +147,10 @@ function HomeContent() {
         setHotels(normalizedHotels);
         console.log('[HomeContent] Hotels loaded:', providerHotels.length);
         if (providerHotels.length > 0) {
-          console.log('[HomeContent] First 5 hotel IDs:', providerHotels.slice(0, 5).map(h => ({ 
-            id: h.id, 
+          console.log('[HomeContent] First 5 hotel IDs:', providerHotels.slice(0, 5).map(h => ({
+            id: h.id,
             idType: typeof h.id,
-            title: h.title 
+            title: h.title
           })));
         }
       } catch (error) {
@@ -168,16 +166,16 @@ function HomeContent() {
       await dynamicDataProvider.whenReady();
       // Add small delay to ensure data is fully synced
       await new Promise(resolve => setTimeout(resolve, 200));
-      
+
       const providerHotels = dynamicDataProvider.getHotels();
       if (providerHotels.length > 0) {
         const normalizedHotels = providerHotels.map(normalizeHotelDates);
         setHotels(normalizedHotels);
         console.log('[HomeContent] Hotels refreshed:', providerHotels.length);
-        console.log('[HomeContent] First 5 hotel IDs after refresh:', providerHotels.slice(0, 5).map(h => ({ 
-          id: h.id, 
+        console.log('[HomeContent] First 5 hotel IDs after refresh:', providerHotels.slice(0, 5).map(h => ({
+          id: h.id,
           idType: typeof h.id,
-          title: h.title 
+          title: h.title
         })));
       }
     };

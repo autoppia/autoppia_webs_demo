@@ -224,7 +224,7 @@ function SearchContent() {
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
       <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-      
+
       <main className="relative mx-auto w-full max-w-7xl px-6 py-16 sm:px-8 lg:px-12">
         <div className="mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Search Movies</h1>
@@ -252,8 +252,8 @@ function SearchContent() {
                 className={cn("pl-12 h-14 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base", dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP, ""))}
               />
             </div>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               id={dyn.v3.getVariant("search-submit-button", ID_VARIANTS_MAP, "search-submit-button")}
               className={cn("h-14 px-8 bg-secondary text-black hover:bg-secondary/90 shadow-lg shadow-secondary/20 font-semibold text-base", dyn.v3.getVariant("search-button", CLASS_VARIANTS_MAP, ""))}
             >

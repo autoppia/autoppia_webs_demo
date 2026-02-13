@@ -46,14 +46,14 @@ export default function ConfirmationPage() {
   const [tripSaved, setTripSaved] = useState(false);
   const router = useRouter();
   const dyn = useDynamicSystem();
-  
+
   // Use selected ride info - this should always be set from sessionStorage
   const ride = selectedRideInfo || {
     name: "AutoDriverX",
     image: "/car1.png",
     price: 26.6,
   };
-  
+
   // Get rideId from reserveRideData, fallback to data.rideIdx
   const rideIdForDriver = reserveRideData?.rideId ?? data.rideIdx;
 
@@ -67,7 +67,7 @@ export default function ConfirmationPage() {
       const date = sessionStorage.getItem("ud_pickupdate") || "";
       const time = sessionStorage.getItem("ud_pickuptime") || "";
       setData({ rideIdx, pickup, dropoff, date, time });
-      
+
       // Get selected ride information from sessionStorage - this is the source of truth
       const reserveRideDataStr = sessionStorage.getItem("__ud_reserveRideData");
       if (reserveRideDataStr) {
@@ -80,7 +80,7 @@ export default function ConfirmationPage() {
           const ridePrice = parsedReserveRideData.price || 26.6;
           // Use image directly from reserveRideData, fallback to RIDE_IMAGE_MAP only if image is missing
           const rideImage = parsedReserveRideData.image || RIDE_IMAGE_MAP[rideName] || "/car1.png";
-          
+
           setSelectedRideInfo({
             name: rideName,
             image: rideImage,
@@ -107,7 +107,7 @@ export default function ConfirmationPage() {
           price: 26.6,
         });
       }
-      
+
       // Save the reservation as an upcoming trip (only once)
       if (!tripSaved && rideIdx !== null && pickup && dropoff) {
         // Get ride info directly from sessionStorage - this is the source of truth
@@ -118,7 +118,7 @@ export default function ConfirmationPage() {
           price: 26.6,
           icon: "",
         };
-        
+
         if (reserveRideDataStrForTrip) {
           try {
             const reserveRideDataForTrip = JSON.parse(reserveRideDataStrForTrip);
@@ -138,7 +138,7 @@ export default function ConfirmationPage() {
         }
         // Use a consistent trip ID based on the reservation data to avoid duplicates
         const tripId = `reserved-${rideIdx}-${pickup.slice(0, 20)}-${dropoff.slice(0, 20)}-${date}-${time}`.replace(/[^a-zA-Z0-9-]/g, '-');
-        
+
         // Get RESERVE_RIDE event data from sessionStorage if available (reuse the one we already parsed)
         let reserveRideData = null;
         if (reserveRideDataStrForTrip) {
@@ -148,7 +148,7 @@ export default function ConfirmationPage() {
             console.error("Error parsing reserveRideData:", e);
           }
         }
-        
+
         const newTrip = {
           id: tripId,
           status: "upcoming" as const,
@@ -169,7 +169,7 @@ export default function ConfirmationPage() {
           // Store the complete RESERVE_RIDE event data for later use
           reserveRideData: reserveRideData || null,
         };
-        
+
         // Save to localStorage
         try {
           const reservedTrips = JSON.parse(localStorage.getItem("reservedTrips") || "[]");
@@ -409,7 +409,7 @@ export default function ConfirmationPage() {
                         console.error("Error parsing reserveRideData:", e);
                       }
                     }
-                    
+
                     if (reserveRideData) {
                       // Use the actual reserved ride data from RESERVE_RIDE event
                       logEvent(EVENT_TYPES.TRIP_DETAILS, {
@@ -427,7 +427,7 @@ export default function ConfirmationPage() {
                       const rideTemplate = RIDE_TEMPLATES.find(r => r.name === ride.name) || RIDE_TEMPLATES[0];
                       const oldPrice = Number((ride.price * 1.1).toFixed(2));
                       const scheduled = data.date && data.time ? `${data.date} ${data.time}` : "now";
-                      
+
                       logEvent(EVENT_TYPES.TRIP_DETAILS, {
                         rideId: rideIdForDriver,
                         rideName: ride.name,

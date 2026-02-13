@@ -13,7 +13,7 @@ export class DynamicDataProvider {
   private resolveReady: () => void = () => {};
   private currentSeed: number | null = null;
   private loadingPromise: Promise<void> | null = null;
-  
+
   // Subscribers
   private userSubscribers: Array<(data: User[]) => void> = [];
   private postSubscribers: Array<(data: Post[]) => void> = [];
@@ -62,10 +62,10 @@ export class DynamicDataProvider {
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
     });
-    
+
     const baseSeed = this.getBaseSeedFromUrl();
     const runtimeSeed = this.getRuntimeV2Seed();
-    
+
     try {
       // If base seed = 1, use fallback data directly (skip DB mode)
       if (baseSeed === 1) {
@@ -82,19 +82,19 @@ export class DynamicDataProvider {
         this.setRecommendations(recommendations);
         return;
       }
-      
+
       this.currentSeed = runtimeSeed ?? 1;
-      
+
       // Check if DB mode is enabled - only try DB if enabled
       const dbModeEnabled = isDbLoadModeEnabled();
       console.log("[autoconnect/data-provider] DB mode enabled:", dbModeEnabled, "runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
-      
+
       if (dbModeEnabled) {
         // Try DB mode first if enabled
         console.log("[autoconnect/data-provider] Attempting to load from DB...");
         // Let initializeUsers/Posts/etc handle DB loading
       }
-      
+
       // Initialize all data types (they handle DB mode internally)
       const [users, posts, jobs, recommendations] = await Promise.all([
         initializeUsers(runtimeSeed ?? undefined),
@@ -102,12 +102,12 @@ export class DynamicDataProvider {
         initializeJobs(runtimeSeed ?? undefined),
         initializeRecommendations(runtimeSeed ?? undefined),
       ]);
-      
+
       this.setUsers(users);
       this.setPosts(posts);
       this.setJobs(jobs);
       this.setRecommendations(recommendations);
-      
+
       console.log("[autoconnect/data-provider] ✅ Data initialized:", {
         users: users.length,
         posts: posts.length,
@@ -136,7 +136,7 @@ export class DynamicDataProvider {
         this.resolveReady();
       }
     }
-    
+
     // Listen for seed changes
     if (typeof window !== "undefined") {
       window.addEventListener("autoconnect:v2SeedChange", this.handleSeedEvent.bind(this));
@@ -168,13 +168,13 @@ export class DynamicDataProvider {
     if (this.loadingPromise) {
       return this.loadingPromise;
     }
-    
+
     this.loadingPromise = (async () => {
       try {
         const baseSeed = this.getBaseSeedFromUrl();
         const runtimeSeed = this.getRuntimeV2Seed();
         const v2Seed = seedValue ?? runtimeSeed ?? 1;
-        
+
         // If base seed = 1, use fallback data directly
         if (baseSeed === 1) {
           console.log("[autoconnect/data-provider] Reload: Base seed is 1, using fallback data");
@@ -182,13 +182,13 @@ export class DynamicDataProvider {
         } else {
           this.currentSeed = v2Seed;
         }
-        
+
         // Reset ready state
         this.ready = false;
         this.readyPromise = new Promise<void>((resolve) => {
           this.resolveReady = resolve;
         });
-        
+
         // Reload all data
         const [users, posts, jobs, recommendations] = await Promise.all([
           initializeUsers(v2Seed),
@@ -196,12 +196,12 @@ export class DynamicDataProvider {
           initializeJobs(v2Seed),
           initializeRecommendations(v2Seed),
         ]);
-        
+
         this.setUsers(users);
         this.setPosts(posts);
         this.setJobs(jobs);
         this.setRecommendations(recommendations);
-        
+
         console.log("[autoconnect/data-provider] ✅ Data reloaded:", {
           users: users.length,
           posts: posts.length,
@@ -217,26 +217,26 @@ export class DynamicDataProvider {
         this.loadingPromise = null;
       }
     })();
-    
+
     return this.loadingPromise;
   }
 
   private setUsers(nextUsers: User[]): void {
     console.log("[autoconnect/data-provider] setUsers called with", nextUsers.length, "users");
     this.users = nextUsers;
-    
+
     // Re-normalize posts when users are updated to ensure correct user references
     if (this.posts.length > 0) {
       console.log("[autoconnect/data-provider] Re-normalizing posts with updated users...");
       this.posts = this.posts.map((p) => {
         if (p.user && p.user.username && this.users.length > 0) {
           const postUsername = String(p.user.username || "").trim().toLowerCase();
-          
+
           // Strategy 1: Exact match (case-insensitive)
           let matchingUser = this.users.find(
             (u) => String(u.username || "").trim().toLowerCase() === postUsername
           );
-          
+
           // Strategy 2: Match without dots
           if (!matchingUser) {
             const postUsernameNoDots = postUsername.replace(/\./g, "");
@@ -244,7 +244,7 @@ export class DynamicDataProvider {
               (u) => String(u.username || "").trim().toLowerCase().replace(/\./g, "") === postUsernameNoDots
             );
           }
-          
+
           // Strategy 3: Partial match
           if (!matchingUser) {
             matchingUser = this.users.find(
@@ -254,7 +254,7 @@ export class DynamicDataProvider {
               }
             );
           }
-          
+
           if (matchingUser) {
             return {
               ...p,
@@ -271,7 +271,7 @@ export class DynamicDataProvider {
       // Notify posts subscribers that posts have been updated
       this.notifyPosts();
     }
-    
+
     this.notifyUsers();
     this.checkAndResolveReady();
   }
@@ -279,21 +279,21 @@ export class DynamicDataProvider {
   private setPosts(nextPosts: Post[]): void {
     console.log("[autoconnect/data-provider] setPosts called with", nextPosts.length, "posts");
     console.log("[autoconnect/data-provider] Current users count:", this.users.length);
-    
+
     // Normalize posts to use correct user references
     this.posts = nextPosts.map((p) => {
       // Normalize user reference - find matching user from our users array
       let normalizedUser = p.user;
-      
+
       // Try to find the user by username to ensure we use the correct user object
       if (p.user && p.user.username && this.users.length > 0) {
         const postUsername = String(p.user.username || "").trim().toLowerCase();
-        
+
         // Strategy 1: Exact match (case-insensitive)
         let matchingUser = this.users.find(
           (u) => String(u.username || "").trim().toLowerCase() === postUsername
         );
-        
+
         // Strategy 2: Match without dots
         if (!matchingUser) {
           const postUsernameNoDots = postUsername.replace(/\./g, "");
@@ -301,7 +301,7 @@ export class DynamicDataProvider {
             (u) => String(u.username || "").trim().toLowerCase().replace(/\./g, "") === postUsernameNoDots
           );
         }
-        
+
         // Strategy 3: Partial match
         if (!matchingUser) {
           matchingUser = this.users.find(
@@ -311,14 +311,14 @@ export class DynamicDataProvider {
             }
           );
         }
-        
+
         if (matchingUser) {
           normalizedUser = matchingUser;
         } else {
           // Only log warning if we have users loaded (to avoid spam during initialization)
           if (this.users.length > 0) {
             console.warn(`[autoconnect/data-provider] Could not find matching user for post.user.username: "${p.user.username}"`);
-            console.warn(`[autoconnect/data-provider] Available usernames (first 10):`, 
+            console.warn(`[autoconnect/data-provider] Available usernames (first 10):`,
               this.users.slice(0, 10).map(u => u.username).join(', '));
           }
         }
@@ -326,14 +326,14 @@ export class DynamicDataProvider {
         // Users not loaded yet, will be normalized in getPosts()
         console.log(`[autoconnect/data-provider] Post has user "${p.user.username}" but users array is empty - will normalize later`);
       }
-      
+
       return {
         ...p,
         user: normalizedUser,
         comments: p.comments || [],
       };
     });
-    
+
     this.notifyPosts();
     this.checkAndResolveReady();
   }
@@ -378,33 +378,33 @@ export class DynamicDataProvider {
       console.log("[autoconnect] getUserByUsername: users array is empty or invalid");
       return undefined;
     }
-    
+
     // Normalize search username
     const searchUsername = String(username || "").trim().toLowerCase();
     console.log(`[autoconnect] getUserByUsername: searching for username="${username}" (normalized: "${searchUsername}") in ${this.users.length} users`);
-    
+
     // Strategy 1: Exact match (case-insensitive)
     let found = this.users.find((user) => {
       const userUsername = String(user.username || "").trim().toLowerCase();
       return userUsername === searchUsername;
     });
-    
+
     if (found) {
       console.log(`[autoconnect] getUserByUsername: ✅ Found via exact match`);
       return found;
     }
-    
+
     // Strategy 2: Partial match
     found = this.users.find((user) => {
       const userUsername = String(user.username || "").trim().toLowerCase();
       return userUsername.includes(searchUsername) || searchUsername.includes(userUsername);
     });
-    
+
     if (found) {
       console.log(`[autoconnect] getUserByUsername: ✅ Found via partial match`);
       return found;
     }
-    
+
     // Strategy 3: URL decode and try again
     try {
       const decodedUsername = decodeURIComponent(username);
@@ -414,7 +414,7 @@ export class DynamicDataProvider {
           const userUsername = String(user.username || "").trim().toLowerCase();
           return userUsername === decodedSearch || userUsername.includes(decodedSearch) || decodedSearch.includes(userUsername);
         });
-        
+
         if (found) {
           console.log(`[autoconnect] getUserByUsername: ✅ Found via URL decoded match`);
           return found;
@@ -423,7 +423,7 @@ export class DynamicDataProvider {
     } catch (e) {
       // Ignore decode errors
     }
-    
+
     // Strategy 4: Handle dot-separated usernames (e.g., "alexsmith" vs "alex.smith")
     if (!found) {
       // Remove dots from search and compare
@@ -431,26 +431,26 @@ export class DynamicDataProvider {
       found = this.users.find((user) => {
         const userUsername = String(user.username || "").trim().toLowerCase();
         const userWithoutDots = userUsername.replace(/\./g, "");
-        return userWithoutDots === searchWithoutDots || 
-               userWithoutDots.includes(searchWithoutDots) || 
+        return userWithoutDots === searchWithoutDots ||
+               userWithoutDots.includes(searchWithoutDots) ||
                searchWithoutDots.includes(userWithoutDots);
       });
-      
+
       if (found) {
         console.log(`[autoconnect] getUserByUsername: ✅ Found via dot-removed match`);
         return found;
       }
     }
-    
+
     // Log for debugging if not found
     if (!found && this.users.length > 0) {
       console.log(`[autoconnect] getUserByUsername: ❌ User not found after all strategies`);
-      console.log(`[autoconnect] Searched for:`, { 
-        original: username, 
+      console.log(`[autoconnect] Searched for:`, {
+        original: username,
         normalized: searchUsername,
         withoutDots: searchUsername.replace(/\./g, "")
       });
-      
+
       // Show ALL usernames, not just first 10
       const allUsernames = this.users.map(u => {
         const uUsername = String(u.username || "").trim();
@@ -462,20 +462,20 @@ export class DynamicDataProvider {
           name: u.name
         };
       });
-      
+
       // Log all usernames in a more readable format
       console.log(`[autoconnect] Available usernames (ALL ${allUsernames.length}):`);
       allUsernames.forEach((u, idx) => {
         console.log(`  [${idx + 1}] "${u.username}" (lower: "${u.usernameLower}", no-dots: "${u.usernameWithoutDots}") - ${u.name}`);
       });
-      
+
       // Also check if there's a close match
       const searchWithoutDots = searchUsername.replace(/\./g, "");
       console.log(`[autoconnect] Search without dots: "${searchWithoutDots}"`);
-      
-      const closeMatches = allUsernames.filter(u => 
+
+      const closeMatches = allUsernames.filter(u =>
         u.usernameWithoutDots === searchWithoutDots ||
-        u.usernameWithoutDots.includes(searchWithoutDots) || 
+        u.usernameWithoutDots.includes(searchWithoutDots) ||
         searchWithoutDots.includes(u.usernameWithoutDots)
       );
       if (closeMatches.length > 0) {
@@ -485,7 +485,7 @@ export class DynamicDataProvider {
         console.log(`[autoconnect] No close matches found even after removing dots`);
       }
     }
-    
+
     return found;
   }
 
@@ -505,16 +505,16 @@ export class DynamicDataProvider {
     return this.posts.map((post) => {
       // Normalize user reference - find matching user from our users array
       let normalizedUser = post.user;
-      
+
       // Try to find the user by username to ensure we use the correct user object
       if (post.user && post.user.username && this.users.length > 0) {
         const postUsername = String(post.user.username || "").trim().toLowerCase();
-        
+
         // Strategy 1: Exact match (case-insensitive)
         let matchingUser = this.users.find(
           (u) => String(u.username || "").trim().toLowerCase() === postUsername
         );
-        
+
         // Strategy 2: Match without dots
         if (!matchingUser) {
           const postUsernameNoDots = postUsername.replace(/\./g, "");
@@ -522,7 +522,7 @@ export class DynamicDataProvider {
             (u) => String(u.username || "").trim().toLowerCase().replace(/\./g, "") === postUsernameNoDots
           );
         }
-        
+
         // Strategy 3: Partial match
         if (!matchingUser) {
           matchingUser = this.users.find(
@@ -532,19 +532,19 @@ export class DynamicDataProvider {
             }
           );
         }
-        
+
         if (matchingUser) {
           normalizedUser = matchingUser;
         } else {
           // Log warning with more context
           console.warn(`[autoconnect/data-provider] Could not find matching user for post.user.username: "${post.user.username}"`);
-          console.warn(`[autoconnect/data-provider] Available usernames (first 10):`, 
+          console.warn(`[autoconnect/data-provider] Available usernames (first 10):`,
             this.users.slice(0, 10).map(u => u.username).join(', '));
         }
       } else if (post.user && post.user.username && this.users.length === 0) {
         console.warn(`[autoconnect/data-provider] Post has user "${post.user.username}" but users array is empty`);
       }
-      
+
       return {
         ...post,
         user: normalizedUser,
@@ -560,7 +560,7 @@ export class DynamicDataProvider {
   public getJobById(id: string): Job | undefined {
     // Try exact match first
     let job = this.jobs.find((job) => job.id === id);
-    
+
     // If not found, try string conversion
     if (!job) {
       const numId = Number(id);
@@ -571,12 +571,12 @@ export class DynamicDataProvider {
         });
       }
     }
-    
+
     // If still not found, try partial match
     if (!job) {
       job = this.jobs.find((j) => String(j.id).includes(String(id)) || String(id).includes(String(j.id)));
     }
-    
+
     return job;
   }
 

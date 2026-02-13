@@ -6,7 +6,7 @@ export function BodyWrapper({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Remove any existing navbar classes
     document.body.classList.remove('navbar-side', 'navbar-hidden-top', 'navbar-floating', 'navbar-top');
-    
+
     // Default navbar style
     document.body.classList.add('navbar-top');
   }, []);

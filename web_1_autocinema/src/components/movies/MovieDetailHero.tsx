@@ -60,7 +60,7 @@ export function MovieDetailHero({ movie, onWatchTrailer, onWatchlist, onShare, i
         </div>
         <div className="flex flex-wrap gap-3 pt-2">
           {movie.trailerUrl && (
-            <Button 
+            <Button
               id={dyn.v3.getVariant("watch-trailer-button", ID_VARIANTS_MAP, "watch-trailer-button")}
               className={cn("h-12 px-6 bg-secondary text-black hover:bg-secondary/90 font-bold shadow-lg shadow-secondary/20 transition-all hover:scale-105", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
               onClick={onWatchTrailer}
@@ -68,19 +68,19 @@ export function MovieDetailHero({ movie, onWatchTrailer, onWatchlist, onShare, i
               <Play className="h-5 w-5 mr-2" /> {dyn.v3.getVariant("watch_trailer", undefined, "Watch trailer")}
             </Button>
           )}
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             id={dyn.v3.getVariant("watchlist-button", ID_VARIANTS_MAP, "watchlist-button")}
-            className={cn("h-12 px-6 border transition-all hover:scale-105", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""), isInWatchlist 
-                ? "border-secondary/30 bg-secondary/20 text-secondary hover:bg-secondary/30" 
+            className={cn("h-12 px-6 border transition-all hover:scale-105", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""), isInWatchlist
+                ? "border-secondary/30 bg-secondary/20 text-secondary hover:bg-secondary/30"
                 : "border-white/20 bg-white/5 text-white hover:bg-white/10")}
             onClick={onWatchlist}
           >
-            <Bookmark className={`h-5 w-5 mr-2 ${isInWatchlist ? "fill-secondary" : ""}`} /> 
+            <Bookmark className={`h-5 w-5 mr-2 ${isInWatchlist ? "fill-secondary" : ""}`} />
             {dyn.v3.getVariant(isInWatchlist ? "remove_from_watchlist" : "add_to_watchlist", undefined, isInWatchlist ? "Remove from watchlist" : "Add to watchlist")}
           </Button>
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             id={dyn.v3.getVariant("share-button", ID_VARIANTS_MAP, "share-button")}
             className={cn("h-12 px-6 border border-white/20 bg-white/5 text-white hover:bg-white/10 transition-all hover:scale-105", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
             onClick={onShare}

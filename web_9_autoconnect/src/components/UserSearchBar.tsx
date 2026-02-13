@@ -42,16 +42,16 @@ export default function UserSearchBar() {
   const [focus, setFocus] = useState(false);
   const dyn = useDynamicSystem();
   const router = useSeedRouter();
-  
+
   // Memoize dyn.v3 to avoid reference changes
   const dynV3 = useMemo(() => dyn.v3, [dyn.seed]);
-  
+
   // Memoize matches to avoid recalculation
   const matches = useMemo(() => {
     if (q.length === 0) return [];
     return dynamicDataProvider.searchUsers(q);
   }, [q]);
-  
+
   // Memoize withClass function to avoid recreation
   const withClass = useCallback((key: string, base: string) => {
     return cn(base, dynV3.getVariant(key, CLASS_VARIANTS_MAP, ""), dynV3.getVariant(key, localClassVariants, ""));

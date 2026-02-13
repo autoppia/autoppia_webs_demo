@@ -69,7 +69,7 @@ export function Footer() {
 
   return (
     dyn.v1.addWrapDecoy("footer-container", (
-      <footer 
+      <footer
         id={dyn.v3.getVariant("footer", ID_VARIANTS_MAP, "footer")}
         className={dyn.v3.getVariant("footer", CLASS_VARIANTS_MAP, "mt-20 text-white")}
       >

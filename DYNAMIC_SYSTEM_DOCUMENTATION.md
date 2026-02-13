@@ -615,22 +615,22 @@ import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 
 export function MovieCard({ movie }: { movie: Movie }) {
   const dyn = useDynamicSystem();
-  
+
   // Local variants (component-specific)
   const dynamicV3IdsVariants: Record<string, string[]> = {
     "card": ["movie-card", "film-card", "movie-tile"],
   };
-  
+
   return (
     <>
       {/* V1: Añade wrapper/decoy */}
       {dyn.v1.addWrapDecoy("movie-card", (
-        <div 
+        <div
           id={dyn.v3.getVariant("card", dynamicV3IdsVariants)}
           className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP)}
         >
           <h3>{movie.title}</h3>
-          
+
           {dyn.v1.addWrapDecoy("movie-card-button", (
             <button
               id={dyn.v3.getVariant("view-details-btn", ID_VARIANTS_MAP)}
@@ -673,7 +673,7 @@ const orderedFeatures = useMemo(() => {
 ```typescript
 export function HomeContent() {
   const dyn = useDynamicSystem();
-  
+
   // Local text variants (only used in this component)
   const dynamicV3TextVariants: Record<string, string[]> = {
     feature_1_title: ["Smart Search", "Búsqueda Inteligente", ...],
@@ -681,11 +681,11 @@ export function HomeContent() {
     app_title: ["Autocinema", "Autocinema", ...],
     // ... more variants
   };
-  
+
   return (
     <div>
       <h1>{dyn.v3.getVariant("app_title", dynamicV3TextVariants)}</h1>
-      
+
       {features.map((feature, i) => (
         <div key={feature.key}>
           <h3>{dyn.v3.getVariant(`feature_${i+1}_title`, dynamicV3TextVariants)}</h3>
@@ -1041,7 +1041,7 @@ For more details, see [TEST_VALIDATION.md](./TEST_VALIDATION.md).
 
 ### Q: How do I test if variants are working?
 
-**A:** 
+**A:**
 1. Run the test script: `node src/dynamic/test-dynamic-system.js`
 2. Change seed in URL: `?seed=1` vs `?seed=42`
 3. Compare IDs, classes, and texts - they should be different
@@ -1049,7 +1049,7 @@ For more details, see [TEST_VALIDATION.md](./TEST_VALIDATION.md).
 
 ### Q: What's the difference between global and local variants?
 
-**A:** 
+**A:**
 - **Global variants** (JSON files): Used across multiple components (e.g., `"button"`, `"card"`)
 - **Local variants** (component dictionaries): Used only in one component (e.g., `"feature_1_title"`)
 

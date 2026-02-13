@@ -142,5 +142,3 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 export function useCart() {
   return useContext(CartContext);
 }
-
-

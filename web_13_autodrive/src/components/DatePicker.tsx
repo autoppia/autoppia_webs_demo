@@ -56,8 +56,8 @@ export function DatePicker({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent 
-        className="w-auto p-0" 
+      <PopoverContent
+        className="w-auto p-0"
         align="start"
         data-testid="date-picker-popover"
       >
@@ -121,7 +121,7 @@ export function DatePickerInput({
             <rect x="6" y="2" width="2" height="3" rx="1" fill="#2095d2" />
             <rect x="12" y="2" width="2" height="3" rx="1" fill="#2095d2" />
           </svg>
-          <span 
+          <span
             className="flex-1 text-base font-[500] text-gray-900"
             data-testid="date-display"
           >
@@ -138,8 +138,8 @@ export function DatePickerInput({
           </svg>
         </div>
       </PopoverTrigger>
-      <PopoverContent 
-        className="w-auto p-0" 
+      <PopoverContent
+        className="w-auto p-0"
         align="start"
         data-testid="date-picker-input-popover"
       >
@@ -158,4 +158,4 @@ export function DatePickerInput({
       </PopoverContent>
     </Popover>
   );
-} 
+}

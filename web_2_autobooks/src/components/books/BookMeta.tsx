@@ -49,4 +49,3 @@ export function BookMeta({ book }: BookMetaProps) {
     </section>
   );
 }
-

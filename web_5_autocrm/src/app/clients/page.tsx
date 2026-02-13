@@ -36,8 +36,8 @@ const STORAGE_KEY_PREFIX = "clients";
 function ClientsDirectoryContent() {
   const [query, setQuery] = useState("");
   const dyn = useDynamicSystem();
-  const { seed, resolvedSeeds } = useSeed();
-  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const { seed } = useSeed();
+  const v2Seed = seed;
   const searchInputBase =
     "w-full h-12 pl-12 pr-4 rounded-2xl bg-neutral-bg-dark border border-zinc-200 text-md focus:outline-accent-forest focus:border-accent-forest placeholder-zinc-400 font-medium";
   const filterSelectBase =
@@ -54,16 +54,16 @@ function ClientsDirectoryContent() {
       try {
         // Wait for data to be ready
         await dynamicDataProvider.whenReady();
-        
+
         // Reload with current seed to ensure we have the right data
         await dynamicDataProvider.reload(seed ?? undefined);
-        
+
         // Wait again to ensure reload is complete
         await dynamicDataProvider.whenReady();
-        
+
         // Get clients from provider
         const clientsData = getClients();
-        
+
         // Normalize clients for display
         const normalized = clientsData.map((c: any, i: number) => ({
           id: c.id ?? `CL-${1000 + i}`,
@@ -77,7 +77,7 @@ function ClientsDirectoryContent() {
           status: c.status ?? "Active",
           last: c.last ?? "Today",
         }));
-        
+
         setClients(normalized);
       } catch (error) {
         console.error("[ClientsPage] Failed to load clients", error);
@@ -86,7 +86,7 @@ function ClientsDirectoryContent() {
         setIsLoading(false);
       }
     };
-    
+
     loadClients();
   }, [seed, v2Seed]);
   const [clientList, setClientList] = useState(clients);
@@ -201,7 +201,7 @@ function ClientsDirectoryContent() {
           </button>
         </div>
       </DynamicElement>
-      
+
       <DynamicElement elementType="section" index={1} className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-0 mb-10">
         <div className="w-full md:w-96 relative">
           <span className="absolute left-4 top-3.5 text-zinc-400 pointer-events-none">

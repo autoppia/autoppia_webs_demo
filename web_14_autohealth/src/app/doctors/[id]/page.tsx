@@ -23,7 +23,7 @@ export default function DoctorProfile() {
   useEffect(() => {
     let mounted = true;
     let unsubscribe: (() => void) | null = null;
-    
+
     const loadDoctor = async () => {
       try {
         // Reset state when loading
@@ -32,21 +32,21 @@ export default function DoctorProfile() {
           setNotFoundError(false);
           setDoctor(null);
         }
-        
+
         // Wait for data to be ready (this will wait for reloads too)
         await whenReady();
         if (!mounted) return;
-        
+
         // Get all doctors from the provider
         const doctors = getDoctors();
         console.log(`[DoctorProfile] Looking for doctor ID: ${id}, Total doctors: ${doctors.length}`);
         if (doctors.length > 0) {
           console.log(`[DoctorProfile] First few doctor IDs:`, doctors.slice(0, 5).map(d => d.id));
         }
-        
+
         // Try to find doctor by ID first
         let foundDoctor = doctors.find((d) => d.id === id);
-        
+
         // If not found by ID, try to find by index from sessionStorage (only if seed matches)
         if (!foundDoctor && typeof window !== 'undefined' && doctors.length > 0) {
           const indexDataStr = sessionStorage.getItem(`__autohealth_doctor_index_${id}`);
@@ -79,7 +79,7 @@ export default function DoctorProfile() {
             }
           }
         }
-        
+
         if (mounted) {
           if (foundDoctor) {
             console.log(`[DoctorProfile] Found doctor: ${foundDoctor.name}`);
@@ -92,12 +92,12 @@ export default function DoctorProfile() {
             setIsLoading(false);
           }
         }
-        
+
         // Subscribe to updates in case doctor data changes (e.g., when seed changes)
         unsubscribe = subscribeDoctors((updatedDoctors) => {
           if (mounted) {
             console.log(`[DoctorProfile] Doctors updated, count: ${updatedDoctors.length}, looking for ID: ${id}`);
-            
+
             // If doctors array is empty, data is being reloaded - wait for it
             if (updatedDoctors.length === 0) {
               console.log(`[DoctorProfile] Doctors array is empty, waiting for reload...`);
@@ -106,10 +106,10 @@ export default function DoctorProfile() {
               setDoctor(null);
               return;
             }
-            
+
             // Try to find doctor by ID first
             let updatedDoctor = updatedDoctors.find((d) => d.id === id);
-            
+
             // If not found by ID, try to find by index from sessionStorage (only if seed matches)
             if (!updatedDoctor && typeof window !== 'undefined' && updatedDoctors.length > 0) {
               const indexDataStr = sessionStorage.getItem(`__autohealth_doctor_index_${id}`);
@@ -142,7 +142,7 @@ export default function DoctorProfile() {
                 }
               }
             }
-            
+
             if (updatedDoctor) {
               console.log(`[DoctorProfile] Found doctor in updated list: ${updatedDoctor.name}`);
               setDoctor(updatedDoctor);
@@ -164,9 +164,9 @@ export default function DoctorProfile() {
         }
       }
     };
-    
+
     loadDoctor();
-    
+
     return () => {
       mounted = false;
       if (unsubscribe) unsubscribe();

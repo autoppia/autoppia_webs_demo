@@ -6,7 +6,7 @@ import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 export default function DynamicDebug() {
-  const { seed, resolvedSeeds } = useSeed();
+  const { seed } = useSeed();
   const dyn = useDynamicSystem();
   const [open, setOpen] = useState(false);
 
@@ -79,9 +79,9 @@ export default function DynamicDebug() {
 
           <div className={`grid grid-cols-2 gap-2 text-[11px] ${classes.item}`}>
             <div className="flex justify-between"><span>{texts.seedLabel}</span><span>{seed}</span></div>
-            <div className="flex justify-between"><span>{texts.resolvedLabel}</span><span>{resolvedSeeds.v1 ?? seed}</span></div>
-            <div className="flex justify-between"><span>V2</span><span>{resolvedSeeds.v2 ?? "—"}</span></div>
-            <div className="flex justify-between"><span>V3</span><span>{resolvedSeeds.v3 ?? "—"}</span></div>
+            <div className="flex justify-between"><span>{texts.resolvedLabel}</span><span>{seed}</span></div>
+            <div className="flex justify-between"><span>V2</span><span>{seed}</span></div>
+            <div className="flex justify-between"><span>V3</span><span>{seed}</span></div>
           </div>
 
           <div className="pt-1 border-t border-gray-200">

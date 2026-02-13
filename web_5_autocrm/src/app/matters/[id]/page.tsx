@@ -108,8 +108,8 @@ function MatterDetailPageContent() {
   const layout = useDetailLayoutVariant();
   const params = useParams();
   const matterId = params?.id as string;
-  const { seed, resolvedSeeds } = useSeed();
-  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const { seed } = useSeed();
+  const v2Seed = seed;
   const dyn = useDynamicSystem();
 
   // Debug: Verify V2 status
@@ -117,9 +117,6 @@ function MatterDetailPageContent() {
     if (process.env.NODE_ENV === "development") {
       console.log("[matters/[id]/page] V2 status:", {
         v2Enabled: dyn.v2.isEnabled(),
-        v2DbMode: dyn.v2.isDbModeEnabled(),
-        v2AiGenerate: dyn.v2.isEnabled(),
-        v2Fallback: dyn.v2.isFallbackMode(),
       });
     }
   }, [dyn.v2]);
@@ -141,25 +138,25 @@ function MatterDetailPageContent() {
       setIsResolving(true);
       try {
         console.log(`[matters/[id]/page] Loading matter ${matterId} with seed=${seed}, v2Seed=${v2Seed}`);
-        
+
         // Wait for data to be ready
         await dynamicDataProvider.whenReady();
-        
+
         // Reload if seed changed
         await dynamicDataProvider.reload(seed ?? undefined);
-        
+
         // Wait again to ensure reload is complete
         await dynamicDataProvider.whenReady();
-        
+
         if (!mounted) return;
-        
+
         // Get matter directly using getMatterById
         const allMatters = dynamicDataProvider.getMatters();
         console.log(`[matters/[id]/page] Searching for matter ${matterId} in ${allMatters.length} matters`);
-        
+
         const found = getMatterById(matterId);
         console.log(`[matters/[id]/page] Matter ${matterId} found:`, found ? found.name : "NOT FOUND");
-        
+
         if (found) {
           const normalized = normalizeMatter(found, 0);
           setCurrentMatter(normalized);

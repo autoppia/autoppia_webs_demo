@@ -69,7 +69,7 @@ export function ContactSection() {
             </span>
           </h1>
           <p className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-            Have a question, suggestion, or just want to share your thoughts about our movie search engine? 
+            Have a question, suggestion, or just want to share your thoughts about our movie search engine?
             Drop us a line and we'll get back to you as soon as possible.
           </p>
         </div>
@@ -109,8 +109,8 @@ export function ContactSection() {
                   </span>
                 </h2>
                 <p className="text-lg text-white/70 leading-relaxed">
-                  Whether you're looking for a specific film, have suggestions for improving our search engine, 
-                  or want to report something, we're here to help. Your feedback helps us make the movie discovery 
+                  Whether you're looking for a specific film, have suggestions for improving our search engine,
+                  or want to report something, we're here to help. Your feedback helps us make the movie discovery
                   experience even better.
                 </p>
               </div>

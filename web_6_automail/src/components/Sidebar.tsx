@@ -196,7 +196,7 @@ export function Sidebar({ textStructure }: SidebarProps) {
             const item = items[orderIndex];
             const ItemIcon = item.icon;
             return dyn.v1.addWrapDecoy(`sidebar-more-${orderIndex}`, (
-              <div key={item.text} className={cn(dyn.v3.getVariant("quick-action", CLASS_VARIANTS_MAP, "flex items-center gap-2 px-3 py-1 rounded-md"), "w-full justify-start text-sm font-normal text-muted-foreground flex items-center rounded-lg")}>                
+              <div key={item.text} className={cn(dyn.v3.getVariant("quick-action", CLASS_VARIANTS_MAP, "flex items-center gap-2 px-3 py-1 rounded-md"), "w-full justify-start text-sm font-normal text-muted-foreground flex items-center rounded-lg")}>
                 <ItemIcon className="h-4 w-4" />
                 <span>{item.text}</span>
               </div>

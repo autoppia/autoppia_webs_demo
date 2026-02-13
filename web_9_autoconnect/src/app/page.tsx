@@ -25,8 +25,7 @@ import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
 
 function HomeContent() {
-  const { seed, resolvedSeeds } = useSeed();
-  resolvedSeeds;
+  const { seed } = useSeed();
   const dyn = useDynamicSystem();
 
   const homeTextVariants: Record<string, string[]> = {
@@ -73,7 +72,7 @@ function HomeContent() {
         const likedStateMap = new Map(
           currentPosts.map((p) => [p.id, { liked: p.liked, likes: p.likes }])
         );
-        
+
         // Map new posts, preserving liked state if post ID matches
         // Note: When seed changes, posts will have new IDs, so we reset all likes
         return updatedPosts.map((post) => {
@@ -96,7 +95,7 @@ function HomeContent() {
         const likedStateMap = new Map(
           currentPosts.map((p) => [p.id, { liked: p.liked, likes: p.likes }])
         );
-        
+
         // Map new posts with updated user references
         return freshPosts.map((post) => {
           const existingState = likedStateMap.get(post.id);
@@ -122,11 +121,11 @@ function HomeContent() {
       await dynamicDataProvider.whenReady();
       // Small delay to ensure data is fully loaded
       await new Promise(resolve => setTimeout(resolve, 300));
-      
+
       const freshPosts = dynamicDataProvider.getPosts();
       const freshUsers = dynamicDataProvider.getUsers();
       console.log(`[autoconnect] Refreshed posts: ${freshPosts.length} posts, users: ${freshUsers.length} users`);
-      
+
       // Reset all posts with fresh data (new seed = new posts = reset likes)
       setPosts(freshPosts.map((post) => ({ ...post, liked: false })));
     };

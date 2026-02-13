@@ -13,9 +13,6 @@ export default function HomePage() {
     console.log("[autodelivery] V2 Status:", {
       seed,
       v2Enabled: dyn.v2.isEnabled(),
-      dbMode: dyn.v2.isDbModeEnabled(),
-      aiMode: dyn.v2.isEnabled(),
-      fallback: dyn.v2.isFallbackMode(),
     });
   }, [seed, dyn]);
 

@@ -55,8 +55,8 @@ function ClientProfilePageContent() {
   const clientId = params?.id as string;
   const seedRouter = useSeedRouter();
   const searchParams = useSearchParams();
-  const { seed, resolvedSeeds } = useSeed();
-  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const { seed } = useSeed();
+  const v2Seed = seed;
   const storageKey = useMemo(
     () => `${STORAGE_KEY_PREFIX}_${v2Seed ?? "default"}`,
     [v2Seed]
@@ -92,22 +92,22 @@ function ClientProfilePageContent() {
       try {
         // Wait for data to be ready
         await dynamicDataProvider.whenReady();
-        
+
         // Reload if seed changed
         await dynamicDataProvider.reload(seed ?? undefined);
-        
+
         // Wait again to ensure reload is complete
         await dynamicDataProvider.whenReady();
-        
+
         if (!mounted) return;
-        
+
         // Get client directly using getClientById
         const allClients = dynamicDataProvider.getClients();
         console.log(`[clients/[id]/page] Searching for client ${clientId} in ${allClients.length} clients`);
-        
+
         const found = getClientById(clientId);
         console.log(`[clients/[id]/page] Client ${clientId} found:`, found ? found.name : "NOT FOUND");
-        
+
         if (found) {
           const normalized = normalizeClient(found, 0);
           setClient(normalized);

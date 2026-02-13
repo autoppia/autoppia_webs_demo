@@ -45,7 +45,7 @@ export default function RootLayout({
                     'button[aria-label*="Issue"]',
                     'button[aria-label*="Error"]',
                   ];
-                  
+
                   selectors.forEach(selector => {
                     try {
                       document.querySelectorAll(selector).forEach(el => {
@@ -55,14 +55,14 @@ export default function RootLayout({
                       });
                     } catch(e) {}
                   });
-                  
+
                   // Hide any element with "Issue" text that's positioned at bottom
                   document.querySelectorAll('*').forEach(el => {
                     try {
                       const text = el.textContent || el.innerText || '';
                       const style = window.getComputedStyle(el);
                       const rect = el.getBoundingClientRect();
-                      
+
                       if (text.includes('Issue') || text.includes('issue')) {
                         if (style.position === 'fixed' || style.position === 'absolute') {
                           if (rect.bottom < window.innerHeight + 100 && rect.bottom > window.innerHeight - 100) {
@@ -76,11 +76,11 @@ export default function RootLayout({
                     } catch(e) {}
                   });
                 };
-                
+
                 // Run immediately and aggressively
                 hideErrorOverlay();
                 setInterval(hideErrorOverlay, 50);
-                
+
                 // Watch for DOM changes
                 const observer = new MutationObserver(hideErrorOverlay);
                 if (document.body) {
@@ -89,7 +89,7 @@ export default function RootLayout({
                 if (document.documentElement) {
                   observer.observe(document.documentElement, { childList: true, subtree: true });
                 }
-                
+
                 // Prevent error overlay from appearing
                 const originalConsoleError = console.error;
                 console.error = function() {

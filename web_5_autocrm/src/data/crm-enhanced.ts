@@ -1,6 +1,6 @@
 /**
  * Enhanced CRM Data with AI Generation Support
- * 
+ *
  * This file provides both static and dynamic data generation
  * for the AutoCRM application.
  */
@@ -190,7 +190,7 @@ export async function initializeFiles(seedOverride?: number | null): Promise<any
     dynamicFiles = (fallbackFiles as any[]);
     return dynamicFiles;
   }
-  
+
   if (dbModeEnabled) {
     try {
       const files = await fetchSeededSelection<any>({
@@ -228,7 +228,7 @@ export async function initializeEvents(seedOverride?: number | null): Promise<an
     dynamicEvents = (fallbackEvents as any[]);
     return dynamicEvents;
   }
-  
+
   if (dbModeEnabled) {
     try {
       const events = await fetchSeededSelection<any>({
@@ -266,7 +266,7 @@ export async function initializeLogs(seedOverride?: number | null): Promise<any[
     dynamicLogs = (fallbackLogs as any[]);
     return dynamicLogs;
   }
-  
+
   if (dbModeEnabled) {
     try {
       const logs = await fetchSeededSelection<any>({
@@ -298,7 +298,7 @@ export async function loadClientsFromDb(seedOverride?: number): Promise<any[]> {
   if (!isDbLoadModeEnabled()) {
     return [];
   }
-  
+
   try {
     const seed = resolveSeed(seedOverride);
     const limit = 50;
@@ -310,7 +310,7 @@ export async function loadClientsFromDb(seedOverride?: number): Promise<any[]> {
       method: "distribute",
       filterKey: "status",
     });
-    
+
     if (selected && selected.length > 0) {
       const categories = ["Active", "On Hold", "Archived"];
       const byCategory: Record<string, any[]> = {};
@@ -343,7 +343,7 @@ export async function loadClientsFromDb(seedOverride?: number): Promise<any[]> {
   } catch (e) {
     console.warn("Failed to load seeded clients from DB:", e);
   }
-  
+
   return [];
 }
 
@@ -351,7 +351,7 @@ export async function loadMattersFromDb(seedOverride?: number): Promise<any[]> {
   if (!isDbLoadModeEnabled()) {
     return [];
   }
-  
+
   try {
     const seed = resolveSeed(seedOverride);
     const limit = 50;
@@ -363,19 +363,19 @@ export async function loadMattersFromDb(seedOverride?: number): Promise<any[]> {
       method: "distribute",
       filterKey: "status",
     });
-    
+
     if (selected && selected.length > 0) {
       return selected.map(normalizeMatter);
     }
   } catch (e) {
     console.warn("Failed to load seeded matters from DB:", e);
   }
-  
+
   return [];
 }
 
 // Export the dynamic data arrays for direct access
-export { 
+export {
   dynamicClients as clients,
   dynamicMatters as matters,
   dynamicFiles as files,

@@ -71,4 +71,3 @@ export function getApiBaseUrl(): string {
   }
   return envUrl || "http://app:8090";
 }
-

@@ -54,10 +54,10 @@ export default function TripDetailsPage() {
   function handleConfirmCancel() {
     // Log the CANCEL_RESERVATION event
     console.log("Logging CANCEL_RESERVATION", { tripId });
-    
+
     // Check if this trip has reserved ride data (from RESERVE_RIDE event)
     const reservedRideData = (activeTrip as any).reserveRideData;
-    
+
     if (reservedRideData) {
       // Use the actual reserved ride data from RESERVE_RIDE event
       logEvent(EVENT_TYPES.CANCEL_RESERVATION, {
@@ -69,7 +69,7 @@ export default function TripDetailsPage() {
       });
     } else {
       // Fallback to template data if reserved ride data is not available
-      logEvent(EVENT_TYPES.CANCEL_RESERVATION, { 
+      logEvent(EVENT_TYPES.CANCEL_RESERVATION, {
         tripId,
         timestamp: new Date().toISOString(),
         tripData: activeTrip,
@@ -77,7 +77,7 @@ export default function TripDetailsPage() {
         cancellationTime: new Date().toISOString()
       });
     }
-    
+
     if (typeof window !== "undefined") {
       // We use localStorage to store a simple array of cancelled trip ids
       let cancelled = [];
@@ -95,10 +95,10 @@ export default function TripDetailsPage() {
   // On page load or when trip details are shown:
   useEffect(() => {
     console.log("Logging TRIP_DETAILS", { tripId });
-    
+
     // Check if this trip has reserved ride data (from RESERVE_RIDE event)
     const reservedRideData = (activeTrip as any).reserveRideData;
-    
+
     if (reservedRideData) {
       // Use the actual reserved ride data from RESERVE_RIDE event
       logEvent(EVENT_TYPES.TRIP_DETAILS, {
@@ -116,10 +116,10 @@ export default function TripDetailsPage() {
       const rideTemplate = RIDE_TEMPLATES.find(r => r.name === activeTrip.ride.name) || RIDE_TEMPLATES[0];
       const oldPrice = Number((activeTrip.price * 1.1).toFixed(2));
       const scheduled = activeTrip.date && activeTrip.time ? `${activeTrip.date} ${activeTrip.time}` : "now";
-      
+
       logEvent(EVENT_TYPES.TRIP_DETAILS, {
-        rideId: RIDE_TEMPLATES.findIndex(r => r.name === activeTrip.ride.name) >= 0 
-          ? RIDE_TEMPLATES.findIndex(r => r.name === activeTrip.ride.name) 
+        rideId: RIDE_TEMPLATES.findIndex(r => r.name === activeTrip.ride.name) >= 0
+          ? RIDE_TEMPLATES.findIndex(r => r.name === activeTrip.ride.name)
           : 0,
         rideName: activeTrip.ride.name,
         rideType: activeTrip.ride.name,

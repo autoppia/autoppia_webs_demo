@@ -59,19 +59,16 @@ function ProductContent() {
 
   const t = (key: string, fallback: string) =>
     dyn.v3.getVariant(key, TEXT_VARIANTS_MAP, fallback);
-  
+
   // Debug: Verify V2 status
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
       console.log("[productId/page] V2 status:", {
         v2Enabled: dyn.v2.isEnabled(),
-        v2DbMode: dyn.v2.isDbModeEnabled(),
-        v2AiGenerate: dyn.v2.isEnabled(),
-        v2Fallback: dyn.v2.isFallbackMode(),
       });
     }
   }, [dyn.v2]);
-  
+
   useEffect(() => {
     // Set delivery date on client side to avoid hydration mismatch
     setDeliveryDate(getDeliveryDate());
@@ -425,8 +422,8 @@ function ProductContent() {
               )}
             </p>
             {dyn.v1.addWrapDecoy("product-return-home-btn", (
-              <Button 
-                className="mt-4" 
+              <Button
+                className="mt-4"
                 id={dyn.v3.getVariant("back-button", ID_VARIANTS_MAP)}
                 onClick={() => router.push("/")}
               >
@@ -457,7 +454,7 @@ function ProductContent() {
                 {dyn.v1.addWrapDecoy("product-page-left", (
                   <div className="space-y-6">
                     {dyn.v1.addWrapDecoy("product-gallery", (
-                      <BlurCard 
+                      <BlurCard
                         id={dyn.v3.getVariant("product-gallery", ID_VARIANTS_MAP)}
                         className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "p-6")}
                       >
@@ -509,7 +506,7 @@ function ProductContent() {
                     ))}
 
                     {dyn.v1.addWrapDecoy("product-info-card", (
-                      <BlurCard 
+                      <BlurCard
                         id={dyn.v3.getVariant("product-info", ID_VARIANTS_MAP)}
                         className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "space-y-5 p-6")}
                       >
@@ -600,7 +597,7 @@ function ProductContent() {
                     ))}
 
                     {dyn.v1.addWrapDecoy("product-highlights", (
-                      <BlurCard 
+                      <BlurCard
                         id={dyn.v3.getVariant("product-highlights", ID_VARIANTS_MAP)}
                         className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "space-y-4 p-6")}
                       >
@@ -625,7 +622,7 @@ function ProductContent() {
                 {dyn.v1.addWrapDecoy("product-page-right", (
                   <div className="space-y-6">
                     {dyn.v1.addWrapDecoy("product-purchase-card", (
-                      <BlurCard 
+                      <BlurCard
                         id={dyn.v3.getVariant("product-purchase", ID_VARIANTS_MAP)}
                         className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "space-y-4 p-6")}
                       >
@@ -680,9 +677,9 @@ function ProductContent() {
                     ))}
 
                     {dyn.v1.addWrapDecoy("product-shipping-card", (
-                      <BlurCard 
+                      <BlurCard
                         id={dyn.v3.getVariant("product-shipping", ID_VARIANTS_MAP)}
-                        className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "space-y-4 p-6")} 
+                        className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "space-y-4 p-6")}
                         data-variant="muted"
                       >
                         {dyn.v1.addWrapDecoy("product-shipping-header", (
@@ -771,7 +768,7 @@ function ProductContent() {
                     )}
                   />
                   {dyn.v1.addWrapDecoy("product-details-card", (
-                    <BlurCard 
+                    <BlurCard
                       id={dyn.v3.getVariant("product-details", ID_VARIANTS_MAP)}
                       className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "p-6")}
                     >

@@ -87,8 +87,8 @@ export function QuickAppointmentHero() {
   };
 
   const validateForm = (): boolean => {
-    return formData.name.trim() !== "" && 
-           formData.email.trim() !== "" && 
+    return formData.name.trim() !== "" &&
+           formData.email.trim() !== "" &&
            formData.phone.trim() !== "";
   };
 
@@ -121,7 +121,7 @@ export function QuickAppointmentHero() {
   };
 
   return (
-    <section 
+    <section
       className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center bg-no-repeat"
       style={{
         backgroundImage: "url('/images/hero/hospital.png')",
@@ -129,7 +129,7 @@ export function QuickAppointmentHero() {
     >
       {/* Dark overlay for better readability */}
       <div className="absolute inset-0 bg-black/50" />
-      
+
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
@@ -137,7 +137,7 @@ export function QuickAppointmentHero() {
             {/* Main text */}
             <div className="text-white space-y-4">
               {dyn.v1.addWrapDecoy("quick-hero-title", (
-                <h2 
+                <h2
                   id={dyn.v3.getVariant("quick-hero-title", ID_VARIANTS_MAP, "quick-hero-title")}
                   className={cn("text-4xl md:text-5xl font-bold", dyn.v3.getVariant("hero-title", CLASS_VARIANTS_MAP, ""))}
                 >
@@ -145,7 +145,7 @@ export function QuickAppointmentHero() {
                 </h2>
               ))}
               {dyn.v1.addWrapDecoy("quick-hero-desc", (
-                <p 
+                <p
                   id={dyn.v3.getVariant("quick-hero-desc", ID_VARIANTS_MAP, "quick-hero-desc")}
                   className={cn("text-lg md:text-xl text-white/90", dyn.v3.getVariant("hero-desc", CLASS_VARIANTS_MAP, ""))}
                 >
@@ -158,7 +158,7 @@ export function QuickAppointmentHero() {
             <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-xl p-6 md:p-8">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                  <Label 
+                  <Label
                     htmlFor={dyn.v3.getVariant("quick-name-input", ID_VARIANTS_MAP, "quick-name")}
                     className="text-gray-700"
                   >
@@ -175,7 +175,7 @@ export function QuickAppointmentHero() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label 
+                  <Label
                     htmlFor={dyn.v3.getVariant("quick-email-input", ID_VARIANTS_MAP, "quick-email")}
                     className="text-gray-700"
                   >
@@ -193,7 +193,7 @@ export function QuickAppointmentHero() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label 
+                  <Label
                     htmlFor={dyn.v3.getVariant("quick-phone-input", ID_VARIANTS_MAP, "quick-phone")}
                     className="text-gray-700"
                   >
@@ -211,7 +211,7 @@ export function QuickAppointmentHero() {
                 </div>
 
                 <div className="space-y-2 relative">
-                  <Label 
+                  <Label
                     htmlFor={dyn.v3.getVariant("quick-specialty-input", ID_VARIANTS_MAP, "quick-specialty")}
                     className="text-gray-700"
                   >
@@ -260,8 +260,8 @@ export function QuickAppointmentHero() {
                     disabled={isSubmitting || !validateForm()}
                     data-testid="request-appointment-submit"
                   >
-                    {isSubmitting 
-                      ? dyn.v3.getVariant("sending", TEXT_VARIANTS_MAP, "Submitting...") 
+                    {isSubmitting
+                      ? dyn.v3.getVariant("sending", TEXT_VARIANTS_MAP, "Submitting...")
                       : dyn.v3.getVariant("request_appointment", TEXT_VARIANTS_MAP, "Request Appointment")}
                   </Button>
                 ))}

@@ -1256,8 +1256,8 @@ export function useSeedVariation(
 
   // Permitir eventos especiales (como MENU_VIEWED) que pueden cambiar temporalmente
   // Pero para variaciones normales, siempre usar Layout C (seed 6)
-  const { resolvedSeeds } = useSeed();
-  const seed = seedOverride ?? resolvedSeeds.v1 ?? resolvedSeeds.base;
+  const { seed: contextSeed } = useSeed();
+  const seed = seedOverride ?? contextSeed;
 
   // Verificar si hay eventos activos primero (estos tienen prioridad)
   const activeEvents = SeedVariationManager.getActiveEvents();

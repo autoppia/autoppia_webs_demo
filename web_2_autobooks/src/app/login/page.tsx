@@ -79,8 +79,8 @@ export default function LoginPage() {
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
       <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-      
-      <main 
+
+      <main
         id={dyn.v3.getVariant("login-main", ID_VARIANTS_MAP, "login-main")}
         className={cn(
           "relative mx-auto w-full max-w-md px-6 py-12",
@@ -91,7 +91,7 @@ export default function LoginPage() {
           <div className="space-y-8">
             {/* Header */}
             {dyn.v1.addWrapDecoy("login-header", (
-              <div 
+              <div
                 id={dyn.v3.getVariant("login-header", ID_VARIANTS_MAP, "login-header")}
                 className={cn(
                   "text-center",
@@ -99,20 +99,20 @@ export default function LoginPage() {
                 )}
               >
                 {dyn.v1.addWrapDecoy("login-icon-container", (
-                  <div 
+                  <div
                     id={dyn.v3.getVariant("login-icon-container", ID_VARIANTS_MAP, "login-icon-container")}
                     className={cn(
                       "inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-secondary/20 border border-secondary/30 mb-4",
                       dyn.v3.getVariant("icon-container", CLASS_VARIANTS_MAP, "")
                     )}
                   >
-                    <BookOpen 
+                    <BookOpen
                       id={dyn.v3.getVariant("login-icon", ID_VARIANTS_MAP, "login-icon")}
-                      className={cn("h-8 w-8 text-secondary", dyn.v3.getVariant("icon-book", CLASS_VARIANTS_MAP, ""))} 
+                      className={cn("h-8 w-8 text-secondary", dyn.v3.getVariant("icon-book", CLASS_VARIANTS_MAP, ""))}
                     />
                   </div>
                 ))}
-                <h1 
+                <h1
                   id={dyn.v3.getVariant("login-title", ID_VARIANTS_MAP, "login-title")}
                   className={cn(
                     "text-4xl md:text-5xl font-bold text-white mb-3",
@@ -121,7 +121,7 @@ export default function LoginPage() {
                 >
                   {dyn.v3.getVariant("login_title", dynamicV3TextVariants, "Welcome Back")}
                 </h1>
-                <p 
+                <p
                   id={dyn.v3.getVariant("login-description", ID_VARIANTS_MAP, "login-description")}
                   className={cn(
                     "text-lg text-white/70",
@@ -135,14 +135,14 @@ export default function LoginPage() {
 
             {/* Login Form */}
             {dyn.v1.addWrapDecoy("login-form-container", (
-              <div 
+              <div
                 id={dyn.v3.getVariant("login-form-container", ID_VARIANTS_MAP, "login-form-container")}
                 className={cn(
                   "relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl",
                   dyn.v3.getVariant("form-container", CLASS_VARIANTS_MAP, "")
                 )}
               >
-                <form 
+                <form
                   id={dyn.v3.getVariant("login-form", ID_VARIANTS_MAP, "login-form")}
                   className={cn(
                     "space-y-6",
@@ -157,16 +157,16 @@ export default function LoginPage() {
                           <div key="username">
                             {dyn.v1.addWrapDecoy("username-field", (
                               <div>
-                                <label 
+                                <label
                                   id={dyn.v3.getVariant("username-label", ID_VARIANTS_MAP, "username-label")}
                                   className={cn(
                                     "flex items-center gap-2 text-sm font-semibold text-white/80 mb-2",
                                     dyn.v3.getVariant("form-label", CLASS_VARIANTS_MAP, "")
                                   )}
                                 >
-                                  <User 
+                                  <User
                                     id={dyn.v3.getVariant("username-icon", ID_VARIANTS_MAP, "username-icon")}
-                                    className={cn("h-4 w-4 text-secondary", dyn.v3.getVariant("icon-user", CLASS_VARIANTS_MAP, ""))} 
+                                    className={cn("h-4 w-4 text-secondary", dyn.v3.getVariant("icon-user", CLASS_VARIANTS_MAP, ""))}
                                   />
                                   {dyn.v3.getVariant("username_label", dynamicV3TextVariants, "Username")}
                                 </label>
@@ -194,16 +194,16 @@ export default function LoginPage() {
                           <div key="password">
                             {dyn.v1.addWrapDecoy("password-field", (
                               <div>
-                                <label 
+                                <label
                                   id={dyn.v3.getVariant("password-label", ID_VARIANTS_MAP, "password-label")}
                                   className={cn(
                                     "flex items-center gap-2 text-sm font-semibold text-white/80 mb-2",
                                     dyn.v3.getVariant("form-label", CLASS_VARIANTS_MAP, "")
                                   )}
                                 >
-                                  <Lock 
+                                  <Lock
                                     id={dyn.v3.getVariant("password-icon", ID_VARIANTS_MAP, "password-icon")}
-                                    className={cn("h-4 w-4 text-secondary", dyn.v3.getVariant("icon-lock", CLASS_VARIANTS_MAP, ""))} 
+                                    className={cn("h-4 w-4 text-secondary", dyn.v3.getVariant("icon-lock", CLASS_VARIANTS_MAP, ""))}
                                   />
                                   {dyn.v3.getVariant("password_label", dynamicV3TextVariants, "Password")}
                                 </label>
@@ -232,7 +232,7 @@ export default function LoginPage() {
                   </div>
 
                   {error && (
-                    <div 
+                    <div
                       id={dyn.v3.getVariant("login-error", ID_VARIANTS_MAP, "login-error")}
                       className={cn(
                         "rounded-xl border border-red-400/30 bg-red-400/10 p-4",
@@ -244,20 +244,20 @@ export default function LoginPage() {
                   )}
 
                   {dyn.v1.addWrapDecoy("login-submit-button", (
-                    <Button 
+                    <Button
                       id={dyn.v3.getVariant("login-submit-button", ID_VARIANTS_MAP, "login-submit-button")}
-                      type="submit" 
+                      type="submit"
                       className={cn(
                         "w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105",
                         dyn.v3.getVariant("submit-button", CLASS_VARIANTS_MAP, "")
                       )}
                       disabled={isSubmitting}
                     >
-                      <LogIn 
+                      <LogIn
                         id={dyn.v3.getVariant("login-submit-icon", ID_VARIANTS_MAP, "login-submit-icon")}
-                        className={cn("h-5 w-5 mr-2", dyn.v3.getVariant("icon-login", CLASS_VARIANTS_MAP, ""))} 
+                        className={cn("h-5 w-5 mr-2", dyn.v3.getVariant("icon-login", CLASS_VARIANTS_MAP, ""))}
                       />
-                      {isSubmitting 
+                      {isSubmitting
                         ? dyn.v3.getVariant("submitting_button", dynamicV3TextVariants, "Signing in…")
                         : dyn.v3.getVariant("submit_button", dynamicV3TextVariants, "Sign in")
                       }
@@ -269,14 +269,14 @@ export default function LoginPage() {
 
             {/* Footer Links */}
             {dyn.v1.addWrapDecoy("login-footer", (
-              <div 
+              <div
                 id={dyn.v3.getVariant("login-footer", ID_VARIANTS_MAP, "login-footer")}
                 className={cn(
                   "text-center space-y-3",
                   dyn.v3.getVariant("page-footer", CLASS_VARIANTS_MAP, "")
                 )}
               >
-                <p 
+                <p
                   id={dyn.v3.getVariant("login-footer-text", ID_VARIANTS_MAP, "login-footer-text")}
                   className={cn(
                     "text-sm text-white/60",
@@ -284,9 +284,9 @@ export default function LoginPage() {
                   )}
                 >
                   {dyn.v3.getVariant("need_account", dynamicV3TextVariants, "Need an account?")}{" "}
-                  <SeedLink 
+                  <SeedLink
                     id={dyn.v3.getVariant("login-signup-link", ID_VARIANTS_MAP, "login-signup-link")}
-                    href="/signup" 
+                    href="/signup"
                     className={cn(
                       "font-semibold text-secondary hover:text-secondary/80 transition-colors",
                       dyn.v3.getVariant("footer-link", CLASS_VARIANTS_MAP, "")
@@ -295,7 +295,7 @@ export default function LoginPage() {
                     {dyn.v3.getVariant("create_one", dynamicV3TextVariants, "Create one")}
                   </SeedLink>
                 </p>
-                <p 
+                <p
                   id={dyn.v3.getVariant("login-footer-note", ID_VARIANTS_MAP, "login-footer-note")}
                   className={cn(
                     "text-xs text-white/50 max-w-md mx-auto",

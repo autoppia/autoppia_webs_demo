@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const projectKey = searchParams.get('project') || 'web_10_autowork_jobs';
   const count = Number.parseInt(searchParams.get('count') || '5');
-  
+
   try {
     const result = await generateProjectData(projectKey, count);
     return NextResponse.json(result);
@@ -16,4 +16,3 @@ export async function GET(request: NextRequest) {
     }, { status: 500 });
   }
 }
-

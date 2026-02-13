@@ -7,7 +7,7 @@ import { useSeed } from "@/context/SeedContext";
 
 export function DynamicDebug() {
   const dyn = useDynamicSystem();
-  const { resolvedSeeds } = useSeed();
+  const { seed } = useSeed();
 
   useEffect(() => {
     const wrappers = document.querySelectorAll('[data-v1="true"]').length;
@@ -18,7 +18,7 @@ export function DynamicDebug() {
 
     console.log("=== 🔍 DYNAMIC DEBUG (web11) ===");
     console.log("Seed (base):", dyn.seed);
-    console.log("Resolved seeds:", resolvedSeeds);
+    console.log("Seed:", seed);
     console.log("V1 enabled:", isV1Enabled());
     console.log("V3 enabled:", isV3Enabled());
     console.log("V1 wrappers/decoys:", wrappers, decoys);
@@ -32,7 +32,7 @@ export function DynamicDebug() {
       });
     }
     console.log("===============================");
-  }, [dyn.seed, resolvedSeeds]);
+  }, [dyn.seed, seed]);
 
   return null;
 }

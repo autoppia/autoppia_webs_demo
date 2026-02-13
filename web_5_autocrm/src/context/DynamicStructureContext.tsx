@@ -7,7 +7,7 @@ import { ID_VARIANTS_MAP } from "@/dynamic/v3";
 /**
  * Legacy compatibility wrapper for useDynamicStructure
  * Migrates old code to use the new unified useDynamicSystem hook
- * 
+ *
  * @deprecated Use useDynamicSystem() directly instead
  */
 export function DynamicStructureProvider({
@@ -26,11 +26,11 @@ export function useDynamicStructure() {
   const dyn = useDynamicSystem();
 
   return {
-    getText: (key: string, fallback: string) => 
+    getText: (key: string, fallback: string) =>
       dyn.v3.getVariant(key, undefined, fallback),
-    getId: (key: string) => 
+    getId: (key: string) =>
       dyn.v3.getVariant(key, ID_VARIANTS_MAP, key),
-    getClass: (key: string, fallback: string = "") => 
+    getClass: (key: string, fallback: string = "") =>
       dyn.v3.getVariant(key, undefined, fallback),
     currentVariation: dyn.seed % 10 || 10,
     seedStructure: dyn.seed,

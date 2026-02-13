@@ -199,7 +199,7 @@ function PlaceSelect({
   const menuRef = useRef<HTMLDivElement>(null);
   const [inputWidth, setInputWidth] = useState<number | null>(null);
   const { seed } = useSeed();
-  
+
   // Get places from data provider (dynamic based on seed)
   const [places, setPlaces] = useState<Place[]>(() => {
     try {
@@ -236,7 +236,7 @@ function PlaceSelect({
     const handleSeedChange = () => {
       updatePlaces();
     };
-    
+
     if (typeof window !== "undefined") {
       window.addEventListener("autodrive:v2SeedChange", handleSeedChange);
     }
@@ -317,7 +317,7 @@ function PlaceSelect({
             "flex-1 bg-transparent border-none outline-none text-[16px] placeholder:text-gray-400 pr-8",
             dyn.v3.getVariant(
               inputType === "location"
-                ? "location-input-field-class" 
+                ? "location-input-field-class"
                 : "destination-input-field-class",
               CLASS_VARIANTS_MAP,
               ""
@@ -837,8 +837,8 @@ function Spinner() {
 export default function Home() {
   const router = useSeedRouter();
   const dyn = useDynamicSystem();
-  const { resolvedSeeds } = useSeed();
-  const v2Seed = resolvedSeeds.v2 ?? dyn.seed;
+  const { seed } = useSeed();
+  const v2Seed = seed;
   const dynamicV3TextVariants: Record<string, string[]> = useMemo(() => ({
     booking_heading: ["Book your ride", "Plan a trip", "Reserve your ride", "Schedule a drive", "Arrange pickup"],
     booking_subtitle: [
@@ -954,7 +954,7 @@ export default function Home() {
       try {
         // Wait for data provider to finish loading
         await whenReady();
-        
+
         if (!isMounted) return;
 
         // Get initial rides after data is ready
@@ -1005,7 +1005,7 @@ export default function Home() {
             }
           }, 0);
         };
-        
+
         if (typeof window !== "undefined" && handleSeedChange) {
           window.addEventListener("autodrive:v2SeedChange", handleSeedChange);
         }
@@ -1019,7 +1019,7 @@ export default function Home() {
     };
 
     setupRides();
-    
+
     return () => {
       isMounted = false;
       if (unsubscribe) {
@@ -1561,12 +1561,12 @@ export default function Home() {
                       estimatedArrival: rideToReserve.eta,
                     },
                   };
-                  
+
                   // Save RESERVE_RIDE event data to sessionStorage for use in confirmation page
                   if (typeof window !== "undefined") {
                     sessionStorage.setItem("__ud_reserveRideData", JSON.stringify(reserveRideEventData));
                   }
-                  
+
                   logEvent(EVENT_TYPES.RESERVE_RIDE, reserveRideEventData);
 
                   if (typeof window !== "undefined") {

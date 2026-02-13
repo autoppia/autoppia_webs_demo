@@ -36,5 +36,3 @@ export async function initializeDoctorReviews(doctor: { id: string; name: string
   if (typeof window !== 'undefined') localStorage.setItem(cacheKey, JSON.stringify(fallback));
   return fallback;
 }
-
-

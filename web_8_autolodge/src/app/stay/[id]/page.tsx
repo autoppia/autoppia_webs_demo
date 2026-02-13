@@ -102,25 +102,25 @@ function PropertyDetailContent() {
     let mounted = true;
     let retryCount = 0;
     const maxRetries = 5;
-    
+
     const checkHotel = async () => {
       if (!mounted) return;
-      
+
       setIsCheckingHotel(true);
-      
+
       // Wait for data provider to be ready
       await dynamicDataProvider.whenReady();
-      
+
       // Wait a bit more to ensure data is fully loaded and synced
       await new Promise(resolve => setTimeout(resolve, 300));
-      
+
       if (!mounted) return;
-      
+
       const numId = Number(params.id);
       const strId = String(params.id);
       if (Number.isFinite(numId)) {
         let hotels = dynamicDataProvider.getHotels();
-        
+
         // Retry a few times if no hotels loaded yet OR if hotel not found but we should wait
         while (mounted && retryCount < maxRetries) {
           // Check if hotels are loaded
@@ -131,7 +131,7 @@ function PropertyDetailContent() {
             hotels = dynamicDataProvider.getHotels();
             continue;
           }
-          
+
           // Hotels are loaded, check if our hotel is in the list
           const allIds = hotels.map(h => ({
             id: h.id,
@@ -139,20 +139,20 @@ function PropertyDetailContent() {
             idString: String(h.id),
             idNumber: typeof h.id === 'number' ? h.id : Number(h.id),
           }));
-          
+
           const hotelExists = allIds.some(h => {
-            return h.idNumber === numId || 
-                   h.idString === strId || 
+            return h.idNumber === numId ||
+                   h.idString === strId ||
                    String(h.idNumber) === strId ||
                    h.id === numId ||
                    String(h.id) === strId;
           });
-          
+
           // If hotel is found in the list, break out of retry loop
           if (hotelExists) {
             break;
           }
-          
+
           // Hotel not in list, but might still be loading - retry a couple more times
           if (retryCount < 3) {
             retryCount++;
@@ -164,9 +164,9 @@ function PropertyDetailContent() {
             break;
           }
         }
-        
+
         if (!mounted) return;
-        
+
         console.log(`[autolodge] Searching for hotel ID: ${numId} (string: "${strId}") in ${hotels.length} hotels`);
         if (hotels.length > 0) {
           // Log all available IDs to debug
@@ -179,32 +179,32 @@ function PropertyDetailContent() {
           }));
           console.log(`[autolodge] Available hotel IDs (first 10):`, allIds.slice(0, 10));
           console.log(`[autolodge] Is search ID in list?`, allIds.some(h => {
-            return h.idNumber === numId || 
-                   h.idString === strId || 
+            return h.idNumber === numId ||
+                   h.idString === strId ||
                    String(h.idNumber) === strId ||
                    h.id === numId ||
                    String(h.id) === strId;
           }));
         }
-        
+
         // Try multiple search strategies
         let fromProvider = dynamicDataProvider.getHotelById(numId);
-        
+
         // If not found, try string search
         if (!fromProvider) {
           fromProvider = dynamicDataProvider.getHotelById(strId);
         }
-        
+
         // If still not found, try direct search in array with all possible formats
         if (!fromProvider && hotels.length > 0) {
           fromProvider = hotels.find(h => {
             const hId = typeof h.id === 'number' ? h.id : Number(h.id);
             const hIdStr = String(h.id);
             const hIdNumStr = String(hId);
-            
+
             // Try all possible matches
-            return hId === numId || 
-                   hIdStr === strId || 
+            return hId === numId ||
+                   hIdStr === strId ||
                    hIdNumStr === strId ||
                    String(hId) === String(numId) ||
                    h.id === numId ||
@@ -212,15 +212,15 @@ function PropertyDetailContent() {
                    Number(hIdStr) === numId;
           });
         }
-        
+
         if (fromProvider) {
           console.log(`[autolodge] ✅ Hotel ${numId} found:`, fromProvider.title, `(ID: ${fromProvider.id}, type: ${typeof fromProvider.id})`);
           setHotelNotFound(false);
           setIsCheckingHotel(false);
         } else {
           console.log(`[autolodge] ❌ Hotel ${numId} not found. Searched as number ${numId} and string "${strId}"`);
-          console.log(`[autolodge] Available hotels (${hotels.length}):`, hotels.slice(0, 10).map(h => ({ 
-            id: h.id, 
+          console.log(`[autolodge] Available hotels (${hotels.length}):`, hotels.slice(0, 10).map(h => ({
+            id: h.id,
             idType: typeof h.id,
             idString: String(h.id),
             idNumber: typeof h.id === 'number' ? h.id : Number(h.id),
@@ -248,25 +248,25 @@ function PropertyDetailContent() {
     // Subscribe to hotel updates to re-check when data changes
     const unsubscribe = dynamicDataProvider.subscribeHotels((hotels) => {
       if (!mounted) return;
-      
+
       console.log(`[autolodge] Hotels updated (${hotels.length} hotels), re-checking hotel ${params.id}...`);
       const numId = Number(params.id);
       const strId = String(params.id);
-      
+
       if (Number.isFinite(numId)) {
         // Wait a bit to ensure data is fully synced
         setTimeout(() => {
           if (!mounted) return;
-          
+
           const currentHotels = dynamicDataProvider.getHotels();
           if (currentHotels.length > 0) {
-            console.log(`[autolodge] Available hotel IDs after update (first 10):`, currentHotels.slice(0, 10).map(h => ({ 
-              id: h.id, 
+            console.log(`[autolodge] Available hotel IDs after update (first 10):`, currentHotels.slice(0, 10).map(h => ({
+              id: h.id,
               idType: typeof h.id,
               idString: String(h.id),
               idNumber: typeof h.id === 'number' ? h.id : Number(h.id)
             })));
-            
+
             // Try multiple search strategies
             let hotel = dynamicDataProvider.getHotelById(numId);
             if (!hotel) {
@@ -276,14 +276,14 @@ function PropertyDetailContent() {
               hotel = currentHotels.find(h => {
                 const hId = typeof h.id === 'number' ? h.id : Number(h.id);
                 const hIdStr = String(h.id);
-                return hId === numId || 
-                       hIdStr === strId || 
+                return hId === numId ||
+                       hIdStr === strId ||
                        String(hId) === strId ||
                        h.id === numId ||
                        String(h.id) === strId;
               });
             }
-            
+
             if (hotel) {
               console.log(`[autolodge] ✅ Hotel ${numId} found after update:`, hotel.title);
               setHotelNotFound(false);
@@ -307,7 +307,7 @@ function PropertyDetailContent() {
     };
 
     window.addEventListener("autolodge:v2SeedChange", handleSeedChange);
-    
+
     return () => {
       mounted = false;
       unsubscribe();
@@ -319,7 +319,7 @@ function PropertyDetailContent() {
     if (hotelNotFound || isCheckingHotel) {
       return null;
     }
-    
+
     const numId = Number(params.id);
     if (Number.isFinite(numId)) {
       const fromProvider = dynamicDataProvider.getHotelById(numId);
@@ -414,8 +414,6 @@ function PropertyDetailContent() {
   useEffect(() => {
     console.log("[autolodge] V2 Status:", {
       enabled: dyn.v2.isEnabled(),
-      dbMode: dyn.v2.isDbModeEnabled(),
-      fallbackMode: dyn.v2.isFallbackMode(),
     });
   }, [dyn]);
 

@@ -279,12 +279,9 @@ function expandRecurringEvents(
 
 function CalendarApp() {
   const dyn = useDynamicSystem();
-  const { seed: baseSeed, resolvedSeeds } = useSeed();
+  const { seed: baseSeed } = useSeed();
   const currentVariant = useMemo(() => DEFAULT_LAYOUT_CONFIG, []);
-  const v2Seed = useMemo(
-    () => resolvedSeeds.v2 ?? resolvedSeeds.base ?? baseSeed,
-    [resolvedSeeds.v2, resolvedSeeds.base, baseSeed]
-  );
+  const v2Seed = baseSeed;
   const dynamicTextVariants = useMemo(
     () => ({
       modal_heading: ["Event details", "Plan event", "Edit scheduling"],
@@ -404,7 +401,7 @@ function CalendarApp() {
   const [v2Events, setV2Events] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userEvents, setUserEvents] = useState<Event[]>([]); // User-created/edited events
-  
+
   // Subscribe to V2 events
   useEffect(() => {
     // Wait for data to be ready
@@ -413,7 +410,7 @@ function CalendarApp() {
       setV2Events(events as Event[]);
       setIsLoading(false);
     });
-    
+
     // Subscribe to events updates
     const unsubscribe = dynamicDataProvider.subscribeEvents((updatedEvents) => {
       // If events array is empty, it means data was cleared (seed change in progress)
@@ -423,11 +420,11 @@ function CalendarApp() {
         setIsLoading(true);
         return;
       }
-      
+
       setV2Events(updatedEvents as Event[]);
       setIsLoading(false);
     });
-    
+
     // Listen for seed changes
     const handleSeedChange = () => {
       console.log(`[autocalendar] Seed changed, reloading events...`);
@@ -436,11 +433,11 @@ function CalendarApp() {
       // Clear user events when seed changes (they belong to old seed)
       setUserEvents([]);
     };
-    
+
     if (typeof window !== "undefined") {
       window.addEventListener("autocalendar:v2SeedChange", handleSeedChange);
     }
-    
+
     return () => {
       unsubscribe();
       if (typeof window !== "undefined") {
@@ -448,7 +445,7 @@ function CalendarApp() {
       }
     };
   }, [dyn.v2]);
-  
+
   // Combine V2 events with user-created events
   const events = useMemo(() => {
     // Merge V2 events with user events, avoiding duplicates
@@ -456,7 +453,7 @@ function CalendarApp() {
     const uniqueUserEvents = userEvents.filter(e => !v2EventIds.has(e.id));
     return [...v2Events, ...uniqueUserEvents];
   }, [v2Events, userEvents]);
-  
+
   // setEvents now updates userEvents instead of all events
   const setEvents = useCallback((updater: Event[] | ((prev: Event[]) => Event[])) => {
     setUserEvents((prev) => {
@@ -466,7 +463,7 @@ function CalendarApp() {
       return newEvents.filter(e => !v2EventIds.has(e.id));
     });
   }, [v2Events]);
-  
+
   const isGenerating = isLoading;
   const genError = null; // V2 handles errors internally
   const [miniCalMonth, setMiniCalMonth] = useState(viewDate.getMonth());
@@ -483,9 +480,9 @@ function CalendarApp() {
       ).entries()
     );
   }, [events]);
-  
+
   const [myCalendars, setMyCalendars] = useState<Calendar[]>([]);
-  
+
   // Update calendars when events change
   useEffect(() => {
     if (uniqueCalendars.length > 0) {

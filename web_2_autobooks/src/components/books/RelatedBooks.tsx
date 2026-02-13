@@ -41,4 +41,3 @@ export function RelatedBooks({ books, title = "Related books" }: RelatedBooksPro
     </section>
   );
 }
-

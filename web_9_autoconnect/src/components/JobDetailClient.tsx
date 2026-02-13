@@ -288,4 +288,4 @@ export default function JobDetailClient({ jobId }: { jobId: string }) {
       <JobDetailContent jobId={jobId} />
     </DataReadyGate>
   );
-} 
+}

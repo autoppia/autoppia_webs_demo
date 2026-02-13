@@ -92,7 +92,7 @@ export default function ProfilePage() {
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-        
+
         <main className="relative mx-auto max-w-2xl px-4 py-16 text-white">
           <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 text-center backdrop-blur-sm shadow-2xl">
             <h1 className="text-3xl font-semibold">Please sign in</h1>
@@ -165,10 +165,10 @@ export default function ProfilePage() {
       username: currentUser.username,
       name: baseBook.title,
     });
-    
+
     // Remove the book from the user's allowed books
     removeAllowedBook(baseBook.id);
-    
+
     setBookMessage(`Book deleted: ${baseBook.title}`);
   };
 
@@ -176,7 +176,7 @@ export default function ProfilePage() {
     // Generate a unique book ID based on timestamp
     const timestamp = Math.floor(Date.now() / 1000);
     const newBookId = `book-v2-${timestamp}`;
-    
+
     logEvent(EVENT_TYPES.ADD_BOOK, {
       book_id: newBookId,
       username: currentUser.username,
@@ -187,10 +187,10 @@ export default function ProfilePage() {
       pages: Number.parseInt(data.duration, 10),
       genres: data.genres.split(",").map((g) => g.trim()).filter(Boolean),
     });
-    
+
     // Add the new book to the user's allowed books
     addAllowedBook(newBookId);
-    
+
     setAddBookMessage(`Book added: ${data.title}`);
     setAddBookKey((prev) => prev + 1);
   };
@@ -204,7 +204,7 @@ export default function ProfilePage() {
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-        
+
         {dyn.v1.addWrapDecoy("profile-content", (
           <main className="relative mx-auto max-w-5xl px-4 py-10 text-white" id={dyn.v3.getVariant("profile-content", ID_VARIANTS_MAP, "profile-content")}>
             {/* Header */}
@@ -284,7 +284,7 @@ export default function ProfilePage() {
                     <p className="text-sm text-white/70">Update your profile information and preferences.</p>
                   </div>
                 </div>
-                
+
                 {dyn.v1.addWrapDecoy("edit-profile-form", (
                   <form className="space-y-6" onSubmit={handleProfileSubmit} id={dyn.v3.getVariant("edit-profile-form", ID_VARIANTS_MAP, "edit-profile-form")}>
                 <div className="grid gap-6 md:grid-cols-2">
@@ -293,9 +293,9 @@ export default function ProfilePage() {
                       <User className="h-4 w-4 text-secondary" />
                       {dyn.v3.getVariant("first_name_field", TEXT_VARIANTS_MAP, "First Name")}
                     </label>
-                    <Input 
-                      value={profileForm.firstName} 
-                      onChange={(event) => handleProfileInputChange("firstName", event.target.value)} 
+                    <Input
+                      value={profileForm.firstName}
+                      onChange={(event) => handleProfileInputChange("firstName", event.target.value)}
                       className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20")}
                       placeholder={dyn.v3.getVariant("first_name_placeholder", TEXT_VARIANTS_MAP, "Enter your first name")}
                       id={dyn.v3.getVariant("first-name-input", ID_VARIANTS_MAP, "first-name-input")}
@@ -306,25 +306,25 @@ export default function ProfilePage() {
                       <User className="h-4 w-4 text-secondary" />
                       {dyn.v3.getVariant("last_name_field", TEXT_VARIANTS_MAP, "Last Name")}
                     </label>
-                    <Input 
-                      value={profileForm.lastName} 
-                      onChange={(event) => handleProfileInputChange("lastName", event.target.value)} 
+                    <Input
+                      value={profileForm.lastName}
+                      onChange={(event) => handleProfileInputChange("lastName", event.target.value)}
                       className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20")}
                       placeholder={dyn.v3.getVariant("last_name_placeholder", TEXT_VARIANTS_MAP, "Enter your last name")}
                       id={dyn.v3.getVariant("last-name-input", ID_VARIANTS_MAP, "last-name-input")}
                     />
                   </div>
                 </div>
-                
+
                 <div className="grid gap-6 md:grid-cols-2">
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                       <Mail className="h-4 w-4 text-secondary" />
                       {dyn.v3.getVariant("email_field", TEXT_VARIANTS_MAP, "Email")}
                     </label>
-                    <Input 
-                      value={profileForm.email} 
-                      onChange={(event) => handleProfileInputChange("email", event.target.value)} 
+                    <Input
+                      value={profileForm.email}
+                      onChange={(event) => handleProfileInputChange("email", event.target.value)}
                       className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20")}
                       placeholder={dyn.v3.getVariant("email_placeholder", TEXT_VARIANTS_MAP, "your.email@example.com")}
                       id={dyn.v3.getVariant("email-input-profile", ID_VARIANTS_MAP, "email-input-profile")}
@@ -344,16 +344,16 @@ export default function ProfilePage() {
                     />
                   </div>
                 </div>
-                
+
                 <div className="grid gap-6 md:grid-cols-2">
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                       <MapPin className="h-4 w-4 text-secondary" />
                       {dyn.v3.getVariant("location_field", TEXT_VARIANTS_MAP, "Location")}
                     </label>
-                    <Input 
-                      value={profileForm.location} 
-                      onChange={(event) => handleProfileInputChange("location", event.target.value)} 
+                    <Input
+                      value={profileForm.location}
+                      onChange={(event) => handleProfileInputChange("location", event.target.value)}
                       className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20")}
                       placeholder={dyn.v3.getVariant("location_placeholder", TEXT_VARIANTS_MAP, "City, Country")}
                       id={dyn.v3.getVariant("location-input", ID_VARIANTS_MAP, "location-input")}
@@ -364,16 +364,16 @@ export default function ProfilePage() {
                       <Globe className="h-4 w-4 text-secondary" />
                       {dyn.v3.getVariant("website_field", TEXT_VARIANTS_MAP, "Website")}
                     </label>
-                    <Input 
-                      value={profileForm.website} 
-                      onChange={(event) => handleProfileInputChange("website", event.target.value)} 
+                    <Input
+                      value={profileForm.website}
+                      onChange={(event) => handleProfileInputChange("website", event.target.value)}
                       className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20")}
                       placeholder={dyn.v3.getVariant("website_placeholder", TEXT_VARIANTS_MAP, "https://yourwebsite.com")}
                       id={dyn.v3.getVariant("website-input", ID_VARIANTS_MAP, "website-input")}
                     />
                   </div>
                 </div>
-                
+
                 <div>
                   <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                     <FileText className="h-4 w-4 text-secondary" />
@@ -387,10 +387,10 @@ export default function ProfilePage() {
                     id={dyn.v3.getVariant("bio-textarea", ID_VARIANTS_MAP, "bio-textarea")}
                   />
                 </div>
-                
+
                     <div className="flex flex-wrap gap-3 pt-2">
                       {dyn.v1.addWrapDecoy("save-profile-button", (
-                        <Button 
+                        <Button
                           type="submit"
                           id={dyn.v3.getVariant("save-profile-button", ID_VARIANTS_MAP, "save-profile-button")}
                           className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "h-12 px-8 bg-secondary text-black hover:bg-secondary/90 font-bold shadow-lg shadow-secondary/20 transition-all hover:scale-105")}
@@ -417,7 +417,7 @@ export default function ProfilePage() {
                     <span className="text-sm text-white/60">({entries.length})</span>
                   </div>
                 )}
-                
+
                 {entries.map(({ bookId, book }) => {
                   const baseBook = book ?? buildFallbackBook(bookId);
                   return (
@@ -452,7 +452,7 @@ export default function ProfilePage() {
                         )}
                       </div>
                     </div>
-                    
+
                     <div className="flex flex-wrap gap-3 mb-6">
                             {book && (
                               dyn.v1.addWrapDecoy(`view-details-button-${bookId}`, (
@@ -478,7 +478,7 @@ export default function ProfilePage() {
                               </Button>
                             ), `delete-book-button-wrap-${bookId}`)}
                           </div>
-                          
+
                           <div className="border-t border-white/10 pt-6">
                             <BookEditor book={baseBook} onSubmit={(data) => handleEntryEdit(baseBook, data)} submitLabel={dyn.v3.getVariant("save_changes", TEXT_VARIANTS_MAP, "Save Changes")} />
                           </div>
@@ -503,13 +503,13 @@ export default function ProfilePage() {
                     <span className="text-sm text-white/60">({currentUser.readingList.length})</span>
                   </div>
                 )}
-                
+
                 {currentUser.readingList && currentUser.readingList.length > 0 ? (
                   <div className="space-y-4">
                     {currentUser.readingList.map((bookId) => {
                       const book = books.find((b) => b.id === bookId);
                       const baseBook = book ?? buildFallbackBook(bookId);
-                      
+
                       return (
                         dyn.v1.addWrapDecoy(`reading-list-item-${bookId}`, (
                           <div key={bookId} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl">
@@ -547,7 +547,7 @@ export default function ProfilePage() {
                                 </div>
                               </div>
                             </div>
-                            
+
                             <div className="flex flex-wrap gap-3">
                               {book && (
                                 dyn.v1.addWrapDecoy(`view-details-reading-${bookId}`, (

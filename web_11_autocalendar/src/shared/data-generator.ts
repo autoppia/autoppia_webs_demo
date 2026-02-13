@@ -224,7 +224,7 @@ export function generateClientSideEvents(count: number = 50, categories: string[
 
 /**
  * Universal Data Generation Utility (Web11 Edition)
- * 
+ *
  * This utility provides consistent data generation for the Web11 AutoCalendar project.
  * It generates realistic mock event data for calendar-based applications.
  */

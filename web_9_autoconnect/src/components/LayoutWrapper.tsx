@@ -8,4 +8,4 @@ interface LayoutWrapperProps {
 
 export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   return <div>{children}</div>;
-} 
+}

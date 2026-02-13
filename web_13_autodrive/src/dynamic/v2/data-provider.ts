@@ -63,10 +63,10 @@ export class DynamicDataProvider {
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
     });
-    
+
     const baseSeed = this.getBaseSeedFromUrl();
     const runtimeSeed = this.getRuntimeV2Seed();
-    
+
     try {
       // If base seed = 1, use fallback data directly (skip DB mode)
       if (baseSeed === 1) {
@@ -81,30 +81,30 @@ export class DynamicDataProvider {
         this.setRides(rides);
         return;
       }
-      
+
       this.currentSeed = runtimeSeed ?? 1;
-      
+
       // Check if DB mode is enabled - only try DB if enabled
       const dbModeEnabled = isDbLoadModeEnabled();
       console.log("[autodrive/data-provider] DB mode enabled:", dbModeEnabled, "runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
-      
+
       if (dbModeEnabled) {
         // Try DB mode first if enabled
         console.log("[autodrive/data-provider] Attempting to load from DB...");
         // Let initializeTrips/Places/Rides handle DB loading
       }
-      
+
       // Initialize all data types (they handle DB mode internally)
       const [trips, places, rides] = await Promise.all([
         initializeTrips(runtimeSeed ?? undefined),
         initializePlaces(runtimeSeed ?? undefined),
         initializeRides(runtimeSeed ?? undefined),
       ]);
-      
+
       this.setTrips(trips);
       this.setPlaces(places);
       this.setRides(rides);
-      
+
       console.log("[autodrive/data-provider] ✅ Data initialized:", {
         trips: trips.length,
         places: places.length,
@@ -130,7 +130,7 @@ export class DynamicDataProvider {
         this.resolveReady();
       }
     }
-    
+
     // Listen for seed changes
     if (typeof window !== "undefined") {
       window.addEventListener("autodrive:v2SeedChange", this.handleSeedEvent.bind(this));
@@ -170,7 +170,7 @@ export class DynamicDataProvider {
         this.notifySubscribers(); // Notify with empty array
         this.notifyPlacesSubscribers(); // Notify places subscribers with empty array
         this.notifyRidesSubscribers(); // Notify rides subscribers with empty array
-        
+
         // Clear sessionStorage related to ride reservation when seed changes
         // This prevents showing wrong ride information on confirmation page
         if (typeof window !== "undefined") {

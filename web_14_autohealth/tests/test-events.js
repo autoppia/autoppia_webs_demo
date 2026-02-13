@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * 🧪 EVENT COVERAGE TEST
- * 
+ *
  * This script validates that all events defined in EVENT_TYPES are being used
  * in the codebase. It requires 100% coverage (all events must be used).
- * 
+ *
  * USAGE:
  *   From Node.js: node tests/test-events.js
  */
@@ -32,7 +32,7 @@ function getAllSourceFiles() {
   const fs = require('fs');
   const pathModule = require('path');
   const srcDir = pathModule.join(process.cwd(), 'src');
-  
+
   function walkDir(dir, fileList = []) {
     if (!fs.existsSync(dir)) return fileList;
     const files = fs.readdirSync(dir);
@@ -51,7 +51,7 @@ function getAllSourceFiles() {
     });
     return fileList;
   }
-  
+
   if (fs.existsSync(srcDir)) {
     return walkDir(srcDir);
   }
@@ -66,7 +66,7 @@ function testEventCoverage() {
   console.log('\n' + '📡'.repeat(30));
   console.log('📡 EVENT COVERAGE TEST');
   console.log('📡'.repeat(30));
-  
+
   const results = {
     passed: 0,
     failed: 0,
@@ -78,15 +78,15 @@ function testEventCoverage() {
       eventUsages: {}
     }
   };
-  
+
   if (isBrowser()) {
     console.log('   ⚠️  This test only works in Node.js');
     return results;
   }
-  
+
   const fs = require('fs');
   const pathModule = require('path');
-  
+
   // Try to find events.ts file in common locations
   const possiblePaths = [
     'src/library/events.ts',
@@ -94,10 +94,10 @@ function testEventCoverage() {
     'src/library/event.ts',
     'src/lib/event.ts'
   ];
-  
+
   let eventsFilePath = null;
   let eventsContent = '';
-  
+
   for (const relPath of possiblePaths) {
     const fullPath = pathModule.join(process.cwd(), relPath);
     if (fs.existsSync(fullPath)) {
@@ -107,7 +107,7 @@ function testEventCoverage() {
       break;
     }
   }
-  
+
   if (!eventsFilePath) {
     console.log('\n❌ events.ts file not found');
     console.log('   Searched in:');
@@ -116,7 +116,7 @@ function testEventCoverage() {
     results.errors.push('events.ts not found in common locations');
     return results;
   }
-  
+
   // Extract EVENT_TYPES from the file
   const eventTypesMatch = eventsContent.match(/export\s+const\s+EVENT_TYPES\s*=\s*\{([^}]+)\}/s);
   if (!eventTypesMatch) {
@@ -125,20 +125,20 @@ function testEventCoverage() {
     results.errors.push('EVENT_TYPES not found in the events file');
     return results;
   }
-  
+
   const eventTypesBlock = eventTypesMatch[1];
-  
+
   // Extract event names (KEY: "VALUE" or KEY: 'VALUE')
   const eventNamePattern = /(\w+)\s*:\s*["']([^"']+)["']/g;
   const eventNames = [];
   let match;
-  
+
   while ((match = eventNamePattern.exec(eventTypesBlock)) !== null) {
     const eventKey = match[1];
     const eventValue = match[2];
     eventNames.push({ key: eventKey, value: eventValue });
   }
-  
+
   // Also try to match commented out events (// EVENT_NAME: "EVENT_NAME")
   const commentedPattern = /\/\/\s*(\w+)\s*:\s*["']([^"']+)["']/g;
   while ((match = commentedPattern.exec(eventTypesBlock)) !== null) {
@@ -149,21 +149,21 @@ function testEventCoverage() {
       eventNames.push({ key: eventKey, value: eventValue });
     }
   }
-  
+
   results.stats.totalEvents = eventNames.length;
   console.log(`\n📊 Total events defined: ${results.stats.totalEvents}`);
-  
+
   if (eventNames.length === 0) {
     console.log('\n⚠️  No events found in EVENT_TYPES');
     results.failed++;
     results.errors.push('Could not extract events from EVENT_TYPES');
     return results;
   }
-  
+
   // Get all source files
   const sourceFiles = getAllSourceFiles();
   console.log(`📂 Source files analyzed: ${sourceFiles.length}`);
-  
+
   // Check usage of each event
   eventNames.forEach(({ key, value }) => {
     // Look for: logEvent(EVENT_TYPES.KEY, ...) or logEvent(EVENT_TYPES['KEY'], ...)
@@ -173,19 +173,19 @@ function testEventCoverage() {
     const pattern3 = new RegExp(`EVENT_TYPES\\.${key}`, 'g');
     const pattern4 = new RegExp(`EVENT_TYPES\\['${key}'\\]`, 'g');
     const pattern5 = new RegExp(`["']${value}["']`, 'g'); // Direct string usage
-    
+
     let usageCount = 0;
     sourceFiles.forEach(file => {
       const content = readFileContent(file);
       // Don't count the events.ts file itself
       if (file === eventsFilePath) return;
-      
+
       const matches1 = content.match(pattern1);
       const matches2 = content.match(pattern2);
       const matches3 = content.match(pattern3);
       const matches4 = content.match(pattern4);
       const matches5 = content.match(pattern5);
-      
+
       usageCount += (matches1 ? matches1.length : 0);
       usageCount += (matches2 ? matches2.length : 0);
       // For pattern3 and pattern4, only count if not in events.ts
@@ -202,25 +202,25 @@ function testEventCoverage() {
         }
       }
     });
-    
+
     results.stats.eventUsages[key] = usageCount;
-    
+
     if (usageCount > 0) {
       results.stats.usedEvents++;
     } else {
       results.stats.unusedEvents.push(key);
     }
   });
-  
+
   console.log(`\n📊 Events used: ${results.stats.usedEvents} / ${results.stats.totalEvents}`);
-  
+
   // Calculate coverage percentage
-  const coveragePercent = results.stats.totalEvents > 0 
+  const coveragePercent = results.stats.totalEvents > 0
     ? ((results.stats.usedEvents / results.stats.totalEvents) * 100).toFixed(1)
     : 0;
-  
+
   console.log(`📈 Coverage: ${coveragePercent}%`);
-  
+
   // Show unused events (if any)
   if (results.stats.unusedEvents.length > 0) {
     console.log(`\n⚠️  Unused events (${results.stats.unusedEvents.length}):`);
@@ -229,7 +229,7 @@ function testEventCoverage() {
       console.log(`   ❌ ${eventKey} (${eventInfo ? eventInfo.value : 'N/A'})`);
     });
   }
-  
+
   // Pass only if 100% of events are used
   if (results.stats.usedEvents === results.stats.totalEvents) {
     console.log(`\n✅ Event coverage: ${results.stats.usedEvents}/${results.stats.totalEvents} = 100%`);
@@ -239,7 +239,7 @@ function testEventCoverage() {
     results.failed++;
     results.errors.push(`Missing ${results.stats.totalEvents - results.stats.usedEvents} unused events (must all be in use: 100%)`);
   }
-  
+
   return results;
 }
 
@@ -251,28 +251,28 @@ function generateReport(result) {
   console.log('\n' + '='.repeat(60));
   console.log('📊 FINAL REPORT');
   console.log('='.repeat(60));
-  
+
   console.log(`\n✅ Tests passed: ${result.passed}`);
   console.log(`❌ Tests failed: ${result.failed}`);
-  
+
   console.log('\n📡 EVENT STATS:');
   console.log('─'.repeat(60));
   console.log(`   🔹 Total events defined: ${result.stats.totalEvents}`);
   console.log(`   🔹 Events in use: ${result.stats.usedEvents}`);
   console.log(`   🔹 Unused events: ${result.stats.unusedEvents.length}`);
-  
-  const coveragePercent = result.stats.totalEvents > 0 
+
+  const coveragePercent = result.stats.totalEvents > 0
     ? ((result.stats.usedEvents / result.stats.totalEvents) * 100).toFixed(1)
     : 0;
   console.log(`   🔹 Coverage: ${coveragePercent}%`);
-  
+
   if (result.errors.length > 0) {
     console.log('\n⚠️  ERRORS:');
     result.errors.forEach((error, i) => {
       console.log(`   ${i + 1}. ${error}`);
     });
   }
-  
+
   console.log('\n' + '='.repeat(60));
   if (result.failed === 0) {
     console.log('✅ EVENT COVERAGE: 100% - VALIDATION SUCCESS');
@@ -282,7 +282,7 @@ function generateReport(result) {
     console.log('   Some events are not being used.');
   }
   console.log('='.repeat(60) + '\n');
-  
+
   return {
     success: result.failed === 0,
     totalPassed: result.passed,

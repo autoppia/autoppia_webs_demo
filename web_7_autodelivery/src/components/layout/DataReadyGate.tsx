@@ -10,7 +10,7 @@ interface DataReadyGateProps {
 
 /**
  * DataReadyGate Component
- * 
+ *
  * This component ensures that data generation/loading is complete before rendering children.
  * It shows a loading state while data is being initialized from:
  * - AI generation API

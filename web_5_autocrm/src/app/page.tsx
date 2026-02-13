@@ -15,20 +15,20 @@ import fallbackFilesJson from "@/data/original/files_1.json";
 import fallbackLogsJson from "@/data/original/logs_1.json";
 
 function DashboardContent() {
-  const { seed, resolvedSeeds } = useSeed();
-  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const { seed } = useSeed();
+  const v2Seed = seed;
 
   // Log v2 info when it changes (only once per unique v2 seed)
   const lastV2SeedRef = useRef<number | null>(null);
   useEffect(() => {
-    const currentV2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+    const currentV2Seed = seed;
     // Only log if v2 seed actually changed
     if (lastV2SeedRef.current !== currentV2Seed) {
       console.log(`[autocrm] V2 Data - Seed: ${currentV2Seed} (from base seed: ${seed})`);
       lastV2SeedRef.current = currentV2Seed;
     }
   }, [resolvedSeeds.v2, resolvedSeeds.base, seed]);
-  
+
   const dyn = useDynamicSystem();
 
   // Debug: Verify V2 status
@@ -36,9 +36,6 @@ function DashboardContent() {
     if (process.env.NODE_ENV === "development") {
       console.log("[page] V2 status:", {
         v2Enabled: dyn.v2.isEnabled(),
-        v2DbMode: dyn.v2.isDbModeEnabled(),
-        v2AiGenerate: dyn.v2.isEnabled(),
-        v2Fallback: dyn.v2.isFallbackMode(),
       });
     }
   }, [dyn.v2]);
@@ -46,15 +43,15 @@ function DashboardContent() {
   // Load dynamic counts for all entities (with cleanup to avoid duplicate loads)
   const lastV2SeedForDataRef = useRef<number | null>(null);
   const [dataSeed, setDataSeed] = useState<number | undefined>(v2Seed);
-  
+
   useEffect(() => {
-    const currentV2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+    const currentV2Seed = seed;
     if (lastV2SeedForDataRef.current !== currentV2Seed) {
       lastV2SeedForDataRef.current = currentV2Seed;
       setDataSeed(currentV2Seed);
     }
-  }, [resolvedSeeds.v2, resolvedSeeds.base]);
-  
+  }, [seed]);
+
   const { data: clientsData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'clients', seedValue: dataSeed });
   const { data: mattersData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'matters', seedValue: dataSeed });
   const { data: eventsData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'events', seedValue: dataSeed });
@@ -104,7 +101,7 @@ function DashboardContent() {
     files: (filesData && filesData.length > 0 ? filesData.length : fallbackCounts.files),
     logs: (logsData && logsData.length > 0 ? logsData.length : fallbackCounts.logs),
   };
-  
+
   // const handleClick = (eventType: EventType, data: EventData) => () => logEvent(eventType, { ...data });
 
   return (

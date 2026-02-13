@@ -44,7 +44,7 @@ export default function ContactPage() {
                   className="w-full h-56 object-cover rounded-lg shadow-md"
                 />
               </div>
-              
+
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-semibold text-slate-700">Name</label>

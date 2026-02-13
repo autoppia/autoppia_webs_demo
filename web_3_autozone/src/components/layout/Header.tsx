@@ -139,12 +139,12 @@ export function Header() {
   return (
     <>
       {dyn.v1.addWrapDecoy("header-container", (
-        <header 
+        <header
           id={dyn.v3.getVariant("header", ID_VARIANTS_MAP, "header")}
           className={dyn.v3.getVariant("header", CLASS_VARIANTS_MAP, "sticky top-0 z-50 w-full backdrop-blur-xl")}
         >
           {dyn.v1.addWrapDecoy("header-nav", (
-            <nav 
+            <nav
               id={dyn.v3.getVariant("nav-menu", ID_VARIANTS_MAP, "main-nav")}
               // Keep header aligned with page content by using the shared omnizon container.
               className={dyn.v3.getVariant("nav-menu", CLASS_VARIANTS_MAP, "w-full omnizon-container pb-4 pt-4")}
@@ -171,7 +171,7 @@ export function Header() {
 
                     {/* Search Bar */}
                     {dyn.v1.addWrapDecoy("header-search-bar", (
-                      <div 
+                      <div
                         id={dyn.v3.getVariant("search-input", ID_VARIANTS_MAP, "search-container")}
                         className={dyn.v3.getVariant(
                           "search-input",

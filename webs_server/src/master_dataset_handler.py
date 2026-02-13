@@ -48,8 +48,8 @@ async def save_master_pool(pool: asyncpg.Pool, project_key: str, entity_type: st
     query = """
         INSERT INTO master_datasets (project_key, entity_type, data_pool, pool_size, metadata, updated_at)
         VALUES ($1, $2, $3, $4, $5, NOW())
-        ON CONFLICT (project_key, entity_type) 
-        DO UPDATE SET 
+        ON CONFLICT (project_key, entity_type)
+        DO UPDATE SET
             data_pool = EXCLUDED.data_pool,
             pool_size = EXCLUDED.pool_size,
             metadata = EXCLUDED.metadata,

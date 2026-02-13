@@ -12,7 +12,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import { cn } from "@/library/utils";
 
 export default function ContactPage() {
-  const { seed, resolvedSeeds } = useSeed();
+  const { seed } = useSeed();
   const dyn = useDynamicSystem();
   const searchParams = useSearchParams();
   const hasSeedParam = Boolean(searchParams?.get("seed"));

@@ -31,8 +31,8 @@ type RestaurantView = {
 export default function Page() {
   const params = useParams();
   const searchParams = useSearchParams();
-  const { seed, resolvedSeeds } = useSeed();
-  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const { seed } = useSeed();
+  const v2Seed = seed;
 
   const restaurantId = params.restaurantId as string;
   const reservationTimeParam = decodeURIComponent(params.time as string);
@@ -65,9 +65,6 @@ export default function Page() {
     if (process.env.NODE_ENV === "development") {
       console.log("[booking/[restaurantId]/[time]/page] V2 status:", {
         v2Enabled: dyn.v2.isEnabled(),
-        v2DbMode: dyn.v2.isDbModeEnabled(),
-        v2AiGenerate: dyn.v2.isEnabled(),
-        v2Fallback: dyn.v2.isFallbackMode(),
       });
     }
   }, [dyn.v2]);
@@ -91,12 +88,12 @@ export default function Page() {
       try {
         // Wait for data to be ready
         await dynamicDataProvider.whenReady();
-        
+
         // Reload if seed changed - pass seed explicitly
         await dynamicDataProvider.reload(seed ?? undefined);
-        
+
         if (!mounted) return;
-        
+
         // Get restaurant directly using getRestaurantById
         const found = getRestaurantById(restaurantId);
         if (found) {
@@ -252,7 +249,7 @@ export default function Page() {
           {/* Name Field */}
           {dyn.v1.addWrapDecoy("full-name-field", (
             <div id={dyn.v3.getVariant("full-name-field-container", ID_VARIANTS_MAP, "full-name-field-container")}>
-              <label 
+              <label
                 className="block text-sm font-medium text-gray-700 mb-1"
                 htmlFor={dyn.v3.getVariant("full-name-input", ID_VARIANTS_MAP, "full-name-input")}
                 id={dyn.v3.getVariant("full-name-label", ID_VARIANTS_MAP, "full-name-label")}
@@ -273,7 +270,7 @@ export default function Page() {
           {/* Phone Field */}
           {dyn.v1.addWrapDecoy("phone-field", (
             <div id={dyn.v3.getVariant("phone-field-container", ID_VARIANTS_MAP, "phone-field-container")}>
-              <label 
+              <label
                 className="block text-sm font-medium text-gray-700 mb-1"
                 htmlFor={dyn.v3.getVariant("phone-number-input", ID_VARIANTS_MAP, "phone-number-input")}
                 id={dyn.v3.getVariant("phone-number-label", ID_VARIANTS_MAP, "phone-number-label")}
@@ -327,7 +324,7 @@ export default function Page() {
           {/* Email Field */}
           {dyn.v1.addWrapDecoy("email-field", (
             <div id={dyn.v3.getVariant("email-field-container", ID_VARIANTS_MAP, "email-field-container")}>
-              <label 
+              <label
                 className="block text-sm font-medium text-gray-700 mb-1"
                 htmlFor={dyn.v3.getVariant("email-input", ID_VARIANTS_MAP, "email-input")}
                 id={dyn.v3.getVariant("email-label", ID_VARIANTS_MAP, "email-label")}
@@ -348,7 +345,7 @@ export default function Page() {
           {/* Occasion Field */}
           {dyn.v1.addWrapDecoy("occasion-field", (
             <div id={dyn.v3.getVariant("occasion-field-container", ID_VARIANTS_MAP, "occasion-field-container")}>
-              <label 
+              <label
                 className="block text-sm font-medium text-gray-700 mb-1"
                 htmlFor={dyn.v3.getVariant("occasion-select", ID_VARIANTS_MAP, "occasion-select")}
                 id={dyn.v3.getVariant("occasion-label", ID_VARIANTS_MAP, "occasion-label")}
@@ -385,7 +382,7 @@ export default function Page() {
           {/* Special Request Field */}
           {dyn.v1.addWrapDecoy("special-request-field", (
             <div id={dyn.v3.getVariant("special-request-field-container", ID_VARIANTS_MAP, "special-request-field-container")}>
-              <label 
+              <label
                 className="block text-sm font-medium text-gray-700 mb-1"
                 htmlFor={dyn.v3.getVariant("special-requests-textarea", ID_VARIANTS_MAP, "special-requests-textarea")}
                 id={dyn.v3.getVariant("special-requests-label", ID_VARIANTS_MAP, "special-requests-label")}

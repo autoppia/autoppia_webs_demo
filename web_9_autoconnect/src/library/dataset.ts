@@ -1,6 +1,6 @@
 /**
  * Web 9 – LinkedIn Lite Data Generation Utility
- * 
+ *
  * Generates realistic Users, Posts, and Jobs for the LinkedIn Lite demo.
  * Calls the same `/datasets/generate` endpoint you already use.
  */

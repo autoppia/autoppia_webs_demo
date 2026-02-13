@@ -82,7 +82,7 @@ export default function MovieDetailPage() {
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-        
+
         <main className="relative mx-auto max-w-4xl px-4 py-16 text-white">
           <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 text-center backdrop-blur-sm shadow-2xl">
             <h1 className="text-3xl font-semibold">Movie not found</h1>
@@ -145,13 +145,13 @@ export default function MovieDetailPage() {
 
   const handleWatchlist = () => {
     if (!movie) return;
-    
+
     if (!currentUser) {
       setWatchlistMessage("Please sign in to add movies to your watchlist");
       setTimeout(() => setWatchlistMessage(null), 3000);
       return;
     }
-    
+
     const payload = movieToFilmPayload(movie);
     const isInWatchlist = currentUser.watchlist?.includes(movie.id);
 
@@ -164,11 +164,11 @@ export default function MovieDetailPage() {
       addToWatchlist(movie.id);
       setWatchlistMessage(`"${movie.title}" added to watchlist`);
     }
-    
+
     // Auto-hide message after 3 seconds
     setTimeout(() => setWatchlistMessage(null), 3000);
   };
-  
+
   const isInWatchlist = currentUser?.watchlist?.includes(movie.id) ?? false;
 
   const handleShare = () => {
@@ -215,7 +215,7 @@ export default function MovieDetailPage() {
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
       <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-      
+
       <main className="relative mx-auto max-w-6xl space-y-8 px-4 py-10 text-white">
         {message && (
           <div className="rounded-xl border border-green-400/30 bg-green-400/10 p-4 backdrop-blur-sm">

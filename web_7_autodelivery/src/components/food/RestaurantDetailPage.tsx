@@ -82,7 +82,7 @@ function ReviewsSection({
       >
         {reviewsTitleText}
       </h3>
-      <div 
+      <div
         className={`space-y-4 ${layout.generateSeedClass('reviews-list')}`}
         {...layout.getElementAttributes('reviews-list', 0)}
       >
@@ -165,9 +165,6 @@ export default function RestaurantDetailPage({
     console.log("[autodelivery] V2 Status:", {
       seed,
       v2Enabled: dyn.v2.isEnabled(),
-      dbMode: dyn.v2.isDbModeEnabled(),
-      aiMode: dyn.v2.isEnabled(),
-      fallback: dyn.v2.isFallbackMode(),
     });
   }, [seed, dyn]);
 
@@ -239,14 +236,14 @@ export default function RestaurantDetailPage({
 
   return (
     dyn.v1.addWrapDecoy("restaurant-detail-page", (
-    <div 
+    <div
       className={`max-w-5xl mx-auto px-2 sm:px-0 ${layout.restaurantDetail.containerClass} ${dyn.v3.getVariant("container", CLASS_VARIANTS_MAP, "")} ds-${seedStructure}`}
       id={dyn.v3.getVariant('restaurant-detail-page', ID_VARIANTS_MAP, `restaurant-detail-page-${seedStructure}`)}
       aria-label={dyn.v3.getVariant('restaurant-detail-page', TEXT_VARIANTS_MAP, 'Restaurant detail page')}
     >
       {/* Header */}
       {dyn.v1.addWrapDecoy("restaurant-header", (
-      <div 
+      <div
         className={`flex flex-col md:flex-row gap-6 md:items-center mt-6 mb-8 ${layout.restaurantDetail.headerClass} ds-${seedStructure}`}
         {...layout.getElementAttributes('restaurant-header', 0)}
       >
@@ -261,7 +258,7 @@ export default function RestaurantDetailPage({
         </div>
         <div className="flex-1 space-y-2">
           <div className="flex items-center gap-3">
-            <h1 
+            <h1
               className={`text-3xl font-bold ${layout.generateSeedClass('restaurant-name')} ds-${seedStructure}`}
               id={dyn.v3.getVariant('restaurant-name', ID_VARIANTS_MAP, `restaurant-name-${seedStructure}`)}
               aria-label={dyn.v3.getVariant('restaurant-name', TEXT_VARIANTS_MAP, restaurant.name)}
@@ -272,14 +269,14 @@ export default function RestaurantDetailPage({
               ★ {restaurant.rating.toFixed(1)}
             </span>
           </div>
-          <div 
+          <div
             className={`text-zinc-600 ${layout.generateSeedClass('restaurant-meta')} ds-${seedStructure}`}
             id={dyn.v3.getVariant('restaurant-meta', ID_VARIANTS_MAP, `restaurant-meta-${seedStructure}`)}
             aria-label={dyn.v3.getVariant('restaurant-meta', TEXT_VARIANTS_MAP, `${restaurant.cuisine} · ${restaurant.rating}`)}
           >
             {dyn.v3.getVariant('restaurant-meta', TEXT_VARIANTS_MAP, `${restaurant.cuisine} · ${restaurant.menu.length} dishes`)}
           </div>
-          <p 
+          <p
             className={`text-zinc-600 ${layout.generateSeedClass('restaurant-description')} ds-${seedStructure}`}
             id={dyn.v3.getVariant('restaurant-description', ID_VARIANTS_MAP, `restaurant-description-${seedStructure}`)}
             aria-label={dyn.v3.getVariant('restaurant-description', TEXT_VARIANTS_MAP, restaurant.description)}
@@ -313,14 +310,14 @@ export default function RestaurantDetailPage({
       {/* Menu */}
       {dyn.v1.addWrapDecoy("menu-section", (
       <div>
-        <h2 
+        <h2
           className={`text-xl font-bold mb-4 ${layout.generateSeedClass('menu-title')} ds-${seedStructure}`}
           id={dyn.v3.getVariant('menu-title', ID_VARIANTS_MAP, `menu-title-${seedStructure}`)}
           aria-label={dyn.v3.getVariant('menu-title', TEXT_VARIANTS_MAP, 'Menu')}
         >
           {dyn.v3.getVariant('menu-title', TEXT_VARIANTS_MAP, 'Menu')}
         </h2>
-        <div 
+        <div
           className={`grid grid-cols-1 sm:grid-cols-2 gap-6 ${layout.restaurantDetail.menuClass}`}
           {...layout.getElementAttributes('menu-grid', 0)}
         >
@@ -343,14 +340,14 @@ export default function RestaurantDetailPage({
                   className="object-cover"
                 />
               </div>
-              <div 
+              <div
                 className={`font-bold text-lg mb-1 ${layout.generateSeedClass('menu-item-name')} ds-${seedStructure}`}
                 id={dyn.v3.getVariant(`menu-item-name-${index}`, ID_VARIANTS_MAP, `menu-item-name-${seedStructure}-${index}`)}
                 aria-label={dyn.v3.getVariant(`menu-item-name-${index}`, TEXT_VARIANTS_MAP, item.name)}
               >
                 {dyn.v3.getVariant(`menu-item-name-${index}`, TEXT_VARIANTS_MAP, item.name)}
               </div>
-              <div 
+              <div
                 className={`text-zinc-500 text-sm mb-2 flex-1 ${layout.generateSeedClass('menu-item-description')} ds-${seedStructure}`}
                 id={dyn.v3.getVariant(`menu-item-description-${index}`, ID_VARIANTS_MAP, `menu-item-description-${seedStructure}-${index}`)}
                 aria-label={dyn.v3.getVariant(`menu-item-description-${index}`, TEXT_VARIANTS_MAP, item.description)}
@@ -358,7 +355,7 @@ export default function RestaurantDetailPage({
                 {dyn.v3.getVariant(`menu-item-description-${index}`, TEXT_VARIANTS_MAP, item.description)}
               </div>
               <div className="flex items-center justify-between mt-auto">
-                <span 
+                <span
                   className={`font-semibold text-green-700 text-base ${layout.generateSeedClass('menu-item-price')} ds-${seedStructure}`}
                   id={dyn.v3.getVariant(`menu-item-price-${index}`, ID_VARIANTS_MAP, `menu-item-price-${seedStructure}-${index}`)}
                   aria-label={dyn.v3.getVariant(`menu-item-price-${index}`, TEXT_VARIANTS_MAP, `$${item.price.toFixed(2)}`)}
@@ -400,9 +397,9 @@ export default function RestaurantDetailPage({
       ))}
 
       {/* Reviews */}
-      <ReviewsSection 
+      <ReviewsSection
         key="reviews"
-        reviews={reviews} 
+        reviews={reviews}
         restaurant={restaurant}
         onDeleteReview={(index) => {
           setReviews((prev) => prev.filter((_, i) => i !== index));
@@ -433,7 +430,7 @@ export default function RestaurantDetailPage({
           }}
         />
       ))}
-      
+
       {/* Modal for item customizations */}
       {modalOpen && modalItem && (
         <AddToCartModal

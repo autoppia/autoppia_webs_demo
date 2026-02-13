@@ -1,6 +1,6 @@
 /**
  * Enhanced Testimonials Data with AI Generation Support
- * 
+ *
  * This file provides both static and dynamic testimonials data generation
  * for the Food Delivery application.
  */

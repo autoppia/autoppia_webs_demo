@@ -24,11 +24,11 @@ function TripCard({ trip, onCancel, index }: { trip: Trip; onCancel?: (tripId: s
   const router = useSeedRouter();
   const dyn = useDynamicSystem();
   const { getElementAttributes, getText } = useSeedLayout();
-  
+
   const handleTripDetailsClick = () => {
     // Check if this trip has reserved ride data (from RESERVE_RIDE event)
     const reservedRideData = (trip as any).reserveRideData;
-    
+
     if (reservedRideData) {
       // Use the actual reserved ride data from RESERVE_RIDE event
       logEvent(EVENT_TYPES.TRIP_DETAILS, {
@@ -46,10 +46,10 @@ function TripCard({ trip, onCancel, index }: { trip: Trip; onCancel?: (tripId: s
       const rideTemplate = RIDE_TEMPLATES.find(r => r.name === trip.ride.name) || RIDE_TEMPLATES[0];
       const oldPrice = Number((trip.price * 1.1).toFixed(2));
       const scheduled = trip.date && trip.time ? `${trip.date} ${trip.time}` : "now";
-      
+
       logEvent(EVENT_TYPES.TRIP_DETAILS, {
-        rideId: RIDE_TEMPLATES.findIndex(r => r.name === trip.ride.name) >= 0 
-          ? RIDE_TEMPLATES.findIndex(r => r.name === trip.ride.name) 
+        rideId: RIDE_TEMPLATES.findIndex(r => r.name === trip.ride.name) >= 0
+          ? RIDE_TEMPLATES.findIndex(r => r.name === trip.ride.name)
           : 0,
         rideName: trip.ride.name,
         rideType: trip.ride.name,
@@ -75,7 +75,7 @@ function TripCard({ trip, onCancel, index }: { trip: Trip; onCancel?: (tripId: s
         }
       });
     }
-    
+
     // Navigate to trip details page
     router.push(`/ride/trip/trips/${trip.id}`);
   };
@@ -84,7 +84,7 @@ function TripCard({ trip, onCancel, index }: { trip: Trip; onCancel?: (tripId: s
     if (onCancel) {
       // Check if this trip has reserved ride data (from RESERVE_RIDE event)
       const reservedRideData = (trip as any).reserveRideData;
-      
+
       if (reservedRideData) {
         // Use the actual reserved ride data from RESERVE_RIDE event
         logEvent(EVENT_TYPES.CANCEL_RESERVATION, {
@@ -107,7 +107,7 @@ function TripCard({ trip, onCancel, index }: { trip: Trip; onCancel?: (tripId: s
       onCancel(trip.id);
     }
   };
-  
+
   return (
     dyn.v1.addWrapDecoy(`trips-upcoming-ride-card-${index}`, (
       <div className="bg-white border border-gray-200 rounded-2xl flex items-center px-8 py-6 gap-7 mb-6 shadow-sm">
@@ -422,7 +422,7 @@ export default function TripsDashboardPage() {
       cancelled.push(tripId);
       localStorage.setItem("cancelledTrips", JSON.stringify(cancelled));
     }
-    
+
     // Remove from reserved trips if it's a reserved trip
     try {
       const reservedTrips = readReservedTrips();
@@ -431,7 +431,7 @@ export default function TripsDashboardPage() {
     } catch (error) {
       console.error("Error removing reserved trip:", error);
     }
-    
+
     // Update state
     setCancelledIds([...cancelledIds, tripId]);
     setTrips((prev) => prev.filter((t) => t.id !== tripId));

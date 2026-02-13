@@ -3,14 +3,13 @@
 import type React from "react";
 import { createContext, useContext, useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { resolveSeedsSync, clampBaseSeed, type ResolvedSeeds } from "@/shared/seed-resolver";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 
 interface SeedContextType {
   seed: number;
   setSeed: (seed: number) => void;
   getNavigationUrl: (path: string) => string;
-  resolvedSeeds: ResolvedSeeds;
-  isSeedReady: boolean; // Indicates whether the seed is synchronized with the URL
+  isSeedReady: boolean;
 }
 
 const DEFAULT_SEED = 1;
@@ -19,7 +18,6 @@ const SeedContext = createContext<SeedContextType>({
   seed: DEFAULT_SEED,
   setSeed: () => {},
   getNavigationUrl: (path: string) => path,
-  resolvedSeeds: resolveSeedsSync(DEFAULT_SEED),
   isSeedReady: false,
 });
 
@@ -52,26 +50,21 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
 function SeedProviderInner({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const [seed, setSeedState] = useState<number>(DEFAULT_SEED);
-  const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() => resolveSeedsSync(DEFAULT_SEED));
-  const [isInitialized, setIsInitialized] = useState(false);
   const [isSeedReady, setIsSeedReady] = useState(false);
 
   useEffect(() => {
-    if (isInitialized) return;
     if (typeof window !== "undefined") {
       try {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
-          const parsed = clampBaseSeed(Number.parseInt(saved, 10));
-          setSeedState(parsed);
+          setSeedState(clampBaseSeed(Number.parseInt(saved, 10)));
         }
-      } catch (error) {
-        console.error("Error loading seed:", error);
+      } catch {
+        // ignore
       }
     }
-    setIsInitialized(true);
     setIsSeedReady(true);
-  }, [isInitialized]);
+  }, []);
 
   const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
     if (urlSeed !== null) {
@@ -84,28 +77,17 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
         }
       }
     }
+    setIsSeedReady(true);
   }, []);
 
   useEffect(() => {
-    const syncResolved = resolveSeedsSync(seed);
-    setResolvedSeeds(syncResolved);
-    console.log(
-      "[autobooks][seeds]",
-      `base=${syncResolved.base}`,
-      `layout(v1)=${syncResolved.v1}`,
-      `data(v2)=${syncResolved.v2}`,
-      `v3=${syncResolved.v3}`
-    );
-  }, [seed]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base ?? null;
-    (window as any).__autobooksV2Seed = v2Seed;
-    window.dispatchEvent(
-      new CustomEvent("autobooks:v2SeedChange", { detail: { seed: v2Seed } })
-    );
-  }, [resolvedSeeds.v2, resolvedSeeds.base]);
+    const urlSeed = searchParams.get("seed");
+    if (urlSeed) {
+      const parsed = clampBaseSeed(Number.parseInt(urlSeed, 10));
+      if (parsed !== seed) setSeedState(parsed);
+    }
+    setIsSeedReady(true);
+  }, [searchParams, seed]);
 
   const setSeed = useCallback((newSeed: number) => {
     setSeedState(clampBaseSeed(newSeed));
@@ -131,14 +113,13 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, resolvedSeeds, isSeedReady }}>
+    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, isSeedReady }}>
       <SeedInitializer onSeedFromUrl={handleSeedFromUrl} />
       {children}
     </SeedContext.Provider>
   );
 }
 
-// Custom hook to use seed context
 export const useSeed = () => {
   const context = useContext(SeedContext);
   if (!context) {

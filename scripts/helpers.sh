@@ -47,13 +47,13 @@ normalize_versions() {
   raw="${raw//[[:space:]]/}"
   raw="${raw//\[/}"
   raw="${raw//\]/}"
-  
+
   # Empty -> empty
   if [ -z "$raw" ]; then
     echo ""
     return 0
   fi
-  
+
   # Split and validate each token
   IFS=',' read -ra parts <<<"$raw"
   local out=()
@@ -65,8 +65,7 @@ normalize_versions() {
     fi
     out+=("$p")
   done
-  
+
   # Rejoin normalized list
   local IFS=','; echo "${out[*]}"
 }
-

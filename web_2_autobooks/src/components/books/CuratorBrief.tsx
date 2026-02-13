@@ -12,8 +12,8 @@ export function CuratorBrief({ totalBooks }: CuratorBriefProps) {
           <p className="text-xs uppercase tracking-[0.3em] text-secondary">Your Collection</p>
           <h2 className="mt-3 text-3xl font-semibold">Explore our curated library.</h2>
           <p className="mt-2 text-base text-white/70">
-            We've handpicked thousands of books across all genres. From bestsellers to hidden gems, 
-            discover stories that match your reading mood. Filter by genre, year, or search for specific 
+            We've handpicked thousands of books across all genres. From bestsellers to hidden gems,
+            discover stories that match your reading mood. Filter by genre, year, or search for specific
             authors and titles to find exactly what you're looking for.
           </p>
           <ul className="mt-4 space-y-2 text-sm text-white/70">

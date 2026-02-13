@@ -72,10 +72,10 @@ export class DynamicDataProvider {
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
     });
-    
+
     const baseSeed = this.getBaseSeedFromUrl();
     const runtimeSeed = this.getRuntimeV2Seed();
-    
+
     try {
       // If base seed = 1, use fallback data directly (skip DB mode)
       if (baseSeed === 1) {
@@ -95,19 +95,19 @@ export class DynamicDataProvider {
         this.resolveReady();
         return;
       }
-      
+
       this.currentSeed = runtimeSeed ?? 1;
-      
+
       // Check if DB mode is enabled - only try DB if enabled
       const dbModeEnabled = isDbLoadModeEnabled();
       console.log("[autohealth/data-provider] DB mode enabled:", dbModeEnabled, "runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
-      
+
       if (dbModeEnabled) {
         // Try DB mode first if enabled
         console.log("[autohealth/data-provider] Attempting to load from DB...");
         // Let initializeDoctors/etc handle DB loading
       }
-      
+
       // Initialize doctors first, then use them for other data types
       const doctors = await initializeDoctors(runtimeSeed ?? undefined);
       this.setDoctors(doctors);
@@ -129,7 +129,7 @@ export class DynamicDataProvider {
         prescriptions: prescriptions.length,
         medicalRecords: medicalRecords.length,
       });
-      
+
       // Mark as ready after setting all data
       this.ready = true;
       this.resolveReady();
@@ -158,7 +158,7 @@ export class DynamicDataProvider {
         this.resolveReady();
       }
     }
-    
+
     // Listen for seed changes
     if (typeof window !== "undefined") {
       window.addEventListener("autohealth:v2SeedChange", this.handleSeedEvent.bind(this));
@@ -191,13 +191,13 @@ export class DynamicDataProvider {
 
         console.log(`[autohealth] Reloading data for seed=${this.currentSeed}...`);
         this.ready = false;
-        
+
         // Clear existing data
         this.doctors = [];
         this.appointments = [];
         this.prescriptions = [];
         this.medicalRecords = [];
-        
+
         // Notify subscribers with empty arrays
         this.notifySubscribers();
 
@@ -223,7 +223,7 @@ export class DynamicDataProvider {
         this.reloadPromise = null;
       }
     })();
-    
+
     await this.reloadPromise;
   }
 

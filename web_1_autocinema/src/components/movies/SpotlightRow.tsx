@@ -18,7 +18,7 @@ export function SpotlightRow({ title, description, movies }: SpotlightRowProps) 
   return (
     <>
       {dyn.v1.addWrapDecoy("spotlight-row", (
-        <section 
+        <section
           id={dyn.v3.getVariant("spotlight-row", ID_VARIANTS_MAP, "spotlight-row")}
           className={cn("space-y-6", dyn.v3.getVariant("spotlight-row", CLASS_VARIANTS_MAP, ""))}
         >
@@ -35,7 +35,7 @@ export function SpotlightRow({ title, description, movies }: SpotlightRowProps) 
           <div className="flex gap-6 overflow-x-auto overflow-y-visible pb-4 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
             {movies.map((movie, index) => (
               dyn.v1.addWrapDecoy(`spotlight-movie-${index}`, (
-                <div 
+                <div
                   key={movie.id}
                   id={dyn.v3.getVariant(index > 0 ? `spotlight-movie-card-${index}` : "spotlight-movie-card", ID_VARIANTS_MAP, index > 0 ? `spotlight-movie-card-${index}` : "spotlight-movie-card")}
                   className={cn(
@@ -47,7 +47,7 @@ export function SpotlightRow({ title, description, movies }: SpotlightRowProps) 
                   <div className="relative mb-4 flex-shrink-0">
                     <div
                       className="aspect-video w-full rounded-2xl bg-cover bg-center overflow-hidden shadow-2xl transition-transform duration-500 group-hover:scale-105"
-                      style={{ 
+                      style={{
                         backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url(${movie.poster || '/media/gallery/default_movie.png'}), url('/media/gallery/default_movie.png')`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center'
@@ -55,7 +55,7 @@ export function SpotlightRow({ title, description, movies }: SpotlightRowProps) 
                     >
                       {/* Gradient overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                      
+
                       {/* Badges overlay */}
                       <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
                         <span className="rounded-full bg-secondary/30 backdrop-blur-md px-4 py-1.5 text-xs font-bold text-secondary border border-secondary/30 whitespace-nowrap">

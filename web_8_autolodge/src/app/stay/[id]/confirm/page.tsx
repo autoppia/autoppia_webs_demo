@@ -88,24 +88,24 @@ function ConfirmPageContent() {
   // Check if hotel exists whenever params.id or data changes
   useEffect(() => {
     let mounted = true;
-    
+
     const checkHotel = async () => {
       if (!mounted) return;
-      
+
       setIsCheckingHotel(true);
       // Wait for data provider to be ready
       await dynamicDataProvider.whenReady();
-      
+
       // Add a small delay to ensure data is fully loaded
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       if (!mounted) return;
-      
+
       const numId = Number(params.id);
       if (Number.isFinite(numId)) {
         const hotels = dynamicDataProvider.getHotels();
         console.log(`[autolodge/confirm] Searching for hotel ${numId} in ${hotels.length} hotels`);
-        
+
         const hotel = dynamicDataProvider.getHotelById(numId);
         if (hotel) {
           console.log(`[autolodge/confirm] ✅ Hotel ${numId} found:`, hotel.title);
@@ -137,7 +137,7 @@ function ConfirmPageContent() {
     // Subscribe to hotel updates to re-check when data changes
     const unsubscribe = dynamicDataProvider.subscribeHotels((hotels) => {
       if (!mounted) return;
-      
+
       console.log(`[autolodge/confirm] Hotels updated (${hotels.length} hotels), re-checking hotel ${params.id}...`);
       const numId = Number(params.id);
       if (Number.isFinite(numId)) {
@@ -164,7 +164,7 @@ function ConfirmPageContent() {
     };
 
     window.addEventListener("autolodge:v2SeedChange", handleSeedChange);
-    
+
     return () => {
       mounted = false;
       unsubscribe();

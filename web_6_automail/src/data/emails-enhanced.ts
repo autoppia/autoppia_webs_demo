@@ -1,6 +1,6 @@
 /**
  * Enhanced Emails Data with AI Generation Support
- * 
+ *
  * This file provides both static and dynamic email data generation
  * for the AutoMail email client application.
  */
@@ -15,8 +15,8 @@ import fallbackEmails from "./original/emails_1.json";
 function normalizeEmailTimestamps(emails: Email[]): Email[] {
   return emails.map((email) => ({
     ...email,
-    timestamp: typeof email.timestamp === 'string' 
-      ? new Date(email.timestamp) 
+    timestamp: typeof email.timestamp === 'string'
+      ? new Date(email.timestamp)
       : email.timestamp,
   }));
 }
@@ -242,7 +242,7 @@ export async function initializeEmails(seedOverride?: number | null): Promise<Em
         method: "distribute",
         filterKey: "category",
       });
-      
+
       const emails = await fetchSeededSelection<Email>({
         projectKey: "web_6_automail",
         entityType: "emails",
@@ -284,7 +284,7 @@ export async function loadEmailsFromDb(seedOverride?: number | null): Promise<Em
     console.log("[automail] loadEmailsFromDb: DB mode not enabled, returning empty array");
     return [];
   }
-  
+
   const seed = resolveSeed(seedOverride);
   console.log("[automail] loadEmailsFromDb - seedOverride:", seedOverride, "final seed:", seed);
 
@@ -292,7 +292,7 @@ export async function loadEmailsFromDb(seedOverride?: number | null): Promise<Em
     console.log("[automail] loadEmailsFromDb: seed is 1, returning empty array to use fallback data");
     return [];
   }
-  
+
   try {
     const limit = 50; // Fixed limit of 50 items
     console.log("[automail] loadEmailsFromDb: Fetching from server with seed:", seed, "limit:", limit);
@@ -354,7 +354,7 @@ export async function loadEmailsFromDb(seedOverride?: number | null): Promise<Em
       console.error("[automail] Error stack:", e.stack);
     }
   }
-  
+
   console.log("[automail] loadEmailsFromDb: Returning empty array");
   return [];
 }

@@ -47,7 +47,7 @@ async function loadMedicalRecordsFromDataset(v2SeedValue?: number | null): Promi
 export async function initializeMedicalRecords(doctors?: Doctor[], v2SeedValue?: number | null): Promise<MedicalRecord[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const aiGenerateEnabled = isDataGenerationAvailable();
-  
+
   // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
@@ -55,7 +55,7 @@ export async function initializeMedicalRecords(doctors?: Doctor[], v2SeedValue?:
     recordsCache = FALLBACK_MEDICAL_RECORDS;
     return recordsCache;
   }
-  
+
   if (dbModeEnabled) {
     if (recordsCache.length > 0) return recordsCache;
     recordsCache = await loadMedicalRecordsFromDataset(v2SeedValue);
@@ -76,7 +76,7 @@ export async function initializeMedicalRecords(doctors?: Doctor[], v2SeedValue?:
       } catch {}
     }
   }
-  
+
   let doctorsToUse = doctors;
   if (!doctorsToUse && typeof window !== 'undefined') {
     const doctorsRaw = localStorage.getItem(DOCTORS_CACHE_KEY);
@@ -84,7 +84,7 @@ export async function initializeMedicalRecords(doctors?: Doctor[], v2SeedValue?:
       try { doctorsToUse = JSON.parse(doctorsRaw) as Doctor[]; } catch {}
     }
   }
-  
+
   const result = await generateMedicalRecords(
     24,
     doctorsToUse?.map(d => ({ id: d.id, name: d.name, specialty: d.specialty })) || []

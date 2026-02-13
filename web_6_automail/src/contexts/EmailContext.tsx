@@ -389,8 +389,8 @@ const tokenize = (str: string) => {
 
 export function EmailProvider({children}: { children: React.ReactNode }) {
     const [state, dispatch] = useReducer(emailReducer, initialState);
-    const { resolvedSeeds } = useSeed();
-    const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+    const { seed } = useSeed();
+    const v2Seed = seed;
 
     useEffect(() => {
         let isMounted = true;

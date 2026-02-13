@@ -33,12 +33,12 @@ export default function ProfileClient({ username }: { username: string }) {
   const router = useSeedRouter();
   const dyn = useDynamicSystem();
   const { getElementAttributes, getText } = useSeedLayout();
-  
+
   // Use V2 dynamic data provider
   const [jobs, setJobs] = useState<any[]>([]);
   const [hires, setHires] = useState<any[]>([]);
   const [experts, setExperts] = useState<any[]>([]);
-  
+
   // Subscribe to data changes
   useEffect(() => {
     dyn.v2.whenReady().then(() => {
@@ -46,7 +46,7 @@ export default function ProfileClient({ username }: { username: string }) {
       setHires(dynamicDataProvider.getHires().slice(0, 6));
       setExperts(dynamicDataProvider.getExperts().slice(0, 6));
     });
-    
+
     const unsubscribeJobs = dynamicDataProvider.subscribeJobs((updatedJobs) => {
       setJobs(updatedJobs.slice(0, 6));
     });
@@ -56,14 +56,14 @@ export default function ProfileClient({ username }: { username: string }) {
     const unsubscribeExperts = dynamicDataProvider.subscribeExperts((updatedExperts) => {
       setExperts(updatedExperts.slice(0, 6));
     });
-    
+
     return () => {
       unsubscribeJobs();
       unsubscribeHires();
       unsubscribeExperts();
     };
   }, [dyn.v2]);
-  
+
   const [userJobs, setUserJobs] = useState<any[]>([]);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [aboutText, setAboutText] = useState("");
@@ -85,7 +85,7 @@ export default function ProfileClient({ username }: { username: string }) {
   // Load user data from localStorage
   useEffect(() => {
     if (typeof window === "undefined") return;
-    
+
     try {
       // Load jobs
       const savedJobs = window.localStorage.getItem("autowork_user_jobs");
@@ -93,13 +93,13 @@ export default function ProfileClient({ username }: { username: string }) {
         const jobs = JSON.parse(savedJobs);
         setUserJobs(jobs);
       }
-      
+
       // Load favorites
       const savedFavorites = localStorage.getItem("autowork_expert_favorites");
       if (savedFavorites) {
         setFavorites(new Set(JSON.parse(savedFavorites)));
       }
-      
+
       const savedProfile = localStorage.getItem(`profile_info_${username}`);
       if (savedProfile) {
         const parsed = JSON.parse(savedProfile);
@@ -157,7 +157,7 @@ export default function ProfileClient({ username }: { username: string }) {
     const inProgressJobs = allJobs.filter((j: any) => j.status === "In progress").length;
     const totalHires = hires.length;
     const favoriteCount = favorites.size;
-    
+
     return {
       totalJobs,
       completedJobs,
@@ -443,7 +443,7 @@ export default function ProfileClient({ username }: { username: string }) {
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="font-semibold text-gray-900">{job.title}</h3>
                   <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                    job.status === "Completed" 
+                    job.status === "Completed"
                       ? "bg-green-100 text-green-700"
                       : job.status === "In progress"
                       ? "bg-blue-100 text-blue-700"
@@ -545,7 +545,7 @@ export default function ProfileClient({ username }: { username: string }) {
                       />
                     </svg>
                   </button>
-                  
+
                   <div
                     onClick={() => handleViewExpert(expert)}
                     className="flex items-center gap-3 flex-1 pr-10 cursor-pointer"

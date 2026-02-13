@@ -88,17 +88,14 @@ function MattersListPageContent() {
   const { getText, getId } = useDynamicStructure();
   const baseInputClass = "w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm";
   const baseSelectClass = "rounded-lg border border-zinc-200 px-3 py-2 text-sm";
-  const { seed, resolvedSeeds } = useSeed();
-  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const { seed } = useSeed();
+  const v2Seed = seed;
 
   // Debug: Verify V2 status
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
       console.log("[matters/page] V2 status:", {
         v2Enabled: dyn.v2.isEnabled(),
-        v2DbMode: dyn.v2.isDbModeEnabled(),
-        v2AiGenerate: dyn.v2.isEnabled(),
-        v2Fallback: dyn.v2.isFallbackMode(),
       });
     }
   }, [dyn.v2]);
@@ -106,7 +103,7 @@ function MattersListPageContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("All");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
-  
+
   // Use dynamicDataProvider to get matters - same source as detail page
   const [matters, setMatters] = useState<any[]>([]);
   const [clients, setClients] = useState<any[]>([]);
@@ -118,17 +115,17 @@ function MattersListPageContent() {
       try {
         // Wait for data to be ready
         await dynamicDataProvider.whenReady();
-        
+
         // Reload with current seed to ensure we have the right data
         await dynamicDataProvider.reload(seed ?? undefined);
-        
+
         // Wait again to ensure reload is complete
         await dynamicDataProvider.whenReady();
-        
+
         // Get matters and clients from provider
         const mattersData = getMatters();
         const clientsData = getClients();
-        
+
         // Normalize matters for display - preserve original ID from provider
         const normalizedMatters = mattersData.map((m: any, i: number) => ({
           id: m.id || `MAT-${1000 + i}`, // Use original ID, don't override
@@ -137,14 +134,14 @@ function MattersListPageContent() {
           status: m.status ?? "Active",
           updated: m.updated ?? "Today",
         }));
-        
+
         // Normalize clients for avatars
         const normalizedClients = clientsData.map((c: any) => ({
           id: c.id,
           name: c.name ?? c.title ?? "",
           avatar: c.avatar ?? "",
         }));
-        
+
         setMatters(normalizedMatters);
         setClients(normalizedClients);
       } catch (error) {
@@ -155,15 +152,15 @@ function MattersListPageContent() {
         setIsLoading(false);
       }
     };
-    
+
     loadData();
   }, [seed, v2Seed]);
-  
+
   const getClientAvatar = (clientName: string): string => {
     const client = clients.find((c) => c.name === clientName);
     return client?.avatar || "";
   };
-  
+
   // console.log("[MattersPage] API response", {
   //   seed: v2Seed,
   //   count: data?.length ?? 0,
@@ -200,7 +197,7 @@ function MattersListPageContent() {
     if (isLoading) return;
     const currentSeed = v2Seed;
     if (seedSnapshot === currentSeed && mattersList.length > 0) return;
-    
+
     // Add timestamps to matters for sorting
     const nextWithTimestamps = matters.map((m: any, idx: number) => ({
       ...m,

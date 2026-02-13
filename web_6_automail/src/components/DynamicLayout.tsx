@@ -312,4 +312,4 @@ export function DynamicLayout({ textStructure }: DynamicLayoutProps) {
         </div>
       );
   }
-} 
+}

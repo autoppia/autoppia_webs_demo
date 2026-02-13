@@ -2,8 +2,8 @@
  * SHARED - Centralized dynamic system
  */
 
-export { 
-  selectVariantIndex, 
+export {
+  selectVariantIndex,
   useDynamicSystem
 } from "./core";
 

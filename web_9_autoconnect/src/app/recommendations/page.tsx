@@ -11,8 +11,7 @@ import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
 
 function RecommendationsContent() {
-  const { seed, resolvedSeeds } = useSeed();
-  resolvedSeeds;
+  const { seed } = useSeed();
   const [following, setFollowing] = useState<Record<string, boolean>>({});
   const recommendations = dynamicDataProvider.getRecommendations();
   const dyn = useDynamicSystem();

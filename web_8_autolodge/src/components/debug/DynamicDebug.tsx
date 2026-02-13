@@ -7,11 +7,11 @@ import { useSeed } from "@/context/SeedContext";
 
 export function DynamicDebug() {
   const dyn = useDynamicSystem();
-  const { resolvedSeeds } = useSeed();
+  const { seed } = useSeed();
 
   useEffect(() => {
     console.log("=== [Autolodge] Dynamic Debug ===");
-    console.log("Seeds:", resolvedSeeds);
+    console.log("Seed:", seed);
     console.log("V1 enabled:", isV1Enabled(), "V3 enabled:", isV3Enabled());
     if (typeof window !== "undefined") {
       const v1Elements = document.querySelectorAll('[data-v1="true"]');
@@ -22,7 +22,7 @@ export function DynamicDebug() {
       console.log("Sample IDs:", sampleIds);
     }
     console.log("=================================");
-  }, [dyn.seed, resolvedSeeds]);
+  }, [dyn.seed, seed]);
 
   return null;
 }

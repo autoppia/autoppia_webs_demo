@@ -54,11 +54,11 @@ export default function Sidebar() {
   const searchParams = useSearchParams();
   const { getText, getId } = useDynamicStructure();
   const dyn = useDynamicSystem();
-  
+
   // V1: Order navigation items dynamically
   const navOrder = dyn.v1.changeOrderElements("sidebar-nav", NAV_ITEMS.length);
   const orderedNavItems = navOrder.map((idx) => NAV_ITEMS[idx]);
-  
+
   return (
     dyn.v1.addWrapDecoy("sidebar", (
       <aside
@@ -74,10 +74,10 @@ export default function Sidebar() {
               href === "/"
                 ? pathname === href
                 : pathname === href || pathname.startsWith(href + "/");
-            
+
             // For help_title, use V3 for text, ID, and class
             const isHelpLink = labelKey === "help_title";
-            const label = isHelpLink 
+            const label = isHelpLink
               ? dyn.v3.getVariant("help_title", TEXT_VARIANTS_MAP, "Help")
               : getText(labelKey, labelKey.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase()));
             const linkId = isHelpLink

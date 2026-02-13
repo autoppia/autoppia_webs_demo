@@ -47,7 +47,7 @@ async function loadPrescriptionsFromDataset(v2SeedValue?: number | null): Promis
 export async function initializePrescriptions(doctors?: Doctor[], v2SeedValue?: number | null): Promise<Prescription[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const aiGenerateEnabled = isDataGenerationAvailable();
-  
+
   // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
@@ -55,7 +55,7 @@ export async function initializePrescriptions(doctors?: Doctor[], v2SeedValue?: 
     prescriptionsCache = FALLBACK_PRESCRIPTIONS;
     return prescriptionsCache;
   }
-  
+
   if (dbModeEnabled) {
     if (prescriptionsCache.length > 0) return prescriptionsCache;
     prescriptionsCache = await loadPrescriptionsFromDataset(v2SeedValue);
@@ -76,7 +76,7 @@ export async function initializePrescriptions(doctors?: Doctor[], v2SeedValue?: 
       } catch {}
     }
   }
-  
+
   let doctorsToUse = doctors;
   if (!doctorsToUse && typeof window !== 'undefined') {
     const doctorsRaw = localStorage.getItem(DOCTORS_CACHE_KEY);
@@ -84,7 +84,7 @@ export async function initializePrescriptions(doctors?: Doctor[], v2SeedValue?: 
       try { doctorsToUse = JSON.parse(doctorsRaw) as Doctor[]; } catch {}
     }
   }
-  
+
   const result = await generatePrescriptions(
     30,
     doctorsToUse?.map(d => ({ id: d.id, name: d.name, specialty: d.specialty })) || []

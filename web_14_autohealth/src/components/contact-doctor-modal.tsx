@@ -52,12 +52,12 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
 
   const validateForm = (): boolean => {
     const requiredFields: (keyof ContactFormData)[] = [
-      "patientName", 
-      "patientEmail", 
-      "subject", 
+      "patientName",
+      "patientEmail",
+      "subject",
       "message"
     ];
-    
+
     return requiredFields.every(field => {
       const value = formData[field];
       return typeof value === 'string' ? value.trim() !== "" : true;
@@ -99,7 +99,7 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
 
       alert("Your message has been sent successfully! The doctor will contact you within 24 hours.");
       onOpenChange(false);
-      
+
       // Reset form
       setFormData({
         patientName: "",
@@ -131,7 +131,7 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
         <DialogHeader>
           <DialogTitle>Contact {doctor.name}</DialogTitle>
           <DialogDescription>
-            Send a message to {doctor.name} ({doctor.specialty}). 
+            Send a message to {doctor.name} ({doctor.specialty}).
             We'll get back to you within 24 hours.
           </DialogDescription>
         </DialogHeader>
@@ -263,21 +263,21 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
 
         <DialogFooter>
           {dyn.v1.addWrapDecoy("cancel-contact-button", (
-            <Button 
+            <Button
               className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
-              variant="outline" 
-              onClick={handleCancel} 
+              variant="outline"
+              onClick={handleCancel}
               disabled={isSubmitting}
             >
               {dyn.v3.getVariant("cancel", TEXT_VARIANTS_MAP, "Cancel")}
             </Button>
           ))}
           {dyn.v1.addWrapDecoy("send-message-button", (
-            <Button 
+            <Button
               id={dyn.v3.getVariant("contact-doctor-button", ID_VARIANTS_MAP, "send-message-button")}
               className={cn("bg-blue-600 hover:bg-blue-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
               data-testid="contact-doctor-submit-btn"
-              onClick={handleSubmitContact} 
+              onClick={handleSubmitContact}
               disabled={isSubmitting || !validateForm()}
             >
               {isSubmitting ? dyn.v3.getVariant("booking", TEXT_VARIANTS_MAP, "Sending...") : dyn.v3.getVariant("contact_doctor", TEXT_VARIANTS_MAP, "Send Message")}

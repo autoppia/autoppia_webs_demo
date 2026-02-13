@@ -77,12 +77,12 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment, sourc
 
   const validateForm = (): boolean => {
     const requiredFields: (keyof BookingFormData)[] = [
-      "patientName", 
-      "patientEmail", 
-      "patientPhone", 
+      "patientName",
+      "patientEmail",
+      "patientPhone",
       "reasonForVisit"
     ];
-    
+
     return requiredFields.every(field => formData[field].trim() !== "");
   };
 
@@ -119,14 +119,14 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment, sourc
       });
 
       alert("Appointment booked successfully!");
-      
+
       // Clear saved quick form data from localStorage
       if (typeof window !== 'undefined') {
         localStorage.removeItem(QUICK_FORM_DATA_KEY);
       }
-      
+
       onOpenChange(false);
-      
+
       // Reset form
       setFormData({
         patientName: "",
@@ -159,7 +159,7 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment, sourc
         <DialogHeader>
           <DialogTitle>Book Appointment</DialogTitle>
           <DialogDescription>
-            Book an appointment with {appointment.doctorName} ({appointment.specialty}) 
+            Book an appointment with {appointment.doctorName} ({appointment.specialty})
             on {appointment.date} at {appointment.time}
           </DialogDescription>
         </DialogHeader>
@@ -287,21 +287,21 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment, sourc
 
         <DialogFooter>
           {dyn.v1.addWrapDecoy("cancel-booking-button", (
-            <Button 
+            <Button
               id={dyn.v3.getVariant("cancel-booking-button", ID_VARIANTS_MAP, "cancel-booking-button")}
               className={cn(dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
-              variant="outline" 
-              onClick={handleCancel} 
+              variant="outline"
+              onClick={handleCancel}
               disabled={isSubmitting}
             >
               {dyn.v3.getVariant("cancel", TEXT_VARIANTS_MAP, "Cancel")}
             </Button>
           ))}
           {dyn.v1.addWrapDecoy("confirm-booking-button", (
-            <Button 
+            <Button
               id={dyn.v3.getVariant("confirm-booking-button", ID_VARIANTS_MAP, "confirm-booking-button")}
               className={cn("bg-blue-600 hover:bg-blue-700", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
-              onClick={handleConfirmAppointment} 
+              onClick={handleConfirmAppointment}
               disabled={isSubmitting || !validateForm()}
               data-testid="confirm-appointment-btn" // For agent navigation according to .cursorrules
               data-agent-id="confirm-appointment-button" // Additional identifier for agent

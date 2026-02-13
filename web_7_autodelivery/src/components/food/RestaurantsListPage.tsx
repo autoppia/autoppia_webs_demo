@@ -65,7 +65,7 @@ export default function RestaurantsListPage() {
   useEffect(() => {
     if (!restaurants.length) return;
     if (!search.trim()) return;
-    
+
     const timeoutId = setTimeout(() => {
       logEvent(EVENT_TYPES.SEARCH_RESTAURANT, {
         query: search.trim(),
@@ -112,12 +112,12 @@ export default function RestaurantsListPage() {
 
   return (
     dyn.v1.addWrapDecoy("restaurants-list-page", (
-    <section 
+    <section
       className={layout.generateSeedClass('restaurants-section')}
       {...layout.getElementAttributes('restaurants-section', 0)}
     >
       {dyn.v1.addWrapDecoy("search-filters", (
-      <div 
+      <div
         className={`mb-8 bg-white/80 backdrop-blur border border-zinc-200/70 shadow-sm rounded-xl px-4 py-3 flex flex-col gap-3 ${layout.searchBar.containerClass} ${dyn.v3.getVariant('search-filters-container', CLASS_VARIANTS_MAP, '')}`}
         id={dyn.v3.getVariant('search-filters', ID_VARIANTS_MAP, 'search-filters')}
         {...layout.getElementAttributes('search-filters', 0)}
@@ -143,7 +143,7 @@ export default function RestaurantsListPage() {
           />
           <div className="flex flex-row gap-3 shrink-0">
             <Select value={cuisine || "all"} onValueChange={v => setCuisine(v === "all" ? "" : v)}>
-              <SelectTrigger 
+              <SelectTrigger
                 className={`w-44 rounded-lg border-zinc-200 shadow-xs ${layout.generateSeedClass('cuisine-select')} ${dyn.v3.getVariant("cuisine-select", CLASS_VARIANTS_MAP, "")}`}
                 {...layout.getElementAttributes('cuisine-select', 0)}
               >
@@ -157,7 +157,7 @@ export default function RestaurantsListPage() {
               </SelectContent>
             </Select>
             <Select value={rating || "all"} onValueChange={v => setRating(v === "all" ? "" : v)}>
-              <SelectTrigger 
+              <SelectTrigger
                 className={`w-36 rounded-lg border-zinc-200 shadow-xs ${layout.generateSeedClass('rating-select')} ${dyn.v3.getVariant("rating-select", CLASS_VARIANTS_MAP, "")}`}
                 {...layout.getElementAttributes('rating-select', 0)}
               >
@@ -193,7 +193,7 @@ export default function RestaurantsListPage() {
       </div>
       ))}
       {dyn.v1.addWrapDecoy("restaurants-grid", (
-      <div 
+      <div
         className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 ${layout.grid.containerClass} ${dyn.v3.getVariant('restaurants-grid-class', CLASS_VARIANTS_MAP, '')}`}
         id={dyn.v3.getVariant('restaurants-grid', ID_VARIANTS_MAP, 'restaurants-grid')}
         {...layout.getElementAttributes('restaurants-grid', 0)}
@@ -224,7 +224,7 @@ export default function RestaurantsListPage() {
             });
           })()
         ) : (
-          <div 
+          <div
             className={`text-zinc-400 text-center col-span-full py-16 text-lg ${layout.generateSeedClass('no-restaurants-message')} ${dyn.v3.getVariant('no-restaurants-message-class', CLASS_VARIANTS_MAP, '')}`}
             id={dyn.v3.getVariant('no-restaurants-message', ID_VARIANTS_MAP, 'no-restaurants-message')}
             {...layout.getElementAttributes('no-restaurants-message', 0)}

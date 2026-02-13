@@ -75,4 +75,3 @@ export function useRestaurants() {
   }
   return context;
 }
-

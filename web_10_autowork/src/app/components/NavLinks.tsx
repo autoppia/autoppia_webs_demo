@@ -48,7 +48,7 @@ const links: NavLink[] = [
 
 export default function NavLinks() {
   const dyn = useDynamicSystem();
-  
+
   const getNavLinkKey = (href: string) => {
     if (href === "/jobs") return "nav-jobs-link";
     if (href === "/hires") return "nav-hires-link";

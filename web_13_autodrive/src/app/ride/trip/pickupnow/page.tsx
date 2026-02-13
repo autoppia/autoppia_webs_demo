@@ -488,13 +488,13 @@ export default function PickupNowPage() {
   const slotPanelRef = useRef<HTMLDivElement>(null);
   const { seed, isDynamicEnabled, generateId } = useSeedLayout();
   const dyn = useDynamicSystem();
-  
+
   // Get seed-based variant
   const variant = getPickupPageVariant(seed);
-  
+
   // Convert Date to string format for compatibility
   const date = selectedDate ? format(selectedDate, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd");
-  
+
   // Only calculate slots and set initial time on client
   const slots = isMounted ? getTimeSlotsForDate(date) : [];
   useEffect(() => {
@@ -538,8 +538,8 @@ export default function PickupNowPage() {
     }
     router.push("/ride/trip");
     console.log("Logging NEXT_PICKUP", { date, time, seed, variant: variant.title });
-    logEvent(EVENT_TYPES.NEXT_PICKUP, { 
-      date, 
+    logEvent(EVENT_TYPES.NEXT_PICKUP, {
+      date,
       time,
       timestamp: new Date().toISOString(),
       scheduledDateTime: `${date}T${time}`,
@@ -573,15 +573,15 @@ export default function PickupNowPage() {
   return (
     dyn.v1.addWrapDecoy(
       "pickupnow-page",
-      <div 
-        className="min-h-screen" 
+      <div
+        className="min-h-screen"
         style={{ backgroundColor: variant.backgroundColor }}
         data-seed={isDynamicEnabled ? seed : undefined}
         data-variant={isDynamicEnabled ? `variant-${((seed % 30) + 1) % 10 || 10}` : undefined}
       >
         {dyn.v1.addWrapDecoy("pickupnow-navigation-bar", <RideNavbar activeTab="ride" />)}
         <div className="flex gap-8 mt-8 px-8 pb-10 max-lg:flex-col max-lg:px-2 max-lg:gap-4">
-          <section 
+          <section
             className="bg-white rounded-2xl shadow-xl p-8 flex flex-col max-lg:w-full mx-auto mt-2 relative border border-gray-100"
             style={{ width: variant.cardWidth, maxWidth: '100%' }}
             id={generateId('pickup-card', 0)}
@@ -611,23 +611,23 @@ export default function PickupNowPage() {
               {variant.removeButtonText}
             </button>
           </div>
-          <div 
+          <div
             className="font-bold text-xl mb-8 leading-tight"
             id={generateId('title', 0)}
           >
             {variant.title}
           </div>
-          
+
           {/* Info items positioned BEFORE pickers */}
           {variant.infoPosition === 'before' && (
-            <ul 
+            <ul
               className="mb-6 text-[15px] text-gray-800 divide-y divide-gray-200 bg-white rounded-lg"
               id={generateId('info-list', 0)}
               data-position="before"
             >
               {variant.infoItems.map((item, index) => (
-                <li 
-                  key={index} 
+                <li
+                  key={index}
                   className="flex items-start py-3 px-0 gap-3"
                   id={generateId(`info-item-${index}`, 0)}
                 >
@@ -637,7 +637,7 @@ export default function PickupNowPage() {
               ))}
             </ul>
           )}
-          
+
           {/* Date picker row */}
           {dyn.v1.addWrapDecoy("pickupnow-date-picker", (
             <div className={cn("mb-4", dyn.v3.getVariant("date-picker-container-class", CLASS_VARIANTS_MAP, ""))}>
@@ -649,7 +649,7 @@ export default function PickupNowPage() {
                 if (newDate) {
                   const dateString = format(newDate, "yyyy-MM-dd");
                   console.log("Logging SELECT_DATE", { date: dateString, seed });
-                  logEvent(EVENT_TYPES.SELECT_DATE, { 
+                  logEvent(EVENT_TYPES.SELECT_DATE, {
                     date: dateString,
                     timestamp: new Date().toISOString(),
                     isToday: dateString === format(new Date(), "yyyy-MM-dd"),
@@ -719,7 +719,7 @@ export default function PickupNowPage() {
               <div
                 ref={slotPanelRef}
                 className="absolute left-0 top-14 w-full max-h-64 overflow-y-auto bg-white rounded-lg shadow-xl z-40"
-                style={{ 
+                style={{
                   boxShadow: "0 4px 32px 0 rgba(0,0,0,0.18)",
                   borderColor: variant.accentColor,
                   borderWidth: '1px',
@@ -735,7 +735,7 @@ export default function PickupNowPage() {
                       setTime(slot.value);
                       setShowSlotPanel(false);
                       console.log("Logging SELECT_TIME", { time: slot.value });
-                      logEvent(EVENT_TYPES.SELECT_TIME, { 
+                      logEvent(EVENT_TYPES.SELECT_TIME, {
                         time: slot.value,
                         timestamp: new Date().toISOString(),
                         timeSlot: slot.label,
@@ -763,14 +763,14 @@ export default function PickupNowPage() {
           ))}
           {/* Info items positioned AFTER time picker */}
           {variant.infoPosition === 'after' && (
-            <ul 
+            <ul
               className="mb-4 text-[15px] text-gray-800 divide-y divide-gray-200 bg-white rounded-lg"
               id={generateId('info-list', 0)}
               data-position="after"
             >
               {variant.infoItems.map((item, index) => (
-                <li 
-                  key={index} 
+                <li
+                  key={index}
                   className="flex items-start py-3 px-0 gap-3"
                   id={generateId(`info-item-${index}`, 0)}
                 >
@@ -780,9 +780,9 @@ export default function PickupNowPage() {
               ))}
             </ul>
           )}
-          
-          <a 
-            className="text-xs underline text-[#222] mb-5" 
+
+          <a
+            className="text-xs underline text-[#222] mb-5"
             href="#"
             id={generateId('terms-link', 0)}
           >
@@ -792,7 +792,7 @@ export default function PickupNowPage() {
             <button
               onClick={handleNext}
               className={getButtonClasses("block w-full text-white py-3 text-lg font-bold mt-2 transition")}
-              style={{ 
+              style={{
                 backgroundColor: variant.accentColor,
                 '--hover-color': `${variant.accentColor}dd`
               } as React.CSSProperties}
@@ -804,14 +804,14 @@ export default function PickupNowPage() {
             </button>
           ))}
         </section>
-        <section 
+        <section
           className="flex-1 min-w-0"
           id={generateId('map-section', 0)}
           data-section-type="map"
         >
-          <div 
+          <div
             className="w-full h-full min-h-[640px] flex items-center justify-center rounded-2xl overflow-hidden bg-gray-100 shadow-md transition-all"
-            style={{ 
+            style={{
               borderWidth: '2px',
               borderStyle: 'solid',
               borderColor: `${variant.accentColor}20`

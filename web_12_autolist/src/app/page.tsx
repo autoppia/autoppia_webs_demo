@@ -565,8 +565,8 @@ function AddTaskCard({
 
 export default function Home() {
   const dyn = useDynamicSystem();
-  const { seedForData } = useSeed();
-  const v2Seed = seedForData;
+  const { seed } = useSeed();
+  const v2Seed = seed;
   const dynIds = {
     appShell: "app-shell",
     heroTitle: dyn.v3.getVariant("hero-title", ID_VARIANTS_MAP, "hero-title"),
@@ -652,7 +652,7 @@ export default function Home() {
   const [v2Tasks, setV2Tasks] = useState<RemoteTask[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userTasks, setUserTasks] = useState<Task[]>([]); // User-created/edited tasks
-  
+
   // Subscribe to V2 tasks
   useEffect(() => {
     // Wait for data to be ready
@@ -661,7 +661,7 @@ export default function Home() {
       setV2Tasks(tasks);
       setIsLoading(false);
     });
-    
+
     // Subscribe to tasks updates
     const unsubscribe = dynamicDataProvider.subscribeTasks((updatedTasks) => {
       // If tasks array is empty, it means data was cleared (seed change in progress)
@@ -671,11 +671,11 @@ export default function Home() {
         setIsLoading(true);
         return;
       }
-      
+
       setV2Tasks(updatedTasks);
       setIsLoading(false);
     });
-    
+
     // Listen for seed changes
     const handleSeedChange = () => {
       console.log(`[autolist] Seed changed, reloading tasks...`);
@@ -684,11 +684,11 @@ export default function Home() {
       // Clear user tasks when seed changes (they belong to old seed)
       setUserTasks([]);
     };
-    
+
     if (typeof window !== "undefined") {
       window.addEventListener("autolist:v2SeedChange", handleSeedChange);
     }
-    
+
     return () => {
       unsubscribe();
       if (typeof window !== "undefined") {
@@ -696,20 +696,20 @@ export default function Home() {
       }
     };
   }, [dyn.v2]);
-  
+
   // Combine V2 tasks with user-created tasks
   const allTasks = useMemo(() => {
     // Normalize V2 tasks
     const normalizedV2Tasks = v2Tasks.map((task, index) =>
       normalizeRemoteTask(task, index)
     );
-    
+
     // Merge V2 tasks with user tasks, avoiding duplicates
     const v2TaskIds = new Set(normalizedV2Tasks.map(t => t.id));
     const uniqueUserTasks = userTasks.filter(t => !v2TaskIds.has(t.id));
     return [...normalizedV2Tasks, ...uniqueUserTasks];
   }, [v2Tasks, userTasks]);
-  
+
   // Separate active and completed tasks from allTasks
   useEffect(() => {
     const initialActive = allTasks.filter((task) => !task.completedAt);
@@ -735,11 +735,11 @@ export default function Home() {
     priority: number;
   }) {
     const v2TaskIds = new Set(v2Tasks.map(t => t.id?.toString()));
-    
+
     if (editIndex !== null) {
       const currentTask = tasks[editIndex];
       const isV2Task = currentTask && v2TaskIds.has(currentTask.id);
-      
+
       if (isV2Task) {
         // Editing a V2 task - add as new user task
         setUserTasks((prev) => [
@@ -766,7 +766,7 @@ export default function Home() {
   }
   function handleDeleteTask(id: string) {
     const v2TaskIds = new Set(v2Tasks.map(t => t.id?.toString()));
-    
+
     if (v2TaskIds.has(id)) {
       // Can't delete V2 tasks, just remove from UI by filtering
       setTasks((tasks) => tasks.filter((t) => t.id !== id));
@@ -774,7 +774,7 @@ export default function Home() {
       // Delete user task
       setUserTasks((prev) => prev.filter((t) => t.id !== id));
     }
-    
+
     if (editIndex !== null && tasks[editIndex]?.id === id) setEditIndex(null);
     // Show snackbar
     setSnackbar({ message: "Task deleted", visible: true });
@@ -783,7 +783,7 @@ export default function Home() {
   function handleCompleteTask(id: string) {
     const v2TaskIds = new Set(v2Tasks.map(t => t.id?.toString()));
     const isV2Task = v2TaskIds.has(id);
-    
+
     setTasks((tasks) => {
       const idx = tasks.findIndex((t) => t.id === id);
       if (idx === -1) return tasks;
@@ -795,7 +795,7 @@ export default function Home() {
       );
       return tasks.filter((v, i) => i !== idx);
     });
-    
+
     // If it's a V2 task, mark as completed in userTasks to persist the state
     if (isV2Task) {
       const task = allTasks.find(t => t.id === id);
@@ -809,7 +809,7 @@ export default function Home() {
         });
       }
     }
-    
+
     // Show snackbar
     setSnackbar({ message: "Task done successfully", visible: true });
     setTimeout(() => setSnackbar({ message: "", visible: false }), 3000);

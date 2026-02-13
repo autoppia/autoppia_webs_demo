@@ -39,18 +39,18 @@ export function applyV1Wrapper(
     componentKey.includes("input-container") ||
     componentKey.includes("form") ||
     componentKey.includes("search");
-  
+
   const useFullSizeWrapper =
     componentKey.includes("input-container") ||
     componentKey.includes("form") ||
     componentKey.includes("search");
-  
+
   // Use div for cards but without w-full h-full to avoid layout changes
   const useDivForCards =
     componentKey.includes("feature-card") ||
     componentKey.includes("task-card") ||
     componentKey.includes("stats-card");
-  
+
   const WrapperElement = (useDivWrapper || useDivForCards) ? "div" : "span";
   const wrapperClassName = useFullSizeWrapper ? "w-full h-full block" : undefined;
 

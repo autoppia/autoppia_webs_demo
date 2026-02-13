@@ -1950,4 +1950,3 @@ export const DASHBOARD_HOTELS = [
         ],
     },
 ];
-

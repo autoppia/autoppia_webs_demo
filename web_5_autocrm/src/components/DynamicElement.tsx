@@ -25,11 +25,11 @@ export function DynamicElement({
   ...props
 }: DynamicElementProps) {
   const dyn = useDynamicSystem();
-  
+
   const elementId = index > 0
     ? dyn.v3.getVariant(`${elementType}-${index}`, ID_VARIANTS_MAP, `${elementType}-${index}`)
     : dyn.v3.getVariant(elementType, ID_VARIANTS_MAP, elementType);
-  
+
   const elementClass = dyn.v3.getVariant(elementType, CLASS_VARIANTS_MAP, className || "");
 
   const wrapped = dyn.v1.addWrapDecoy(elementType, (

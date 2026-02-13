@@ -26,4 +26,3 @@ export function BookGrid({ books, onSelectBook, layoutClass }: BookGridProps) {
     </div>
   );
 }
-

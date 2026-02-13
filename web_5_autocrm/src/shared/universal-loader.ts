@@ -23,9 +23,9 @@ export function useProjectData<T>(params: Parameters<typeof loadDataOrGenerate<T
     let cancelled = false
     console.log("[useProjectData] loading", { projectKey: params.projectKey, entityType: params.entityType, seedValue: params.seedValue ?? null })
     loadDataOrGenerate<T>(params).then(
-      data => { 
+      data => {
         console.log("[useProjectData] loaded data", { projectKey: params.projectKey, entityType: params.entityType, count: data.length, sample: (data as unknown as any[]).slice?.(0, 3) ?? [] })
-        if (!cancelled) setState({ data, isLoading: false, error: null }) 
+        if (!cancelled) setState({ data, isLoading: false, error: null })
       },
       err => { if (!cancelled) setState({ data: [], isLoading: false, error: err?.message || 'Failed to load data' }) },
     )

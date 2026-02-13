@@ -93,12 +93,12 @@ export function PropertyCard({
   // This ensures the ID in the URL matches exactly the ID in the data
   const hotelId = id; // Use the ID directly without any transformation
   const hotelHref = href ?? `/stay/${hotelId}`;
-  
+
   // Log when a hotel card is rendered to track ID consistency
   if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
     console.log(`[PropertyCard] Rendering hotel card - ID: ${hotelId} (type: ${typeof hotelId}), href: ${hotelHref}, title: ${title}`);
   }
-  
+
   return (
     <SeedLink
       href={hotelHref}

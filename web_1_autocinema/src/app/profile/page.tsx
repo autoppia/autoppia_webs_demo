@@ -106,7 +106,7 @@ export default function ProfilePage() {
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-        
+
         <main className="relative mx-auto max-w-2xl px-4 py-16 text-white">
           <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 text-center backdrop-blur-sm shadow-2xl">
             <h1 className="text-3xl font-semibold">Please sign in</h1>
@@ -174,10 +174,10 @@ export default function ProfilePage() {
   const handleEntryDelete = (baseMovie: Movie) => {
     const payload = movieToFilmPayload(baseMovie);
     logEvent(EVENT_TYPES.DELETE_FILM, payload);
-    
+
     // Remove the movie from the user's allowed movies
     removeAllowedMovie(baseMovie.id);
-    
+
     setFilmMessage(`Film deleted: ${baseMovie.title}`);
   };
 
@@ -185,13 +185,13 @@ export default function ProfilePage() {
     // Generate a unique movie ID based on timestamp
     const timestamp = Math.floor(Date.now() / 1000);
     const newMovieId = `movie-v2-${timestamp}`;
-    
+
     const payload = editorDataToFilmPayload(timestamp, data);
     logEvent(EVENT_TYPES.ADD_FILM, payload);
-    
+
     // Add the new movie to the user's allowed movies
     addAllowedMovie(newMovieId);
-    
+
     setAddFilmMessage(`Film added: ${payload.name}`);
     setAddFilmKey((prev) => prev + 1);
   };
@@ -204,7 +204,7 @@ export default function ProfilePage() {
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
       <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
-      
+
       <main className="relative mx-auto max-w-5xl px-4 py-10 text-white">
         {/* Header */}
         <header className="mb-8">
@@ -276,7 +276,7 @@ export default function ProfilePage() {
                   <p className="text-sm text-white/70">Update your profile information and preferences.</p>
                 </div>
               </div>
-              
+
               <form className="space-y-6" onSubmit={handleProfileSubmit}>
                 <div className="grid gap-6 md:grid-cols-2">
                   <div>
@@ -284,9 +284,9 @@ export default function ProfilePage() {
                       <User className="h-4 w-4 text-secondary" />
                       First Name
                     </label>
-                    <Input 
-                      value={profileForm.firstName} 
-                      onChange={(event) => handleProfileInputChange("firstName", event.target.value)} 
+                    <Input
+                      value={profileForm.firstName}
+                      onChange={(event) => handleProfileInputChange("firstName", event.target.value)}
                       id={dyn.v3.getVariant("profile-first-name-input", ID_VARIANTS_MAP, "profile-first-name-input")}
                       className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
                       placeholder={dyn.v3.getVariant("first_name_placeholder", TEXT_VARIANTS_MAP, "Enter your first name")}
@@ -297,25 +297,25 @@ export default function ProfilePage() {
                       <User className="h-4 w-4 text-secondary" />
                       Last Name
                     </label>
-                    <Input 
-                      value={profileForm.lastName} 
-                      onChange={(event) => handleProfileInputChange("lastName", event.target.value)} 
+                    <Input
+                      value={profileForm.lastName}
+                      onChange={(event) => handleProfileInputChange("lastName", event.target.value)}
                       id={dyn.v3.getVariant("profile-last-name-input", ID_VARIANTS_MAP, "profile-last-name-input")}
                       className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
                       placeholder={dyn.v3.getVariant("last_name_placeholder", TEXT_VARIANTS_MAP, "Enter your last name")}
                     />
                   </div>
                 </div>
-                
+
                 <div className="grid gap-6 md:grid-cols-2">
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                       <Mail className="h-4 w-4 text-secondary" />
                       Email
                     </label>
-                    <Input 
-                      value={profileForm.email} 
-                      onChange={(event) => handleProfileInputChange("email", event.target.value)} 
+                    <Input
+                      value={profileForm.email}
+                      onChange={(event) => handleProfileInputChange("email", event.target.value)}
                       id={dyn.v3.getVariant("profile-email-input", ID_VARIANTS_MAP, "profile-email-input")}
                       className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
                       placeholder={dyn.v3.getVariant("email_placeholder_profile", TEXT_VARIANTS_MAP, "your.email@example.com")}
@@ -335,16 +335,16 @@ export default function ProfilePage() {
                     />
                   </div>
                 </div>
-                
+
                 <div className="grid gap-6 md:grid-cols-2">
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                       <MapPin className="h-4 w-4 text-secondary" />
                       Location
                     </label>
-                    <Input 
-                      value={profileForm.location} 
-                      onChange={(event) => handleProfileInputChange("location", event.target.value)} 
+                    <Input
+                      value={profileForm.location}
+                      onChange={(event) => handleProfileInputChange("location", event.target.value)}
                       id={dyn.v3.getVariant("profile-location-input", ID_VARIANTS_MAP, "profile-location-input")}
                       className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
                       placeholder={dyn.v3.getVariant("location_placeholder", TEXT_VARIANTS_MAP, "City, Country")}
@@ -355,16 +355,16 @@ export default function ProfilePage() {
                       <Globe className="h-4 w-4 text-secondary" />
                       Website
                     </label>
-                    <Input 
-                      value={profileForm.website} 
-                      onChange={(event) => handleProfileInputChange("website", event.target.value)} 
+                    <Input
+                      value={profileForm.website}
+                      onChange={(event) => handleProfileInputChange("website", event.target.value)}
                       id={dyn.v3.getVariant("profile-website-input", ID_VARIANTS_MAP, "profile-website-input")}
                       className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
                       placeholder={dyn.v3.getVariant("website_placeholder", TEXT_VARIANTS_MAP, "https://yourwebsite.com")}
                     />
                   </div>
                 </div>
-                
+
                 <div>
                   <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                     <FileText className="h-4 w-4 text-secondary" />
@@ -378,10 +378,10 @@ export default function ProfilePage() {
                     placeholder={dyn.v3.getVariant("bio_placeholder", undefined, "Tell us about yourself...")}
                   />
                 </div>
-                
+
                 <div className="flex flex-wrap gap-3 pt-2">
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     id={dyn.v3.getVariant("save-profile-button", ID_VARIANTS_MAP, "save-profile-button")}
                     className={cn("h-12 px-8 bg-secondary text-black hover:bg-secondary/90 font-bold shadow-lg shadow-secondary/20 transition-all hover:scale-105", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
                   >
@@ -404,7 +404,7 @@ export default function ProfilePage() {
                   <span className="text-sm text-white/60">({entries.length})</span>
                 </div>
               )}
-              
+
               {entries.map(({ movieId, movie }) => {
                 const baseMovie = movie ?? buildFallbackMovie(movieId);
                 return (
@@ -436,7 +436,7 @@ export default function ProfilePage() {
                         )}
                       </div>
                     </div>
-                    
+
                     <div className="flex flex-wrap gap-3 mb-6">
                       {movie && (
                         <SeedLink
@@ -457,7 +457,7 @@ export default function ProfilePage() {
                         {dyn.v3.getVariant("delete_movie", undefined, "Delete Movie")}
                       </Button>
                     </div>
-                    
+
                     <div className="border-t border-white/10 pt-6">
                       <MovieEditor movie={baseMovie} onSubmit={(data) => handleEntryEdit(baseMovie, data)} submitLabel="Save Changes" />
                     </div>
@@ -477,12 +477,12 @@ export default function ProfilePage() {
                   <span className="text-sm text-white/60">({currentUser.watchlist.length})</span>
                 </div>
               )}
-              
+
               {currentUser.watchlist && currentUser.watchlist.length > 0 ? (
                 currentUser.watchlist.map((movieId) => {
                   const movie = movies.find((m) => m.id === movieId);
                   const baseMovie = movie ?? buildFallbackMovie(movieId);
-                  
+
                   return (
                     <div key={movieId} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl">
                       <div className="flex items-start justify-between mb-6">
@@ -519,7 +519,7 @@ export default function ProfilePage() {
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="flex flex-wrap gap-3">
                         {movie && (
                           <SeedLink

@@ -22,25 +22,25 @@ export default function HireFormWrapperClient({ slug }: { slug: string }) {
   const findExpert = (searchSlug: string): Expert | null => {
     // First try to find by slug using dynamicDataProvider
     let found = dynamicDataProvider.getExpertBySlug(searchSlug);
-    
+
     if (found) {
       return found as Expert;
     }
-    
+
     // If not found, try to find by matching name
     const allExperts = dynamicDataProvider.getExperts();
     const normalizedSearch = searchSlug.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    
+
     found = allExperts.find((e) => {
       const expertSlug = (e.slug || "").toLowerCase();
       const expertName = (e.name || "").toLowerCase().replace(/[^a-z0-9]+/g, '-');
       return expertSlug === normalizedSearch || expertName === normalizedSearch;
     });
-    
+
     if (found) {
       return found as Expert;
     }
-    
+
     // Fallback: try localStorage
     try {
       const raw = window.localStorage.getItem("autowork_experts");
@@ -58,35 +58,35 @@ export default function HireFormWrapperClient({ slug }: { slug: string }) {
         }
       }
     } catch {}
-    
+
     return null;
   };
 
   useEffect(() => {
     let mounted = true;
-    
+
     const loadExpert = async () => {
       setIsLoading(true);
-      
+
       // Wait for data to be ready
       await dyn.v2.whenReady();
       await new Promise(resolve => setTimeout(resolve, 200));
-      
+
       if (!mounted) return;
-      
+
       const found = findExpert(slug);
-      
+
       if (found && mounted) {
         setExpert(found);
       }
-      
+
       if (mounted) {
         setIsLoading(false);
       }
     };
-    
+
     loadExpert();
-    
+
     // Subscribe to experts updates
     const unsubscribe = dynamicDataProvider.subscribeExperts(() => {
       if (mounted) {
@@ -96,18 +96,18 @@ export default function HireFormWrapperClient({ slug }: { slug: string }) {
         }
       }
     });
-    
+
     // Listen for seed changes
     const handleSeedChange = () => {
       if (mounted) {
         loadExpert();
       }
     };
-    
+
     if (typeof window !== "undefined") {
       window.addEventListener("autowork:v2SeedChange", handleSeedChange);
     }
-    
+
     return () => {
       mounted = false;
       unsubscribe();

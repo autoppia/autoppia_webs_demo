@@ -109,7 +109,7 @@ export function useSeedLayout() {
       const seedParam = urlParams.get('seed');
       const rawSeed = seedParam ? parseInt(seedParam, 10) : 1;
       const effectiveSeed = rawSeed >= 1 && rawSeed <= 300 ? rawSeed : 1;
-      
+
       const updateState = () => {
         setSeed(effectiveSeed);
         setLayout(getStaticLayout());
@@ -179,4 +179,4 @@ export function useSeedLayout() {
     generateId,
     generateSeedClass,
   };
-} 
+}

@@ -23,7 +23,7 @@ export function Pagination({ currentPage, totalPages, totalItems }: PaginationPr
 
   const goToPage = (page: number) => {
     if (page < 1 || page > totalPages) return;
-    
+
     const params = new URLSearchParams(searchParams.toString());
     if (page === 1) {
       params.delete("page");
@@ -46,7 +46,7 @@ export function Pagination({ currentPage, totalPages, totalItems }: PaginationPr
         <span className="font-semibold text-white">{endItem}</span> of{" "}
         <span className="font-semibold text-white">{totalItems}</span> books
       </div>
-      
+
       <div className="flex items-center gap-2">
         <Button
           variant="ghost"
@@ -114,4 +114,3 @@ export function Pagination({ currentPage, totalPages, totalItems }: PaginationPr
     </div>
   );
 }
-

@@ -1,6 +1,6 @@
 /**
  * Main export for dynamic system
- * 
+ *
  * Provides unified V1+V2+V3 functionality through useDynamicSystem hook
  */
 

@@ -20,11 +20,11 @@ export const getRuntimeV2Seed = (): number | null => {
 
 export const resolveDatasetSeed = (seedValue?: number | null): number => {
   if (!isDbLoadModeEnabled()) return 1;
-  
+
   if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
     return clampSeed(seedValue);
   }
-  
+
   // Get base seed from URL
   const getBaseSeedFromUrl = (): number | null => {
     if (typeof window === "undefined") return null;
@@ -38,18 +38,18 @@ export const resolveDatasetSeed = (seedValue?: number | null): number => {
     }
     return null;
   };
-  
+
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed !== null) {
     // If base seed is 1, v2 should also be 1
     if (baseSeed === 1) {
       return 1;
     }
-    
+
     // For other seeds, use base seed directly (v2 seed = base seed)
     return clampSeed(baseSeed);
   }
-  
+
   const runtime = getRuntimeV2Seed();
   if (runtime !== null) {
     return runtime;

@@ -34,7 +34,7 @@ export interface LayoutConfig {
 export function getSeedLayout(seed: number): LayoutConfig {
   // Static layout: ignore seed
   const normalizedSeed = 1;
-  
+
   const layouts: Record<number, LayoutConfig> = {
     1: {
       searchBar: {
@@ -359,4 +359,4 @@ export function getSeedLayout(seed: number): LayoutConfig {
   };
 
   return layouts[normalizedSeed] || layouts[1];
-} 
+}

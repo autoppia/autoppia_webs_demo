@@ -172,8 +172,8 @@ const STATIC_LAYOUT: SeedLayout = {
 };
 
 export function LayoutProvider({ children }: { children: React.ReactNode }) {
-  const { seed, resolvedSeeds, getNavigationUrl: seedGetNavigationUrl } = useSeed();
-  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const { seed, getNavigationUrl: seedGetNavigationUrl } = useSeed();
+  const v2Seed = seed;
 
   const getElementAttributes = (elementType: string, index: number = 0): Record<string, string> => ({
     "data-element-type": elementType,

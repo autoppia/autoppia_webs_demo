@@ -100,8 +100,8 @@ export function CommentsPanel({ comments, onSubmit }: CommentsPanelProps) {
                 placeholder={dyn.v3.getVariant("message_placeholder", undefined, "Share your thoughts...")}
               />
             </label>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               id={dyn.v3.getVariant("share-feedback-button", ID_VARIANTS_MAP, "share-feedback-button")}
               className={cn("w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold shadow-lg shadow-secondary/20 transition-all hover:scale-105", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
             >

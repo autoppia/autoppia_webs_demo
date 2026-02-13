@@ -50,13 +50,12 @@ const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
 export function LayoutProvider({ children }: { children: React.ReactNode }) {
   // Use SeedContext for unified seed management
-  const { seed: baseSeed, resolvedSeeds, setSeed: setSeedInContext, getNavigationUrl: seedGetNavigationUrl } = useSeed();
-  // LAYOUT FIJO - La seed se mantiene en URL para V2 y V3, pero el layout (V1) es siempre fijo como seed=1
-  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
-  
+  const { seed: baseSeed, setSeed: setSeedInContext, getNavigationUrl: seedGetNavigationUrl } = useSeed();
+  const v2Seed = baseSeed;
+
   const [seed, setSeed] = useState(baseSeed);
   const [currentVariant] = useState<LayoutVariant>(DEFAULT_LAYOUT_VARIANT);
-  
+
   // Sync with SeedContext - la seed se mantiene pero el layout siempre es seed=1
   useEffect(() => {
     setSeed(baseSeed);
@@ -112,4 +111,4 @@ export function useLayout() {
     throw new Error('useLayout must be used within a LayoutProvider');
   }
   return context;
-} 
+}

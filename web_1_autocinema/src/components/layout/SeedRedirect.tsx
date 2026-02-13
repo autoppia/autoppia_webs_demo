@@ -12,7 +12,7 @@ const DEFAULT_SEED = 1;
 /**
  * Component that redirects to seed=1 URL if no seed parameter exists in the URL.
  * This guarantees there is always a seed in the URL.
- * 
+ *
  * NOTE: If the user specifies a seed in the URL (e.g. ?seed=5), that seed is honored.
  */
 export function SeedRedirect() {

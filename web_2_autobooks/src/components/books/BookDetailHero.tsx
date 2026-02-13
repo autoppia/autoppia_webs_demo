@@ -23,7 +23,7 @@ export function BookDetailHero({
   isInReadingList = false,
 }: BookDetailHeroProps) {
   const dyn = useDynamicSystem();
-  
+
   return (
     <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl lg:flex lg:items-start lg:gap-8">
       <div className="relative group">
@@ -66,7 +66,7 @@ export function BookDetailHero({
         <div className="flex flex-wrap gap-3 pt-2">
           {book.trailerUrl && (
             dyn.v1.addWrapDecoy("read-book-button", (
-              <Button 
+              <Button
                 id={dyn.v3.getVariant("read-book-button", ID_VARIANTS_MAP, "read-book-button")}
                 className={cn("h-12 px-6 bg-secondary text-black hover:bg-secondary/90 font-bold shadow-lg shadow-secondary/20 transition-all hover:scale-105", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
                 onClick={onReadBook}
@@ -88,21 +88,21 @@ export function BookDetailHero({
             ))
           )}
           {dyn.v1.addWrapDecoy("reading-list-button", (
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               id={dyn.v3.getVariant("reading-list-button", ID_VARIANTS_MAP, "reading-list-button")}
-              className={cn("h-12 px-6 border transition-all hover:scale-105", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""), isInReadingList 
-                ? "border-secondary/30 bg-secondary/20 text-secondary hover:bg-secondary/30" 
+              className={cn("h-12 px-6 border transition-all hover:scale-105", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""), isInReadingList
+                ? "border-secondary/30 bg-secondary/20 text-secondary hover:bg-secondary/30"
                 : "border-white/20 bg-white/5 text-white hover:bg-white/10")}
               onClick={onReadingList}
             >
-              <Bookmark className={`h-5 w-5 mr-2 ${isInReadingList ? "fill-secondary" : ""}`} /> 
+              <Bookmark className={`h-5 w-5 mr-2 ${isInReadingList ? "fill-secondary" : ""}`} />
               {dyn.v3.getVariant(isInReadingList ? "remove_from_reading_list" : "add_to_reading_list", TEXT_VARIANTS_MAP, isInReadingList ? "Remove from reading list" : "Add to reading list")}
             </Button>
           ))}
           {dyn.v1.addWrapDecoy("share-detail-button", (
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               id={dyn.v3.getVariant("share-detail-button", ID_VARIANTS_MAP, "share-detail-button")}
               className={cn("h-12 px-6 border border-white/20 bg-white/5 text-white hover:bg-white/10 transition-all hover:scale-105", dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, ""))}
               onClick={onShare}
@@ -115,4 +115,3 @@ export function BookDetailHero({
     </section>
   );
 }
-

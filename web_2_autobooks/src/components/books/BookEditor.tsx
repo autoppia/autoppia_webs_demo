@@ -142,4 +142,3 @@ export function BookEditor({ book, onSubmit, onCancel, submitLabel = "Save chang
     </form>
   );
 }
-

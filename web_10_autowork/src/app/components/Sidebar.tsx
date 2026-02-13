@@ -16,7 +16,7 @@ export default function Sidebar() {
           </span>
         </div>
       </div>
-      
+
       {/* Navigation Links */}
       <nav className="flex flex-col gap-2 flex-1">
         <NavLinks />

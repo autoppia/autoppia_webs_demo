@@ -12,20 +12,20 @@ export default function FavoritesPage() {
   const dyn = useDynamicSystem();
   const [experts, setExperts] = useState<any[]>([]);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
-  
+
   // Subscribe to experts data
   useEffect(() => {
     dyn.v2.whenReady().then(() => {
       setExperts(dynamicDataProvider.getExperts().slice(0, 6));
     });
-    
+
     const unsubscribe = dynamicDataProvider.subscribeExperts((updatedExperts) => {
       setExperts(updatedExperts.slice(0, 6));
     });
-    
+
     return () => unsubscribe();
   }, [dyn.v2]);
-  
+
   // Load favorites from localStorage
   useEffect(() => {
     if (typeof window === "undefined") return;

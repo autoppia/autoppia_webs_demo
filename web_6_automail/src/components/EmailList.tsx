@@ -72,9 +72,6 @@ export function EmailList({ textStructure }: EmailListProps) {
     console.log("[automail/EmailList] V2 Status:", {
       seed,
       v2Enabled: dyn.v2.isEnabled(),
-      dbMode: dyn.v2.isDbModeEnabled(),
-      aiMode: dyn.v2.isEnabled(),
-      fallback: dyn.v2.isFallbackMode(),
     });
   }, [seed, dyn.v2]);
 
@@ -287,8 +284,8 @@ export function EmailList({ textStructure }: EmailListProps) {
           </Button>
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
             <span>
-              {filteredEmails.length === 0 
-                ? "0" 
+              {filteredEmails.length === 0
+                ? "0"
                 : `${paginationStart}-${paginationEnd}`}{" "}
               of {filteredEmails.length}
             </span>
@@ -332,10 +329,10 @@ export function EmailList({ textStructure }: EmailListProps) {
             {selectedEmails.length} selected
           </span>
           <Separator orientation="vertical" className="h-4" />
-          <Button 
-            id="bulk-delete-button" 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            id="bulk-delete-button"
+            variant="ghost"
+            size="sm"
             onClick={handleBulkDelete}
             className={cn(
               currentVariant.id === 2 && "delete-element",
@@ -367,8 +364,8 @@ export function EmailList({ textStructure }: EmailListProps) {
           <LabelSelector
             emailIds={selectedEmails}
             trigger={
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="sm"
                 className={cn(
                   currentVariant.id === 2 && "label-panel",
@@ -514,7 +511,7 @@ function EmailItem({
     !email.isRead && "email-item-unread",
     isSelected && "email-item-selected"
   );
-  
+
   // Get CSS classes based on layout variant
   const getEmailItemClasses = () => {
     switch (currentVariant.id) {

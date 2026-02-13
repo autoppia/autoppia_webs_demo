@@ -112,7 +112,7 @@ export default function Home() {
                 <div className="mt-6 flex justify-center">
                   <SeedLink href="/appointments">
                     {dyn.v1.addWrapDecoy("hero-cta-button", (
-                      <Button 
+                      <Button
                         id={dyn.v3.getVariant("hero-cta", ID_VARIANTS_MAP, "hero-cta")}
                         className={cn("size-lg", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
                         size="lg"
@@ -132,7 +132,7 @@ export default function Home() {
         {orderedNav.map((n, i) => (
           dyn.v1.addWrapDecoy(`nav-card-${i}`, (
             <SeedLink key={n.href} href={n.href}>
-              <Card 
+              <Card
                 className={cn("h-full transition hover:shadow-md", dyn.v3.getVariant("nav-card", CLASS_VARIANTS_MAP, ""))}
               >
                 <CardHeader>

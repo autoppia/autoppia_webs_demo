@@ -27,7 +27,7 @@ export function Header() {
     if (!pathname) return false;
     // Remove query parameters for comparison
     const cleanPathname = pathname.split("?")[0];
-    
+
     if (href === "/") {
       return cleanPathname === "/";
     }
@@ -67,8 +67,8 @@ export function Header() {
           })}
           {currentUser ? (
             <>
-              <SeedLink 
-                href="/profile" 
+              <SeedLink
+                href="/profile"
                 className={cn(
                   "font-semibold transition",
                   isActive("/profile") ? "text-secondary" : "text-secondary/80 hover:text-secondary"
@@ -97,8 +97,8 @@ export function Header() {
             </>
           ) : (
             <>
-              <SeedLink 
-                href="/register" 
+              <SeedLink
+                href="/register"
                 className={cn(
                   "transition",
                   isActive("/register") ? "font-semibold text-secondary" : "text-white/70 hover:text-white"
@@ -106,7 +106,7 @@ export function Header() {
               >
                 Register
               </SeedLink>
-              <SeedLink 
+              <SeedLink
                 href="/login"
                 className={cn(
                   "transition",

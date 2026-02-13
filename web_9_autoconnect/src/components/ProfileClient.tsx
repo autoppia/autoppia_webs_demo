@@ -20,8 +20,7 @@ import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 function ProfileContent({ username }: { username: string }) {
   type ExperienceEntry = NonNullable<User["experience"]>[number];
-  const { resolvedSeeds, seed } = useSeed();
-  resolvedSeeds;
+  const { seed } = useSeed();
   const layoutSeed = seed;
   // Default layout config (no v1 layout variations in this build)
   const layout = { profileLayout: "full" as const };
@@ -31,54 +30,54 @@ function ProfileContent({ username }: { username: string }) {
 
   // Get data from dynamic provider
   const users = dynamicDataProvider.getUsers();
-  
+
   // Subscribe to posts to get stable reference
   const [mockPosts, setMockPosts] = useState<Post[]>(() => dynamicDataProvider.getPosts());
-  
+
   useEffect(() => {
     const unsubscribe = dynamicDataProvider.subscribePosts((updatedPosts) => {
       setMockPosts(updatedPosts);
     });
     return () => unsubscribe();
   }, []);
-  
+
   // Subscribe to users to get stable reference
   const [usersState, setUsersState] = useState<User[]>(() => dynamicDataProvider.getUsers());
-  
+
   useEffect(() => {
     const unsubscribe = dynamicDataProvider.subscribeUsers((updatedUsers) => {
       setUsersState(updatedUsers);
     });
     return () => unsubscribe();
   }, []);
-  
+
   // Serialize usersState for stable dependency
   const usersStateKey = useMemo(() => {
     if (!usersState || usersState.length === 0) return '';
     return usersState.map(u => u.username).sort().join(',');
   }, [usersState]);
-  
+
   // Memoize user lookup to avoid reference changes - search in usersState directly
   const user = useMemo(() => {
     if (!usersState || usersState.length === 0) return undefined;
     const searchUsername = String(username || "").trim().toLowerCase();
-    
+
     // Strategy 1: Exact match
     let found = usersState.find((u) => {
       const userUsername = String(u.username || "").trim().toLowerCase();
       return userUsername === searchUsername;
     });
-    
+
     if (found) return found;
-    
+
     // Strategy 2: Partial match
     found = usersState.find((u) => {
       const userUsername = String(u.username || "").trim().toLowerCase();
       return userUsername.includes(searchUsername) || searchUsername.includes(userUsername);
     });
-    
+
     if (found) return found;
-    
+
     // Strategy 3: Without dots
     const searchWithoutDots = searchUsername.replace(/\./g, "");
     found = usersState.find((u) => {
@@ -86,28 +85,28 @@ function ProfileContent({ username }: { username: string }) {
       const userWithoutDots = userUsername.replace(/\./g, "");
       return userWithoutDots === searchWithoutDots;
     });
-    
+
     return found;
   }, [username, usersState, usersStateKey]);
-  
+
   // Memoize currentUser to avoid reference changes
   const currentUser = useMemo(() => {
     return usersState[2] || usersState[0];
   }, [usersState, usersStateKey]);
-  
+
   const dyn = useDynamicSystem();
-  
+
   // Memoize isSelf to avoid recalculation
   const isSelf = useMemo(() => {
     return user?.username === currentUser?.username;
   }, [user?.username, currentUser?.username]);
-  
+
   // Create stable reference for dyn.seed
   const dynSeed = dyn.seed;
-  
+
   // Memoize dyn.v3 to avoid reference changes
   const dynV3 = useMemo(() => dyn.v3, [dyn.seed]);
-  
+
   // Use ref to maintain stable reference to changeOrderElements
   const changeOrderElementsRef = useRef(dyn.v1.changeOrderElements);
   useEffect(() => {
@@ -197,29 +196,29 @@ function ProfileContent({ username }: { username: string }) {
   // Check if user exists whenever username or data changes
   useEffect(() => {
     let mounted = true;
-    
+
     const checkUser = async () => {
       if (!mounted) return;
-      
+
       setIsCheckingUser(true);
-      
+
       // Wait for data provider to be ready
       await dynamicDataProvider.whenReady();
-      
+
       // Wait a bit more to ensure data is fully loaded
       await new Promise(resolve => setTimeout(resolve, 200));
-      
+
       if (!mounted) return;
-      
+
       const foundUser = dynamicDataProvider.getUserByUsername(username);
-      
+
       if (foundUser) {
         console.log(`[autoconnect] ✅ User "${username}" found:`, foundUser.name);
         setUserNotFound(false);
         setIsCheckingUser(false);
       } else {
         const allUsers = dynamicDataProvider.getUsers();
-        console.log(`[autoconnect] ❌ User "${username}" not found. Available users (${allUsers.length}):`, 
+        console.log(`[autoconnect] ❌ User "${username}" not found. Available users (${allUsers.length}):`,
           allUsers.slice(0, 10).map(u => ({ username: u.username, name: u.name })));
         setUserNotFound(true);
         setIsCheckingUser(false);
@@ -231,7 +230,7 @@ function ProfileContent({ username }: { username: string }) {
     // Subscribe to user updates to re-check when data changes
     const unsubscribe = dynamicDataProvider.subscribeUsers((users) => {
       if (!mounted) return;
-      
+
       console.log(`[autoconnect] Users updated (${users.length} users), re-checking user ${username}...`);
       setTimeout(() => {
         if (!mounted) return;
@@ -258,7 +257,7 @@ function ProfileContent({ username }: { username: string }) {
     if (typeof window !== "undefined") {
       window.addEventListener("autoconnect:v2SeedChange", handleSeedChange);
     }
-    
+
     return () => {
       mounted = false;
       unsubscribe();
@@ -305,37 +304,37 @@ function ProfileContent({ username }: { username: string }) {
   // Calculate posts for this user - memoize with stable dependencies
   // IMPORTANT: All hooks must be called before any early returns to follow React's rules of hooks
   const userUsername = user?.username;
-  
+
   // Serialize mockPosts for stable dependency check
   const mockPostsKey = useMemo(() => {
     if (!mockPosts || mockPosts.length === 0) return '';
     return mockPosts.map(p => `${p.id}:${p.user?.username || ''}`).sort().join(',');
   }, [mockPosts]);
-  
+
   const posts = useMemo(() => {
     if (!userUsername || !mockPosts || mockPosts.length === 0) return [];
     return mockPosts.filter((p) => p.user.username === userUsername);
   }, [mockPosts, mockPostsKey, userUsername]);
-  
+
   // Serialize localPosts for stable dependency check
   const localPostsKey = useMemo(() => {
     if (!localPosts || localPosts.length === 0) return '';
     return localPosts.map(p => p.id).sort().join(',');
   }, [localPosts]);
-  
+
   const allPosts = useMemo(() => {
     if (!posts || posts.length === 0) {
       return isSelf && localPosts.length > 0 ? localPosts : [];
     }
     return isSelf ? [...localPosts, ...posts] : posts;
   }, [isSelf, localPosts, localPostsKey, posts]);
-  
+
   // Serialize allPosts for stable dependency
   const allPostsKey = useMemo(() => {
     if (!allPosts || allPosts.length === 0) return '';
     return allPosts.map(p => p.id).sort().join(',');
   }, [allPosts]);
-  
+
   // Serialize postsState completely for stable dependency comparison
   const postsStateSerialized = useMemo(() => {
     try {
@@ -344,11 +343,11 @@ function ProfileContent({ username }: { username: string }) {
       return '';
     }
   }, [postsState]);
-  
+
   // Merge posts with saved state (likes and comments) - recalculate when postsState changes
   const postsWithState = useMemo(() => {
     if (!allPosts || allPosts.length === 0) return [];
-    
+
     // Parse the serialized state to avoid accessing postsState directly
     let parsedState: typeof postsState = {};
     try {
@@ -356,7 +355,7 @@ function ProfileContent({ username }: { username: string }) {
     } catch {
       parsedState = {};
     }
-    
+
     return allPosts.map(post => {
       const state = parsedState[post.id];
       if (state) {
@@ -370,31 +369,31 @@ function ProfileContent({ username }: { username: string }) {
       return post;
     });
   }, [allPosts, allPostsKey, postsStateSerialized]);
-  
+
   // Serialize hiddenPostIds for stable dependency
   const hiddenPostIdsStr = useMemo(() => {
     return Array.from(hiddenPostIds).sort().join(',');
   }, [hiddenPostIds]);
-  
+
   // Serialize postsWithState for stable dependency
   const postsWithStateKey = useMemo(() => {
     if (!postsWithState || postsWithState.length === 0) return '';
     return postsWithState.map(p => p.id).sort().join(',');
   }, [postsWithState]);
-  
+
   // Memoize the order separately - use ref to avoid dependency on dyn.v1
   const postsLength = postsWithState?.length || 0;
   const postsOrder = useMemo(() => {
     if (postsLength === 0) return [];
     return changeOrderElementsRef.current("profile-posts", postsLength);
   }, [postsLength, dynSeed]);
-  
+
   const visiblePosts = useMemo(() => {
     if (!postsWithState || postsWithState.length === 0) return [];
-    
+
     // Parse the serialized hiddenPostIds to avoid accessing hiddenPostIds directly
     const hiddenSet = new Set(hiddenPostIdsStr ? hiddenPostIdsStr.split(',') : []);
-    
+
     const orderedPosts = postsOrder.map((idx) => postsWithState[idx]);
     return orderedPosts.filter((p) => !hiddenSet.has(p.id));
   }, [postsWithState, postsWithStateKey, postsOrder, hiddenPostIdsStr]);

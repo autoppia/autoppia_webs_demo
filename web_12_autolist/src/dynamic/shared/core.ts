@@ -93,17 +93,7 @@ export function useDynamicSystem() {
        * @returns Promise that resolves when data is loaded
        */
       whenReady: () => dynamicDataProvider.whenReady(),
-      
-      /**
-       * Check if V2 is enabled
-       */
-      isDbModeEnabled: () => isDbLoadModeEnabled(),
-      
-      /**
-       * Check if fallback mode is active
-       */
-      isFallbackMode: () => !isDbLoadModeEnabled(),
-      
+
       /**
        * Check if V2 is enabled
        */

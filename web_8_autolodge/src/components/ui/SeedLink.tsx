@@ -14,14 +14,14 @@ interface SeedLinkProps extends Omit<ComponentProps<typeof Link>, 'href'> {
  */
 export function SeedLink({ href, preserveSeed = true, ...props }: SeedLinkProps) {
   const { getNavigationUrl } = useSeed();
-  
+
   // If preserveSeed is false, just return a normal Link
   if (!preserveSeed) {
     return <Link href={href} {...props} />;
   }
-  
+
   // Use getNavigationUrl to preserve seed
   const hrefWithSeed = getNavigationUrl(href);
-  
+
   return <Link href={hrefWithSeed} {...props} />;
 }

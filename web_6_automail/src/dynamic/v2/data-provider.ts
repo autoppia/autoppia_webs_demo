@@ -23,7 +23,7 @@ export class DynamicDataProvider {
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
     });
-    
+
     // Initialize emails with data generation if enabled
     this.initializeEmails();
 
@@ -45,7 +45,7 @@ export class DynamicDataProvider {
   private async initializeEmails(): Promise<void> {
     const baseSeed = this.getBaseSeedFromUrl();
     const runtimeSeed = this.getRuntimeV2Seed();
-    
+
     try {
       // If base seed = 1, use fallback data directly (skip DB/AI)
       if (baseSeed === 1) {
@@ -54,19 +54,19 @@ export class DynamicDataProvider {
         this.setEmails(initializedEmails);
         return;
       }
-      
+
       this.currentSeed = runtimeSeed ?? 1;
-      
+
       // Check if DB mode is enabled - only try DB if enabled
       const dbModeEnabled = isDbLoadModeEnabled();
         console.log("[automail/data-provider] DB mode enabled:", dbModeEnabled, "runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
-        
+
         if (dbModeEnabled) {
           // Try DB mode first if enabled
           console.log("[automail/data-provider] Attempting to load emails from DB...");
           const dbEmails = await loadEmailsFromDb(runtimeSeed ?? undefined);
           console.log("[automail/data-provider] loadEmailsFromDb returned:", dbEmails.length, "emails");
-        
+
         if (dbEmails.length > 0) {
           console.log("[automail/data-provider] ✅ Successfully loaded", dbEmails.length, "emails from DB");
           this.setEmails(dbEmails);
@@ -75,7 +75,7 @@ export class DynamicDataProvider {
           console.log("[automail/data-provider] ⚠️ No emails from DB, will try initializeEmails...");
         }
       }
-      
+
       // If DB mode not enabled or DB returned empty, use initializeEmails
       // This will handle AI generation mode or fallback
       const initializedEmails = await initializeEmails(runtimeSeed ?? undefined);
@@ -104,12 +104,12 @@ export class DynamicDataProvider {
     if (this.loadingPromise) {
       return this.loadingPromise;
     }
-    
+
     this.loadingPromise = (async () => {
       try {
         const baseSeed = this.getBaseSeedFromUrl();
         const v2Seed = seedValue ?? this.getRuntimeV2Seed() ?? 1;
-        
+
         // If base seed = 1, use fallback data directly (skip DB/AI)
         if (baseSeed === 1) {
           console.log("[automail/data-provider] Reload: Base seed is 1, using fallback data");
@@ -117,13 +117,13 @@ export class DynamicDataProvider {
         } else {
           this.currentSeed = v2Seed;
         }
-        
+
         // Reset ready state
         this.ready = false;
         this.readyPromise = new Promise<void>((resolve) => {
           this.resolveReady = resolve;
         });
-        
+
         const initializedEmails = await initializeEmails(v2Seed);
         this.setEmails(initializedEmails);
       } catch (error) {
@@ -135,7 +135,7 @@ export class DynamicDataProvider {
         this.loadingPromise = null;
       }
     })();
-    
+
     return this.loadingPromise;
   }
 
@@ -163,12 +163,12 @@ export class DynamicDataProvider {
     if (!this.isEnabled) {
       return 1;
     }
-    
+
     // Validate seed range (1-300)
     if (providedSeed < 1 || providedSeed > 300) {
       return 1;
     }
-    
+
     return providedSeed;
   }
 

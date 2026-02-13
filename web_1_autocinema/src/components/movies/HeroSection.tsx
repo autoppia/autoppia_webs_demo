@@ -71,10 +71,10 @@ export function HeroSection({
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)]" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20" />
       </div>
-      
+
       {/* Grid pattern overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-      
+
       <div className="relative w-full px-6 py-20 sm:px-8 lg:px-12 lg:py-28">
         <div className="mx-auto max-w-[1600px]">
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-12">
@@ -86,11 +86,11 @@ export function HeroSection({
                 </div>
                 <span>Curated AI cinema collections</span>
               </div>
-              
+
               <h1 className="text-5xl font-bold leading-[1.1] tracking-tight lg:text-6xl xl:text-7xl mb-6">
                 Discover AI-driven stories, remixed genres, and cinematic experiments.
               </h1>
-              
+
               <p className="text-lg text-white/70 leading-relaxed mb-8">
                 Search hundreds of procedurally generated movies loaded directly from our datasets service. No backend, no forms – just cinema.
               </p>
@@ -112,8 +112,8 @@ export function HeroSection({
                     className={cn("pl-12 h-14 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base", dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP, ""))}
                   />
                 </div>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   id={dyn.v3.getVariant("search-submit-button", ID_VARIANTS_MAP, "search-submit-button")}
                   className={cn("h-14 px-8 bg-secondary text-black hover:bg-secondary/90 shadow-lg shadow-secondary/20 font-semibold text-base", dyn.v3.getVariant("search-button", CLASS_VARIANTS_MAP, ""))}
                 >
@@ -149,7 +149,7 @@ export function HeroSection({
                   </h2>
                 </div>
               ))}
-              
+
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {topMovies.map((movie, index) => (
                   <div
@@ -165,10 +165,10 @@ export function HeroSection({
                     >
                       {/* Gradient overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-                      
+
                       {/* Shine effect on hover */}
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                      
+
                       {/* Content overlay */}
                       <div className="absolute inset-0 flex flex-col justify-end p-6 lg:p-8">
                         {/* Badges */}
@@ -181,17 +181,17 @@ export function HeroSection({
                             {movie.rating}
                           </div>
                         </div>
-                        
+
                         {/* Title */}
                         <h3 className="text-2xl lg:text-3xl font-bold leading-tight mb-3 drop-shadow-lg">
                           {movie.title}
                         </h3>
-                        
+
                         {/* Synopsis */}
                         <p className="text-sm lg:text-base text-white/90 mb-4 line-clamp-2 leading-relaxed">
                           {movie.synopsis}
                         </p>
-                        
+
                         {/* Meta info */}
                         <div className="flex items-center gap-3 text-xs lg:text-sm text-white/80 mb-5 font-medium">
                           <span>{movie.year}</span>
@@ -200,7 +200,7 @@ export function HeroSection({
                           <span className="text-white/40">•</span>
                           <span className="truncate">{movie.director}</span>
                         </div>
-                        
+
                         {/* CTA Button */}
                         <SeedLink
                           href={`/movies/${movie.id}`}

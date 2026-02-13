@@ -31,8 +31,8 @@ const LoadingNotice = ({ message }: { message: string }) => (
 export default function DocumentsPage() {
   const { getText, getId } = useDynamicStructure();
   const dyn = useDynamicSystem();
-  const { resolvedSeeds } = useSeed();
-  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const { seed } = useSeed();
+  const v2Seed = seed;
   const { data, isLoading, error } = useProjectData<any>({
     projectKey: "web_5_autocrm",
     entityType: "files",

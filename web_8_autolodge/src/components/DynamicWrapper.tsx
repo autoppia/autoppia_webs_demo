@@ -9,11 +9,11 @@ interface DynamicWrapperProps {
   [key: string]: unknown;
 }
 
-export default function DynamicWrapper({ 
-  children, 
-  as: Component = 'div', 
-  className = '', 
-  ...props 
+export default function DynamicWrapper({
+  children,
+  as: Component = 'div',
+  className = '',
+  ...props
 }: DynamicWrapperProps) {
   return (
     <Component className={className} {...props}>

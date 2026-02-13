@@ -62,22 +62,22 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
   if (!dbModeEnabled) {
     return 1;
   }
-  
+
   if (typeof v2SeedValue === "number" && Number.isFinite(v2SeedValue)) {
     return clampSeed(v2SeedValue);
   }
-  
+
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed !== null) {
     // If base seed is 1, v2 should also be 1
     if (baseSeed === 1) {
       return 1;
     }
-    
+
     // For other seeds, use base seed directly (v2 seed = base seed)
     return clampSeed(baseSeed);
   }
-  
+
   // Fallback to runtime seed if available
   if (typeof window !== "undefined") {
     const fromClient = getRuntimeV2Seed();
@@ -85,7 +85,7 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
       return clampSeed(fromClient);
     }
   }
-  
+
   return 1;
 };
 

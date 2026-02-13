@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { getEnabledFlags } from "@/shared/seed-resolver";
+import { isV1Enabled } from "@/dynamic/shared/flags";
 
 const DEFAULT_V1_SEED = 1;
 
@@ -16,8 +16,7 @@ export function SeedRedirect() {
     if (typeof window === "undefined") return;
     if (hasRedirectedRef.current) return;
 
-    const enabledFlags = getEnabledFlags();
-    if (!enabledFlags.v1) {
+    if (!isV1Enabled()) {
       return;
     }
 
@@ -42,4 +41,3 @@ export function SeedRedirect() {
 
   return null;
 }
-

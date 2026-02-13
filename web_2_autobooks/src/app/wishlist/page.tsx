@@ -161,5 +161,3 @@ export default function WishlistPage() {
     ), "wishlist-page-wrap")
   );
 }
-
-

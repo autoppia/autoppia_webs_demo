@@ -80,19 +80,19 @@
   .layout-sidebar-left {
     @apply flex flex-col lg:flex-row;
   }
-  
+
   .layout-sidebar-left .hero-section {
     @apply order-4;
   }
-  
+
   .layout-sidebar-left .booking-section {
     @apply order-1 w-full lg:w-80 lg:flex-shrink-0;
   }
-  
+
   .layout-sidebar-left .rides-section {
     @apply order-2 w-full lg:w-80 lg:flex-shrink-0;
   }
-  
+
   .layout-sidebar-left .map-section {
     @apply order-3 flex-1;
   }
@@ -100,19 +100,19 @@
   .layout-vertical-header {
     @apply flex flex-row;
   }
-  
+
   .layout-vertical-header .hero-section {
     @apply order-1;
   }
-  
+
   .layout-vertical-header .booking-section {
     @apply order-2;
   }
-  
+
   .layout-vertical-header .map-section {
     @apply order-3;
   }
-  
+
   .layout-vertical-header .rides-section {
     @apply order-4;
   }
@@ -120,19 +120,19 @@
   .layout-inverted {
     @apply flex flex-col-reverse;
   }
-  
+
   .layout-inverted .hero-section {
     @apply order-3;
   }
-  
+
   .layout-inverted .booking-section {
     @apply order-1;
   }
-  
+
   .layout-inverted .map-section {
     @apply order-2;
   }
-  
+
   .layout-inverted .rides-section {
     @apply order-4;
   }
@@ -140,19 +140,19 @@
   .layout-stacked {
     @apply flex flex-col space-y-6;
   }
-  
+
   .layout-stacked .hero-section {
     @apply order-3;
   }
-  
+
   .layout-stacked .booking-section {
     @apply order-1;
   }
-  
+
   .layout-stacked .rides-section {
     @apply order-2;
   }
-  
+
   .layout-stacked .map-section {
     @apply order-4;
   }
@@ -160,19 +160,19 @@
   .layout-split {
     @apply flex flex-col lg:flex-row gap-8;
   }
-  
+
   .layout-split .hero-section {
     @apply order-4;
   }
-  
+
   .layout-split .booking-section {
     @apply order-1 lg:w-1/2;
   }
-  
+
   .layout-split .rides-section {
     @apply order-2 lg:w-1/2;
   }
-  
+
   .layout-split .map-section {
     @apply order-3 lg:w-full;
   }
@@ -180,19 +180,19 @@
   .layout-car-sidebar {
     @apply flex flex-col lg:flex-row;
   }
-  
+
   .layout-car-sidebar .hero-section {
     @apply order-4;
   }
-  
+
   .layout-car-sidebar .booking-section {
     @apply order-1;
   }
-  
+
   .layout-car-sidebar .map-section {
     @apply order-2;
   }
-  
+
   .layout-car-sidebar .rides-section {
     @apply order-3 w-full lg:w-80 lg:flex-shrink-0;
   }
@@ -200,19 +200,19 @@
   .layout-floating {
     @apply relative;
   }
-  
+
   .layout-floating .hero-section {
     @apply order-1;
   }
-  
+
   .layout-floating .booking-section {
     @apply order-2;
   }
-  
+
   .layout-floating .rides-section {
     @apply order-3;
   }
-  
+
   .layout-floating .map-section {
     @apply order-4;
   }
@@ -220,19 +220,19 @@
   .layout-multi-column {
     @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
   }
-  
+
   .layout-multi-column .hero-section {
     @apply order-3;
   }
-  
+
   .layout-multi-column .booking-section {
     @apply order-1;
   }
-  
+
   .layout-multi-column .rides-section {
     @apply order-2;
   }
-  
+
   .layout-multi-column .map-section {
     @apply order-4 lg:col-span-3;
   }
@@ -240,19 +240,19 @@
   .layout-masonry {
     @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4;
   }
-  
+
   .layout-masonry .hero-section {
     @apply order-1 lg:col-span-2;
   }
-  
+
   .layout-masonry .booking-section {
     @apply order-2;
   }
-  
+
   .layout-masonry .rides-section {
     @apply order-3;
   }
-  
+
   .layout-masonry .map-section {
     @apply order-4 lg:col-span-2;
   }

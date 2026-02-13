@@ -110,7 +110,7 @@ export function ProductCarousel({
     node.addEventListener("wheel", handleWheel, { passive: true });
     node.addEventListener("touchstart", handleTouchStart, { passive: true });
     node.addEventListener("touchmove", handleTouchMove, { passive: true });
-    
+
     return () => {
       if (rafIdRef.current !== null) {
         window.cancelAnimationFrame(rafIdRef.current);
@@ -219,9 +219,9 @@ export function ProductCarousel({
             // Prevent any accidental navigation when starting to scroll
             const target = e.target as HTMLElement;
             // Only prevent if clicking on the container itself, not on interactive elements
-            if (target === containerRef.current || 
-                (containerRef.current?.contains(target) && 
-                 !target.closest('button') && 
+            if (target === containerRef.current ||
+                (containerRef.current?.contains(target) &&
+                 !target.closest('button') &&
                  !target.closest('[role="button"]') &&
                  !target.closest('a'))) {
               e.stopPropagation();
@@ -230,9 +230,9 @@ export function ProductCarousel({
           onTouchStart={(e) => {
             // Prevent any accidental navigation when starting to scroll on touch devices
             const target = e.target as HTMLElement;
-            if (target === containerRef.current || 
-                (containerRef.current?.contains(target) && 
-                 !target.closest('button') && 
+            if (target === containerRef.current ||
+                (containerRef.current?.contains(target) &&
+                 !target.closest('button') &&
                  !target.closest('[role="button"]') &&
                  !target.closest('a'))) {
               e.stopPropagation();
@@ -242,9 +242,9 @@ export function ProductCarousel({
             // Prevent any accidental navigation from clicks during scroll
             const target = e.target as HTMLElement;
             // If clicking on the container itself (not a button or link), prevent navigation
-            if (target === containerRef.current || 
-                (containerRef.current?.contains(target) && 
-                 !target.closest('button') && 
+            if (target === containerRef.current ||
+                (containerRef.current?.contains(target) &&
+                 !target.closest('button') &&
                  !target.closest('[role="button"]') &&
                  !target.closest('a') &&
                  !target.closest('[onClick]'))) {

@@ -24,11 +24,11 @@ export function DynamicButton({
   ...props
 }: DynamicButtonProps) {
   const dyn = useDynamicSystem();
-  
-  const buttonId = index > 0 
+
+  const buttonId = index > 0
     ? dyn.v3.getVariant(`${eventType}-button-${index}`, ID_VARIANTS_MAP, `${eventType}-button-${index}`)
     : dyn.v3.getVariant(`${eventType}-button`, ID_VARIANTS_MAP, `${eventType}-button`);
-  
+
   const buttonClass = dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, className || "btn-primary");
 
   return (

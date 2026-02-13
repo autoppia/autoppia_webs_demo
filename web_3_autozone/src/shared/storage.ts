@@ -19,5 +19,3 @@ export function writeJson<T>(key: string, value: T): void {
     // ignore
   }
 }
-
-

@@ -1,10 +1,10 @@
 /**
  * Universal Data Generation Utility (Web10 Edition)
- * 
+ *
  * This utility provides consistent data generation for Web10 ecosystem datasets.
  * It generates realistic mock data for jobs, hires, skills, and experts
  * for use across all Web10-based applications.
- * 
+ *
  * Extended: Web8-style multi-layered generation for Autowork (jobs, hires, skills, experts)
  */
 
@@ -337,7 +337,7 @@ export async function generateProjectData(
   }
 
   const startTime = Date.now();
-  
+
   const cacheKey = getCacheKey(projectKey);
   const cached = getCachedData(cacheKey);
   if (cached && cached.length >= Math.max(1, Math.min(200, count))) {

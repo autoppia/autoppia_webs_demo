@@ -76,7 +76,7 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
  * You do not need to pass the seed manually.
  */
 export function useDynamicSystem() {
-  const { seed, resolvedSeeds } = useSeed();
+  const { seed } = useSeed();
   const { dynamicDataProvider } = require("../v2");
 
   return useMemo(() => ({
@@ -124,23 +124,7 @@ export function useDynamicSystem() {
        * @returns Promise that resolves when data is loaded
        */
       whenReady: () => dynamicDataProvider.whenReady(),
-      
-      /**
-       * Check if V2 is enabled
-       */
-      isDbModeEnabled: () => {
-        const { isDbLoadModeEnabled } = require("@/shared/seeded-loader");
-        return isDbLoadModeEnabled();
-      },
-      
-      /**
-       * Check if fallback mode is active
-       */
-      isFallbackMode: () => {
-        const { isDbLoadModeEnabled } = require("@/shared/seeded-loader");
-        return !isDbLoadModeEnabled();
-      },
-      
+
       /**
        * Check if V2 is enabled
        */
@@ -185,5 +169,5 @@ export function useDynamicSystem() {
      */
     selectVariantIndex: (key: string, count: number) =>
       selectVariantIndex(seed, key, count),
-  }), [seed, resolvedSeeds]);
+  }), [seed]);
 }

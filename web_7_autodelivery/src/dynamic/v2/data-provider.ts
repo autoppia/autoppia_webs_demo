@@ -26,7 +26,7 @@ export class DynamicDataProvider {
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
     });
-    
+
     // Initialize restaurants
     this.initializeRestaurants();
 
@@ -48,7 +48,7 @@ export class DynamicDataProvider {
   private async initializeRestaurants(): Promise<void> {
     const baseSeed = this.getBaseSeedFromUrl();
     const runtimeSeed = this.getRuntimeV2Seed();
-    
+
     try {
       // If base seed = 1, use fallback data directly (skip DB/AI)
       if (baseSeed === 1) {
@@ -58,19 +58,19 @@ export class DynamicDataProvider {
         this.setTestimonials(getRandomTestimonials(5));
         return;
       }
-      
+
       this.currentSeed = runtimeSeed ?? 1;
-      
+
       // Check if DB mode is enabled - only try DB if enabled
       const dbModeEnabled = isDbLoadModeEnabled();
       console.log("[autodelivery/data-provider] DB mode enabled:", dbModeEnabled, "runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
-      
+
       if (dbModeEnabled) {
         // Try DB mode first if enabled
         console.log("[autodelivery/data-provider] Attempting to load restaurants from DB...");
         const dbRestaurants = await loadRestaurantsFromDb(runtimeSeed ?? undefined);
         console.log("[autodelivery/data-provider] loadRestaurantsFromDb returned:", dbRestaurants.length, "restaurants");
-        
+
         if (dbRestaurants.length > 0) {
           console.log("[autodelivery/data-provider] ✅ Successfully loaded", dbRestaurants.length, "restaurants from DB");
           this.setRestaurants(dbRestaurants);
@@ -80,7 +80,7 @@ export class DynamicDataProvider {
           console.log("[autodelivery/data-provider] ⚠️ No restaurants from DB, will try initializeRestaurants...");
         }
       }
-      
+
       // If DB mode not enabled or DB returned empty, use initializeRestaurants
       // This will handle AI generation mode or fallback
       const initializedRestaurants = await initializeRestaurants(runtimeSeed ?? undefined);
@@ -103,7 +103,7 @@ export class DynamicDataProvider {
       }
     }
   }
-  
+
   /**
    * Reload data if seed has changed
    */
@@ -115,7 +115,7 @@ export class DynamicDataProvider {
       this.reload(seedToUse);
     }
   }
-  
+
   /**
    * Reload restaurants with a new seed
    */
@@ -124,12 +124,12 @@ export class DynamicDataProvider {
     if (this.loadingPromise) {
       return this.loadingPromise;
     }
-    
+
     this.loadingPromise = (async () => {
       try {
         const baseSeed = this.getBaseSeedFromUrl();
         const v2Seed = seedValue ?? this.getRuntimeV2Seed() ?? 1;
-        
+
         // If base seed = 1, use fallback data directly (skip DB/AI)
         if (baseSeed === 1) {
           console.log("[autodelivery/data-provider] Reload: Base seed is 1, using fallback data");
@@ -137,13 +137,13 @@ export class DynamicDataProvider {
         } else {
           this.currentSeed = v2Seed;
         }
-        
+
         // Reset ready state
         this.ready = false;
         this.readyPromise = new Promise<void>((resolve) => {
           this.resolveReady = resolve;
         });
-        
+
         const initializedRestaurants = await initializeRestaurants(v2Seed);
         this.setRestaurants(initializedRestaurants);
         this.setTestimonials(getRandomTestimonials(5));
@@ -156,7 +156,7 @@ export class DynamicDataProvider {
         this.loadingPromise = null;
       }
     })();
-    
+
     return this.loadingPromise;
   }
 
@@ -257,20 +257,20 @@ export class DynamicDataProvider {
       console.log("[autodelivery] getRestaurantById: restaurants array is not valid");
       return undefined;
     }
-    
+
     // Ensure id is a string
     const searchId = String(id || '');
     if (!searchId) {
       console.log("[autodelivery] getRestaurantById: invalid id provided");
       return undefined;
     }
-    
+
     // Try exact match first
     let found = this.restaurants.find((restaurant) => {
       const restaurantId = String(restaurant.id || '');
       return restaurantId === searchId;
     });
-    
+
     // If not found, try URL decoding
     if (!found) {
       try {
@@ -283,7 +283,7 @@ export class DynamicDataProvider {
         // Ignore decode errors
       }
     }
-    
+
     // If still not found, try partial match (for numeric IDs)
     if (!found && /^\d+$/.test(searchId)) {
       found = this.restaurants.find((restaurant) => {
@@ -292,7 +292,7 @@ export class DynamicDataProvider {
         return restaurantId === searchId || restaurantId.endsWith(`-${searchId}`) || restaurantId.includes(searchId);
       });
     }
-    
+
     // If still not found, try partial matching
     if (!found) {
       found = this.restaurants.find((restaurant) => {
@@ -300,14 +300,14 @@ export class DynamicDataProvider {
         return restaurantId.includes(searchId) || searchId.includes(restaurantId);
       });
     }
-    
+
     // Log for debugging if not found
     if (!found && this.restaurants.length > 0) {
       console.log(`[autodelivery] Restaurant ${searchId} not found. Available restaurants (${this.restaurants.length}):`,
         this.restaurants.slice(0, 5).map(r => ({ id: r.id, name: r.name }))
       );
     }
-    
+
     return found;
   }
 

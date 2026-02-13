@@ -187,7 +187,7 @@ function PlaceSelect({
   const menuRef = useRef<HTMLDivElement>(null);
   const [inputWidth, setInputWidth] = useState<number | null>(null);
   const { seed } = useSeed();
-  
+
   // Get places from data provider (dynamic based on seed)
   const [places, setPlaces] = useState<Place[]>(() => {
     try {
@@ -224,7 +224,7 @@ function PlaceSelect({
     const handleSeedChange = () => {
       updatePlaces();
     };
-    
+
     if (typeof window !== "undefined") {
       window.addEventListener("autodrive:v2SeedChange", handleSeedChange);
     }
@@ -302,11 +302,11 @@ function PlaceSelect({
               setSearchValue("");
             }
             // Log enter event when user focuses on input
-            const enterEventType = placeholder.toLowerCase().includes('pickup') 
-              ? EVENT_TYPES.ENTER_LOCATION 
+            const enterEventType = placeholder.toLowerCase().includes('pickup')
+              ? EVENT_TYPES.ENTER_LOCATION
               : EVENT_TYPES.ENTER_DESTINATION;
-            
-            logEvent(enterEventType, { 
+
+            logEvent(enterEventType, {
               inputType: placeholder.toLowerCase().includes('pickup') ? 'location' : 'destination',
               timestamp: new Date().toISOString(),
               page: 'trip_form',
@@ -325,25 +325,25 @@ function PlaceSelect({
           onKeyDown={(e) => {
             if (isTyping && e.key === 'Enter' && searchValue.trim()) {
               e.preventDefault();
-              
+
               // Check if there's an exact match
-              const exactMatch = places.find(option => 
+              const exactMatch = places.find(option =>
                 option.label.toLowerCase() === searchValue.toLowerCase()
               );
-              
+
               if (exactMatch) {
                 // Use exact match if found
                 setValue(exactMatch.label);
                 setOpen(false);
                 setIsTyping(false);
                 setSearchValue("");
-                
+
                 // Log ENTER event for exact match
-                const enterEventType = placeholder.toLowerCase().includes('pickup') 
-                  ? EVENT_TYPES.ENTER_LOCATION 
+                const enterEventType = placeholder.toLowerCase().includes('pickup')
+                  ? EVENT_TYPES.ENTER_LOCATION
                   : EVENT_TYPES.ENTER_DESTINATION;
-                
-                logEvent(enterEventType, { 
+
+                logEvent(enterEventType, {
                   value: exactMatch.label,
                   inputType: placeholder.toLowerCase().includes('pickup') ? 'location' : 'destination',
                   timestamp: new Date().toISOString(),
@@ -355,7 +355,7 @@ function PlaceSelect({
                     full: exactMatch.label
                   }
                 });
-                
+
                 if (typeof window !== "undefined") {
                   sessionStorage.setItem(
                     placeholder === "Pickup location"
@@ -371,13 +371,13 @@ function PlaceSelect({
                 setIsTyping(false);
                 const customOption = searchValue;
                 setSearchValue("");
-                
+
                 // Log ENTER event for custom value
-                const enterEventType = placeholder.toLowerCase().includes('pickup') 
-                  ? EVENT_TYPES.ENTER_LOCATION 
+                const enterEventType = placeholder.toLowerCase().includes('pickup')
+                  ? EVENT_TYPES.ENTER_LOCATION
                   : EVENT_TYPES.ENTER_DESTINATION;
-                
-                logEvent(enterEventType, { 
+
+                logEvent(enterEventType, {
                   value: customOption,
                   inputType: placeholder.toLowerCase().includes('pickup') ? 'location' : 'destination',
                   timestamp: new Date().toISOString(),
@@ -386,7 +386,7 @@ function PlaceSelect({
                   isCustomValue: true,
                   searchValue: customOption
                 });
-                
+
                 if (typeof window !== "undefined") {
                   sessionStorage.setItem(
                     placeholder === "Pickup location"
@@ -402,25 +402,25 @@ function PlaceSelect({
             if (isTyping) {
               const newValue = e.target.value;
               setSearchValue(newValue);
-              
+
               // Open dropdown when user starts typing
               if (!open && newValue.trim()) {
                 setOpen(true);
               }
-              
+
               // Log SEARCH event when user types
               if (newValue.trim()) {
-                const searchEventType = placeholder.toLowerCase().includes('pickup') 
-                  ? EVENT_TYPES.SEARCH_LOCATION 
+                const searchEventType = placeholder.toLowerCase().includes('pickup')
+                  ? EVENT_TYPES.SEARCH_LOCATION
                   : EVENT_TYPES.SEARCH_DESTINATION;
-                
-                const matchedResults = places.filter((option) => 
+
+                const matchedResults = places.filter((option) =>
                   option.label.toLowerCase().includes(newValue.toLowerCase()) ||
                   option.main.toLowerCase().includes(newValue.toLowerCase()) ||
                   option.sub.toLowerCase().includes(newValue.toLowerCase())
                 );
-                
-                logEvent(searchEventType, { 
+
+                logEvent(searchEventType, {
                   value: newValue,
                   inputType: placeholder.toLowerCase().includes('pickup') ? 'location' : 'destination',
                   timestamp: new Date().toISOString(),
@@ -513,7 +513,7 @@ function PlaceSelect({
               if (!isTyping || !searchValue.trim()) {
                 return true; // Show all options when not typing or search is empty
               }
-              
+
               const searchLower = searchValue.toLowerCase();
               return (
                 option.label.toLowerCase().includes(searchLower) ||
@@ -523,12 +523,12 @@ function PlaceSelect({
             });
 
             // Add custom option if user is typing and there are no exact matches
-            const hasExactMatch = filteredOptions.some(option => 
+            const hasExactMatch = filteredOptions.some(option =>
               option.label.toLowerCase() === searchValue.toLowerCase()
             );
-            
+
             const showCustomOption = isTyping && searchValue.trim() && !hasExactMatch;
-            
+
             return (
               <>
                 {filteredOptions.map((option) => (
@@ -540,13 +540,13 @@ function PlaceSelect({
                 setOpen(false);
                 setIsTyping(false);
                 setSearchValue("");
-                
+
                 // Log ENTER event when user selects from dropdown
-                const enterEventType = placeholder.toLowerCase().includes('pickup') 
-                  ? EVENT_TYPES.ENTER_LOCATION 
+                const enterEventType = placeholder.toLowerCase().includes('pickup')
+                  ? EVENT_TYPES.ENTER_LOCATION
                   : EVENT_TYPES.ENTER_DESTINATION;
-                
-                logEvent(enterEventType, { 
+
+                logEvent(enterEventType, {
                   value: option.label,
                   inputType: placeholder.toLowerCase().includes('pickup') ? 'location' : 'destination',
                   timestamp: new Date().toISOString(),
@@ -560,7 +560,7 @@ function PlaceSelect({
                   wasTyping: isTyping,
                   searchValue: isTyping ? searchValue : null
                 });
-                
+
                 if (typeof window !== "undefined") {
                   sessionStorage.setItem(
                     placeholder === "Pickup location"
@@ -601,7 +601,7 @@ function PlaceSelect({
               </span>
             </button>
                 ))}
-                
+
                 {showCustomOption && (
                   <button
                     key="custom-option"
@@ -612,13 +612,13 @@ function PlaceSelect({
                       setIsTyping(false);
                       const customOption = searchValue;
                       setSearchValue("");
-                      
+
                       // Log ENTER event for custom value
-                      const enterEventType = placeholder.toLowerCase().includes('pickup') 
-                        ? EVENT_TYPES.ENTER_LOCATION 
+                      const enterEventType = placeholder.toLowerCase().includes('pickup')
+                        ? EVENT_TYPES.ENTER_LOCATION
                         : EVENT_TYPES.ENTER_DESTINATION;
-                      
-                      logEvent(enterEventType, { 
+
+                      logEvent(enterEventType, {
                         value: customOption,
                         inputType: placeholder.toLowerCase().includes('pickup') ? 'location' : 'destination',
                         timestamp: new Date().toISOString(),
@@ -627,7 +627,7 @@ function PlaceSelect({
                         isCustomValue: true,
                         searchValue: customOption
                       });
-                      
+
                       if (typeof window !== "undefined") {
                         sessionStorage.setItem(
                           placeholder === "Pickup location"
@@ -819,7 +819,7 @@ export default function RideTripPage() {
       try {
         // Wait for data provider to finish loading
         await whenReady();
-        
+
         if (!isMounted) return;
 
         // Get initial rides after data is ready
@@ -858,7 +858,7 @@ export default function RideTripPage() {
             }
           }, 0);
         };
-        
+
         if (typeof window !== "undefined" && handleSeedChange) {
           window.addEventListener("autodrive:v2SeedChange", handleSeedChange);
         }
@@ -872,7 +872,7 @@ export default function RideTripPage() {
     };
 
     setupRides();
-    
+
     return () => {
       isMounted = false;
       if (unsubscribe) {
@@ -899,7 +899,7 @@ export default function RideTripPage() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    
+
     // Calculate total trips from localStorage (cancelled trips are tracked)
     let totalTrips = 0;
     try {
@@ -952,7 +952,7 @@ export default function RideTripPage() {
         pickupLength: pickup?.length || 0,
         dropoffLength: dropoff?.length || 0
       });
-  
+
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
@@ -960,7 +960,7 @@ export default function RideTripPage() {
       }, 20);
     }
   }
-  
+
 
   useEffect(() => {
     if (!pickup || !dropoff) {
@@ -1161,7 +1161,7 @@ export default function RideTripPage() {
         <h1 className="text-3xl font-bold mb-2" {...getElementAttributes('choose-ride-title', 0)}>{getText('choose-ride-title', 'Choose a ride')}</h1>
         <div className="text-lg font-semibold mb-4" {...getElementAttributes('recommended-label', 0)}>{getText('recommended-label', 'Recommended')}</div>
         <div className="space-y-3">
-          {rides.map((ride, idx) => 
+          {rides.map((ride, idx) =>
             dyn.v1.addWrapDecoy(`ride-trip-ride-card-${idx}`, (
               <div
                 key={ride.name}
@@ -1366,14 +1366,14 @@ export default function RideTripPage() {
                       estimatedArrival: rideToReserve.eta
                     },
                   };
-                  
+
                   // Save RESERVE_RIDE event data to sessionStorage for use in confirmation page
                   if (typeof window !== "undefined") {
                     sessionStorage.setItem("__ud_reserveRideData", JSON.stringify(reserveRideEventData));
                   }
-                  
+
                   logEvent(EVENT_TYPES.RESERVE_RIDE, reserveRideEventData);
-                  
+
                   if (typeof window !== "undefined") {
                     sessionStorage.setItem(
                       "__ud_selectedRideIdx",

@@ -111,7 +111,7 @@ export function AboutSection() {
             </span>
           </h1>
           <p className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-            Discover, search, and explore thousands of movies with our intelligent search engine. 
+            Discover, search, and explore thousands of movies with our intelligent search engine.
             Find your next favorite film in seconds.
           </p>
         </div>

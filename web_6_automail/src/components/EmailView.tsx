@@ -56,9 +56,6 @@ export function EmailView({ textStructure }: EmailViewProps) {
     console.log("[automail/EmailView] V2 Status:", {
       seed,
       v2Enabled: dyn.v2.isEnabled(),
-      dbMode: dyn.v2.isDbModeEnabled(),
-      aiMode: dyn.v2.isEnabled(),
-      fallback: dyn.v2.isFallbackMode(),
     });
   }, [seed, dyn.v2]);
 
@@ -414,9 +411,9 @@ export function EmailView({ textStructure }: EmailViewProps) {
               </div>
 
             <div className="flex items-center gap-2">
-              <Button 
-              variant="ghost" 
-              size="icon" 
+              <Button
+              variant="ghost"
+              size="icon"
               onClick={handleReply}
               id={dyn.v3.getVariant("email-reply", ID_VARIANTS_MAP, textStructure?.email_ids.reply_btn || "reply-button")}
             >
@@ -505,7 +502,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
 
           {/* Action Buttons */}
           <div className="flex gap-3 pt-6 border-t border-border">
-            <Button 
+            <Button
               id={dyn.v3.getVariant("email-reply", ID_VARIANTS_MAP, textStructure?.email_ids.reply_btn || "reply-button")}
               aria-label={textStructure?.email_aria_labels.reply_btn || "Reply to this email"}
               onClick={handleReply}
@@ -524,8 +521,8 @@ export function EmailView({ textStructure }: EmailViewProps) {
                 Edit draft
               </Button>
             )}
-            <Button 
-              id={dyn.v3.getVariant("email-reply-all", ID_VARIANTS_MAP, textStructure?.email_ids.reply_all_btn || "reply-all-button")} 
+            <Button
+              id={dyn.v3.getVariant("email-reply-all", ID_VARIANTS_MAP, textStructure?.email_ids.reply_all_btn || "reply-all-button")}
               variant="outline"
               aria-label={textStructure?.email_aria_labels.reply_all_btn || "Reply to all recipients"}
               onClick={handleReplyAll}
@@ -534,8 +531,8 @@ export function EmailView({ textStructure }: EmailViewProps) {
               <ReplyAll className="h-4 w-4 mr-2" />
               {dyn.v3.getVariant("reply_all_action", TEXT_VARIANTS_MAP, textStructure?.email_content.reply_all_button || "Reply All")}
             </Button>
-            <Button 
-              id={dyn.v3.getVariant("email-forward", ID_VARIANTS_MAP, textStructure?.email_ids.forward_btn || "forward-button")} 
+            <Button
+              id={dyn.v3.getVariant("email-forward", ID_VARIANTS_MAP, textStructure?.email_ids.forward_btn || "forward-button")}
               variant="outline"
               aria-label={textStructure?.email_aria_labels.forward_btn || "Forward this email"}
               onClick={handleForward}

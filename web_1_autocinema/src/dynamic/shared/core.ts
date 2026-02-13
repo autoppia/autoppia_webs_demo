@@ -116,14 +116,6 @@ export function useDynamicSystem() {
       /**
        * Check if V2 is enabled
        */
-      isDbModeEnabled: () => isV2Enabled(),
-
-      /**
-       * Check if enabled is enabled
-       */
-      /**
-       * Check if V2 is enabled
-       */
       isEnabled: () => isV2Enabled(),
     },
 

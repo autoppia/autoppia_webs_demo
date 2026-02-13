@@ -1,11 +1,6 @@
 import type { RemoteTask } from "@/data/tasks-enhanced";
 import { initializeTasks } from "@/data/tasks-enhanced";
-import { clampBaseSeed, getSeedForLoad } from "@/shared/seed-resolver";
-import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
-
-type AutolistWindow = Window & {
-  __autolistV2Seed?: number | null;
-};
+import { clampBaseSeed } from "@/shared/seed-resolver";
 
 export interface TaskSearchFilters {
   query?: string;
@@ -21,7 +16,7 @@ export class DynamicDataProvider {
   private resolveReady: () => void = () => {};
   private currentSeed: number | null = null;
   private loadingPromise: Promise<void> | null = null;
-  
+
   // Subscribers
   private taskSubscribers: Array<(data: RemoteTask[]) => void> = [];
 
@@ -39,149 +34,65 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  private getBaseSeedFromUrl(): number | null {
-    if (typeof window === "undefined") return null;
-    const params = new URLSearchParams(window.location.search);
-    const seedParam = params.get("seed");
-    if (seedParam) {
-      const parsed = Number.parseInt(seedParam, 10);
-      if (Number.isFinite(parsed)) {
-        return clampBaseSeed(parsed);
-      }
+  private getBaseSeed(): number {
+    if (typeof window === "undefined") return clampBaseSeed(1);
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get("seed");
+      if (raw) return clampBaseSeed(Number.parseInt(raw, 10));
+      const stored = window.localStorage?.getItem("autolist_seed_base");
+      if (stored) return clampBaseSeed(Number.parseInt(stored, 10));
+    } catch {
+      // ignore
     }
-    return null;
-  }
-
-  private getRuntimeV2Seed(): number | null {
-    if (typeof window === "undefined") return null;
-    const value = (window as AutolistWindow).__autolistV2Seed;
-    if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 999) {
-      return value;
-    }
-    return null;
+    return clampBaseSeed(1);
   }
 
   private async initialize(): Promise<void> {
-    // Reset ready state when initializing
     this.ready = false;
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
     });
-    
-    const baseSeed = this.getBaseSeedFromUrl();
-    const runtimeSeed = this.getRuntimeV2Seed();
-    const v2Seed =
-      baseSeed !== null
-        ? getSeedForLoad(baseSeed)
-        : (runtimeSeed ?? 1);
-    
-    this.currentSeed = v2Seed;
-    
     try {
-      console.log("[autolist/data-provider] Initializing data - baseSeed:", baseSeed, "v2Seed:", v2Seed);
-      
-      // Initialize tasks
-      const tasks = await initializeTasks(v2Seed);
-      
+      const effectiveSeed = this.getBaseSeed();
+      this.currentSeed = effectiveSeed;
+      const tasks = await initializeTasks(effectiveSeed);
       this.setTasks(tasks);
-      
-      console.log("[autolist/data-provider] ✅ Data initialized:", {
-        tasks: tasks.length,
-      });
     } catch (error) {
       console.error("[autolist/data-provider] Failed to initialize data:", error);
-      // Mark as ready even on error to prevent infinite loading
       this.ready = true;
       this.resolveReady();
     }
-    
-    // Listen for seed changes
-    if (typeof window !== "undefined") {
-      window.addEventListener("autolist:v2SeedChange", this.handleSeedEvent.bind(this));
-    }
   }
 
-  private handleSeedEvent = () => {
-    console.log("[autolist/data-provider] Seed change event received");
-    this.reload();
-  };
-
-  /**
-   * Reload data if seed has changed
-   */
   public reloadIfSeedChanged(seed?: number | null): void {
-    const runtimeSeed = this.getRuntimeV2Seed();
-    const seedToUse = seed !== undefined && seed !== null ? seed : runtimeSeed;
-    if (seedToUse !== null && seedToUse !== this.currentSeed) {
-      console.log(`[autolist] Seed changed from ${this.currentSeed} to ${seedToUse}, reloading...`);
-      this.reload(seedToUse);
+    const targetSeed = seed !== undefined && seed !== null ? seed : this.getBaseSeed();
+    if (targetSeed !== this.currentSeed) {
+      this.reload(targetSeed);
     }
   }
 
-  /**
-   * Reload all data with a new seed
-   */
   public async reload(seedValue?: number | null): Promise<void> {
-    // Prevent concurrent reloads
-    if (this.loadingPromise) {
-      return this.loadingPromise;
-    }
-    
+    if (this.loadingPromise) return this.loadingPromise;
+    const targetSeed = clampBaseSeed(seedValue ?? this.getBaseSeed());
+    if (targetSeed === this.currentSeed && this.ready) return;
+    this.currentSeed = targetSeed;
+    this.ready = false;
+    this.readyPromise = new Promise<void>((resolve) => {
+      this.resolveReady = resolve;
+    });
     this.loadingPromise = (async () => {
       try {
-        const baseSeed = this.getBaseSeedFromUrl();
-        const runtimeSeed = this.getRuntimeV2Seed();
-        const v2Seed =
-          seedValue !== undefined && seedValue !== null
-            ? clampBaseSeed(seedValue)
-            : baseSeed !== null
-              ? getSeedForLoad(baseSeed)
-              : (runtimeSeed ?? 1);
-        
-        // If base seed = 1, use fallback data directly
-        if (baseSeed === 1) {
-          console.log("[autolist/data-provider] Reload: Base seed is 1, using fallback data");
-          this.currentSeed = 1;
-        } else {
-          this.currentSeed = v2Seed;
-        }
-        
-        // Reset ready state
-        this.ready = false;
-        this.readyPromise = new Promise<void>((resolve) => {
-          this.resolveReady = resolve;
-        });
-        
-        // CRITICAL: Clear all existing data BEFORE loading new data
-        // This ensures no old seed data is preserved
-        console.log("[autolist/data-provider] Clearing old data before loading new seed data...");
-        this.tasks = [];
-        
-        // Notify all subscribers with empty arrays to clear UI immediately
-        this.notifyTasks();
-        
-        // Small delay to ensure subscribers have processed the clear
-        await new Promise(resolve => setTimeout(resolve, 50));
-        
-        // Now load new data for the new seed
-        const tasks = await initializeTasks(v2Seed);
-        
-        // Set new data (this will notify subscribers again with new data)
+        const tasks = await initializeTasks(targetSeed);
         this.setTasks(tasks);
-        
-        console.log("[autolist/data-provider] ✅ Data reloaded for seed", v2Seed, ":", {
-          tasks: tasks.length,
-        });
       } catch (error) {
         console.error("[autolist] Failed to reload data:", error);
-        // Mark as ready even on error to prevent infinite loading
         this.ready = true;
         this.resolveReady();
       } finally {
         this.loadingPromise = null;
       }
     })();
-    
     return this.loadingPromise;
   }
 
@@ -220,7 +131,7 @@ export class DynamicDataProvider {
   public searchTasks(query: string, filters?: TaskSearchFilters): RemoteTask[] {
     const normalized = query.trim().toLowerCase();
     let results = this.tasks;
-    
+
     if (normalized) {
       results = results.filter(
         (task) =>
@@ -228,11 +139,11 @@ export class DynamicDataProvider {
           task.description?.toLowerCase().includes(normalized)
       );
     }
-    
+
     if (filters?.priority !== undefined) {
       results = results.filter((task) => task.priority === filters.priority);
     }
-    
+
     if (filters?.completed !== undefined) {
       if (filters.completed) {
         results = results.filter((task) => task.completed_at !== null);
@@ -240,7 +151,7 @@ export class DynamicDataProvider {
         results = results.filter((task) => task.completed_at === null);
       }
     }
-    
+
     return results;
   }
 

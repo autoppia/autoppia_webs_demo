@@ -131,7 +131,7 @@ export function getTextStructure(seedStructure?: number): TextStructureConfig {
 
   // Map seed-structure (1-300) to variation (1-10) using modulo
   const variationKey = ((seedStructure - 1) % 10) + 1;
-  
+
   if (variationKey in textStructureVariations.variations) {
     return textStructureVariations.variations[variationKey.toString() as keyof typeof textStructureVariations.variations].elements as TextStructureConfig;
   }

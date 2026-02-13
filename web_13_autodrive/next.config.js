@@ -24,11 +24,11 @@ console.log('  NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE:', process.env.NEXT_PUBLIC_DYN
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async rewrites() {
-    const destination = process.env.INTERNAL_API_URL || 
-      (process.env.NODE_ENV === 'development' && !process.env.DOCKER_BUILD 
-        ? 'http://localhost:8090' 
+    const destination = process.env.INTERNAL_API_URL ||
+      (process.env.NODE_ENV === 'development' && !process.env.DOCKER_BUILD
+        ? 'http://localhost:8090'
         : 'http://app:8090');
-    
+
     return {
       beforeFiles: [],
       afterFiles: [

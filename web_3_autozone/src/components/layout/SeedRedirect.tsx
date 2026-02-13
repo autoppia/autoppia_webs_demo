@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { getEnabledFlags } from "@/shared/seed-resolver";
+import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
 
 /**
  * Default seed to use when v1 is enabled but no seed is in the URL.
@@ -32,10 +32,8 @@ export function SeedRedirect() {
     // Prevent multiple redirects
     if (hasRedirectedRef.current) return;
 
-    // Check if v1 is enabled
-    const enabledFlags = getEnabledFlags();
-    if (!enabledFlags.v1 && !enabledFlags.v3) {
-      // Neither v1 nor v3 is enabled, no need to redirect
+    // Check if v1 or v3 is enabled
+    if (!isV1Enabled() && !isV3Enabled()) {
       return;
     }
 
@@ -73,4 +71,3 @@ export function SeedRedirect() {
 
   return null; // This component doesn't render anything
 }
-

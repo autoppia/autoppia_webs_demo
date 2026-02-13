@@ -8,7 +8,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, id, placeholder, ...props }, ref) => {
     const dyn = useDynamicSystem();
     const dynamicId = id || dyn.v3.getVariant("input", ID_VARIANTS_MAP, "input");
-    
+
     return (
       <>
         {dyn.v1.addWrapDecoy("input", (

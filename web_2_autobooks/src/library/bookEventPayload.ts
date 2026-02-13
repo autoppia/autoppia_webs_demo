@@ -17,4 +17,3 @@ export function buildBookDetailPayload(book: Book): BookDetailPayload {
     book_id: book.id,
   };
 }
-
