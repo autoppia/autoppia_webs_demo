@@ -7,14 +7,9 @@
 
 import type { Email, Label } from "@/types/email";
 import { readJson, writeJson } from "@/shared/storage";
-import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { clampBaseSeed } from "@/shared/seed-resolver";
-import { systemLabels as importedSystemLabels, userLabels as importedUserLabels } from "@/library/dataset";
 import fallbackEmails from "./original/emails_1.json";
-
-// Re-export labels from dataset
-export const systemLabels: Label[] = importedSystemLabels;
-export const userLabels: Label[] = importedUserLabels;
 
 // Helper function to normalize email timestamps
 function normalizeEmailTimestamps(emails: Email[]): Email[] {
@@ -188,7 +183,7 @@ export const originalEmails: Email[] = [
 ];
 
 // Dynamic emails array that can be populated with generated data
-let dynamicEmails: Email[] = isDataGenerationAvailable() ? [] : [...originalEmails];
+let dynamicEmails: Email[] = [...originalEmails];
 
 // Client-side cache to avoid regenerating on every reload
 export function readCachedEmails(): Email[] | null {
@@ -199,21 +194,6 @@ export function readCachedEmails(): Email[] | null {
 export function writeCachedEmails(emailsToCache: Email[]): void {
   writeJson("automail_generated_emails_v1", emailsToCache);
 }
-
-// Configuration for async data generation
-const DATA_GENERATION_CONFIG = {
-  // Default delay between category calls (in milliseconds)
-  DEFAULT_DELAY_BETWEEN_CALLS: 1000,
-  // Default emails per category
-  DEFAULT_EMAILS_PER_CATEGORY: 8,
-  // Maximum retry attempts for failed category generation
-  MAX_RETRY_ATTEMPTS: 2,
-  // Available categories for data generation
-  AVAILABLE_CATEGORIES: ["primary", "social", "promotions", "updates", "forums", "support"]
-};
-
-const clampSeed = (value: number, fallback = 1): number =>
-  value >= 1 && value <= 300 ? value : fallback;
 
 const getBaseSeedFromUrl = (): number | null => {
   if (typeof window === "undefined") return null;
@@ -230,7 +210,7 @@ const getBaseSeedFromUrl = (): number | null => {
 
 const resolveSeed = (seedOverride?: number | null): number => {
   const baseSeed = getBaseSeedFromUrl();
-  return clampSeed(seedOverride ?? baseSeed ?? 1);
+  return clampBaseSeed(seedOverride ?? baseSeed ?? 1);
 };
 
 /**
@@ -377,74 +357,6 @@ export async function loadEmailsFromDb(seedOverride?: number | null): Promise<Em
   
   console.log("[automail] loadEmailsFromDb: Returning empty array");
   return [];
-}
-
-/**
- * Get emails by category
- */
-export function getEmailsByCategory(category: string): Email[] {
-  return dynamicEmails.filter((email) => email.category === category);
-}
-
-/**
- * Get an email by ID
- */
-export function getEmailById(id: string): Email | undefined {
-  return dynamicEmails.find((email) => email.id === id);
-}
-
-/**
- * Get unread emails
- */
-export function getUnreadEmails(): Email[] {
-  return dynamicEmails.filter((email) => !email.isRead);
-}
-
-/**
- * Get starred emails
- */
-export function getStarredEmails(): Email[] {
-  return dynamicEmails.filter((email) => email.isStarred);
-}
-
-/**
- * Reset to original emails only
- */
-export function resetToOriginalEmails(): void {
-  dynamicEmails = [...originalEmails];
-}
-
-/**
- * Get statistics about current emails
- */
-export function getEmailStats() {
-  const categories = dynamicEmails.reduce((acc, email) => {
-    const category = email.category || "Unknown";
-    acc[category] = (acc[category] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-
-  return {
-    totalEmails: dynamicEmails.length,
-    originalEmails: originalEmails.length,
-    generatedEmails: dynamicEmails.length - originalEmails.length,
-    unreadCount: dynamicEmails.filter(e => !e.isRead).length,
-    starredCount: dynamicEmails.filter(e => e.isStarred).length,
-    categories,
-  };
-}
-
-/**
- * Search emails by query
- */
-export function searchEmails(query: string): Email[] {
-  const lowercaseQuery = query.toLowerCase();
-  return dynamicEmails.filter((email) =>
-    email.subject.toLowerCase().includes(lowercaseQuery) ||
-    email.body?.toLowerCase().includes(lowercaseQuery) ||
-    email.from.name?.toLowerCase().includes(lowercaseQuery) ||
-    email.from.email?.toLowerCase().includes(lowercaseQuery)
-  );
 }
 
 // Export the dynamic emails array for direct access

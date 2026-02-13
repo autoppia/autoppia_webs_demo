@@ -85,18 +85,9 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
  */
 export function useDynamicSystem() {
   const { seed: baseSeed } = useSeed();
-  const v1Seed = baseSeed;
-  const v2Seed = baseSeed;
-  const v3Seed = baseSeed;
   
   return useMemo(() => ({
     seed: baseSeed,
-    seeds: {
-      base: baseSeed,
-      v1: v1Seed,
-      v2: v2Seed,
-      v3: v3Seed,
-    },
     
     /**
      * V1: DOM structure (wrappers, decoys, and ordering)
@@ -118,7 +109,7 @@ export function useDynamicSystem() {
         componentKey: string,
         children: ReactNode,
         reactKey?: string
-      ) => applyV1Wrapper(v1Seed, componentKey, children, reactKey),
+      ) => applyV1Wrapper(baseSeed, componentKey, children, reactKey),
       
       /**
        * Changes the dynamic order of element arrays
@@ -127,7 +118,7 @@ export function useDynamicSystem() {
        * @returns Array of reordered indexes
        */
       changeOrderElements: (key: string, count: number) => 
-        generateDynamicOrder(v1Seed, key, count),
+        generateDynamicOrder(baseSeed, key, count),
     },
     
     /**
@@ -177,7 +168,7 @@ export function useDynamicSystem() {
       ) => {
         if (!isV3Enabled() && fallback !== undefined) return fallback;
         if (!isV3Enabled()) return key;
-        return getVariant(v3Seed, key, variants, fallback);
+        return getVariant(baseSeed, key, variants, fallback);
       },
     },
     
@@ -185,6 +176,6 @@ export function useDynamicSystem() {
      * Utility: select variant index for custom logic
      */
     selectVariantIndex: (key: string, count: number) => 
-      selectVariantIndex(v3Seed, key, count),
-  }), [baseSeed, v1Seed, v2Seed, v3Seed]);
+      selectVariantIndex(baseSeed, key, count),
+  }), [baseSeed]);
 }

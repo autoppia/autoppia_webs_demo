@@ -95,16 +95,9 @@ const getBaseSeedFromUrl = (): number | null => {
   return null;
 };
 
-const clampSeed = (seed: number): number => {
-  if (Number.isNaN(seed)) return 1;
-  if (seed < 1) return 1;
-  if (seed > 300) return 300;
-  return seed;
-};
-
 const resolveSeed = (seedValue?: number | null): number => {
   const baseSeed = getBaseSeedFromUrl();
-  return clampSeed(seedValue ?? baseSeed ?? 1);
+  return clampBaseSeed(seedValue ?? baseSeed ?? 1);
 };
 
 // Dynamic restaurants array
@@ -184,8 +177,7 @@ export async function loadRestaurantsFromDb(seedOverride?: number | null): Promi
   
   // Check base seed from URL - if seed = 1, return empty array to trigger fallback
   const baseSeed = getBaseSeedFromUrl();
-  const fallbackSeed = getSeedValueFromEnv(1);
-  const seed = (typeof seedOverride === "number" && seedOverride > 0) ? seedOverride : fallbackSeed;
+  const seed = (typeof seedOverride === "number" && seedOverride > 0) ? seedOverride : baseSeed;
   
   console.log("[autodelivery] loadRestaurantsFromDb - baseSeed:", baseSeed, "seedOverride:", seedOverride, "final seed:", seed);
   

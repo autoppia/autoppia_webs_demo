@@ -5,9 +5,9 @@ import { dynamicDataProvider } from "@/dynamic/v2";
 import { useSeed } from "@/context/SeedContext";
 
 export function DataReadyGate({ children }: { children: React.ReactNode }) {
-  // Initialize as true on the server to avoid hydration mismatches
-  // Then verify on the client if it is actually ready
-  const [ready, setReady] = useState(true);
+  // Start false so server and initial client render show the same fallback,
+  // then flip to ready after mount/data load to avoid hydration mismatches.
+  const [ready, setReady] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { seed } = useSeed();
 
@@ -52,9 +52,8 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
     reloadData();
   }, [seed, mounted]);
 
-  // During SSR and the first client render, show children
-  // Only show loading if we are on the client and it truly is not ready
-  if (mounted && !ready) {
+  // During SSR and first client render, show a stable fallback to avoid HTML/React mismatches
+  if (!mounted || !ready) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center text-gray-700">
         Loading film library…

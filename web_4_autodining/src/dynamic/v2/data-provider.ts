@@ -5,7 +5,7 @@
  */
 
 import type { RestaurantGenerated } from '@/data/restaurants-enhanced';
-import { initializeRestaurants, getRestaurants } from '@/data/restaurants-enhanced';
+import { initializeRestaurants } from '@/data/restaurants-enhanced';
 import { clampBaseSeed } from '@/shared/seed-resolver';
 import { isV2Enabled } from "@/dynamic/shared/flags";
 

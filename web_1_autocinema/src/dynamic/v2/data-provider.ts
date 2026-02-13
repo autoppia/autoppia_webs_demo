@@ -76,36 +76,6 @@ export class DynamicDataProvider {
     }
   }
 
-  private async reloadIfSeedChanged(): Promise<void> {
-    const newSeed = this.getBaseSeed();
-    if (newSeed !== this.currentSeed) {
-      console.log(`[autocinema] Seed changed from ${this.currentSeed} to ${newSeed}, reloading movies...`);
-      this.currentSeed = newSeed;
-      this.ready = false;
-      
-      // If already loading, wait for it
-      if (this.loadingPromise) {
-        await this.loadingPromise;
-        return;
-      }
-      
-      // Start new load
-      this.loadingPromise = (async () => {
-        try {
-          this.movies = await initializeMovies(newSeed);
-          this.ready = true;
-        } catch (error) {
-          console.error("[autocinema] Failed to reload movies", error);
-          this.ready = true; // Mark as ready even on error to prevent blocking
-        } finally {
-          this.loadingPromise = null;
-        }
-      })();
-      
-      await this.loadingPromise;
-    }
-  }
-
   public isReady(): boolean {
     return this.ready;
   }

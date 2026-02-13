@@ -3,7 +3,6 @@
  * All variants mirror the base seed from the URL.
  */
 
-const BOOL_TRUE = ["true", "1", "yes", "y"];
 
 export interface ResolvedSeeds {
   base: number;
@@ -12,10 +11,18 @@ export interface ResolvedSeeds {
   v3: number;
 }
 
-const boolFromEnv = (value?: string | undefined | null): boolean => {
-  if (!value) return false;
-  return BOOL_TRUE.includes(value.toLowerCase());
+const BASE_SEED = {
+  min: 1,
+  max: 999,
+  defaultValue: 1,
 };
+
+export function clampBaseSeed(seed: number): number {
+  if (Number.isNaN(seed)) return BASE_SEED.defaultValue;
+  if (seed < BASE_SEED.min) return BASE_SEED.min;
+  if (seed > BASE_SEED.max) return BASE_SEED.max;
+  return seed;
+}
 
 function parseEnableDynamicFromUrl(): { v1: boolean; v2: boolean; v3: boolean } | null {
   if (typeof window === "undefined") return null;
@@ -48,12 +55,10 @@ function getEnabledFlagsInternal(): { v1: boolean; v2: boolean; v3: boolean } {
   };
 }
 
-const clampSeedValue = (seed: number): number => Math.min(999, Math.max(1, Math.round(seed) || 1));
-
 const resolvedCache = new Map<number, ResolvedSeeds>();
 
 const buildSeeds = (seed: number): ResolvedSeeds => {
-  const safeSeed = clampSeedValue(seed);
+  const safeSeed = clampBaseSeed(seed);
   return {
     base: safeSeed,
     v1: safeSeed,
@@ -62,17 +67,8 @@ const buildSeeds = (seed: number): ResolvedSeeds => {
   };
 };
 
-export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
-  const safeSeed = clampSeedValue(baseSeed);
-  if (resolvedCache.has(safeSeed)) return resolvedCache.get(safeSeed)!;
-
-  const resolved = buildSeeds(safeSeed);
-  resolvedCache.set(safeSeed, resolved);
-  return resolved;
-}
-
 export function resolveSeedsSync(baseSeed: number): ResolvedSeeds {
-  const safeSeed = clampSeedValue(baseSeed);
+  const safeSeed = clampBaseSeed(baseSeed);
   return resolvedCache.get(safeSeed) ?? buildSeeds(safeSeed);
 }
 

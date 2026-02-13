@@ -3,9 +3,6 @@ import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loade
 import { clampBaseSeed } from "@/shared/seed-resolver";
 import fallbackProducts from "./original/products_1.json";
 
-const clampSeed = (value: number, fallback = 1): number =>
-  value >= 1 && value <= 300 ? value : fallback;
-
 const getBaseSeedFromUrl = (): number | null => {
   if (typeof window === "undefined") return null;
   // Leer seed base de la URL
@@ -100,7 +97,7 @@ const normalizeProduct = (product: DatasetProduct): Product => {
 export async function initializeProducts(seedOverride?: number | null): Promise<Product[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
-  const effectiveSeed = clampSeed(seedOverride ?? baseSeed ?? 1);
+  const effectiveSeed = clampBaseSeed(seedOverride ?? baseSeed ?? 1);
   if (effectiveSeed === 1 && dbModeEnabled) {
     console.log("[autozone] Base seed is 1, using original data (skipping DB/AI modes)");
     const fallbackData = (fallbackProducts as DatasetProduct[]).map(normalizeProduct);
@@ -141,5 +138,3 @@ export async function initializeProducts(seedOverride?: number | null): Promise<
   dynamicProducts = normalizeProductImages(fallbackData);
   return dynamicProducts;
 }
-
-export const getCachedProducts = () => dynamicProducts;
