@@ -62,15 +62,6 @@ const getBaseSeedFromUrl = (): number | null => {
   return null;
 };
 
-const getRuntimeV2Seed = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const value = (window as any).__autobooksV2Seed;
-  if (typeof value === "number" && Number.isFinite(value)) {
-    return clampSeed(value);
-  }
-  return null;
-};
-
 const coerceNumber = (value: unknown, fallback = 0): number => {
   if (typeof value === "number") return Number.isFinite(value) ? value : fallback;
   if (typeof value === "string") {
@@ -173,10 +164,11 @@ const normalizeBook = (book: DatasetBook): Book => {
 
 let booksCache: Book[] = [];
 
-export async function initializeBooks(v2SeedValue?: number | null, limit = 300): Promise<Book[]> {
+export async function initializeBooks(seedOverride?: number | null): Promise<Book[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && dbModeEnabled) {
+  const effectiveSeed = clampSeed(seedOverride ?? baseSeed ?? 1);
+  if (effectiveSeed === 1 && dbModeEnabled) {
     console.log("[autobooks] Base seed is 1, using original data from original/books_1.json (skipping DB/AI modes)");
     booksCache = (fallbackBooks as DatasetBook[]).map(normalizeBook);
     return booksCache;
@@ -184,12 +176,6 @@ export async function initializeBooks(v2SeedValue?: number | null, limit = 300):
   
   // Priority 1: DB mode - fetch from /datasets/load endpoint (loads from data/books_1.json)
   if (dbModeEnabled) {
-    const runtimeSeed = v2SeedValue ?? getRuntimeV2Seed();
-    const effectiveSeed = clampSeed(runtimeSeed ?? baseSeed ?? 1);
-    if (typeof window !== "undefined" && runtimeSeed == null) {
-      await new Promise((resolve) => setTimeout(resolve, 50));
-    }
-
     try {
       const books = await fetchSeededSelection<DatasetBook>({
         projectKey: "web_2_autobooks",

@@ -10,12 +10,7 @@ import {
   Suspense,
 } from "react";
 import { useSearchParams } from "next/navigation";
-import {
-  resolveSeeds,
-  resolveSeedsSync,
-  clampBaseSeed,
-  type ResolvedSeeds,
-} from "@/shared/seed-resolver";
+import { resolveSeedsSync, clampBaseSeed, type ResolvedSeeds } from "@/shared/seed-resolver";
 
 declare global {
   interface Window {
@@ -134,27 +129,14 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Update resolved seeds when seed changes
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    const resolved = resolveSeedsSync(seed);
+    setResolvedSeeds(resolved);
 
-    const updateResolvedSeeds = async () => {
-      const resolved = await resolveSeeds(seed);
-      setResolvedSeeds(resolved);
-
-      // Set global v2 seed for DynamicDataProvider
-      if (typeof window !== "undefined") {
-        const v2Seed = resolved.v2 ?? resolved.base;
-        window.__autocrmV2Seed = v2Seed;
-
-        // Dispatch custom event for v2 seed changes
-        window.dispatchEvent(
-          new CustomEvent("autocrm:v2SeedChange", {
-            detail: { seed: v2Seed },
-          })
-        );
-      }
-    };
-
-    updateResolvedSeeds();
+    if (typeof window !== "undefined") {
+      const v2Seed = resolved.v2 ?? resolved.base;
+      window.__autocrmV2Seed = v2Seed;
+      window.dispatchEvent(new CustomEvent("autocrm:v2SeedChange", { detail: { seed: v2Seed } }));
+    }
   }, [seed]);
 
   const setSeed = useCallback(

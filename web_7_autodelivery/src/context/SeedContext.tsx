@@ -10,12 +10,7 @@ import {
   Suspense,
 } from "react";
 import { useSearchParams } from "next/navigation";
-import {
-  resolveSeeds,
-  resolveSeedsSync,
-  clampBaseSeed,
-  type ResolvedSeeds,
-} from "@/shared/seed-resolver";
+import { resolveSeedsSync, clampBaseSeed, type ResolvedSeeds } from "@/shared/seed-resolver";
 
 declare global {
   interface Window {
@@ -115,23 +110,8 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Update derived seeds + persist base seed
   useEffect(() => {
-    let cancelled = false;
-    
-    // Use sync version for immediate update
     const syncResolved = resolveSeedsSync(seed);
     setResolvedSeeds(syncResolved);
-    
-    // Fetch from centralized service (async, updates when ready)
-    resolveSeeds(seed).then((resolved) => {
-      // Only update if this effect hasn't been cancelled (seed hasn't changed)
-      if (!cancelled) {
-        setResolvedSeeds(resolved);
-      }
-    }).catch((error) => {
-      if (!cancelled) {
-        console.warn("[SeedContext:web7] Failed to resolve seeds from API, using local:", error);
-      }
-    });
     
     // Persist to localStorage (client-side only)
     if (typeof window !== "undefined") {
@@ -141,11 +121,6 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
         console.error("Error saving seed to localStorage:", error);
       }
     }
-    
-    // Cleanup: cancel if seed changes before async completes
-    return () => {
-      cancelled = true;
-    };
   }, [seed]);
 
   // Sync v2Seed to window for backward compatibility with data loaders
@@ -209,4 +184,3 @@ export const useSeed = () => {
   }
   return context;
 };
-

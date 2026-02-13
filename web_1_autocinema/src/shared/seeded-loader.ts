@@ -66,4 +66,3 @@ export async function fetchSeededSelection<T = unknown>(options: SeededLoadOptio
   const json = await resp.json();
   return (json?.data ?? []) as T[];
 }
-

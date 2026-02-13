@@ -10,12 +10,7 @@ import {
   Suspense,
 } from "react";
 import { useSearchParams } from "next/navigation";
-import {
-  resolveSeeds,
-  resolveSeedsSync,
-  clampBaseSeed,
-  type ResolvedSeeds,
-} from "@/shared/seed-resolver";
+import { resolveSeedsSync, clampBaseSeed, type ResolvedSeeds } from "@/shared/seed-resolver";
 
 interface SeedContextType {
   seed: number;
@@ -107,24 +102,9 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   // Update derived seeds + persist base seed
   // Re-run when seed OR enable_dynamic changes
   useEffect(() => {
-    let cancelled = false;
-    
-    // Use sync version for immediate update
     const syncResolved = resolveSeedsSync(seed);
     setResolvedSeeds(syncResolved);
-    
-    // Fetch from centralized service (async, updates when ready)
-    resolveSeeds(seed).then((resolved) => {
-      // Only update if this effect hasn't been cancelled (seed hasn't changed)
-      if (!cancelled) {
-        setResolvedSeeds(resolved);
-      }
-    }).catch((error) => {
-      if (!cancelled) {
-        console.warn("[SeedContext] Failed to resolve seeds from API, using local:", error);
-      }
-    });
-    
+
     if (typeof window !== "undefined") {
       try {
         localStorage.setItem("autodining_seed_base", seed.toString());
@@ -132,11 +112,6 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
         console.error("Error saving seed to localStorage:", error);
       }
     }
-    
-    // Cleanup: cancel if seed changes before async completes
-    return () => {
-      cancelled = true;
-    };
   }, [seed]);
 
   // Sync v2Seed to window for backward compatibility

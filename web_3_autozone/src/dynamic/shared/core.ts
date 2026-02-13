@@ -84,15 +84,15 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
  * You do not need to pass the seed manually.
  */
 export function useDynamicSystem() {
-  const { seed: baseSeed, resolvedSeeds } = useSeed();
-  const v1Seed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? baseSeed;
-  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base ?? baseSeed;
-  const v3Seed = resolvedSeeds.v3 ?? resolvedSeeds.base ?? baseSeed;
+  const { seed: baseSeed } = useSeed();
+  const v1Seed = baseSeed;
+  const v2Seed = baseSeed;
+  const v3Seed = baseSeed;
   
   return useMemo(() => ({
-    seed: resolvedSeeds.base ?? baseSeed,
+    seed: baseSeed,
     seeds: {
-      base: resolvedSeeds.base ?? baseSeed,
+      base: baseSeed,
       v1: v1Seed,
       v2: v2Seed,
       v3: v3Seed,
@@ -198,5 +198,5 @@ export function useDynamicSystem() {
      */
     selectVariantIndex: (key: string, count: number) => 
       selectVariantIndex(v3Seed, key, count),
-  }), [baseSeed, resolvedSeeds.base, resolvedSeeds.v1, resolvedSeeds.v2, resolvedSeeds.v3, v1Seed, v2Seed, v3Seed]);
+  }), [baseSeed, v1Seed, v2Seed, v3Seed]);
 }

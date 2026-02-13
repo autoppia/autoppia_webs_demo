@@ -3,7 +3,7 @@
 import type React from "react";
 import { createContext, useContext, useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { resolveSeeds, resolveSeedsSync, clampBaseSeed, type ResolvedSeeds } from "@/shared/seed-resolver";
+import { resolveSeedsSync, clampBaseSeed, type ResolvedSeeds } from "@/shared/seed-resolver";
 
 interface SeedContextType {
   seed: number;
@@ -52,9 +52,7 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
 function SeedProviderInner({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const [seed, setSeedState] = useState<number>(DEFAULT_SEED);
-  const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() =>
-    resolveSeedsSync(DEFAULT_SEED)
-  );
+  const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() => resolveSeedsSync(DEFAULT_SEED));
   const [isInitialized, setIsInitialized] = useState(false);
   const [isSeedReady, setIsSeedReady] = useState(false);
 
@@ -89,37 +87,15 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
     const syncResolved = resolveSeedsSync(seed);
     setResolvedSeeds(syncResolved);
     console.log(
       "[autobooks][seeds]",
       `base=${syncResolved.base}`,
-      `layout(v1)=${syncResolved.v1 ?? "disabled"}`,
-      `data(v2)=${syncResolved.v2 ?? "disabled"}`,
-      `v3=${syncResolved.v3 ?? "disabled"}`
+      `layout(v1)=${syncResolved.v1}`,
+      `data(v2)=${syncResolved.v2}`,
+      `v3=${syncResolved.v3}`
     );
-    resolveSeeds(seed)
-      .then((resolved) => {
-        if (!cancelled) {
-          setResolvedSeeds(resolved);
-          console.log(
-            "[autobooks][seeds:update]",
-            `base=${resolved.base}`,
-            `layout(v1)=${resolved.v1 ?? "disabled"}`,
-            `data(v2)=${resolved.v2 ?? "disabled"}`,
-            `v3=${resolved.v3 ?? "disabled"}`
-          );
-        }
-      })
-      .catch((error) => {
-        if (!cancelled) {
-          console.warn("[autobooks] Seed resolver fallback:", error);
-        }
-      });
-    return () => {
-      cancelled = true;
-    };
   }, [seed]);
 
   useEffect(() => {

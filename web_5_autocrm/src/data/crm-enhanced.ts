@@ -6,7 +6,7 @@
  */
 
 import { readJson, writeJson } from "@/shared/storage";
-import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { clampBaseSeed } from "@/shared/seed-resolver";
 import fallbackClients from "./original/clients_1.json";
 import fallbackMatters from "./original/matters_1.json";
@@ -19,12 +19,6 @@ const CACHE_KEYS = {
   clients: "autocrm_generated_clients_v1",
   matters: "autocrm_generated_matters_v1",
 };
-
-// Note: v2Seed is now passed directly to initializeClients, initializeMatters, etc.
-// This function is kept for backward compatibility but should use the seed parameter
-function getActiveSeed(defaultSeed: number = 1): number {
-  return getSeedValueFromEnv(defaultSeed);
-}
 
 // Dynamic data arrays
 let dynamicClients: any[] = (fallbackClients as any[]);
@@ -79,7 +73,7 @@ function normalizeMatter(matter: any, index: number): any {
 }
 
 const clampSeed = (value: number, fallback = 1): number =>
-  value >= 1 && value <= 300 ? fallback : value;
+  value >= 1 && value <= 300 ? value : fallback;
 
 const getBaseSeedFromUrl = (): number | null => {
   if (typeof window === "undefined") return null;
@@ -94,30 +88,18 @@ const getBaseSeedFromUrl = (): number | null => {
   return null;
 };
 
-const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number => {
-  if (!dbModeEnabled) {
-    return 1;
-  }
-  
-  if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
-    return clampSeed(seedValue);
-  }
-  
+const resolveSeed = (seedValue?: number | null): number => {
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed !== null) {
-    return clampSeed(baseSeed);
-  }
-  
-  return 1;
+  return clampSeed(seedValue ?? baseSeed ?? 1);
 };
 
 /**
  * Initialize clients with V2 system (DB mode or fallback)
  */
-export async function initializeClients(v2SeedValue?: number | null): Promise<any[]> {
+export async function initializeClients(seedOverride?: number | null): Promise<any[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && dbModeEnabled) {
+  const effectiveSeed = resolveSeed(seedOverride);
+  if (effectiveSeed === 1 && dbModeEnabled) {
     console.log("[autocrm] Base seed is 1, using original data (skipping DB/AI modes)");
     // Use local fallback data (from webs_server/initial_data/web_5_autocrm/original/)
     // These files are imported at build time and represent the original data
@@ -127,11 +109,6 @@ export async function initializeClients(v2SeedValue?: number | null): Promise<an
 
   // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
-    if (typeof window !== "undefined" && v2SeedValue == null) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    }
-    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
-
     try {
       const clients = await fetchSeededSelection<any>({
         projectKey: "web_5_autocrm",
@@ -164,10 +141,10 @@ export async function initializeClients(v2SeedValue?: number | null): Promise<an
 /**
  * Initialize matters with V2 system (DB mode or fallback)
  */
-export async function initializeMatters(v2SeedValue?: number | null): Promise<any[]> {
+export async function initializeMatters(seedOverride?: number | null): Promise<any[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && dbModeEnabled) {
+  const effectiveSeed = resolveSeed(seedOverride);
+  if (effectiveSeed === 1 && dbModeEnabled) {
     console.log("[autocrm] Base seed is 1, using original data for matters (skipping DB/AI modes)");
     // Use local fallback data (from webs_server/initial_data/web_5_autocrm/original/)
     dynamicMatters = (fallbackMatters as any[]).map((m, i) => normalizeMatter(m, i));
@@ -176,11 +153,6 @@ export async function initializeMatters(v2SeedValue?: number | null): Promise<an
 
   // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
-    if (typeof window !== "undefined" && v2SeedValue == null) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    }
-    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
-
     try {
       const matters = await fetchSeededSelection<any>({
         projectKey: "web_5_autocrm",
@@ -213,10 +185,10 @@ export async function initializeMatters(v2SeedValue?: number | null): Promise<an
 /**
  * Initialize files with V2 system (DB mode or fallback)
  */
-export async function initializeFiles(v2SeedValue?: number | null): Promise<any[]> {
+export async function initializeFiles(seedOverride?: number | null): Promise<any[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && dbModeEnabled) {
+  const effectiveSeed = resolveSeed(seedOverride);
+  if (effectiveSeed === 1 && dbModeEnabled) {
     console.log("[autocrm] Base seed is 1, using original data for files (skipping DB/AI modes)");
     dynamicFiles = (fallbackFiles as any[]);
     return dynamicFiles;
@@ -224,7 +196,6 @@ export async function initializeFiles(v2SeedValue?: number | null): Promise<any[
   
   if (dbModeEnabled) {
     try {
-      const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
       const files = await fetchSeededSelection<any>({
         projectKey: "web_5_autocrm",
         entityType: "files",
@@ -252,10 +223,10 @@ export async function initializeFiles(v2SeedValue?: number | null): Promise<any[
 /**
  * Initialize events with V2 system (DB mode or fallback)
  */
-export async function initializeEvents(v2SeedValue?: number | null): Promise<any[]> {
+export async function initializeEvents(seedOverride?: number | null): Promise<any[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && dbModeEnabled) {
+  const effectiveSeed = resolveSeed(seedOverride);
+  if (effectiveSeed === 1 && dbModeEnabled) {
     console.log("[autocrm] Base seed is 1, using original data for events (skipping DB/AI modes)");
     dynamicEvents = (fallbackEvents as any[]);
     return dynamicEvents;
@@ -263,7 +234,6 @@ export async function initializeEvents(v2SeedValue?: number | null): Promise<any
   
   if (dbModeEnabled) {
     try {
-      const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
       const events = await fetchSeededSelection<any>({
         projectKey: "web_5_autocrm",
         entityType: "events",
@@ -291,10 +261,10 @@ export async function initializeEvents(v2SeedValue?: number | null): Promise<any
 /**
  * Initialize logs with V2 system (DB mode or fallback)
  */
-export async function initializeLogs(v2SeedValue?: number | null): Promise<any[]> {
+export async function initializeLogs(seedOverride?: number | null): Promise<any[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && dbModeEnabled) {
+  const effectiveSeed = resolveSeed(seedOverride);
+  if (effectiveSeed === 1 && dbModeEnabled) {
     console.log("[autocrm] Base seed is 1, using original data for logs (skipping DB/AI modes)");
     dynamicLogs = (fallbackLogs as any[]);
     return dynamicLogs;
@@ -302,7 +272,6 @@ export async function initializeLogs(v2SeedValue?: number | null): Promise<any[]
   
   if (dbModeEnabled) {
     try {
-      const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
       const logs = await fetchSeededSelection<any>({
         projectKey: "web_5_autocrm",
         entityType: "logs",
@@ -334,7 +303,7 @@ export async function loadClientsFromDb(seedOverride?: number): Promise<any[]> {
   }
   
   try {
-    const seed = typeof seedOverride === "number" ? seedOverride : getActiveSeed(1);
+    const seed = resolveSeed(seedOverride);
     const limit = 50;
     const selected = await fetchSeededSelection<any>({
       projectKey: "web_5_autocrm",
@@ -387,7 +356,7 @@ export async function loadMattersFromDb(seedOverride?: number): Promise<any[]> {
   }
   
   try {
-    const seed = typeof seedOverride === "number" ? seedOverride : getActiveSeed(1);
+    const seed = resolveSeed(seedOverride);
     const limit = 50;
     const selected = await fetchSeededSelection<any>({
       projectKey: "web_5_autocrm",
