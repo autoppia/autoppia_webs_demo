@@ -90,6 +90,9 @@ export class DynamicDataProvider {
         this.setAppointments(appointments);
         this.setPrescriptions(prescriptions);
         this.setMedicalRecords(medicalRecords);
+        // Mark as ready after setting all data
+        this.ready = true;
+        this.resolveReady();
         return;
       }
       
@@ -126,6 +129,10 @@ export class DynamicDataProvider {
         prescriptions: prescriptions.length,
         medicalRecords: medicalRecords.length,
       });
+      
+      // Mark as ready after setting all data
+      this.ready = true;
+      this.resolveReady();
     } catch (error) {
       console.error("[autohealth/data-provider] Failed to initialize data:", error);
       // Even if there's an error, we should mark as ready with fallback data
@@ -141,6 +148,9 @@ export class DynamicDataProvider {
         this.setAppointments(appointments);
         this.setPrescriptions(prescriptions);
         this.setMedicalRecords(medicalRecords);
+        // Mark as ready after setting fallback data
+        this.ready = true;
+        this.resolveReady();
       } catch (fallbackError) {
         console.error("[autohealth/data-provider] Failed to initialize fallback data:", fallbackError);
         // Last resort: mark as ready to prevent infinite loading
