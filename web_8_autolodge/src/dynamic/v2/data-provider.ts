@@ -87,7 +87,7 @@ export class DynamicDataProvider {
       }
       
       // If DB mode not enabled or DB returned empty, use initializeHotels
-      // This will handle AI generation mode or fallback
+      // This will handle fallback data loading
       const initializedHotels = await initializeHotels(runtimeSeed ?? undefined);
       this.setHotels(initializedHotels);
 
