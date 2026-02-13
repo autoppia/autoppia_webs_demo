@@ -1,12 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { readJson, writeJson } from './storage'
 import { isDbLoadModeEnabled, getSeedValueFromEnv, fetchSeededSelection } from './seeded-loader'
-import { generateProjectData } from './data-generator'
-
-export function buildStorageKey({ projectKey, entityType, mode, seed, version }: { projectKey: string; entityType: string; mode: 'gen'|'db'|'static'; seed?: number; version?: string }) {
-  return `cache:${projectKey}:${entityType}:${mode}:${seed ?? 'na'}:${version ?? 'v1'}`
-}
 
 export async function loadDataOrGenerate<T>({ projectKey, entityType, generateCount = 50, categories, version = 'v1', ttlMs, fallback, seedValue }: { projectKey: string; entityType: string; generateCount?: number; categories?: string[]; version?: string; ttlMs?: number; fallback?: () => Promise<T[]>|T[]; seedValue?: number | null }) : Promise<T[]> {
   if (isDbLoadModeEnabled()) {

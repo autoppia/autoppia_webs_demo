@@ -1,5 +1,5 @@
-import { isDataGenerationEnabled } from "@/shared/data-generator";
 import { clampBaseSeed } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 // Legacy function - always return false since v1-layouts is removed
 const isDynamicEnabled = (): boolean => {
@@ -30,7 +30,6 @@ const BASE_SEED_STORAGE_KEY = "autocrm_seed_base";
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private isEnabled: boolean = false;
-  private dataGenerationEnabled: boolean = false;
   private ready: boolean = false;
   private readyPromise: Promise<void>;
   private resolveReady!: () => void;
@@ -43,11 +42,7 @@ export class DynamicDataProvider {
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
-    this.isEnabled = isDynamicHtmlEnabled();
-    this.dataGenerationEnabled = isDataGenerationEnabled();
-    
-    // V2 siempre habilitado si hay datos
-    this.isEnabled = true;
+    this.isEnabled = isV2Enabled();
     if (typeof window === "undefined") {
       this.ready = true;
       this.readyPromise = Promise.resolve();
@@ -70,6 +65,13 @@ export class DynamicDataProvider {
     
     // Initialize data with enhanced loader only (no dataset.ts)
     this.initializeData();
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("autocrm:v2SeedChange", (event) => {
+        const detail = (event as CustomEvent<{ seed: number | null }>).detail;
+        this.reload(detail?.seed ?? null);
+      });
+    }
   }
 
   private getBaseSeed(): number {
@@ -94,6 +96,15 @@ export class DynamicDataProvider {
     return clampBaseSeed(1);
   }
 
+  private getRuntimeV2Seed(): number | null {
+    if (typeof window === "undefined") return null;
+    const value = (window as any).__autocrmV2Seed;
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return clampBaseSeed(value);
+    }
+    return null;
+  }
+
   private async reloadIfSeedChanged(): Promise<void> {
     const newSeed = this.getBaseSeed();
     if (newSeed !== this.currentSeed) {
@@ -112,12 +123,14 @@ export class DynamicDataProvider {
 
   private async initializeData(): Promise<void> {
     try {
-      const seed = this.getBaseSeed();
-      this.currentSeed = seed;
+      const baseSeed = this.getBaseSeed();
+      const v2Seed = this.getRuntimeV2Seed();
+      const effectiveSeed = clampBaseSeed(v2Seed ?? baseSeed);
+      this.currentSeed = effectiveSeed;
       
       // Try DB mode first if enabled
-      const dbClients = await loadClientsFromDb(seed);
-      const dbMatters = await loadMattersFromDb(seed);
+      const dbClients = await loadClientsFromDb(effectiveSeed);
+      const dbMatters = await loadMattersFromDb(effectiveSeed);
       if (dbClients.length > 0) {
         this.clients = dbClients;
         writeCachedClients(this.clients);
@@ -147,11 +160,11 @@ export class DynamicDataProvider {
       // Generate all data in parallel for better performance
       console.log("🚀 Initializing all CRM data...");
       const [initializedClients, initializedMatters, initializedFiles, initializedEvents, initializedLogs] = await Promise.all([
-        initializeClients(),
-        initializeMatters(),
-        initializeFiles(),
-        initializeEvents(),
-        initializeLogs(),
+        initializeClients(effectiveSeed),
+        initializeMatters(effectiveSeed),
+        initializeFiles(effectiveSeed),
+        initializeEvents(effectiveSeed),
+        initializeLogs(effectiveSeed),
       ]);
       
       this.clients = initializedClients;
@@ -165,29 +178,23 @@ export class DynamicDataProvider {
       if (this.matters.length > 0) writeCachedMatters(this.matters);
       console.log("✅ All CRM data initialized successfully");
       
-      // Mark as ready only when either generation is disabled or we have generated data
-      if (!this.dataGenerationEnabled || this.clients.length > 0 || this.matters.length > 0) {
-        this.ready = true;
-        this.resolveReady();
-      }
+      this.ready = true;
+      this.resolveReady();
 
     } catch (error) {
       console.error("❌ Error initializing CRM data:", error);
-      // Keep silent in production; initialize readiness when generation off
-      // If generation is enabled, do not mark ready here; the gate will continue showing loading
-      if (!this.dataGenerationEnabled) {
-        this.ready = true;
-        this.resolveReady();
-      }
+      this.ready = true;
+      this.resolveReady();
     }
   }
 
   public async reload(seedValue?: number | null): Promise<void> {
     if (typeof window === "undefined") return;
     
-    const targetSeed = seedValue !== undefined && seedValue !== null 
-      ? clampBaseSeed(seedValue)
-      : this.getBaseSeed();
+    const runtimeSeed = seedValue !== undefined && seedValue !== null
+      ? seedValue
+      : this.getRuntimeV2Seed();
+    const targetSeed = runtimeSeed !== null ? clampBaseSeed(runtimeSeed) : this.getBaseSeed();
     
     if (targetSeed === this.currentSeed && this.ready) {
       return; // Already loaded with this seed
@@ -208,11 +215,11 @@ export class DynamicDataProvider {
       try {
         // Use initializeClients/initializeMatters which handle seed derivation internally
         const [clients, matters, files, events, logs] = await Promise.all([
-          initializeClients(),
-          initializeMatters(),
-          initializeFiles(),
-          initializeEvents(),
-          initializeLogs(),
+          initializeClients(targetSeed),
+          initializeMatters(targetSeed),
+          initializeFiles(targetSeed),
+          initializeEvents(targetSeed),
+          initializeLogs(targetSeed),
         ]);
         
         this.clients = clients;

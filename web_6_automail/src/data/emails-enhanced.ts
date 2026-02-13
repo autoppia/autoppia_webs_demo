@@ -7,14 +7,8 @@
 
 import type { Email, Label } from "@/types/email";
 import { readJson, writeJson } from "@/shared/storage";
-import { 
-  generateEmailsWithFallback, 
-  replaceAllEmails, 
-  addGeneratedEmails,
-  isDataGenerationAvailable 
-} from "@/utils/emailDataGenerator";
 import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 import { systemLabels as importedSystemLabels, userLabels as importedUserLabels } from "@/library/dataset";
 import fallbackEmails from "./original/emails_1.json";
 
@@ -218,56 +212,6 @@ const DATA_GENERATION_CONFIG = {
   AVAILABLE_CATEGORIES: ["primary", "social", "promotions", "updates", "forums", "support"]
 };
 
-/**
- * Utility function to generate emails for multiple categories with delays
- * Prevents server overload by spacing out API calls
- */
-async function generateEmailsForCategories(
-  categories: string[],
-  emailsPerCategory: number,
-  delayBetweenCalls: number = 200,
-  existingEmails: Email[] = []
-): Promise<Email[]> {
-  let allGeneratedEmails: Email[] = [];
-
-  // Bounded concurrency (e.g., 3 at a time)
-  const concurrencyLimit = 3;
-  let index = 0;
-
-  async function worker() {
-    while (index < categories.length) {
-      const currentIndex = index++;
-      const category = categories[currentIndex];
-      try {
-        console.log(`Generating ${emailsPerCategory} emails for ${category}...`);
-        const categoryEmails = await generateEmailsWithFallback(
-          [],
-          emailsPerCategory,
-          [category]
-        );
-        allGeneratedEmails = [...allGeneratedEmails, ...categoryEmails];
-        console.log(`✅ Generated ${categoryEmails.length} emails for ${category}`);
-      } catch (categoryError) {
-        console.warn(`Failed to generate emails for ${category}:`, categoryError);
-      }
-      // small gap to avoid burst
-      if (currentIndex < categories.length - 1 && delayBetweenCalls > 0) {
-        await new Promise((r) => setTimeout(r, delayBetweenCalls));
-      }
-    }
-  }
-
-  const workers = Array.from({ length: Math.min(concurrencyLimit, categories.length) }, () => worker());
-  await Promise.all(workers);
-
-  if (allGeneratedEmails.length > 0) {
-    return allGeneratedEmails;
-  } else {
-    console.warn('No emails were generated for any category, returning existing emails.');
-    return existingEmails;
-  }
-}
-
 const clampSeed = (value: number, fallback = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;
 
@@ -282,27 +226,6 @@ const getBaseSeedFromUrl = (): number | null => {
     }
   }
   return null;
-};
-
-const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number => {
-  if (!dbModeEnabled) {
-    return 1;
-  }
-  
-  if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
-    return clampSeed(seedValue);
-  }
-  
-  const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed !== null) {
-    const resolvedSeeds = resolveSeedsSync(baseSeed);
-    if (resolvedSeeds.v2 !== null) {
-      return resolvedSeeds.v2;
-    }
-    return clampSeed(baseSeed);
-  }
-  
-  return 1;
 };
 
 /**
@@ -326,10 +249,10 @@ export async function initializeEmails(v2SeedValue?: number | null): Promise<Ema
   
   if (baseSeed === 1 || v2SeedValue === 1) {
     if (dbModeEnabled) {
-      console.log("[automail] Base seed is 1, using original data (skipping DB/AI modes)");
-      dynamicEmails = normalizeEmailTimestamps(fallbackEmails as Email[]);
-      return dynamicEmails;
+      console.log("[automail] Base seed is 1, using original data (skipping DB mode)");
     }
+    dynamicEmails = normalizeEmailTimestamps(fallbackEmails as Email[]);
+    return dynamicEmails;
   }
 
   // Priority 1: DB mode - fetch from /datasets/load endpoint
@@ -337,10 +260,11 @@ export async function initializeEmails(v2SeedValue?: number | null): Promise<Ema
     console.log("[automail] DB mode enabled, attempting to load from DB...");
     console.log("[automail] baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue);
     
-    if (typeof window !== "undefined" && v2SeedValue == null) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
+    const runtimeSeed = v2SeedValue ?? getRuntimeV2Seed();
+    if (typeof window !== "undefined" && runtimeSeed == null) {
+      await new Promise((resolve) => setTimeout(resolve, 50));
     }
-    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+    const effectiveSeed = clampSeed(runtimeSeed ?? baseSeed ?? 1);
     console.log("[automail] Effective seed for DB load:", effectiveSeed);
 
     try {
@@ -397,8 +321,9 @@ export async function loadEmailsFromDb(seedOverride?: number | null): Promise<Em
   
   // Check base seed from URL - if seed = 1, return empty array to trigger fallback
   const baseSeed = getBaseSeedFromUrl();
+  const runtimeSeed = seedOverride ?? getRuntimeV2Seed();
   const fallbackSeed = getSeedValueFromEnv(1);
-  const seed = (typeof seedOverride === "number" && seedOverride > 0) ? seedOverride : fallbackSeed;
+  const seed = (typeof runtimeSeed === "number" && runtimeSeed > 0) ? runtimeSeed : fallbackSeed;
   
   console.log("[automail] loadEmailsFromDb - baseSeed:", baseSeed, "seedOverride:", seedOverride, "final seed:", seed);
   

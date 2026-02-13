@@ -1,6 +1,7 @@
 import type { Product } from "@/context/CartContext";
 import { initializeProducts } from "@/data/products-enhanced";
 import { clampBaseSeed } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 // Dynamic data provider that returns either seed data or empty arrays based on config
 export class DynamicDataProvider {
@@ -13,14 +14,20 @@ export class DynamicDataProvider {
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
-    // V2 siempre habilitado si hay datos
-    this.isEnabled = true;
+    this.isEnabled = isV2Enabled();
     if (typeof window === "undefined") {
       this.ready = true;
       this.readyPromise = Promise.resolve();
       return;
     }
     this.readyPromise = this.loadProducts();
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("autozone:v2SeedChange", (event) => {
+        const detail = (event as CustomEvent<{ seed: number | null }>).detail;
+        this.reload(detail?.seed ?? null);
+      });
+    }
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -52,11 +59,22 @@ export class DynamicDataProvider {
     return clampBaseSeed(1);
   }
 
+  private getRuntimeV2Seed(): number | null {
+    if (typeof window === "undefined") return null;
+    const value = (window as any).__autozoneV2Seed;
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return clampBaseSeed(value);
+    }
+    return null;
+  }
+
   private async loadProducts(): Promise<void> {
     try {
-      const seed = this.getBaseSeed();
-      this.currentSeed = seed;
-      this.products = await initializeProducts();
+      const baseSeed = this.getBaseSeed();
+      const v2Seed = this.getRuntimeV2Seed();
+      const effectiveSeed = clampBaseSeed(v2Seed ?? baseSeed);
+      this.currentSeed = effectiveSeed;
+      this.products = await initializeProducts(effectiveSeed);
     } catch (error) {
       console.error("[autozone] Failed to initialize products", error);
       throw error;
@@ -106,9 +124,10 @@ export class DynamicDataProvider {
   public async reload(seedValue?: number | null): Promise<void> {
     if (typeof window === "undefined") return;
     
-    const targetSeed = seedValue !== undefined && seedValue !== null 
-      ? clampBaseSeed(seedValue)
-      : this.getBaseSeed();
+    const runtimeSeed = seedValue !== undefined && seedValue !== null
+      ? seedValue
+      : this.getRuntimeV2Seed();
+    const targetSeed = runtimeSeed !== null ? clampBaseSeed(runtimeSeed) : this.getBaseSeed();
     
     if (targetSeed === this.currentSeed && this.ready) {
       return; // Already loaded with this seed

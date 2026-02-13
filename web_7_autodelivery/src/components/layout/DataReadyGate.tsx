@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { dynamicDataProvider } from "@/dynamic/v2";
-import { isDataGenerationEnabled } from "@/shared/data-generator";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 interface DataReadyGateProps {
@@ -67,35 +66,19 @@ export function DataReadyGate({ children }: DataReadyGateProps) {
     };
   }, []);
 
-  // Determine loading message based on mode
-  const getLoadingMessage = () => {
-    if (isDataGenerationEnabled()) {
-      return {
-        title: "Generating Data...",
-        subtitle: "AI is creating realistic restaurants. This may take a few moments."
-      };
-    } else if (isDbLoadModeEnabled()) {
-      return {
-        title: "Loading Data...",
-        subtitle: "Fetching restaurants from database..."
-      };
-    } else {
-      return {
-        title: "Initializing...",
-        subtitle: "Preparing your food delivery app..."
-      };
-    }
-  };
-
   if (!isReady) {
-    const message = getLoadingMessage();
-    
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="text-center space-y-4 max-w-md px-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="text-lg font-semibold text-foreground">{message.title}</p>
-          <p className="text-sm text-muted-foreground">{message.subtitle}</p>
+          <p className="text-lg font-semibold text-foreground">
+            {isDbLoadModeEnabled() ? "Loading Data..." : "Initializing..."}
+          </p>
+          <p className="text-sm text-muted-foreground">
+            {isDbLoadModeEnabled()
+              ? "Fetching restaurants from database..."
+              : "Preparing your food delivery app..."}
+          </p>
         </div>
       </div>
     );

@@ -1,6 +1,5 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { clampBaseSeed, getSeedForLoad } from "@/shared/seed-resolver";
-import { isV2Enabled } from "@/dynamic/shared/flags";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 import fallbackMovies from "./original/movies_1.json";
 
 export interface Movie {
@@ -45,6 +44,15 @@ const getBaseSeedFromUrl = (): number | null => {
   if (seedParam) {
     const parsed = Number.parseInt(seedParam, 10);
     if (Number.isFinite(parsed)) return clampBaseSeed(parsed);
+  }
+  return null;
+};
+
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const value = (window as any).__autocinemaV2Seed;
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return clampBaseSeed(value);
   }
   return null;
 };
@@ -139,11 +147,12 @@ export async function initializeMovies(v2SeedValue?: number | null, limit = 300)
 
   // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
-    // Si no se proporciona seed, leerlo de la URL
-    if (typeof window !== "undefined" && v2SeedValue == null) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
+    const runtimeSeed = v2SeedValue ?? getRuntimeV2Seed();
+    const effectiveSeed = clampBaseSeed(runtimeSeed ?? baseSeed ?? 1);
+    if (typeof window !== "undefined" && runtimeSeed == null) {
+      // Allow SeedContext time to sync v2 seed to window
+      await new Promise((resolve) => setTimeout(resolve, 50));
     }
-    const effectiveSeed = getSeedForLoad(v2SeedValue ?? getBaseSeedFromUrl() ?? 1);
 
     try {
       const movies = await fetchSeededSelection<DatasetMovie>({

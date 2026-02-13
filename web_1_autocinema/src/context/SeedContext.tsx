@@ -3,13 +3,23 @@
 import type React from "react";
 import { createContext, useContext, useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed, resolveSeeds, resolveSeedsSync, type ResolvedSeeds } from "@/shared/seed-resolver";
+
+declare global {
+  interface Window {
+    __autocinemaV2Seed?: number | null;
+  }
+  interface WindowEventMap {
+    "autocinema:v2SeedChange": CustomEvent<{ seed: number | null }>;
+  }
+}
 
 interface SeedContextType {
   seed: number;
   setSeed: (seed: number) => void;
   getNavigationUrl: (path: string) => string;
   isSeedReady: boolean; // Indicates whether the seed is synchronized with the URL
+  resolvedSeeds: ResolvedSeeds;
 }
 
 const DEFAULT_SEED = 1;
@@ -19,6 +29,7 @@ const SeedContext = createContext<SeedContextType>({
   setSeed: () => {},
   getNavigationUrl: (path: string) => path,
   isSeedReady: false,
+  resolvedSeeds: resolveSeedsSync(DEFAULT_SEED),
 });
 
 const STORAGE_KEY = "autocinema_seed_base";
@@ -112,6 +123,7 @@ function SeedProviderInner({
   
   const [seed, setSeedState] = useState<number>(getInitialSeed);
   const [isSeedReady, setIsSeedReady] = useState<boolean>(false);
+  const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() => resolveSeedsSync(getInitialSeed()));
 
   const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
     if (urlSeed !== null) {
@@ -163,6 +175,37 @@ function SeedProviderInner({
     console.log("[autocinema][seed] base=", seed);
   }, [seed]);
 
+  // Resolve per-version seeds through backend
+  useEffect(() => {
+    let cancelled = false;
+    const syncResolved = resolveSeedsSync(seed);
+    setResolvedSeeds(syncResolved);
+
+    resolveSeeds(seed)
+      .then((resolved) => {
+        if (!cancelled) {
+          setResolvedSeeds(resolved);
+        }
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          console.warn("[autocinema] Failed to resolve seeds from API, using fallback:", error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [seed]);
+
+  // Sync v2 seed to window for data layer listeners
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base ?? seed;
+    (window as any).__autocinemaV2Seed = v2Seed ?? null;
+    window.dispatchEvent(new CustomEvent("autocinema:v2SeedChange", { detail: { seed: v2Seed ?? null } }));
+  }, [resolvedSeeds.v2, resolvedSeeds.base, seed]);
+
   const setSeed = useCallback((newSeed: number) => {
     setSeedState(clampBaseSeed(newSeed));
   }, []);
@@ -187,7 +230,7 @@ function SeedProviderInner({
   );
 
   return (
-    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, isSeedReady }}>
+    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, isSeedReady, resolvedSeeds }}>
       <SeedInitializer onSeedFromUrl={handleSeedFromUrl} />
       {children}
     </SeedContext.Provider>

@@ -77,9 +77,9 @@ def resolve_seeds(
         }
     """
     # Default configurations (can be overridden)
-    default_v1 = {"max": 300, "multiplier": 29, "offset": 7}
-    default_v2 = {"max": 300, "multiplier": 53, "offset": 17}
-    default_v3 = {"max": 100, "multiplier": 71, "offset": 3}
+    default_v1 = {"max": 900, "multiplier": 29, "offset": 7}
+    default_v2 = {"max": 900, "multiplier": 53, "offset": 17}
+    default_v3 = {"max": 900, "multiplier": 71, "offset": 3}
 
     v1_cfg = v1_config or default_v1
     v2_cfg = v2_config or default_v2
@@ -103,8 +103,12 @@ def resolve_seeds(
         )
 
     if v2_enabled:
-        # v2 = mismo seed de la URL; se envía tal cual a /datasets/load
-        result["v2"] = safe_seed
+        result["v2"] = derive_seed(
+            safe_seed,
+            v2_cfg["multiplier"],
+            v2_cfg["max"],
+            v2_cfg.get("offset", 0),
+        )
 
     if v3_enabled:
         result["v3"] = derive_seed(

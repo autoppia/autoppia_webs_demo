@@ -9,7 +9,7 @@ import {
   fetchSeededSelection,
   isDbLoadModeEnabled,
 } from "@/shared/seeded-loader";
-import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 import fallbackRestaurants from "./original/restaurants_1.json";
 
 export interface RestaurantGenerated {
@@ -56,29 +56,13 @@ const getBaseSeedFromUrl = (): number | null => {
   return null;
 };
 
-const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number => {
-  if (!dbModeEnabled) {
-    return 1;
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const value = (window as any).__autodiningV2Seed;
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return clampSeed(value);
   }
-  
-  // Si se proporciona un seed específico (ya derivado), usarlo directamente
-  if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
-    return clampSeed(seedValue);
-  }
-  
-  // Obtener seed base de la URL y derivar el V2 seed
-  const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed !== null) {
-    // Derivar V2 seed usando la fórmula: ((baseSeed * 53 + 17) % 300) + 1
-    const resolvedSeeds = resolveSeedsSync(baseSeed);
-    if (resolvedSeeds.v2 !== null) {
-      return resolvedSeeds.v2;
-    }
-    // Si V2 no está habilitado, usar el base seed
-    return clampSeed(baseSeed);
-  }
-  
-  return 1;
+  return null;
 };
 
 // Cache for loaded restaurants
@@ -176,11 +160,11 @@ export async function initializeRestaurants(
 
   // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
-    // Si no se proporciona seed, leerlo de la URL
-    if (typeof window !== "undefined" && v2SeedValue == null) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
+    const runtimeSeed = v2SeedValue ?? getRuntimeV2Seed();
+    const effectiveSeed = clampSeed(runtimeSeed ?? baseSeed ?? 1);
+    if (typeof window !== "undefined" && runtimeSeed == null) {
+      await new Promise((resolve) => setTimeout(resolve, 50));
     }
-    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
 
     try {
       const restaurants = await fetchSeededSelection<DatasetRestaurant>({

@@ -141,13 +141,14 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
       setResolvedSeeds(resolved);
 
       // Set global v2 seed for DynamicDataProvider
-      if (typeof window !== "undefined" && resolved.v2 !== null) {
-        window.__autocrmV2Seed = resolved.v2;
+      if (typeof window !== "undefined") {
+        const v2Seed = resolved.v2 ?? resolved.base;
+        window.__autocrmV2Seed = v2Seed;
 
         // Dispatch custom event for v2 seed changes
         window.dispatchEvent(
           new CustomEvent("autocrm:v2SeedChange", {
-            detail: { seed: resolved.v2 },
+            detail: { seed: v2Seed },
           })
         );
       }

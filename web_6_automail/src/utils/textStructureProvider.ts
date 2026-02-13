@@ -140,21 +140,6 @@ export function getTextStructure(seedStructure?: number): TextStructureConfig {
   return textStructureVariations.variations["1"].elements as TextStructureConfig;
 }
 
-export function getTextStructureName(seedStructure?: number): string {
-  if (!seedStructure || seedStructure < 1 || seedStructure > 300) {
-    return textStructureVariations.variations["1"].name;
-  }
-
-  // Map seed-structure (1-300) to variation (1-10) using modulo
-  const variationKey = ((seedStructure - 1) % 10) + 1;
-  
-  if (variationKey in textStructureVariations.variations) {
-    return textStructureVariations.variations[variationKey.toString() as keyof typeof textStructureVariations.variations].name;
-  }
-
-  return textStructureVariations.variations["1"].name;
-}
-
 // Helper function to check if text structure is enabled
 export function isTextStructureEnabled(): boolean {
   return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE === 'true';

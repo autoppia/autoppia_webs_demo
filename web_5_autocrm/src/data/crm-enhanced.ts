@@ -6,17 +6,8 @@
  */
 
 import { readJson, writeJson } from "@/shared/storage";
-import { 
-  generateClientsWithFallback, 
-  generateMattersWithFallback,
-  generateFilesWithFallback,
-  generateEventsWithFallback,
-  generateLogsWithFallback,
-  isDataGenerationAvailable 
-} from "@/utils/dataGenerator";
 import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
-import { isV2Enabled } from "@/dynamic/shared/flags";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 import fallbackClients from "./original/clients_1.json";
 import fallbackMatters from "./original/matters_1.json";
 import fallbackFiles from "./original/files_1.json";
@@ -27,9 +18,6 @@ import fallbackLogs from "./original/logs_1.json";
 const CACHE_KEYS = {
   clients: "autocrm_generated_clients_v1",
   matters: "autocrm_generated_matters_v1",
-  files: "autocrm_generated_files_v1",
-  events: "autocrm_generated_events_v1",
-  logs: "autocrm_generated_logs_v1",
 };
 
 // Note: v2Seed is now passed directly to initializeClients, initializeMatters, etc.
@@ -39,11 +27,11 @@ function getActiveSeed(defaultSeed: number = 1): number {
 }
 
 // Dynamic data arrays
-let dynamicClients: any[] = isDataGenerationAvailable() ? [] : (fallbackClients as any[]);
-let dynamicMatters: any[] = isDataGenerationAvailable() ? [] : (fallbackMatters as any[]);
-let dynamicFiles: any[] = isDataGenerationAvailable() ? [] : (fallbackFiles as any[]);
-let dynamicEvents: any[] = isDataGenerationAvailable() ? [] : (fallbackEvents as any[]);
-let dynamicLogs: any[] = isDataGenerationAvailable() ? [] : (fallbackLogs as any[]);
+let dynamicClients: any[] = (fallbackClients as any[]);
+let dynamicMatters: any[] = (fallbackMatters as any[]);
+let dynamicFiles: any[] = (fallbackFiles as any[]);
+let dynamicEvents: any[] = (fallbackEvents as any[]);
+let dynamicLogs: any[] = (fallbackLogs as any[]);
 
 // Cache functions
 export function readCachedClients(): any[] | null {
@@ -60,54 +48,6 @@ export function readCachedMatters(): any[] | null {
 
 export function writeCachedMatters(mattersToCache: any[]): void {
   writeJson(CACHE_KEYS.matters, mattersToCache);
-}
-
-export function readCachedFiles(): any[] | null {
-  return readJson<any[]>(CACHE_KEYS.files, null);
-}
-
-export function writeCachedFiles(filesToCache: any[]): void {
-  writeJson(CACHE_KEYS.files, filesToCache);
-}
-
-export function readCachedEvents(): any[] | null {
-  return readJson<any[]>(CACHE_KEYS.events, null);
-}
-
-export function writeCachedEvents(eventsToCache: any[]): void {
-  writeJson(CACHE_KEYS.events, eventsToCache);
-}
-
-export function readCachedLogs(): any[] | null {
-  return readJson<any[]>(CACHE_KEYS.logs, null);
-}
-
-export function writeCachedLogs(logsToCache: any[]): void {
-  writeJson(CACHE_KEYS.logs, logsToCache);
-}
-
-// Configuration for async data generation
-const DATA_GENERATION_CONFIG = {
-  DEFAULT_DELAY_BETWEEN_CALLS: 1000,
-  DEFAULT_CLIENTS_COUNT: 60,
-  DEFAULT_MATTERS_COUNT: 50,
-  DEFAULT_FILES_COUNT: 50,
-  DEFAULT_EVENTS_COUNT: 30,
-  DEFAULT_LOGS_COUNT: 40,
-  MAX_RETRY_ATTEMPTS: 2,
-  AVAILABLE_CLIENT_CATEGORIES: ["Active", "On Hold", "Archived"],
-  AVAILABLE_MATTER_CATEGORIES: ["Active", "On Hold", "Archived"],
-};
-
-function isUniqueGenerationEnabled(): boolean {
-  try {
-    // @ts-ignore - process may not be available in all environments
-    const env = typeof process !== 'undefined' ? process.env : {};
-    const raw = (env?.NEXT_PUBLIC_DATA_GENERATION_UNIQUE || env?.DATA_GENERATION_UNIQUE || '').toString().toLowerCase();
-    return raw === 'true' || raw === '1' || raw === 'yes' || raw === 'on';
-  } catch {
-    return false;
-  }
 }
 
 /**
@@ -165,10 +105,6 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
   
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed !== null) {
-    const resolvedSeeds = resolveSeedsSync(baseSeed);
-    if (resolvedSeeds.v2 !== null) {
-      return resolvedSeeds.v2;
-    }
     return clampSeed(baseSeed);
   }
   
@@ -275,144 +211,120 @@ export async function initializeMatters(v2SeedValue?: number | null): Promise<an
 }
 
 /**
- * Initialize files with V2 system (DB mode, AI generation, or fallback)
+ * Initialize files with V2 system (DB mode or fallback)
  */
-export async function initializeFiles(): Promise<any[]> {
+export async function initializeFiles(v2SeedValue?: number | null): Promise<any[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed === 1 && dbModeEnabled) {
     console.log("[autocrm] Base seed is 1, using original data for files (skipping DB/AI modes)");
-    // Use local fallback data (from webs_server/initial_data/web_5_autocrm/original/)
     dynamicFiles = (fallbackFiles as any[]);
     return dynamicFiles;
   }
   
-  if (!dbModeEnabled) {
-    dynamicFiles = (fallbackFiles as any[]);
-    return dynamicFiles;
-  }
+  if (dbModeEnabled) {
+    try {
+      const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+      const files = await fetchSeededSelection<any>({
+        projectKey: "web_5_autocrm",
+        entityType: "files",
+        seedValue: effectiveSeed,
+        limit: 50,
+        method: "distribute",
+      });
 
-  if (!isDataGenerationAvailable()) {
-    dynamicFiles = (fallbackFiles as any[]);
-    return dynamicFiles;
-  }
-
-  try {
-    if (!isUniqueGenerationEnabled()) {
-      const cached = readCachedFiles();
-      if (cached && cached.length > 0) {
-        dynamicFiles = cached;
+      if (Array.isArray(files) && files.length > 0) {
+        console.log(`[autocrm] Loaded ${files.length} files from dataset (seed=${effectiveSeed})`);
+        dynamicFiles = files;
         return dynamicFiles;
       }
-    }
 
-    const count = DATA_GENERATION_CONFIG.DEFAULT_FILES_COUNT;
-    const generatedFiles = await generateFilesWithFallback([], count);
-    
-    dynamicFiles = generatedFiles;
-    if (!isUniqueGenerationEnabled()) {
-      writeCachedFiles(dynamicFiles);
+      console.warn(`[autocrm] No files returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+    } catch (error) {
+      console.warn("[autocrm] Backend unavailable, falling back to local JSON:", error);
     }
-    return dynamicFiles;
-  } catch (error) {
-    console.warn("⚠️ Failed to generate files. Error:", error);
-    dynamicFiles = (fallbackFiles as any[]);
-    return dynamicFiles;
   }
+
+  dynamicFiles = (fallbackFiles as any[]);
+  return dynamicFiles;
 }
 
 /**
- * Initialize events with V2 system (DB mode, AI generation, or fallback)
+ * Initialize events with V2 system (DB mode or fallback)
  */
-export async function initializeEvents(): Promise<any[]> {
+export async function initializeEvents(v2SeedValue?: number | null): Promise<any[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed === 1 && dbModeEnabled) {
     console.log("[autocrm] Base seed is 1, using original data for events (skipping DB/AI modes)");
-    // Use local fallback data (from webs_server/initial_data/web_5_autocrm/original/)
     dynamicEvents = (fallbackEvents as any[]);
     return dynamicEvents;
   }
   
-  if (!dbModeEnabled) {
-    dynamicEvents = (fallbackEvents as any[]);
-    return dynamicEvents;
-  }
+  if (dbModeEnabled) {
+    try {
+      const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+      const events = await fetchSeededSelection<any>({
+        projectKey: "web_5_autocrm",
+        entityType: "events",
+        seedValue: effectiveSeed,
+        limit: 50,
+        method: "distribute",
+      });
 
-  if (!isDataGenerationAvailable()) {
-    dynamicEvents = (fallbackEvents as any[]);
-    return dynamicEvents;
-  }
-
-  try {
-    if (!isUniqueGenerationEnabled()) {
-      const cached = readCachedEvents();
-      if (cached && cached.length > 0) {
-        dynamicEvents = cached;
+      if (Array.isArray(events) && events.length > 0) {
+        console.log(`[autocrm] Loaded ${events.length} events from dataset (seed=${effectiveSeed})`);
+        dynamicEvents = events;
         return dynamicEvents;
       }
-    }
 
-    const count = DATA_GENERATION_CONFIG.DEFAULT_EVENTS_COUNT;
-    const generatedEvents = await generateEventsWithFallback([], count);
-    
-    dynamicEvents = generatedEvents;
-    if (!isUniqueGenerationEnabled()) {
-      writeCachedEvents(dynamicEvents);
+      console.warn(`[autocrm] No events returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+    } catch (error) {
+      console.warn("[autocrm] Backend unavailable, falling back to local JSON:", error);
     }
-    return dynamicEvents;
-  } catch (error) {
-    console.warn("⚠️ Failed to generate events. Error:", error);
-    dynamicEvents = (fallbackEvents as any[]);
-    return dynamicEvents;
   }
+
+  dynamicEvents = (fallbackEvents as any[]);
+  return dynamicEvents;
 }
 
 /**
- * Initialize logs with V2 system (DB mode, AI generation, or fallback)
+ * Initialize logs with V2 system (DB mode or fallback)
  */
-export async function initializeLogs(): Promise<any[]> {
+export async function initializeLogs(v2SeedValue?: number | null): Promise<any[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed === 1 && dbModeEnabled) {
     console.log("[autocrm] Base seed is 1, using original data for logs (skipping DB/AI modes)");
-    // Use local fallback data (from webs_server/initial_data/web_5_autocrm/original/)
     dynamicLogs = (fallbackLogs as any[]);
     return dynamicLogs;
   }
   
-  if (!dbModeEnabled) {
-    dynamicLogs = (fallbackLogs as any[]);
-    return dynamicLogs;
-  }
+  if (dbModeEnabled) {
+    try {
+      const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+      const logs = await fetchSeededSelection<any>({
+        projectKey: "web_5_autocrm",
+        entityType: "logs",
+        seedValue: effectiveSeed,
+        limit: 50,
+        method: "distribute",
+      });
 
-  if (!isDataGenerationAvailable()) {
-    dynamicLogs = (fallbackLogs as any[]);
-    return dynamicLogs;
-  }
-
-  try {
-    if (!isUniqueGenerationEnabled()) {
-      const cached = readCachedLogs();
-      if (cached && cached.length > 0) {
-        dynamicLogs = cached;
+      if (Array.isArray(logs) && logs.length > 0) {
+        console.log(`[autocrm] Loaded ${logs.length} logs from dataset (seed=${effectiveSeed})`);
+        dynamicLogs = logs;
         return dynamicLogs;
       }
-    }
 
-    const count = DATA_GENERATION_CONFIG.DEFAULT_LOGS_COUNT;
-    const generatedLogs = await generateLogsWithFallback([], count);
-    
-    dynamicLogs = generatedLogs;
-    if (!isUniqueGenerationEnabled()) {
-      writeCachedLogs(dynamicLogs);
+      console.warn(`[autocrm] No logs returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+    } catch (error) {
+      console.warn("[autocrm] Backend unavailable, falling back to local JSON:", error);
     }
-    return dynamicLogs;
-  } catch (error) {
-    console.warn("⚠️ Failed to generate logs. Error:", error);
-    dynamicLogs = (fallbackLogs as any[]);
-    return dynamicLogs;
   }
+
+  dynamicLogs = (fallbackLogs as any[]);
+  return dynamicLogs;
 }
 
 // Runtime-only DB fetch for when DB mode is enabled

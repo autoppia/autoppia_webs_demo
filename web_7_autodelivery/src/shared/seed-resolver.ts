@@ -92,6 +92,30 @@ export function clampBaseSeed(seed: number): number {
   return seed;
 }
 
+function getFallbackResolved(seed: number): ResolvedSeeds {
+  const safeSeed = clampBaseSeed(seed);
+  return { base: safeSeed, v1: null, v2: null, v3: null };
+}
+
+function shouldSkipSeedResolution(
+  seed: number,
+  flags: { v1: boolean; v2: boolean; v3: boolean }
+): { skip: boolean; reason?: string } {
+  if (seed === 1) {
+    return { skip: true, reason: "base seed is 1 (use defaults)" };
+  }
+
+  const disabled = Object.entries(flags)
+    .filter(([, enabled]) => !enabled)
+    .map(([version]) => version.toUpperCase());
+
+  if (disabled.length > 0) {
+    return { skip: true, reason: `disabled versions: ${disabled.join(", ")}` };
+  }
+
+  return { skip: false };
+}
+
 /**
  * Local fallback seed resolution (same formulas as webs_server).
  * Used when API is unavailable or during SSR.
@@ -135,6 +159,14 @@ export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
   const safeSeed = clampBaseSeed(baseSeed);
   const enabledFlags = getEnabledFlagsInternal();
 
+  const skip = shouldSkipSeedResolution(safeSeed, enabledFlags);
+  if (skip.skip) {
+    if (skip.reason) {
+      console.log(`[seed-resolver] Skipping API call: ${skip.reason}`);
+    }
+    return getFallbackResolved(safeSeed);
+  }
+
   // During SSR or if API URL is not available, use local fallback
   if (typeof window === "undefined") {
     return resolveSeedsLocal(safeSeed, enabledFlags);
@@ -177,20 +209,11 @@ export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
  * Use this when you need seeds synchronously (e.g., during initial render).
  */
 export function resolveSeedsSync(baseSeed: number): ResolvedSeeds {
+  const safeSeed = clampBaseSeed(baseSeed);
   const enabledFlags = getEnabledFlagsInternal();
-  return resolveSeedsLocal(baseSeed, enabledFlags);
+  const skip = shouldSkipSeedResolution(safeSeed, enabledFlags);
+  if (skip.skip) {
+    return getFallbackResolved(safeSeed);
+  }
+  return resolveSeedsLocal(safeSeed, enabledFlags);
 }
-
-/**
- * Get current enabled flags (from URL or env)
- * Public API for checking what's enabled
- */
-export function getEnabledFlags(): { v1: boolean; v2: boolean; v3: boolean } {
-  return getEnabledFlagsInternal();
-}
-
-export const seedResolverConfig = {
-  base: BASE_SEED,
-  getEnabledFlags,
-};
-

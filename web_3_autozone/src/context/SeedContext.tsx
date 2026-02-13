@@ -32,7 +32,6 @@ interface SeedContextType {
   setSeed: (seed: number) => void;
   getNavigationUrl: (path: string) => string;
   resolvedSeeds: ResolvedSeeds;
-  v2Seed: number | null; // Para compatibilidad backward
 }
 
 const SeedContext = createContext<SeedContextType>({
@@ -40,7 +39,6 @@ const SeedContext = createContext<SeedContextType>({
   setSeed: () => {},
   getNavigationUrl: (path: string) => path,
   resolvedSeeds: resolveSeedsSync(1),
-  v2Seed: null,
 });
 
 const DEFAULT_SEED = 1;
@@ -181,12 +179,10 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
     const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
     window.__autozoneV2Seed = v2Seed ?? null;
     window.dispatchEvent(new CustomEvent("autozone:v2SeedChange", { detail: { seed: v2Seed ?? null } }));
-    if (typeof window !== "undefined") {
-      const isDebug =
-        new URLSearchParams(window.location.search).get("debug_seed") === "1";
-      if (isDebug) {
-        console.log("[SeedContext:web3] v2-seed synced to window:", v2Seed);
-      }
+    const isDebug = typeof window !== "undefined" &&
+      new URLSearchParams(window.location.search).get("debug_seed") === "1";
+    if (isDebug) {
+      console.log("[SeedContext:web3] v2-seed synced to window:", v2Seed);
     }
   }, [resolvedSeeds.v2, resolvedSeeds.base]);
 
@@ -219,11 +215,8 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
     return query ? `${base}?${query}` : base;
   }, [seed]);
 
-  // v2Seed for backward compatibility
-  const v2Seed = resolvedSeeds.v2 ?? null;
-
   return (
-    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, resolvedSeeds, v2Seed }}>
+    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, resolvedSeeds }}>
       <Suspense fallback={null}>
         <SeedInitializer onSeedFromUrl={handleSeedFromUrl} onSeedChange={handleSeedChange} />
       </Suspense>

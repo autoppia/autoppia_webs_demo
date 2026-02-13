@@ -84,10 +84,19 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
  * You do not need to pass the seed manually.
  */
 export function useDynamicSystem() {
-  const { seed } = useSeed();
+  const { seed: baseSeed, resolvedSeeds } = useSeed();
+  const v1Seed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? baseSeed;
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base ?? baseSeed;
+  const v3Seed = resolvedSeeds.v3 ?? resolvedSeeds.base ?? baseSeed;
   
   return useMemo(() => ({
-    seed,
+    seed: resolvedSeeds.base ?? baseSeed,
+    seeds: {
+      base: resolvedSeeds.base ?? baseSeed,
+      v1: v1Seed,
+      v2: v2Seed,
+      v3: v3Seed,
+    },
     
     /**
      * V1: DOM structure (wrappers, decoys, and ordering)
@@ -109,7 +118,7 @@ export function useDynamicSystem() {
         componentKey: string,
         children: ReactNode,
         reactKey?: string
-      ) => applyV1Wrapper(seed, componentKey, children, reactKey),
+      ) => applyV1Wrapper(v1Seed, componentKey, children, reactKey),
       
       /**
        * Changes the dynamic order of element arrays
@@ -118,7 +127,7 @@ export function useDynamicSystem() {
        * @returns Array of reordered indexes
        */
       changeOrderElements: (key: string, count: number) => 
-        generateDynamicOrder(seed, key, count),
+        generateDynamicOrder(v1Seed, key, count),
     },
     
     /**
@@ -176,7 +185,7 @@ export function useDynamicSystem() {
           // Si no hay variantes, devolver la key (pero esto no debería pasar)
           return key;
         }
-        return getVariant(seed, key, variants, fallback);
+        return getVariant(v3Seed, key, variants, fallback);
       },
     },
     
@@ -184,6 +193,6 @@ export function useDynamicSystem() {
      * Utility: select variant index for custom logic
      */
     selectVariantIndex: (key: string, count: number) => 
-      selectVariantIndex(seed, key, count),
-  }), [seed]);
+      selectVariantIndex(v3Seed, key, count),
+  }), [baseSeed, resolvedSeeds.base, resolvedSeeds.v1, resolvedSeeds.v2, resolvedSeeds.v3, v1Seed, v2Seed, v3Seed]);
 }

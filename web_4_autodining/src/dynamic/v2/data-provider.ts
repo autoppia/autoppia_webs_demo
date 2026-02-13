@@ -7,6 +7,7 @@
 import type { RestaurantGenerated } from '@/data/restaurants-enhanced';
 import { initializeRestaurants, getRestaurants } from '@/data/restaurants-enhanced';
 import { clampBaseSeed } from '@/shared/seed-resolver';
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 const BASE_SEED_STORAGE_KEY = "autodining_seed_base";
 
@@ -20,14 +21,20 @@ export class DynamicDataProvider {
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
-    // V2 siempre habilitado si hay datos
-    this.isEnabled = true;
+    this.isEnabled = isV2Enabled();
     if (typeof window === "undefined") {
       this.ready = true;
       this.readyPromise = Promise.resolve();
       return;
     }
     this.readyPromise = this.loadRestaurants();
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("autodining:v2SeedChange", (event) => {
+        const detail = (event as CustomEvent<{ seed: number | null }>).detail;
+        this.reload(detail?.seed ?? null);
+      });
+    }
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -59,11 +66,22 @@ export class DynamicDataProvider {
     return clampBaseSeed(1);
   }
 
+  private getRuntimeV2Seed(): number | null {
+    if (typeof window === "undefined") return null;
+    const value = (window as any).__autodiningV2Seed;
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return clampBaseSeed(value);
+    }
+    return null;
+  }
+
   private async loadRestaurants(): Promise<void> {
     try {
-      const seed = this.getBaseSeed();
-      this.currentSeed = seed;
-      this.restaurants = await initializeRestaurants();
+      const baseSeed = this.getBaseSeed();
+      const v2Seed = this.getRuntimeV2Seed();
+      const effectiveSeed = clampBaseSeed(v2Seed ?? baseSeed);
+      this.currentSeed = effectiveSeed;
+      this.restaurants = await initializeRestaurants(effectiveSeed);
     } catch (error) {
       console.error("[autodining] Failed to initialize restaurants", error);
       throw error;
@@ -113,9 +131,10 @@ export class DynamicDataProvider {
   public async reload(seedValue?: number | null): Promise<void> {
     if (typeof window === "undefined") return;
     
-    const targetSeed = seedValue !== undefined && seedValue !== null 
-      ? clampBaseSeed(seedValue)
-      : this.getBaseSeed();
+    const runtimeSeed = seedValue !== undefined && seedValue !== null
+      ? seedValue
+      : this.getRuntimeV2Seed();
+    const targetSeed = runtimeSeed !== null ? clampBaseSeed(runtimeSeed) : this.getBaseSeed();
     
     if (targetSeed === this.currentSeed && this.ready) {
       return; // Already loaded with this seed

@@ -139,6 +139,14 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, [seed]);
 
+  // Sync v2Seed to window for backward compatibility
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+    (window as any).__autodiningV2Seed = v2Seed ?? null;
+    window.dispatchEvent(new CustomEvent("autodining:v2SeedChange", { detail: { seed: v2Seed ?? null } }));
+  }, [resolvedSeeds.v2, resolvedSeeds.base]);
+
   const setSeed = useCallback((newSeed: number) => {
     setSeedState(clampBaseSeed(newSeed));
   }, []);
@@ -190,4 +198,3 @@ export const useSeed = () => {
   }
   return context;
 };
-

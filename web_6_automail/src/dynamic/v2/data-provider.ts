@@ -1,19 +1,13 @@
 import type { Email, EmailFolder } from "@/types/email";
 import { emails, initializeEmails, loadEmailsFromDb, writeCachedEmails, readCachedEmails } from "@/data/emails-enhanced";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { isDataGenerationEnabled } from "@/shared/data-generator";
-
-// Check if dynamic HTML is enabled via environment variable
-const isDynamicHtmlEnabled = (): boolean => {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === "true" || process.env.ENABLE_DYNAMIC_V1 === "true";
-};
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 // Dynamic data provider that returns either seed data or empty arrays based on config
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private emails: Email[] = [];
   private isEnabled: boolean = false;
-  private dataGenerationEnabled: boolean = false;
   private ready: boolean = false;
   private readyPromise: Promise<void>;
   private resolveReady!: () => void;
@@ -22,8 +16,7 @@ export class DynamicDataProvider {
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
-    this.isEnabled = isDynamicHtmlEnabled();
-    this.dataGenerationEnabled = isDataGenerationEnabled();
+    this.isEnabled = isV2Enabled();
     // hydrate from cache if available to keep content stable across reloads
     const cached = readCachedEmails();
     this.emails = Array.isArray(cached) && cached.length > 0 ? cached : emails;
@@ -66,13 +59,13 @@ export class DynamicDataProvider {
       
       // Check if DB mode is enabled - only try DB if enabled
       const dbModeEnabled = isDbLoadModeEnabled();
-      console.log("[automail/data-provider] DB mode enabled:", dbModeEnabled, "runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
-      
-      if (dbModeEnabled) {
-        // Try DB mode first if enabled
-        console.log("[automail/data-provider] Attempting to load emails from DB...");
-        const dbEmails = await loadEmailsFromDb(runtimeSeed ?? undefined);
-        console.log("[automail/data-provider] loadEmailsFromDb returned:", dbEmails.length, "emails");
+        console.log("[automail/data-provider] DB mode enabled:", dbModeEnabled, "runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
+        
+        if (dbModeEnabled) {
+          // Try DB mode first if enabled
+          console.log("[automail/data-provider] Attempting to load emails from DB...");
+          const dbEmails = await loadEmailsFromDb(runtimeSeed ?? undefined);
+          console.log("[automail/data-provider] loadEmailsFromDb returned:", dbEmails.length, "emails");
         
         if (dbEmails.length > 0) {
           console.log("[automail/data-provider] ✅ Successfully loaded", dbEmails.length, "emails from DB");
@@ -107,11 +100,11 @@ export class DynamicDataProvider {
   /**
    * Reload data if seed has changed
    */
-  public reloadIfSeedChanged(): void {
+  public async reloadIfSeedChanged(): Promise<void> {
     const runtimeSeed = this.getRuntimeV2Seed();
     if (runtimeSeed !== null && runtimeSeed !== this.currentSeed) {
       console.log(`[automail] Seed changed from ${this.currentSeed} to ${runtimeSeed}, reloading...`);
-      this.reload(runtimeSeed);
+      await this.reload(runtimeSeed);
     }
   }
   

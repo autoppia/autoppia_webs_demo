@@ -1,9 +1,6 @@
 /**
  * Shared seed resolver utilities.
- * Takes a single base seed and derives seeds for each dynamic layer (v1/v2/v3)
- * so we only keep ?seed=XYZ in the URL.
- *
- * Mirrors the logic from webs_server so the mapping stays deterministic.
+ * Always resolve seeds via backend /seeds/resolve (single source of truth).
  */
 
 const BOOL_TRUE = ["true", "1", "yes", "y"];
@@ -49,13 +46,6 @@ const BASE_SEED = {
   defaultValue: 1,
 };
 
-export function clampBaseSeed(seed: number): number {
-  if (Number.isNaN(seed)) return BASE_SEED.defaultValue;
-  if (seed < BASE_SEED.min) return BASE_SEED.min;
-  if (seed > BASE_SEED.max) return BASE_SEED.max;
-  return seed;
-}
-
 function getApiBaseUrl(): string {
   const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
   const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
@@ -71,65 +61,106 @@ function getApiBaseUrl(): string {
   return envUrl || "http://app:8090";
 }
 
-function resolveSeedsLocal(baseSeed: number, enabledFlags?: { v1: boolean; v2: boolean; v3: boolean }): ResolvedSeeds {
-  const safeSeed = clampBaseSeed(baseSeed);
-  const flags = enabledFlags || getEnabledFlagsInternal();
-  const resolved: ResolvedSeeds = {
-    base: safeSeed,
-    v1: null,
-    v2: null,
-    v3: null,
-  };
-  if (flags.v1) {
-    resolved.v1 = ((safeSeed * 37 + 11) % 10) + 1;
-  }
-  if (flags.v2) {
-    resolved.v2 = safeSeed;
-  }
-  if (flags.v3) {
-    resolved.v3 = ((safeSeed * 71 + 3) % 100) + 1;
-  }
-  return resolved;
+export function clampBaseSeed(seed: number): number {
+  if (Number.isNaN(seed)) return BASE_SEED.defaultValue;
+  if (seed < BASE_SEED.min) return BASE_SEED.min;
+  if (seed > BASE_SEED.max) return BASE_SEED.max;
+  return seed;
 }
 
+const resolvedCache = new Map<number, ResolvedSeeds>();
+const inflight = new Map<number, Promise<ResolvedSeeds>>();
+
+function getFallbackResolved(seed: number): ResolvedSeeds {
+  const safeSeed = clampBaseSeed(seed);
+  return { base: safeSeed, v1: null, v2: null, v3: null };
+}
+
+function shouldSkipSeedResolution(
+  seed: number,
+  flags: { v1: boolean; v2: boolean; v3: boolean }
+): { skip: boolean; reason?: string } {
+  if (seed === 1) {
+    return { skip: true, reason: "base seed is 1 (use defaults)" };
+  }
+
+  const disabled = Object.entries(flags)
+    .filter(([, enabled]) => !enabled)
+    .map(([version]) => version.toUpperCase());
+
+  if (disabled.length > 0) {
+    return { skip: true, reason: `disabled versions: ${disabled.join(", ")}` };
+  }
+
+  return { skip: false };
+}
+
+function buildResolveUrl(seed: number, flags: { v1: boolean; v2: boolean; v3: boolean }): string {
+  const apiUrl = getApiBaseUrl();
+  const url = new URL(`${apiUrl}/seeds/resolve`);
+  url.searchParams.set("seed", seed.toString());
+  url.searchParams.set("v1_enabled", String(flags.v1));
+  url.searchParams.set("v2_enabled", String(flags.v2));
+  url.searchParams.set("v3_enabled", String(flags.v3));
+  return url.toString();
+}
+
+/**
+ * Resolve seeds using centralized webs_server API.
+ * No local formulas are used — backend is the single source of truth.
+ */
 export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
   const safeSeed = clampBaseSeed(baseSeed);
-  const enabledFlags = getEnabledFlagsInternal();
-  if (typeof window === "undefined") {
-    return resolveSeedsLocal(safeSeed, enabledFlags);
-  }
-  try {
-    const apiUrl = getApiBaseUrl();
-    const url = new URL(`${apiUrl}/seeds/resolve`);
-    url.searchParams.set("seed", safeSeed.toString());
-    url.searchParams.set("v1_enabled", String(enabledFlags.v1));
-    url.searchParams.set("v2_enabled", String(enabledFlags.v2));
-    url.searchParams.set("v3_enabled", String(enabledFlags.v3));
+  if (resolvedCache.has(safeSeed)) return resolvedCache.get(safeSeed)!;
+  if (inflight.has(safeSeed)) return inflight.get(safeSeed)!;
 
-    const response = await fetch(url.toString(), {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    if (!response.ok) {
-      throw new Error(`Seed resolution API failed: ${response.status}`);
+  const flags = getEnabledFlagsInternal();
+  const skip = shouldSkipSeedResolution(safeSeed, flags);
+  if (skip.skip) {
+    const fallback = getFallbackResolved(safeSeed);
+    resolvedCache.set(safeSeed, fallback);
+    if (skip.reason) {
+      console.log(`[seed-resolver] Skipping API call: ${skip.reason}`);
     }
-    const data = await response.json();
-    return {
-      base: data.base ?? safeSeed,
-      v1: data.v1 ?? null,
-      v2: data.v2 ?? null,
-      v3: data.v3 ?? null,
-    };
-  } catch (error) {
-    console.warn("[seed-resolver] API call failed, using local fallback:", error);
-    return resolveSeedsLocal(safeSeed, enabledFlags);
+    return fallback;
   }
+
+  const promise = (async () => {
+    try {
+      const response = await fetch(buildResolveUrl(safeSeed, flags), {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!response.ok) {
+        throw new Error(`Seed resolution API failed: ${response.status}`);
+      }
+      const data = await response.json();
+      const resolved: ResolvedSeeds = {
+        base: data.base ?? safeSeed,
+        v1: data.v1 ?? null,
+        v2: data.v2 ?? null,
+        v3: data.v3 ?? null,
+      };
+      resolvedCache.set(safeSeed, resolved);
+      return resolved;
+    } catch (error) {
+      console.warn("[seed-resolver] API call failed, using fallback seeds:", error);
+      const fallback = getFallbackResolved(safeSeed);
+      resolvedCache.set(safeSeed, fallback);
+      return fallback;
+    } finally {
+      inflight.delete(safeSeed);
+    }
+  })();
+
+  inflight.set(safeSeed, promise);
+  return promise;
 }
 
+/**
+ * Synchronous snapshot of the last resolved seeds (or base-only placeholder).
+ */
 export function resolveSeedsSync(baseSeed: number): ResolvedSeeds {
-  return resolveSeedsLocal(baseSeed, getEnabledFlagsInternal());
-}
-
-export function getEnabledFlags(): { v1: boolean; v2: boolean; v3: boolean } {
-  return getEnabledFlagsInternal();
+  const safeSeed = clampBaseSeed(baseSeed);
+  return resolvedCache.get(safeSeed) ?? getFallbackResolved(safeSeed);
 }
