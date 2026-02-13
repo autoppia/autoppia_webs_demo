@@ -228,26 +228,19 @@ const getBaseSeedFromUrl = (): number | null => {
   return null;
 };
 
-/**
- * Get v2 seed from window (synchronized by SeedContext)
- */
-const getRuntimeV2Seed = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const value = (window as any).__automailV2Seed;
-  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
-    return value;
-  }
-  return null;
+const resolveSeed = (seedOverride?: number | null): number => {
+  const baseSeed = getBaseSeedFromUrl();
+  return clampSeed(seedOverride ?? baseSeed ?? 1);
 };
 
 /**
  * Initialize emails with V2 system (DB mode or fallback)
  */
-export async function initializeEmails(v2SeedValue?: number | null): Promise<Email[]> {
+export async function initializeEmails(seedOverride?: number | null): Promise<Email[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const baseSeed = getBaseSeedFromUrl();
-  
-  if (baseSeed === 1 || v2SeedValue === 1) {
+  const effectiveSeed = resolveSeed(seedOverride);
+
+  if (effectiveSeed === 1) {
     if (dbModeEnabled) {
       console.log("[automail] Base seed is 1, using original data (skipping DB mode)");
     }
@@ -258,14 +251,7 @@ export async function initializeEmails(v2SeedValue?: number | null): Promise<Ema
   // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
     console.log("[automail] DB mode enabled, attempting to load from DB...");
-    console.log("[automail] baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue);
-    
-    const runtimeSeed = v2SeedValue ?? getRuntimeV2Seed();
-    if (typeof window !== "undefined" && runtimeSeed == null) {
-      await new Promise((resolve) => setTimeout(resolve, 50));
-    }
-    const effectiveSeed = clampSeed(runtimeSeed ?? baseSeed ?? 1);
-    console.log("[automail] Effective seed for DB load:", effectiveSeed);
+    console.log("[automail] effectiveSeed:", effectiveSeed);
 
     try {
       console.log("[automail] Calling fetchSeededSelection with:", {
@@ -319,16 +305,10 @@ export async function loadEmailsFromDb(seedOverride?: number | null): Promise<Em
     return [];
   }
   
-  // Check base seed from URL - if seed = 1, return empty array to trigger fallback
-  const baseSeed = getBaseSeedFromUrl();
-  const runtimeSeed = seedOverride ?? getRuntimeV2Seed();
-  const fallbackSeed = getSeedValueFromEnv(1);
-  const seed = (typeof runtimeSeed === "number" && runtimeSeed > 0) ? runtimeSeed : fallbackSeed;
-  
-  console.log("[automail] loadEmailsFromDb - baseSeed:", baseSeed, "seedOverride:", seedOverride, "final seed:", seed);
-  
-  // If seed = 1, return empty array so initializeEmails will use fallback data
-  if (baseSeed === 1 || seed === 1) {
+  const seed = resolveSeed(seedOverride);
+  console.log("[automail] loadEmailsFromDb - seedOverride:", seedOverride, "final seed:", seed);
+
+  if (seed === 1) {
     console.log("[automail] loadEmailsFromDb: seed is 1, returning empty array to use fallback data");
     return [];
   }

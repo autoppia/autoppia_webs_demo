@@ -6,8 +6,8 @@
  */
 
 import type { Restaurant } from "@/data/restaurants";
-import { fetchSeededSelection, isDbLoadModeEnabled, getSeedValueFromEnv } from "@/shared/seeded-loader";
-import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 import fallbackRestaurants from "./original/restaurants_1.json";
 
 // Helper function to normalize restaurant images
@@ -95,19 +95,6 @@ const getBaseSeedFromUrl = (): number | null => {
   return null;
 };
 
-/**
- * Get v2 seed from window (synchronized by SeedContext)
- */
-const getRuntimeV2Seed = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const extendedWindow = window as Window & { __autodeliveryV2Seed?: number | null };
-  const value = extendedWindow.__autodeliveryV2Seed;
-  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
-    return value;
-  }
-  return null;
-};
-
 const clampSeed = (seed: number): number => {
   if (Number.isNaN(seed)) return 1;
   if (seed < 1) return 1;
@@ -115,25 +102,9 @@ const clampSeed = (seed: number): number => {
   return seed;
 };
 
-const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number => {
-  if (!dbModeEnabled) {
-    return 1;
-  }
-  
-  if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
-    return clampSeed(seedValue);
-  }
-  
+const resolveSeed = (seedValue?: number | null): number => {
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed !== null) {
-    const resolvedSeeds = resolveSeedsSync(baseSeed);
-    if (resolvedSeeds.v2 !== null) {
-      return resolvedSeeds.v2;
-    }
-    return clampSeed(baseSeed);
-  }
-  
-  return 1;
+  return clampSeed(seedValue ?? baseSeed ?? 1);
 };
 
 // Dynamic restaurants array
@@ -142,13 +113,11 @@ let dynamicRestaurants: Restaurant[] = [];
 /**
  * Initialize restaurants with V2 system (DB mode or fallback)
  */
-export async function initializeRestaurants(v2SeedValue?: number | null, baseSeedOverride?: number | null): Promise<Restaurant[]> {
+export async function initializeRestaurants(seedOverride?: number | null): Promise<Restaurant[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const baseSeed = baseSeedOverride !== undefined && baseSeedOverride !== null
-    ? baseSeedOverride
-    : getBaseSeedFromUrl();
+  const effectiveSeed = resolveSeed(seedOverride);
 
-  if (baseSeed === 1 && dbModeEnabled) {
+  if (effectiveSeed === 1 && dbModeEnabled) {
     console.log("[autodelivery] Base seed is 1 and V2 enabled, using original data (skipping DB/AI modes)");
     dynamicRestaurants = normalizeRestaurantImages(fallbackRestaurants as Restaurant[]);
     console.log("[autodelivery] Loaded original restaurants:", dynamicRestaurants.length);
@@ -158,12 +127,7 @@ export async function initializeRestaurants(v2SeedValue?: number | null, baseSee
   // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
     console.log("[autodelivery] DB mode enabled, attempting to load from DB...");
-    console.log("[autodelivery] baseSeed:", baseSeed, "v2SeedValue:", v2SeedValue);
-    
-    if (typeof window !== "undefined" && v2SeedValue == null) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    }
-    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+    console.log("[autodelivery] effectiveSeed:", effectiveSeed);
     console.log("[autodelivery] Effective seed for DB load:", effectiveSeed);
 
     try {

@@ -20,15 +20,6 @@ const getBaseSeedFromUrl = (): number | null => {
   return null;
 };
 
-const getRuntimeV2Seed = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const value = (window as any).__autozoneV2Seed;
-  if (typeof value === "number" && Number.isFinite(value)) {
-    return clampSeed(value);
-  }
-  return null;
-};
-
 const normalizeImageUrl = (image?: string, category?: string): string => {
   const DEFAULT = "/images/homepage_categories/coffee_machine.jpg";
   if (!image) return getCategoryFallback(category);
@@ -106,13 +97,11 @@ const normalizeProduct = (product: DatasetProduct): Product => {
   };
 };
 
-export async function initializeProducts(
-  v2SeedValue?: number | null,
-  limit = 100
-): Promise<Product[]> {
+export async function initializeProducts(seedOverride?: number | null): Promise<Product[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && dbModeEnabled) {
+  const effectiveSeed = clampSeed(seedOverride ?? baseSeed ?? 1);
+  if (effectiveSeed === 1 && dbModeEnabled) {
     console.log("[autozone] Base seed is 1, using original data (skipping DB/AI modes)");
     const fallbackData = (fallbackProducts as DatasetProduct[]).map(normalizeProduct);
     dynamicProducts = normalizeProductImages(fallbackData);
@@ -121,12 +110,6 @@ export async function initializeProducts(
   
   // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
-    const runtimeSeed = v2SeedValue ?? getRuntimeV2Seed();
-    const effectiveSeed = clampSeed(runtimeSeed ?? baseSeed ?? 1);
-    if (typeof window !== "undefined" && runtimeSeed == null) {
-      await new Promise((resolve) => setTimeout(resolve, 50));
-    }
-
     try {
       const products = await fetchSeededSelection<DatasetProduct>({
         projectKey: "web_3_autozone",

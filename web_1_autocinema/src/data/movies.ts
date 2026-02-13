@@ -48,15 +48,6 @@ const getBaseSeedFromUrl = (): number | null => {
   return null;
 };
 
-const getRuntimeV2Seed = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const value = (window as any).__autocinemaV2Seed;
-  if (typeof value === "number" && Number.isFinite(value)) {
-    return clampBaseSeed(value);
-  }
-  return null;
-};
-
 const coerceNumber = (value: unknown, fallback = 0): number => {
   if (typeof value === "number") return Number.isFinite(value) ? value : fallback;
   if (typeof value === "string") {
@@ -136,10 +127,11 @@ const normalizeMovie = (movie: DatasetMovie): Movie => {
 
 let moviesCache: Movie[] = [];
 
-export async function initializeMovies(v2SeedValue?: number | null, limit = 300): Promise<Movie[]> {
+export async function initializeMovies(seedOverride?: number | null): Promise<Movie[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && dbModeEnabled) {
+  const effectiveSeed = clampBaseSeed(seedOverride ?? baseSeed ?? 1);
+  if (effectiveSeed === 1 && dbModeEnabled) {
     console.log("[autocinema] Base seed is 1, using original data (skipping DB/AI modes)");
     moviesCache = (fallbackMovies as DatasetMovie[]).map(normalizeMovie);
     return moviesCache;
@@ -147,13 +139,6 @@ export async function initializeMovies(v2SeedValue?: number | null, limit = 300)
 
   // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
-    const runtimeSeed = v2SeedValue ?? getRuntimeV2Seed();
-    const effectiveSeed = clampBaseSeed(runtimeSeed ?? baseSeed ?? 1);
-    if (typeof window !== "undefined" && runtimeSeed == null) {
-      // Allow SeedContext time to sync v2 seed to window
-      await new Promise((resolve) => setTimeout(resolve, 50));
-    }
-
     try {
       const movies = await fetchSeededSelection<DatasetMovie>({
         projectKey: "web_1_autocinema",

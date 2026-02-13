@@ -11,12 +11,7 @@ import {
   Suspense,
 } from "react";
 import { useSearchParams } from "next/navigation";
-import {
-  resolveSeeds,
-  resolveSeedsSync,
-  clampBaseSeed,
-  type ResolvedSeeds,
-} from "@/shared/seed-resolver";
+import { resolveSeedsSync, clampBaseSeed, type ResolvedSeeds } from "@/shared/seed-resolver";
 
 declare global {
   interface Window {
@@ -143,23 +138,9 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Update derived seeds + persist base seed
   useEffect(() => {
-    let cancelled = false;
-    
-    // Use sync version for immediate update
     const syncResolved = resolveSeedsSync(seed);
     setResolvedSeeds(syncResolved);
-    
-    // Fetch from centralized service (async, updates when ready)
-    resolveSeeds(seed).then((resolved) => {
-      if (!cancelled) {
-        setResolvedSeeds(resolved);
-      }
-    }).catch((error) => {
-      if (!cancelled) {
-        console.warn("[SeedContext:web3] Failed to resolve seeds from API, using local:", error);
-      }
-    });
-    
+
     if (typeof window !== "undefined") {
       try {
         localStorage.setItem("autozone_seed_base", seed.toString());
@@ -167,10 +148,6 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
         console.error("Error saving seed to localStorage:", error);
       }
     }
-    
-    return () => {
-      cancelled = true;
-    };
   }, [seed]);
 
   // Sync v2Seed to window for backward compatibility

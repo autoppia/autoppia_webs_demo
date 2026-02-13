@@ -56,15 +56,6 @@ const getBaseSeedFromUrl = (): number | null => {
   return null;
 };
 
-const getRuntimeV2Seed = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const value = (window as any).__autodiningV2Seed;
-  if (typeof value === "number" && Number.isFinite(value)) {
-    return clampSeed(value);
-  }
-  return null;
-};
-
 // Cache for loaded restaurants
 export let dynamicRestaurants: RestaurantGenerated[] = [];
 
@@ -146,13 +137,11 @@ export function getRestaurants(): RestaurantGenerated[] {
 /**
  * Initialize restaurants from server using seeded selection
  */
-export async function initializeRestaurants(
-  v2SeedValue?: number | null,
-  limit = 300
-): Promise<RestaurantGenerated[]> {
+export async function initializeRestaurants(seedOverride?: number | null): Promise<RestaurantGenerated[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && dbModeEnabled) {
+  const effectiveSeed = clampSeed(seedOverride ?? baseSeed ?? 1);
+  if (effectiveSeed === 1 && dbModeEnabled) {
     console.log("[autodining] Base seed is 1, using original data (skipping DB/AI modes)");
     dynamicRestaurants = normalizeRestaurants(fallbackRestaurants as DatasetRestaurant[]);
     return dynamicRestaurants;
@@ -160,12 +149,6 @@ export async function initializeRestaurants(
 
   // Priority 1: DB mode - fetch from /datasets/load endpoint
   if (dbModeEnabled) {
-    const runtimeSeed = v2SeedValue ?? getRuntimeV2Seed();
-    const effectiveSeed = clampSeed(runtimeSeed ?? baseSeed ?? 1);
-    if (typeof window !== "undefined" && runtimeSeed == null) {
-      await new Promise((resolve) => setTimeout(resolve, 50));
-    }
-
     try {
       const restaurants = await fetchSeededSelection<DatasetRestaurant>({
         projectKey: "web_4_autodining",
@@ -196,5 +179,3 @@ export async function initializeRestaurants(
   dynamicRestaurants = normalizeRestaurants(fallbackRestaurants as DatasetRestaurant[]);
   return dynamicRestaurants;
 }
-
-export const getCachedRestaurants = () => dynamicRestaurants;

@@ -1,14 +1,21 @@
 /**
- * Seed Resolution System for web_5_autocrm
- * Always uses backend /seeds/resolve; no local formulas.
+ * Simplified seed utilities for autocrm.
+ * All variants mirror the base seed from the URL.
  */
+
+const BOOL_TRUE = ["true", "1", "yes", "y"];
 
 export interface ResolvedSeeds {
   base: number;
-  v1: number | null;
-  v2: number | null;
-  v3: number | null;
+  v1: number;
+  v2: number;
+  v3: number;
 }
+
+const boolFromEnv = (value?: string | undefined | null): boolean => {
+  if (!value) return false;
+  return BOOL_TRUE.includes(value.toLowerCase());
+};
 
 function parseEnableDynamicFromUrl(): { v1: boolean; v2: boolean; v3: boolean } | null {
   if (typeof window === "undefined") return null;
@@ -24,23 +31,16 @@ function parseEnableDynamicFromUrl(): { v1: boolean; v2: boolean; v3: boolean } 
   };
 }
 
-function getEnabledFlagsFromEnv(): { v1: boolean; v2: boolean; v3: boolean } {
-  if (typeof window === "undefined") {
-    return {
-      v1: (process.env.ENABLE_DYNAMIC_V1 || "").toLowerCase() === "true",
-      v2: (process.env.ENABLE_DYNAMIC_V2 || "").toLowerCase() === "true",
-      v3: (process.env.ENABLE_DYNAMIC_V3 || "").toLowerCase() === "true",
-    };
-  }
+function getEnabledFlagsInternal(): { v1: boolean; v2: boolean; v3: boolean } {
+  const urlFlags = parseEnableDynamicFromUrl();
+  if (urlFlags) return urlFlags;
 
   return {
     v1:
       (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 || process.env.ENABLE_DYNAMIC_V1 || "")
         .toLowerCase() === "true",
     v2:
-      (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 ||
-        process.env.ENABLE_DYNAMIC_V2 ||
-        "")
+      (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 || process.env.ENABLE_DYNAMIC_V2 || "")
         .toLowerCase() === "true",
     v3:
       (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 || process.env.ENABLE_DYNAMIC_V3 || "")
@@ -48,114 +48,32 @@ function getEnabledFlagsFromEnv(): { v1: boolean; v2: boolean; v3: boolean } {
   };
 }
 
-function getEnabledFlagsInternal(): { v1: boolean; v2: boolean; v3: boolean } {
-  const urlFlags = parseEnableDynamicFromUrl();
-  if (urlFlags !== null) {
-    return urlFlags;
-  }
-  return getEnabledFlagsFromEnv();
-}
-
-export function clampBaseSeed(seed: number, minVal: number = 1, maxVal: number = 999): number {
-  if (seed < minVal) return minVal;
-  if (seed > maxVal) return maxVal;
-  return seed;
-}
-
-function getApiBaseUrl(): string {
-  const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
-  const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
-  const envIsLocal = envUrl && (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"));
-  const originIsLocal = origin && (origin.includes("localhost") || origin.includes("127.0.0.1"));
-
-  if (envUrl && (!(envIsLocal) || originIsLocal)) {
-    return envUrl;
-  }
-  if (origin) {
-    return `${origin}/api`;
-  }
-  return envUrl || "http://app:8090";
-}
+const clampSeedValue = (seed: number): number => Math.min(999, Math.max(1, Math.round(seed) || 1));
 
 const resolvedCache = new Map<number, ResolvedSeeds>();
-const inflight = new Map<number, Promise<ResolvedSeeds>>();
 
-function getFallbackResolved(seed: number): ResolvedSeeds {
-  const safeSeed = clampBaseSeed(seed);
-  return { base: safeSeed, v1: safeSeed, v2: null, v3: safeSeed };
-}
-
-function shouldSkipSeedResolution(seed: number, flags: { v2: boolean }): { skip: boolean; reason?: string } {
-  if (seed === 1) {
-    return { skip: true, reason: "base seed is 1 (use defaults)" };
-  }
-  if (!flags.v2) {
-    return { skip: true, reason: "v2 disabled (use base seed for all)" };
-  }
-  return { skip: false };
-}
-
-function buildResolveUrl(seed: number, flags: { v1: boolean; v2: boolean; v3: boolean }): string {
-  const apiUrl = getApiBaseUrl();
-  const url = new URL(`${apiUrl}/seeds/resolve`);
-  url.searchParams.set("seed", seed.toString());
-  url.searchParams.set("v1_enabled", String(flags.v1));
-  url.searchParams.set("v2_enabled", String(flags.v2));
-  url.searchParams.set("v3_enabled", String(flags.v3));
-  return url.toString();
-}
+const buildSeeds = (seed: number): ResolvedSeeds => {
+  const safeSeed = clampSeedValue(seed);
+  return {
+    base: safeSeed,
+    v1: safeSeed,
+    v2: safeSeed,
+    v3: safeSeed,
+  };
+};
 
 export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
-  const safeSeed = clampBaseSeed(baseSeed);
+  const safeSeed = clampSeedValue(baseSeed);
   if (resolvedCache.has(safeSeed)) return resolvedCache.get(safeSeed)!;
-  if (inflight.has(safeSeed)) return inflight.get(safeSeed)!;
 
-  const flags = getEnabledFlagsInternal();
-  const skip = shouldSkipSeedResolution(safeSeed, { v2: flags.v2 });
-  if (skip.skip) {
-    const fallback = getFallbackResolved(safeSeed);
-    resolvedCache.set(safeSeed, fallback);
-    if (skip.reason) {
-      console.log(`[seed-resolver] Skipping API call: ${skip.reason}`);
-    }
-    return fallback;
-  }
-
-  const promise = (async () => {
-    try {
-      const response = await fetch(buildResolveUrl(safeSeed, flags), {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) {
-        throw new Error(`Seed resolution API failed: ${response.status}`);
-      }
-      const data = await response.json();
-      const resolved: ResolvedSeeds = {
-        base: data.base ?? safeSeed,
-        v1: safeSeed,
-        v2: data.v2 ?? null,
-        v3: safeSeed,
-      };
-      resolvedCache.set(safeSeed, resolved);
-      return resolved;
-    } catch (error) {
-      console.warn("[seed-resolver] API call failed, using fallback seeds:", error);
-      const fallback = getFallbackResolved(safeSeed);
-      resolvedCache.set(safeSeed, fallback);
-      return fallback;
-    } finally {
-      inflight.delete(safeSeed);
-    }
-  })();
-
-  inflight.set(safeSeed, promise);
-  return promise;
+  const resolved = buildSeeds(safeSeed);
+  resolvedCache.set(safeSeed, resolved);
+  return resolved;
 }
 
 export function resolveSeedsSync(baseSeed: number): ResolvedSeeds {
-  const safeSeed = clampBaseSeed(baseSeed);
-  return resolvedCache.get(safeSeed) ?? getFallbackResolved(safeSeed);
+  const safeSeed = clampSeedValue(baseSeed);
+  return resolvedCache.get(safeSeed) ?? buildSeeds(safeSeed);
 }
 
 export function getEnabledFlags(): { v1: boolean; v2: boolean; v3: boolean } {

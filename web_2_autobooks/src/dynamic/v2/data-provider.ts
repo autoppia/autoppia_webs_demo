@@ -63,20 +63,9 @@ export class DynamicDataProvider {
     return clampBaseSeed(1);
   }
 
-  private getRuntimeV2Seed(): number | null {
-    if (typeof window === "undefined") return null;
-    const value = (window as any).__autobooksV2Seed;
-    if (typeof value === "number" && Number.isFinite(value)) {
-      return clampBaseSeed(value);
-    }
-    return null;
-  }
-
   private async loadBooks(): Promise<void> {
     try {
-      const baseSeed = this.getBaseSeed();
-      const v2Seed = this.getRuntimeV2Seed();
-      const effectiveSeed = clampBaseSeed(v2Seed ?? baseSeed);
+      const effectiveSeed = this.getBaseSeed();
       this.currentSeed = effectiveSeed;
       this.books = await initializeBooks(effectiveSeed);
     } catch (error) {
@@ -103,7 +92,7 @@ export class DynamicDataProvider {
       // Start new load
       this.loadingPromise = (async () => {
         try {
-          this.books = await initializeBooks();
+          this.books = await initializeBooks(newSeed);
           this.ready = true;
         } catch (error) {
           console.error("[autobooks] Failed to reload books", error);
@@ -128,10 +117,7 @@ export class DynamicDataProvider {
   public async reload(seedValue?: number | null): Promise<void> {
     if (typeof window === "undefined") return;
     
-    const runtimeSeed = seedValue !== undefined && seedValue !== null
-      ? seedValue
-      : this.getRuntimeV2Seed();
-    const targetSeed = runtimeSeed !== null ? clampBaseSeed(runtimeSeed) : this.getBaseSeed();
+    const targetSeed = clampBaseSeed(seedValue ?? this.getBaseSeed());
     
     if (targetSeed === this.currentSeed && this.ready) {
       return; // Already loaded with this seed
@@ -147,10 +133,10 @@ export class DynamicDataProvider {
       return;
     }
     
-    // Start new load (initializeBooks will derive the V2 seed from the URL)
+    // Start new load with the current base seed
     this.loadingPromise = (async () => {
       try {
-        this.books = await initializeBooks();
+        this.books = await initializeBooks(targetSeed);
         this.ready = true;
         console.log(`[autobooks] Books reloaded: ${this.books.length} books`);
       } catch (error) {

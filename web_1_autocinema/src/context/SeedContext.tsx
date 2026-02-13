@@ -3,7 +3,7 @@
 import type React from "react";
 import { createContext, useContext, useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { clampBaseSeed, resolveSeeds, resolveSeedsSync, type ResolvedSeeds } from "@/shared/seed-resolver";
+import { clampBaseSeed, resolveSeedsSync, type ResolvedSeeds } from "@/shared/seed-resolver";
 
 declare global {
   interface Window {
@@ -175,27 +175,9 @@ function SeedProviderInner({
     console.log("[autocinema][seed] base=", seed);
   }, [seed]);
 
-  // Resolve per-version seeds through backend
+  // Keep resolved seeds in sync with the current URL seed (all variants share the base seed)
   useEffect(() => {
-    let cancelled = false;
-    const syncResolved = resolveSeedsSync(seed);
-    setResolvedSeeds(syncResolved);
-
-    resolveSeeds(seed)
-      .then((resolved) => {
-        if (!cancelled) {
-          setResolvedSeeds(resolved);
-        }
-      })
-      .catch((error) => {
-        if (!cancelled) {
-          console.warn("[autocinema] Failed to resolve seeds from API, using fallback:", error);
-        }
-      });
-
-    return () => {
-      cancelled = true;
-    };
+    setResolvedSeeds(resolveSeedsSync(seed));
   }, [seed]);
 
   // Sync v2 seed to window for data layer listeners

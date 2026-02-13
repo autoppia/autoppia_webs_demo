@@ -84,10 +84,19 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
  * You do not need to pass the seed manually.
  */
 export function useDynamicSystem() {
-  const { seed } = useSeed();
+  const { seed: baseSeed } = useSeed();
+  const v1Seed = baseSeed;
+  const v2Seed = baseSeed;
+  const v3Seed = baseSeed;
   
   return useMemo(() => ({
-    seed,
+    seed: baseSeed,
+    seeds: {
+      base: baseSeed,
+      v1: v1Seed,
+      v2: v2Seed,
+      v3: v3Seed,
+    },
     
     /**
      * V1: DOM structure (wrappers, decoys, and ordering)
