@@ -72,9 +72,6 @@ function normalizeMatter(matter: any, index: number): any {
   };
 }
 
-const clampSeed = (value: number, fallback = 1): number =>
-  value >= 1 && value <= 300 ? value : fallback;
-
 const getBaseSeedFromUrl = (): number | null => {
   if (typeof window === "undefined") return null;
   const params = new URLSearchParams(window.location.search);
@@ -90,7 +87,7 @@ const getBaseSeedFromUrl = (): number | null => {
 
 const resolveSeed = (seedValue?: number | null): number => {
   const baseSeed = getBaseSeedFromUrl();
-  return clampSeed(seedValue ?? baseSeed ?? 1);
+  return clampBaseSeed(seedValue ?? baseSeed ?? 1);
 };
 
 /**

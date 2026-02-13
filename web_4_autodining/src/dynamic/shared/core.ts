@@ -91,12 +91,6 @@ export function useDynamicSystem() {
   
   return useMemo(() => ({
     seed: baseSeed,
-    seeds: {
-      base: baseSeed,
-      v1: v1Seed,
-      v2: v2Seed,
-      v3: v3Seed,
-    },
     
     /**
      * V1: DOM structure (wrappers, decoys, and ordering)

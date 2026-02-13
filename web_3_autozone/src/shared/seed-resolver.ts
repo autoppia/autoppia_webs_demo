@@ -60,14 +60,6 @@ const buildSeeds = (seed: number): ResolvedSeeds => {
   return { base: safeSeed, v1: safeSeed, v2: safeSeed, v3: safeSeed };
 };
 
-export async function resolveSeeds(baseSeed: number): Promise<ResolvedSeeds> {
-  const safeSeed = clampBaseSeed(baseSeed);
-  if (resolvedCache.has(safeSeed)) return resolvedCache.get(safeSeed)!;
-  const resolved = buildSeeds(safeSeed);
-  resolvedCache.set(safeSeed, resolved);
-  return resolved;
-}
-
 export function resolveSeedsSync(baseSeed: number): ResolvedSeeds {
   const safeSeed = clampBaseSeed(baseSeed);
   return resolvedCache.get(safeSeed) ?? buildSeeds(safeSeed);

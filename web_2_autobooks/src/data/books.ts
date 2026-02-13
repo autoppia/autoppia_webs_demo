@@ -45,9 +45,6 @@ type DatasetBook = {
 
 const DEFAULT_POSTER = "/media/gallery/default_book.png";
 
-const clampSeed = (value: number, fallback = 1): number =>
-  value >= 1 && value <= 300 ? value : fallback;
-
 const getBaseSeedFromUrl = (): number | null => {
   if (typeof window === "undefined") return null;
   // Leer seed base de la URL
@@ -167,7 +164,7 @@ let booksCache: Book[] = [];
 export async function initializeBooks(seedOverride?: number | null): Promise<Book[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
-  const effectiveSeed = clampSeed(seedOverride ?? baseSeed ?? 1);
+  const effectiveSeed = clampBaseSeed(seedOverride ?? baseSeed ?? 1);
   if (effectiveSeed === 1 && dbModeEnabled) {
     console.log("[autobooks] Base seed is 1, using original data from original/books_1.json (skipping DB/AI modes)");
     booksCache = (fallbackBooks as DatasetBook[]).map(normalizeBook);

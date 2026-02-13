@@ -39,9 +39,6 @@ type DatasetRestaurant = {
   bookings?: number;
 };
 
-const clampSeed = (value: number, fallback = 1): number =>
-  value >= 1 && value <= 300 ? value : fallback;
-
 const getBaseSeedFromUrl = (): number | null => {
   if (typeof window === "undefined") return null;
   // Leer seed base de la URL
@@ -140,7 +137,7 @@ export function getRestaurants(): RestaurantGenerated[] {
 export async function initializeRestaurants(seedOverride?: number | null): Promise<RestaurantGenerated[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
-  const effectiveSeed = clampSeed(seedOverride ?? baseSeed ?? 1);
+  const effectiveSeed = clampBaseSeed(seedOverride ?? baseSeed ?? 1);
   if (effectiveSeed === 1 && dbModeEnabled) {
     console.log("[autodining] Base seed is 1, using original data (skipping DB/AI modes)");
     dynamicRestaurants = normalizeRestaurants(fallbackRestaurants as DatasetRestaurant[]);

@@ -169,5 +169,3 @@ export async function initializeMovies(seedOverride?: number | null): Promise<Mo
   moviesCache = (fallbackMovies as DatasetMovie[]).map(normalizeMovie);
   return moviesCache;
 }
-
-export const getCachedMovies = () => moviesCache;
