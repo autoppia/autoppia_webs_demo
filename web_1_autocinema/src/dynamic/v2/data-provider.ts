@@ -1,7 +1,6 @@
 import type { Movie } from "@/data/movies";
 import { initializeMovies } from "@/data/movies";
 import { clampBaseSeed } from "@/shared/seed-resolver";
-import { isV2Enabled } from "@/dynamic/shared/flags";
 
 export interface MovieSearchFilters {
   genre?: string;
@@ -13,25 +12,18 @@ const BASE_SEED_STORAGE_KEY = "autocinema_seed_base";
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private movies: Movie[] = [];
-  private isEnabled = false;
   private ready = false;
   private readyPromise: Promise<void>;
   private currentSeed: number = 1;
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
-    this.isEnabled = isV2Enabled();
     if (typeof window === "undefined") {
       this.ready = true;
       this.readyPromise = Promise.resolve();
       return;
     }
     this.readyPromise = this.loadMovies();
-
-    window.addEventListener("autocinema:v2SeedChange", (event) => {
-      const detail = (event as CustomEvent<{ seed: number | null }>).detail;
-      this.reload(detail?.seed ?? null);
-    });
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -87,35 +79,31 @@ export class DynamicDataProvider {
   public async reload(seedValue?: number | null): Promise<void> {
     if (typeof window === "undefined") return;
     const targetSeed = clampBaseSeed(seedValue ?? this.getBaseSeed());
-    
+
     if (targetSeed === this.currentSeed && this.ready) {
-      return; // Already loaded with this seed
+      return;
     }
-    
-    console.log(`[autocinema] Reloading movies for base seed=${targetSeed}...`);
+
     this.currentSeed = targetSeed;
     this.ready = false;
-    
-    // If already loading, wait for it
+
     if (this.loadingPromise) {
       await this.loadingPromise;
       return;
     }
-    
-    // Start new load with the current base seed
+
     this.loadingPromise = (async () => {
       try {
         this.movies = await initializeMovies(targetSeed);
         this.ready = true;
-        console.log(`[autocinema] Movies reloaded: ${this.movies.length} movies`);
       } catch (error) {
         console.error("[autocinema] Failed to reload movies", error);
-        this.ready = true; // Mark as ready even on error to prevent blocking
+        this.ready = true;
       } finally {
         this.loadingPromise = null;
       }
     })();
-    
+
     await this.loadingPromise;
   }
 
@@ -186,10 +174,6 @@ export class DynamicDataProvider {
     });
     return Array.from(years).sort((a, b) => b - a);
   }
-
-  public isDynamicModeEnabled(): boolean {
-    return this.isEnabled;
-  }
 }
 
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
@@ -202,4 +186,3 @@ export const searchMovies = (query: string, filters?: MovieSearchFilters) => dyn
 export const getMoviesByGenre = (genre: string) => dynamicDataProvider.getMoviesByGenre(genre);
 export const getAvailableGenres = () => dynamicDataProvider.getAvailableGenres();
 export const getAvailableYears = () => dynamicDataProvider.getAvailableYears();
-export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();

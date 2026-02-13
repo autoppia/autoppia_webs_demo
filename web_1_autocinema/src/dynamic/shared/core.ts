@@ -123,26 +123,9 @@ export function useDynamicSystem() {
     
     /**
      * V2: Data loading (status checking)
-     * Provides status checks for V2
      */
     v2: {
-      /**
-       * Check if V2 is enabled
-       */
-      isDbModeEnabled: () => isV2Enabled(),
-      
-      /**
-       * Check if enabled is enabled
-       */
-      /**
-       * Check if V2 is enabled
-       */
       isEnabled: () => isV2Enabled(),
-      
-      /**
-       * Check if using fallback (original data) - V2 disabled
-       */
-      isFallbackMode: () => !isV2Enabled(),
     },
     
     /**

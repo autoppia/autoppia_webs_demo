@@ -471,44 +471,6 @@ done
 
 echo "✅ Master pools ready"
 
-# If DB mode (v2) is disabled, we won't sync into repo; originals will be copied directly into the container later
-
-# Copy data from repo to container (repo is always up to date)
-if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
-  REPO_DATA_DIR="$DEMOS_DIR/webs_server/initial_data"
-  echo "📦 Copying data pools from repo to webs_server container..."
-  for project in $WEBS_PROJECTS; do
-    SRC_MAIN="$REPO_DATA_DIR/$project/main.json"
-    SRC_ORIG_DIR="$REPO_DATA_DIR/$project/original"
-    SRC_DATA_DIR="$REPO_DATA_DIR/$project/data"
-
-    if [ -f "$SRC_MAIN" ]; then
-      echo "  → Copying $project to container (from repo)..."
-      docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data /app/data/$project/original 2>/dev/null || true
-      docker cp "$SRC_MAIN" webs_server-app-1:/app/data/$project/main.json 2>/dev/null || true
-      # Prefer originals if DB mode is disabled; otherwise copy data files
-      if [ "$ENABLE_DYNAMIC_V2" = false ]; then
-        if [ -d "$SRC_ORIG_DIR" ] && ls "$SRC_ORIG_DIR"/*.json >/dev/null 2>&1; then
-          for data_file in "$SRC_ORIG_DIR"/*.json; do
-            if [ -f "$data_file" ]; then
-              docker cp "$data_file" webs_server-app-1:/app/data/$project/original/ 2>/dev/null || true
-            fi
-          done
-        fi
-      elif [ -d "$SRC_DATA_DIR" ]; then
-        for data_file in "$SRC_DATA_DIR"/*.json; do
-          if [ -f "$data_file" ]; then
-            docker cp "$data_file" webs_server-app-1:/app/data/$project/data/ 2>/dev/null || true
-          fi
-        done
-      fi
-      docker exec -u root webs_server-app-1 chown -R appuser:appuser /app/data/$project 2>/dev/null || true
-      echo "  ✅ $project copied to container"
-    fi
-  done
-  echo "✅ Data pools copied to container"
-fi
-
   popd >/dev/null
   echo "✅ $name running on HTTP→localhost:$WEBS_PORT, DB→localhost:$WEBS_PG_PORT"
   echo ""

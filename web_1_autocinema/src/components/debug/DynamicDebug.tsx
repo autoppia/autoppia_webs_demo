@@ -12,7 +12,6 @@ export function DynamicDebug() {
     console.log("Seed:", dyn.seed);
     console.log("V1 enabled:", isV1Enabled());
     console.log("V2 enabled:", isV2Enabled());
-    console.log("V2 fallback mode:", dyn.v2.isFallbackMode());
     console.log("V3 enabled:", isV3Enabled());
     console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V1:", typeof window !== "undefined" ? (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 : "SSR");
     console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V2:", typeof window !== "undefined" ? (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 : "SSR");

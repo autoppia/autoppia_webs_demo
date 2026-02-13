@@ -61,9 +61,6 @@ export function HomeContent() {
         seed: dyn.seed,
         v1Enabled: isV1Enabled(),
         v2Enabled: dyn.v2.isEnabled(),
-        v2DbMode: dyn.v2.isDbModeEnabled(),
-        v2AiGenerate: dyn.v2.isEnabled(),
-        v2Fallback: dyn.v2.isFallbackMode(),
         v3Enabled: isV3Enabled(),
       });
     }

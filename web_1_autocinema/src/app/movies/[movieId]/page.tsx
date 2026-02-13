@@ -63,9 +63,6 @@ export default function MovieDetailPage() {
     if (process.env.NODE_ENV === "development") {
       console.log("[movies/[movieId]/page] V2 status:", {
         v2Enabled: dyn.v2.isEnabled(),
-        v2DbMode: dyn.v2.isDbModeEnabled(),
-        v2AiGenerate: dyn.v2.isEnabled(),
-        v2Fallback: dyn.v2.isFallbackMode(),
       });
     }
   }, [dyn.v2]);
