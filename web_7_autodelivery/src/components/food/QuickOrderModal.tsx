@@ -106,7 +106,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
     });
     onOpenChange(false);
     // Navigate to restaurant page
-    window.location.href = getNavigationUrl(`/restaurants/${restaurant.id}`);
+    router.push(getNavigationUrl(`/restaurants/${restaurant.id}`));
   };
 
   const handleQuickOrder = (restaurant: typeof restaurants[0]) => {
@@ -122,7 +122,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
         itemName: firstItem.name,
       });
       onOpenChange(false);
-      window.location.href = getNavigationUrl("/cart");
+      router.push(getNavigationUrl("/cart"));
     } else {
       logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, {
         restaurantId: restaurant.id,
@@ -132,7 +132,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
         itemName: null,
       });
       onOpenChange(false);
-      window.location.href = getNavigationUrl(`/restaurants/${restaurant.id}`);
+      router.push(getNavigationUrl(`/restaurants/${restaurant.id}`));
     }
   };
 
@@ -367,7 +367,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
               size="sm"
               onClick={() => {
                 onOpenChange(false);
-                window.location.href = getNavigationUrl("/cart");
+                router.push(getNavigationUrl("/cart"));
               }}
             >
               View Cart

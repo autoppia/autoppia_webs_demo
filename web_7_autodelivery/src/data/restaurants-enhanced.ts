@@ -7,7 +7,8 @@
 
 import type { Restaurant } from "@/data/restaurants";
 import { fetchSeededSelection } from "@/shared/seeded-loader";
-import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 // Helper function to normalize restaurant images
 function normalizeRestaurantImages(restaurants: Restaurant[]): Restaurant[] {
@@ -79,7 +80,10 @@ function normalizeRestaurantImages(restaurants: Restaurant[]): Restaurant[] {
 }
 
 const resolveSeed = (seedValue?: number | null): number => {
-  return clampBaseSeed(seedValue ?? getBaseSeedFromUrl());
+  // V2 rule: seed always comes from URL, but if V2 is disabled we force seed=1.
+  return isV2Enabled()
+    ? clampSeed(seedValue ?? getSeedFromUrl())
+    : 1;
 };
 
 // Dynamic restaurants array
@@ -120,8 +124,7 @@ export async function initializeRestaurants(seedOverride?: number | null): Promi
 
 // Runtime-only DB fetch for when DB mode is enabled
 export async function loadRestaurantsFromDb(seedOverride?: number | null): Promise<Restaurant[]> {
-  const baseSeed = getBaseSeedFromUrl();
-  const seed = (typeof seedOverride === "number" && seedOverride > 0) ? seedOverride : baseSeed;
+  const seed = resolveSeed(seedOverride);
 
   try {
     const limit = 50;

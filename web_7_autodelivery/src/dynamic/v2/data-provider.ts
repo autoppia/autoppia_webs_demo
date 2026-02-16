@@ -8,6 +8,8 @@ import type { Restaurant } from "@/data/restaurants";
 import type { Testimonial } from "@/data/testimonials";
 import { initializeRestaurants, loadRestaurantsFromDb } from "@/data/restaurants-enhanced";
 import { getRandomTestimonials } from "@/data/testimonials-enhanced";
+import { isV2Enabled } from "@/dynamic/shared/flags";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
@@ -29,12 +31,6 @@ export class DynamicDataProvider {
     // Initialize restaurants
     this.initializeRestaurants();
 
-    if (typeof window !== "undefined") {
-      window.addEventListener("autodelivery:v2SeedChange", (event) => {
-        const detail = (event as CustomEvent<{ seed: number | null }>).detail;
-        this.reloadIfSeedChanged(detail?.seed ?? null);
-      });
-    }
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -45,24 +41,24 @@ export class DynamicDataProvider {
   }
 
   private async initializeRestaurants(): Promise<void> {
-    const runtimeSeed = this.getRuntimeV2Seed();
-    this.currentSeed = runtimeSeed ?? 1;
+    const seed = this.getSeed();
+    this.currentSeed = seed;
 
     try {
-      const dbRestaurants = await loadRestaurantsFromDb(runtimeSeed ?? undefined);
+      const dbRestaurants = await loadRestaurantsFromDb(seed);
       if (dbRestaurants.length > 0) {
           this.setRestaurants(dbRestaurants);
           this.setTestimonials(getRandomTestimonials(5));
           return;
       }
 
-      const initializedRestaurants = await initializeRestaurants(runtimeSeed ?? undefined);
+      const initializedRestaurants = await initializeRestaurants(seed);
       this.setRestaurants(initializedRestaurants);
       this.setTestimonials(getRandomTestimonials(5));
     } catch (error) {
       console.warn("[autodelivery/data-provider] Failed to load restaurants:", error);
       try {
-        const initializedRestaurants = await initializeRestaurants(runtimeSeed ?? undefined);
+        const initializedRestaurants = await initializeRestaurants(seed);
         this.setRestaurants(initializedRestaurants);
         this.setTestimonials(getRandomTestimonials(5));
       } catch {
@@ -77,7 +73,7 @@ export class DynamicDataProvider {
    * Reload data if seed has changed
    */
   public reloadIfSeedChanged(seed?: number | null): void {
-    const runtimeSeed = this.getRuntimeV2Seed();
+    const runtimeSeed = this.getSeed();
     const seedToUse = seed !== undefined && seed !== null ? seed : runtimeSeed;
     if (seedToUse !== null && seedToUse !== this.currentSeed) {
       console.log(`[autodelivery] Seed changed from ${this.currentSeed} to ${seedToUse}, reloading...`);
@@ -96,7 +92,9 @@ export class DynamicDataProvider {
 
     this.loadingPromise = (async () => {
       try {
-        const v2Seed = seedValue ?? this.getRuntimeV2Seed() ?? 1;
+        const v2Seed = isV2Enabled()
+          ? clampSeed(seedValue ?? this.getSeed())
+          : 1;
         this.currentSeed = v2Seed;
 
         this.ready = false;
@@ -167,21 +165,10 @@ export class DynamicDataProvider {
     this.testimonialSubscribers.forEach((cb) => cb(this.testimonials));
   }
 
-  private getRuntimeV2Seed(): number | null {
-    if (typeof window === "undefined") return null;
-    const extendedWindow = window as Window & {
-      __autodeliveryV2Seed?: number | null;
-    };
-    const value = extendedWindow.__autodeliveryV2Seed;
-    if (
-      typeof value === "number" &&
-      Number.isFinite(value) &&
-      value >= 1 &&
-      value <= 300
-    ) {
-      return value;
-    }
-    return null;
+  private getSeed(): number {
+    if (!isV2Enabled()) return 1;
+    if (typeof window === "undefined") return 1;
+    return clampSeed(getSeedFromUrl());
   }
 
   private setRestaurants(nextRestaurants: Restaurant[]): void {

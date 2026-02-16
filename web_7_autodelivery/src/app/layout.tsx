@@ -36,23 +36,6 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} bg-zinc-50`}
       suppressHydrationWarning
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  const params = new URLSearchParams(window.location.search);
-                  const seed = params.get('seed');
-                  if (seed) {
-                    window.__INITIAL_SEED__ = parseInt(seed, 10);
-                  }
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
-      </head>
       <body className="min-h-screen font-sans bg-zinc-50" suppressHydrationWarning>
         <SeedProvider>
           <LayoutProvider>

@@ -78,12 +78,6 @@ export type SeedLayout = {
   };
 };
 
-declare global {
-  interface Window {
-    __autodeliveryV2Seed?: number | null;
-  }
-}
-
 interface LayoutContextType extends SeedLayout {
   seed: number;
   isDynamicMode: boolean;
