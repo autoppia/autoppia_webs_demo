@@ -76,9 +76,9 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
  *   dyn.v3.getVariant()           // V3: Gets variants (IDs, classes, texts)
  *
  * It behaves the same even if V1/V2/V3 are OFF:
- * - If V1 is OFF: dyn.v1.addWrapDecoy() returns children unchanged
+ * - If V1 is OFF: dyn.v1.addWrapDecoy() behaves like seed=1 (original structure)
  * - If V2 is OFF: dyn.v2 status methods return false
- * - If V3 is OFF: dyn.v3.getVariant() returns the fallback or key
+ * - If V3 is OFF: dyn.v3.getVariant() behaves like seed=1 (returns first variant/original)
  *
  * The seed is read automatically from SeedContext (which reads it from the URL).
  * You do not need to pass the seed manually.
@@ -86,27 +86,52 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
 export function useDynamicSystem() {
   const { seed: baseSeed } = useSeed();
 
-  return useMemo(() => {
-    // When V1 is off we always use seed 1 so V1 logic is "original" (no wrappers, no decoys, original order)
-    const v1Seed = isV1Enabled() ? baseSeed : 1;
-
-    return {
+  return useMemo(() => ({
     seed: baseSeed,
 
     /**
      * V1: DOM structure (wrappers, decoys, and ordering)
-     * Breaks XPath by adding invisible elements and changing order.
-     * If V1 is disabled, seed passed to V1 is 1 (original layout).
+     * Breaks XPath by adding invisible elements and changing order
      */
     v1: {
+      /**
+       * Adds wrapper and decoy to break XPath
+       *
+       * Always uses 2 wrapper variants (0=none, 1=with) and 3 decoy variants (0=none, 1=before, 2=after)
+       *
+       * @param componentKey - Unique component identifier (e.g. "movie-card", "search-button")
+       * @param children - Element to wrap
+       * @param reactKey - Optional React key
+       *
+       * If V1 is OFF, behaves like seed=1 (original structure)
+       */
       addWrapDecoy: (
         componentKey: string,
         children: ReactNode,
         reactKey?: string
-      ) => applyV1Wrapper(v1Seed, componentKey, children, reactKey),
+      ) => {
+        // If V1 is not enabled, treat as seed=1 (original structure) for all seeds
+        let effectiveSeed = baseSeed;
+        if (!isV1Enabled()) {
+          effectiveSeed = 1;
+        }
+        return applyV1Wrapper(effectiveSeed, componentKey, children, reactKey);
+      },
 
-      changeOrderElements: (key: string, count: number) =>
-        generateDynamicOrder(v1Seed, key, count),
+      /**
+       * Changes the dynamic order of element arrays
+       * @param key - Unique identifier (e.g. "stats-cards", "featured-movies")
+       * @param count - Number of elements (e.g. 4, 6, 10)
+       * @returns Array of reordered indexes
+       */
+      changeOrderElements: (key: string, count: number) => {
+        // If V1 is not enabled, treat as seed=1 (original order) for all seeds
+        let effectiveSeed = baseSeed;
+        if (!isV1Enabled()) {
+          effectiveSeed = 1;
+        }
+        return generateDynamicOrder(effectiveSeed, key, count);
+      },
     },
 
     /**
@@ -143,9 +168,12 @@ export function useDynamicSystem() {
         variants?: Record<string, string[]>,
         fallback?: string
       ) => {
-        if (!isV3Enabled() && fallback !== undefined) return fallback;
-        if (!isV3Enabled()) return key;
-        return getVariant(baseSeed, key, variants, fallback);
+        // If V3 is not enabled, treat as seed=1 (original variant) for all seeds
+        let effectiveSeed = baseSeed;
+        if (!isV3Enabled()) {
+          effectiveSeed = 1;
+        }
+        return getVariant(effectiveSeed, key, variants, fallback);
       },
     },
 
@@ -154,6 +182,5 @@ export function useDynamicSystem() {
      */
     selectVariantIndex: (key: string, count: number) =>
       selectVariantIndex(baseSeed, key, count),
-    };
-  }, [baseSeed]);
+  }), [baseSeed]);
 }

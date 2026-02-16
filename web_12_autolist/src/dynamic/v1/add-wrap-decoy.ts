@@ -7,7 +7,6 @@
 import type { ReactNode } from "react";
 import React, { Fragment } from "react";
 import { selectVariantIndex, generateId } from "../shared/core";
-import { isV1Enabled } from "../shared/flags";
 
 export function applyV1Wrapper(
   seed: number,
@@ -15,10 +14,6 @@ export function applyV1Wrapper(
   children: ReactNode,
   reactKey?: string
 ): ReactNode {
-  if (!isV1Enabled()) {
-    return children;
-  }
-
   const wrapperVariants = 2;
   const decoyVariants = 3;
 

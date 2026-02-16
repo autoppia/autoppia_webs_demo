@@ -9,7 +9,7 @@
 import { useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
 import { applyV1Wrapper } from "../v1/add-wrap-decoy";
-import { isV3Enabled } from "./flags";
+import { isV3Enabled, isV1Enabled } from "./flags";
 import { getVariant, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "../v3/utils/variant-selector";
 import { generateDynamicOrder } from "../v1/change-order-elements";
 import { dynamicDataProvider } from "../v2/data-provider";
@@ -56,14 +56,17 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
 }
 
 /**
- * Centralized hook that unifies V1 (wrappers/decoy), V2 (data loading), and V3 (attributes/text)
+ * Centralized hook that unifies V1 (wrappers/decoy) and V3 (attributes/text)
  *
  * Usage:
  *   const dyn = useDynamicSystem();
  *   dyn.v1.addWrapDecoy()         // V1: Adds wrappers and decoys
  *   dyn.v1.changeOrderElements()  // V1: Changes element order
- *   dyn.v2.whenReady()            // V2: Wait for data to be ready
  *   dyn.v3.getVariant()           // V3: Gets variants (IDs, classes, texts)
+ *
+ * It behaves the same even if V1/V3 are OFF:
+ * - If V1 is OFF: dyn.v1.addWrapDecoy() behaves like seed=1 (original structure)
+ * - If V3 is OFF: dyn.v3.getVariant() behaves like seed=1 (returns first variant/original)
  *
  * The seed is read automatically from SeedContext (which reads it from the URL).
  */
@@ -78,14 +81,27 @@ export function useDynamicSystem() {
         componentKey: string,
         children: ReactNode,
         reactKey?: string
-      ) => applyV1Wrapper(seed, componentKey, children, reactKey),
-      changeOrderElements: (key: string, count: number) =>
-        generateDynamicOrder(seed, key, count),
+      ) => {
+        // If V1 is not enabled, treat as seed=1 (original structure) for all seeds
+        let effectiveSeed = seed;
+        if (!isV1Enabled()) {
+          effectiveSeed = 1;
+        }
+        return applyV1Wrapper(effectiveSeed, componentKey, children, reactKey);
+      },
+      changeOrderElements: (key: string, count: number) => {
+        // If V1 is not enabled, treat as seed=1 (original order) for all seeds
+        let effectiveSeed = seed;
+        if (!isV1Enabled()) {
+          effectiveSeed = 1;
+        }
+        return generateDynamicOrder(effectiveSeed, key, count);
+      },
     },
 
     /**
-     * V2: Data loading
-     * Provides access to dynamic data provider
+     * V2: Data loading (V2 enabled)
+     * Dynamic data loading based on seed
      */
     v2: {
       /**
@@ -106,9 +122,12 @@ export function useDynamicSystem() {
         variants?: Record<string, string[]>,
         fallback?: string
       ) => {
-        if (!isV3Enabled() && fallback !== undefined) return fallback;
-        if (!isV3Enabled()) return key;
-        return getVariant(seed, key, variants, fallback);
+        // If V3 is not enabled, treat as seed=1 (original variant) for all seeds
+        let effectiveSeed = seed;
+        if (!isV3Enabled()) {
+          effectiveSeed = 1;
+        }
+        return getVariant(effectiveSeed, key, variants, fallback);
       },
     },
 

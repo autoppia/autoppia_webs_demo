@@ -9,7 +9,7 @@
 import { useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
 import { applyV1Wrapper } from "../v1/add-wrap-decoy";
-import { isV3Enabled, isV2Enabled } from "./flags";
+import { isV3Enabled, isV2Enabled, isV1Enabled } from "./flags";
 import { getVariant, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "../v3/utils/variant-selector";
 import { generateDynamicOrder } from "../v1/change-order-elements";
 import type { ReactNode } from "react";
@@ -75,8 +75,8 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
  *   dyn.v3.getVariant()           // V3: Gets variants (IDs, classes, texts)
  *
  * It behaves the same even if V1/V3 are OFF:
- * - If V1 is OFF: dyn.v1.addWrapDecoy() returns children unchanged
- * - If V3 is OFF: dyn.getVariant() returns the fallback or key
+ * - If V1 is OFF: dyn.v1.addWrapDecoy() behaves like seed=1 (original structure)
+ * - If V3 is OFF: dyn.v3.getVariant() behaves like seed=1 (returns first variant/original)
  *
  * The seed is read automatically from SeedContext (which reads it from the URL).
  * You do not need to pass the seed manually.
@@ -101,13 +101,20 @@ export function useDynamicSystem() {
        * @param children - Element to wrap
        * @param reactKey - Optional React key
        *
-       * If V1 is OFF, returns children unchanged
+       * If V1 is OFF, behaves like seed=1 (original structure)
        */
       addWrapDecoy: (
         componentKey: string,
         children: ReactNode,
         reactKey?: string
-      ) => applyV1Wrapper(seed, componentKey, children, reactKey),
+      ) => {
+        // If V1 is not enabled, treat as seed=1 (original structure) for all seeds
+        let effectiveSeed = seed;
+        if (!isV1Enabled()) {
+          effectiveSeed = 1;
+        }
+        return applyV1Wrapper(effectiveSeed, componentKey, children, reactKey);
+      },
 
       /**
        * Changes the dynamic order of element arrays
@@ -115,8 +122,14 @@ export function useDynamicSystem() {
        * @param count - Number of elements (e.g. 4, 6, 10)
        * @returns Array of reordered indexes
        */
-      changeOrderElements: (key: string, count: number) =>
-        generateDynamicOrder(seed, key, count),
+      changeOrderElements: (key: string, count: number) => {
+        // If V1 is not enabled, treat as seed=1 (original order) for all seeds
+        let effectiveSeed = seed;
+        if (!isV1Enabled()) {
+          effectiveSeed = 1;
+        }
+        return generateDynamicOrder(effectiveSeed, key, count);
+      },
     },
 
     /**
@@ -154,9 +167,12 @@ export function useDynamicSystem() {
         variants?: Record<string, string[]>,
         fallback?: string
       ) => {
-        if (!isV3Enabled() && fallback !== undefined) return fallback;
-        if (!isV3Enabled()) return key;
-        return getVariant(seed, key, variants, fallback);
+        // If V3 is not enabled, treat as seed=1 (original variant) for all seeds
+        let effectiveSeed = seed;
+        if (!isV3Enabled()) {
+          effectiveSeed = 1;
+        }
+        return getVariant(effectiveSeed, key, variants, fallback);
       },
     },
 

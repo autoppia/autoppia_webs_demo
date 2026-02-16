@@ -10,7 +10,6 @@
 import type { ReactNode } from "react";
 import React, { Fragment } from "react";
 import { selectVariantIndex, generateId } from "../shared/core";
-import { isV1Enabled } from "../shared/flags";
 
 /**
  * Applies V1 wrappers and decoys to an element
@@ -30,11 +29,6 @@ export function applyV1Wrapper(
   children: ReactNode,
   reactKey?: string
 ): ReactNode {
-  // If V1 is not enabled, return unchanged (behaves the same)
-  if (!isV1Enabled()) {
-    return children;
-  }
-
   // Always use 2 wrapper variants (0=without, 1=with) and 3 decoy variants (0=without, 1=before, 2=after)
   const wrapperVariants = 2;
   const decoyVariants = 3;

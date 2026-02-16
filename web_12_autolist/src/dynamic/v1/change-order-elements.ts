@@ -11,6 +11,7 @@ export function generateDynamicOrder(
   key: string,
   count: number
 ): number[] {
+  // Seed 1 = original order (0, 1, 2, ..., count-1)
   if (seed === 1) {
     return Array.from({ length: count }, (_, i) => i);
   }

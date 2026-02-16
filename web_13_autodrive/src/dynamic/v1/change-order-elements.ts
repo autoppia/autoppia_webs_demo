@@ -11,7 +11,7 @@ import { selectVariantIndex } from "../shared/core";
  * Generates a dynamic order for an array of elements
  *
  * @param seed - Base seed (1-999)
- * @param key - Unique identifier for this set of elements (e.g. "featured-restaurants", "booking-cards")
+ * @param key - Unique identifier for this set of elements (e.g. "featured-movies", "stats-cards")
  * @param count - Number of elements (e.g. 3, 4, 6)
  * @returns Array of reordered indexes (e.g. [0,1,2] or [2,0,1] for count=3)
  */
