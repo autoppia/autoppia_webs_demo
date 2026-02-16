@@ -142,10 +142,14 @@ export async function initializeMovies(seedOverride?: number | null): Promise<Mo
       return moviesCache;
     }
 
-    // If no movies returned from backend, fallback to local JSON
-    console.warn(`[autocinema] No movies returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
+    // No movies from backend; keep or reset cache so callers always get an array
+    console.warn(`[autocinema] No movies returned from backend (seed=${effectiveSeed}), using empty list`);
+    moviesCache = [];
+    return moviesCache;
   } catch (error) {
-    // If backend fails, fallback to local JSON
-    console.warn("[autocinema] Backend unavailable, falling back to local JSON:", error);
+    // Backend unavailable; ensure we never leave movies undefined for getFeaturedMovies etc.
+    console.warn("[autocinema] Backend unavailable, using empty list:", error);
+    moviesCache = [];
+    return moviesCache;
   }
 }

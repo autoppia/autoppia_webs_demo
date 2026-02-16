@@ -300,8 +300,6 @@ export_env_vars() {
     NEXT_PUBLIC_ENABLE_DYNAMIC_V1="$ENABLE_DYNAMIC_V1" \
     ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
     NEXT_PUBLIC_ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
-    ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
-    NEXT_PUBLIC_ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
     ENABLE_DYNAMIC_V3="$ENABLE_DYNAMIC_V3" \
     NEXT_PUBLIC_ENABLE_DYNAMIC_V3="$ENABLE_DYNAMIC_V3" \
     ENABLE_DYNAMIC_V4="$ENABLE_DYNAMIC_V4" \
@@ -413,8 +411,6 @@ deploy_webs_server() {
       WEB_PORT="$WEBS_PORT" \
       POSTGRES_PORT="$WEBS_PG_PORT" \
       OPENAI_API_KEY="${OPENAI_API_KEY:-}" \
-      ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
-      NEXT_PUBLIC_ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
       ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
       NEXT_PUBLIC_ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
       HOST_UID=$(id -u) \
@@ -605,19 +601,19 @@ case "$WEB_DEMO" in
     deploy_webs_server
     echo "📦 Deploying all web projects in parallel (max $PARALLEL_JOBS concurrent)..."
     open_sem "$PARALLEL_JOBS"
-#    run_with_limit deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
-#    run_with_limit deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
-#    run_with_limit deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
-#    run_with_limit deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
-#    run_with_limit deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
-#    run_with_limit deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
-#    run_with_limit deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
-#    run_with_limit deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
-#    run_with_limit deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
-#    run_with_limit deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-#    run_with_limit deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
-#    run_with_limit deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
-#    run_with_limit deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
+    run_with_limit deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
+    run_with_limit deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
+    run_with_limit deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
+    run_with_limit deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
+    run_with_limit deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
+    run_with_limit deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
+    run_with_limit deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
+    run_with_limit deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
+    run_with_limit deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
+    run_with_limit deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+    run_with_limit deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
+    run_with_limit deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+    run_with_limit deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
     run_with_limit deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     failed=0
     for pid in "${PARALLEL_PIDS[@]}"; do

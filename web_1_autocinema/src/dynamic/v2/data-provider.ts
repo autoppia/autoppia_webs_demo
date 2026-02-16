@@ -59,10 +59,11 @@ export class DynamicDataProvider {
     try {
       const effectiveSeed = this.getBaseSeed();
       this.currentSeed = effectiveSeed;
-      this.movies = await initializeMovies(effectiveSeed);
+      const loaded = await initializeMovies(effectiveSeed);
+      this.movies = Array.isArray(loaded) ? loaded : [];
     } catch (error) {
       console.error("[autocinema] Failed to initialize movies", error);
-      throw error;
+      this.movies = [];
     } finally {
       this.ready = true;
     }
@@ -94,10 +95,12 @@ export class DynamicDataProvider {
 
     this.loadingPromise = (async () => {
       try {
-        this.movies = await initializeMovies(targetSeed);
+        const loaded = await initializeMovies(targetSeed);
+        this.movies = Array.isArray(loaded) ? loaded : [];
         this.ready = true;
       } catch (error) {
         console.error("[autocinema] Failed to reload movies", error);
+        this.movies = [];
         this.ready = true;
       } finally {
         this.loadingPromise = null;
@@ -108,20 +111,20 @@ export class DynamicDataProvider {
   }
 
   public getMovies(): Movie[] {
-    return this.movies;
+    return this.movies ?? [];
   }
 
   public getMovieById(id: string): Movie | undefined {
-    return this.movies.find((movie) => movie.id === id);
+    return (this.movies ?? []).find((movie) => movie.id === id);
   }
 
   public getFeaturedMovies(count = 6): Movie[] {
-    return this.movies.slice(0, count);
+    return (this.movies ?? []).slice(0, count);
   }
 
   public findRelatedMovies(movieId: string, limit = 4): Movie[] {
     const current = this.getMovieById(movieId);
-    const pool = this.movies.filter((movie) => movie.id !== movieId);
+    const pool = (this.movies ?? []).filter((movie) => movie.id !== movieId);
 
     if (current && current.genres.length > 0) {
       const primaryGenre = current.genres[0];
@@ -136,7 +139,7 @@ export class DynamicDataProvider {
 
   public searchMovies(query: string, filters?: MovieSearchFilters): Movie[] {
     const normalizedQuery = query.trim().toLowerCase();
-    return this.movies.filter((movie) => {
+    return (this.movies ?? []).filter((movie) => {
       const matchesQuery =
         normalizedQuery.length === 0 ||
         movie.title.toLowerCase().includes(normalizedQuery) ||
@@ -152,12 +155,12 @@ export class DynamicDataProvider {
   }
 
   public getMoviesByGenre(genre: string): Movie[] {
-    return this.movies.filter((movie) => movie.genres.includes(genre));
+    return (this.movies ?? []).filter((movie) => movie.genres.includes(genre));
   }
 
   public getAvailableGenres(): string[] {
     const genres = new Set<string>();
-    this.movies.forEach((movie) => {
+    (this.movies ?? []).forEach((movie) => {
       movie.genres.forEach((genre) => {
         if (genre) genres.add(genre);
       });
@@ -167,7 +170,7 @@ export class DynamicDataProvider {
 
   public getAvailableYears(): number[] {
     const years = new Set<number>();
-    this.movies.forEach((movie) => {
+    (this.movies ?? []).forEach((movie) => {
       if (movie.year) {
         years.add(movie.year);
       }
