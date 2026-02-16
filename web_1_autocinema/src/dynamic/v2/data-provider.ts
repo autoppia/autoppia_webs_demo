@@ -1,13 +1,12 @@
 import type { Movie } from "@/data/movies";
 import { initializeMovies } from "@/data/movies";
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 export interface MovieSearchFilters {
   genre?: string;
   year?: number;
 }
-
-const BASE_SEED_STORAGE_KEY = "autocinema_seed_base";
 
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
@@ -33,31 +32,14 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  private getBaseSeed(): number {
-    if (typeof window === "undefined") {
-      return clampBaseSeed(1);
-    }
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const raw = params.get("seed");
-      if (raw) {
-        const parsed = clampBaseSeed(Number.parseInt(raw, 10));
-        window.localStorage.setItem(BASE_SEED_STORAGE_KEY, parsed.toString());
-        return parsed;
-      }
-      const stored = window.localStorage.getItem(BASE_SEED_STORAGE_KEY);
-      if (stored) {
-        return clampBaseSeed(Number.parseInt(stored, 10));
-      }
-    } catch (error) {
-      console.warn("[autocinema] Failed to resolve base seed from URL/localStorage", error);
-    }
-    return clampBaseSeed(1);
+  private getSeed(): number {
+    // V2 rule: if V2 is disabled, always act as seed=1.
+    return isV2Enabled() ? clampSeed(getSeedFromUrl()) : 1;
   }
 
   private async loadMovies(): Promise<void> {
     try {
-      const effectiveSeed = this.getBaseSeed();
+      const effectiveSeed = this.getSeed();
       this.currentSeed = effectiveSeed;
       const loaded = await initializeMovies(effectiveSeed);
       this.movies = Array.isArray(loaded) ? loaded : [];
@@ -79,7 +61,7 @@ export class DynamicDataProvider {
 
   public async reload(seedValue?: number | null): Promise<void> {
     if (typeof window === "undefined") return;
-    const targetSeed = clampBaseSeed(seedValue ?? this.getBaseSeed());
+    const targetSeed = isV2Enabled() ? clampSeed(seedValue ?? this.getSeed()) : 1;
 
     if (targetSeed === this.currentSeed && this.ready) {
       return;

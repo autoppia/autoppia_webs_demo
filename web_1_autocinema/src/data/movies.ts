@@ -1,4 +1,4 @@
-import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 import { fetchSeededSelection } from "@/shared/seeded-loader";
 import { isV2Enabled } from "@/dynamic/shared/flags";
 
@@ -121,8 +121,10 @@ let moviesCache: Movie[] = [];
  * Initialize movies from base seed data (local JSON only). Optional seed for reload consistency.
  */
 export async function initializeMovies(seedOverride?: number | null): Promise<Movie[]> {
-  const baseSeed = getBaseSeedFromUrl();
-  const effectiveSeed = clampBaseSeed(seedOverride ?? baseSeed ?? 1);
+  // V2 rule: seed always comes from URL, but if V2 is disabled we force seed=1.
+  const effectiveSeed = isV2Enabled()
+    ? clampSeed(seedOverride ?? getSeedFromUrl())
+    : 1;
 
   try {
     const movies = await fetchSeededSelection<DatasetMovie>({
