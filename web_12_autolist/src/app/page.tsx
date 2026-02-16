@@ -566,7 +566,6 @@ function AddTaskCard({
 export default function Home() {
   const dyn = useDynamicSystem();
   const { seed } = useSeed();
-  const v2Seed = seed;
   const dynIds = {
     appShell: "app-shell",
     heroTitle: dyn.v3.getVariant("hero-title", ID_VARIANTS_MAP, "hero-title"),
@@ -676,26 +675,17 @@ export default function Home() {
       setIsLoading(false);
     });
 
-    // Listen for seed changes
-    const handleSeedChange = () => {
-      console.log(`[autolist] Seed changed, reloading tasks...`);
-      setV2Tasks([]);
-      setIsLoading(true);
-      // Clear user tasks when seed changes (they belong to old seed)
-      setUserTasks([]);
-    };
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("autolist:v2SeedChange", handleSeedChange);
-    }
-
     return () => {
       unsubscribe();
-      if (typeof window !== "undefined") {
-        window.removeEventListener("autolist:v2SeedChange", handleSeedChange);
-      }
     };
   }, [dyn.v2]);
+
+  // Clear local state when seed changes (V2 data will reload via ClientBody).
+  useEffect(() => {
+    setV2Tasks([]);
+    setIsLoading(true);
+    setUserTasks([]);
+  }, [seed]);
 
   // Combine V2 tasks with user-created tasks
   const allTasks = useMemo(() => {

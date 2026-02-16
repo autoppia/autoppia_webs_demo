@@ -1,5 +1,6 @@
-import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 import { fetchSeededSelection } from "@/shared/seeded-loader";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 export interface RemoteTask {
   id?: string;
@@ -18,7 +19,9 @@ let tasksCache: RemoteTask[] = [];
  * When v2 is disabled, the server returns the original dataset.
  */
 export async function initializeTasks(seedOverride?: number | null, limit = 50): Promise<RemoteTask[]> {
-  const seed = clampBaseSeed(seedOverride ?? getBaseSeedFromUrl());
+  const seed = isV2Enabled()
+    ? clampSeed(seedOverride ?? getSeedFromUrl())
+    : 1;
 
   // Always call the server endpoint - server is the single source of truth
   try {

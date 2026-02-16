@@ -1,7 +1,7 @@
 import type { RemoteTask } from "@/data/tasks-enhanced";
 import { initializeTasks } from "@/data/tasks-enhanced";
-import { clampBaseSeed } from "@/shared/seed-resolver";
-import {isV2Enabled} from "@/dynamic";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 export interface TaskSearchFilters {
   query?: string;
@@ -35,18 +35,11 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  private getBaseSeed(): number {
-    if (typeof window === "undefined") return clampBaseSeed(1);
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const raw = params.get("seed");
-      if (raw) return clampBaseSeed(Number.parseInt(raw, 10));
-      const stored = window.localStorage?.getItem("autolist_seed_base");
-      if (stored) return clampBaseSeed(Number.parseInt(stored, 10));
-    } catch {
-      // ignore
-    }
-    return clampBaseSeed(1);
+  private getSeed(): number {
+    // V2 rule: if V2 is disabled, always act as seed=1.
+    if (!isV2Enabled()) return 1;
+    if (typeof window === "undefined") return 1;
+    return getSeedFromUrl();
   }
 
   private async initialize(): Promise<void> {
@@ -55,7 +48,7 @@ export class DynamicDataProvider {
       this.resolveReady = resolve;
     });
     try {
-      const effectiveSeed = this.getBaseSeed();
+      const effectiveSeed = this.getSeed();
       this.currentSeed = effectiveSeed;
       const tasks = await initializeTasks(effectiveSeed);
       this.setTasks(tasks);
@@ -68,7 +61,7 @@ export class DynamicDataProvider {
 
   public async reload(seedValue?: number | null): Promise<void> {
     if (this.loadingPromise) return this.loadingPromise;
-    const targetSeed = clampBaseSeed(seedValue ?? this.getBaseSeed());
+    const targetSeed = clampSeed(seedValue ?? this.getSeed());
     if (targetSeed === this.currentSeed && this.ready) return;
     this.currentSeed = targetSeed;
     this.ready = false;
@@ -77,6 +70,9 @@ export class DynamicDataProvider {
     });
     this.loadingPromise = (async () => {
       try {
+        // Clear current data so UI doesn't show stale seed data.
+        this.tasks = [];
+        this.notifyTasks();
         const tasks = await initializeTasks(targetSeed);
         this.setTasks(tasks);
       } catch (error) {
@@ -88,6 +84,13 @@ export class DynamicDataProvider {
       }
     })();
     return this.loadingPromise;
+  }
+
+  public reloadIfSeedChanged(seed?: number | null): void {
+    const targetSeed = seed !== undefined && seed !== null ? seed : this.getSeed();
+    if (targetSeed !== this.currentSeed) {
+      this.reload(targetSeed);
+    }
   }
 
   private setTasks(nextTasks: RemoteTask[]): void {
@@ -175,6 +178,10 @@ export class DynamicDataProvider {
 
   public isDynamicModeEnabled(): boolean {
     return isV2Enabled();
+  }
+
+  public getLayoutConfig(seed?: number) {
+    return { seed: clampSeed(seed ?? 1) };
   }
 
 }

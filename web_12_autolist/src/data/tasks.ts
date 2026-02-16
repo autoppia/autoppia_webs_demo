@@ -1,8 +1,6 @@
 import { fetchSeededSelection } from "@/shared/seeded-loader";
-
-type AutolistWindow = Window & {
-  __autolistV2Seed?: number | null;
-};
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 export interface RemoteTask {
   id?: string;
@@ -13,21 +11,6 @@ export interface RemoteTask {
   completed_at?: string | null;
 }
 
-const clampSeed = (value: number, fallback: number = 1): number =>
-  value >= 1 && value <= 300 ? value : fallback;
-
-/**
- * Get v2 seed from window (synchronized by SeedContext)
- */
-const getRuntimeV2Seed = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const value = (window as AutolistWindow).__autolistV2Seed;
-  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
-    return value;
-  }
-  return null;
-};
-
 export interface LoadTasksResult {
   tasks: RemoteTask[];
   error?: string;
@@ -37,16 +20,9 @@ export async function loadTasks(
   v2Seed?: number | null,
   limit: number = 80
 ): Promise<LoadTasksResult> {
-  let effectiveSeed = 1;
-  if (typeof window === "undefined") {
-    effectiveSeed = 1;
-  } else {
-    // Wait a bit for SeedContext to sync v2Seed to window
-    await new Promise(resolve => setTimeout(resolve, 100));
-    const resolvedSeed = typeof v2Seed === "number" ? clampSeed(v2Seed, 1) : getRuntimeV2Seed();
-    // Default to 1 if no v2-seed provided
-    effectiveSeed = resolvedSeed ?? 1;
-  }
+  const effectiveSeed = isV2Enabled()
+    ? clampSeed(v2Seed ?? getSeedFromUrl())
+    : 1;
 
   // Always call the server endpoint - server determines whether v2 is enabled or disabled
   // When v2 is disabled, the server returns the original dataset
