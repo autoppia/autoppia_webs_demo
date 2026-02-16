@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import HireFormClient from "./HireFormClient";
 import { dynamicDataProvider } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
+import { useSeed } from "@/context/SeedContext";
 
 interface Expert {
   slug: string;
@@ -17,6 +18,7 @@ export default function HireFormWrapperClient({ slug }: { slug: string }) {
   const [expert, setExpert] = useState<Expert | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const dyn = useDynamicSystem();
+  const { seed } = useSeed();
 
   // Function to find expert by slug or name
   const findExpert = (searchSlug: string): Expert | null => {
@@ -97,25 +99,11 @@ export default function HireFormWrapperClient({ slug }: { slug: string }) {
       }
     });
 
-    // Listen for seed changes
-    const handleSeedChange = () => {
-      if (mounted) {
-        loadExpert();
-      }
-    };
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("autowork:v2SeedChange", handleSeedChange);
-    }
-
     return () => {
       mounted = false;
       unsubscribe();
-      if (typeof window !== "undefined") {
-        window.removeEventListener("autowork:v2SeedChange", handleSeedChange);
-      }
     };
-  }, [slug, dyn.v2]);
+  }, [slug, dyn.v2, seed]);
 
   if (isLoading || !expert) {
     return (

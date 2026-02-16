@@ -245,30 +245,11 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
       }, 200);
     });
 
-    // Listen for seed changes to re-check
-    const handleSeedChange = () => {
-      if (!mounted) return;
-      console.log(`[autowork] Seed changed, re-checking expert "${slug}"...`);
-      retryCount = 0; // Reset retry count on seed change
-      // Clear expert state when seed changes to prevent showing old data
-      setExpert(null);
-      setIsLoading(true);
-      // Reload expert with new seed data
-      loadExpert();
-    };
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("autowork:v2SeedChange", handleSeedChange);
-    }
-
     return () => {
       mounted = false;
       unsubscribe();
-      if (typeof window !== "undefined") {
-        window.removeEventListener("autowork:v2SeedChange", handleSeedChange);
-      }
     };
-  }, [slug, dyn.v2]);
+  }, [slug, dyn.v2, seed]);
 
   if (isLoading || !expert) {
     return (

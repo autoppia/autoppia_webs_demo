@@ -1,11 +1,11 @@
 "use client";
 
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 
 interface Expert {
   slug: string;
@@ -22,7 +22,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
   const [increaseWhen, setIncreaseWhen] = useState("Never");
   const [increaseHowMuch, setIncreaseHowMuch] = useState("5%");
 
-  const route = useRouter();
+  const route = useSeedRouter();
   const handleCancel = () => {
     logEvent(EVENT_TYPES.CANCEL_HIRE, {
       Button: "Cancel",
