@@ -1,6 +1,7 @@
-import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 import { Hotel } from "@/types/hotel";
 import { fetchSeededSelection } from "@/shared/seeded-loader";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 let hotelsCache: Hotel[] = [];
 
@@ -9,7 +10,10 @@ let hotelsCache: Hotel[] = [];
  * Server determines whether v2 is enabled or disabled and returns appropriate data.
  */
 export async function initializeHotels(seedOverride?: number | null): Promise<Hotel[]> {
-  const seed = clampBaseSeed(seedOverride ?? getBaseSeedFromUrl());
+  // V2 rule: seed always comes from URL, but if V2 is disabled we force seed=1.
+  const seed = isV2Enabled()
+    ? clampSeed(seedOverride ?? getSeedFromUrl())
+    : 1;
 
   try {
     console.log("[hotels-enhanced] Fetching hotels from server with seed:", seed);

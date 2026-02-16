@@ -6,9 +6,8 @@
 
 import type { Hotel } from "@/types/hotel";
 import { initializeHotels } from "@/data/hotels-enhanced";
-import { clampBaseSeed } from "@/shared/seed-resolver";
-
-const STORAGE_KEY = "autolodge_seed_base";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 export interface HotelSearchFilters {
   region?: string;
@@ -44,22 +43,10 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  private getBaseSeed(): number {
-    if (typeof window === "undefined") return clampBaseSeed(1);
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const raw = params.get("seed");
-      if (raw) {
-        const parsed = clampBaseSeed(Number.parseInt(raw, 10));
-        localStorage.setItem(STORAGE_KEY, parsed.toString());
-        return parsed;
-      }
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) return clampBaseSeed(Number.parseInt(stored, 10));
-    } catch {
-      // ignore
-    }
-    return clampBaseSeed(1);
+  private getSeed(): number {
+    if (!isV2Enabled()) return 1;
+    if (typeof window === "undefined") return 1;
+    return clampSeed(getSeedFromUrl());
   }
 
   private async initializeHotels(): Promise<void> {
@@ -68,7 +55,7 @@ export class DynamicDataProvider {
       this.resolveReady = resolve;
     });
     try {
-      const effectiveSeed = this.getBaseSeed();
+      const effectiveSeed = this.getSeed();
       this.currentSeed = effectiveSeed;
       const initializedHotels = await initializeHotels(effectiveSeed);
       this.setHotels(initializedHotels);
@@ -80,7 +67,7 @@ export class DynamicDataProvider {
   }
 
   public reloadIfSeedChanged(seed?: number | null): void {
-    const targetSeed = seed !== undefined && seed !== null ? seed : this.getBaseSeed();
+    const targetSeed = seed !== undefined && seed !== null ? seed : this.getSeed();
     if (targetSeed !== this.currentSeed) {
       this.reload(targetSeed);
     }
@@ -88,7 +75,9 @@ export class DynamicDataProvider {
 
   public async reload(seedValue?: number | null): Promise<void> {
     if (typeof window === "undefined") return;
-    const targetSeed = clampBaseSeed(seedValue ?? this.getBaseSeed());
+    const targetSeed = isV2Enabled()
+      ? clampSeed(seedValue ?? this.getSeed())
+      : 1;
     if (targetSeed === this.currentSeed && this.ready) return;
     if (this.loadingPromise) {
       await this.loadingPromise;
