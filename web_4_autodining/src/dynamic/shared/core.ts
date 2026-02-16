@@ -189,6 +189,6 @@ export function useDynamicSystem() {
      * Utility: select variant index for custom logic
      */
     selectVariantIndex: (key: string, count: number) =>
-      selectVariantIndex(v3Seed, key, count),
-  }), [baseSeed, v1Seed, v2Seed, v3Seed]);
+      selectVariantIndex(baseSeed, key, count),
+  }), [baseSeed]);
 }
