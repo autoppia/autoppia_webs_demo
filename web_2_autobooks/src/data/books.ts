@@ -1,5 +1,5 @@
 import { fetchSeededSelection } from "@/shared/seeded-loader";
-import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 import {isV2Enabled} from "@/dynamic/shared/flags";
 
 export interface Book {
@@ -139,9 +139,9 @@ let booksCache: Book[] = [];
  * Initialize books from base seed data (local JSON only).
  */
 export async function initializeBooks(seedOverride?: number | null): Promise<Book[]> {
-  const baseSeed = getBaseSeedFromUrl();
+  // V2 rule: seed always comes from URL, but if V2 is disabled we force seed=1.
   const effectiveSeed = isV2Enabled()
-    ? clampBaseSeed(seedOverride ?? baseSeed ?? 1)
+    ? clampSeed(seedOverride ?? getSeedFromUrl())
     : 1;
 
   try {

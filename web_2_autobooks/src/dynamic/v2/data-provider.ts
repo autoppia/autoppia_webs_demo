@@ -1,6 +1,6 @@
 import type { Book } from "@/data/books";
 import { initializeBooks } from "@/data/books";
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 import { isV2Enabled } from "@/dynamic/shared/flags";
 
 export interface BookSearchFilters {
@@ -8,19 +8,15 @@ export interface BookSearchFilters {
   year?: number;
 }
 
-const BASE_SEED_STORAGE_KEY = "autobooks_seed_base";
-
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private books: Book[] = [];
-  private isEnabled = false;
   private ready = false;
   private readyPromise: Promise<void>;
   private currentSeed: number = 1;
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
-    this.isEnabled = isV2Enabled();
     if (typeof window === "undefined") {
       this.ready = true;
       this.readyPromise = Promise.resolve();
@@ -41,31 +37,16 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  private getBaseSeed(): number {
-    if (typeof window === "undefined") {
-      return clampBaseSeed(1);
-    }
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const raw = params.get("seed");
-      if (raw) {
-        const parsed = clampBaseSeed(Number.parseInt(raw, 10));
-        window.localStorage.setItem(BASE_SEED_STORAGE_KEY, parsed.toString());
-        return parsed;
-      }
-      const stored = window.localStorage.getItem(BASE_SEED_STORAGE_KEY);
-      if (stored) {
-        return clampBaseSeed(Number.parseInt(stored, 10));
-      }
-    } catch (error) {
-      console.warn("[autobooks] Failed to resolve base seed from URL/localStorage", error);
-    }
-    return clampBaseSeed(1);
+  private getSeed(): number {
+    // V2 rule: if V2 is disabled, always act as seed=1.
+    if (!isV2Enabled()) return 1;
+    if (typeof window === "undefined") return 1;
+    return clampSeed(getSeedFromUrl());
   }
 
   private async loadBooks(): Promise<void> {
     try {
-      const effectiveSeed = this.getBaseSeed();
+      const effectiveSeed = this.getSeed();
       this.currentSeed = effectiveSeed;
       this.books = await initializeBooks(effectiveSeed);
     } catch (error) {
@@ -77,7 +58,7 @@ export class DynamicDataProvider {
   }
 
   private async reloadIfSeedChanged(): Promise<void> {
-    const newSeed = this.getBaseSeed();
+    const newSeed = this.getSeed();
     if (newSeed !== this.currentSeed) {
       console.log(`[autobooks] Seed changed from ${this.currentSeed} to ${newSeed}, reloading books...`);
       this.currentSeed = newSeed;
@@ -117,7 +98,9 @@ export class DynamicDataProvider {
   public async reload(seedValue?: number | null): Promise<void> {
     if (typeof window === "undefined") return;
 
-    const targetSeed = clampBaseSeed(seedValue ?? this.getBaseSeed());
+    const targetSeed = isV2Enabled()
+      ? clampSeed(seedValue ?? this.getSeed())
+      : 1;
 
     if (targetSeed === this.currentSeed && this.ready) {
       return; // Already loaded with this seed
