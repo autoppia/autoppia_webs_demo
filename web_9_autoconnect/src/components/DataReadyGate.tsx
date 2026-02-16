@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { dynamicDataProvider } from "@/dynamic/v2";
+import { useSeed } from "@/context/SeedContext";
 
 interface DataReadyGateProps {
   children: React.ReactNode;
@@ -11,6 +12,7 @@ interface DataReadyGateProps {
  * DataReadyGate ensures autoconnect data is loaded before rendering children
  */
 export function DataReadyGate({ children, fallback }: DataReadyGateProps) {
+  const { seed } = useSeed();
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -19,6 +21,8 @@ export function DataReadyGate({ children, fallback }: DataReadyGateProps) {
 
     const checkDataReady = async () => {
       try {
+        // Ensure provider is reloaded when seed changes.
+        dynamicDataProvider.reloadIfSeedChanged(seed);
         await dynamicDataProvider.whenReady();
         if (!mounted) return;
         setIsReady(true);
@@ -50,27 +54,12 @@ export function DataReadyGate({ children, fallback }: DataReadyGateProps) {
       }
     });
 
-    // Listen for seed changes
-    const handleSeedChange = () => {
-      if (!mounted) return;
-      setIsLoading(true);
-      setIsReady(false);
-      checkDataReady();
-    };
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("autoconnect:v2SeedChange", handleSeedChange);
-    }
-
     return () => {
       mounted = false;
       unsubscribeUsers();
       unsubscribePosts();
-      if (typeof window !== "undefined") {
-        window.removeEventListener("autoconnect:v2SeedChange", handleSeedChange);
-      }
     };
-  }, []);
+  }, [seed]);
 
   if (isLoading) {
     return (

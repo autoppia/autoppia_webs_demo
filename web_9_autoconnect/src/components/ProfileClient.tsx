@@ -21,7 +21,6 @@ import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 function ProfileContent({ username }: { username: string }) {
   type ExperienceEntry = NonNullable<User["experience"]>[number];
   const { seed } = useSeed();
-  const layoutSeed = seed;
   // Default layout config (no v1 layout variations in this build)
   const layout = { profileLayout: "full" as const };
 
@@ -247,25 +246,11 @@ function ProfileContent({ username }: { username: string }) {
       }, 200);
     });
 
-    // Listen for seed changes to re-check
-    const handleSeedChange = () => {
-      if (!mounted) return;
-      console.log('[autoconnect] Seed changed, re-checking user...');
-      checkUser();
-    };
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("autoconnect:v2SeedChange", handleSeedChange);
-    }
-
     return () => {
       mounted = false;
       unsubscribe();
-      if (typeof window !== "undefined") {
-        window.removeEventListener("autoconnect:v2SeedChange", handleSeedChange);
-      }
     };
-  }, [username]);
+  }, [username, seed]); // V2 dataset can change by seed
 
   // Load posts state from localStorage (likes and comments)
   useEffect(() => {

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import type { Job } from "@/library/dataset";
@@ -59,12 +59,12 @@ function AppliedJobsContent() {
             Track the roles you have already applied to.
           </p>
         </div>
-        <Link
+        <SeedLink
           href="/jobs"
           className="text-blue-700 hover:text-blue-800 font-semibold"
         >
           ← Back to Jobs
-        </Link>
+        </SeedLink>
       </div>
 
       {appliedList.length === 0 ? (
@@ -72,9 +72,9 @@ function AppliedJobsContent() {
           <div className="text-gray-600 mb-2">
             You have not applied to any jobs yet.
           </div>
-          <Link href="/jobs" className="text-blue-600 hover:underline text-sm">
+          <SeedLink href="/jobs" className="text-blue-600 hover:underline text-sm">
             Browse jobs to get started.
-          </Link>
+          </SeedLink>
         </div>
       ) : (
         <div className="space-y-4">
@@ -96,12 +96,12 @@ function AppliedJobsContent() {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Link
+                <SeedLink
                   href={`/jobs/${job.id}`}
                   className="text-blue-600 hover:underline text-sm"
                 >
                   View details
-                </Link>
+                </SeedLink>
                 <button
                   className="text-sm text-red-600 hover:underline"
                   onClick={() => cancelApplication(job)}

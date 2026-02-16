@@ -17,23 +17,6 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  const params = new URLSearchParams(window.location.search);
-                  const seed = params.get('seed');
-                  if (seed) {
-                    window.__INITIAL_SEED__ = parseInt(seed, 10);
-                  }
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
-      </head>
       <body className="bg-gray-100 text-gray-900" suppressHydrationWarning>
         <SeedProvider>
           <Suspense fallback={<LoadingFallback />}>

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import type { Post } from "@/library/dataset";
@@ -34,20 +34,20 @@ function SavedPostsContent() {
             Posts you saved are stored locally in your browser.
           </p>
         </div>
-        <Link
+        <SeedLink
           href="/"
           className="text-blue-600 hover:text-blue-800 font-semibold"
         >
           ← Back to feed
-        </Link>
+        </SeedLink>
       </div>
 
       {savedList.length === 0 ? (
         <div className="bg-white rounded-xl shadow p-8 text-center">
           <div className="text-gray-600 mb-2">No saved posts yet.</div>
-          <Link href="/" className="text-blue-600 hover:underline text-sm">
+          <SeedLink href="/" className="text-blue-600 hover:underline text-sm">
             Browse the feed to save posts.
-          </Link>
+          </SeedLink>
         </div>
       ) : (
         <div className="space-y-4">

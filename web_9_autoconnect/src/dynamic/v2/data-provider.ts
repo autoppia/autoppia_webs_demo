@@ -1,7 +1,7 @@
 import type { Job, Post, Recommendation, User } from "@/library/dataset";
 import { initializeUsers, initializePosts, initializeJobs, initializeRecommendations } from "@/data/autoconnect-enhanced";
-import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
@@ -35,26 +35,11 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  private getBaseSeedFromUrl(): number | null {
-    if (typeof window === "undefined") return null;
-    const params = new URLSearchParams(window.location.search);
-    const seedParam = params.get("seed");
-    if (seedParam) {
-      const parsed = Number.parseInt(seedParam, 10);
-      if (Number.isFinite(parsed)) {
-        return clampBaseSeed(parsed);
-      }
-    }
-    return null;
-  }
-
-  private getRuntimeV2Seed(): number | null {
-    if (typeof window === "undefined") return null;
-    const value = (window as any).__autoconnectV2Seed;
-    if (typeof value === "number" && Number.isFinite(value)) {
-      return clampBaseSeed(value);
-    }
-    return null;
+  private getSeed(): number {
+    // V2 rule: if V2 is disabled, always act as seed=1.
+    if (!isV2Enabled()) return 1;
+    if (typeof window === "undefined") return 1;
+    return getSeedFromUrl();
   }
 
   private async initialize(): Promise<void> {
@@ -64,44 +49,17 @@ export class DynamicDataProvider {
       this.resolveReady = resolve;
     });
 
-    const baseSeed = this.getBaseSeedFromUrl();
-    const runtimeSeed = this.getRuntimeV2Seed();
+    const seed = this.getSeed();
 
     try {
-      // If base seed = 1, use fallback data directly (skip DB mode)
-      if (baseSeed === 1) {
-        console.log("[autoconnect/data-provider] Base seed is 1, using fallback data");
-        const [users, posts, jobs, recommendations] = await Promise.all([
-          initializeUsers(runtimeSeed ?? undefined),
-          initializePosts(runtimeSeed ?? undefined),
-          initializeJobs(runtimeSeed ?? undefined),
-          initializeRecommendations(runtimeSeed ?? undefined),
-        ]);
-        this.setUsers(users);
-        this.setPosts(posts);
-        this.setJobs(jobs);
-        this.setRecommendations(recommendations);
-        return;
-      }
-
-      this.currentSeed = runtimeSeed ?? 1;
-
-      // Check if DB mode is enabled - only try DB if enabled
-      const dbModeEnabled = isDbLoadModeEnabled();
-      console.log("[autoconnect/data-provider] DB mode enabled:", dbModeEnabled, "runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
-
-      if (dbModeEnabled) {
-        // Try DB mode first if enabled
-        console.log("[autoconnect/data-provider] Attempting to load from DB...");
-        // Let initializeUsers/Posts/etc handle DB loading
-      }
+      this.currentSeed = seed;
 
       // Initialize all data types (they handle DB mode internally)
       const [users, posts, jobs, recommendations] = await Promise.all([
-        initializeUsers(runtimeSeed ?? undefined),
-        initializePosts(runtimeSeed ?? undefined),
-        initializeJobs(runtimeSeed ?? undefined),
-        initializeRecommendations(runtimeSeed ?? undefined),
+        initializeUsers(seed),
+        initializePosts(seed),
+        initializeJobs(seed),
+        initializeRecommendations(seed),
       ]);
 
       this.setUsers(users);
@@ -121,10 +79,10 @@ export class DynamicDataProvider {
       // to prevent infinite loading state
       try {
         const [users, posts, jobs, recommendations] = await Promise.all([
-          initializeUsers(runtimeSeed ?? undefined),
-          initializePosts(runtimeSeed ?? undefined),
-          initializeJobs(runtimeSeed ?? undefined),
-          initializeRecommendations(runtimeSeed ?? undefined),
+          initializeUsers(seed),
+          initializePosts(seed),
+          initializeJobs(seed),
+          initializeRecommendations(seed),
         ]);
         this.setUsers(users);
         this.setPosts(posts);
@@ -138,24 +96,14 @@ export class DynamicDataProvider {
       }
     }
 
-    // Listen for seed changes
-    if (typeof window !== "undefined") {
-      window.addEventListener("autoconnect:v2SeedChange", this.handleSeedEvent.bind(this));
-    }
-  }
-
-  private handleSeedEvent = () => {
-    console.log("[autoconnect/data-provider] Seed change event received");
-    this.reload();
   };
 
   /**
    * Reload data if seed has changed
    */
   public reloadIfSeedChanged(seed?: number | null): void {
-    const runtimeSeed = this.getRuntimeV2Seed();
-    const seedToUse = seed !== undefined && seed !== null ? seed : runtimeSeed;
-    if (seedToUse !== null && seedToUse !== this.currentSeed) {
+    const seedToUse = seed !== undefined && seed !== null ? seed : this.getSeed();
+    if (seedToUse !== this.currentSeed) {
       console.log(`[autoconnect] Seed changed from ${this.currentSeed} to ${seedToUse}, reloading...`);
       this.reload(seedToUse);
     }
@@ -172,17 +120,10 @@ export class DynamicDataProvider {
 
     this.loadingPromise = (async () => {
       try {
-        const baseSeed = this.getBaseSeedFromUrl();
-        const runtimeSeed = this.getRuntimeV2Seed();
-        const v2Seed = clampBaseSeed(seedValue ?? runtimeSeed ?? 1);
-
-        // If base seed = 1, use fallback data directly
-        if (baseSeed === 1) {
-          console.log("[autoconnect/data-provider] Reload: Base seed is 1, using fallback data");
-          this.currentSeed = 1;
-        } else {
-          this.currentSeed = v2Seed;
-        }
+        const v2Seed = isV2Enabled()
+          ? clampSeed(seedValue ?? this.getSeed())
+          : 1;
+        this.currentSeed = v2Seed;
 
         // Reset ready state
         this.ready = false;
@@ -645,11 +586,12 @@ export class DynamicDataProvider {
   }
 
   public isDynamicModeEnabled(): boolean {
-    return isDbLoadModeEnabled();
+    return isV2Enabled();
   }
 
   public getLayoutConfig(seed?: number) {
-    return { seed: clampBaseSeed(seed ?? 1) };
+    // Keep same range contract everywhere (1..999).
+    return { seed: clampSeed(seed ?? 1) };
   }
 }
 

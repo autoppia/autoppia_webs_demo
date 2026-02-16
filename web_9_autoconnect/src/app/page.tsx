@@ -19,7 +19,7 @@ import {
   persistHiddenPosts,
   persistSavedPosts,
 } from "@/library/localState";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
@@ -113,33 +113,7 @@ function HomeContent() {
     };
   }, []);
 
-  // Also listen for seed changes to refresh posts
-  useEffect(() => {
-    const handleSeedChange = async () => {
-      console.log('[autoconnect] Seed changed, refreshing posts...');
-      // Wait for data to be ready
-      await dynamicDataProvider.whenReady();
-      // Small delay to ensure data is fully loaded
-      await new Promise(resolve => setTimeout(resolve, 300));
-
-      const freshPosts = dynamicDataProvider.getPosts();
-      const freshUsers = dynamicDataProvider.getUsers();
-      console.log(`[autoconnect] Refreshed posts: ${freshPosts.length} posts, users: ${freshUsers.length} users`);
-
-      // Reset all posts with fresh data (new seed = new posts = reset likes)
-      setPosts(freshPosts.map((post) => ({ ...post, liked: false })));
-    };
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("autoconnect:v2SeedChange", handleSeedChange);
-    }
-
-    return () => {
-      if (typeof window !== "undefined") {
-        window.removeEventListener("autoconnect:v2SeedChange", handleSeedChange);
-      }
-    };
-  }, []);
+  // Seed changes are handled centrally by DataReadyGate (reloads provider).
 
   useEffect(() => {
     setSavedPosts(loadSavedPosts());
@@ -262,9 +236,9 @@ function HomeContent() {
             </button>
           </div>
           <div className="flex items-center gap-3 text-xs text-blue-700 mb-2">
-            <Link href="/saved" className="hover:underline font-semibold">
+            <SeedLink href="/saved" className="hover:underline font-semibold">
               View all saved
-            </Link>
+            </SeedLink>
             <span className="text-gray-300">•</span>
             <span className="text-gray-600">
               Saved posts persist locally for this session.
