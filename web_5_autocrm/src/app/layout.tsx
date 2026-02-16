@@ -36,22 +36,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <head>
-        {/* Inject seed from URL before React mounts */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  const params = new URLSearchParams(window.location.search);
-                  const seed = params.get('seed');
-                  if (seed) {
-                    window.__INITIAL_SEED__ = parseInt(seed, 10);
-                  }
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
       </head>
       <body
         className="font-sans bg-neutral text-[#1A1A1A] min-h-screen"

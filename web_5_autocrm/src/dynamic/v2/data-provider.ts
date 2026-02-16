@@ -1,4 +1,4 @@
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 import { isV2Enabled } from "@/dynamic/shared/flags";
 import {
   initializeClients,
@@ -14,13 +14,9 @@ import {
   writeCachedMatters,
 } from "@/data/crm-enhanced";
 
-
-const BASE_SEED_STORAGE_KEY = "autocrm_seed_base";
-
 // Dynamic data provider that returns either seed data or empty arrays based on config
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
-  private isEnabled: boolean = false;
   private ready: boolean = false;
   private readyPromise: Promise<void>;
   private resolveReady!: () => void;
@@ -33,7 +29,6 @@ export class DynamicDataProvider {
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
-    this.isEnabled = isV2Enabled();
     if (typeof window === "undefined") {
       this.ready = true;
       this.readyPromise = Promise.resolve();
@@ -65,39 +60,15 @@ export class DynamicDataProvider {
     }
   }
 
-  private getBaseSeed(): number {
-    if (typeof window === "undefined") {
-      return clampBaseSeed(1);
-    }
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const raw = params.get("seed");
-      if (raw) {
-        const parsed = clampBaseSeed(Number.parseInt(raw, 10));
-        window.localStorage.setItem(BASE_SEED_STORAGE_KEY, parsed.toString());
-        return parsed;
-      }
-      const stored = window.localStorage.getItem(BASE_SEED_STORAGE_KEY);
-      if (stored) {
-        return clampBaseSeed(Number.parseInt(stored, 10));
-      }
-    } catch (error) {
-      console.warn("[autocrm] Failed to resolve base seed from URL/localStorage", error);
-    }
-    return clampBaseSeed(1);
-  }
-
-  private getRuntimeV2Seed(): number | null {
-    if (typeof window === "undefined") return null;
-    const value = (window as any).__autocrmV2Seed;
-    if (typeof value === "number" && Number.isFinite(value)) {
-      return clampBaseSeed(value);
-    }
-    return null;
+  private getSeed(): number {
+    // V2 rule: if V2 is disabled, always act as seed=1.
+    if (!isV2Enabled()) return 1;
+    if (typeof window === "undefined") return 1;
+    return clampSeed(getSeedFromUrl());
   }
 
   private async reloadIfSeedChanged(): Promise<void> {
-    const newSeed = this.getBaseSeed();
+    const newSeed = this.getSeed();
     if (newSeed !== this.currentSeed) {
       console.log(`[autocrm] Seed changed from ${this.currentSeed} to ${newSeed}, reloading data...`);
       this.currentSeed = newSeed;
@@ -114,9 +85,7 @@ export class DynamicDataProvider {
 
   private async initializeData(): Promise<void> {
     try {
-      const baseSeed = this.getBaseSeed();
-      const v2Seed = this.getRuntimeV2Seed();
-      const effectiveSeed = clampBaseSeed(v2Seed ?? baseSeed);
+      const effectiveSeed = this.getSeed();
       this.currentSeed = effectiveSeed;
 
       // Try DB mode first if enabled
@@ -182,10 +151,9 @@ export class DynamicDataProvider {
   public async reload(seedValue?: number | null): Promise<void> {
     if (typeof window === "undefined") return;
 
-    const runtimeSeed = seedValue !== undefined && seedValue !== null
-      ? seedValue
-      : this.getRuntimeV2Seed();
-    const targetSeed = runtimeSeed !== null ? clampBaseSeed(runtimeSeed) : this.getBaseSeed();
+    const targetSeed = isV2Enabled()
+      ? clampSeed(seedValue ?? this.getSeed())
+      : 1;
 
     if (targetSeed === this.currentSeed && this.ready) {
       return; // Already loaded with this seed

@@ -2,26 +2,26 @@
  * Seed utilities: single base seed from URL for v1/v2/v3.
  */
 
-const BASE_SEED = { min: 1, max: 999, defaultValue: 1 };
+const SEED_RANGE = { min: 1, max: 999, defaultValue: 1 };
 
-export function clampBaseSeed(seed: number): number {
-  if (Number.isNaN(seed)) return BASE_SEED.defaultValue;
-  if (seed < BASE_SEED.min) return BASE_SEED.min;
-  if (seed > BASE_SEED.max) return BASE_SEED.max;
+export function clampSeed(seed: number): number {
+  if (Number.isNaN(seed)) return SEED_RANGE.defaultValue;
+  if (seed < SEED_RANGE.min) return SEED_RANGE.min;
+  if (seed > SEED_RANGE.max) return SEED_RANGE.max;
   return seed;
 }
 
-export function getBaseSeedFromUrl(): number {
-  if (typeof window === "undefined") return BASE_SEED.defaultValue;
+export function getSeedFromUrl(): number {
+  if (typeof window === "undefined") return SEED_RANGE.defaultValue;
   try {
     const params = new URLSearchParams(window.location.search);
     const raw = params.get("seed");
-    if (raw) {
-      const parsed = Number.parseInt(raw, 10);
-      if (Number.isFinite(parsed)) return clampBaseSeed(parsed);
-    }
+    if (!raw) return SEED_RANGE.defaultValue;
+    const parsed = Number.parseInt(raw, 10);
+    if (!Number.isFinite(parsed)) return SEED_RANGE.defaultValue;
+    return clampSeed(parsed);
   } catch {
     // ignore
   }
-  return BASE_SEED.defaultValue;
+  return SEED_RANGE.defaultValue;
 }

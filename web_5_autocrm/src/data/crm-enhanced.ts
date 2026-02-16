@@ -7,7 +7,8 @@
 
 import { readJson, writeJson } from "@/shared/storage";
 import { fetchSeededSelection } from "@/shared/seeded-loader";
-import {clampBaseSeed, getBaseSeedFromUrl} from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 // Client-side cache keys
 const CACHE_KEYS = {
@@ -68,7 +69,10 @@ function normalizeMatter(matter: any, index: number): any {
 }
 
 const resolveSeed = (seedValue?: number | null): number => {
-  return clampBaseSeed(seedValue ?? getBaseSeedFromUrl());
+  // V2 rule: seed always comes from URL, but if V2 is disabled we force seed=1.
+  return isV2Enabled()
+    ? clampSeed(seedValue ?? getSeedFromUrl())
+    : 1;
 };
 
 /**
