@@ -3,7 +3,8 @@ import { initializeDoctors } from "@/data/doctors-enhanced";
 import { initializeAppointments } from "@/data/appointments-enhanced";
 import { initializePrescriptions } from "@/data/prescriptions-enhanced";
 import { initializeMedicalRecords } from "@/data/medical-records-enhanced";
-import { clampBaseSeed, getBaseSeedFromUrl as getBaseSeedFromUrlShared } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
@@ -11,11 +12,10 @@ export class DynamicDataProvider {
   private appointments: Appointment[] = [];
   private prescriptions: Prescription[] = [];
   private medicalRecords: MedicalRecord[] = [];
-  private isEnabled = false;
   private ready = false;
   private readyPromise: Promise<void>;
   private resolveReady!: () => void;
-  private currentSeed: number = 1;
+  private currentSeed: number | null = null;
   private loadingPromise: Promise<void> | null = null;
   private reloadPromise: Promise<void> | null = null;
   private subscribers: {
@@ -44,31 +44,11 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  private getBaseSeedFromUrl(): number | null {
-    // Check if seed is actually in URL
-    if (typeof window === "undefined") return null;
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const seedParam = params.get("seed");
-      if (seedParam) {
-        const parsed = Number.parseInt(seedParam, 10);
-        if (Number.isFinite(parsed)) {
-          return clampBaseSeed(parsed);
-        }
-      }
-    } catch {
-      // ignore
-    }
-    return null;
-  }
-
-  private getRuntimeV2Seed(): number | null {
-    if (typeof window === "undefined") return null;
-    const value = (window as any).__autohealthV2Seed;
-    if (typeof value === "number" && Number.isFinite(value)) {
-      return clampBaseSeed(value);
-    }
-    return null;
+  private getSeed(): number {
+    // V2 rule: if V2 is disabled, always act as seed=1.
+    if (!isV2Enabled()) return 1;
+    if (typeof window === "undefined") return 1;
+    return getSeedFromUrl();
   }
 
   private async initialize(): Promise<void> {
@@ -78,25 +58,19 @@ export class DynamicDataProvider {
       this.resolveReady = resolve;
     });
 
-    const baseSeed = this.getBaseSeedFromUrl();
-    const runtimeSeed = this.getRuntimeV2Seed();
-
     try {
-      // Use base seed if available, otherwise runtime seed, otherwise default to 1
-      this.currentSeed = baseSeed ?? runtimeSeed ?? 1;
-
-      // Always initialize from server - server determines whether v2 is enabled or disabled
-      console.log("[autohealth/data-provider] Initializing from server, runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed, "currentSeed:", this.currentSeed);
+      const seed = this.getSeed();
+      this.currentSeed = seed;
 
       // Initialize doctors first, then use them for other data types
-      const doctors = await initializeDoctors(this.currentSeed);
+      const doctors = await initializeDoctors(seed);
       this.setDoctors(doctors);
 
       // Initialize other data types in parallel
       const [appointments, prescriptions, medicalRecords] = await Promise.all([
-        initializeAppointments(doctors, this.currentSeed),
-        initializePrescriptions(doctors, this.currentSeed),
-        initializeMedicalRecords(doctors, this.currentSeed),
+        initializeAppointments(doctors, seed),
+        initializePrescriptions(doctors, seed),
+        initializeMedicalRecords(doctors, seed),
       ]);
 
       this.setAppointments(appointments);
@@ -115,20 +89,17 @@ export class DynamicDataProvider {
       this.resolveReady();
     } catch (error) {
       console.error("[autohealth/data-provider] Failed to initialize data:", error);
-      // Re-throw error - server is the single source of truth
-      throw error;
-    }
-
-    // Listen for seed changes
-    if (typeof window !== "undefined") {
-      window.addEventListener("autohealth:v2SeedChange", this.handleSeedEvent.bind(this));
+      this.ready = true;
+      this.resolveReady();
     }
   }
 
-  private handleSeedEvent = () => {
-    console.log("[autohealth/data-provider] Seed change event received");
-    this.reload();
-  };
+  public reloadIfSeedChanged(seed?: number | null): void {
+    const targetSeed = seed !== undefined && seed !== null ? seed : this.getSeed();
+    if (targetSeed !== this.currentSeed) {
+      this.reload(targetSeed);
+    }
+  }
 
   public async reload(seedValue?: number | null): Promise<void> {
     // If already reloading, return the existing promise
@@ -138,11 +109,8 @@ export class DynamicDataProvider {
 
     this.reloadPromise = (async () => {
       try {
-        const baseSeed = this.getBaseSeedFromUrl();
-        const runtimeSeed = seedValue ?? this.getRuntimeV2Seed();
-
-        // Use base seed if available, otherwise runtime seed, otherwise default to 1
-        this.currentSeed = baseSeed ?? runtimeSeed ?? 1;
+        const seed = clampSeed(seedValue ?? this.getSeed());
+        this.currentSeed = seed;
 
         console.log(`[autohealth] Reloading data for seed=${this.currentSeed}...`);
         this.ready = false;
@@ -173,7 +141,8 @@ export class DynamicDataProvider {
         console.log(`[autohealth] Data reloaded: ${doctors.length} doctors, ${appointments.length} appointments, ${prescriptions.length} prescriptions, ${medicalRecords.length} medical records`);
       } catch (error) {
         console.error("[autohealth/data-provider] Failed to reload data:", error);
-        throw error;
+        this.ready = true;
+        this.resolveReady();
       } finally {
         this.ready = true;
         this.reloadPromise = null;
@@ -197,7 +166,11 @@ export class DynamicDataProvider {
   }
 
   public isDynamicModeEnabled(): boolean {
-    return this.isEnabled;
+    return isV2Enabled();
+  }
+
+  public getLayoutConfig(seed?: number) {
+    return { seed: clampSeed(seed ?? 1) };
   }
 
   // Doctors

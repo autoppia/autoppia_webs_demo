@@ -41,7 +41,8 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
     const reloadData = async () => {
       setReady(false);
       try {
-        await dynamicDataProvider.reload();
+        dynamicDataProvider.reloadIfSeedChanged(seed);
+        await dynamicDataProvider.whenReady();
         setReady(true);
       } catch (error) {
         console.error("[autohealth] Failed to reload data on seed change", error);
