@@ -5,10 +5,10 @@
 The Dynamic System is a comprehensive anti-scraping solution that dynamically modifies web page structure and content based on a single numerical `seed` parameter from the URL. The system consists of three main components:
 
 - **V1**: Modifies DOM structure (wrappers and decoys) to break XPath selectors
-- **V2**: Provides dynamic data loading (currently disabled - uses original data)
+- **V2**: Provides dynamic data loading (dataset varies by seed when enabled)
 - **V3**: Modifies attributes and text content (IDs, CSS classes, texts) to prevent selector memorization
 
-V1 and V3 work independently and can be enabled/disabled via environment variables. V2 is currently disabled and will provide randomized data when enabled. The system is designed to be deterministic: the same seed always produces the same output, ensuring consistency while preventing scrapers from memorizing fixed selectors.
+V1, V2, and V3 work independently and can be enabled/disabled via environment variables. The system is deterministic: the same seed always produces the same output, ensuring consistency while preventing scrapers from memorizing fixed selectors.
 
 ## Table of Contents
 
@@ -35,7 +35,7 @@ src/dynamic/
   │   ├── change-order-elements.ts  # generateDynamicOrder function
   │   └── index.ts
   │
-  ├── v2-data/               # V2: Data loading (separate system)
+  ├── v2/                    # V2: Data loading (per-site provider)
   │   ├── data-provider.ts
   │   └── index.ts
   │
@@ -50,7 +50,7 @@ src/dynamic/
   │
   ├── shared/                # Shared utilities
   │   ├── core.ts            # Core functions + useDynamicSystem hook
-  │   ├── flags.ts           # Feature flags (isV1Enabled, isV3Enabled)
+  │   ├── flags.ts           # Feature flags (isV1Enabled, isV2Enabled, isV3Enabled)
   │   └── index.ts
   │
   └── index.ts               # Main export
@@ -69,14 +69,17 @@ src/dynamic/
 
 ## Core Concepts
 
-### Seed System
+### Seed System (Single Source of Truth)
 
 The entire system is driven by a single numerical `seed` parameter extracted from the URL:
 
 - **URL Format**: `/?seed=42` or `/search?seed=123`
 - **Default**: If no seed is provided, defaults to `1`
-- **Range**: Typically 1-999 (can be extended)
+- **Range**: 1-999 (clamped)
 - **Deterministic**: Same seed always produces the same output
+- **Navigation invariant**: The `seed` query param must be preserved across navigation (clicks/routes) so it never changes or disappears.
+
+**Important:** Seed is always read from the URL. There is no localStorage or runtime seed override.
 
 ### Key Principle: `selectVariantIndex(seed, key, count)`
 
@@ -110,7 +113,7 @@ selectVariantIndex(100, "movie-card", 3)  // → 0 (different because seed is di
 This ensures:
 - The default/fallback version is always consistent
 - Users can always access the "original" design with `?seed=1`
-- The system gracefully degrades when V1/V3 are disabled
+- The system gracefully degrades when V1/V2/V3 are disabled (each behaves as `seed=1`)
 
 ---
 
@@ -378,86 +381,23 @@ const orderedItems = useMemo(() => {
 
 ### Purpose
 
-V2 provides dynamic data loading based on the seed. When enabled, it will return randomized data (different movies, different content) based on the seed value. Currently, V2 is **disabled** and the system uses the original data.
+V2 loads data from the backend based on the seed. This makes the dataset vary across seeds while remaining deterministic.
 
-### Current Status
+### Behavior
 
-**V2 is currently disabled** - The system loads data from the original source (local JSON files).
-
-### How It Works
-
-**When V2 is Disabled (Current State):**
-- Loads data from original source (local JSON files)
-- Returns the same data regardless of seed
-- Simple and predictable behavior
-
-**When V2 is Enabled (Future):**
-- Will load randomized data based on the seed
-- Same seed will always return the same randomized data (deterministic)
-- Different seeds will return different data sets
-- Prevents scrapers from memorizing specific data patterns
+- When **enabled**, V2 sends the URL seed to the backend to load a dataset.
+- When **disabled**, V2 always behaves as `seed=1` (original dataset).
+- V1/V2/V3 all use the same URL seed (no aliases, no secondary seed sources).
 
 ### Implementation
 
-The V2 system is implemented through the `DynamicDataProvider` class:
+Each web has a per‑site `DynamicDataProvider` in `src/dynamic/v2/` and data loaders in `src/data/*-enhanced.ts`. The provider loads data from `webs_server` and exposes getters like `getDoctors()`, `getAppointments()`, or `getMovies()` depending on the web.
 
-```typescript
-import { getMovies, getFeaturedMovies, searchMovies } from "@/dynamic/v2-data";
+### Important Notes
 
-// Get all movies (uses original data when V2 is disabled)
-const movies = getMovies();
-
-// Get featured movies (uses original data when V2 is disabled)
-const featured = getFeaturedMovies(6);
-
-// Search movies (uses original data when V2 is disabled)
-const results = searchMovies("action");
-```
-
-### Data Provider API
-
-The `DynamicDataProvider` provides the following methods:
-
-- `getMovies()`: Returns all movies
-- `getMovieById(id)`: Returns a specific movie by ID
-- `getFeaturedMovies(count)`: Returns featured movies
-- `getRelatedMovies(movieId, limit)`: Returns related movies
-- `searchMovies(query, filters)`: Searches movies by query and filters
-- `getMoviesByGenre(genre)`: Returns movies by genre
-- `getAvailableGenres()`: Returns list of available genres
-- `getAvailableYears()`: Returns list of available years
-- `whenReady()`: Returns a promise that resolves when data is loaded
-
-### Future Implementation
-
-When V2 is enabled, the data provider will:
-1. Use the seed to generate a deterministic randomization
-2. Shuffle/filter data based on the seed
-3. Return different data sets for different seeds
-4. Maintain consistency: same seed = same data
-
-**Example (Future Behavior):**
-```typescript
-// Seed 1: Original data
-getMovies() // → [Movie1, Movie2, Movie3, ...]
-
-// Seed 42: Randomized data (deterministic)
-getMovies() // → [Movie5, Movie1, Movie8, ...] (same order for seed 42)
-
-// Seed 100: Different randomized data
-getMovies() // → [Movie3, Movie7, Movie2, ...] (same order for seed 100)
-```
-
-### Simple Explanation
-
-**Current (V2 Disabled):**
-- The website always shows the same movies and data
-- Simple and predictable
-- Uses original data from JSON files
-
-**Future (V2 Enabled):**
-- The website will show different movies/data based on the seed
-- Same seed = same data (deterministic)
+- Backend is the source of truth for datasets.
+- No runtime seed override and no localStorage seed.
+- If the backend is down, V2 will fail (no dataset fallback).
 - Different seed = different data
 - Prevents scrapers from memorizing which movies appear where
 
@@ -592,7 +532,7 @@ dyn.selectVariantIndex(key, count)
 **Key Features:**
 - Automatically obtains `seed` from `SeedContext` (which reads from URL)
 - No need to pass `seed` manually
-- Works even when V1/V3 are disabled (graceful degradation)
+- Works even when V1/V2/V3 are disabled (graceful degradation)
 - Uses `useMemo` for performance optimization
 
 ### Seed Context Integration
@@ -703,17 +643,19 @@ export function HomeContent() {
 
 ### Environment Variables
 
-Control V1 and V3 via environment variables:
+Control V1, V2, and V3 via environment variables:
 
 ```bash
 # .env.local
 NEXT_PUBLIC_ENABLE_DYNAMIC_V1=true
+NEXT_PUBLIC_ENABLE_DYNAMIC_V2=true
 NEXT_PUBLIC_ENABLE_DYNAMIC_V3=true
 ```
 
 **Behavior when disabled:**
-- **V1 OFF**: `dyn.v1.addWrapDecoy()` returns children unchanged
-- **V3 OFF**: `dyn.v3.getVariant()` returns fallback or key itself
+- **V1 OFF**: `dyn.v1.addWrapDecoy()` returns children unchanged (effectively `seed=1`)
+- **V2 OFF**: Always uses `seed=1` when requesting data (original dataset)
+- **V3 OFF**: `dyn.v3.getVariant()` returns fallback or key itself (effectively `seed=1`)
 
 ### Adding New Variants
 
@@ -1073,7 +1015,7 @@ This ensures the "original" version is always accessible.
 The Dynamic System provides a comprehensive, deterministic solution for preventing web scraping through:
 
 1. **V1**: Structural changes (wrappers/decoy) that break XPath selectors
-2. **V2**: Dynamic data loading (currently disabled - uses original data, will provide randomized data when enabled)
+2. **V2**: Dynamic data loading (enabled - dataset varies by seed)
 3. **V3**: Attribute and text variations that prevent selector memorization
 4. **Unified API**: Single `getVariant()` function for all variant types
 5. **Flexible Organization**: Global JSONs for reusable elements, local dictionaries for component-specific elements
@@ -1105,7 +1047,7 @@ The system is designed to be:
 2. **Local vs Global variants**: Component-specific variants stay in components, reusable variants in JSONs
 3. **Seed = 1 is original**: Ensures consistent fallback behavior
 4. **Deterministic hashing**: Uses `hashString()` for better distribution than simple modulo
-5. **Graceful degradation**: System works even when V1/V3 are disabled
+5. **Graceful degradation**: System works even when V1/V2/V3 are disabled
 
 ---
 
@@ -1113,7 +1055,7 @@ The system is designed to be:
 
 The Dynamic System is a production-ready solution for anti-scraping that:
 - Prevents XPath memorization (V1)
-- Provides dynamic data loading (V2 - currently disabled, uses original data)
+- Provides dynamic data loading (V2 - dataset varies by seed)
 - Prevents selector memorization (V3)
 - Maintains consistent user experience (deterministic)
 - Provides flexible variant management (global + local)
@@ -1124,7 +1066,7 @@ The system is designed to be maintainable, scalable, and easy to use while provi
 ### System Status Summary
 
 - **V1**: ✅ Active - Modifies DOM structure (wrappers/decoy)
-- **V2**: ⏸️ Disabled - Currently uses original data, will provide randomized data when enabled
+- **V2**: ✅ Active - Loads dataset by URL seed (no fallback if backend is down)
 - **V3**: ✅ Active - Modifies attributes and texts (IDs, classes, texts)
 
 ### Quick Reference

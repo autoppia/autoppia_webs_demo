@@ -11,17 +11,17 @@
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
 #   --demo=NAME                   Deploy specific demo: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all (default: all)
 #   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v2,v3)
-#                                            v2 = carga de datos por seed (dataset por ?seed=X)
+#                                            v2 = data by seed (dataset by ?seed=X)
 #   --webs_data_path=PATH         Host dir to bind at /app/data (default: $DEMOS_DIR/webs_server/initial_data)
-#   -y, --yes                     Force Docker cleanup (remove all containers/images/volumes) before deploy
 #   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
+#   --clean_all=BOOL              If true, remove ALL Docker containers/images/volumes before deploy (default: false)
 #   --parallel=N                  Max concurrent web project deployments when --demo=all (default: 3)
 #   -h, --help                    Show this help and exit
 #
 # Examples:
-#   ./setup.sh --demo=automail  # v1,v3 enabled by default (seeds + layout variants + HTML structure)
-#   ./setup.sh --enabled_dynamic_versions=v2  # v2: DB Mode
-#   ./setup.sh --enabled_dynamic_versions=v1,v2  # v1 + v2: Layouts + DB Mode
+#   ./setup.sh --demo=automail  # v1,v2,v3 enabled by default
+#   ./setup.sh --enabled_dynamic_versions=v2  # v2 only (data by seed)
+#   ./setup.sh --enabled_dynamic_versions=v1,v2  # v1 + v2
 #   ./setup.sh --demo=all --parallel=4  # Deploy all demos with max 4 concurrent
 #------------------------------------------------------------
 set -euo pipefail
@@ -43,16 +43,17 @@ Options:
   --webs_port=PORT              Set webs_server port (default: 8090)
   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
   --demo=NAME                   One of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, all (default: all)
-  --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v2,v3). v2 = datos por seed.
+  --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v2,v3). v2 = data by seed.
   --webs_data_path=PATH         Host dir to bind at /app/data (default: \$DEMOS_DIR/webs_server/initial_data)
   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
+  --clean_all=BOOL              If true, remove ALL Docker containers/images/volumes before deploy (default: false)
   --parallel=N                  Max concurrent web project deployments when --demo=all (default: 3)
   -h, --help                    Show this help and exit
 
 Examples:
-  ./setup.sh --demo=automail  # v1,v3 enabled by default (seeds + layout variants + HTML structure)
-  ./setup.sh --enabled_dynamic_versions=v2  # v2: DB Mode
-  ./setup.sh --enabled_dynamic_versions=v1,v2  # v1 + v2: Layouts + DB Mode
+  ./setup.sh --demo=automail  # v1,v2,v3 enabled by default
+  ./setup.sh --enabled_dynamic_versions=v2  # v2 only (data by seed)
+  ./setup.sh --enabled_dynamic_versions=v1,v2  # v1 + v2
   ./setup.sh --demo=all --parallel=4  # Deploy all demos with max 4 concurrent
 USAGE
 }
@@ -84,6 +85,7 @@ for ARG in "$@"; do
     --webs_data_path=*)  WEBS_DATA_PATH="${ARG#*=}" ;;
     -h|--help)           print_usage; exit 0 ;;
     --fast=*)            FAST_MODE="${ARG#*=}" ;;
+    --clean_all=*)       CLEAN_ALL="${ARG#*=}" ;;
     --parallel=*)        PARALLEL_JOBS="${ARG#*=}" ;;
     *) ;;
   esac
@@ -96,12 +98,13 @@ WEBS_PORT="${WEBS_PORT:-8090}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-5437}"
 WEB_DEMO="${WEB_DEMO:-all}"
 FAST_MODE="${FAST_MODE:-false}"
+CLEAN_ALL="${CLEAN_ALL:-false}"
 PARALLEL_JOBS="${PARALLEL_JOBS:-3}"
 ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-v1,v2,v3}"
 
 # Initialize dynamic version flags (will be set by version mapping)
 ENABLE_DYNAMIC_V1="${ENABLE_DYNAMIC_V1:-false}"
-ENABLE_DYNAMIC_V2="${ENABLE_DYNAMIC_V2:-}"
+ENABLE_DYNAMIC_V2="${ENABLE_DYNAMIC_V2:-false}"
 ENABLE_DYNAMIC_V3="${ENABLE_DYNAMIC_V3:-false}"
 ENABLE_DYNAMIC_V4="${ENABLE_DYNAMIC_V4:-false}"
 
@@ -121,7 +124,7 @@ ENABLED_DYNAMIC_VERSIONS="$ENABLED_DYNAMIC_VERSIONS_NORMALIZED"
 # 4. MAP DYNAMIC VERSIONS TO FLAGS
 # ============================================================================
 # v1 -> ENABLE_DYNAMIC_V1 (seeds + layout variants)
-# v2 -> ENABLE_DYNAMIC_V2 (datos por seed)
+# v2 -> ENABLE_DYNAMIC_V2 (data by seed)
 # v3 -> ENABLE_DYNAMIC_V3 (changes classes, IDs, structure)
 # v4 -> ENABLE_DYNAMIC_V4
 
@@ -155,12 +158,12 @@ else
 fi
 
 # Normalize all boolean flags AFTER version mapping (so mapped values are preserved)
-for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2 ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
+for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2 ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE CLEAN_ALL; do
   eval "$var=\$(normalize_bool \"\$$var\")"
 done
 
 # Check for invalid booleans
-for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2 ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
+for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2 ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE CLEAN_ALL; do
   if [ "$(eval echo \$$var)" = "__INVALID__" ]; then
     echo "❌ Invalid boolean flag: $var. Use true/false (or yes/no, 1/0)."
     exit 1
@@ -217,6 +220,7 @@ echo "      V3 (HTML structure)  →  $ENABLE_DYNAMIC_V3"
 echo "      V4 (seed HTML)       →  $ENABLE_DYNAMIC_V4"
 echo "    Enabled versions       →  ${ENABLED_DYNAMIC_VERSIONS:-<none>}"
 echo "    Fast mode              →  $FAST_MODE"
+echo "    Clean all Docker       →  $CLEAN_ALL"
 [ "$WEB_DEMO" = "all" ] && echo "    Parallel jobs           →  $PARALLEL_JOBS"
 echo "    Host data path         →  ${WEBS_DATA_PATH:-<default: ~/webs_data (copied from repo)>}"
 echo ""
@@ -247,11 +251,37 @@ setup_docker() {
       docker network create "$EXTERNAL_NET"
     fi
   else
-    echo "[INFO] Cleaning up Docker..."
-    docker ps -aq | xargs -r docker rm -f || true
-    docker volume ls -q | xargs -r docker volume rm 2>/dev/null || true
-    docker images -q | xargs -r docker rmi --force 2>/dev/null || true
-    docker network prune -f || true
+    if [ "$CLEAN_ALL" = true ]; then
+      echo "[WARN] CLEAN_ALL=true: removing ALL Docker containers/images/volumes..."
+      docker ps -aq | xargs -r docker rm -f || true
+      docker volume ls -q | xargs -r docker volume rm 2>/dev/null || true
+      docker images -q | xargs -r docker rmi --force 2>/dev/null || true
+      docker network prune -f || true
+    else
+      echo "[INFO] Cleaning up only demo containers/volumes..."
+      local project_prefixes="webs_server movies_ books_ autozone_ autodining_ autocrm_ automail_ autodelivery_ autolodge_ autoconnect_ autowork_ autocalendar_ autolist_ autodrive_ autohealth_"
+
+      # Remove demo containers by compose project label
+      docker ps -a --format '{{.ID}}\t{{.Label "com.docker.compose.project"}}' | while IFS=$'\t' read -r id proj; do
+        for prefix in $project_prefixes; do
+          if [[ "$proj" == "$prefix"* ]]; then
+            docker rm -f "$id" >/dev/null 2>&1 || true
+            break
+          fi
+        done
+      done
+
+      # Remove demo volumes by compose project label
+      docker volume ls --format '{{.Name}}\t{{.Label "com.docker.compose.project"}}' | while IFS=$'\t' read -r vol proj; do
+        for prefix in $project_prefixes; do
+          if [[ "$proj" == "$prefix"* ]]; then
+            docker volume rm "$vol" >/dev/null 2>&1 || true
+            break
+          fi
+        done
+      done
+    fi
+
     if ! docker network ls --format '{{.Name}}' | grep -qx "$EXTERNAL_NET"; then
       docker network create "$EXTERNAL_NET"
     fi
