@@ -1,6 +1,7 @@
 /**
  * V2 Data Loading System for web_8_autolodge
- * Loads from local base data only (no DB, no v2SeedChange).
+ * When V2 is enabled, loads data from server endpoint /datasets/load based on seed.
+ * When V2 is disabled, falls back to local JSON data.
  */
 
 import type { Hotel } from "@/types/hotel";

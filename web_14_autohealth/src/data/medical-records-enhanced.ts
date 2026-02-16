@@ -1,12 +1,10 @@
 import type { Doctor, MedicalRecord } from "@/data/types";
 import fallbackMedicalRecordsJson from "@/data/original/medical-records_1.json";
-import { isDataGenerationAvailable, generateMedicalRecords } from "@/utils/healthDataGenerator";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { resolveDatasetSeed, waitForDatasetSeed } from "@/utils/v2Seed";
 import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 
 const CACHE_KEY = 'autohealth_medical_records_v1';
-const DOCTORS_CACHE_KEY = 'autohealth_doctors_v1';
 const PROJECT_KEY = 'web_14_autohealth';
 let recordsCache: MedicalRecord[] = [];
 const FALLBACK_MEDICAL_RECORDS: MedicalRecord[] = Array.isArray(fallbackMedicalRecordsJson) ? (fallbackMedicalRecordsJson as MedicalRecord[]) : [];
@@ -30,12 +28,11 @@ async function loadMedicalRecordsFromDataset(v2SeedValue?: number | null): Promi
 
 export async function initializeMedicalRecords(doctors?: Doctor[], v2SeedValue?: number | null): Promise<MedicalRecord[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isDataGenerationAvailable();
 
-  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  // Check base seed from URL - if seed = 1, use original data
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
-    console.log("[autohealth] Base seed is 1, using original medical records data (skipping DB/AI modes)");
+  if (baseSeed === 1 && dbModeEnabled) {
+    console.log("[autohealth] Base seed is 1, using original medical records data (skipping DB mode)");
     recordsCache = FALLBACK_MEDICAL_RECORDS;
     return recordsCache;
   }
@@ -46,38 +43,6 @@ export async function initializeMedicalRecords(doctors?: Doctor[], v2SeedValue?:
     return recordsCache;
   }
 
-  if (!aiGenerateEnabled) {
-    recordsCache = FALLBACK_MEDICAL_RECORDS;
-    return recordsCache;
-  }
-
-  if (typeof window !== 'undefined') {
-    const raw = localStorage.getItem(CACHE_KEY);
-    if (raw) {
-      try {
-        recordsCache = JSON.parse(raw) as MedicalRecord[];
-        if (recordsCache.length > 0) return recordsCache;
-      } catch {}
-    }
-  }
-
-  let doctorsToUse = doctors;
-  if (!doctorsToUse && typeof window !== 'undefined') {
-    const doctorsRaw = localStorage.getItem(DOCTORS_CACHE_KEY);
-    if (doctorsRaw) {
-      try { doctorsToUse = JSON.parse(doctorsRaw) as Doctor[]; } catch {}
-    }
-  }
-
-  const result = await generateMedicalRecords(
-    24,
-    doctorsToUse?.map(d => ({ id: d.id, name: d.name, specialty: d.specialty })) || []
-  );
-  if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-    recordsCache = result.data as MedicalRecord[];
-    if (typeof window !== 'undefined') localStorage.setItem(CACHE_KEY, JSON.stringify(recordsCache));
-    return recordsCache;
-  }
   recordsCache = FALLBACK_MEDICAL_RECORDS;
   return recordsCache;
 }

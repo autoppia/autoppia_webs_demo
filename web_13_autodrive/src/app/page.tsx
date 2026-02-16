@@ -1109,6 +1109,16 @@ export default function Home() {
       });
 
       setLoading(true);
+
+      // Fetch latest rides from data provider before showing
+      const latestRides = getRides();
+      if (latestRides.length > 0) {
+        console.log("[Home] handleSearch: Using latest rides from data provider:", latestRides.length);
+        setRides(latestRides);
+      } else {
+        console.warn("[Home] handleSearch: No rides from data provider, using current state");
+      }
+
       setTimeout(() => {
         setLoading(false);
         setShowRides(true);
@@ -1116,7 +1126,7 @@ export default function Home() {
           pickup,
           dropoff,
           scheduled: pickupScheduled ? `${pickupScheduled.date} ${pickupScheduled.time}` : "now",
-          rideCount: rides.length,
+          rideCount: latestRides.length > 0 ? latestRides.length : rides.length,
           timestamp: new Date().toISOString(),
         });
       }, 20);

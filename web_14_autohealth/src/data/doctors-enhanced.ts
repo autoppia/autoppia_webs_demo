@@ -1,6 +1,5 @@
 import type { Doctor } from "@/data/types";
 import fallbackDoctorsJson from "@/data/original/doctors_1.json";
-import { isDataGenerationAvailable, generateDoctors } from "@/utils/healthDataGenerator";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { resolveDatasetSeed, waitForDatasetSeed } from "@/utils/v2Seed";
 import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
@@ -30,12 +29,11 @@ async function loadDoctorsFromDataset(v2SeedValue?: number | null): Promise<Doct
 
 export async function initializeDoctors(v2SeedValue?: number | null): Promise<Doctor[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  const aiGenerateEnabled = isDataGenerationAvailable();
 
-  // Check base seed from URL - if seed = 1, use original data for both DB and AI modes
+  // Check base seed from URL - if seed = 1, use original data
   const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && (dbModeEnabled || aiGenerateEnabled)) {
-    console.log("[autohealth] Base seed is 1, using original data (skipping DB/AI modes)");
+  if (baseSeed === 1 && dbModeEnabled) {
+    console.log("[autohealth] Base seed is 1, using original data (skipping DB mode)");
     doctorsCache = FALLBACK_DOCTORS;
     lastSeed = 1;
     return doctorsCache;
@@ -54,28 +52,6 @@ export async function initializeDoctors(v2SeedValue?: number | null): Promise<Do
   if (dbModeEnabled) {
     if (doctorsCache.length > 0 && lastSeed === currentSeed) return doctorsCache;
     doctorsCache = await loadDoctorsFromDataset(v2SeedValue);
-    return doctorsCache;
-  }
-
-  if (!aiGenerateEnabled) {
-    doctorsCache = FALLBACK_DOCTORS;
-    return doctorsCache;
-  }
-
-  if (typeof window !== 'undefined') {
-    const raw = localStorage.getItem(CACHE_KEY);
-    if (raw) {
-      try {
-        doctorsCache = JSON.parse(raw) as Doctor[];
-        if (doctorsCache.length > 0) return doctorsCache;
-      } catch { }
-    }
-  }
-
-  const result = await generateDoctors(12);
-  if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-    doctorsCache = result.data as Doctor[];
-    if (typeof window !== 'undefined') localStorage.setItem(CACHE_KEY, JSON.stringify(doctorsCache));
     return doctorsCache;
   }
 

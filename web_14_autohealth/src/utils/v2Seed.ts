@@ -1,12 +1,5 @@
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { getBaseSeedFromUrl } from "@/shared/seed-resolver";
-
-const clampSeed = (value: number, fallback = 1): number => {
-  if (!Number.isFinite(value)) return fallback;
-  if (value < 1) return 1;
-  if (value > 300) return 300;
-  return value;
-};
+import { getBaseSeedFromUrl, clampBaseSeed } from "@/shared/seed-resolver";
 
 export const shouldUseDbSeed = () => isDbLoadModeEnabled();
 
@@ -14,7 +7,7 @@ export const getRuntimeV2Seed = (): number | null => {
   if (typeof window === "undefined") return null;
   const value = (window as any).__autohealthV2Seed;
   if (typeof value === "number" && Number.isFinite(value)) {
-    return clampSeed(value);
+    return clampBaseSeed(value);
   }
   return null;
 };
@@ -23,7 +16,7 @@ export const resolveDatasetSeed = (seedValue?: number | null): number => {
   if (!isDbLoadModeEnabled()) return 1;
 
   if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
-    return clampSeed(seedValue);
+    return clampBaseSeed(seedValue);
   }
 
   const baseSeed = getBaseSeedFromUrl();
@@ -34,7 +27,7 @@ export const resolveDatasetSeed = (seedValue?: number | null): number => {
     }
 
     // For other seeds, use base seed directly (v2 seed = base seed)
-    return clampSeed(baseSeed);
+    return clampBaseSeed(baseSeed);
   }
 
   const runtime = getRuntimeV2Seed();

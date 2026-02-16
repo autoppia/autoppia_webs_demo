@@ -1,6 +1,7 @@
 import type { AutoworkJob, AutoworkHire, AutoworkExpert } from "@/shared/data-generator";
 import { initializeJobs, initializeHires, initializeExperts, initializeSkills } from "@/data/autowork-enhanced";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
@@ -48,8 +49,8 @@ export class DynamicDataProvider {
     const seedParam = params.get("seed");
     if (seedParam) {
       const parsed = Number.parseInt(seedParam, 10);
-      if (Number.isFinite(parsed) && parsed >= 1 && parsed <= 300) {
-        return parsed;
+      if (Number.isFinite(parsed)) {
+        return clampBaseSeed(parsed);
       }
     }
     return null;
@@ -58,8 +59,8 @@ export class DynamicDataProvider {
   private getRuntimeV2Seed(): number | null {
     if (typeof window === "undefined") return null;
     const value = (window as any).__autoworkV2Seed;
-    if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
-      return value;
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return clampBaseSeed(value);
     }
     return null;
   }
@@ -178,7 +179,7 @@ export class DynamicDataProvider {
       try {
         const baseSeed = this.getBaseSeedFromUrl();
         const runtimeSeed = this.getRuntimeV2Seed();
-        const v2Seed = seedValue ?? runtimeSeed ?? 1;
+        const v2Seed = clampBaseSeed(seedValue ?? runtimeSeed ?? 1);
 
         console.log(`[autowork/data-provider] Reload: Seed changing from ${this.currentSeed} to ${v2Seed}`);
 

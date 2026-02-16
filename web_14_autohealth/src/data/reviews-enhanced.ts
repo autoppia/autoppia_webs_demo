@@ -1,5 +1,3 @@
-import { isDataGenerationAvailable, generateDoctorReviews } from '@/utils/healthDataGenerator';
-
 export type Review = { rating: number; comment: string; patientName: string; date: string };
 
 function keyFor(doctorId: string) {
@@ -8,25 +6,21 @@ function keyFor(doctorId: string) {
 
 export async function initializeDoctorReviews(doctor: { id: string; name: string; specialty?: string }, forceGenerate: boolean = false): Promise<Review[]> {
   const cacheKey = keyFor(doctor.id);
-  if (!isDataGenerationAvailable()) {
-    return [];
-  }
+
+  // Check cache first
   if (!forceGenerate && typeof window !== 'undefined') {
     const raw = localStorage.getItem(cacheKey);
-    if (raw) { try { return JSON.parse(raw) as Review[]; } catch {} }
-  }
-  const result = await generateDoctorReviews(doctor, 12);
-  if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-    // Validate shape: require rating, comment, patientName, date
-    const valid = (result.data as unknown[]).filter((r: any) =>
-      r && typeof r === 'object' && typeof r.rating === 'number' && typeof r.comment === 'string' && typeof r.patientName === 'string' && typeof r.date === 'string'
-    ) as Review[];
-    if (valid.length > 0) {
-      if (typeof window !== 'undefined') localStorage.setItem(cacheKey, JSON.stringify(valid));
-      return valid;
+    if (raw) {
+      try {
+        const cached = JSON.parse(raw) as Review[];
+        if (Array.isArray(cached) && cached.length > 0) {
+          return cached;
+        }
+      } catch {}
     }
   }
-  // Frontend fallback synthesis to avoid empty UI if backend can't generate
+
+  // Generate fallback reviews
   const fallback: Review[] = Array.from({ length: 8 }).map((_, i) => ({
     rating: 3 + Math.floor(Math.random() * 3),
     comment: `Great experience with ${doctor.name}. ${i % 2 === 0 ? 'Very professional.' : 'Would recommend.'}`,

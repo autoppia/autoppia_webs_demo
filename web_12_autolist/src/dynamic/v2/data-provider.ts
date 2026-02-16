@@ -1,6 +1,7 @@
 import type { RemoteTask } from "@/data/tasks-enhanced";
 import { initializeTasks } from "@/data/tasks-enhanced";
 import { clampBaseSeed } from "@/shared/seed-resolver";
+import { isDbLoadModeEnabled } from "@/shared/seeded-loader"
 
 export interface TaskSearchFilters {
   query?: string;

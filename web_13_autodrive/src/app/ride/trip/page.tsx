@@ -954,6 +954,16 @@ export default function RideTripPage() {
       });
 
       setLoading(true);
+
+      // Fetch latest rides from data provider before showing
+      const latestRides = getRides();
+      if (latestRides.length > 0) {
+        console.log("[RideTripPage] handleSearch: Using latest rides from data provider:", latestRides.length);
+        setRides(latestRides);
+      } else {
+        console.warn("[RideTripPage] handleSearch: No rides from data provider, using current state");
+      }
+
       setTimeout(() => {
         setLoading(false);
         setShowRides(true);

@@ -44,9 +44,6 @@ const normalizeRide = (ride: any): Ride => ({
 // Fallback rides data from JSON
 const fallbackRides: Ride[] = (fallbackRidesData as any[]).map(normalizeRide);
 
-const clampSeed = (value: number, fallback: number = 1): number =>
-  value >= 1 && value <= 300 ? value : fallback;
-
 /**
  * Get v2 seed from window (synchronized by SeedContext)
  */
@@ -65,7 +62,7 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
   }
 
   if (typeof v2SeedValue === "number" && Number.isFinite(v2SeedValue)) {
-    return clampSeed(v2SeedValue);
+    return clampBaseSeed(v2SeedValue);
   }
 
   const baseSeed = getBaseSeedFromUrl();
@@ -76,14 +73,14 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
     }
 
     // For other seeds, use base seed directly (v2 seed = base seed)
-    return clampSeed(baseSeed);
+    return clampBaseSeed(baseSeed);
   }
 
   // Fallback to runtime seed if available
   if (typeof window !== "undefined") {
     const fromClient = getRuntimeV2Seed();
     if (typeof fromClient === "number") {
-      return clampSeed(fromClient);
+      return clampBaseSeed(fromClient);
     }
   }
 
@@ -133,7 +130,7 @@ function generateDeterministicRides(seed: number): Ride[] {
 
 /**
  * Initialize rides data for Web13.
- * Priority: DB → AI → Fallback (deterministic)
+ * Priority: DB → Fallback (deterministic)
  */
 export async function initializeRides(
   v2SeedValue?: number | null,
@@ -142,7 +139,7 @@ export async function initializeRides(
   const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed === 1 && dbModeEnabled) {
-    console.log("[autodrive] Base seed is 1, using original rides data (skipping DB/AI modes)");
+    console.log("[autodrive] Base seed is 1, using original rides data (skipping DB mode)");
     return generateDeterministicRides(1);
   }
 

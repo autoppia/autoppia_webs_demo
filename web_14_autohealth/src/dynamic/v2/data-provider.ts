@@ -4,6 +4,7 @@ import { initializeAppointments } from "@/data/appointments-enhanced";
 import { initializePrescriptions } from "@/data/prescriptions-enhanced";
 import { initializeMedicalRecords } from "@/data/medical-records-enhanced";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { clampBaseSeed, getBaseSeedFromUrl as getBaseSeedFromUrlShared } from "@/shared/seed-resolver";
 
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
@@ -45,14 +46,19 @@ export class DynamicDataProvider {
   }
 
   private getBaseSeedFromUrl(): number | null {
+    // Check if seed is actually in URL
     if (typeof window === "undefined") return null;
-    const params = new URLSearchParams(window.location.search);
-    const seedParam = params.get("seed");
-    if (seedParam) {
-      const parsed = Number.parseInt(seedParam, 10);
-      if (Number.isFinite(parsed) && parsed >= 1 && parsed <= 300) {
-        return parsed;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const seedParam = params.get("seed");
+      if (seedParam) {
+        const parsed = Number.parseInt(seedParam, 10);
+        if (Number.isFinite(parsed)) {
+          return clampBaseSeed(parsed);
+        }
       }
+    } catch {
+      // ignore
     }
     return null;
   }
@@ -60,8 +66,8 @@ export class DynamicDataProvider {
   private getRuntimeV2Seed(): number | null {
     if (typeof window === "undefined") return null;
     const value = (window as any).__autohealthV2Seed;
-    if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
-      return value;
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return clampBaseSeed(value);
     }
     return null;
   }
@@ -96,11 +102,12 @@ export class DynamicDataProvider {
         return;
       }
 
-      this.currentSeed = runtimeSeed ?? 1;
+      // Use base seed if available, otherwise runtime seed, otherwise default to 1
+      this.currentSeed = baseSeed ?? runtimeSeed ?? 1;
 
       // Check if DB mode is enabled - only try DB if enabled
       const dbModeEnabled = isDbLoadModeEnabled();
-      console.log("[autohealth/data-provider] DB mode enabled:", dbModeEnabled, "runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
+      console.log("[autohealth/data-provider] DB mode enabled:", dbModeEnabled, "runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed, "currentSeed:", this.currentSeed);
 
       if (dbModeEnabled) {
         // Try DB mode first if enabled
@@ -109,14 +116,15 @@ export class DynamicDataProvider {
       }
 
       // Initialize doctors first, then use them for other data types
-      const doctors = await initializeDoctors(runtimeSeed ?? undefined);
+      // Pass the current seed to initialization functions
+      const doctors = await initializeDoctors(this.currentSeed);
       this.setDoctors(doctors);
 
       // Initialize other data types in parallel
       const [appointments, prescriptions, medicalRecords] = await Promise.all([
-        initializeAppointments(doctors, runtimeSeed ?? undefined),
-        initializePrescriptions(doctors, runtimeSeed ?? undefined),
-        initializeMedicalRecords(doctors, runtimeSeed ?? undefined),
+        initializeAppointments(doctors, this.currentSeed),
+        initializePrescriptions(doctors, this.currentSeed),
+        initializeMedicalRecords(doctors, this.currentSeed),
       ]);
 
       this.setAppointments(appointments);
@@ -138,12 +146,14 @@ export class DynamicDataProvider {
       // Even if there's an error, we should mark as ready with fallback data
       // to prevent infinite loading state
       try {
-        const doctors = await initializeDoctors(runtimeSeed ?? undefined);
+        // Use the current seed that was determined earlier, or fallback to runtimeSeed
+        const fallbackSeed = this.currentSeed ?? baseSeed ?? runtimeSeed ?? 1;
+        const doctors = await initializeDoctors(fallbackSeed);
         this.setDoctors(doctors);
         const [appointments, prescriptions, medicalRecords] = await Promise.all([
-          initializeAppointments(doctors, runtimeSeed ?? undefined),
-          initializePrescriptions(doctors, runtimeSeed ?? undefined),
-          initializeMedicalRecords(doctors, runtimeSeed ?? undefined),
+          initializeAppointments(doctors, fallbackSeed),
+          initializePrescriptions(doctors, fallbackSeed),
+          initializeMedicalRecords(doctors, fallbackSeed),
         ]);
         this.setAppointments(appointments);
         this.setPrescriptions(prescriptions);
@@ -179,14 +189,15 @@ export class DynamicDataProvider {
     this.reloadPromise = (async () => {
       try {
         const baseSeed = this.getBaseSeedFromUrl();
-        const v2Seed = seedValue ?? this.getRuntimeV2Seed() ?? 1;
+        const runtimeSeed = seedValue ?? this.getRuntimeV2Seed();
 
-        // If base seed = 1, use fallback data directly (skip DB/AI)
+        // If base seed = 1, use fallback data directly (skip DB mode)
         if (baseSeed === 1) {
           console.log("[autohealth/data-provider] Reload: Base seed is 1, using fallback data");
           this.currentSeed = 1;
         } else {
-          this.currentSeed = v2Seed;
+          // Use base seed if available, otherwise runtime seed, otherwise default to 1
+          this.currentSeed = baseSeed ?? runtimeSeed ?? 1;
         }
 
         console.log(`[autohealth] Reloading data for seed=${this.currentSeed}...`);

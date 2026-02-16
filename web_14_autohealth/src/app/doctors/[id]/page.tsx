@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import type { Doctor } from "@/data/types";
 import { getDoctors, subscribeDoctors, whenReady } from "@/dynamic/v2";
 import { DoctorProfileClient } from "./doctor-profile-client";
-import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { useSeed } from "@/context/SeedContext";
@@ -18,7 +17,6 @@ export default function DoctorProfile() {
   const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [notFoundError, setNotFoundError] = useState(false);
-  const useAiGeneration = isDataGenerationAvailable() && !isDbLoadModeEnabled();
 
   useEffect(() => {
     let mounted = true;
@@ -174,16 +172,6 @@ export default function DoctorProfile() {
   }, [id, currentSeed, dyn]);
 
   if (isLoading) {
-    if (useAiGeneration) {
-      return (
-        <div className="container py-20 flex items-center justify-center">
-          <div className="flex items-center gap-3 text-muted-foreground">
-            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-            <span>Loading doctor profile...</span>
-          </div>
-        </div>
-      );
-    }
     return (
       <div className="container py-20 flex items-center justify-center">
         <div className="text-muted-foreground">Loading doctor profile…</div>

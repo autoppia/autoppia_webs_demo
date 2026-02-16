@@ -12,6 +12,7 @@
 #   --demo=NAME                   Deploy specific demo: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all (default: all)
 #   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v2,v3)
 #                                            v2 = carga de datos por seed (dataset por ?seed=X)
+#   --webs_data_path=PATH         Host dir to bind at /app/data (default: $DEMOS_DIR/webs_server/initial_data)
 #   -y, --yes                     Force Docker cleanup (remove all containers/images/volumes) before deploy
 #   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
 #   --parallel=N                  Max concurrent web project deployments when --demo=all (default: 3)
@@ -43,6 +44,7 @@ Options:
   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
   --demo=NAME                   One of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, all (default: all)
   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v2,v3). v2 = datos por seed.
+  --webs_data_path=PATH         Host dir to bind at /app/data (default: \$DEMOS_DIR/webs_server/initial_data)
   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
   --parallel=N                  Max concurrent web project deployments when --demo=all (default: 3)
   -h, --help                    Show this help and exit
@@ -79,6 +81,7 @@ for ARG in "$@"; do
     --webs_postgres=*)   WEBS_PG_PORT="${ARG#*=}" ;;
     --demo=*)            WEB_DEMO="${ARG#*=}" ;;
     --enabled_dynamic_versions=*) ENABLED_DYNAMIC_VERSIONS="${ARG#*=}" ;;
+    --webs_data_path=*)  WEBS_DATA_PATH="${ARG#*=}" ;;
     -h|--help)           print_usage; exit 0 ;;
     --fast=*)            FAST_MODE="${ARG#*=}" ;;
     --parallel=*)        PARALLEL_JOBS="${ARG#*=}" ;;
@@ -215,6 +218,7 @@ echo "      V4 (seed HTML)       →  $ENABLE_DYNAMIC_V4"
 echo "    Enabled versions       →  ${ENABLED_DYNAMIC_VERSIONS:-<none>}"
 echo "    Fast mode              →  $FAST_MODE"
 [ "$WEB_DEMO" = "all" ] && echo "    Parallel jobs           →  $PARALLEL_JOBS"
+echo "    Host data path         →  ${WEBS_DATA_PATH:-<default: ~/webs_data (copied from repo)>}"
 echo ""
 
 # ============================================================================
@@ -294,6 +298,8 @@ export_env_vars() {
     GIT_COMMIT_HASH="$git_hash" \
     ENABLE_DYNAMIC_V1="$ENABLE_DYNAMIC_V1" \
     NEXT_PUBLIC_ENABLE_DYNAMIC_V1="$ENABLE_DYNAMIC_V1" \
+    ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
+    NEXT_PUBLIC_ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
     ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
     NEXT_PUBLIC_ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
     ENABLE_DYNAMIC_V3="$ENABLE_DYNAMIC_V3" \
@@ -378,14 +384,46 @@ deploy_webs_server() {
   [ "$FAST_MODE" = false ] && cache_flag="--no-cache"
 
   (
+    # Calculate absolute path for webs_data (works on any server)
+    # Use a temp directory outside repo to avoid modifying repo files
+    if [ -z "${WEBS_DATA_PATH:-}" ]; then
+      WEBS_DATA_ABS_PATH="${HOME}/webs_data"
+    else
+      WEBS_DATA_ABS_PATH="$WEBS_DATA_PATH"
+    fi
+
+    # Source data directory (in repo, read-only)
+    INITIAL_DATA_DIR="$DEMOS_DIR/webs_server/initial_data"
+
+    # Initialize data directory if it doesn't exist (copy from repo)
+    # This copies both 'original/' (high quality, fewer records) and 'data/' (more records)
+    # The container will use 'original/' if v2 is disabled, 'data/' if v2 is enabled
+    if [ ! -d "$WEBS_DATA_ABS_PATH" ] || [ -z "$(ls -A "$WEBS_DATA_ABS_PATH" 2>/dev/null)" ]; then
+      echo "  [INFO] Initializing data directory from repo (first time only)..."
+      echo "  [INFO] Copying both 'original/' (high quality) and 'data/' (more records) directories..."
+      mkdir -p "$WEBS_DATA_ABS_PATH"
+      if [ -d "$INITIAL_DATA_DIR" ]; then
+        cp -r "$INITIAL_DATA_DIR"/* "$WEBS_DATA_ABS_PATH/" 2>/dev/null || true
+        echo "  ✅ Data copied from $INITIAL_DATA_DIR to $WEBS_DATA_ABS_PATH"
+        echo "  ✅ Both 'original/' and 'data/' directories are available"
+      fi
+    fi
+
     export \
       WEB_PORT="$WEBS_PORT" \
       POSTGRES_PORT="$WEBS_PG_PORT" \
       OPENAI_API_KEY="${OPENAI_API_KEY:-}" \
       ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
       NEXT_PUBLIC_ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
+      ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
+      NEXT_PUBLIC_ENABLE_DYNAMIC_V2="$ENABLE_DYNAMIC_V2" \
       HOST_UID=$(id -u) \
-      HOST_GID=$(id -g)
+      HOST_GID=$(id -g) \
+      WEBS_DATA_PATH="$WEBS_DATA_ABS_PATH"
+
+    # Ensure host data directory exists and is owned by the invoking user
+    mkdir -p "$WEBS_DATA_PATH"
+    chown -R "$(id -u)":"$(id -g)" "$WEBS_DATA_ABS_PATH" 2>/dev/null || true
 
     docker compose -p "$name" build $cache_flag
     docker compose -p "$name" up -d
@@ -411,6 +449,69 @@ deploy_webs_server() {
     docker compose -p "$name" logs --tail=20
     exit 1
   fi
+
+  # Initialize master data pools if they don't exist
+  echo "📦 Checking for initial data pools..."
+  # Use the same WEBS_DATA_PATH that was set in deploy_webs_server
+  if [ -z "${WEBS_DATA_PATH:-}" ]; then
+    WEBS_DATA_PATH="${HOME}/webs_data"
+  fi
+  mkdir -p "$WEBS_DATA_PATH"
+
+  for project in $WEBS_PROJECTS; do
+    if [ ! -f "$WEBS_DATA_PATH/$project/main.json" ]; then
+      echo "  → Initializing $project master pool (100 records)..."
+      mkdir -p "$WEBS_DATA_PATH/$project/data"
+      if [ -d "$DEMOS_DIR/webs_server/initial_data/$project" ]; then
+        cp -r "$DEMOS_DIR/webs_server/initial_data/$project"/* "$WEBS_DATA_PATH/$project/"
+        echo "  ✅ $project master pool initialized"
+      else
+        echo "  ⚠️  No initial data found for $project (will need to generate)"
+      fi
+    else
+  echo "  ✓ $project master pool already exists ($(cat "$WEBS_DATA_PATH/$project/main.json" | grep -o '"./data/[^"]*"' | wc -l) files)"
+  fi
+done
+
+echo "✅ Master pools ready"
+
+# If DB mode (v2) is disabled, we won't sync into repo; originals will be copied directly into the container later
+
+# Copy data from repo to container (repo is always up to date)
+if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
+  REPO_DATA_DIR="$DEMOS_DIR/webs_server/initial_data"
+  echo "📦 Copying data pools from repo to webs_server container..."
+  for project in $WEBS_PROJECTS; do
+    SRC_MAIN="$REPO_DATA_DIR/$project/main.json"
+    SRC_ORIG_DIR="$REPO_DATA_DIR/$project/original"
+    SRC_DATA_DIR="$REPO_DATA_DIR/$project/data"
+
+    if [ -f "$SRC_MAIN" ]; then
+      echo "  → Copying $project to container (from repo)..."
+      docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data /app/data/$project/original 2>/dev/null || true
+      docker cp "$SRC_MAIN" webs_server-app-1:/app/data/$project/main.json 2>/dev/null || true
+      # Prefer originals if DB mode is disabled; otherwise copy data files
+      if [ "$ENABLE_DYNAMIC_V2" = false ]; then
+        if [ -d "$SRC_ORIG_DIR" ] && ls "$SRC_ORIG_DIR"/*.json >/dev/null 2>&1; then
+          for data_file in "$SRC_ORIG_DIR"/*.json; do
+            if [ -f "$data_file" ]; then
+              docker cp "$data_file" webs_server-app-1:/app/data/$project/original/ 2>/dev/null || true
+            fi
+          done
+        fi
+      elif [ -d "$SRC_DATA_DIR" ]; then
+        for data_file in "$SRC_DATA_DIR"/*.json; do
+          if [ -f "$data_file" ]; then
+            docker cp "$data_file" webs_server-app-1:/app/data/$project/data/ 2>/dev/null || true
+          fi
+        done
+      fi
+      docker exec -u root webs_server-app-1 chown -R appuser:appuser /app/data/$project 2>/dev/null || true
+      echo "  ✅ $project copied to container"
+    fi
+  done
+  echo "✅ Data pools copied to container"
+fi
 
   popd >/dev/null
   echo "✅ $name running on HTTP→localhost:$WEBS_PORT, DB→localhost:$WEBS_PG_PORT"
@@ -504,19 +605,19 @@ case "$WEB_DEMO" in
     deploy_webs_server
     echo "📦 Deploying all web projects in parallel (max $PARALLEL_JOBS concurrent)..."
     open_sem "$PARALLEL_JOBS"
-    run_with_limit deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
-    run_with_limit deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
-    run_with_limit deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
-    run_with_limit deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
-    run_with_limit deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
-    run_with_limit deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
-    run_with_limit deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
-    run_with_limit deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
-    run_with_limit deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
-    run_with_limit deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-    run_with_limit deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
-    run_with_limit deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
-    run_with_limit deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
+#    run_with_limit deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
+#    run_with_limit deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
+#    run_with_limit deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
+#    run_with_limit deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
+#    run_with_limit deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
+#    run_with_limit deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
+#    run_with_limit deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
+#    run_with_limit deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
+#    run_with_limit deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
+#    run_with_limit deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+#    run_with_limit deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
+#    run_with_limit deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+#    run_with_limit deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
     run_with_limit deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     failed=0
     for pid in "${PARALLEL_PIDS[@]}"; do

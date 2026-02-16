@@ -152,7 +152,7 @@ export class DynamicDataProvider {
         const baseSeed = this.getBaseSeedFromUrl();
         const v2Seed = seedValue ?? this.getRuntimeV2Seed() ?? 1;
 
-        // If base seed = 1, use fallback data directly (skip DB/AI)
+        // If base seed = 1, use fallback data directly (skip DB mode)
         if (baseSeed === 1) {
           console.log("[autodrive/data-provider] Reload: Base seed is 1, using fallback data");
           this.currentSeed = 1;

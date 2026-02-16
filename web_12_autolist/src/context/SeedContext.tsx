@@ -5,6 +5,10 @@ import { createContext, useContext, useState, useEffect, useCallback, Suspense }
 import { useSearchParams } from "next/navigation";
 import { clampBaseSeed } from "@/shared/seed-resolver";
 
+interface WindowWithInitialSeed extends Window {
+  __INITIAL_SEED__?: number;
+}
+
 interface SeedContextType {
   seed: number;
   setSeed: (seed: number) => void;
@@ -63,8 +67,8 @@ function SeedProviderInner({
   const searchParams = useSearchParams();
 
   const getInitialSeed = (): number => {
-    if (typeof window !== "undefined" && (window as any).__INITIAL_SEED__ !== undefined) {
-      const serverSeed = (window as any).__INITIAL_SEED__;
+    if (typeof window !== "undefined" && (window as WindowWithInitialSeed).__INITIAL_SEED__ !== undefined) {
+      const serverSeed = (window as WindowWithInitialSeed).__INITIAL_SEED__;
       if (typeof serverSeed === "number" && Number.isFinite(serverSeed)) {
         return clampBaseSeed(serverSeed);
       }
@@ -126,10 +130,13 @@ function SeedProviderInner({
       }
       setIsSeedReady(true);
     } else {
-      if (typeof window !== "undefined" && (window as any).__INITIAL_SEED__ !== undefined) {
-        const initial = clampBaseSeed((window as any).__INITIAL_SEED__);
-        if (initial !== seed) {
-          setSeedState(initial);
+      if (typeof window !== "undefined") {
+        const initialSeed = (window as WindowWithInitialSeed).__INITIAL_SEED__;
+        if (initialSeed !== undefined) {
+          const initial = clampBaseSeed(initialSeed);
+          if (initial !== seed) {
+            setSeedState(initial);
+          }
         }
       }
       setIsSeedReady(true);

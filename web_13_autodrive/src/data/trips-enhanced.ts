@@ -115,9 +115,6 @@ export const simulatedTrips: Trip[] = [
   },
 ];
 
-const clampSeed = (value: number, fallback: number = 1): number =>
-  value >= 1 && value <= 300 ? value : fallback;
-
 /**
  * Get v2 seed from window (synchronized by SeedContext)
  */
@@ -136,7 +133,7 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
   }
 
   if (typeof v2SeedValue === "number" && Number.isFinite(v2SeedValue)) {
-    return clampSeed(v2SeedValue);
+    return clampBaseSeed(v2SeedValue);
   }
 
   const baseSeed = getBaseSeedFromUrl();
@@ -147,14 +144,14 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
     }
 
     // For other seeds, use base seed directly (v2 seed = base seed)
-    return clampSeed(baseSeed);
+    return clampBaseSeed(baseSeed);
   }
 
   // Fallback to runtime seed if available
   if (typeof window !== "undefined") {
     const fromClient = getRuntimeV2Seed();
     if (typeof fromClient === "number") {
-      return clampSeed(fromClient);
+      return clampBaseSeed(fromClient);
     }
   }
 
@@ -282,7 +279,7 @@ function generateDeterministicTrips(seed: number, limit: number): Trip[] {
 
 /**
  * Initialize trips data for Web13 with deterministic pools.
- * Priority: DB → AI → Fallback (deterministic)
+ * Priority: DB → Fallback (deterministic)
  */
 export async function initializeTrips(
   v2SeedValue?: number | null,
@@ -291,7 +288,7 @@ export async function initializeTrips(
   const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed === 1 && dbModeEnabled) {
-    console.log("[autodrive] Base seed is 1, using original trips data (skipping DB/AI modes)");
+    console.log("[autodrive] Base seed is 1, using original trips data (skipping DB mode)");
     // Return normalized trips from JSON
     return (fallbackTripsData as any[]).map(normalizeTrip);
   }

@@ -50,17 +50,10 @@ try {
 const getRuntimeV2Seed = (): number | null => {
   if (typeof window === "undefined") return null;
   const value = (window as any).__autoconnectV2Seed;
-  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
-    return value;
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return clampBaseSeed(value);
   }
   return null;
-};
-
-const clampSeed = (seed: number): number => {
-  if (Number.isNaN(seed)) return 1;
-  if (seed < 1) return 1;
-  if (seed > 300) return 300;
-  return seed;
 };
 
 const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number => {
@@ -69,7 +62,7 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
   }
 
   if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
-    return clampSeed(seedValue);
+    return clampBaseSeed(seedValue);
   }
 
   const baseSeed = getBaseSeedFromUrl();
@@ -82,7 +75,7 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
     // For other seeds, resolveSeedsSync returns defaults (v2: 1)
     // But we need the actual resolved seed, so use base seed directly
     // The backend will resolve it properly, and v2 seed is typically same as base seed
-    return clampSeed(baseSeed);
+    return clampBaseSeed(baseSeed);
   }
 
   return 1;
