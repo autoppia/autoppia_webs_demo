@@ -115,6 +115,101 @@ function countPatternInFiles(files, pattern) {
 }
 
 // ============================================================================
+// TEST V2: Dataset variation (integration test, strict by default)
+// ============================================================================
+
+function testV2DatasetVariation() {
+  console.log('\n🗃️  TEST V2: Variación de dataset (integración)');
+  console.log('─'.repeat(60));
+
+  const results = { passed: 0, failed: 0, errors: [], stats: {} };
+
+  if (isBrowser()) {
+    console.log('   ⚠️  Este test solo funciona en Node.js');
+    return results;
+  }
+
+  const baseUrl = process.env.TEST_V2_API_URL || process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:8090';
+  const strictEnv = String(process.env.TEST_V2_STRICT || '').toLowerCase();
+  const strict = strictEnv ? strictEnv === 'true' : true;
+
+  console.log(`   🔗 Backend: ${baseUrl} (strict=${strict})`);
+
+  let execFileSync;
+  try {
+    ({ execFileSync } = require('child_process'));
+  } catch {
+    console.log('   ⚠️  Saltado: no se pudo cargar child_process');
+    return results;
+  }
+
+  function curlJSON(url) {
+    const out = execFileSync('curl', ['-sS', url], { encoding: 'utf8' });
+    return JSON.parse(out);
+  }
+
+  function buildUrl(seed) {
+    const trimmed = String(baseUrl).replace(/\/+$/, '');
+    const params = new URLSearchParams({
+      project_key: 'web_11_autocalendar',
+      entity_type: 'calendar_events',
+      seed_value: String(seed),
+      limit: '50',
+      method: 'shuffle',
+    });
+    return `${trimmed}/datasets/load?${params.toString()}`;
+  }
+
+  const seedsToTest = [1, 2, 3, 10, 999];
+  const signatures = [];
+
+  try {
+    seedsToTest.forEach((seed) => {
+      const url = buildUrl(seed);
+      const json = curlJSON(url);
+      const data = Array.isArray(json && json.data) ? json.data : [];
+      const sig = data
+        .slice(0, 10)
+        .map((x) => (x && (x.id || x.label)) || '')
+        .join('|');
+
+      signatures.push({ seed, count: data.length, sig });
+      console.log(`   📦 seed=${seed}: items=${data.length}`);
+    });
+  } catch (err) {
+    const msg = `V2 backend request failed (${baseUrl}): ${err && err.message ? err.message : String(err)}`;
+    if (strict) {
+      console.log(`   ❌ ${msg}`);
+      results.failed++;
+      results.errors.push(msg);
+    } else {
+      console.log(`   ⚠️  ${msg}`);
+    }
+    return results;
+  }
+
+  const unique = new Set(signatures.map((x) => x.sig));
+  results.stats.uniqueSignatures = unique.size;
+  results.stats.seedsTested = seedsToTest.length;
+
+  if (unique.size >= 2) {
+    console.log(`   ✅ Variación detectada: ${unique.size}/${seedsToTest.length} resultados distintos (por top-10 id/label)`);
+    results.passed++;
+  } else {
+    const msg = 'No se detectó variación en V2 (todos los seeds devolvieron el mismo top-10).';
+    if (strict) {
+      console.log(`   ❌ ${msg}`);
+      results.failed++;
+      results.errors.push(msg);
+    } else {
+      console.log(`   ⚠️  ${msg}`);
+    }
+  }
+
+  return results;
+}
+
+// ============================================================================
 // TEST 1: File structure
 // ============================================================================
 
@@ -821,6 +916,7 @@ function runAllTests() {
   results.push(testVariantFiles());
   results.push(testDeterminism());
   results.push(testSeedVariation()); // NEW!
+  results.push(testV2DatasetVariation()); // integration (strict by default)
   results.push(testRealUsage()); // NEW!
   results.push(testEventCoverage()); // NEW!
 

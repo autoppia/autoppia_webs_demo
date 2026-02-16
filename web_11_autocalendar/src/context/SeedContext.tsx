@@ -1,9 +1,9 @@
 "use client";
 
 import type React from "react";
-import { createContext, useContext, useState, useEffect, useCallback, Suspense } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 
 interface SeedContextType {
   seed: number;
@@ -21,142 +21,56 @@ const SeedContext = createContext<SeedContextType>({
   isSeedReady: false,
 });
 
-const STORAGE_KEY = "autocalendar_seed_base";
-
-function SeedInitializer({ onSeedFromUrl }: { onSeedFromUrl: (seed: number | null) => void }) {
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const rawSeed = searchParams.get("seed");
-    if (rawSeed) {
-      const parsed = clampBaseSeed(Number.parseInt(rawSeed, 10));
-      onSeedFromUrl(parsed);
-    } else {
-      onSeedFromUrl(null);
-    }
-  }, [searchParams, onSeedFromUrl]);
-
-  return null;
-}
-
-export const SeedProvider = ({
-  children,
-  initialSeed,
-}: {
-  children: React.ReactNode;
-  initialSeed?: number;
-}) => {
+export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <Suspense fallback={children}>
-      <SeedProviderInner initialSeed={initialSeed}>{children}</SeedProviderInner>
+      <SeedProviderInner>{children}</SeedProviderInner>
     </Suspense>
   );
 };
 
-function SeedProviderInner({
-  children,
-  initialSeed,
-}: {
-  children: React.ReactNode;
-  initialSeed?: number;
-}) {
+function SeedProviderInner({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
-
-  const getInitialSeed = (): number => {
-    if (typeof window !== "undefined" && (window as any).__INITIAL_SEED__ !== undefined) {
-      const serverSeed = (window as any).__INITIAL_SEED__;
-      if (typeof serverSeed === "number" && Number.isFinite(serverSeed)) {
-        return clampBaseSeed(serverSeed);
-      }
-    }
-    if (initialSeed !== undefined) {
-      return clampBaseSeed(initialSeed);
-    }
-    try {
-      const urlSeed = searchParams.get("seed");
-      if (urlSeed) {
-        return clampBaseSeed(Number.parseInt(urlSeed, 10));
-      }
-    } catch {
-      // useSearchParams can fail during SSR
-    }
-    if (typeof window !== "undefined") {
-      try {
-        const params = new URLSearchParams(window.location.search);
-        const urlSeed = params.get("seed");
-        if (urlSeed) {
-          return clampBaseSeed(Number.parseInt(urlSeed, 10));
-        }
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          return clampBaseSeed(Number.parseInt(saved, 10));
-        }
-      } catch {
-        // Ignore
-      }
-    }
-    return DEFAULT_SEED;
-  };
-
-  const [seed, setSeedState] = useState<number>(getInitialSeed);
+  const [seed, setSeedState] = useState<number>(DEFAULT_SEED);
   const [isSeedReady, setIsSeedReady] = useState<boolean>(false);
 
-  const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
-    if (urlSeed !== null) {
-      setSeedState(urlSeed);
-      setIsSeedReady(true);
-      if (typeof window !== "undefined") {
-        try {
-          localStorage.setItem(STORAGE_KEY, urlSeed.toString());
-        } catch (error) {
-          console.error("Error saving seed to localStorage:", error);
-        }
-      }
-    } else {
-      setIsSeedReady(true);
-    }
-  }, []);
-
+  // Source of truth: URL `?seed=` (clamped 1..999). If missing/invalid => 1.
   useEffect(() => {
-    const urlSeed = searchParams.get("seed");
-    if (urlSeed) {
-      const parsed = clampBaseSeed(Number.parseInt(urlSeed, 10));
-      if (parsed !== seed) {
-        setSeedState(parsed);
-      }
-      setIsSeedReady(true);
-    } else {
-      if (typeof window !== "undefined" && (window as any).__INITIAL_SEED__ !== undefined) {
-        const initial = clampBaseSeed((window as any).__INITIAL_SEED__);
-        if (initial !== seed) {
-          setSeedState(initial);
-        }
-      }
-      setIsSeedReady(true);
-    }
-  }, [searchParams, seed]);
-
-  useEffect(() => {
+    setSeedState(getSeedFromUrl());
     setIsSeedReady(true);
-  }, []);
+  }, [searchParams]);
 
+  // Optional: allow components to update seed and keep it in the URL.
   const setSeed = useCallback((newSeed: number) => {
-    setSeedState(clampBaseSeed(newSeed));
+    const clamped = clampSeed(newSeed);
+    setSeedState(clamped);
+    if (typeof window !== "undefined") {
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set("seed", String(clamped));
+        window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+      } catch {
+        // ignore
+      }
+    }
   }, []);
 
   const getNavigationUrl = useCallback(
     (path: string): string => {
       if (!path) return path;
       if (path.startsWith("http")) return path;
+
       const currentParams =
         typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
       const [base, qs] = path.split("?");
       const params = new URLSearchParams(qs || "");
       params.set("seed", seed.toString());
+
       const enableDynamic = currentParams.get("enable_dynamic");
       if (enableDynamic) {
         params.set("enable_dynamic", enableDynamic);
       }
+
       const query = params.toString();
       return query ? `${base}?${query}` : base;
     },
@@ -165,7 +79,6 @@ function SeedProviderInner({
 
   return (
     <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, isSeedReady }}>
-      <SeedInitializer onSeedFromUrl={handleSeedFromUrl} />
       {children}
     </SeedContext.Provider>
   );

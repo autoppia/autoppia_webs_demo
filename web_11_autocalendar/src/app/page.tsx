@@ -279,9 +279,8 @@ function expandRecurringEvents(
 
 function CalendarApp() {
   const dyn = useDynamicSystem();
-  const { seed: baseSeed } = useSeed();
+  const { seed } = useSeed();
   const currentVariant = useMemo(() => DEFAULT_LAYOUT_CONFIG, []);
-  const v2Seed = baseSeed;
   const dynamicTextVariants = useMemo(
     () => ({
       modal_heading: ["Event details", "Plan event", "Edit scheduling"],
@@ -425,26 +424,17 @@ function CalendarApp() {
       setIsLoading(false);
     });
 
-    // Listen for seed changes
-    const handleSeedChange = () => {
-      console.log(`[autocalendar] Seed changed, reloading events...`);
-      setV2Events([]);
-      setIsLoading(true);
-      // Clear user events when seed changes (they belong to old seed)
-      setUserEvents([]);
-    };
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("autocalendar:v2SeedChange", handleSeedChange);
-    }
-
     return () => {
       unsubscribe();
-      if (typeof window !== "undefined") {
-        window.removeEventListener("autocalendar:v2SeedChange", handleSeedChange);
-      }
     };
   }, [dyn.v2]);
+
+  // Clear local state when seed changes (V2 data will reload via ClientBody).
+  useEffect(() => {
+    setV2Events([]);
+    setIsLoading(true);
+    setUserEvents([]);
+  }, [seed]);
 
   // Combine V2 events with user-created events
   const events = useMemo(() => {

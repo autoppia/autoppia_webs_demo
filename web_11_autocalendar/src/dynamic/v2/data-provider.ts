@@ -1,6 +1,7 @@
 import type { CalendarEvent } from "@/library/dataset";
 import { initializeEvents } from "@/data/events-enhanced";
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 export interface EventSearchFilters {
   calendar?: string;
@@ -17,7 +18,6 @@ export class DynamicDataProvider {
   private currentSeed: number | null = null;
   private loadingPromise: Promise<void> | null = null;
 
-  // Subscribers
   private eventSubscribers: Array<(data: CalendarEvent[]) => void> = [];
 
   private constructor() {
@@ -34,21 +34,11 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  private getBaseSeed(): number {
-    if (typeof window === "undefined") return clampBaseSeed(1);
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const raw = params.get("seed");
-      if (raw) {
-        const parsed = clampBaseSeed(Number.parseInt(raw, 10));
-        return parsed;
-      }
-      const stored = window.localStorage?.getItem("autocalendar_seed_base");
-      if (stored) return clampBaseSeed(Number.parseInt(stored, 10));
-    } catch {
-      // ignore
-    }
-    return clampBaseSeed(1);
+  private getSeed(): number {
+    // V2 rule: if V2 is disabled, always act as seed=1.
+    if (!isV2Enabled()) return 1;
+    if (typeof window === "undefined") return 1;
+    return getSeedFromUrl();
   }
 
   private async initialize(): Promise<void> {
@@ -57,7 +47,7 @@ export class DynamicDataProvider {
       this.resolveReady = resolve;
     });
     try {
-      const effectiveSeed = this.getBaseSeed();
+      const effectiveSeed = this.getSeed();
       this.currentSeed = effectiveSeed;
       const events = await initializeEvents(effectiveSeed);
       this.setEvents(events);
@@ -69,7 +59,7 @@ export class DynamicDataProvider {
   }
 
   public reloadIfSeedChanged(seed?: number | null): void {
-    const targetSeed = seed !== undefined && seed !== null ? seed : this.getBaseSeed();
+    const targetSeed = seed !== undefined && seed !== null ? seed : this.getSeed();
     if (targetSeed !== this.currentSeed) {
       this.reload(targetSeed);
     }
@@ -77,7 +67,7 @@ export class DynamicDataProvider {
 
   public async reload(seedValue?: number | null): Promise<void> {
     if (this.loadingPromise) return this.loadingPromise;
-    const targetSeed = clampBaseSeed(seedValue ?? this.getBaseSeed());
+    const targetSeed = clampSeed(seedValue ?? this.getSeed());
     if (targetSeed === this.currentSeed && this.ready) return;
     this.currentSeed = targetSeed;
     this.ready = false;
@@ -86,6 +76,9 @@ export class DynamicDataProvider {
     });
     this.loadingPromise = (async () => {
       try {
+        // Clear current data so UI doesn't show stale seed data.
+        this.events = [];
+        this.notifyEvents();
         const events = await initializeEvents(targetSeed);
         this.setEvents(events);
       } catch (error) {
@@ -106,7 +99,6 @@ export class DynamicDataProvider {
   }
 
   private checkAndResolveReady(): void {
-    // Mark as ready when data is loaded
     if (!this.ready && this.events.length > 0) {
       this.ready = true;
       console.log("[autocalendar/data-provider] Marking as ready");
@@ -185,11 +177,11 @@ export class DynamicDataProvider {
   }
 
   public isDynamicModeEnabled(): boolean {
-    return false;
+    return isV2Enabled();
   }
 
   public getLayoutConfig(seed?: number) {
-    return { seed: clampBaseSeed(seed ?? 1) };
+    return { seed: clampSeed(seed ?? 1) };
   }
 }
 

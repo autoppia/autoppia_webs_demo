@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientBody from "./ClientBody";
-import Script from "next/script";
 import { SeedProvider } from "@/context/SeedContext";
 import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
@@ -32,24 +31,9 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
         <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  const params = new URLSearchParams(window.location.search);
-                  const seed = params.get('seed');
-                  if (seed) {
-                    window.__INITIAL_SEED__ = parseInt(seed, 10);
-                  }
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
-        <Script
           crossOrigin="anonymous"
           src="//unpkg.com/same-runtime/dist/index.global.js"
-        ></Script>
+        ></script>
       </head>
       <body suppressHydrationWarning className="antialiased">
         <SeedProvider>

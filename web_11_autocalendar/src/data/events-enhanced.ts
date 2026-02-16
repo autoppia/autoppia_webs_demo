@@ -1,6 +1,7 @@
-import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 import { CalendarEvent } from "@/library/dataset";
 import { fetchSeededSelection } from "@/shared/seeded-loader";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 let eventsCache: CalendarEvent[] = [];
 
@@ -10,7 +11,9 @@ let eventsCache: CalendarEvent[] = [];
  * When v2 is disabled, the server returns the original dataset.
  */
 export async function initializeEvents(seedOverride?: number | null): Promise<CalendarEvent[]> {
-  const seed = clampBaseSeed(seedOverride ?? getBaseSeedFromUrl());
+  const seed = isV2Enabled()
+    ? clampSeed(seedOverride ?? getSeedFromUrl())
+    : 1;
 
   // Always call the server endpoint - server is the single source of truth
   try {
