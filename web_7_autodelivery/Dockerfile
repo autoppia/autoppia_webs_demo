@@ -17,8 +17,6 @@ COPY web_7_autodelivery/package.json web_7_autodelivery/package-lock.json ./
 RUN set -e; for i in 1 2 3; do npm ci && exit 0 || echo "Attempt $i failed, retrying..."; sleep 5; done; exit 1
 
 COPY web_7_autodelivery/ .
-# Copy original dataset files for fallback
-COPY webs_server/initial_data/web_7_autodelivery/original/restaurants_1.json src/data/original/restaurants_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

@@ -6,9 +6,8 @@
  */
 
 import type { Restaurant } from "@/data/restaurants";
-import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { fetchSeededSelection } from "@/shared/seeded-loader";
 import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
-import fallbackRestaurants from "./original/restaurants_1.json";
 
 // Helper function to normalize restaurant images
 function normalizeRestaurantImages(restaurants: Restaurant[]): Restaurant[] {
@@ -87,93 +86,45 @@ const resolveSeed = (seedValue?: number | null): number => {
 let dynamicRestaurants: Restaurant[] = [];
 
 /**
- * Initialize restaurants with V2 system (DB mode or fallback)
+ * Initialize restaurants with V2 system (DB mode only)
  */
 export async function initializeRestaurants(seedOverride?: number | null): Promise<Restaurant[]> {
-  const dbModeEnabled = isDbLoadModeEnabled();
   const effectiveSeed = resolveSeed(seedOverride);
 
-  if (effectiveSeed === 1 && dbModeEnabled) {
-    console.log("[autodelivery] Base seed is 1 and V2 enabled, using original data (skipping DB/AI modes)");
-    dynamicRestaurants = normalizeRestaurantImages(fallbackRestaurants as Restaurant[]);
-    console.log("[autodelivery] Loaded original restaurants:", dynamicRestaurants.length);
-    return dynamicRestaurants;
-  }
+  try {
+    const restaurants = await fetchSeededSelection<Restaurant>({
+      projectKey: "web_7_autodelivery",
+      entityType: "restaurants",
+      seedValue: effectiveSeed,
+      limit: 50,
+      method: "distribute",
+      filterKey: "cuisine",
+    });
 
-  // Priority 1: DB mode - fetch from /datasets/load endpoint
-  if (dbModeEnabled) {
-    console.log("[autodelivery] DB mode enabled, attempting to load from DB...");
-    console.log("[autodelivery] effectiveSeed:", effectiveSeed);
-    console.log("[autodelivery] Effective seed for DB load:", effectiveSeed);
-
-    try {
-      console.log("[autodelivery] Calling fetchSeededSelection with:", {
-        projectKey: "web_7_autodelivery",
-        entityType: "restaurants",
-        seedValue: effectiveSeed,
-        limit: 50,
-        method: "distribute",
-        filterKey: "cuisine",
-      });
-
-      const restaurants = await fetchSeededSelection<Restaurant>({
-        projectKey: "web_7_autodelivery",
-        entityType: "restaurants",
-        seedValue: effectiveSeed,
-        limit: 50, // Fixed limit of 50 items for DB mode
-        method: "distribute",
-        filterKey: "cuisine",
-      });
-
-      console.log("[autodelivery] fetchSeededSelection returned:", restaurants?.length, "restaurants");
-      console.log("[autodelivery] First few restaurants:", restaurants?.slice(0, 3));
-
-      if (Array.isArray(restaurants) && restaurants.length > 0) {
-        console.log(
-          `[autodelivery] ✅ Successfully loaded ${restaurants.length} restaurants from dataset (seed=${effectiveSeed})`
-        );
-        dynamicRestaurants = normalizeRestaurantImages(restaurants);
-        return dynamicRestaurants;
-      }
-
-      console.warn(`[autodelivery] ⚠️ No restaurants returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
-    } catch (error) {
-      console.error("[autodelivery] ❌ Backend unavailable, falling back to local JSON. Error:", error);
-      if (error instanceof Error) {
-        console.error("[autodelivery] Error message:", error.message);
-        console.error("[autodelivery] Error stack:", error.stack);
-      }
+    if (Array.isArray(restaurants) && restaurants.length > 0) {
+      console.log(
+        `[autodelivery] Loaded ${restaurants.length} restaurants from dataset (seed=${effectiveSeed})`
+      );
+      dynamicRestaurants = normalizeRestaurantImages(restaurants);
+      return dynamicRestaurants;
     }
+
+    console.warn(`[autodelivery] No restaurants returned from backend (seed=${effectiveSeed})`);
+  } catch (error) {
+    console.warn("[autodelivery] Backend unavailable:", error);
   }
 
-  // Fallback to local JSON
-  dynamicRestaurants = normalizeRestaurantImages(fallbackRestaurants as Restaurant[]);
+  dynamicRestaurants = [];
   return dynamicRestaurants;
 }
 
 // Runtime-only DB fetch for when DB mode is enabled
 export async function loadRestaurantsFromDb(seedOverride?: number | null): Promise<Restaurant[]> {
-  if (!isDbLoadModeEnabled()) {
-    console.log("[autodelivery] loadRestaurantsFromDb: DB mode not enabled, returning empty array");
-    return [];
-  }
-
-  // Check base seed from URL - if seed = 1, return empty array to trigger fallback
   const baseSeed = getBaseSeedFromUrl();
   const seed = (typeof seedOverride === "number" && seedOverride > 0) ? seedOverride : baseSeed;
 
-  console.log("[autodelivery] loadRestaurantsFromDb - baseSeed:", baseSeed, "seedOverride:", seedOverride, "final seed:", seed);
-
-  // If seed = 1, return empty array so initializeRestaurants will use fallback data
-  if (baseSeed === 1 || seed === 1) {
-    console.log("[autodelivery] loadRestaurantsFromDb: seed is 1, returning empty array to use fallback data");
-    return [];
-  }
-
   try {
-    const limit = 50; // Fixed limit of 50 items
-    console.log("[autodelivery] loadRestaurantsFromDb: Fetching from server with seed:", seed, "limit:", limit);
-    // Prefer distributed selection to avoid cuisine dominance
+    const limit = 50;
     const distributed = await fetchSeededSelection<Restaurant>({
       projectKey: "web_7_autodelivery",
       entityType: "restaurants",
@@ -182,28 +133,23 @@ export async function loadRestaurantsFromDb(seedOverride?: number | null): Promi
       method: "distribute",
       filterKey: "cuisine",
     });
-    const selected = Array.isArray(distributed) && distributed.length > 0 ? distributed : await fetchSeededSelection<Restaurant>({
-      projectKey: "web_7_autodelivery",
-      entityType: "restaurants",
-      seedValue: seed,
-      limit,
-      method: "select",
-    });
+    const selected =
+      Array.isArray(distributed) && distributed.length > 0
+        ? distributed
+        : await fetchSeededSelection<Restaurant>({
+            projectKey: "web_7_autodelivery",
+            entityType: "restaurants",
+            seedValue: seed,
+            limit,
+            method: "select",
+          });
     if (selected && selected.length > 0) {
-      console.log("[autodelivery] loadRestaurantsFromDb: ✅ Successfully loaded", selected.length, "restaurants from DB");
       return normalizeRestaurantImages(selected);
-    } else {
-      console.warn("[autodelivery] loadRestaurantsFromDb: ⚠️ No restaurants selected from DB (selected length:", selected?.length, ")");
     }
   } catch (e) {
-    console.error("[autodelivery] loadRestaurantsFromDb: ❌ Failed to load seeded restaurant selection from DB:", e);
-    if (e instanceof Error) {
-      console.error("[autodelivery] Error message:", e.message);
-      console.error("[autodelivery] Error stack:", e.stack);
-    }
+    console.warn("[autodelivery] loadRestaurantsFromDb: Failed to load from DB:", e);
   }
 
-  console.log("[autodelivery] loadRestaurantsFromDb: Returning empty array");
   return [];
 }
 

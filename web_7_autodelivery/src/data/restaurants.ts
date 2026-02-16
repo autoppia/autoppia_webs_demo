@@ -1,6 +1,4 @@
-// Example dummy data for restaurants and menu
-
-import originalRestaurants from "./original/restaurants_1.json";
+// Types and constants for restaurants and menu (data loaded from DB via restaurants-enhanced)
 
 export type MenuItemSize = {
     name: string;
@@ -45,19 +43,5 @@ export type Restaurant = {
     pickupTime: string;
 };
 
-const DEFAULT_SIZES: MenuItemSize[] = [
-    {name: "Small", cal: 230, priceMod: 0},
-    {name: "Medium", cal: 320, priceMod: 0.9},
-    {name: "Large", cal: 480, priceMod: 1.6},
-];
-
-// Use original JSON file as default instead of baseRestaurants
-const baseRestaurants: Restaurant[] = (originalRestaurants as Restaurant[]).map((rest) => ({
-    ...rest,
-    menu: rest.menu.map((item) => ({
-        ...item,
-        sizes: item.sizes && item.sizes.length > 0 ? item.sizes : DEFAULT_SIZES,
-    })),
-}));
-
-export const restaurants: Restaurant[] = baseRestaurants;
+// Empty by default; populated from DB via restaurants-enhanced / dynamicDataProvider
+export const restaurants: Restaurant[] = [];

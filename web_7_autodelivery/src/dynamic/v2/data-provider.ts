@@ -8,7 +8,6 @@ import type { Restaurant } from "@/data/restaurants";
 import type { Testimonial } from "@/data/testimonials";
 import { initializeRestaurants, loadRestaurantsFromDb } from "@/data/restaurants-enhanced";
 import { getRandomTestimonials } from "@/data/testimonials-enhanced";
-import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
@@ -46,58 +45,28 @@ export class DynamicDataProvider {
   }
 
   private async initializeRestaurants(): Promise<void> {
-    const baseSeed = this.getBaseSeedFromUrl();
     const runtimeSeed = this.getRuntimeV2Seed();
+    this.currentSeed = runtimeSeed ?? 1;
 
     try {
-      // If base seed = 1, use fallback data directly (skip DB/AI)
-      if (baseSeed === 1) {
-        console.log("[autodelivery/data-provider] Base seed is 1, using fallback data");
-        const initializedRestaurants = await initializeRestaurants(runtimeSeed ?? undefined);
-        this.setRestaurants(initializedRestaurants);
-        this.setTestimonials(getRandomTestimonials(5));
-        return;
-      }
-
-      this.currentSeed = runtimeSeed ?? 1;
-
-      // Check if DB mode is enabled - only try DB if enabled
-      const dbModeEnabled = isDbLoadModeEnabled();
-      console.log("[autodelivery/data-provider] DB mode enabled:", dbModeEnabled, "runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
-
-      if (dbModeEnabled) {
-        // Try DB mode first if enabled
-        console.log("[autodelivery/data-provider] Attempting to load restaurants from DB...");
-        const dbRestaurants = await loadRestaurantsFromDb(runtimeSeed ?? undefined);
-        console.log("[autodelivery/data-provider] loadRestaurantsFromDb returned:", dbRestaurants.length, "restaurants");
-
-        if (dbRestaurants.length > 0) {
-          console.log("[autodelivery/data-provider] ✅ Successfully loaded", dbRestaurants.length, "restaurants from DB");
+      const dbRestaurants = await loadRestaurantsFromDb(runtimeSeed ?? undefined);
+      if (dbRestaurants.length > 0) {
           this.setRestaurants(dbRestaurants);
           this.setTestimonials(getRandomTestimonials(5));
           return;
-        } else {
-          console.log("[autodelivery/data-provider] ⚠️ No restaurants from DB, will try initializeRestaurants...");
-        }
       }
 
-      // If DB mode not enabled or DB returned empty, use initializeRestaurants
-      // This will handle AI generation mode or fallback
       const initializedRestaurants = await initializeRestaurants(runtimeSeed ?? undefined);
       this.setRestaurants(initializedRestaurants);
       this.setTestimonials(getRandomTestimonials(5));
-
     } catch (error) {
-      console.error("[autodelivery/data-provider] Failed to initialize restaurants:", error);
-      // Even if there's an error, we should mark as ready with fallback data
-      // to prevent infinite loading state
+      console.warn("[autodelivery/data-provider] Failed to load restaurants:", error);
       try {
         const initializedRestaurants = await initializeRestaurants(runtimeSeed ?? undefined);
         this.setRestaurants(initializedRestaurants);
         this.setTestimonials(getRandomTestimonials(5));
-      } catch (fallbackError) {
-        console.error("[autodelivery/data-provider] Failed to initialize fallback restaurants:", fallbackError);
-        // Last resort: mark as ready with empty array to prevent infinite loading
+      } catch {
+        this.setRestaurants([]);
         this.ready = true;
         this.resolveReady();
       }
@@ -127,18 +96,9 @@ export class DynamicDataProvider {
 
     this.loadingPromise = (async () => {
       try {
-        const baseSeed = this.getBaseSeedFromUrl();
         const v2Seed = seedValue ?? this.getRuntimeV2Seed() ?? 1;
+        this.currentSeed = v2Seed;
 
-        // If base seed = 1, use fallback data directly (skip DB/AI)
-        if (baseSeed === 1) {
-          console.log("[autodelivery/data-provider] Reload: Base seed is 1, using fallback data");
-          this.currentSeed = 1;
-        } else {
-          this.currentSeed = v2Seed;
-        }
-
-        // Reset ready state
         this.ready = false;
         this.readyPromise = new Promise<void>((resolve) => {
           this.resolveReady = resolve;
@@ -148,8 +108,7 @@ export class DynamicDataProvider {
         this.setRestaurants(initializedRestaurants);
         this.setTestimonials(getRandomTestimonials(5));
       } catch (error) {
-        console.error("[autodelivery] Failed to reload restaurants:", error);
-        // Mark as ready even on error to prevent infinite loading
+        console.warn("[autodelivery] Failed to reload restaurants:", error);
         this.ready = true;
         this.resolveReady();
       } finally {
@@ -221,19 +180,6 @@ export class DynamicDataProvider {
       value <= 300
     ) {
       return value;
-    }
-    return null;
-  }
-
-  private getBaseSeedFromUrl(): number | null {
-    if (typeof window === "undefined") return null;
-    const params = new URLSearchParams(window.location.search);
-    const seedParam = params.get("seed");
-    if (seedParam) {
-      const parsed = Number.parseInt(seedParam, 10);
-      if (Number.isFinite(parsed) && parsed >= 1 && parsed <= 300) {
-        return parsed;
-      }
     }
     return null;
   }
@@ -339,8 +285,3 @@ export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
 // Re-export for compatibility
 export { initializeRestaurants };
-export const getTestimonials = () => dynamicDataProvider.getTestimonials();
-export const getRestaurants = () => dynamicDataProvider.getRestaurants();
-
-// Export helper functions
-export const isDynamicModeEnabled = () => dynamicDataProvider.isReady();
