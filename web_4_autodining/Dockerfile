@@ -18,8 +18,6 @@ COPY web_4_autodining/package.json web_4_autodining/package-lock.json ./
 RUN set -e; for i in 1 2 3; do npm ci && exit 0 || echo "Attempt $i failed, retrying..."; sleep 5; done; exit 1
 
 COPY web_4_autodining/ .
-# Copy original dataset files for fallback
-COPY webs_server/initial_data/web_4_autodining/original/restaurants_1.json src/data/original/restaurants_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions
@@ -57,12 +55,6 @@ RUN BASE_VERSION=$(node -p "require('./package.json').version") && \
     echo "WEB_VERSION=$WEB_VERSION" >> .env.local && \
     echo "✅ Auto-version: $WEB_VERSION"
 
-# Debug: Print the environment variables
-RUN echo "🔍 Build-time ENABLE_DYNAMIC_V1: $ENABLE_DYNAMIC_V1"
-RUN echo "🔍 Build-time NEXT_PUBLIC_ENABLE_DYNAMIC_V1: $NEXT_PUBLIC_ENABLE_DYNAMIC_V1"
-RUN echo "🔍 Build-time ENABLE_DYNAMIC_V2: $ENABLE_DYNAMIC_V2"
-RUN echo "🔍 Build-time NEXT_PUBLIC_ENABLE_DYNAMIC_V2: $NEXT_PUBLIC_ENABLE_DYNAMIC_V2"
-
 RUN npm run build
 
 # Stage 2: Create the lean production image
@@ -72,9 +64,6 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=8003
 EXPOSE 8003
-
-# Note: NEXT_PUBLIC_* variables are embedded at build time in the .next bundle,
-# so they don't need to be set here. They're already in the JavaScript code.
 
 # Copy package files first (npm ci requires package-lock.json)
 COPY --from=builder /app/package.json ./package.json

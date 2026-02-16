@@ -20,15 +20,12 @@ import {
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { getRestaurants, initializeRestaurants } from "@/dynamic/v2";
-import type { RestaurantGenerated } from "@/dynamic/v2";
 import { useSearchParams } from "next/navigation";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
 import { cn } from "@/library/utils";
-import { buildBookingHref } from "@/utils/bookingPaths";
 import Navbar from "@/components/Navbar";
-import fallbackRestaurants from "@/data/original/restaurants_1.json";
 
 type UiRestaurant = {
   id: string;
@@ -44,38 +41,7 @@ type UiRestaurant = {
   times: string[];
 };
 
-// Default restaurants array from jsonData (fallback when dynamic data unavailable)
-// Usar el JSON actualizado directamente que ya tiene rating y stars separados
-const defaultRestaurants = (fallbackRestaurants as any[]).map(
-  (item, index) => ({
-    id: `restaurant-${item.id ?? index + 1}`,
-    name: item.namepool,
-    image: item.image || `/images/restaurant${(index % 19) + 1}.jpg`,
-    rating: item.rating ?? 4.5,
-    stars: item.stars ?? 5,
-    reviews: item.reviews ?? 0,
-    cuisine: item.cuisine,
-    price: item.price ?? "$$",
-    bookings: item.bookings ?? 0,
-    area: item.area,
-    times: ["1:00 PM"],
-  })
-);
-
-const staticById = new Map(
-  (fallbackRestaurants as any[]).map((item, index) => [
-    item.id ?? `restaurant-${index + 1}`,
-    {
-      rating: item.rating ?? 4.5,
-      stars: item.stars ?? 5,
-      reviews: item.reviews ?? 0,
-      bookings: item.bookings ?? 0,
-      price: item.price ?? "$$",
-      area: item.area,
-      cuisine: item.cuisine,
-    },
-  ])
-);
+const defaultRestaurants: UiRestaurant[] = [];
 
 function StarRating({ count }: { count: number }) {
   // count ya viene como entero (1-5) del JSON, no necesitamos round
@@ -521,29 +487,19 @@ function HomePageContent() {
         // Only update state if this effect hasn't been cancelled
         if (!cancelled) {
           const fresh = getRestaurants().map((r) => {
-            const staticDefaults =
-              staticById.get(r.id) ||
-              staticById.get(r.id?.toString().replace("restaurant-", ""));
-
-            // Priorizar valores directos del restaurante, luego defaults, luego fallback
-            const rating = (r as any).rating ?? staticDefaults?.rating ?? 4.5;
-            const stars =
-              (r as any).stars ?? staticDefaults?.stars ?? Math.round(rating);
-            const reviews = r.reviews ?? staticDefaults?.reviews ?? 64;
-            const bookings = r.bookings ?? staticDefaults?.bookings ?? 0;
-            const price = r.price ?? staticDefaults?.price ?? "$$";
-
+            const rating = (r as any).rating ?? 4.5;
+            const stars = (r as any).stars ?? Math.round(rating);
             return {
               id: r.id,
               name: r.name,
               image: r.image,
-              cuisine: r.cuisine ?? staticDefaults?.cuisine ?? "International",
-              area: r.area ?? staticDefaults?.area ?? "Downtown",
-              reviews,
+              cuisine: r.cuisine ?? "International",
+              area: r.area ?? "Downtown",
+              reviews: r.reviews ?? 64,
               rating,
               stars,
-              price,
-              bookings,
+              price: r.price ?? "$$",
+              bookings: r.bookings ?? 0,
               times: ["1:00 PM"],
             };
           });

@@ -1,5 +1,3 @@
-// src/lib/logger.ts
-
 export const EVENT_TYPES = {
   SEARCH_RESTAURANT: "SEARCH_RESTAURANT",
   TIME_DROPDOWN_OPENED: "TIME_DROPDOWN_OPENED",
@@ -25,9 +23,6 @@ export const EVENT_TYPES = {
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
 
-// Import the SeedVariationManager for event registration
-import { SeedVariationManager } from "./utils";
-
 export function logEvent(
   eventType: EventType,
   data: any = {},
@@ -43,16 +38,6 @@ export function logEvent(
   const validatorId = localStorage.getItem("validator_id");
   const resolvedWebAgentId = webAgentId && webAgentId !== "null" ? webAgentId : "1";
   const resolvedValidatorId = validatorId && validatorId !== "null" ? validatorId : "1";
-
-  // Register the event with the SeedVariationManager to trigger layout changes
-  try {
-    SeedVariationManager.registerEvent(eventType);
-  } catch (err) {
-    // Ignorar errores en el registro de eventos - no debe romper la página
-    if (process.env.NODE_ENV === "development") {
-      console.warn("⚠️ Error registering event:", err);
-    }
-  }
 
   // Construir el payload completo que espera el backend
   const eventData = {

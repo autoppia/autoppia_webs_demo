@@ -7,10 +7,8 @@
 
 import {
   fetchSeededSelection,
-  isDbLoadModeEnabled,
 } from "@/shared/seeded-loader";
 import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
-import fallbackRestaurants from "./original/restaurants_1.json";
 
 export interface RestaurantGenerated {
   id: string;
@@ -97,68 +95,37 @@ function normalizeRestaurants(
  * Get restaurants (from cache or static fallback)
  */
 export function getRestaurants(): RestaurantGenerated[] {
-  // Si hay dynamic restaurants, usarlos
-  if (dynamicRestaurants.length > 0) {
-    return dynamicRestaurants;
-  }
-
-  // Si no, usar el JSON actualizado directamente (ya tiene rating y stars)
-  return (fallbackRestaurants as any[]).map((item) => ({
-    id: `restaurant-${item.id}`,
-    name: item.namepool,
-    image: item.image || `/images/restaurant${parseInt(item.id) % 19 || 1}.jpg`,
-    rating: item.rating ?? 4.5,
-    stars: item.stars ?? 5,
-    reviews: item.reviews ?? 0,
-    cuisine: item.cuisine,
-    price: item.price ?? "$$",
-    bookings: item.bookings ?? 0,
-    area: item.area,
-  }));
+  return dynamicRestaurants;
 }
 
 /**
  * Initialize restaurants from server using seeded selection
  */
 export async function initializeRestaurants(seedOverride?: number | null): Promise<RestaurantGenerated[]> {
-  const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
   const effectiveSeed = clampBaseSeed(seedOverride ?? baseSeed ?? 1);
-  if (effectiveSeed === 1 && dbModeEnabled) {
-    console.log("[autodining] Base seed is 1, using original data (skipping DB/AI modes)");
-    dynamicRestaurants = normalizeRestaurants(fallbackRestaurants as DatasetRestaurant[]);
-    return dynamicRestaurants;
-  }
 
-  // Priority 1: DB mode - fetch from /datasets/load endpoint
-  if (dbModeEnabled) {
-    try {
-      const restaurants = await fetchSeededSelection<DatasetRestaurant>({
-        projectKey: "web_4_autodining",
-        entityType: "restaurants",
-        seedValue: effectiveSeed,
-        limit: 50, // Fixed limit of 50 items for DB mode
-        method: "distribute",
-        filterKey: "cuisine",
-      });
+  try {
+    const restaurants = await fetchSeededSelection<DatasetRestaurant>({
+      projectKey: "web_4_autodining",
+      entityType: "restaurants",
+      seedValue: effectiveSeed,
+      limit: 50, // Fixed limit of 50 items for DB mode
+      method: "distribute",
+      filterKey: "cuisine",
+    });
 
-      if (Array.isArray(restaurants) && restaurants.length > 0) {
-        console.log(
-          `[autodining] Loaded ${restaurants.length} restaurants from dataset (seed=${effectiveSeed})`
-        );
-        dynamicRestaurants = normalizeRestaurants(restaurants);
-        return dynamicRestaurants;
-      }
-
-      // If no restaurants returned from backend, fallback to local JSON
-      console.warn(`[autodining] No restaurants returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
-    } catch (error) {
-      // If backend fails, fallback to local JSON
-      console.warn("[autodining] Backend unavailable, falling back to local JSON:", error);
+    if (Array.isArray(restaurants) && restaurants.length > 0) {
+      console.log(
+        `[autodining] Loaded ${restaurants.length} restaurants from dataset (seed=${effectiveSeed})`
+      );
+      dynamicRestaurants = normalizeRestaurants(restaurants);
+      return dynamicRestaurants;
     }
-  }
 
-  // Fallback to local JSON
-  dynamicRestaurants = normalizeRestaurants(fallbackRestaurants as DatasetRestaurant[]);
+    console.warn(`[autodining] No restaurants returned from backend (seed=${effectiveSeed})`);
+  } catch (error) {
+    console.warn("[autodining] Backend unavailable, Error:", error);
+  }
   return dynamicRestaurants;
 }
