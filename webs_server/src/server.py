@@ -800,6 +800,58 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
         )
 
 
+# --- Data Loading Helpers ---
+def _is_v2_enabled() -> bool:
+    """True when ENABLE_DYNAMIC_V2 is set to an enabled value."""
+    return os.getenv("ENABLE_DYNAMIC_V2", "false").lower() not in {"false", "0", "no", "off"}
+
+
+def _apply_seeded_selection(
+    pool: List[Dict[str, Any]],
+    seed: int,
+    limit: int,
+    method: str,
+    filter_key: Optional[str],
+    filter_values: Optional[str],
+) -> List[Dict[str, Any]]:
+    """Apply deterministic seeded selection to the pool. Returns selected items."""
+    method_normalized = (method or "select").lower()
+    filter_list = [v.strip() for v in filter_values.split(",")] if filter_values else None
+
+    if method_normalized == "shuffle":
+        return seeded_shuffle(pool, seed, limit=limit)
+    if method_normalized == "filter":
+        return seeded_filter_and_select(pool, seed, limit, filter_key=filter_key, filter_values=filter_list)
+    if method_normalized == "distribute":
+        category_key = filter_key or "category"
+        return seeded_distribution(pool, seed, category_key=category_key, total_count=limit)
+    return seeded_select(pool, seed=seed, count=limit, allow_duplicates=False)
+
+
+def _build_load_metadata(
+    project_key: str,
+    entity_type: str,
+    seed: int,
+    limit: int,
+    method: str,
+    filter_key: Optional[str],
+    filter_values: Optional[List[str]],
+    total_available: int,
+) -> Dict[str, Any]:
+    """Build response metadata for dataset load."""
+    return {
+        "source": "file_storage",
+        "projectKey": project_key,
+        "entityType": entity_type,
+        "seed": seed,
+        "limit": limit,
+        "method": method,
+        "filterKey": filter_key,
+        "filterValues": filter_values,
+        "totalAvailable": total_available,
+    }
+
+
 # --- Data Loading Models ---
 class DatasetLoadRequest(BaseModel):
     project_key: str = Field(..., description="Project key")
@@ -841,8 +893,10 @@ async def load_dataset_endpoint(
     This endpoint is used when projects are deployed with --load_from_db parameter.
     """
     try:
-        # Load from file-based storage under /app/data only (files-only mode)
-        file_data_pool = load_all_data(project_key, entity_type, seed_value=seed_value)
+        v2_enabled = _is_v2_enabled()
+        load_seed = seed_value if v2_enabled else 1
+
+        file_data_pool = load_all_data(project_key, entity_type, seed_value=load_seed)
 
         if not file_data_pool:
             raise HTTPException(
@@ -850,64 +904,24 @@ async def load_dataset_endpoint(
                 detail=f"No file-based data found for project={project_key}. Generate data first.",
             )
 
-        # If V2 DB mode is disabled, or seed is 1: return a limited subset (respect frontend limit).
-        if os.getenv("ENABLE_DYNAMIC_V2", "false").lower() in {"false", "0", "no", "off"} or seed_value == 1:
-            logger.info("v2 db mode disabled or seed value is 1; returning fallback data (respecting limit).")
-            limited = file_data_pool[:limit]
-            metadata = {
-                "source": "file_storage",
-                "projectKey": project_key,
-                "entityType": entity_type,
-                "seed": seed_value,
-                "limit": limit,
-                "method": "full",
-                "filterKey": filter_key,
-                "filterValues": None,
-                "totalAvailable": len(file_data_pool),
-            }
+        total_available = len(file_data_pool)
+        use_original_only = not v2_enabled or seed_value == 1
+
+        if use_original_only:
+            logger.info("v2 disabled or seed=1; returning original data (respecting limit), seed ignored when v2 disabled.")
+            data = file_data_pool[:limit]
+            effective_seed = 1 if not v2_enabled else seed_value
+            metadata = _build_load_metadata(project_key, entity_type, effective_seed, limit, "full", filter_key, None, total_available)
             return DatasetLoadResponse(
-                message=f"DB mode disabled or seed=1; returning {len(limited)} items (limit={limit}, pool={len(file_data_pool)})",
+                message=f"Original data only (v2 disabled or seed=1); returning {len(data)} items (limit={limit}, pool={total_available})",
                 metadata=metadata,
-                data=limited,
-                count=len(limited),
+                data=data,
+                count=len(data),
             )
 
-        # Apply seeded selection based on requested method
-        method_normalized = (method or "select").lower()
-        selected: List[Dict[str, Any]]
-
-        # Parse filters
         filter_list = [v.strip() for v in filter_values.split(",")] if filter_values else None
-
-        if method_normalized == "shuffle":
-            selected = seeded_shuffle(file_data_pool, seed_value, limit=limit)
-        elif method_normalized == "filter":
-            selected = seeded_filter_and_select(
-                file_data_pool,
-                seed_value,
-                limit,
-                filter_key=filter_key,
-                filter_values=filter_list,
-            )
-        elif method_normalized == "distribute":
-            # Use filter_key as category_key for distribution if provided, else default 'category'
-            category_key = filter_key or "category"
-            selected = seeded_distribution(file_data_pool, seed_value, category_key=category_key, total_count=limit)
-        else:
-            # Default 'select' method
-            selected = seeded_select(file_data_pool, seed=seed_value, count=limit, allow_duplicates=False)
-
-        metadata = {
-            "source": "file_storage",
-            "projectKey": project_key,
-            "entityType": entity_type,
-            "seed": seed_value,
-            "limit": limit,
-            "method": method_normalized,
-            "filterKey": filter_key,
-            "filterValues": filter_list,
-            "totalAvailable": len(file_data_pool),
-        }
+        selected = _apply_seeded_selection(file_data_pool, seed_value, limit, method, filter_key, filter_values)
+        metadata = _build_load_metadata(project_key, entity_type, seed_value, limit, (method or "select").lower(), filter_key, filter_list, total_available)
         return DatasetLoadResponse(
             message=f"Successfully selected {len(selected)} items from file storage using seed={seed_value}",
             metadata=metadata,
