@@ -11,10 +11,7 @@ services:
         API_URL: ${API_URL:-http://app:8090}
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8090}
         GIT_COMMIT_HASH: ${GIT_COMMIT_HASH:-unknown}
-    # En producción NO montes tu código: deja que la imagen lleve la build
-    # volumes:
-    #   - .:/app
-    #   - /app/node_modules
+
     ports:
       - "127.0.0.1:${WEB_PORT}:8001"
     restart: always

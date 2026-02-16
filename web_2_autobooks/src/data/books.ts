@@ -1,5 +1,6 @@
+import { fetchSeededSelection } from "@/shared/seeded-loader";
 import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
-import baseBooks from "./original/books_1.json";
+import {isV2Enabled} from "@/dynamic/shared/flags";
 
 export interface Book {
   id: string;
@@ -18,9 +19,6 @@ export interface Book {
   imagePath?: string;
   price?: number;
 }
-
-export type Movie = Book;
-
 type DatasetBook = {
   id?: string;
   title?: string;
@@ -141,7 +139,33 @@ let booksCache: Book[] = [];
  * Initialize books from base seed data (local JSON only).
  */
 export async function initializeBooks(seedOverride?: number | null): Promise<Book[]> {
-  const _seed = clampBaseSeed(seedOverride ?? getBaseSeedFromUrl());
-  booksCache = (baseBooks as DatasetBook[]).map(normalizeBook);
-  return booksCache;
+  const baseSeed = getBaseSeedFromUrl();
+  const effectiveSeed = isV2Enabled()
+    ? clampBaseSeed(seedOverride ?? baseSeed ?? 1)
+    : 1;
+
+  try {
+    const books = await fetchSeededSelection<DatasetBook>({
+      projectKey: "web_2_autobooks",
+      entityType: "books",
+      seedValue: effectiveSeed,
+      limit: 50, // Fixed limit of 50 items for DB mode
+      method: "distribute",
+      filterKey: "category",
+    });
+
+    if (Array.isArray(books) && books.length > 0) {
+      console.log(`[autobooks] Loaded ${books.length} books`);
+      booksCache = books.map(normalizeBook);
+      return booksCache;
+    }
+    console.warn(`[autobooks] No books returned from backend (seed=${effectiveSeed})`);
+    booksCache = [];
+    return booksCache;
+  } catch (error) {
+    console.warn("[autobooks] Backend unavailable, Error", error);
+    booksCache = [];
+    return booksCache;
+    }
+
 }
