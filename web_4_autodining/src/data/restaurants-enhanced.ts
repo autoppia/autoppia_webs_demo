@@ -8,7 +8,8 @@
 import {
   fetchSeededSelection,
 } from "@/shared/seeded-loader";
-import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 export interface RestaurantGenerated {
   id: string;
@@ -102,8 +103,10 @@ export function getRestaurants(): RestaurantGenerated[] {
  * Initialize restaurants from server using seeded selection
  */
 export async function initializeRestaurants(seedOverride?: number | null): Promise<RestaurantGenerated[]> {
-  const baseSeed = getBaseSeedFromUrl();
-  const effectiveSeed = clampBaseSeed(seedOverride ?? baseSeed ?? 1);
+  // V2 rule: seed always comes from URL, but if V2 is disabled we force seed=1.
+  const effectiveSeed = isV2Enabled()
+    ? clampSeed(seedOverride ?? getSeedFromUrl())
+    : 1;
 
   try {
     const restaurants = await fetchSeededSelection<DatasetRestaurant>({
