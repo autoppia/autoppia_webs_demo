@@ -1,18 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
-import { getEffectiveSeed } from '@/dynamic/v2';
 import { getLayoutVariant, type LayoutVariant } from '@/dynamic/layout';
 import { useSeed } from '@/context/SeedContext';
-
-declare global {
-  interface Window {
-    __automailV2Seed?: number | null;
-  }
-  interface WindowEventMap {
-    "automail:v2SeedChange": CustomEvent<{ seed: number | null }>;
-  }
-}
 
 interface LayoutContextType {
   currentVariant: LayoutVariant;
@@ -20,7 +10,6 @@ interface LayoutContextType {
   setSeed: (seed: number) => void;
   updateUrlManually: (seed: number) => void;
   getNavigationUrl: (path: string) => string;
-  v2Seed: number | null;
 }
 
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
@@ -28,7 +17,6 @@ const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 export function LayoutProvider({ children }: { children: React.ReactNode }) {
   // Use SeedContext for unified seed management
   const { seed: baseSeed, setSeed: setSeedInContext, getNavigationUrl: seedGetNavigationUrl } = useSeed();
-  const v2Seed = baseSeed;
 
   const [seed, setSeed] = useState(baseSeed);
   const currentVariant = useMemo(() => getLayoutVariant(seed), [seed]);
@@ -38,22 +26,11 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     setSeed(baseSeed);
   }, [baseSeed]);
 
-  // Sync v2Seed to window for backward compatibility
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    window.__automailV2Seed = v2Seed ?? null;
-    window.dispatchEvent(new CustomEvent("automail:v2SeedChange", { detail: { seed: v2Seed ?? null } }));
-    console.log("[LayoutContext] v2-seed set", { v2Seed });
-  }, [v2Seed]);
-
   // LAYOUT FIJO - Siempre usar layout de seed=1
 
   const handleSetSeed = (newSeed: number) => {
-    if (newSeed >= 1 && newSeed <= 300) {
-      const effectiveSeed = getEffectiveSeed(newSeed);
-      // Update SeedContext (which will update URL and localStorage)
-      setSeedInContext(effectiveSeed);
-    }
+    // Delegate clamp + URL update to SeedContext.
+    setSeedInContext(newSeed);
   };
 
   const updateUrlManually = (newSeed: number) => {
@@ -75,7 +52,6 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
       setSeed: handleSetSeed,
       updateUrlManually,
       getNavigationUrl,
-      v2Seed,
     }}>
       {children}
     </LayoutContext.Provider>

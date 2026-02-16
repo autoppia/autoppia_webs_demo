@@ -1,12 +1,12 @@
 import type { Email } from "@/types/email";
 import { emails, initializeEmails, loadEmailsFromDb, writeCachedEmails, readCachedEmails } from "@/data/emails-enhanced";
 import { isV2Enabled } from "@/dynamic/shared/flags";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 
 // Dynamic data provider that returns either seed data or empty arrays based on config
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private emails: Email[] = [];
-  private isEnabled: boolean = false;
   private ready: boolean = false;
   private readyPromise: Promise<void>;
   private resolveReady!: () => void;
@@ -15,7 +15,6 @@ export class DynamicDataProvider {
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
-    this.isEnabled = isV2Enabled();
     // hydrate from cache if available to keep content stable across reloads
     const cached = readCachedEmails();
     this.emails = Array.isArray(cached) && cached.length > 0 ? cached : emails;
@@ -25,13 +24,6 @@ export class DynamicDataProvider {
 
     // Initialize emails with data generation if enabled
     this.initializeEmails();
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("automail:v2SeedChange", (event) => {
-        const detail = (event as CustomEvent<{ seed: number | null }>).detail;
-        this.refreshEmailsForSeed(detail?.seed ?? null);
-      });
-    }
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -42,23 +34,22 @@ export class DynamicDataProvider {
   }
 
   private async initializeEmails(): Promise<void> {
-    const runtimeSeed = this.getRuntimeV2Seed();
-    this.currentSeed = runtimeSeed ?? 1;
+    const seed = this.getSeed();
+    this.currentSeed = seed;
 
     try {
-
-      const dbEmails = await loadEmailsFromDb(runtimeSeed ?? undefined);
+      const dbEmails = await loadEmailsFromDb(seed);
       if (dbEmails.length > 0) {
         this.setEmails(dbEmails);
         return;
       }
 
-      const initializedEmails = await initializeEmails(runtimeSeed ?? undefined);
+      const initializedEmails = await initializeEmails(seed);
       this.setEmails(initializedEmails);
     } catch (error) {
       console.warn("[automail/data-provider] Failed to load emails:", error);
       try {
-        const initializedEmails = await initializeEmails(runtimeSeed ?? undefined);
+        const initializedEmails = await initializeEmails(seed);
         this.setEmails(initializedEmails);
       } catch {
         this.setEmails([]);
@@ -76,7 +67,9 @@ export class DynamicDataProvider {
 
     this.loadingPromise = (async () => {
       try {
-        const v2Seed = seedValue ?? this.getRuntimeV2Seed() ?? 1;
+        const v2Seed = isV2Enabled()
+          ? clampSeed(seedValue ?? this.getSeed())
+          : 1;
         this.currentSeed = v2Seed;
 
         this.ready = false;
@@ -117,45 +110,10 @@ export class DynamicDataProvider {
     };
   }
   // Get effective seed value - returns 1 (default) when dynamic HTML is disabled
-  // Validates seed is between 1-300, defaults to 1 if invalid
-  public getEffectiveSeed(providedSeed: number = 1): number {
-    if (!this.isEnabled) {
-      return 1;
-    }
-
-    // Validate seed range (1-300)
-    if (providedSeed < 1 || providedSeed > 300) {
-      return 1;
-    }
-
-    return providedSeed;
-  }
-
-  // Get layout configuration based on seed
-  public getLayoutConfig(seed?: number) {
-    return { layoutType: "fixed", seed: seed ?? 1 };
-  }
-
-  private getRuntimeV2Seed(): number | null {
-    if (typeof window === "undefined") return null;
-    const seed = (window as any).__automailV2Seed;
-    if (typeof seed === "number" && Number.isFinite(seed) && seed >= 1 && seed <= 300) {
-      return seed;
-    }
-    return null;
-  }
-
-  private getBaseSeedFromUrl(): number | null {
-    if (typeof window === "undefined") return null;
-    const params = new URLSearchParams(window.location.search);
-    const seedParam = params.get("seed");
-    if (seedParam) {
-      const parsed = Number.parseInt(seedParam, 10);
-      if (Number.isFinite(parsed) && parsed >= 1 && parsed <= 300) {
-        return parsed;
-      }
-    }
-    return null;
+  private getSeed(): number {
+    if (!isV2Enabled()) return 1;
+    if (typeof window === "undefined") return 1;
+    return clampSeed(getSeedFromUrl());
   }
 
   private setEmails(nextEmails: Email[]): void {
@@ -187,6 +145,4 @@ export class DynamicDataProvider {
 // Export singleton instance
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
-// Helper functions for easy accessexport const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
-export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
-export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
+// Keep only the provider singleton; seed handling is centralized in SeedContext + EmailContext.

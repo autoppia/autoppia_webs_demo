@@ -25,23 +25,6 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  const params = new URLSearchParams(window.location.search);
-                  const seed = params.get('seed');
-                  if (seed) {
-                    window.__INITIAL_SEED__ = parseInt(seed, 10);
-                  }
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
-      </head>
       <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider>
           <Suspense fallback={<div className="min-h-screen bg-background" />}>

@@ -8,7 +8,8 @@
 import type { Email } from "@/types/email";
 import { readJson, writeJson } from "@/shared/storage";
 import { fetchSeededSelection } from "@/shared/seeded-loader";
-import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 // Helper function to normalize email timestamps
 function normalizeEmailTimestamps(emails: Email[]): Email[] {
@@ -34,7 +35,10 @@ export function writeCachedEmails(emailsToCache: Email[]): void {
 }
 
 const resolveSeed = (seedOverride?: number | null): number => {
-  return clampBaseSeed(seedOverride ?? getBaseSeedFromUrl());
+  // V2 rule: seed always comes from URL, but if V2 is disabled we force seed=1.
+  return isV2Enabled()
+    ? clampSeed(seedOverride ?? getSeedFromUrl())
+    : 1;
 };
 
 /**
