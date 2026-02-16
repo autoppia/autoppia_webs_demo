@@ -1,17 +1,11 @@
 "use client";
 
 import React, { Suspense, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { DynamicLayout } from "@/components/DynamicLayout";
-import { getEffectiveTextStructure } from "@/utils/textStructureProvider";
-import { useDynamicSystem } from "@/dynamic";
+import { MailLayout, useDynamicSystem } from "@/dynamic";
 import { useSeed } from "@/context/SeedContext";
+import { DataReadyGate } from "@/components/DataReadyGate";
 
 function GmailContent() {
-  const searchParams = useSearchParams();
-  // La seed se mantiene en URL para V2 (datos) y V3 (texto), pero el layout (V1) es fijo como seed=1
-  const seedStructure = Number(searchParams.get("seed-structure") ?? "1");
-  const textStructure = getEffectiveTextStructure(seedStructure);
   const dyn = useDynamicSystem();
   const { seed } = useSeed();
 
@@ -23,17 +17,15 @@ function GmailContent() {
     });
   }, [seed, dyn]);
 
-  return (
-    <div className="min-h-screen bg-background">
-      <DynamicLayout key={`1-${seedStructure}`} textStructure={textStructure} />
-    </div>
-  );
+  return <MailLayout key="layout" />;
 }
 
 export default function GmailPage() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center">Loading...</div>}>
-      <GmailContent />
+      <DataReadyGate>
+        <GmailContent />
+      </DataReadyGate>
     </Suspense>
   );
 }

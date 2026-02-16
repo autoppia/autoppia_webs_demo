@@ -7,7 +7,6 @@ import { EmailProvider } from "@/contexts/EmailContext";
 import { LayoutProvider } from "@/contexts/LayoutContext";
 import { SeedProvider } from "@/context/SeedContext";
 import { DynamicDebug } from "@/components/debug/DynamicDebug";
-// LAYOUT FIJO - Sin variaciones V1, la seed se mantiene en URL para V2 y V3
 
 const inter = Inter({ subsets: ["latin"] });
 

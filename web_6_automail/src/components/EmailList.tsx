@@ -13,9 +13,8 @@ import { useLayout } from "@/contexts/LayoutContext";
 import { LabelSelector } from "@/components/LabelSelector";
 import type { Email } from "@/types/email";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { TextStructureConfig } from "@/utils/textStructureProvider";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeed } from "@/context/SeedContext";
 import {
   Star,
@@ -31,11 +30,7 @@ import {
   Tag,
 } from "lucide-react";
 
-interface EmailListProps {
-  textStructure?: TextStructureConfig;
-}
-
-export function EmailList({ textStructure }: EmailListProps) {
+export function EmailList() {
   const { currentVariant } = useLayout();
   const dyn = useDynamicSystem();
   const { seed } = useSeed();
@@ -264,7 +259,7 @@ export function EmailList({ textStructure }: EmailListProps) {
 
   return dyn.v1.addWrapDecoy("email-list-shell", (
     <div
-      className={cn("flex flex-col h-full bg-background px-6", dyn.v3.getVariant("email-list", CLASS_VARIANTS_MAP, ""))}
+      className={cn("flex flex-col h-full min-h-0 bg-background px-6", dyn.v3.getVariant("email-list", CLASS_VARIANTS_MAP, ""))}
       data-testid="email-list"
       suppressHydrationWarning
       id={dyn.v3.getVariant("email-list", ID_VARIANTS_MAP, "email-list")}

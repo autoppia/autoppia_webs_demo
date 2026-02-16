@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { useEmail } from "@/contexts/EmailContext";
 import { LabelSelector } from "@/components/LabelSelector";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { TextStructureConfig } from "@/utils/textStructureProvider";
 import {
   Star,
   Reply,
@@ -27,14 +26,10 @@ import {
   Mail,
 } from "lucide-react";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeed } from "@/context/SeedContext";
 
-interface EmailViewProps {
-  textStructure?: TextStructureConfig;
-}
-
-export function EmailView({ textStructure }: EmailViewProps) {
+export function EmailView() {
   const {
     currentEmail,
     setCurrentEmail,
@@ -58,15 +53,6 @@ export function EmailView({ textStructure }: EmailViewProps) {
       v2Enabled: dyn.v2.isEnabled(),
     });
   }, [seed, dyn.v2]);
-
-  // useEffect(() => {
-  //   if (!currentEmail) return;
-  //   logEvent(EVENT_TYPES.VIEW_EMAIL, {
-  //     email_id: currentEmail.id,
-  //     subject: currentEmail.subject,
-  //     from: currentEmail.from.email,
-  //   });
-  // }, [currentEmail]);
 
   if (!currentEmail) {
     return null;
@@ -234,7 +220,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
   return (
     dyn.v1.addWrapDecoy("email-content-view", (
       <div
-        className={cn("h-full flex flex-col bg-background", dyn.v3.getVariant("email-view", CLASS_VARIANTS_MAP, ""))}
+        className={cn("h-full min-h-0 flex flex-col bg-background", dyn.v3.getVariant("email-view", CLASS_VARIANTS_MAP, ""))}
         data-testid="email-view"
         suppressHydrationWarning
         id={dyn.v3.getVariant("email-view", ID_VARIANTS_MAP, "email-view")}
@@ -257,7 +243,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
             </Button>
 
             <Button
-              id={dyn.v3.getVariant("email-mark-spam", ID_VARIANTS_MAP, textStructure?.email_ids.spam_btn || "spam-button")}
+              id={dyn.v3.getVariant("email-mark-spam", ID_VARIANTS_MAP, "spam-button")}
               variant="ghost"
               size="icon"
               onClick={handleMarkAsSpam}
@@ -268,7 +254,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
             </Button>
 
             <Button
-              id={dyn.v3.getVariant("email-mark-unread", ID_VARIANTS_MAP, textStructure?.email_ids.unread_btn || "unread-button")}
+              id={dyn.v3.getVariant("email-mark-unread", ID_VARIANTS_MAP, "unread-button")}
               variant="ghost"
               size="icon"
               onClick={handleMarkAsUnread}
@@ -279,7 +265,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
             </Button>
 
             <Button
-              id={dyn.v3.getVariant("email-delete", ID_VARIANTS_MAP, textStructure?.email_ids.delete_btn || "delete-button")}
+              id={dyn.v3.getVariant("email-delete", ID_VARIANTS_MAP, "delete-button")}
               variant="ghost"
               size="icon"
               onClick={handleDeleteClick}
@@ -294,7 +280,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
             </div>
 
             <Button
-              id={dyn.v3.getVariant("email-snooze", ID_VARIANTS_MAP, textStructure?.email_ids.snooze_btn || "snooze-button")}
+              id={dyn.v3.getVariant("email-snooze", ID_VARIANTS_MAP, "snooze-button")}
               variant="ghost"
               size="icon"
               title={dyn.v3.getVariant("snooze_action", TEXT_VARIANTS_MAP, "Snooze")}
@@ -304,12 +290,12 @@ export function EmailView({ textStructure }: EmailViewProps) {
             </Button>
 
             <Button
-              id={dyn.v3.getVariant("email-star", ID_VARIANTS_MAP, textStructure?.email_ids.important_btn || "star-button")}
+              id={dyn.v3.getVariant("email-star", ID_VARIANTS_MAP, "star-button")}
               variant="ghost"
               size="icon"
               onClick={handleStarClick}
               title={currentEmail.isStarred ? "Remove star" : "Add star"}
-              aria-label={textStructure?.email_aria_labels.important_btn || "Mark as important"}
+              aria-label="Mark as important"
               className={dyn.v3.getVariant("email-action-button", CLASS_VARIANTS_MAP, "")}
             >
               <Star
@@ -415,7 +401,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
               variant="ghost"
               size="icon"
               onClick={handleReply}
-              id={dyn.v3.getVariant("email-reply", ID_VARIANTS_MAP, textStructure?.email_ids.reply_btn || "reply-button")}
+              id={dyn.v3.getVariant("email-reply", ID_VARIANTS_MAP, "reply-button")}
             >
                 <Reply className="h-4 w-4" />
               </Button>
@@ -503,43 +489,43 @@ export function EmailView({ textStructure }: EmailViewProps) {
           {/* Action Buttons */}
           <div className="flex gap-3 pt-6 border-t border-border">
             <Button
-              id={dyn.v3.getVariant("email-reply", ID_VARIANTS_MAP, textStructure?.email_ids.reply_btn || "reply-button")}
-              aria-label={textStructure?.email_aria_labels.reply_btn || "Reply to this email"}
+              id={dyn.v3.getVariant("email-reply", ID_VARIANTS_MAP, "reply-button")}
+              aria-label="Reply to this email"
               onClick={handleReply}
               className={dyn.v3.getVariant("email-action-button", CLASS_VARIANTS_MAP, "")}
             >
               <Reply className="h-4 w-4 mr-2" />
-              {dyn.v3.getVariant("reply_action", TEXT_VARIANTS_MAP, textStructure?.email_content.reply_button || "Reply")}
+              {dyn.v3.getVariant("reply_action", TEXT_VARIANTS_MAP, "Reply")}
             </Button>
             {currentEmail.isDraft && (
               <Button
-                id={textStructure?.email_ids.edit_draft_btn || "edit-draft-button"}
+                id={dyn.v3.getVariant("email-edit-draft", ID_VARIANTS_MAP, "edit-draft-button")}
                 variant="secondary"
-                aria-label={textStructure?.email_aria_labels.edit_draft_btn || "Edit this draft email"}
+                aria-label="Edit this draft email"
                 onClick={handleEditDraft}
               >
                 Edit draft
               </Button>
             )}
             <Button
-              id={dyn.v3.getVariant("email-reply-all", ID_VARIANTS_MAP, textStructure?.email_ids.reply_all_btn || "reply-all-button")}
+              id={dyn.v3.getVariant("email-reply-all", ID_VARIANTS_MAP, "reply-all-button")}
               variant="outline"
-              aria-label={textStructure?.email_aria_labels.reply_all_btn || "Reply to all recipients"}
+              aria-label="Reply to all recipients"
               onClick={handleReplyAll}
               className={dyn.v3.getVariant("email-action-button", CLASS_VARIANTS_MAP, "")}
             >
               <ReplyAll className="h-4 w-4 mr-2" />
-              {dyn.v3.getVariant("reply_all_action", TEXT_VARIANTS_MAP, textStructure?.email_content.reply_all_button || "Reply All")}
+              {dyn.v3.getVariant("reply_all_action", TEXT_VARIANTS_MAP, "Reply All")}
             </Button>
             <Button
-              id={dyn.v3.getVariant("email-forward", ID_VARIANTS_MAP, textStructure?.email_ids.forward_btn || "forward-button")}
+              id={dyn.v3.getVariant("email-forward", ID_VARIANTS_MAP, "forward-button")}
               variant="outline"
-              aria-label={textStructure?.email_aria_labels.forward_btn || "Forward this email"}
+              aria-label="Forward this email"
               onClick={handleForward}
               className={dyn.v3.getVariant("email-action-button", CLASS_VARIANTS_MAP, "")}
             >
               <Forward className="h-4 w-4 mr-2" />
-              {dyn.v3.getVariant("forward_action", TEXT_VARIANTS_MAP, textStructure?.email_content.forward_button || "Forward")}
+              {dyn.v3.getVariant("forward_action", TEXT_VARIANTS_MAP, "Forward")}
             </Button>
           </div>
         </div>

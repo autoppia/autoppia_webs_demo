@@ -12,17 +12,12 @@ import { Separator } from "@/components/ui/separator";
 import { useEmail } from "@/contexts/EmailContext";
 import { useLayout } from "@/contexts/LayoutContext";
 import { cn } from "@/library/utils";
-import { TextStructureConfig } from "@/utils/textStructureProvider";
 import { Send, Paperclip, Smile, X, Minus, Square, Bold, Italic, Underline, Link, List, Save } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
-interface ComposeModalProps {
-  textStructure?: TextStructureConfig;
-}
-
-export function ComposeModal({ textStructure }: ComposeModalProps) {
+export function ComposeModal() {
   const { currentVariant } = useLayout();
   const dyn = useDynamicSystem();
   const { isComposeOpen, composeData, toggleCompose, updateComposeData, sendEmail, saveDraft } = useEmail();
@@ -99,13 +94,13 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
   };
 
   const canSend = composeData.to.length > 0 || toInput.trim();
-  const composeTitle = dyn.v3.getVariant("compose_email", TEXT_VARIANTS_MAP, textStructure?.email_content?.new_message || "New message");
+  const composeTitle = dyn.v3.getVariant("compose_email", TEXT_VARIANTS_MAP, "New message");
 
   const fieldLabel = (key: string, fallback: string) => dyn.v3.getVariant(key, TEXT_VARIANTS_MAP, fallback);
   const inputId = (key: string, fallback: string) => dyn.v3.getVariant(key, ID_VARIANTS_MAP, fallback);
-  const toPlaceholder = dyn.v3.getVariant("compose_to_placeholder", TEXT_VARIANTS_MAP, textStructure?.email_content.compose_to || "To");
-  const subjectPlaceholder = dyn.v3.getVariant("compose_subject_placeholder", TEXT_VARIANTS_MAP, textStructure?.email_content.subject_placeholder || "Subject");
-  const bodyPlaceholder = dyn.v3.getVariant("compose_body_placeholder", TEXT_VARIANTS_MAP, textStructure?.email_content.message_placeholder || "Type your message...");
+  const toPlaceholder = dyn.v3.getVariant("compose_to_placeholder", TEXT_VARIANTS_MAP, "To");
+  const subjectPlaceholder = dyn.v3.getVariant("compose_subject_placeholder", TEXT_VARIANTS_MAP, "Subject");
+  const bodyPlaceholder = dyn.v3.getVariant("compose_body_placeholder", TEXT_VARIANTS_MAP, "Type your message...");
 
   const containerClass = cn(
     dyn.v3.getVariant("compose-modal", CLASS_VARIANTS_MAP, "rounded-xl border border-border shadow-xl bg-background"),
@@ -137,7 +132,7 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
           <div className="px-4 py-3 space-y-3">
             <div className="flex items-start gap-3">
               <Label className="text-xs font-medium text-muted-foreground w-16 text-right pt-2">
-                {fieldLabel("compose-to", textStructure?.email_content?.to || "To")}
+                {fieldLabel("compose-to", "To")}
               </Label>
               <div className="flex-1 min-h-[36px] border border-border rounded-md p-2 focus-within:ring-1 focus-within:ring-primary/50 bg-background">
                 <div className="flex flex-wrap gap-1 items-center">
@@ -151,12 +146,12 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
                   ))}
                   {dyn.v1.addWrapDecoy("compose-to-input", (
                     <Input
-                      id={inputId("compose-to", textStructure?.email_ids.to_input || "to-input")}
+                      id={inputId("compose-to", "to-input")}
                       value={toInput}
                       onChange={(e) => setToInput(e.target.value)}
                       onKeyDown={handleToKeyDown}
-                      placeholder={composeData.to.length === 0 ? (textStructure?.email_content.compose_to || fieldLabel("compose-to", "To")) : ""}
-                      aria-label={textStructure?.email_aria_labels.to_input || "Recipient email address"}
+                      placeholder={composeData.to.length === 0 ? toPlaceholder : ""}
+                      aria-label="Recipient email address"
                       className={dyn.v3.getVariant("label-selector", CLASS_VARIANTS_MAP, "border-none focus-visible:ring-0")}
                     />
                   ))}
@@ -166,14 +161,14 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
 
             <div className="flex items-start gap-3">
               <Label className="text-xs font-medium text-muted-foreground w-16 text-right pt-2">
-                {fieldLabel("compose-subject", textStructure?.email_content?.subject || "Subject")}
+                {fieldLabel("compose-subject", "Subject")}
               </Label>
               {dyn.v1.addWrapDecoy("compose-subject", (
                 <Input
-                  id={inputId("compose-subject", textStructure?.email_ids.subject_input || "subject-input")}
+                  id={inputId("compose-subject", "subject-input")}
                   value={composeData.subject || ""}
                   onChange={(e) => updateComposeData({ subject: e.target.value })}
-                  placeholder={textStructure?.email_content.subject_placeholder || "Subject"}
+                  placeholder={subjectPlaceholder}
                   aria-label="Subject"
                 />
               ))}
@@ -181,14 +176,14 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
 
             <div className="flex items-start gap-3">
               <Label className="text-xs font-medium text-muted-foreground w-16 text-right pt-2">
-                {fieldLabel("compose-body", textStructure?.email_content?.message || "Message")}
+                {fieldLabel("compose-body", "Message")}
               </Label>
               {dyn.v1.addWrapDecoy("compose-body", (
                 <Textarea
-                  id={inputId("compose-body", textStructure?.email_ids.body_input || "body-input")}
+                  id={inputId("compose-body", "body-input")}
                   value={composeData.body || ""}
                   onChange={(e) => updateComposeData({ body: e.target.value })}
-                  placeholder={textStructure?.email_content.message_placeholder || "Type your message..."}
+                  placeholder={bodyPlaceholder}
                   className="min-h-[240px]"
                 />
               ))}

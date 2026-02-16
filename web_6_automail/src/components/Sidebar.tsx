@@ -8,7 +8,6 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { useEmail } from "@/contexts/EmailContext";
 import { useLayout } from "@/contexts/LayoutContext";
-import { TextStructureConfig } from "@/utils/textStructureProvider";
 import { CreateLabelDialog } from "@/components/CreateLabelDialog";
 import type { EmailFolder } from "@/types/email";
 import { EVENT_TYPES, logEvent } from "@/library/events";
@@ -27,11 +26,7 @@ interface NavigationItem {
   route?: string;
 }
 
-interface SidebarProps {
-  textStructure?: TextStructureConfig;
-}
-
-export function Sidebar({ textStructure }: SidebarProps) {
+export function Sidebar() {
   const { currentVariant } = useLayout();
   const dyn = useDynamicSystem();
   const { getNavigationUrl } = useSeed();
@@ -63,16 +58,16 @@ export function Sidebar({ textStructure }: SidebarProps) {
   }, {} as Record<string, number>);
 
   const navigationItems: NavigationItem[] = [
-    { id: "inbox", label: dyn.v3.getVariant("inbox_label", TEXT_VARIANTS_MAP, textStructure?.inbox_label || "Inbox"), icon: Inbox, count: counts.inbox, type: "folder" },
+    { id: "inbox", label: dyn.v3.getVariant("inbox_label", TEXT_VARIANTS_MAP, "Inbox"), icon: Inbox, count: counts.inbox, type: "folder" },
     { id: "templates", label: dyn.v3.getVariant("templates_nav", TEXT_VARIANTS_MAP, "Templates"), icon: FileText, type: "route", route: "/templates" },
-    { id: "starred", label: dyn.v3.getVariant("starred_label", TEXT_VARIANTS_MAP, textStructure?.starred_label || "Starred"), icon: Star, count: counts.starred, type: "folder" },
+    { id: "starred", label: dyn.v3.getVariant("starred_label", TEXT_VARIANTS_MAP, "Starred"), icon: Star, count: counts.starred, type: "folder" },
     { id: "snoozed", label: dyn.v3.getVariant("snoozed_label", TEXT_VARIANTS_MAP, "Snoozed"), icon: Clock, count: counts.snoozed, type: "folder" },
-    { id: "sent", label: dyn.v3.getVariant("sent_label", TEXT_VARIANTS_MAP, textStructure?.sent_label || "Sent"), icon: Send, count: counts.sent, type: "folder" },
-    { id: "drafts", label: dyn.v3.getVariant("drafts_label", TEXT_VARIANTS_MAP, textStructure?.drafts_label || "Drafts"), icon: FileText, count: counts.drafts, type: "folder" },
+    { id: "sent", label: dyn.v3.getVariant("sent_label", TEXT_VARIANTS_MAP, "Sent"), icon: Send, count: counts.sent, type: "folder" },
+    { id: "drafts", label: dyn.v3.getVariant("drafts_label", TEXT_VARIANTS_MAP, "Drafts"), icon: FileText, count: counts.drafts, type: "folder" },
     { id: "important", label: dyn.v3.getVariant("important_label", TEXT_VARIANTS_MAP, "Important"), icon: AlertTriangle, count: counts.important, type: "folder" },
     { id: "archive", label: dyn.v3.getVariant("archive_label", TEXT_VARIANTS_MAP, "Archive"), icon: PenTool, count: counts.archive, type: "folder" },
     { id: "spam", label: dyn.v3.getVariant("spam_label", TEXT_VARIANTS_MAP, "Spam"), icon: Mail, count: counts.spam, type: "folder" },
-    { id: "trash", label: dyn.v3.getVariant("trash_label", TEXT_VARIANTS_MAP, textStructure?.trash_label || "Trash"), icon: Trash2, count: counts.trash, type: "folder" },
+    { id: "trash", label: dyn.v3.getVariant("trash_label", TEXT_VARIANTS_MAP, "Trash"), icon: Trash2, count: counts.trash, type: "folder" },
   ];
 
   const orderedNavigation = dyn.v1.changeOrderElements("sidebar-nav-order", navigationItems.length).map((idx) => navigationItems[idx]);
@@ -84,14 +79,13 @@ export function Sidebar({ textStructure }: SidebarProps) {
   };
 
   const sidebarId = dyn.v3.getVariant("sidebar-panel", ID_VARIANTS_MAP, "sidebar");
-  const sidebarClass = cn(dyn.v3.getVariant("sidebar-panel", CLASS_VARIANTS_MAP, "w-64 h-full border-r border-border flex flex-col"), "sidebar-gradient flex flex-col");
+  const sidebarClass = cn(dyn.v3.getVariant("sidebar-panel", CLASS_VARIANTS_MAP, "w-64 min-h-0 flex-1 border-r border-border flex flex-col"), "sidebar-gradient flex flex-col");
   const composeId = dyn.v3.getVariant("sidebar-compose", ID_VARIANTS_MAP, "compose-btn");
-  const composeText = dyn.v3.getVariant("compose_cta", TEXT_VARIANTS_MAP, textStructure?.compose_button || "Compose");
+  const composeText = dyn.v3.getVariant("compose_cta", TEXT_VARIANTS_MAP, "Compose");
 
   const handleItemClick = (item: NavigationItem) => {
     if (item.type === "folder") {
       setFilter({ folder: item.id as EmailFolder });
-      logEvent(EVENT_TYPES.NAVIGATION_CLICKED, { id: item.id, label: item.label });
     } else if (item.type === "route" && item.route) {
       logEvent(EVENT_TYPES.VIEW_TEMPLATES, { source: "sidebar" });
       router.push(getNavigationUrl(item.route));

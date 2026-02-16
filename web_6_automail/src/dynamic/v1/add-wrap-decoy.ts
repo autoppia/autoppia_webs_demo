@@ -57,28 +57,59 @@ export function applyV1Wrapper(
   const shouldWrap = wrapperVariant > 0;
 
   // Apply wrapper if necessary
-  // Use div instead of span for elements that need to take full width
+  // Use div instead of span for elements that need to take full width / participate in layout.
+  // Exclude compose-modal: it's an overlay; a full-size div wrapper would cover the whole screen and hide main content.
   const useDivWrapper =
     componentKey.includes("input-container") ||
     componentKey.includes("form") ||
     componentKey.includes("search") ||
     componentKey.includes("feature-card") ||
     componentKey.includes("genre-card") ||
-    componentKey.includes("stats-card");
+    componentKey.includes("stats-card") ||
+    componentKey.includes("email-list") ||
+    componentKey.includes("sidebar") ||
+    componentKey.includes("email-card") ||
+    componentKey.includes("email-view");
   const WrapperElement = useDivWrapper ? "div" : "span";
 
-  const core = shouldWrap
-    ? React.createElement(
-        WrapperElement,
-        {
-          "data-dyn-wrap": componentKey,
-          "data-v1": "true",
-          "data-wrapper-variant": wrapperVariant,
-          className: useDivWrapper ? "w-full h-full" : undefined,
-        },
-        children
-      )
-    : children;
+  // Only add flex-1 for main layout fillers (so they take space in flex-col). Not for modals/overlays (e.g. compose-modal).
+  const useFlex1 =
+    componentKey.includes("email-list") ||
+    componentKey.includes("email-view") ||
+    componentKey.includes("sidebar-shell");
+  const wrapperClass = useDivWrapper
+    ? `w-full h-full min-w-0 min-h-0${useFlex1 ? " flex-1" : ""}`
+    : undefined;
+
+  let core: ReactNode;
+  if (shouldWrap) {
+    core = React.createElement(
+      WrapperElement,
+      {
+        "data-dyn-wrap": componentKey,
+        "data-v1": "true",
+        "data-wrapper-variant": wrapperVariant,
+        className: wrapperClass,
+      },
+      children
+    );
+  } else {
+    core = children;
+  }
+
+  // When decoy is *before* the core (decoyVariant 1), the flex parent has [decoy, core]. If core has no flex-1 (e.g. no wrapper), it collapses. Wrap in a flex-1 container for layout fillers.
+  const decoyFirstAndNeedsFlex = useFlex1 && !shouldWrap && decoyVariant === 1;
+  if (decoyFirstAndNeedsFlex) {
+    core = React.createElement(
+      "div",
+      {
+        "data-dyn-wrap": `${componentKey}-flex1`,
+        "data-v1": "true",
+        className: "w-full h-full min-w-0 min-h-0 flex-1",
+      },
+      core
+    );
+  }
 
   // Return according to decoy position
   // Use a deterministic key based on the seed and componentKey to avoid hydration issues

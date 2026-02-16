@@ -17,8 +17,6 @@ COPY web_6_automail/package.json web_6_automail/package-lock.json ./
 RUN set -e; for i in 1 2 3; do npm ci && exit 0 || echo "Attempt $i failed, retrying..."; sleep 5; done; exit 1
 
 COPY web_6_automail/ .
-# Copy original dataset files for fallback
-COPY webs_server/initial_data/web_6_automail/original/emails_1.json src/data/original/emails_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

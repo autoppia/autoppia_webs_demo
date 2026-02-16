@@ -11,35 +11,30 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Switch } from '@/components/ui/switch';
 import { useEmail } from '@/contexts/EmailContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLayout } from '@/contexts/LayoutContext';
 import { cn } from '@/library/utils';
-import { TextStructureConfig } from '@/utils/textStructureProvider';
 import {
   Search,
   Menu,
   Settings,
-  HelpCircle,
   User,
   LogOut,
   Moon,
   Sun,
   Monitor,
-  Grid3X3,
   X,
 } from 'lucide-react';
 import { EVENT_TYPES, logEvent } from '@/library/events';
 import { useDynamicSystem } from '@/dynamic/shared';
-import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from '@/dynamic/v3/utils/variant-selector';
+import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from '@/dynamic/v3';
 
 interface ToolbarProps {
   onMenuClick?: () => void;
-  textStructure?: TextStructureConfig;
 }
 
-export function Toolbar({ onMenuClick, textStructure }: ToolbarProps) {
+export function Toolbar({ onMenuClick }: ToolbarProps) {
   const { currentVariant } = useLayout();
   const dyn = useDynamicSystem();
   const { searchQuery, setSearchQuery } = useEmail();
@@ -123,10 +118,10 @@ export function Toolbar({ onMenuClick, textStructure }: ToolbarProps) {
   const placeholderText = dyn.v3.getVariant(
     'search_placeholder',
     TEXT_VARIANTS_MAP,
-    textStructure?.search_placeholder || 'Search mail'
+    'Search mail'
   );
 
-  const composeLabel = dyn.v3.getVariant('compose_cta', TEXT_VARIANTS_MAP, textStructure?.compose || 'Compose');
+  const composeLabel = dyn.v3.getVariant('compose_cta', TEXT_VARIANTS_MAP, 'Compose');
 
   const renderThemeButton = (label: string, value: 'light' | 'dark' | 'system', icon: React.ReactNode) => (
     <Button
@@ -174,7 +169,7 @@ export function Toolbar({ onMenuClick, textStructure }: ToolbarProps) {
               <span className="text-white font-bold text-sm">A</span>
             </div>
             <span className="font-bold text-xl text-foreground hidden sm:block bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              {textStructure?.app_name || "AutoMail"}
+              {"AutoMail"}
             </span>
           </div>
         </div>

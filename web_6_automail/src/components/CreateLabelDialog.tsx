@@ -10,7 +10,7 @@ import { useEmail } from '@/contexts/EmailContext';
 import { Plus } from 'lucide-react';
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { TEXT_VARIANTS_MAP, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
+import { TEXT_VARIANTS_MAP, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
 
 const LABEL_COLORS = [
