@@ -16,9 +16,6 @@ COPY web_3_autozone/package.json web_3_autozone/package-lock.json ./
 # Retry npm ci up to 3 times on network errors
 RUN set -e; for i in 1 2 3; do npm ci && exit 0 || echo "Attempt $i failed, retrying..."; sleep 5; done; exit 1
 
-# Copy original dataset files for fallback FIRST (before copying project)
-RUN mkdir -p src/data/original
-COPY webs_server/initial_data/web_3_autozone/original/products_1.json src/data/original/products_1.json
 COPY web_3_autozone/ .
 
 # Build args for environment flags and API URL

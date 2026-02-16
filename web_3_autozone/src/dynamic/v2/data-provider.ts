@@ -72,35 +72,6 @@ export class DynamicDataProvider {
     }
   }
 
-  private async reloadIfSeedChanged(): Promise<void> {
-    const newSeed = this.getBaseSeed();
-    if (newSeed !== this.currentSeed) {
-      console.log(`[autozone] Seed changed from ${this.currentSeed} to ${newSeed}, reloading products...`);
-      this.currentSeed = newSeed;
-      this.ready = false;
-
-      // If already loading, wait for it
-      if (this.loadingPromise) {
-        await this.loadingPromise;
-        return;
-      }
-
-      // Start new load
-      this.loadingPromise = (async () => {
-        try {
-          this.products = await initializeProducts(newSeed);
-          this.ready = true;
-        } catch (error) {
-          console.error("[autozone] Failed to reload products", error);
-          this.ready = true; // Mark as ready even on error to prevent blocking
-        } finally {
-          this.loadingPromise = null;
-        }
-      })();
-
-      await this.loadingPromise;
-    }
-  }
 
   public isReady(): boolean {
     return this.ready;
@@ -146,15 +117,6 @@ export class DynamicDataProvider {
     await this.loadingPromise;
   }
 
-  public getProducts(): Product[] {
-    // Trigger reload if seed changed
-    if (typeof window !== "undefined") {
-      this.reloadIfSeedChanged().catch((error) => {
-        console.error("[autozone] Failed to check/reload on seed change:", error);
-      });
-    }
-    return this.products;
-  }
 
   public getProductById(id: string): Product | undefined {
     if (!Array.isArray(this.products)) {
@@ -170,12 +132,6 @@ export class DynamicDataProvider {
     return this.products.filter((product) => product.category === category);
   }
 
-  public getFeaturedProducts(count = 4): Product[] {
-    if (!Array.isArray(this.products)) {
-      return [];
-    }
-    return this.products.slice(0, count);
-  }
 
   public searchProducts(query: string): Product[] {
     const trimmed = query.trim().toLowerCase();
@@ -193,10 +149,6 @@ export class DynamicDataProvider {
     );
   }
 
-  public isDynamicModeEnabled(): boolean {
-    return this.isEnabled;
-  }
-
   // Get effective seed value - returns 1 (default) when dynamic HTML is disabled
   // Validates seed is between 1-300, defaults to 1 if invalid
   public getEffectiveSeed(providedSeed = 1): number {
@@ -211,118 +163,13 @@ export class DynamicDataProvider {
 
     return providedSeed;
   }
-
-  // Get layout configuration based on seed
-  public getLayoutConfig(seed?: number) {
-    // Legacy v1-layouts was permanently disabled and always returned the default layout.
-    // Keep the same stable config here without depending on v1-layouts.
-    return {
-      headerOrder: ["logo", "search", "nav"],
-      searchPosition: "center",
-      navbarStyle: "top",
-      contentGrid: "default",
-      cardLayout: "grid",
-      buttonStyle: "default",
-      footerStyle: "default",
-      spacing: "normal",
-      borderRadius: "medium",
-      colorScheme: "default",
-    } as const;
-  }
-
-  // Static category data - always available
-  public getStaticCategories(): Array<{
-    image: string;
-    title: string;
-    link?: string;
-  }> {
-    return [
-      {
-        image: "/images/homepage_categories/air_fryer.jpg",
-        title: "Air Fryer",
-        link: "/kitchen-2",
-      },
-      {
-        image: "/images/homepage_categories/coffee_machine.jpg",
-        title: "Espresso Machine",
-        link: "/kitchen-1",
-      },
-      {
-        image: "/images/homepage_categories/cookware.jpg",
-        title: "Stainless Steel Cookware Set",
-        link: "/kitchen-3",
-      },
-      {
-        image: "/images/homepage_categories/kettles.jpg",
-        title: "Kettles",
-        link: "/kitchen-4",
-      },
-    ];
-  }
-
-  public getStaticHomeEssentials(): Array<{
-    image: string;
-    title: string;
-  }> {
-    return [
-      {
-        image: "/images/homepage_categories/cleaning.jpg",
-        title: "Cleaning Tools",
-      },
-      {
-        image: "/images/homepage_categories/storage.jpg",
-        title: "Home Storage",
-      },
-      {
-        image: "/images/homepage_categories/decor.jpg",
-        title: "Home Decor",
-      },
-      {
-        image: "/images/homepage_categories/bedding.jpg",
-        title: "Bedding",
-      },
-    ];
-  }
-
-  public getStaticRefreshSpace(): Array<{
-    image: string;
-    title: string;
-  }> {
-    return [
-      {
-        image: "/images/homepage_categories/dining.jpg",
-        title: "Dining",
-      },
-      {
-        image: "/images/homepage_categories/home.jpg",
-        title: "Home",
-      },
-      {
-        image: "/images/homepage_categories/kitchen.jpg",
-        title: "Kitchen",
-      },
-      {
-        image: "/images/homepage_categories/health.jpg",
-        title: "Health and Beauty",
-      },
-    ];
-  }
 }
 
 // Export singleton instance
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
 // Helper functions for easy access
-export const getProducts = () => dynamicDataProvider.getProducts();
 export const getProductById = (id: string) => dynamicDataProvider.getProductById(id);
 export const getProductsByCategory = (category: string) => dynamicDataProvider.getProductsByCategory(category);
-export const getFeaturedProducts = (count?: number) => dynamicDataProvider.getFeaturedProducts(count);
 export const searchProducts = (query: string) => dynamicDataProvider.searchProducts(query);
-export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
 export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
-export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
-
-// Static data helpers
-export const getStaticCategories = () => dynamicDataProvider.getStaticCategories();
-export const getStaticHomeEssentials = () => dynamicDataProvider.getStaticHomeEssentials();
-export const getStaticRefreshSpace = () => dynamicDataProvider.getStaticRefreshSpace();

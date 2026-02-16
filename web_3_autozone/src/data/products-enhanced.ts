@@ -1,7 +1,6 @@
-import type { Product } from "@/context/CartContext";
-import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
-import fallbackProducts from "./original/products_1.json";
+import type {Product} from "@/context/CartContext";
+import {fetchSeededSelection} from "@/shared/seeded-loader";
+import {clampBaseSeed, getBaseSeedFromUrl} from "@/shared/seed-resolver";
 
 const normalizeImageUrl = (image?: string, category?: string): string => {
   const DEFAULT = "/images/homepage_categories/coffee_machine.jpg";
@@ -81,46 +80,31 @@ const normalizeProduct = (product: DatasetProduct): Product => {
 };
 
 export async function initializeProducts(seedOverride?: number | null): Promise<Product[]> {
-  const dbModeEnabled = isDbLoadModeEnabled();
   const baseSeed = getBaseSeedFromUrl();
   const effectiveSeed = clampBaseSeed(seedOverride ?? baseSeed ?? 1);
-  if (effectiveSeed === 1 && dbModeEnabled) {
-    console.log("[autozone] Base seed is 1, using original data (skipping DB/AI modes)");
-    const fallbackData = (fallbackProducts as DatasetProduct[]).map(normalizeProduct);
-    dynamicProducts = normalizeProductImages(fallbackData);
-    return dynamicProducts;
-  }
 
-  // Priority 1: DB mode - fetch from /datasets/load endpoint
-  if (dbModeEnabled) {
-    try {
-      const products = await fetchSeededSelection<DatasetProduct>({
-        projectKey: "web_3_autozone",
-        entityType: "products",
-        seedValue: effectiveSeed,
-        limit: 50, // Fixed limit of 50 items for DB mode
-        method: "distribute",
-        filterKey: "category",
-      });
+  try {
+    const products = await fetchSeededSelection<DatasetProduct>({
+      projectKey: "web_3_autozone",
+      entityType: "products",
+      seedValue: effectiveSeed,
+      limit: 50, // Fixed limit of 50 items for DB mode
+      method: "distribute",
+      filterKey: "category",
+    });
 
-      if (Array.isArray(products) && products.length > 0) {
-        console.log(
-          `[autozone] Loaded ${products.length} products from dataset (seed=${effectiveSeed})`
-        );
-        dynamicProducts = normalizeProductImages(products.map(normalizeProduct));
-        return dynamicProducts;
-      }
-
-      // If no products returned from backend, fallback to local JSON
-      console.warn(`[autozone] No products returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
-    } catch (error) {
-      // If backend fails, fallback to local JSON
-      console.warn("[autozone] Backend unavailable, falling back to local JSON:", error);
+    if (Array.isArray(products) && products.length > 0) {
+      console.log(
+        `[autozone] Loaded ${products.length} products from dataset (seed=${effectiveSeed})`
+      );
+      dynamicProducts = normalizeProductImages(products.map(normalizeProduct));
+      return dynamicProducts;
     }
-  }
 
-  // Fallback to local JSON
-  const fallbackData = (fallbackProducts as DatasetProduct[]).map(normalizeProduct);
-  dynamicProducts = normalizeProductImages(fallbackData);
+    console.warn(`[autozone] No products returned from backend (seed=${effectiveSeed})`);
+  } catch (error) {
+    // If backend fails, fallback to local JSON
+    console.warn("[autozone] Backend unavailable, falling back to local JSON:", error);
+  }
   return dynamicProducts;
-}
+};

@@ -5,20 +5,9 @@
  */
 export {
   dynamicDataProvider,
-  getProducts,
   getProductById,
   getProductsByCategory,
-  getFeaturedProducts,
-  getStaticCategories,
-  getStaticHomeEssentials,
-  getStaticRefreshSpace,
-  getLayoutConfig,
   getEffectiveSeed,
   searchProducts,
-  isDynamicModeEnabled,
 } from './data-provider';
 export type { Product } from '@/context/CartContext';
-
-// Export whenReady function
-import { dynamicDataProvider } from "./data-provider";
-export const whenReady = () => dynamicDataProvider.whenReady();
