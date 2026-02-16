@@ -1,6 +1,7 @@
 import type {Product} from "@/context/CartContext";
 import {fetchSeededSelection} from "@/shared/seeded-loader";
-import {clampBaseSeed, getBaseSeedFromUrl} from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 const normalizeImageUrl = (image?: string, category?: string): string => {
   const DEFAULT = "/images/homepage_categories/coffee_machine.jpg";
@@ -80,8 +81,10 @@ const normalizeProduct = (product: DatasetProduct): Product => {
 };
 
 export async function initializeProducts(seedOverride?: number | null): Promise<Product[]> {
-  const baseSeed = getBaseSeedFromUrl();
-  const effectiveSeed = clampBaseSeed(seedOverride ?? baseSeed ?? 1);
+  // V2 rule: seed always comes from URL, but if V2 is disabled we force seed=1.
+  const effectiveSeed = isV2Enabled()
+    ? clampSeed(seedOverride ?? getSeedFromUrl())
+    : 1;
 
   try {
     const products = await fetchSeededSelection<DatasetProduct>({

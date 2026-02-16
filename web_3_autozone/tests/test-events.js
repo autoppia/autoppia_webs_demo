@@ -92,7 +92,8 @@ function testEventCoverage() {
     'src/library/events.ts',
     'src/lib/events.ts',
     'src/library/event.ts',
-    'src/lib/event.ts'
+    'src/lib/event.ts',
+    'src/events/index.ts'
   ];
 
   let eventsFilePath = null;
