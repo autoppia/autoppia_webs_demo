@@ -2,18 +2,6 @@ import { fetchSeededSelection } from "@/shared/seeded-loader";
 import type { User, Post, Job, Recommendation } from "@/library/dataset";
 import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 
-/**
- * Get v2 seed from window (synchronized by SeedContext)
- */
-const getRuntimeV2Seed = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const value = (window as any).__autoconnectV2Seed;
-  if (typeof value === "number" && Number.isFinite(value)) {
-    return clampBaseSeed(value);
-  }
-  return null;
-};
-
 const resolveSeed = (seedValue?: number | null): number => {
   if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
     return clampBaseSeed(seedValue);
@@ -32,7 +20,6 @@ const resolveSeed = (seedValue?: number | null): number => {
  * Server determines whether v2 is enabled or disabled and returns appropriate data.
  */
 export async function initializeUsers(v2SeedValue?: number | null): Promise<User[]> {
-  const baseSeed = getBaseSeedFromUrl();
 
   if (typeof window !== "undefined" && v2SeedValue == null) {
     await new Promise((resolve) => setTimeout(resolve, 100));
@@ -66,8 +53,6 @@ export async function initializeUsers(v2SeedValue?: number | null): Promise<User
  * Server determines whether v2 is enabled or disabled and returns appropriate data.
  */
 export async function initializePosts(v2SeedValue?: number | null): Promise<Post[]> {
-  const baseSeed = getBaseSeedFromUrl();
-
   if (typeof window !== "undefined" && v2SeedValue == null) {
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
@@ -100,8 +85,6 @@ export async function initializePosts(v2SeedValue?: number | null): Promise<Post
  * Server determines whether v2 is enabled or disabled and returns appropriate data.
  */
 export async function initializeJobs(v2SeedValue?: number | null): Promise<Job[]> {
-  const baseSeed = getBaseSeedFromUrl();
-
   if (typeof window !== "undefined" && v2SeedValue == null) {
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
@@ -134,8 +117,6 @@ export async function initializeJobs(v2SeedValue?: number | null): Promise<Job[]
  * Server determines whether v2 is enabled or disabled and returns appropriate data.
  */
 export async function initializeRecommendations(v2SeedValue?: number | null): Promise<Recommendation[]> {
-  const baseSeed = getBaseSeedFromUrl();
-
   if (typeof window !== "undefined" && v2SeedValue == null) {
     await new Promise((resolve) => setTimeout(resolve, 100));
   }

@@ -9,11 +9,9 @@
 import { useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
 import { applyV1Wrapper } from "../v1/add-wrap-decoy";
-import { isV3Enabled, isV1Enabled } from "./flags";
+import {isV3Enabled, isV1Enabled, isV2Enabled} from "./flags";
 import { getVariant, ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "../v3/utils/variant-selector";
 import { generateDynamicOrder } from "../v1/change-order-elements";
-import { dynamicDataProvider } from "../v2/data-provider";
-import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import type { ReactNode } from "react";
 
 // ============================================================================
@@ -142,7 +140,7 @@ export function useDynamicSystem() {
       /**
        * Check if V2 is enabled
        */
-      isEnabled: () => isDbLoadModeEnabled(),
+      isEnabled: () => isV2Enabled(),
     },
 
     /**

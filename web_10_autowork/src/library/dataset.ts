@@ -82,28 +82,28 @@ export const hires = [
 ];
 
 // Popular skills step 2
-export const popularSkills = [
-  "JavaScript",
-  "TypeScript",
-  "Python",
-  "Java",
-  "C#",
-  "C++",
-  "Ruby",
-  "Go",
-  "Swift",
-  "Kotlin",
-  "Objective-C",
-  "PHP",
-  "HTML",
-  "CSS",
-  "React",
-  "Angular",
-  "Vue.js",
-  "Node.js",
-  "Django",
-  "Flask",
-];
+// export const popularSkills = [
+//   "JavaScript",
+//   "TypeScript",
+//   "Python",
+//   "Java",
+//   "C#",
+//   "C++",
+//   "Ruby",
+//   "Go",
+//   "Swift",
+//   "Kotlin",
+//   "Objective-C",
+//   "PHP",
+//   "HTML",
+//   "CSS",
+//   "React",
+//   "Angular",
+//   "Vue.js",
+//   "Node.js",
+//   "Django",
+//   "Flask",
+// ];
 
 // Unified experts dataset
 export const experts = [

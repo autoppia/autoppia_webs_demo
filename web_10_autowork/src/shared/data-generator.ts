@@ -28,10 +28,6 @@ export interface AutoworkHire {
   skills?: string[];
 }
 
-export interface AutoworkSkill {
-  name: string;
-}
-
 export interface AutoworkExpert {
   slug: string;
   name: string;

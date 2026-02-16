@@ -15,18 +15,6 @@ export interface Place {
   longitude?: number;
 }
 
-// Normalize places from JSON data
-const normalizePlace = (place: any): Place => ({
-  id: place.id || `pl-${Math.random().toString(36).slice(2, 9)}`,
-  label: place.label || "",
-  main: place.main || "",
-  sub: place.sub || "",
-  category: place.category,
-  latitude: place.latitude,
-  longitude: place.longitude,
-});
-
-
 /**
  * Get v2 seed from window (synchronized by SeedContext)
  */

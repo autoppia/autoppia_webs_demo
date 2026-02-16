@@ -12,7 +12,6 @@ import type { MedicalRecord } from "@/data/types";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
-import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { Pagination } from "@/components/ui/pagination";
 
 const RECORDS_PAGE_SIZE = 9;

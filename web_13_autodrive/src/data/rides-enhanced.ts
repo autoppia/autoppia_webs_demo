@@ -22,25 +22,6 @@ export interface Ride {
   features?: string[];
 }
 
-// Normalize ride from JSON data
-const normalizeRide = (ride: any): Ride => ({
-  id: ride.id || `r-${Math.random().toString(36).slice(2, 9)}`,
-  name: ride.name || "",
-  image: ride.image || "/car1.png",
-  icon: ride.icon || ride.image || "/car1.png",
-  price: ride.price || 26.6,
-  oldPrice: ride.oldPrice || ride.price * 1.2 || 32.0,
-  seats: ride.seats || 4,
-  eta: ride.eta || "2 min away",
-  desc: ride.desc || "",
-  recommended: ride.recommended || false,
-  waitTime: ride.waitTime,
-  perMile: ride.perMile,
-  perMinute: ride.perMinute,
-  features: ride.features,
-});
-
-
 /**
  * Get v2 seed from window (synchronized by SeedContext)
  */

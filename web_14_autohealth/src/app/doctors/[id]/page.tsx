@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import type { Doctor } from "@/data/types";
 import { getDoctors, subscribeDoctors, whenReady } from "@/dynamic/v2";
 import { DoctorProfileClient } from "./doctor-profile-client";
-import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { useSeed } from "@/context/SeedContext";
 

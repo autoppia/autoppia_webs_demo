@@ -23,22 +23,9 @@ export interface SeededLoadOptions {
   filterValues?: string[];
 }
 
-export function isDbLoadModeEnabled(): boolean {
-  const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 || process.env.ENABLE_DYNAMIC_V2 || "").toString().toLowerCase();
-  return raw === "true";
-}
-
-export function getSeedValueFromEnv(defaultSeed: number = 1): number {
-  // Always return default seed (v2-seed comes from URL parameter, not env vars)
-  return defaultSeed;
-}
-
 export async function fetchSeededSelection<T = unknown>(options: SeededLoadOptions): Promise<T[]> {
-  // Always call the server endpoint - server determines whether v2 is enabled or disabled
-  // When v2 is disabled, the server returns the original dataset
-
   const baseUrl = getApiBaseUrl();
-  const seed = options.seedValue ?? getSeedValueFromEnv(1);
+  const seed = options.seedValue ?? 1;
   const limit = options.limit ?? 50;
   const method = options.method ?? "select";
   const params = new URLSearchParams({

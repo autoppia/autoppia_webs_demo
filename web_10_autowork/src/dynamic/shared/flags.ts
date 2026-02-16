@@ -2,7 +2,7 @@
  * FLAGS - Enablement control for V1, V2, and V3
  *
  * V1: DOM structure (wrappers, decoys) - Breaks XPath
- * V2: Data loading (DB, AI, fallback)
+ * V2: Data loading (DB mode) - Dynamic data
  * V3: Attributes and text (IDs, classes, texts) - Anti-memorization
  */
 
@@ -13,7 +13,7 @@
 export function isV1Enabled(): boolean {
   // In Next.js, NEXT_PUBLIC_* variables are available on both server and client
   const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1;
-  const enabled = value === "true" || value === true;
+  const enabled = value === "true";
 
   // Debug in development
   if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
@@ -26,19 +26,17 @@ export function isV1Enabled(): boolean {
 }
 
 /**
- * Checks whether V2 DB load mode is enabled
- * V2 DB load mode loads data from database
+ * Checks whether V2 DB mode is enabled
+ * V2 DB mode loads data from the server database
  */
-export function isV2DbLoadModeEnabled(): boolean {
-  // This uses the same flag as the seeded-loader
-  // Import it to avoid duplication
-  try {
-    const { isDbLoadModeEnabled } = require("@/shared/seeded-loader");
-    return isDbLoadModeEnabled();
-  } catch {
-    return false;
-  }
+export function isV2Enabled(): boolean {
+  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2;
+  return value === "true";
 }
+
+/**
+ * Checks whether V2 is enabled
+ */
 
 /**
  * Checks whether V3 is enabled
@@ -47,7 +45,7 @@ export function isV2DbLoadModeEnabled(): boolean {
 export function isV3Enabled(): boolean {
   // In Next.js, NEXT_PUBLIC_* variables are available on both server and client
   const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3;
-  const enabled = value === "true" || value === true;
+  const enabled = value === "true";
 
   // Debug in development
   if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {

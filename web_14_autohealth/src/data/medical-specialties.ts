@@ -30,11 +30,6 @@ export const MEDICAL_SPECIALTIES = [
 ] as const;
 
 /**
- * Type for medical specialty
- */
-export type MedicalSpecialty = typeof MEDICAL_SPECIALTIES[number];
-
-/**
  * Get all medical specialties as a sorted array
  */
 export function getAllSpecialties(): string[] {
@@ -52,14 +47,5 @@ export function filterSpecialties(searchTerm: string): string[] {
   const term = searchTerm.toLowerCase();
   return MEDICAL_SPECIALTIES.filter(specialty =>
     specialty.toLowerCase().includes(term)
-  );
-}
-
-/**
- * Check if a string is a valid medical specialty
- */
-export function isValidSpecialty(specialty: string): boolean {
-  return MEDICAL_SPECIALTIES.some(
-    s => s.toLowerCase() === specialty.toLowerCase()
   );
 }

@@ -17,7 +17,6 @@ COPY web_11_autocalendar/package.json web_11_autocalendar/package-lock.json ./
 RUN set -e; for i in 1 2 3; do npm ci && exit 0 || echo "Attempt $i failed, retrying..."; sleep 5; done; exit 1
 
 COPY web_11_autocalendar/ .
-# Removed: Copy original dataset files for fallback (no longer needed)
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions
@@ -55,12 +54,6 @@ RUN BASE_VERSION=$(node -p "require('./package.json').version") && \
     echo "WEB_VERSION=$WEB_VERSION" >> .env.local && \
     echo "✅ Auto-version: $WEB_VERSION"
 
-# Debug: Print the environment variables
-RUN echo "🔍 Build-time ENABLE_DYNAMIC_V1: $ENABLE_DYNAMIC_V1"
-RUN echo "🔍 Build-time NEXT_PUBLIC_ENABLE_DYNAMIC_V1: $NEXT_PUBLIC_ENABLE_DYNAMIC_V1"
-RUN echo "🔍 Build-time ENABLE_DYNAMIC_V2: $ENABLE_DYNAMIC_V2"
-RUN echo "🔍 Build-time NEXT_PUBLIC_ENABLE_DYNAMIC_V2: $NEXT_PUBLIC_ENABLE_DYNAMIC_V2"
-
 RUN npm run build
 
 # Stage 2: Create the lean production image
@@ -73,9 +66,6 @@ ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1
 
 EXPOSE 8010
-
-# Note: NEXT_PUBLIC_* variables are embedded at build time in the .next bundle,
-# so they don't need to be set here. They're already in the JavaScript code.
 
 # Copy package files first (npm ci requires package-lock.json)
 COPY --from=builder /app/package.json ./package.json

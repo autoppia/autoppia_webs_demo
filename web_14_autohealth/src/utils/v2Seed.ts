@@ -1,7 +1,5 @@
-import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { getBaseSeedFromUrl, clampBaseSeed } from "@/shared/seed-resolver";
 
-export const shouldUseDbSeed = () => isDbLoadModeEnabled();
 
 export const getRuntimeV2Seed = (): number | null => {
   if (typeof window === "undefined") return null;

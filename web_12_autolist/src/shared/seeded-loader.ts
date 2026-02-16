@@ -8,19 +8,6 @@ export interface SeededLoadOptions {
   filterValues?: string[];
 }
 
-const coerceBool = (value: string | undefined | null): boolean => {
-  const normalized = (value ?? "").toString().trim().toLowerCase();
-  return ["true", "1", "yes", "y", "on"].includes(normalized);
-};
-
-export function isDbLoadModeEnabled(): boolean {
-  return coerceBool(
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 ||
-      process.env.ENABLE_DYNAMIC_V2 ||
-      ""
-  );
-}
-
 export function getApiBaseUrl(): string {
   const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
   const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
@@ -39,9 +26,6 @@ export function getApiBaseUrl(): string {
 export async function fetchSeededSelection<T = unknown>(
   options: SeededLoadOptions
 ): Promise<T[]> {
-  // Always call the server endpoint - server determines whether v2 is enabled or disabled
-  // When v2 is disabled, the server returns the original dataset
-
   const baseUrl = getApiBaseUrl();
   const seed = options.seedValue ?? 1;
   const limit = options.limit ?? 50;

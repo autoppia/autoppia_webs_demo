@@ -54,12 +54,6 @@ RUN BASE_VERSION=$(node -p "require('./package.json').version") && \
     echo "WEB_VERSION=$WEB_VERSION" >> .env.local && \
     echo "✅ Auto-version: $WEB_VERSION"
 
-# Debug: Print the environment variables
-RUN echo "🔍 Build-time ENABLE_DYNAMIC_V1: $ENABLE_DYNAMIC_V1"
-RUN echo "🔍 Build-time NEXT_PUBLIC_ENABLE_DYNAMIC_V1: $NEXT_PUBLIC_ENABLE_DYNAMIC_V1"
-RUN echo "🔍 Build-time ENABLE_DYNAMIC_V2: $ENABLE_DYNAMIC_V2"
-RUN echo "🔍 Build-time NEXT_PUBLIC_ENABLE_DYNAMIC_V2: $NEXT_PUBLIC_ENABLE_DYNAMIC_V2"
-
 RUN npm run build
 
 # Stage 2: Create the lean production image
@@ -69,9 +63,6 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=8009
 EXPOSE 8009
-
-# Note: NEXT_PUBLIC_* variables are embedded at build time in the .next bundle,
-# so they don't need to be set here. They're already in the JavaScript code.
 
 # Copy package files first (npm ci requires package-lock.json)
 COPY --from=builder /app/package.json ./package.json

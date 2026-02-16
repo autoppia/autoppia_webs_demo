@@ -34,14 +34,4 @@ export async function initializeHotels(seedOverride?: number | null): Promise<Ho
     throw error;
   }
 }
-
-/**
- * Clear cached hotel data
- */
-export function clearHotelCache(): void {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("autolodge_generated_hotels_v1");
-  }
-}
-
-export { hotelsCache as dynamicHotels, hotelsCache as hotels };
+export {hotelsCache as hotels };

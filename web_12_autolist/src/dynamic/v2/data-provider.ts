@@ -1,7 +1,7 @@
 import type { RemoteTask } from "@/data/tasks-enhanced";
 import { initializeTasks } from "@/data/tasks-enhanced";
 import { clampBaseSeed } from "@/shared/seed-resolver";
-import { isDbLoadModeEnabled } from "@/shared/seeded-loader"
+import {isV2Enabled} from "@/dynamic";
 
 export interface TaskSearchFilters {
   query?: string;
@@ -63,13 +63,6 @@ export class DynamicDataProvider {
       console.error("[autolist/data-provider] Failed to initialize data:", error);
       this.ready = true;
       this.resolveReady();
-    }
-  }
-
-  public reloadIfSeedChanged(seed?: number | null): void {
-    const targetSeed = seed !== undefined && seed !== null ? seed : this.getBaseSeed();
-    if (targetSeed !== this.currentSeed) {
-      this.reload(targetSeed);
     }
   }
 
@@ -181,12 +174,9 @@ export class DynamicDataProvider {
   }
 
   public isDynamicModeEnabled(): boolean {
-    return isDbLoadModeEnabled();
+    return isV2Enabled();
   }
 
-  public getLayoutConfig(seed?: number) {
-    return { seed: clampBaseSeed(seed ?? 1) };
-  }
 }
 
 export const dynamicDataProvider = DynamicDataProvider.getInstance();

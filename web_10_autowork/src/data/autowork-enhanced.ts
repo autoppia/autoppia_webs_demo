@@ -2,18 +2,6 @@ import { fetchSeededSelection } from "@/shared/seeded-loader";
 import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 import type { AutoworkJob, AutoworkHire, AutoworkExpert } from "@/shared/data-generator";
 
-/**
- * Get v2 seed from window (synchronized by SeedContext)
- */
-const getRuntimeV2Seed = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const value = (window as any).__autoworkV2Seed;
-  if (typeof value === "number" && Number.isFinite(value)) {
-    return clampBaseSeed(value);
-  }
-  return null;
-};
-
 const resolveSeed = (seedValue?: number | null): number => {
   if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
     return clampBaseSeed(seedValue);

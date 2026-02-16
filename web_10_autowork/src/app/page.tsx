@@ -9,7 +9,6 @@ import { writeJson } from "@/shared/storage";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
-// POPULAR_SKILLS removed - now using V2 dynamic skills from dynamicDataProvider
 
 const SCOPE_SIZE_OPTIONS = ["Large", "Medium", "Small"] as const;
 const SCOPE_DURATION_OPTIONS = ["More than 6 months", "3 to 6 months"] as const;

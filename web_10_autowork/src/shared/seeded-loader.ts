@@ -32,22 +32,9 @@ export interface SeededLoadOptions {
   filterValues?: string[];
 }
 
-export function isDbLoadModeEnabled(): boolean {
-  const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 || process.env.ENABLE_DYNAMIC_V2 || "").toString().toLowerCase();
-  return raw === "true";
-}
-
-export function getSeedValueFromEnv(defaultSeed = 1): number {
-  // Always return default seed (v2-seed comes from URL parameter, not env vars)
-  return defaultSeed;
-}
-
 export async function fetchSeededSelection<T = any>(options: SeededLoadOptions): Promise<T[]> {
-  // Always call the server - server determines whether v2 is enabled or disabled
-  // When v2 is disabled, server returns the original dataset
-
   const baseUrl = getApiBaseUrl();
-  const seed = options.seedValue ?? getSeedValueFromEnv(1);
+  const seed = options.seedValue ?? 1;
   const limit = options.limit ?? 50;
   const method = options.method ?? "select";
   const params = new URLSearchParams({
@@ -102,42 +89,5 @@ export async function fetchSeededSelection<T = any>(options: SeededLoadOptions):
     }
     // Re-throw other errors
     throw error;
-  }
-}
-
-
-export async function fetchPoolInfo(projectKey: string, entityType: string): Promise<{ pool_size: number } | null> {
-  // In browser, avoid calling default :8090 when no explicit public API URL is set
-  if (typeof window !== 'undefined') {
-    const pubUrl = (process.env.NEXT_PUBLIC_API_URL || '').toString();
-    if (!pubUrl) return null;
-  }
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/pool/info?project_key=${encodeURIComponent(projectKey)}&entity_type=${encodeURIComponent(entityType)}`;
-
-  // Add timeout to prevent infinite hanging (5 seconds for pool info)
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-  try {
-    const resp = await fetch(url, {
-      method: "GET",
-      signal: controller.signal,
-    });
-    clearTimeout(timeoutId);
-
-    if (!resp.ok) return null;
-    const json = await resp.json();
-    if (json && typeof json.pool_size === "number") {
-      return { pool_size: json.pool_size as number };
-    }
-    return null;
-  } catch (error: any) {
-    clearTimeout(timeoutId);
-    // Silently fail for pool info (it's optional)
-    if (error.name === 'AbortError' || error.message?.includes('aborted')) {
-      console.warn(`[seeded-loader] Pool info request timed out for ${entityType}`);
-    }
-    return null;
   }
 }

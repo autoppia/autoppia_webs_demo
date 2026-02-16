@@ -2,32 +2,23 @@
  * FLAGS - Enablement control for V1, V2, and V3
  *
  * V1: DOM structure (wrappers, decoys) - Breaks XPath
- * V2: Data loading - Loads different data subsets based on seed
+ * V2: Data loading (DB mode) - Dynamic data
  * V3: Attributes and text (IDs, classes, texts) - Anti-memorization
  */
 
-import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
-
+/**
+ * Checks whether V1 is enabled
+ * V1 adds wrappers and decoys to the DOM to break XPath
+ */
 export function isV1Enabled(): boolean {
+  // In Next.js, NEXT_PUBLIC_* variables are available on both server and client
   const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1;
-  const enabled = value === undefined ? true : value === "true" || value === "1";
+  const enabled = value === "true";
 
+  // Debug in development
   if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
     if (!enabled) {
-      console.warn("[dynamic] V1 está deshabilitado. Configura NEXT_PUBLIC_ENABLE_DYNAMIC_V1=true para activarlo");
-    }
-  }
-
-  return enabled;
-}
-
-export function isV3Enabled(): boolean {
-  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3;
-  const enabled = value === undefined ? true : value === "true" || value === "1";
-
-  if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
-    if (!enabled) {
-      console.warn("[dynamic] V3 está deshabilitado. Configura NEXT_PUBLIC_ENABLE_DYNAMIC_V3=true para activarlo");
+      console.warn("[dynamic] V1 está deshabilitado. Para habilitarlo, configura NEXT_PUBLIC_ENABLE_DYNAMIC_V1=true");
     }
   }
 
@@ -35,9 +26,33 @@ export function isV3Enabled(): boolean {
 }
 
 /**
- * Checks whether V2 DB load mode is enabled
- * V2 DB mode loads pre-generated data from backend
+ * Checks whether V2 DB mode is enabled
+ * V2 DB mode loads data from the server database
  */
-export function isV2DbLoadModeEnabled(): boolean {
-  return isDbLoadModeEnabled();
+export function isV2Enabled(): boolean {
+  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2;
+  return value === "true";
+}
+
+/**
+ * Checks whether V2 is enabled
+ */
+
+/**
+ * Checks whether V3 is enabled
+ * V3 changes IDs, classes, and texts to prevent memorization
+ */
+export function isV3Enabled(): boolean {
+  // In Next.js, NEXT_PUBLIC_* variables are available on both server and client
+  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3;
+  const enabled = value === "true";
+
+  // Debug in development
+  if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
+    if (!enabled) {
+      console.warn("[dynamic] V3 está deshabilitado. Para habilitarlo, configura NEXT_PUBLIC_ENABLE_DYNAMIC_V3=true");
+    }
+  }
+
+  return enabled;
 }
