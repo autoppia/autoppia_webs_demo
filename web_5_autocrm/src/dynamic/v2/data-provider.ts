@@ -244,10 +244,6 @@ export class DynamicDataProvider {
     return this.readyPromise;
   }
 
-  public isDynamicModeEnabled(): boolean {
-    return this.isEnabled;
-  }
-
   public getClients(): any[] {
     // Trigger reload if seed changed
     if (typeof window !== "undefined") {
@@ -409,35 +405,10 @@ export class DynamicDataProvider {
       matter.client?.toLowerCase().includes(lowercaseQuery)
     );
   }
-
-  // Get effective seed value - returns 1 (default) when dynamic HTML is disabled
-  // Validates seed is between 1-300, defaults to 1 if invalid
-  public getEffectiveSeed(providedSeed: number = 1): number {
-    if (!this.isEnabled) {
-      return 1;
-    }
-
-    // Validate seed range (1-300), default to 1 if invalid
-    if (providedSeed < 1 || providedSeed > 300) {
-      return 1;
-    }
-
-    return providedSeed;
-  }
-
-  // Get layout configuration based on seed
-  public getLayoutConfig(seed?: number) {
-    return getEffectiveLayoutConfig(seed);
-  }
 }
 
 // Export singleton instance
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
-
-// Helper functions for easy access
-export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
-export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
-export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
 
 // Data access helpers
 export const getClients = () => dynamicDataProvider.getClients();

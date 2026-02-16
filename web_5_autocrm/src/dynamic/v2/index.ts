@@ -1,8 +1,8 @@
 export { DynamicDataProvider, dynamicDataProvider } from "./data-provider";
 export {
-  getEffectiveSeed,
-  getLayoutConfig,
-  isDynamicModeEnabled,
+  // getEffectiveSeed,
+  // getLayoutConfig,
+  // isDynamicModeEnabled,
   whenReady,
   getClients,
   getMatters,

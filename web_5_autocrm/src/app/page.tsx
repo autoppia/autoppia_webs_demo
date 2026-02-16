@@ -8,11 +8,6 @@ import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { useProjectData } from "@/shared/universal-loader";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { initializeClients, initializeEvents, initializeFiles, initializeLogs, initializeMatters } from "@/data/crm-enhanced";
-import fallbackClientsJson from "@/data/original/clients_1.json";
-import fallbackMattersJson from "@/data/original/matters_1.json";
-import fallbackEventsJson from "@/data/original/events_1.json";
-import fallbackFilesJson from "@/data/original/files_1.json";
-import fallbackLogsJson from "@/data/original/logs_1.json";
 
 function DashboardContent() {
   const { seed } = useSeed();
@@ -27,7 +22,7 @@ function DashboardContent() {
       console.log(`[autocrm] V2 Data - Seed: ${currentV2Seed} (from base seed: ${seed})`);
       lastV2SeedRef.current = currentV2Seed;
     }
-  }, [resolvedSeeds.v2, resolvedSeeds.base, seed]);
+  }, [seed]);
 
   const dyn = useDynamicSystem();
 
@@ -58,12 +53,12 @@ function DashboardContent() {
   const { data: filesData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'files', seedValue: dataSeed });
   const { data: logsData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'logs', seedValue: dataSeed });
 
-  const [fallbackCounts, setFallbackCounts] = useState({
-    matters: (fallbackMattersJson as any[]).length,
-    clients: (fallbackClientsJson as any[]).length,
-    events: (fallbackEventsJson as any[]).length,
-    files: (fallbackFilesJson as any[]).length,
-    logs: (fallbackLogsJson as any[]).length,
+  const [dataCounts, setDataCounts] = useState({
+    matters: 0,
+    clients: 0,
+    events: 0,
+    files: 0,
+    logs: 0,
   });
 
   useEffect(() => {
@@ -78,7 +73,7 @@ function DashboardContent() {
           initializeLogs(),
         ]);
         if (!alive) return;
-        setFallbackCounts({
+        setDataCounts({
           matters: matters.length,
           clients: clients.length,
           events: events.length,
@@ -86,7 +81,7 @@ function DashboardContent() {
           logs: logs.length,
         });
       } catch (err) {
-        console.warn("[Dashboard] Failed to load fallback counts", err);
+        console.warn("[Dashboard] Failed to load data counts", err);
       }
     })();
     return () => {
@@ -95,11 +90,11 @@ function DashboardContent() {
   }, []);
 
   const counters = {
-    matters: (mattersData && mattersData.length > 0 ? mattersData.length : fallbackCounts.matters),
-    clients: (clientsData && clientsData.length > 0 ? clientsData.length : fallbackCounts.clients),
-    events: (eventsData && eventsData.length > 0 ? eventsData.length : fallbackCounts.events),
-    files: (filesData && filesData.length > 0 ? filesData.length : fallbackCounts.files),
-    logs: (logsData && logsData.length > 0 ? logsData.length : fallbackCounts.logs),
+    matters: (mattersData && mattersData.length > 0 ? mattersData.length : dataCounts.matters),
+    clients: (clientsData && clientsData.length > 0 ? clientsData.length : dataCounts.clients),
+    events: (eventsData && eventsData.length > 0 ? eventsData.length : dataCounts.events),
+    files: (filesData && filesData.length > 0 ? filesData.length : dataCounts.files),
+    logs: (logsData && logsData.length > 0 ? logsData.length : dataCounts.logs),
   };
 
   // const handleClick = (eventType: EventType, data: EventData) => () => logEvent(eventType, { ...data });
