@@ -17,9 +17,7 @@ COPY web_11_autocalendar/package.json web_11_autocalendar/package-lock.json ./
 RUN set -e; for i in 1 2 3; do npm ci && exit 0 || echo "Attempt $i failed, retrying..."; sleep 5; done; exit 1
 
 COPY web_11_autocalendar/ .
-# Copy original dataset files for fallback
-COPY webs_server/initial_data/web_11_autocalendar/original/events_1.json src/data/original/events_1.json
-COPY webs_server/initial_data/web_11_autocalendar/original/calendar_events_1.json src/data/original/calendar_events_1.json
+# Removed: Copy original dataset files for fallback (no longer needed)
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

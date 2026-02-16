@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { EVENTS_DATASET } from "@/library/dataset";
+import { CalendarEvent } from "@/library/dataset";
 import { dynamicDataProvider } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
@@ -543,7 +543,7 @@ function CalendarApp() {
       </div>
     </div>
   ) : null;
-  const [searchResults, setSearchResults] = useState<typeof EVENTS_DATASET>([]);
+  const [searchResults, setSearchResults] = useState<CalendarEvent[]>([]);
 
 
   useEffect(() => {
@@ -574,7 +574,7 @@ function CalendarApp() {
             ev.label.toLowerCase().includes(q) ||
             (ev.location ?? "").toLowerCase().includes(q)
         );
-        setSearchResults(results as typeof EVENTS_DATASET);
+        setSearchResults(results as CalendarEvent[]);
         setSearchDropdownOpen(true);
       } else {
         setSearchResults([]);

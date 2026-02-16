@@ -16,7 +16,6 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { dynamicDataProvider } from "@/dynamic/v2";
-import { DASHBOARD_HOTELS } from "@/library/dataset";
 import type { Hotel } from "@/types/hotel";
 import { useWishlist } from "@/hooks/useWishlist";
 
@@ -54,7 +53,30 @@ function getFallbackHotel(): Hotel {
   if (firstDynamic) {
     return firstDynamic;
   }
-  return DASHBOARD_HOTELS[0] as Hotel;
+  // Return a minimal hotel object if no data is available
+  // This should rarely happen as server should always return data
+  return {
+    id: 0,
+    image: "",
+    title: "Loading...",
+    location: "",
+    rating: 0,
+    reviews: 0,
+    guests: 0,
+    maxGuests: 0,
+    bedrooms: 0,
+    beds: 0,
+    baths: 0,
+    datesFrom: "",
+    datesTo: "",
+    price: 0,
+    host: {
+      name: "",
+      since: 0,
+      avatar: "",
+    },
+    amenities: [],
+  } as Hotel;
 }
 
 function PropertyDetailContent() {

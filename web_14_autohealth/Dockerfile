@@ -17,8 +17,7 @@ COPY web_14_autohealth/package.json web_14_autohealth/package-lock.json ./
 # Retry npm ci up to 3 times on network errors
 RUN set -e; for i in 1 2 3; do npm ci && exit 0 || echo "Attempt $i failed, retrying..."; sleep 5; done; exit 1
 
-# Copy original dataset files for fallback
-COPY webs_server/initial_data/web_14_autohealth/original/ src/data/original/
+# Removed: Copy original dataset files for fallback (no longer needed)
 COPY web_14_autohealth/ .
 
 # Build args for environment flags and API URL

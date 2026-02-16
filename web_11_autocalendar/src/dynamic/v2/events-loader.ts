@@ -1,6 +1,5 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { EVENTS_DATASET, CalendarEvent } from "@/library/dataset";
-import fallbackCalendarEvents from "../../data/original/calendar_events_1.json";
+import { CalendarEvent } from "@/library/dataset";
 
 const PROJECT_KEY = "web_11_autocalendar";
 const ENTITY_TYPE = "calendar_events";
@@ -46,12 +45,8 @@ export async function initializeEvents(
     effectiveSeed = clampSeed(v2Seed, 1);
   }
 
-  // If V2 is NOT enabled, return original dataset immediately
-  if (!dbModeEnabled) {
-    console.log("[AutoCalendar] DB mode disabled, using original calendar_events dataset");
-    return (fallbackCalendarEvents as CalendarEvent[]).map((e) => ({ ...e }));
-  }
-
+  // Always call the server endpoint - server determines whether v2 is enabled or disabled
+  // When v2 is disabled, the server returns the original dataset
   try {
     const events = await fetchSeededSelection<CalendarEvent>({
       projectKey: PROJECT_KEY,
@@ -60,19 +55,21 @@ export async function initializeEvents(
       limit: 50,
       method: "shuffle",
     });
+
     if (Array.isArray(events) && events.length > 0) {
       return events;
     }
+
+    // If server returns empty array, throw error (no fallback)
+    throw new Error(`Server returned empty array for seed ${effectiveSeed}`);
   } catch (error) {
     console.error(
-      "[AutoCalendar] Failed to load calendar_events from dataset (seed:",
+      "[AutoCalendar] Failed to load calendar_events from server (seed:",
       effectiveSeed,
-      "), using original dataset fallback",
+      ")",
       error
     );
+    // Re-throw error - server is the single source of truth
+    throw error;
   }
-
-  // Fallback to original dataset
-  console.log("[AutoCalendar] Falling back to original calendar_events dataset");
-  return (fallbackCalendarEvents as CalendarEvent[]).map((e) => ({ ...e }));
 }

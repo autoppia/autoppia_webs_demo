@@ -1,6 +1,5 @@
-import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { fetchSeededSelection } from "@/shared/seeded-loader";
 import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
-import fallbackTripsData from "./original/trips_1.json";
 
 const PROJECT_KEY = "web_13_autodrive";
 const ENTITY_TYPE = "trips";
@@ -127,23 +126,13 @@ const getRuntimeV2Seed = (): number | null => {
   return null;
 };
 
-const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): number => {
-  if (!dbModeEnabled) {
-    return 1;
-  }
-
+const resolveSeed = (v2SeedValue?: number | null): number => {
   if (typeof v2SeedValue === "number" && Number.isFinite(v2SeedValue)) {
     return clampBaseSeed(v2SeedValue);
   }
 
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed !== undefined) {
-    // If base seed is 1, v2 should also be 1
-    if (baseSeed === 1) {
-      return 1;
-    }
-
-    // For other seeds, use base seed directly (v2 seed = base seed)
     return clampBaseSeed(baseSeed);
   }
 
@@ -278,57 +267,42 @@ function generateDeterministicTrips(seed: number, limit: number): Trip[] {
 }
 
 /**
- * Initialize trips data for Web13 with deterministic pools.
- * Priority: DB → Fallback (deterministic)
+ * Initialize trips data from server endpoint.
+ * Server determines whether v2 is enabled or disabled.
+ * When v2 is disabled, the server returns the original dataset.
  */
 export async function initializeTrips(
   v2SeedValue?: number | null,
   limit: number = 30
 ): Promise<Trip[]> {
-  const dbModeEnabled = isDbLoadModeEnabled();
-  const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && dbModeEnabled) {
-    console.log("[autodrive] Base seed is 1, using original trips data (skipping DB mode)");
-    // Return normalized trips from JSON
-    return (fallbackTripsData as any[]).map(normalizeTrip);
+  // If no seed provided, wait a bit for SeedContext to sync v2Seed to window
+  if (typeof window !== "undefined" && v2SeedValue == null) {
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
+  const effectiveSeed = resolveSeed(v2SeedValue);
 
-  // Priority 1: DB mode - fetch from /datasets/load endpoint
-  if (dbModeEnabled) {
-    // If no seed provided, wait a bit for SeedContext to sync v2Seed to window
-    if (typeof window !== "undefined" && v2SeedValue == null) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
+  // Always call the server endpoint - server is the single source of truth
+  try {
+    const trips = await fetchSeededSelection<Trip>({
+      projectKey: PROJECT_KEY,
+      entityType: ENTITY_TYPE,
+      seedValue: effectiveSeed,
+      limit: 50, // Fixed limit of 50 items for DB mode
+      method: "shuffle",
+    });
+
+    if (Array.isArray(trips) && trips.length > 0) {
+      console.log(
+        `[autodrive] Loaded ${trips.length} trips from server (seed=${effectiveSeed})`
+      );
+      return trips;
     }
-    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
 
-    try {
-      const trips = await fetchSeededSelection<Trip>({
-        projectKey: PROJECT_KEY,
-        entityType: ENTITY_TYPE,
-        seedValue: effectiveSeed,
-        limit: 50, // Fixed limit of 50 items for DB mode
-        method: "shuffle",
-      });
-
-      if (Array.isArray(trips) && trips.length > 0) {
-        console.log(
-          `[autodrive] Loaded ${trips.length} trips from dataset (seed=${effectiveSeed})`
-        );
-        return trips;
-      }
-
-      // If no trips returned from backend, fallback to original JSON data
-      console.warn(`[autodrive] No trips returned from backend (seed=${effectiveSeed}), falling back to original data`);
-    } catch (error) {
-      // If backend fails, fallback to original JSON data
-      console.warn("[autodrive] Backend unavailable, falling back to original data:", error);
-    }
+    // If server returns empty array, throw error (no fallback)
+    throw new Error(`Server returned empty array for seed ${effectiveSeed}`);
+  } catch (error) {
+    console.error("[autodrive] Failed to load trips from server:", error);
+    // Re-throw error - server is the single source of truth
+    throw error;
   }
-  // Priority 2: Fallback - use original JSON data
-  else {
-    console.log("[autodrive] V2 modes disabled, using original data");
-  }
-
-  // Fallback to original JSON data
-  return (fallbackTripsData as any[]).map(normalizeTrip);
 }

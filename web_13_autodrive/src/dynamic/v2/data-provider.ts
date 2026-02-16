@@ -4,7 +4,6 @@ import type { Place } from "@/data/places-enhanced";
 import { initializePlaces } from "@/data/places-enhanced";
 import type { Ride } from "@/data/rides-enhanced";
 import { initializeRides } from "@/data/rides-enhanced";
-import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
@@ -68,33 +67,12 @@ export class DynamicDataProvider {
     const runtimeSeed = this.getRuntimeV2Seed();
 
     try {
-      // If base seed = 1, use fallback data directly (skip DB mode)
-      if (baseSeed === 1) {
-        console.log("[autodrive/data-provider] Base seed is 1, using fallback data");
-        const [trips, places, rides] = await Promise.all([
-          initializeTrips(runtimeSeed ?? undefined),
-          initializePlaces(runtimeSeed ?? undefined),
-          initializeRides(runtimeSeed ?? undefined),
-        ]);
-        this.setTrips(trips);
-        this.setPlaces(places);
-        this.setRides(rides);
-        return;
-      }
-
       this.currentSeed = runtimeSeed ?? 1;
 
-      // Check if DB mode is enabled - only try DB if enabled
-      const dbModeEnabled = isDbLoadModeEnabled();
-      console.log("[autodrive/data-provider] DB mode enabled:", dbModeEnabled, "runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
+      // Always initialize from server - server determines whether v2 is enabled or disabled
+      console.log("[autodrive/data-provider] Initializing from server, runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
 
-      if (dbModeEnabled) {
-        // Try DB mode first if enabled
-        console.log("[autodrive/data-provider] Attempting to load from DB...");
-        // Let initializeTrips/Places/Rides handle DB loading
-      }
-
-      // Initialize all data types (they handle DB mode internally)
+      // Initialize all data types (they handle server loading internally)
       const [trips, places, rides] = await Promise.all([
         initializeTrips(runtimeSeed ?? undefined),
         initializePlaces(runtimeSeed ?? undefined),
@@ -112,23 +90,8 @@ export class DynamicDataProvider {
       });
     } catch (error) {
       console.error("[autodrive/data-provider] Failed to initialize data:", error);
-      // Even if there's an error, we should mark as ready with fallback data
-      // to prevent infinite loading state
-      try {
-        const [trips, places, rides] = await Promise.all([
-          initializeTrips(runtimeSeed ?? undefined),
-          initializePlaces(runtimeSeed ?? undefined),
-          initializeRides(runtimeSeed ?? undefined),
-        ]);
-        this.setTrips(trips);
-        this.setPlaces(places);
-        this.setRides(rides);
-      } catch (fallbackError) {
-        console.error("[autodrive/data-provider] Failed to initialize fallback data:", fallbackError);
-        // Last resort: mark as ready to prevent infinite loading
-        this.ready = true;
-        this.resolveReady();
-      }
+      // Re-throw error - server is the single source of truth
+      throw error;
     }
 
     // Listen for seed changes
@@ -149,18 +112,8 @@ export class DynamicDataProvider {
 
     this.loadingPromise = (async () => {
       try {
-        const baseSeed = this.getBaseSeedFromUrl();
         const v2Seed = seedValue ?? this.getRuntimeV2Seed() ?? 1;
-
-        // If base seed = 1, use fallback data directly (skip DB mode)
-        if (baseSeed === 1) {
-          console.log("[autodrive/data-provider] Reload: Base seed is 1, using fallback data");
-          this.currentSeed = 1;
-        } else {
-          this.currentSeed = v2Seed;
-        }
-
-        // Note: We always reload to ensure fresh data
+        this.currentSeed = v2Seed;
 
         console.log(`[autodrive] Reloading trips, places, and rides for seed=${this.currentSeed}...`);
         this.ready = false;
@@ -194,6 +147,7 @@ export class DynamicDataProvider {
         console.log(`[autodrive] Data reloaded: ${newTrips.length} trips, ${newPlaces.length} places, ${newRides.length} rides`);
       } catch (error) {
         console.error("[autodrive/data-provider] Failed to reload data:", error);
+        throw error;
       } finally {
         this.ready = true;
         this.loadingPromise = null;

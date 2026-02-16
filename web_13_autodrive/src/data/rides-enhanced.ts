@@ -1,6 +1,5 @@
-import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { fetchSeededSelection } from "@/shared/seeded-loader";
 import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
-import fallbackRidesData from "./original/rides_1.json";
 
 const PROJECT_KEY = "web_13_autodrive";
 const ENTITY_TYPE = "rides";
@@ -41,8 +40,6 @@ const normalizeRide = (ride: any): Ride => ({
   features: ride.features,
 });
 
-// Fallback rides data from JSON
-const fallbackRides: Ride[] = (fallbackRidesData as any[]).map(normalizeRide);
 
 /**
  * Get v2 seed from window (synchronized by SeedContext)
@@ -56,23 +53,13 @@ const getRuntimeV2Seed = (): number | null => {
   return null;
 };
 
-const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): number => {
-  if (!dbModeEnabled) {
-    return 1;
-  }
-
+const resolveSeed = (v2SeedValue?: number | null): number => {
   if (typeof v2SeedValue === "number" && Number.isFinite(v2SeedValue)) {
     return clampBaseSeed(v2SeedValue);
   }
 
   const baseSeed = getBaseSeedFromUrl();
   if (baseSeed !== null) {
-    // If base seed is 1, v2 should also be 1
-    if (baseSeed === 1) {
-      return 1;
-    }
-
-    // For other seeds, use base seed directly (v2 seed = base seed)
     return clampBaseSeed(baseSeed);
   }
 
@@ -87,104 +74,48 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
   return 1;
 };
 
-const seededRandom = (seed: number) => {
-  let value = seed;
-  return () => {
-    value = (value * 1664525 + 1013904223) % 4294967296;
-    return value / 4294967296;
-  };
-};
-
-function formatEta(minutesFromNow: number): string {
-  const etaTime = new Date();
-  etaTime.setMinutes(etaTime.getMinutes() + minutesFromNow);
-  const timeString = etaTime.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-  return `${minutesFromNow} min away · ${timeString}`;
-}
-
 /**
- * Generate deterministic rides from templates (fallback)
- */
-function generateDeterministicRides(seed: number): Ride[] {
-  const rng = seededRandom(seed || 1);
-  const recommendedIdx = Math.floor(rng() * fallbackRides.length);
-
-  return fallbackRides.map((template, idx) => {
-    const surgeMultiplier = 0.85 + rng() * 0.4; // 0.85 - 1.25
-    const price = Number((template.price * surgeMultiplier).toFixed(2));
-    const oldPrice = Number((price * (1.05 + rng() * 0.15)).toFixed(2));
-    const minutesAway = 1 + Math.floor(rng() * 5);
-
-    return {
-      ...template,
-      price,
-      oldPrice,
-      eta: formatEta(minutesAway),
-      recommended: idx === recommendedIdx,
-    };
-  });
-}
-
-/**
- * Initialize rides data for Web13.
- * Priority: DB → Fallback (deterministic)
+ * Initialize rides data from server endpoint.
+ * Server determines whether v2 is enabled or disabled.
+ * When v2 is disabled, the server returns the original dataset.
  */
 export async function initializeRides(
   v2SeedValue?: number | null,
   limit: number = 10
 ): Promise<Ride[]> {
-  const dbModeEnabled = isDbLoadModeEnabled();
-  const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && dbModeEnabled) {
-    console.log("[autodrive] Base seed is 1, using original rides data (skipping DB mode)");
-    return generateDeterministicRides(1);
+  // If no seed provided, wait a bit for SeedContext to sync v2Seed to window
+  if (typeof window !== "undefined" && v2SeedValue == null) {
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
+  const effectiveSeed = resolveSeed(v2SeedValue);
 
-  // Priority 1: DB mode - fetch from /datasets/load endpoint
-  if (dbModeEnabled) {
-    // If no seed provided, wait a bit for SeedContext to sync v2Seed to window
-    if (typeof window !== "undefined" && v2SeedValue == null) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
+  // Always call the server endpoint - server is the single source of truth
+  try {
+    const rides = await fetchSeededSelection<Ride>({
+      projectKey: PROJECT_KEY,
+      entityType: ENTITY_TYPE,
+      seedValue: effectiveSeed,
+      limit: 50, // Fixed limit of 50 items for DB mode
+      method: "shuffle",
+    });
+
+    if (Array.isArray(rides) && rides.length > 0) {
+      console.log(
+        `[autodrive] Loaded ${rides.length} rides from server (seed=${effectiveSeed})`
+      );
+      // Ensure at least one is recommended
+      const ridesWithRecommended = rides.map((ride, idx) => ({
+        ...ride,
+        recommended: idx === 0 || ride.recommended || false,
+      }));
+      return ridesWithRecommended;
     }
-    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
 
-    try {
-      const rides = await fetchSeededSelection<Ride>({
-        projectKey: PROJECT_KEY,
-        entityType: ENTITY_TYPE,
-        seedValue: effectiveSeed,
-        limit: 50, // Fixed limit of 50 items for DB mode
-        method: "shuffle",
-      });
-
-      if (Array.isArray(rides) && rides.length > 0) {
-        console.log(
-          `[autodrive] Loaded ${rides.length} rides from dataset (seed=${effectiveSeed})`
-        );
-        // Ensure at least one is recommended
-        const ridesWithRecommended = rides.map((ride, idx) => ({
-          ...ride,
-          recommended: idx === 0 || ride.recommended || false,
-        }));
-        return ridesWithRecommended;
-      }
-
-      // If no rides returned from backend, fallback to local data
-      console.warn(`[autodrive] No rides returned from backend (seed=${effectiveSeed}), falling back to local data`);
-    } catch (error) {
-      // If backend fails, fallback to local data
-      console.warn("[autodrive] Backend unavailable for rides, falling back to local data:", error);
-    }
+    // If server returns empty array, throw error (no fallback)
+    throw new Error(`Server returned empty array for seed ${effectiveSeed}`);
+  } catch (error) {
+    console.error("[autodrive] Failed to load rides from server:", error);
+    // Re-throw error - server is the single source of truth
+    throw error;
   }
-  // Priority 2: Fallback - use deterministic generation
-  else {
-    console.log("[autodrive] V2 modes disabled for rides, using deterministic generation");
-  }
-
-  // Fallback to deterministic generation
-  const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
-  return generateDeterministicRides(effectiveSeed);
 }

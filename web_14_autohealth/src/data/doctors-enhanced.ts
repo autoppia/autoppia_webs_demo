@@ -1,14 +1,11 @@
 import type { Doctor } from "@/data/types";
-import fallbackDoctorsJson from "@/data/original/doctors_1.json";
-import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { fetchSeededSelection } from "@/shared/seeded-loader";
 import { resolveDatasetSeed, waitForDatasetSeed } from "@/utils/v2Seed";
-import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 
 const CACHE_KEY = 'autohealth_doctors_v2';
 const PROJECT_KEY = 'web_14_autohealth';
 let doctorsCache: Doctor[] = [];
 let lastSeed: number | null = null;
-const FALLBACK_DOCTORS: Doctor[] = Array.isArray(fallbackDoctorsJson) ? (fallbackDoctorsJson as Doctor[]) : [];
 
 async function loadDoctorsFromDataset(v2SeedValue?: number | null): Promise<Doctor[]> {
   await waitForDatasetSeed(v2SeedValue);
@@ -22,23 +19,12 @@ async function loadDoctorsFromDataset(v2SeedValue?: number | null): Promise<Doct
     filterKey: "specialty",
   });
   if (!Array.isArray(doctors) || doctors.length === 0) {
-    throw new Error(`[autohealth] No doctors returned from dataset (seed=${effectiveSeed})`);
+    throw new Error(`[autohealth] No doctors returned from server (seed=${effectiveSeed})`);
   }
   return doctors;
 }
 
 export async function initializeDoctors(v2SeedValue?: number | null): Promise<Doctor[]> {
-  const dbModeEnabled = isDbLoadModeEnabled();
-
-  // Check base seed from URL - if seed = 1, use original data
-  const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && dbModeEnabled) {
-    console.log("[autohealth] Base seed is 1, using original data (skipping DB mode)");
-    doctorsCache = FALLBACK_DOCTORS;
-    lastSeed = 1;
-    return doctorsCache;
-  }
-
   // Clear cache if seed changed
   const currentSeed = v2SeedValue ?? null;
   if (lastSeed !== null && currentSeed !== null && lastSeed !== currentSeed) {
@@ -49,12 +35,15 @@ export async function initializeDoctors(v2SeedValue?: number | null): Promise<Do
   }
   lastSeed = currentSeed;
 
-  if (dbModeEnabled) {
-    if (doctorsCache.length > 0 && lastSeed === currentSeed) return doctorsCache;
+  // Always call the server endpoint - server is the single source of truth
+  if (doctorsCache.length > 0 && lastSeed === currentSeed) return doctorsCache;
+
+  try {
     doctorsCache = await loadDoctorsFromDataset(v2SeedValue);
     return doctorsCache;
+  } catch (error) {
+    console.error("[autohealth] Failed to load doctors from server:", error);
+    // Re-throw error - server is the single source of truth
+    throw error;
   }
-
-  doctorsCache = FALLBACK_DOCTORS;
-  return doctorsCache;
 }

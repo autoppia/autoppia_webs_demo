@@ -1,13 +1,10 @@
 import type { Doctor, Prescription } from "@/data/types";
-import fallbackPrescriptionsJson from "@/data/original/prescriptions_1.json";
-import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { fetchSeededSelection } from "@/shared/seeded-loader";
 import { resolveDatasetSeed, waitForDatasetSeed } from "@/utils/v2Seed";
-import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
 
 const CACHE_KEY = 'autohealth_prescriptions_v1';
 const PROJECT_KEY = 'web_14_autohealth';
 let prescriptionsCache: Prescription[] = [];
-const FALLBACK_PRESCRIPTIONS: Prescription[] = Array.isArray(fallbackPrescriptionsJson) ? (fallbackPrescriptionsJson as Prescription[]) : [];
 
 async function loadPrescriptionsFromDataset(v2SeedValue?: number | null): Promise<Prescription[]> {
   await waitForDatasetSeed(v2SeedValue);
@@ -21,28 +18,21 @@ async function loadPrescriptionsFromDataset(v2SeedValue?: number | null): Promis
     filterKey: "category",
   });
   if (!Array.isArray(prescriptions) || prescriptions.length === 0) {
-    throw new Error(`[autohealth] No prescriptions returned from dataset (seed=${effectiveSeed})`);
+    throw new Error(`[autohealth] No prescriptions returned from server (seed=${effectiveSeed})`);
   }
   return prescriptions;
 }
 
 export async function initializePrescriptions(doctors?: Doctor[], v2SeedValue?: number | null): Promise<Prescription[]> {
-  const dbModeEnabled = isDbLoadModeEnabled();
+  // Always call the server endpoint - server is the single source of truth
+  if (prescriptionsCache.length > 0) return prescriptionsCache;
 
-  // Check base seed from URL - if seed = 1, use original data
-  const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed === 1 && dbModeEnabled) {
-    console.log("[autohealth] Base seed is 1, using original prescriptions data (skipping DB mode)");
-    prescriptionsCache = FALLBACK_PRESCRIPTIONS;
-    return prescriptionsCache;
-  }
-
-  if (dbModeEnabled) {
-    if (prescriptionsCache.length > 0) return prescriptionsCache;
+  try {
     prescriptionsCache = await loadPrescriptionsFromDataset(v2SeedValue);
     return prescriptionsCache;
+  } catch (error) {
+    console.error("[autohealth] Failed to load prescriptions from server:", error);
+    // Re-throw error - server is the single source of truth
+    throw error;
   }
-
-  prescriptionsCache = FALLBACK_PRESCRIPTIONS;
-  return prescriptionsCache;
 }

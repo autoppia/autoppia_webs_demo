@@ -39,11 +39,8 @@ export function getApiBaseUrl(): string {
 export async function fetchSeededSelection<T = unknown>(
   options: SeededLoadOptions
 ): Promise<T[]> {
-  // Si el modo DB está deshabilitado, NO hacer ninguna llamada HTTP
-  if (!isDbLoadModeEnabled()) {
-    console.log(`[seeded-loader] DB mode disabled, skipping API call for ${options.entityType}`);
-    return [] as T[];
-  }
+  // Always call the server endpoint - server determines whether v2 is enabled or disabled
+  // When v2 is disabled, the server returns the original dataset
 
   const baseUrl = getApiBaseUrl();
   const seed = options.seedValue ?? 1;

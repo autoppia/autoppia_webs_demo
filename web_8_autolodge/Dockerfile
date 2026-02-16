@@ -17,8 +17,6 @@ COPY web_8_autolodge/package.json web_8_autolodge/package-lock.json ./
 RUN set -e; for i in 1 2 3; do npm ci && exit 0 || echo "Attempt $i failed, retrying..."; sleep 5; done; exit 1
 
 COPY web_8_autolodge/ .
-# Copy original dataset files for fallback
-COPY webs_server/initial_data/web_8_autolodge/original/hotels_1.json src/data/original/hotels_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

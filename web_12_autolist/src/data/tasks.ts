@@ -1,5 +1,4 @@
-import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import tasksData from "./original/tasks_1.json";
+import { fetchSeededSelection } from "@/shared/seeded-loader";
 
 type AutolistWindow = Window & {
   __autolistV2Seed?: number | null;
@@ -12,42 +11,6 @@ export interface RemoteTask {
   due_date?: string | null;
   priority?: number;
   completed_at?: string | null;
-}
-
-interface LocalTaskData {
-  id?: string | number;
-  name?: string;
-  description?: string;
-  priority?: number;
-  status?: string;
-  createdAt?: string;
-  dueDate?: string;
-  tags?: string[];
-}
-
-/**
- * Load tasks from local JSON file (fallback when v2 is disabled or backend unavailable)
- */
-async function loadTasksFromLocal(limit: number = 80): Promise<RemoteTask[]> {
-  try {
-    // Transform local JSON format to RemoteTask format
-    const localTasks = (tasksData as LocalTaskData[]).slice(0, limit).map((task: LocalTaskData) => ({
-      id: task.id?.toString(),
-      name: task.name,
-      description: task.description,
-      due_date: task.dueDate || task.createdAt || null,
-      priority: task.priority || 4,
-      completed_at: task.status === "completed"
-        ? (task.createdAt || new Date().toISOString())
-        : null,
-    }));
-
-    console.log(`[autolist] Loaded ${localTasks.length} tasks from local JSON file`);
-    return localTasks;
-  } catch (error) {
-    console.error("[autolist] Failed to load tasks from local JSON:", error);
-    return [];
-  }
 }
 
 const clampSeed = (value: number, fallback: number = 1): number =>
@@ -74,16 +37,6 @@ export async function loadTasks(
   v2Seed?: number | null,
   limit: number = 80
 ): Promise<LoadTasksResult> {
-  const dbMode = isDbLoadModeEnabled();
-
-  // If v2 DB mode is disabled, always load from local JSON
-  if (!dbMode) {
-    console.log("[autolist] v2 DB mode disabled, loading from local JSON");
-    const localTasks = await loadTasksFromLocal(limit);
-    return { tasks: localTasks };
-  }
-
-  // If v2 is enabled, try to load from backend
   let effectiveSeed = 1;
   if (typeof window === "undefined") {
     effectiveSeed = 1;
@@ -95,6 +48,8 @@ export async function loadTasks(
     effectiveSeed = resolvedSeed ?? 1;
   }
 
+  // Always call the server endpoint - server determines whether v2 is enabled or disabled
+  // When v2 is disabled, the server returns the original dataset
   try {
     const tasks = await fetchSeededSelection<RemoteTask>({
       projectKey: "web_12_autolist",
@@ -106,19 +61,16 @@ export async function loadTasks(
 
     if (Array.isArray(tasks) && tasks.length > 0) {
       console.log(
-        `[autolist] Loaded ${tasks.length} tasks from dataset (seed=${effectiveSeed})`
+        `[autolist] Loaded ${tasks.length} tasks from server (seed=${effectiveSeed})`
       );
       return { tasks };
     }
 
-    // If no tasks returned from backend, fallback to local JSON (no error, just fallback)
-    console.warn(`[autolist] No tasks returned from backend (seed=${effectiveSeed}), falling back to local JSON`);
-    const localTasks = await loadTasksFromLocal(limit);
-    return { tasks: localTasks }; // No error message for fallback
+    // If server returns empty array, throw error (no fallback)
+    throw new Error(`Server returned empty array for seed ${effectiveSeed}`);
   } catch (error) {
-    // If backend fails, fallback to local JSON (no error, just fallback)
-    console.warn("[autolist] Backend unavailable, falling back to local JSON:", error);
-    const localTasks = await loadTasksFromLocal(limit);
-    return { tasks: localTasks }; // No error message for fallback
+    console.error("[autolist] Failed to load tasks from server:", error);
+    // Re-throw error - server is the single source of truth
+    throw error;
   }
 }

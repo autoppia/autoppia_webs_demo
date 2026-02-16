@@ -17,8 +17,7 @@ COPY web_12_autolist/package.json web_12_autolist/package-lock.json ./
 RUN set -e; for i in 1 2 3; do npm ci && exit 0 || echo "Attempt $i failed, retrying..."; sleep 5; done; exit 1
 
 COPY web_12_autolist/ .
-# Copy original dataset files for fallback
-COPY webs_server/initial_data/web_12_autolist/original/tasks_1.json src/data/original/tasks_1.json
+# Removed: Copy original dataset files for fallback (no longer needed)
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions
