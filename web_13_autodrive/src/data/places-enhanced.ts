@@ -1,5 +1,6 @@
 import { fetchSeededSelection } from "@/shared/seeded-loader";
-import { clampBaseSeed, getBaseSeedFromUrl } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 const PROJECT_KEY = "web_13_autodrive";
 const ENTITY_TYPE = "places";
@@ -15,37 +16,10 @@ export interface Place {
   longitude?: number;
 }
 
-/**
- * Get v2 seed from window (synchronized by SeedContext)
- */
-const getRuntimeV2Seed = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const value = (window as Window & { __autodriveV2Seed?: number | null }).__autodriveV2Seed;
-  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
-    return value;
-  }
-  return null;
-};
-
 const resolveSeed = (v2SeedValue?: number | null): number => {
-  if (typeof v2SeedValue === "number" && Number.isFinite(v2SeedValue)) {
-    return clampBaseSeed(v2SeedValue);
-  }
-
-  const baseSeed = getBaseSeedFromUrl();
-  if (baseSeed !== null) {
-    return clampBaseSeed(baseSeed);
-  }
-
-  // Fallback to runtime seed if available
-  if (typeof window !== "undefined") {
-    const fromClient = getRuntimeV2Seed();
-    if (typeof fromClient === "number") {
-      return clampBaseSeed(fromClient);
-    }
-  }
-
-  return 1;
+  return isV2Enabled()
+    ? clampSeed(v2SeedValue ?? getSeedFromUrl())
+    : 1;
 };
 
 /**
@@ -57,10 +31,6 @@ export async function initializePlaces(
   v2SeedValue?: number | null,
   limit: number = 50
 ): Promise<Place[]> {
-  // If no seed provided, wait a bit for SeedContext to sync v2Seed to window
-  if (typeof window !== "undefined" && v2SeedValue == null) {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-  }
   const effectiveSeed = resolveSeed(v2SeedValue);
 
   // Always call the server endpoint - server is the single source of truth

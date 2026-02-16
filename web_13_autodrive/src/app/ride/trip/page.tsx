@@ -220,23 +220,11 @@ function PlaceSelect({
       }
     });
 
-    // Also listen to seed change events
-    const handleSeedChange = () => {
-      updatePlaces();
-    };
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("autodrive:v2SeedChange", handleSeedChange);
-    }
-
     // Initial update
     updatePlaces();
 
     return () => {
       unsubscribe();
-      if (typeof window !== "undefined") {
-        window.removeEventListener("autodrive:v2SeedChange", handleSeedChange);
-      }
     };
   }, [seed]);
 
@@ -785,7 +773,8 @@ function Spinner() {
 
 export default function RideTripPage() {
   const router = useSeedRouter();
-  const { getElementAttributes, getText, v2Seed } = useSeedLayout();
+  const { getElementAttributes, getText } = useSeedLayout();
+  const { seed } = useSeed();
   const dyn = useDynamicSystem();
   const [pickupOpen, setPickupOpen] = useState(false);
   const [dropoffOpen, setDropoffOpen] = useState(false);
@@ -801,7 +790,7 @@ export default function RideTripPage() {
   const [selectedRide, setSelectedRide] = useState<Ride | null>(null);
   const [rides, setRides] = useState<Ride[]>(() => {
     // Start with fallback, will be updated when data loads
-    return generateSeededRides(v2Seed ?? 1);
+    return generateSeededRides(seed ?? 1);
   });
   const [stats, setStats] = useState({
     totalTrips: 0,
@@ -812,7 +801,6 @@ export default function RideTripPage() {
   useEffect(() => {
     let isMounted = true;
     let unsubscribe: (() => void) | null = null;
-    let handleSeedChange: (() => void) | null = null;
 
     // Wait for data provider to be ready, then subscribe
     const setupRides = async () => {
@@ -833,40 +821,15 @@ export default function RideTripPage() {
         unsubscribe = subscribeRides((newRides) => {
           if (!isMounted) return;
           // Always update when subscription fires, even if empty (to clear old data)
-          setRides(newRides.length > 0 ? newRides : generateSeededRides(v2Seed ?? 1));
+          setRides(newRides.length > 0 ? newRides : generateSeededRides(seed ?? 1));
           setSelectedRideIdx(null);
           setSelectedRide(null);
         });
-
-        // Also listen to seed change events
-        handleSeedChange = () => {
-          if (!isMounted) return;
-          // Use setTimeout to handle async operation
-          setTimeout(async () => {
-            if (!isMounted) return;
-            try {
-              // Wait a bit for data to reload
-              await new Promise(resolve => setTimeout(resolve, 100));
-              const dynamicRides = getRides();
-              if (dynamicRides.length > 0) {
-                setRides(dynamicRides);
-                setSelectedRideIdx(null);
-                setSelectedRide(null);
-              }
-            } catch (error) {
-              console.warn("[RideTripPage] Failed to update rides:", error);
-            }
-          }, 0);
-        };
-
-        if (typeof window !== "undefined" && handleSeedChange) {
-          window.addEventListener("autodrive:v2SeedChange", handleSeedChange);
-        }
       } catch (error) {
         console.warn("[RideTripPage] Failed to setup rides:", error);
         // Fallback to generated rides
         if (isMounted) {
-          setRides(generateSeededRides(v2Seed ?? 1));
+          setRides(generateSeededRides(seed ?? 1));
         }
       }
     };
@@ -878,11 +841,8 @@ export default function RideTripPage() {
       if (unsubscribe) {
         unsubscribe();
       }
-      if (typeof window !== "undefined" && handleSeedChange) {
-        window.removeEventListener("autodrive:v2SeedChange", handleSeedChange);
-      }
     };
-  }, [v2Seed]);
+  }, [seed]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -911,16 +871,16 @@ export default function RideTripPage() {
     }
 
     // Simulate active riders and available drivers based on seed for consistency
-    const seed = v2Seed ?? 1;
-    const activeRiders = 1247 + (seed * 47) % 523;
-    const availableDrivers = 458 + (seed * 32) % 142;
+    const seedValue = seed ?? 1;
+    const activeRiders = 1247 + (seedValue * 47) % 523;
+    const availableDrivers = 458 + (seedValue * 32) % 142;
 
     setStats({
       totalTrips: totalTrips || 12, // Fallback to 12 if no trips
       activeRiders,
       availableDrivers,
     });
-  }, [v2Seed]);
+  }, [seed]);
 
   function formatDateTime(date: string, time: string) {
     // MMM DD, HH:MM AM/PM

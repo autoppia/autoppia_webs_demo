@@ -232,23 +232,11 @@ function PlaceSelect({
       }
     });
 
-    // Also listen to seed change events
-    const handleSeedChange = () => {
-      updatePlaces();
-    };
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("autodrive:v2SeedChange", handleSeedChange);
-    }
-
     // Initial update
     updatePlaces();
 
     return () => {
       unsubscribe();
-      if (typeof window !== "undefined") {
-        window.removeEventListener("autodrive:v2SeedChange", handleSeedChange);
-      }
     };
   }, [seed]);
 
@@ -838,7 +826,6 @@ export default function Home() {
   const router = useSeedRouter();
   const dyn = useDynamicSystem();
   const { seed } = useSeed();
-  const v2Seed = seed;
   const dynamicV3TextVariants: Record<string, string[]> = useMemo(() => ({
     booking_heading: ["Book your ride", "Plan a trip", "Reserve your ride", "Schedule a drive", "Arrange pickup"],
     booking_subtitle: [
@@ -936,7 +923,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [selectedRideIdx, setSelectedRideIdx] = useState<number | null>(null);
   const [selectedRide, setSelectedRide] = useState<Ride | null>(null);
-  const [rides, setRides] = useState<Ride[]>(() => generateSeededRides(v2Seed ?? 1));
+  const [rides, setRides] = useState<Ride[]>(() => generateSeededRides(seed ?? 1));
   const [stats, setStats] = useState({
     totalTrips: 0,
     activeRiders: 0,
@@ -947,7 +934,6 @@ export default function Home() {
   useEffect(() => {
     let isMounted = true;
     let unsubscribe: (() => void) | null = null;
-    let handleSeedChange: (() => void) | null = null;
 
     // Wait for data provider to be ready, then subscribe
     const setupRides = async () => {
@@ -966,7 +952,7 @@ export default function Home() {
           setSelectedRide(null);
         } else {
           console.warn("[Home] No rides from data provider, using fallback");
-          setRides(generateSeededRides(v2Seed ?? 1));
+          setRides(generateSeededRides(seed ?? 1));
         }
 
         // Subscribe to rides changes
@@ -974,46 +960,16 @@ export default function Home() {
           if (!isMounted) return;
           console.log("[Home] Rides updated from subscription:", newRides.length);
           // Always update when subscription fires, even if empty (to clear old data)
-          setRides(newRides.length > 0 ? newRides : generateSeededRides(v2Seed ?? 1));
+          setRides(newRides.length > 0 ? newRides : generateSeededRides(seed ?? 1));
           setSelectedRideIdx(null);
           setSelectedRide(null);
         });
 
-        // Also listen to seed change events
-        handleSeedChange = () => {
-          if (!isMounted) return;
-          console.log("[Home] Seed change event received, updating rides...");
-          // Use setTimeout to handle async operation
-          setTimeout(async () => {
-            if (!isMounted) return;
-            try {
-              // Wait a bit for data to reload
-              await new Promise(resolve => setTimeout(resolve, 100));
-              const dynamicRides = getRides();
-              if (dynamicRides.length > 0) {
-                console.log("[Home] Updated rides after seed change:", dynamicRides.length);
-                setRides(dynamicRides);
-                setSelectedRideIdx(null);
-                setSelectedRide(null);
-              } else {
-                console.warn("[Home] No rides after seed change, using fallback");
-                setRides(generateSeededRides(v2Seed ?? 1));
-              }
-            } catch (error) {
-              console.warn("[Home] Failed to update rides:", error);
-              setRides(generateSeededRides(v2Seed ?? 1));
-            }
-          }, 0);
-        };
-
-        if (typeof window !== "undefined" && handleSeedChange) {
-          window.addEventListener("autodrive:v2SeedChange", handleSeedChange);
-        }
       } catch (error) {
         console.warn("[Home] Failed to setup rides:", error);
         // Fallback to generated rides
         if (isMounted) {
-          setRides(generateSeededRides(v2Seed ?? 1));
+          setRides(generateSeededRides(seed ?? 1));
         }
       }
     };
@@ -1025,11 +981,8 @@ export default function Home() {
       if (unsubscribe) {
         unsubscribe();
       }
-      if (typeof window !== "undefined" && handleSeedChange) {
-        window.removeEventListener("autodrive:v2SeedChange", handleSeedChange);
-      }
     };
-  }, [v2Seed]);
+  }, [seed]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -1060,16 +1013,16 @@ export default function Home() {
     }
 
     // Simulate active riders and available drivers based on seed for consistency
-    const seed = v2Seed ?? 1;
-    const activeRiders = 1247 + ((seed * 47) % 523);
-    const availableDrivers = 458 + ((seed * 32) % 142);
+    const seedValue = seed ?? 1;
+    const activeRiders = 1247 + ((seedValue * 47) % 523);
+    const availableDrivers = 458 + ((seedValue * 32) % 142);
 
     setStats({
       totalTrips: totalTrips || 12, // Fallback to 12 if no trips
       activeRiders,
       availableDrivers,
     });
-  }, [v2Seed]);
+  }, [seed]);
 
   useEffect(() => {
     logEvent(EVENT_TYPES.EXPLORE_FEATURES, {

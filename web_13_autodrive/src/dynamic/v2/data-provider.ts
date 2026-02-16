@@ -4,17 +4,18 @@ import type { Place } from "@/data/places-enhanced";
 import { initializePlaces } from "@/data/places-enhanced";
 import type { Ride } from "@/data/rides-enhanced";
 import { initializeRides } from "@/data/rides-enhanced";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private trips: Trip[] = [];
   private places: Place[] = [];
   private rides: Ride[] = [];
-  private isEnabled = false;
   private ready = false;
   private readyPromise: Promise<void>;
   private resolveReady!: () => void;
-  private currentSeed: number = 1;
+  private currentSeed: number | null = null;
   private loadingPromise: Promise<void> | null = null;
   private subscribers: ((trips: Trip[]) => void)[] = [];
   private placesSubscribers: ((places: Place[]) => void)[] = [];
@@ -34,26 +35,11 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  private getBaseSeedFromUrl(): number | null {
-    if (typeof window === "undefined") return null;
-    const params = new URLSearchParams(window.location.search);
-    const seedParam = params.get("seed");
-    if (seedParam) {
-      const parsed = Number.parseInt(seedParam, 10);
-      if (Number.isFinite(parsed) && parsed >= 1 && parsed <= 300) {
-        return parsed;
-      }
-    }
-    return null;
-  }
-
-  private getRuntimeV2Seed(): number | null {
-    if (typeof window === "undefined") return null;
-    const value = (window as any).__autodriveV2Seed;
-    if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
-      return value;
-    }
-    return null;
+  private getSeed(): number {
+    // V2 rule: if V2 is disabled, always act as seed=1.
+    if (!isV2Enabled()) return 1;
+    if (typeof window === "undefined") return 1;
+    return getSeedFromUrl();
   }
 
   private async initialize(): Promise<void> {
@@ -63,20 +49,15 @@ export class DynamicDataProvider {
       this.resolveReady = resolve;
     });
 
-    const baseSeed = this.getBaseSeedFromUrl();
-    const runtimeSeed = this.getRuntimeV2Seed();
-
     try {
-      this.currentSeed = runtimeSeed ?? 1;
-
-      // Always initialize from server - server determines whether v2 is enabled or disabled
-      console.log("[autodrive/data-provider] Initializing from server, runtimeSeed:", runtimeSeed, "baseSeed:", baseSeed);
+      const seed = this.getSeed();
+      this.currentSeed = seed;
 
       // Initialize all data types (they handle server loading internally)
       const [trips, places, rides] = await Promise.all([
-        initializeTrips(runtimeSeed ?? undefined),
-        initializePlaces(runtimeSeed ?? undefined),
-        initializeRides(runtimeSeed ?? undefined),
+        initializeTrips(seed),
+        initializePlaces(seed),
+        initializeRides(seed),
       ]);
 
       this.setTrips(trips);
@@ -90,20 +71,17 @@ export class DynamicDataProvider {
       });
     } catch (error) {
       console.error("[autodrive/data-provider] Failed to initialize data:", error);
-      // Re-throw error - server is the single source of truth
-      throw error;
-    }
-
-    // Listen for seed changes
-    if (typeof window !== "undefined") {
-      window.addEventListener("autodrive:v2SeedChange", this.handleSeedEvent.bind(this));
+      this.ready = true;
+      this.resolveReady();
     }
   }
 
-  private handleSeedEvent = () => {
-    console.log("[autodrive/data-provider] Seed change event received");
-    this.reload();
-  };
+  public reloadIfSeedChanged(seed?: number | null): void {
+    const targetSeed = seed !== undefined && seed !== null ? seed : this.getSeed();
+    if (targetSeed !== this.currentSeed) {
+      this.reload(targetSeed);
+    }
+  }
 
   public async reload(seedValue?: number | null): Promise<void> {
     if (this.loadingPromise) {
@@ -112,7 +90,7 @@ export class DynamicDataProvider {
 
     this.loadingPromise = (async () => {
       try {
-        const v2Seed = seedValue ?? this.getRuntimeV2Seed() ?? 1;
+        const v2Seed = clampSeed(seedValue ?? this.getSeed());
         this.currentSeed = v2Seed;
 
         console.log(`[autodrive] Reloading trips, places, and rides for seed=${this.currentSeed}...`);
@@ -147,7 +125,8 @@ export class DynamicDataProvider {
         console.log(`[autodrive] Data reloaded: ${newTrips.length} trips, ${newPlaces.length} places, ${newRides.length} rides`);
       } catch (error) {
         console.error("[autodrive/data-provider] Failed to reload data:", error);
-        throw error;
+        this.ready = true;
+        this.resolveReady();
       } finally {
         this.ready = true;
         this.loadingPromise = null;
@@ -165,7 +144,7 @@ export class DynamicDataProvider {
   }
 
   public isDynamicModeEnabled(): boolean {
-    return this.isEnabled;
+    return isV2Enabled();
   }
 
   public getTrips(limit?: number): Trip[] {
@@ -253,6 +232,10 @@ export class DynamicDataProvider {
 
   public getRideById(id: string): Ride | undefined {
     return this.rides.find((ride) => ride.id === id);
+  }
+
+  public getLayoutConfig(seed?: number) {
+    return { seed: clampSeed(seed ?? 1) };
   }
 }
 
