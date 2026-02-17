@@ -9,6 +9,7 @@ import { QuickActionCard } from '@/components/landing/QuickActionCard';
 import { SubnetsTable } from '@/components/landing/SubnetsTable';
 import { ValidatorsTable } from '@/components/landing/ValidatorsTable';
 import { TransactionsTable } from '@/components/landing/TransactionsTable';
+import type { PriceDataPoint, VolumeDataPoint, SubnetWithTrend, ValidatorWithTrend, TransactionWithMethod } from '@/shared/types';
 import {
   generatePriceHistory,
   generateVolumeData,
@@ -25,11 +26,11 @@ export default function LandingPage() {
 
   // Only generate data on client side to avoid hydration mismatch
   const [data, setData] = useState<{
-    priceData: any[];
-    volumeData: any[];
-    subnets: any[];
-    validators: any[];
-    transactions: any[];
+    priceData: PriceDataPoint[];
+    volumeData: VolumeDataPoint[];
+    subnets: SubnetWithTrend[];
+    validators: ValidatorWithTrend[];
+    transactions: TransactionWithMethod[];
   }>({
     priceData: [],
     volumeData: [],
@@ -74,14 +75,14 @@ export default function LandingPage() {
 
   return (
     <DynamicWrapper>
-      <div className="min-h-screen bg-zinc-950">
+      <div className="min-h-screen bg-zinc-950 py-8">
         {/* Hero Section with Price Chart */}
-        <section className="container mx-auto px-4 py-8">
+        <section className="mb-8">
           <PriceChart data={data.priceData} />
         </section>
 
         {/* Quick Action Card */}
-        <section className="container mx-auto px-4 py-8">
+        <section className="mb-8">
           <QuickActionCard
             title="Explore the Bittensor Network"
             description="Discover active subnets, track their performance, and analyze network activity across the Bittensor ecosystem."
@@ -92,7 +93,7 @@ export default function LandingPage() {
         </section>
 
         {/* Subnets Overview */}
-        <section className="container mx-auto px-4 py-8">
+        <section className="mb-8">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-white mb-2">Top Subnets</h2>
             <p className="text-zinc-400">
@@ -103,7 +104,7 @@ export default function LandingPage() {
         </section>
 
         {/* Validators Overview */}
-        <section className="container mx-auto px-4 py-8">
+        <section className="mb-8">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-white mb-2">Top Validators</h2>
             <p className="text-zinc-400">
@@ -114,7 +115,7 @@ export default function LandingPage() {
         </section>
 
         {/* Recent Transactions */}
-        <section className="container mx-auto px-4 py-8">
+        <section className="mb-8">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-white mb-2">Recent Transactions</h2>
             <p className="text-zinc-400">

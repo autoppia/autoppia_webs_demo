@@ -3,7 +3,7 @@
 import React from 'react';
 import { DynamicWrapper } from '@/dynamic/v1/DynamicWrapper';
 import { DynamicText } from '@/dynamic/v3/DynamicText';
-import { TransactionWithMethod } from '@/shared/types';
+import type { TransactionWithMethod } from '@/shared/types';
 import { formatTAO, formatTimestamp } from '@/library/formatters';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 
@@ -35,16 +35,17 @@ export function TransactionsTable({ transactions, maxRows = 10 }: TransactionsTa
     
     if (diffInSeconds < 60) {
       return `${diffInSeconds} secs`;
-    } else if (diffInSeconds < 3600) {
+    }
+    if (diffInSeconds < 3600) {
       const mins = Math.floor(diffInSeconds / 60);
       return `${mins} ${mins === 1 ? 'min' : 'mins'}`;
-    } else if (diffInSeconds < 86400) {
+    }
+    if (diffInSeconds < 86400) {
       const hours = Math.floor(diffInSeconds / 3600);
       return `${hours} ${hours === 1 ? 'hour' : 'hours'}`;
-    } else {
-      const days = Math.floor(diffInSeconds / 86400);
-      return `${days} ${days === 1 ? 'day' : 'days'}`;
     }
+    const days = Math.floor(diffInSeconds / 86400);
+    return `${days} ${days === 1 ? 'day' : 'days'}`;
   };
 
   // Subnet names
@@ -146,7 +147,7 @@ export function TransactionsTable({ transactions, maxRows = 10 }: TransactionsTa
                 const alphaAmount = (transaction.amount * (0.5 + Math.random() * 2)).toFixed(2);
                 const taoAmount = transaction.amount.toFixed(2);
                 // TAO Price = price of 1 alpha in TAO
-                const alphaPriceInTao = (parseFloat(taoAmount) / parseFloat(alphaAmount)).toFixed(4);
+                const alphaPriceInTao = (Number.parseFloat(taoAmount) / Number.parseFloat(alphaAmount)).toFixed(4);
                 const slippage = (Math.random() * 2).toFixed(2);
                 // Fee: in TAO when buying, in alpha when selling
                 const feeAmount = (transaction.fee * (action === 'buy' ? 1 : 2)).toFixed(4);

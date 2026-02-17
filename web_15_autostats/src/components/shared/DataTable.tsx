@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import type React from 'react';
+import { useState, useMemo } from 'react';
 import {
   Table,
   TableBody,
@@ -31,7 +32,7 @@ interface DataTableProps<T> {
 
 type SortDirection = 'asc' | 'desc' | null;
 
-export function DataTable<T extends Record<string, any>>({
+export function DataTable<T extends Record<string, unknown>>({
   data,
   columns,
   onRowClick,

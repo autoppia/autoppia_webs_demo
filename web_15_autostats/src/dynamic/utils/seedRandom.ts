@@ -11,11 +11,11 @@ export function seedRandom(seed: string): () => number {
   
   let state = Math.abs(hash);
   
-  return function() {
+  return () => {
     // LCG parameters (from Numerical Recipes)
     const a = 1664525;
     const c = 1013904223;
-    const m = Math.pow(2, 32);
+    const m = 2 ** 32;
     
     state = (a * state + c) % m;
     return state / m;

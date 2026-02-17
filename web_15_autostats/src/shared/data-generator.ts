@@ -9,7 +9,7 @@
 
 export interface DataGenerationResponse {
   success: boolean;
-  data: any[];
+  data: unknown[];
   count: number;
   generationTime: number;
   error?: string;
@@ -19,9 +19,9 @@ export interface ProjectDataConfig {
   projectName: string;
   dataType: string;
   interfaceDefinition: string;
-  examples: any[];
+  examples: unknown[];
   categories: string[];
-  namingRules: Record<string, any>;
+  namingRules: Record<string, unknown>;
   additionalRequirements: string;
 }
 
@@ -70,7 +70,7 @@ export interface RestaurantGenerated {
  */
 export async function generateProjectData(
   projectKey: string,
-  count: number = 10,
+  count = 10,
   categories?: string[]
 ): Promise<DataGenerationResponse> {
   const config = PROJECT_CONFIGS[projectKey];
