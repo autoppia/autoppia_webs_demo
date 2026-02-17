@@ -79,7 +79,6 @@ function getTrendColor(trend: 'up' | 'down' | 'neutral'): string {
       return '#10b981'; // green
     case 'down':
       return '#ef4444'; // red
-    case 'neutral':
     default:
       return '#71717a'; // gray
   }

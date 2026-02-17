@@ -1,4 +1,4 @@
-import { Block, Subnet, Validator, Transfer, Account, Extrinsic, PriceDataPoint, VolumeDataPoint, SubnetWithTrend, ValidatorWithTrend, TransactionWithMethod } from '@/shared/types';
+import type { Block, Subnet, Validator, Transfer, Account, Extrinsic, PriceDataPoint, CandleDataPoint, VolumeDataPoint, SubnetWithTrend, ValidatorWithTrend, TransactionWithMethod } from '@/shared/types';
 import { SUBNET_NAMES } from '@/shared/constants';
 
 // Seeded random number generator using Linear Congruential Generator (LCG)
@@ -28,7 +28,7 @@ export function generateHash(): string {
   return hash;
 }
 
-export function generateBlocks(count: number, startBlock: number = 1000000): Block[] {
+export function generateBlocks(count: number, startBlock = 1000000): Block[] {
   const blocks: Block[] = [];
   const now = Date.now();
   
@@ -151,18 +151,19 @@ export function generateAccounts(count: number): Account[] {
 
 /**
  * Generate price history data for different time ranges
- * @param timeRange - Time range for the price history ('24h', '7d', '30d', '1y', 'all')
+ * @param timeRange - Time range for the price history ('1h', '24h', '7d', '30d', '1y', 'all')
  * @param seed - Seed for deterministic random generation
  * @returns Array of PriceDataPoint objects with timestamp and price
  */
 export function generatePriceHistory(
-  timeRange: '24h' | '7d' | '30d' | '1y' | 'all',
+  timeRange: '1h' | '24h' | '7d' | '30d' | '1y' | 'all',
   seed: number
 ): PriceDataPoint[] {
   const now = Date.now();
   
   // Define intervals for each time range
   const intervals = {
+    '1h': { count: 60, interval: 60000 },         // every minute for 1 hour
     '24h': { count: 24, interval: 3600000 },      // hourly for 24 hours
     '7d': { count: 168, interval: 3600000 },      // hourly for 7 days
     '30d': { count: 30, interval: 86400000 },     // daily for 30 days
@@ -189,6 +190,66 @@ export function generatePriceHistory(
       timestamp,
       price: basePrice,
     });
+  }
+  
+  return data;
+}
+
+/**
+ * Generate candlestick data for different candle sizes
+ * Fixed number of candles (~168) but different time periods based on candle size
+ * @param candleSize - Candle size ('1h', '4h', '1d')
+ * @param seed - Seed for deterministic random generation
+ * @returns Array of CandleDataPoint objects with OHLC data
+ */
+export function generateCandleHistory(
+  candleSize: '1h' | '4h' | '1d',
+  seed: number
+): CandleDataPoint[] {
+  const now = Date.now();
+  
+  // Fixed number of candles, but different time periods
+  const candleConfigs = {
+    '1h': { count: 168, interval: 3600000 },      // 168 candles = 7 days
+    '4h': { count: 168, interval: 14400000 },     // 168 candles = 28 days
+    '1d': { count: 168, interval: 86400000 },     // 168 candles = 168 days
+  };
+  
+  const { count, interval } = candleConfigs[candleSize];
+  const rng = seedRandom(seed);
+  
+  // Starting price around $450 (realistic for TAO token)
+  let basePrice = 450;
+  const data: CandleDataPoint[] = [];
+  
+  // Generate candlestick data with realistic OHLC values
+  for (let i = count - 1; i >= 0; i--) {
+    const timestamp = new Date(now - i * interval);
+    
+    // Open price is the previous close (or base price for first candle)
+    const open = basePrice;
+    
+    // Generate realistic price movement for this candle
+    const volatility = (rng() * 0.04 - 0.02) * basePrice; // ±2% volatility
+    const direction = rng() > 0.5 ? 1 : -1;
+    
+    // Close price
+    const close = Math.max(100, open + volatility * direction);
+    
+    // High and low based on open and close
+    const high = Math.max(open, close) * (1 + rng() * 0.01); // Up to 1% higher
+    const low = Math.min(open, close) * (1 - rng() * 0.01);  // Up to 1% lower
+    
+    data.push({
+      timestamp,
+      open,
+      high,
+      low,
+      close,
+    });
+    
+    // Update base price for next candle
+    basePrice = close;
   }
   
   return data;
@@ -271,17 +332,36 @@ export function generateSubnetsWithTrends(
     const trendSeed = seed + subnet.id;
     const rng = seedRandom(trendSeed);
     
-    // Generate price between $10 and $110
-    const price = rng() * 100 + 10;
+    // Special handling for Root subnet (ID 0)
+    // Root subnet always has a price of 1.0 TAO
+    let price: number;
+    let marketCap: number;
+    let volume24h: number;
     
-    // Generate market cap between $1M and $11M
-    const marketCap = rng() * 10000000 + 1000000;
-    
-    // Generate 24h volume between $100K and $1.1M
-    const volume24h = rng() * 1000000 + 100000;
+    if (subnet.id === 0) {
+      // Root subnet (ID 0) - fixed price of 1.0 TAO
+      price = 1.0;
+      // Root has higher market cap (between $50M and $100M)
+      marketCap = rng() * 50000000 + 50000000;
+      // Root has higher volume (between $5M and $10M)
+      volume24h = rng() * 5000000 + 5000000;
+    } else {
+      // Alpha subnets - variable prices
+      // Generate price between 0.01 and 2.0 TAO
+      price = rng() * 1.99 + 0.01;
+      // Generate market cap between $1M and $11M
+      marketCap = rng() * 10000000 + 1000000;
+      // Generate 24h volume between $100K and $1.1M
+      volume24h = rng() * 1000000 + 100000;
+    }
     
     // Generate 24h price change between -10% and +10%
     const priceChange24h = (rng() - 0.5) * 20;
+    
+    // Generate other time period changes
+    const priceChange1h = (rng() - 0.5) * 5;   // 1h: -2.5% to +2.5%
+    const priceChange1w = (rng() - 0.5) * 30;  // 1w: -15% to +15%
+    const priceChange1m = (rng() - 0.5) * 50;  // 1m: -25% to +25%
     
     // Determine trend direction based on price change
     const trend = priceChange24h > 2 ? 'up' : priceChange24h < -2 ? 'down' : 'neutral';
@@ -294,7 +374,10 @@ export function generateSubnetsWithTrends(
       price,
       marketCap,
       volume24h,
+      priceChange1h,
       priceChange24h,
+      priceChange1w,
+      priceChange1m,
       trendData,
     };
   });

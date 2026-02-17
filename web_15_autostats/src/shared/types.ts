@@ -16,7 +16,7 @@ export interface Extrinsic {
   hash: string;
   method: string;
   section: string;
-  args: Record<string, any>;
+  args: Record<string, unknown>;
   signer: string;
   nonce: number;
   success: boolean;
@@ -92,6 +92,14 @@ export interface PriceDataPoint {
   price: number;
 }
 
+export interface CandleDataPoint {
+  timestamp: Date;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+}
+
 export interface VolumeDataPoint {
   timestamp: Date;
   volume: number;
@@ -101,7 +109,10 @@ export interface SubnetWithTrend extends Subnet {
   price: number;
   marketCap: number;
   volume24h: number;
+  priceChange1h: number;
   priceChange24h: number;
+  priceChange1w: number;
+  priceChange1m: number;
   trendData: number[];
 }
 

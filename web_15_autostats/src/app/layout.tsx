@@ -42,8 +42,10 @@ export default function RootLayout({
                 <SeedRedirect />
               </Suspense>
               <Header />
-              <main className="flex-1">
-                {children}
+              <main className="flex-1 w-full">
+                <div className="container mx-auto px-6 max-w-[1400px]">
+                  {children}
+                </div>
               </main>
               <Footer />
               <DynamicDebug />
