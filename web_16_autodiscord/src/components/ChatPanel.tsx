@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Hash, ThumbsUp } from "lucide-react";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 import { formatMessageTime, formatMessageDateGroup } from "@/utils/format";
 import { EmptyState } from "@/components/EmptyState";
 import { CURRENT_USER } from "@/constants/mock";
@@ -70,6 +71,7 @@ export function ChatPanel({
     e.preventDefault();
     const trimmed = input.trim();
     if (!trimmed || !channel) return;
+    logEvent(EVENT_TYPES.SEND_MESSAGE, { channel_id: channel.id, content_length: trimmed.length });
     onSendMessage(trimmed);
     setInput("");
   };
@@ -130,7 +132,10 @@ export function ChatPanel({
                               <button
                                 key={r.emoji}
                                 type="button"
-                                onClick={() => onReaction(msg.id, r.emoji)}
+                                onClick={() => {
+                                logEvent(EVENT_TYPES.ADD_REACTION, { message_id: msg.id, emoji: r.emoji });
+                                onReaction(msg.id, r.emoji);
+                              }}
                                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-white/10 hover:bg-white/15 text-gray-300 text-sm"
                               >
                                 {r.emoji === "👍" ? <ThumbsUp className="w-3.5 h-3.5" /> : r.emoji}
@@ -142,7 +147,10 @@ export function ChatPanel({
                         {reactions.length === 0 && (
                           <button
                             type="button"
-                            onClick={() => onReaction(msg.id, "👍")}
+                            onClick={() => {
+                                logEvent(EVENT_TYPES.ADD_REACTION, { message_id: msg.id, emoji: "👍" });
+                                onReaction(msg.id, "👍");
+                              }}
                             className="mt-1 opacity-0 group-hover:opacity-100 inline-flex items-center gap-1 px-2 py-0.5 rounded hover:bg-white/10 text-gray-400 text-sm transition-opacity"
                             aria-label="Add reaction"
                           >
