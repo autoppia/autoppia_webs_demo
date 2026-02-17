@@ -272,7 +272,7 @@ def get_project_entity_metadata(project_key: str, entity_type: str) -> Dict[str,
                 "requirements": "Include realistic hotel titles, locations, ratings, reviews, guest capacity, bedrooms, beds, baths, dates, prices, host info (name, since years, avatar), and amenities array with icon, title, and desc.",
             }
         },
-        "web_15_autodiscord": {
+        "web_16_autodiscord": {
             "servers": {
                 "description": "Discord-like servers (guilds)",
                 "categories": ["Gaming", "Dev", "Design", "Music", "Community"],

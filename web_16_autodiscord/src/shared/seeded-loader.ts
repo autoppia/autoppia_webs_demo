@@ -1,4 +1,4 @@
-const PROJECT_KEY = "web_15_autodiscord";
+const PROJECT_KEY = "web_16_autodiscord";
 
 function getApiBaseUrl(): string {
   const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;

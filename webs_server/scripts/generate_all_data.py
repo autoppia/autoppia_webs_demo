@@ -159,7 +159,7 @@ def main(argv: List[str]) -> int:
         "web_12_autolist",
         "web_13_autodrive",
         "web_14_autohealth",
-        "web_15_autodiscord",
+        "web_16_autodiscord",
     ]
     filtered_projects = {}
     for project_id in PROJECT_IDS:
