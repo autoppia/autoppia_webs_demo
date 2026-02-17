@@ -12,13 +12,21 @@ export interface Channel {
   position: number;
 }
 
+export interface MessageReaction {
+  emoji: string;
+  count: number;
+}
+
 export interface Message {
   id: string;
   channelId: string;
   authorUsername: string;
   content: string;
   timestamp: string;
+  reactions?: MessageReaction[];
 }
+
+export type MemberStatus = "online" | "idle" | "dnd" | "offline";
 
 export interface Member {
   id: string;
@@ -27,4 +35,5 @@ export interface Member {
   displayName: string;
   avatar: string;
   role: string;
+  status?: MemberStatus;
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { useSeed } from "@/context/SeedContext";
 import { useDiscordData } from "@/hooks/useDiscordData";
 import { clampSeed } from "@/shared/seed-resolver";
@@ -8,7 +9,11 @@ import { ServerList } from "@/components/ServerList";
 import { ChannelSidebar } from "@/components/ChannelSidebar";
 import { ChatPanel } from "@/components/ChatPanel";
 import { MemberSidebar } from "@/components/MemberSidebar";
-import type { Channel } from "@/types/discord";
+import { LoadingSkeleton } from "@/components/LoadingSkeleton";
+import { ErrorState } from "@/components/ErrorState";
+import { EmptyState } from "@/components/EmptyState";
+import { CURRENT_USER } from "@/constants/mock";
+import type { Channel, Message, MessageReaction } from "@/types/discord";
 
 function pickDefaultChannel(channels: Channel[]): string | null {
   if (channels.length === 0) return null;
@@ -16,23 +21,42 @@ function pickDefaultChannel(channels: Channel[]): string | null {
   return (firstText ?? channels[0])?.id ?? null;
 }
 
+function nextId(): string {
+  return `local-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
 export default function DiscordPage() {
+  const searchParams = useSearchParams();
   const { seed } = useSeed();
   const effectiveSeed = useMemo(() => clampSeed(seed ?? 1), [seed]);
-  const { data, loading, error } = useDiscordData(effectiveSeed);
+  const { data, loading, error, reload } = useDiscordData(effectiveSeed);
+
+  const serverParam = searchParams.get("server");
+  const channelParam = searchParams.get("channel");
 
   const [selectedServerId, setSelectedServerId] = useState<string | null>(null);
   const [selectedChannelId, setSelectedChannelId] = useState<string | null>(null);
+  const [localMessages, setLocalMessages] = useState<Record<string, Message[]>>({});
+  const [localReactions, setLocalReactions] = useState<Record<string, MessageReaction[]>>({});
+  const [unreadChannelIds, setUnreadChannelIds] = useState<Set<string>>(new Set());
 
   const channelsForServer = useMemo(() => {
     if (!data || !selectedServerId) return [];
     return data.channels.filter((ch) => ch.serverId === selectedServerId);
   }, [data, selectedServerId]);
 
-  const messagesForChannel = useMemo(() => {
+  const apiMessagesForChannel = useMemo(() => {
     if (!data || !selectedChannelId) return [];
     return data.messages.filter((m) => m.channelId === selectedChannelId);
   }, [data, selectedChannelId]);
+
+  const messagesForChannel = useMemo(() => {
+    const local = selectedChannelId ? localMessages[selectedChannelId] ?? [] : [];
+    const combined = [...apiMessagesForChannel, ...local].sort(
+      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    );
+    return combined;
+  }, [apiMessagesForChannel, localMessages, selectedChannelId]);
 
   const membersForServer = useMemo(() => {
     if (!data || !selectedServerId) return [];
@@ -47,6 +71,38 @@ export default function DiscordPage() {
     () => data?.channels.find((c) => c.id === selectedChannelId) ?? null,
     [data, selectedChannelId]
   );
+
+  const updateUrl = useCallback((serverId: string | null, channelId: string | null) => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    if (serverId) url.searchParams.set("server", serverId);
+    else url.searchParams.delete("server");
+    if (channelId) url.searchParams.set("channel", channelId);
+    else url.searchParams.delete("channel");
+    window.history.replaceState({}, "", url.pathname + url.search);
+  }, []);
+
+  useEffect(() => {
+    if (!data) return;
+    const servers = data.servers;
+    const serverId = serverParam && servers.some((s) => s.id === serverParam) ? serverParam : null;
+    const firstServerId = servers.length > 0 ? servers[0].id : null;
+    const resolvedServerId = serverId ?? firstServerId;
+    setSelectedServerId(resolvedServerId);
+
+    if (resolvedServerId) {
+      const channels = data.channels.filter((ch) => ch.serverId === resolvedServerId);
+      const channelId =
+        channelParam && channels.some((c) => c.id === channelParam) ? channelParam : null;
+      const defaultChannelId = pickDefaultChannel(channels);
+      setSelectedChannelId(channelId ?? defaultChannelId);
+      updateUrl(resolvedServerId, channelId ?? defaultChannelId);
+    }
+  }, [data, serverParam, channelParam, updateUrl]);
+
+  useEffect(() => {
+    if (selectedServerId && selectedChannelId) updateUrl(selectedServerId, selectedChannelId);
+  }, [selectedServerId, selectedChannelId, updateUrl]);
 
   useEffect(() => {
     if (!data) return;
@@ -66,26 +122,68 @@ export default function DiscordPage() {
     }
   }, [selectedServerId, channelsForServer, selectedChannelId]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-discord-darkest flex items-center justify-center">
-        <span className="text-gray-400">Loading…</span>
-      </div>
-    );
-  }
+  const handleSelectServer = useCallback((id: string) => {
+    setSelectedServerId(id);
+  }, []);
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-discord-darkest flex items-center justify-center">
-        <p className="text-red-400">{error}</p>
-      </div>
-    );
-  }
+  const handleSelectChannel = useCallback((id: string) => {
+    setSelectedChannelId(id);
+  }, []);
 
+  const handleSendMessage = useCallback(
+    (content: string) => {
+      if (!selectedChannelId) return;
+      const msg: Message = {
+        id: nextId(),
+        channelId: selectedChannelId,
+        authorUsername: CURRENT_USER.username,
+        content,
+        timestamp: new Date().toISOString(),
+      };
+      setLocalMessages((prev) => {
+        const list = prev[selectedChannelId] ?? [];
+        return { ...prev, [selectedChannelId]: [...list, msg] };
+      });
+    },
+    [selectedChannelId]
+  );
+
+  const handleReaction = useCallback((messageId: string, emoji: string) => {
+    setLocalReactions((prev) => {
+      const list = prev[messageId] ?? [];
+      const existing = list.find((r) => r.emoji === emoji);
+      const next = existing
+        ? list.map((r) => (r.emoji === emoji ? { ...r, count: r.count + 1 } : r))
+        : [...list, { emoji, count: 1 }];
+      return { ...prev, [messageId]: next };
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!selectedServerId || channelsForServer.length === 0) return;
+    const textChannels = channelsForServer.filter((c) => c.type === "text");
+    setUnreadChannelIds(
+      new Set(textChannels.filter((ch) => ch.id !== selectedChannelId).map((ch) => ch.id))
+    );
+  }, [selectedServerId, selectedChannelId, channelsForServer]);
+
+  if (loading) return <LoadingSkeleton />;
+  if (error) return <ErrorState message={error} onRetry={reload} />;
   if (!data) {
     return (
       <div className="min-h-screen bg-discord-darkest flex items-center justify-center">
         <span className="text-gray-400">No data</span>
+      </div>
+    );
+  }
+
+  if (data.servers.length === 0) {
+    return (
+      <div className="min-h-screen bg-discord-darkest flex items-center justify-center">
+        <EmptyState
+          title="No servers"
+          description="Create or join a server to get started. (Demo: data is mocked.)"
+        />
       </div>
     );
   }
@@ -95,15 +193,22 @@ export default function DiscordPage() {
       <ServerList
         servers={data.servers}
         selectedId={selectedServerId}
-        onSelect={setSelectedServerId}
+        onSelect={handleSelectServer}
       />
       <ChannelSidebar
         server={selectedServer}
         channels={channelsForServer}
         selectedChannelId={selectedChannelId}
-        onSelectChannel={setSelectedChannelId}
+        unreadChannelIds={unreadChannelIds}
+        onSelectChannel={handleSelectChannel}
       />
-      <ChatPanel channel={selectedChannel} messages={messagesForChannel} />
+      <ChatPanel
+        channel={selectedChannel}
+        messages={messagesForChannel}
+        localReactions={localReactions}
+        onSendMessage={handleSendMessage}
+        onReaction={handleReaction}
+      />
       <MemberSidebar members={membersForServer} />
     </div>
   );
