@@ -29,6 +29,7 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
   const [seed, setSeedState] = useState(1);
   const [isSeedReady, setIsSeedReady] = useState(false);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: searchParams triggers re-run when URL ?seed= changes
   useEffect(() => {
     setSeedState(getSeedFromUrl());
     setIsSeedReady(true);
