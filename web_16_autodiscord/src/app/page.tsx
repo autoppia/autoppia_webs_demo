@@ -45,6 +45,7 @@ export default function DiscordPage() {
   const [dmMessages, setDmMessages] = useState<Record<string, DMMessage[]>>({});
   const [localMessages, setLocalMessages] = useState<Record<string, Message[]>>({});
   const [localReactions, setLocalReactions] = useState<Record<string, MessageReaction[]>>({});
+  const [userReactions, setUserReactions] = useState<Record<string, Set<string>>>({});
   const [unreadChannelIds, setUnreadChannelIds] = useState<Set<string>>(new Set());
   const [createServerModalOpen, setCreateServerModalOpen] = useState(false);
   const [serverSettingsModalOpen, setServerSettingsModalOpen] = useState(false);
@@ -199,15 +200,32 @@ export default function DiscordPage() {
   );
 
   const handleReaction = useCallback((messageId: string, emoji: string) => {
+    const removing = userReactions[messageId]?.has(emoji);
+    setUserReactions((prev) => {
+      const set = new Set(prev[messageId] ?? []);
+      if (removing) set.delete(emoji);
+      else set.add(emoji);
+      return { ...prev, [messageId]: set };
+    });
     setLocalReactions((prev) => {
       const list = prev[messageId] ?? [];
       const existing = list.find((r) => r.emoji === emoji);
+      if (removing) {
+        if (!existing) return prev;
+        return {
+          ...prev,
+          [messageId]:
+            existing.count <= 1
+              ? list.filter((r) => r.emoji !== emoji)
+              : list.map((r) => (r.emoji === emoji ? { ...r, count: r.count - 1 } : r)),
+        };
+      }
       const next = existing
         ? list.map((r) => (r.emoji === emoji ? { ...r, count: r.count + 1 } : r))
         : [...list, { emoji, count: 1 }];
       return { ...prev, [messageId]: next };
     });
-  }, []);
+  }, [userReactions]);
 
   const handleCreateServer = useCallback((name: string) => {
     const id = `local-server-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
