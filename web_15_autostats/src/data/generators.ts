@@ -389,22 +389,50 @@ export function generateSubnetsWithTrends(
  * @param seed - Seed for deterministic random generation
  * @returns Array of ValidatorWithTrend objects with performance trend data
  */
+function generateSeededAddress(rng: () => number): string {
+  const chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+  let address = '5'; // Substrate address prefix
+  for (let i = 0; i < 47; i++) {
+    address += chars.charAt(Math.floor(rng() * chars.length));
+  }
+  return address;
+}
+
 export function generateValidatorsWithTrends(
   count: number,
   seed: number
 ): ValidatorWithTrend[] {
-  // Generate base validator data
-  const validators = generateValidators(count);
-  
+  // Use seeded RNG so hotkeys are deterministic for a given seed
+  const rng = seedRandom(seed + 5000);
+
+  const validators: Validator[] = [];
+  for (let i = 0; i < count; i++) {
+    const stake = rng() * 1000000;
+    validators.push({
+      hotkey: generateSeededAddress(rng),
+      coldkey: generateSeededAddress(rng),
+      stake,
+      returnPercentage: rng() * 20,
+      nominatorCount: Math.floor(rng() * 100),
+      totalDelegated: stake * (rng() * 2 + 1),
+      commission: rng() * 20,
+      subnet: Math.floor(rng() * 32),
+      rank: i + 1,
+    });
+  }
+  validators.sort((a, b) => b.stake - a.stake);
+  // Reassign ranks after sorting
+  validators.forEach((v, i) => { v.rank = i + 1; });
+
   // Extend each validator with performance trend data
   return validators.map((validator, index) => {
     // Use index to create unique but deterministic seed for each validator
     const trendSeed = seed + index;
-    
+
     // Generate 30-day performance trend (30 data points for sparkline)
     // Most validators should have upward trending performance
     const performanceTrend = generateTrendData(30, trendSeed, 'up');
-    
+
     return {
       ...validator,
       performanceTrend,
