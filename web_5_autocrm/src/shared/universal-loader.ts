@@ -3,7 +3,11 @@ import { useEffect, useState } from 'react'
 import { fetchSeededSelection } from './seeded-loader'
 
 export async function loadData<T>({ projectKey, entityType, generateCount = 50, categories, version = 'v1', ttlMs, seedValue }: { projectKey: string; entityType: string; generateCount?: number; categories?: string[]; version?: string; ttlMs?: number; seedValue?: number | null }) : Promise<T[]> {
-  const seed = typeof seedValue === 'number' ? seedValue : 1
+  // Skip fetch until URL seed is known (callers pass undefined when !isSeedReady); avoids first request with seed=1.
+  if (seedValue === undefined) {
+    return [];
+  }
+  const seed = typeof seedValue === 'number' ? seedValue : 1;
   console.log("[universal-loader] DB mode enabled → fetching seeded selection", {
     projectKey,
     entityType,
