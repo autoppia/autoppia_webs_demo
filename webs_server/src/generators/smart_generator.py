@@ -272,6 +272,28 @@ def get_project_entity_metadata(project_key: str, entity_type: str) -> Dict[str,
                 "requirements": "Include realistic hotel titles, locations, ratings, reviews, guest capacity, bedrooms, beds, baths, dates, prices, host info (name, since years, avatar), and amenities array with icon, title, and desc.",
             }
         },
+        "web_15_autodiscord": {
+            "servers": {
+                "description": "Discord-like servers (guilds)",
+                "categories": ["Gaming", "Dev", "Design", "Music", "Community"],
+                "requirements": "Include id, name, optional icon. Short server names.",
+            },
+            "channels": {
+                "description": "Text and voice channels",
+                "categories": ["text", "voice"],
+                "requirements": "Include id, serverId, name, type (text/voice), position.",
+            },
+            "messages": {
+                "description": "Chat messages in channels",
+                "categories": [],
+                "requirements": "Include id, channelId, authorUsername, content, timestamp (ISO).",
+            },
+            "members": {
+                "description": "Server members",
+                "categories": ["admin", "mod", "member"],
+                "requirements": "Include id, serverId, username, displayName, avatar URL, role.",
+            },
+        },
     }
 
     project_meta = metadata_map.get(project_key, {})
