@@ -64,22 +64,33 @@ export function useDynamicPopup(pageKey: string): UseDynamicPopupResult {
   const [showIndex, setShowIndex] = useState(0);
   const [doneForThisPage, setDoneForThisPage] = useState(false);
   const reShowTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /** When popup is open, keep showing variant for this page until dismissed (so nav doesn't change content). */
+  const lastShownPageKeyRef = useRef<string>(pageKey);
+  const lastShowIndexRef = useRef<number>(0);
 
   useEffect(() => {
     setShowIndex(0);
     setDoneForThisPage(false);
+    if (reShowTimeoutRef.current) {
+      clearTimeout(reShowTimeoutRef.current);
+      reShowTimeoutRef.current = null;
+    }
+    // Do not setShow(false) on nav so popup stays visible until user dismisses
+  }, [pageKey]);
+
+  const dismiss = useCallback(() => {
+    const wasPageKey = lastShownPageKeyRef.current;
     setShow(false);
     if (reShowTimeoutRef.current) {
       clearTimeout(reShowTimeoutRef.current);
       reShowTimeoutRef.current = null;
     }
-  }, [pageKey]);
-
-  const dismiss = useCallback(() => {
-    setShow(false);
-    if (reShowTimeoutRef.current) {
-      clearTimeout(reShowTimeoutRef.current);
-      reShowTimeoutRef.current = null;
+    if (pageKey !== wasPageKey) {
+      lastShownPageKeyRef.current = pageKey;
+      lastShowIndexRef.current = 0;
+      setShowIndex(0);
+      setDoneForThisPage(false);
+      return;
     }
     if (showIndex + 1 >= MAX_POPUPS_PER_PAGE) {
       setDoneForThisPage(true);
@@ -88,7 +99,10 @@ export function useDynamicPopup(pageKey: string): UseDynamicPopupResult {
     const delay = jitter(RE_SHOW_DELAY_MS, seed, `${pageKey}-reshow-${showIndex}`);
     reShowTimeoutRef.current = setTimeout(() => {
       reShowTimeoutRef.current = null;
-      setShowIndex((i) => i + 1);
+      const nextIndex = showIndex + 1;
+      lastShownPageKeyRef.current = pageKey;
+      lastShowIndexRef.current = nextIndex;
+      setShowIndex(nextIndex);
       setShow(true);
     }, delay);
   }, [seed, pageKey, showIndex]);
@@ -100,7 +114,11 @@ export function useDynamicPopup(pageKey: string): UseDynamicPopupResult {
     if (!popup) return;
 
     const delay = jitter(popup.delayMs, seed, `${pageKey}-delay-${showIndex}`);
-    const t = setTimeout(() => setShow(true), delay);
+    const t = setTimeout(() => {
+      lastShownPageKeyRef.current = pageKey;
+      lastShowIndexRef.current = showIndex;
+      setShow(true);
+    }, delay);
     return () => clearTimeout(t);
   }, [seed, pageKey, showIndex, doneForThisPage]);
 
@@ -108,11 +126,13 @@ export function useDynamicPopup(pageKey: string): UseDynamicPopupResult {
     return { shouldShow: false, variant: null, dismiss: noop };
   }
 
-  const popup = pickPopup(seed, pageKey, showIndex);
+  const displayPageKey = lastShownPageKeyRef.current;
+  const displayShowIndex = lastShowIndexRef.current;
+  const popup = pickPopup(seed, displayPageKey, displayShowIndex);
   if (!popup) {
     return { shouldShow: false, variant: null, dismiss: noop };
   }
 
-  const variant = buildVariant(seed, pageKey, showIndex, popup);
+  const variant = buildVariant(seed, displayPageKey, displayShowIndex, popup);
   return { shouldShow: true, variant, dismiss };
 }

@@ -3,7 +3,7 @@
  * Declarative list of popups: delay, placements, and meaningful lengthy texts
  */
 
-export type PopupPlacement = "center" | "bottom-right" | "banner";
+export type PopupPlacement = "center" | "bottom-right" | "bottom-left" | "banner" | "top-right" | "top-left" | "top-banner" | "middle-right" | "middle-left";
 
 export interface PopupDef {
   id: string;
@@ -18,7 +18,7 @@ export const POPUPS: PopupDef[] = [
     id: "welcome",
     probability: 1,
     delayMs: [800, 3200],
-    placements: ["center", "bottom-right"],
+    placements: ["center", "bottom-right", "top-right", "middle-right"],
     texts: {
       title: [
         "Welcome to Autocinema",
@@ -37,7 +37,7 @@ export const POPUPS: PopupDef[] = [
     id: "discover",
     probability: 1,
     delayMs: [1000, 5000],
-    placements: ["bottom-right", "banner", "center"],
+    placements: ["bottom-right", "banner", "center", "top-left", "top-banner"],
     texts: {
       title: [
         "Discover new releases and classics",

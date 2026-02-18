@@ -4,18 +4,50 @@ import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import type { PopupVariant } from "./useDynamicPopup";
 
+const POPUP_LAYER_Z = 99999;
+
 interface DynamicPopupProps {
   variant: PopupVariant;
   onClose: () => void;
 }
 
-/** Viewport-fixed positioning so popup appears on the right / bottom as intended. */
+const FIXED_PLACEMENTS = ["bottom-right", "bottom-left", "banner", "top-right", "top-left", "top-banner", "middle-right", "middle-left"] as const;
+
+function getPlacementStyle(placement: string): React.CSSProperties {
+  switch (placement) {
+    case "bottom-right":
+      return { position: "fixed" as const, bottom: 24, right: 24, left: "auto", top: "auto" };
+    case "bottom-left":
+      return { position: "fixed" as const, bottom: 24, left: 24, right: "auto", top: "auto" };
+    case "banner":
+      return { position: "fixed" as const, bottom: 24, left: "50%", right: "auto", top: "auto", transform: "translateX(-50%)" };
+    case "top-right":
+      return { position: "fixed" as const, top: 24, right: 24, left: "auto", bottom: "auto" };
+    case "top-left":
+      return { position: "fixed" as const, top: 24, left: 24, right: "auto", bottom: "auto" };
+    case "top-banner":
+      return { position: "fixed" as const, top: 24, left: "50%", right: "auto", bottom: "auto", transform: "translateX(-50%)" };
+    case "middle-right":
+      return { position: "fixed" as const, top: "50%", right: 24, left: "auto", bottom: "auto", transform: "translateY(-50%)" };
+    case "middle-left":
+      return { position: "fixed" as const, top: "50%", left: 24, right: "auto", bottom: "auto", transform: "translateY(-50%)" };
+    default:
+      return {};
+  }
+}
+
 function getPlacementClasses(placement: string): string {
   switch (placement) {
     case "bottom-right":
-      return "fixed bottom-6 right-6 sm:bottom-8 sm:right-8 w-full max-w-md sm:max-w-lg";
+    case "bottom-left":
+    case "top-right":
+    case "top-left":
+    case "middle-right":
+    case "middle-left":
+      return "w-full max-w-md sm:max-w-lg";
     case "banner":
-      return "fixed bottom-6 left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 w-full max-w-xl";
+    case "top-banner":
+      return "w-full max-w-xl";
     default:
       return "";
   }
@@ -25,11 +57,9 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Blur any focused input so typing stays disabled while popup is open
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
-    // Move focus into the dialog for accessibility and so keys don't go to the page
     dialogRef.current?.focus();
   }, []);
 
@@ -39,7 +69,6 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
         onClose();
         return;
       }
-      // Block all other keys from reaching the page (e.g. typing in a previously focused input)
       const target = e.target as Node;
       if (dialogRef.current && !dialogRef.current.contains(target)) {
         e.preventDefault();
@@ -50,30 +79,32 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
     return () => document.removeEventListener("keydown", onKeyDown, true);
   }, [onClose]);
 
-  const isCenter = variant.placement === "center";
+  const isCenter = !FIXED_PLACEMENTS.includes(variant.placement as (typeof FIXED_PLACEMENTS)[number]);
+  const placementStyle = isCenter ? undefined : getPlacementStyle(variant.placement);
   const content = (
     <div
-      className={`fixed inset-0 z-[100] bg-background/90 backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
+      className={`fixed inset-0 bg-background/90 backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
+      style={{ zIndex: POPUP_LAYER_Z }}
       data-v4="true"
       role="dialog"
       aria-modal="true"
       aria-label={variant.title}
       onKeyDown={(e) => {
         if (e.key === "Escape") onClose();
-        // Prevent keys from reaching background when target is the overlay (backdrop)
         if (e.target === e.currentTarget) {
           e.preventDefault();
           e.stopPropagation();
         }
       }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) e.preventDefault();
+      }}
     >
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`
-          relative w-full max-w-md rounded-xl border border-border bg-card text-card-foreground shadow-lg px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8
-          ${getPlacementClasses(variant.placement)}
-        `}
+        className={`relative w-full max-w-md rounded-xl border border-border bg-card text-card-foreground shadow-lg px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
+        style={placementStyle}
         data-popup-id={variant.popupId}
       >
         <div className="absolute left-0 right-0 top-0 h-1 rounded-t-xl bg-gradient-to-r from-primary to-accent" />

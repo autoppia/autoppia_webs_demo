@@ -2,7 +2,7 @@
  * V4 - Popup definitions (AutoList: tasks, to-dos, lists)
  */
 
-export type PopupPlacement = "center" | "bottom-right" | "banner";
+export type PopupPlacement = "center" | "bottom-right" | "bottom-left" | "banner" | "top-right" | "top-left" | "top-banner" | "middle-right" | "middle-left";
 
 export interface PopupDef {
   id: string;

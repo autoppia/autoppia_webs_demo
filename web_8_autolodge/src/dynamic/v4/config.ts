@@ -2,7 +2,7 @@
  * V4 - Popup definitions (Autolodge: hotels, bookings, stays)
  */
 
-export type PopupPlacement = "center" | "bottom-right" | "banner";
+export type PopupPlacement = "center" | "bottom-right" | "bottom-left" | "banner" | "top-right" | "top-left" | "top-banner" | "middle-right" | "middle-left";
 
 export interface PopupDef {
   id: string;
@@ -17,7 +17,7 @@ export const POPUPS: PopupDef[] = [
     id: "welcome",
     probability: 1,
     delayMs: [800, 3200],
-    placements: ["center", "bottom-right"],
+    placements: ["center", "bottom-right", "top-right", "top-left", "middle-right", "bottom-left"],
     texts: {
       title: ["Welcome to Autolodge", "Book hotels and stays", "Find your perfect getaway"],
       body: [
@@ -32,7 +32,7 @@ export const POPUPS: PopupDef[] = [
     id: "discover",
     probability: 1,
     delayMs: [1000, 5000],
-    placements: ["bottom-right", "banner", "center"],
+    placements: ["bottom-right", "banner", "center", "top-banner", "middle-left"],
     texts: {
       title: ["Discover hotels and cabins", "Explore the full catalog", "Find your next stay"],
       body: [

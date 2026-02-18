@@ -50,6 +50,7 @@ export default function RootLayout({
                   selectors.forEach(selector => {
                     try {
                       document.querySelectorAll(selector).forEach(el => {
+                        if (el.getAttribute?.('data-v4') === 'true') return;
                         if (el.textContent && (el.textContent.includes('Issue') || el.textContent.includes('Error'))) {
                           el.remove();
                         }

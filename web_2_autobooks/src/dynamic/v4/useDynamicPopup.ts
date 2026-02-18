@@ -94,7 +94,7 @@ export function useDynamicPopup(pageKey: string): UseDynamicPopupResult {
   }, [seed, pageKey, showIndex]);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !isV4Enabled() || doneForThisPage) return;
+    if (typeof window === "undefined" || !isV4Enabled() || seed === 1 || doneForThisPage) return;
 
     const popup = pickPopup(seed, pageKey, showIndex);
     if (!popup) return;
