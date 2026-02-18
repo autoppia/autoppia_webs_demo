@@ -26,6 +26,8 @@ export function isV1Enabled(): boolean {
   return enabled;
 }
 
+let _v2Warned = false;
+
 /**
  * Checks whether V2 is enabled
  * V2 fetches data from /datasets/load endpoint
@@ -35,11 +37,10 @@ export function isV2Enabled(): boolean {
   const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2;
   const enabled = value === "true" || value === true;
 
-  // Debug in development
-  if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
-    if (!enabled) {
-      console.warn("[dynamic] V2 está deshabilitado. Para habilitarlo, configura NEXT_PUBLIC_ENABLE_DYNAMIC_V2=true");
-    }
+  // Debug in development (warn once per session to avoid console noise)
+  if (typeof window !== "undefined" && process.env.NODE_ENV === "development" && !enabled && !_v2Warned) {
+    _v2Warned = true;
+    console.warn("[dynamic] V2 está deshabilitado. Para habilitarlo, configura NEXT_PUBLIC_ENABLE_DYNAMIC_V2=true");
   }
 
   return enabled;
@@ -66,9 +67,14 @@ export function isV3Enabled(): boolean {
 
 /**
  * Checks whether V4 is enabled
- * V4 shows randomized popups when enabled
+ * V4 shows randomized popups when enabled.
+ * In development, enabled by default so popups work without env config.
  */
 export function isV4Enabled(): boolean {
   const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V4;
-  return value === "true" || value === true;
+  if (value === "true" || value === true) return true;
+  if (value === "false" || value === false) return false;
+  // In dev, enable V4 by default so popups work without setting env
+  if (typeof process !== "undefined" && process.env.NODE_ENV === "development") return true;
+  return false;
 }

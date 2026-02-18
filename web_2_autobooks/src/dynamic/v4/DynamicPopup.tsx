@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import type { PopupVariant } from "./useDynamicPopup";
 
@@ -9,36 +9,67 @@ interface DynamicPopupProps {
   onClose: () => void;
 }
 
+/** Viewport-fixed positioning so popup appears on the right / bottom as intended. */
 function getPlacementClasses(placement: string): string {
   switch (placement) {
     case "bottom-right":
-      return "absolute bottom-6 right-6 sm:bottom-8 sm:right-8";
+      return "fixed bottom-6 right-6 sm:bottom-8 sm:right-8 w-full max-w-md sm:max-w-lg";
     case "banner":
-      return "absolute top-6 left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:max-w-xl";
+      return "fixed bottom-6 left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 w-full max-w-xl";
     default:
       return "";
   }
 }
 
 export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    const onEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+    // Blur any focused input so typing stays disabled while popup is open
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    // Move focus into the dialog for accessibility and so keys don't go to the page
+    dialogRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      // Block all other keys from reaching the page (e.g. typing in a previously focused input)
+      const target = e.target as Node;
+      if (dialogRef.current && !dialogRef.current.contains(target)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
     };
-    document.addEventListener("keydown", onEscape);
-    return () => document.removeEventListener("keydown", onEscape);
+    document.addEventListener("keydown", onKeyDown, true);
+    return () => document.removeEventListener("keydown", onKeyDown, true);
   }, [onClose]);
 
   const isCenter = variant.placement === "center";
   const content = (
     <div
-      className={`fixed inset-0 z-50 bg-background/90 backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
+      className={`fixed inset-0 z-[100] bg-background/90 backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
       data-v4="true"
       role="dialog"
       aria-modal="true"
       aria-label={variant.title}
+      onKeyDown={(e) => {
+        if (e.key === "Escape") onClose();
+        // Prevent keys from reaching background when target is the overlay (backdrop)
+        if (e.target === e.currentTarget) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
     >
       <div
+        ref={dialogRef}
+        tabIndex={-1}
         className={`
           relative w-full max-w-md rounded-xl border border-border bg-card text-card-foreground shadow-lg px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8
           ${getPlacementClasses(variant.placement)}

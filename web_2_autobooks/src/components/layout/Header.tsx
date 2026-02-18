@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { BookOpen, Bookmark, ShoppingCart, Home, Search, Info, Mail } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { SeedLink } from "@/components/ui/SeedLink";
@@ -19,12 +20,16 @@ const NAV_LINKS = [
 ];
 
 export function Header() {
+  const [mounted, setMounted] = useState(false);
   const { currentUser, logout } = useAuth();
   const { state: cartState } = useCart();
   const pathname = usePathname();
   const readingListCount = currentUser?.readingList?.length ?? 0;
   const cartCount = cartState.totalItems ?? 0;
   const dyn = useDynamicSystem();
+
+  // Defer badge/auth-dependent UI until after mount so server and client render the same (avoids hydration mismatch).
+  useEffect(() => setMounted(true), []);
 
   const isActive = (href: string) => {
     if (!pathname) return false;
@@ -54,12 +59,13 @@ export function Header() {
         <nav className="flex flex-wrap items-center gap-4 text-sm text-white/70">
           {NAV_LINKS.map((link) => {
             const active = isActive(link.href);
-            const showBadge =
+            const showBadge = mounted && (
               link.href === "/wishlist"
                 ? readingListCount > 0
                 : link.href === "/cart"
                   ? cartCount > 0
-                  : false;
+                  : false
+            );
             const badgeValue =
               link.href === "/wishlist" ? readingListCount : link.href === "/cart" ? cartCount : 0;
             const Icon = link.icon;
@@ -94,7 +100,12 @@ export function Header() {
               </SeedLink>
             );
           })}
-          {currentUser ? (
+          {!mounted ? (
+            <>
+              <SeedLink href="/signup" className="text-white/70 hover:text-white transition">Register</SeedLink>
+              <SeedLink href="/login" className="text-white/70 hover:text-white transition">Login</SeedLink>
+            </>
+          ) : currentUser ? (
             <>
               <SeedLink
                 href="/profile"

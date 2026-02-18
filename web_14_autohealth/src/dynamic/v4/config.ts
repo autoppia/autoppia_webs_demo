@@ -2,7 +2,7 @@
  * V4 - Popup definitions (AutoHealth: doctors, appointments, healthcare)
  */
 
-export type PopupPlacement = "center" | "bottom-right" | "banner";
+export type PopupPlacement = "center" | "bottom-right" | "bottom-left" | "top-right" | "top-left" | "banner" | "top-banner";
 
 export interface PopupDef {
   id: string;
@@ -17,7 +17,7 @@ export const POPUPS: PopupDef[] = [
     id: "welcome",
     probability: 1,
     delayMs: [800, 3200],
-    placements: ["center", "bottom-right"],
+    placements: ["center", "bottom-right", "top-right", "bottom-left", "banner", "top-banner"],
     texts: {
       title: ["Welcome to AutoHealth", "Your healthcare portal", "Manage your care"],
       body: [
@@ -32,7 +32,7 @@ export const POPUPS: PopupDef[] = [
     id: "doctors",
     probability: 1,
     delayMs: [1000, 5000],
-    placements: ["bottom-right", "banner", "center"],
+    placements: ["bottom-right", "banner", "center", "top-right", "bottom-left", "top-banner"],
     texts: {
       title: ["Find a doctor", "Browse providers", "Book with specialists"],
       body: [
@@ -47,7 +47,7 @@ export const POPUPS: PopupDef[] = [
     id: "appointments",
     probability: 1,
     delayMs: [900, 3800],
-    placements: ["banner", "center", "bottom-right"],
+    placements: ["banner", "center", "bottom-right", "top-left", "bottom-left", "top-banner"],
     texts: {
       title: ["Your appointments", "Upcoming visits", "Schedule"],
       body: [
@@ -62,7 +62,7 @@ export const POPUPS: PopupDef[] = [
     id: "health",
     probability: 1,
     delayMs: [600, 4000],
-    placements: ["bottom-right", "center"],
+    placements: ["bottom-right", "center", "top-right", "bottom-left", "banner", "top-left"],
     texts: {
       title: ["Your health info", "Records and results", "Stay informed"],
       body: [
