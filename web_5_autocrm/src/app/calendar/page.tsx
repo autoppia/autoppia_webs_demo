@@ -68,12 +68,12 @@ function pad(num: number) {
 
 export default function CalendarPage() {
   const { getText, getId } = useDynamicStructure();
-  const { seed } = useSeed();
+  const { seed, isSeedReady } = useSeed();
   const v2Seed = seed;
   const { data, isLoading, error } = useProjectData<any>({
     projectKey: "web_5_autocrm",
     entityType: "events",
-    seedValue: v2Seed ?? undefined,
+    seedValue: isSeedReady ? v2Seed : undefined,
   });
   // console.log("[CalendarPage] API response", {
   //   seed: v2Seed ?? null,

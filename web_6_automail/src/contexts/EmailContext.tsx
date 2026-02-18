@@ -389,7 +389,7 @@ const tokenize = (str: string) => {
 
 export function EmailProvider({children}: { children: React.ReactNode }) {
     const [state, dispatch] = useReducer(emailReducer, initialState);
-    const { seed } = useSeed();
+    const { seed, isSeedReady } = useSeed();
     const v2Seed = seed;
 
     useEffect(() => {
@@ -415,15 +415,15 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
         };
     }, []);
 
-    // Track last v2Seed to avoid duplicate refreshes
+    // Track last v2Seed to avoid duplicate refreshes. Only run when URL seed is ready to avoid reload(1).
     const lastV2SeedRef = useRef<number | null>(null);
     useEffect(() => {
-        // Only refresh if v2Seed actually changed
+        if (!isSeedReady) return;
         if (lastV2SeedRef.current !== v2Seed) {
             lastV2SeedRef.current = v2Seed;
             dynamicDataProvider.reload(v2Seed ?? null);
         }
-    }, [v2Seed]);
+    }, [v2Seed, isSeedReady]);
 
     // Email actions
     const toggleStar = useCallback(

@@ -75,9 +75,7 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
     setIsSubmitting(true);
 
     try {
-      // Log the contact doctor event (single generic event with all information)
-      // According to .cursorrules: "Generic Use Cases: We do not create unique events for every UI path"
-      // Differences are captured in metadata, not in the event name
+      // Log the contact doctor event (single generic event). Do not add a separate "Contact Doctor Successfully" event in IWA/analytics; success is indicated by success: true and outcome: "message_sent" in this payload.
       logEvent(EVENT_TYPES.CONTACT_DOCTOR, {
         doctor,
         patientName: formData.patientName,
@@ -88,6 +86,8 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
         urgency: formData.urgency,
         preferredContactMethod: formData.preferredContactMethod,
         appointmentRequest: formData.appointmentRequest,
+        success: true,
+        outcome: "message_sent",
       });
 
       // Simulate API call

@@ -88,7 +88,7 @@ function MattersListPageContent() {
   const { getText, getId } = useDynamicStructure();
   const baseInputClass = "w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm";
   const baseSelectClass = "rounded-lg border border-zinc-200 px-3 py-2 text-sm";
-  const { seed } = useSeed();
+  const { seed, isSeedReady } = useSeed();
   const v2Seed = seed;
 
   // Debug: Verify V2 status
@@ -110,6 +110,7 @@ function MattersListPageContent() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!isSeedReady) return;
     const loadData = async () => {
       setIsLoading(true);
       try {
@@ -154,7 +155,7 @@ function MattersListPageContent() {
     };
 
     loadData();
-  }, [seed, v2Seed]);
+  }, [seed, v2Seed, isSeedReady]);
 
   const getClientAvatar = (clientName: string): string => {
     const client = clients.find((c) => c.name === clientName);
