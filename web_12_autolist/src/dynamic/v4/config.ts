@@ -12,9 +12,9 @@ export interface PopupDef {
   texts: Record<string, string[]>;
 }
 
-/** All placements so popups can appear in different positions. */
+/** Placements that stay visible on screen (center and bottom area; avoid top/middle that can be off-screen or behind nav). */
 const ALL_PLACEMENTS: PopupPlacement[] = [
-  "center", "bottom-right", "bottom-left", "banner", "top-right", "top-left", "top-banner", "middle-right", "middle-left",
+  "center", "bottom-right", "bottom-left", "banner",
 ];
 
 export const POPUPS: PopupDef[] = [

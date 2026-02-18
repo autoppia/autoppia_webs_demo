@@ -12,12 +12,17 @@ export interface PopupDef {
   texts: Record<string, string[]>;
 }
 
+/** Placements that stay visible on screen (center and bottom area; avoid top/middle that can be off-screen or behind nav). */
+const ALL_PLACEMENTS: PopupPlacement[] = [
+  "center", "bottom-right", "bottom-left", "banner",
+];
+
 export const POPUPS: PopupDef[] = [
   {
     id: "welcome",
     probability: 1,
     delayMs: [800, 3200],
-    placements: ["center", "bottom-right"],
+    placements: ALL_PLACEMENTS,
     texts: {
       title: ["Welcome to AutoConnect", "Your professional network", "Connect and share"],
       body: [
@@ -32,7 +37,7 @@ export const POPUPS: PopupDef[] = [
     id: "feed",
     probability: 1,
     delayMs: [1000, 5000],
-    placements: ["bottom-right", "banner", "center"],
+    placements: ALL_PLACEMENTS,
     texts: {
       title: ["Your feed and updates", "Stay connected", "See what's new"],
       body: [
@@ -47,7 +52,7 @@ export const POPUPS: PopupDef[] = [
     id: "profile",
     probability: 1,
     delayMs: [900, 3800],
-    placements: ["banner", "center", "bottom-right"],
+    placements: ALL_PLACEMENTS,
     texts: {
       title: ["Your profile", "Edit and showcase", "Manage your presence"],
       body: [
@@ -62,7 +67,7 @@ export const POPUPS: PopupDef[] = [
     id: "connections",
     probability: 1,
     delayMs: [600, 4000],
-    placements: ["bottom-right", "center"],
+    placements: ALL_PLACEMENTS,
     texts: {
       title: ["Grow your network", "Find connections", "Connect with others"],
       body: [
