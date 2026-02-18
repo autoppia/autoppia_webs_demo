@@ -12,12 +12,25 @@ export interface PopupDef {
   texts: Record<string, string[]>;
 }
 
+/** All placements for anti-memorization: popups appear in random positions. */
+const ALL_PLACEMENTS: PopupPlacement[] = [
+  "center",
+  "bottom-right",
+  "bottom-left",
+  "top-right",
+  "top-left",
+  "banner",
+  "top-banner",
+  "middle-right",
+  "middle-left",
+];
+
 export const POPUPS: PopupDef[] = [
   {
     id: "welcome",
     probability: 1,
     delayMs: [800, 3200],
-    placements: ["center", "bottom-right"],
+    placements: [...ALL_PLACEMENTS],
     texts: {
       title: ["Welcome to AutoDrive", "Book rides", "Smart trip management"],
       body: [
@@ -32,7 +45,7 @@ export const POPUPS: PopupDef[] = [
     id: "book",
     probability: 1,
     delayMs: [1000, 5000],
-    placements: ["bottom-right", "banner", "center"],
+    placements: [...ALL_PLACEMENTS],
     texts: {
       title: ["Book a ride", "Request a trip", "Where to?"],
       body: [
@@ -47,7 +60,7 @@ export const POPUPS: PopupDef[] = [
     id: "trips",
     probability: 1,
     delayMs: [900, 3800],
-    placements: ["banner", "center", "bottom-right"],
+    placements: [...ALL_PLACEMENTS],
     texts: {
       title: ["Your trips", "Trip history", "Past rides"],
       body: [
@@ -62,7 +75,7 @@ export const POPUPS: PopupDef[] = [
     id: "profile",
     probability: 1,
     delayMs: [600, 4000],
-    placements: ["bottom-right", "center"],
+    placements: [...ALL_PLACEMENTS],
     texts: {
       title: ["Your profile", "Payment and preferences", "Account settings"],
       body: [
