@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import { SeedProvider } from "@/context/SeedContext";
+import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
 import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
 const geistSans = Geist({
@@ -33,6 +34,7 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="bg-neutral-50 min-h-screen font-sans" suppressHydrationWarning>
         <SeedProvider>
+          <V4PopupLayer>
           <Suspense fallback={<div className="h-16" />}>
             <Header />
             <main className="flex justify-center w-full mt-3 px-2">
@@ -40,6 +42,7 @@ export default function RootLayout({
             </main>
           </Suspense>
           <DynamicDebug />
+          </V4PopupLayer>
         </SeedProvider>
       </body>
     </html>

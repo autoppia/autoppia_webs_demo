@@ -6,6 +6,7 @@ import { LayoutProvider } from "@/contexts/LayoutProvider";
 import { RestaurantProvider } from "@/contexts/RestaurantContext";
 import { SeedProvider } from "@/context/SeedContext";
 import { DataReadyGate } from "@/components/layout/DataReadyGate";
+import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
 import { Suspense } from "react";
 import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
@@ -41,6 +42,7 @@ export default function RootLayout({
           <LayoutProvider>
             <RestaurantProvider>
               <Suspense fallback={<div className="min-h-screen" />}>
+                <V4PopupLayer>
                 <DataReadyGate>
                   <Navbar />
                   {/* Debug badge removed */}
@@ -49,6 +51,7 @@ export default function RootLayout({
                     {children}
                   </div>
                 </DataReadyGate>
+                </V4PopupLayer>
               </Suspense>
               <DynamicDebug />
             </RestaurantProvider>

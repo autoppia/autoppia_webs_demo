@@ -4,6 +4,7 @@ import "./globals.css";
 import ClientBody from "./ClientBody";
 import Script from "next/script";
 import { SeedProvider } from "@/context/SeedContext";
+import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +38,9 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning className="antialiased">
         <SeedProvider>
-          <ClientBody>{children}</ClientBody>
+          <V4PopupLayer>
+            <ClientBody>{children}</ClientBody>
+          </V4PopupLayer>
         </SeedProvider>
       </body>
     </html>

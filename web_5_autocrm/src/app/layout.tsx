@@ -8,6 +8,7 @@ import UserNameBadge from "@/components/UserNameBadge";
 import { SeedProvider } from "@/context/SeedContext";
 import ClientProviders from "./ClientProviders";
 import { SeedRedirect } from "@/components/layout/SeedRedirect";
+import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
 import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
 const geistSans = Geist({
@@ -45,6 +46,7 @@ export default function RootLayout({
           <Suspense fallback={null}>
             <SeedRedirect />
           </Suspense>
+          <V4PopupLayer>
           <ClientProviders>
           <nav
             className="w-full h-20 flex items-center px-10 shadow-sm bg-white gap-6 sticky top-0 z-30"
@@ -86,6 +88,7 @@ export default function RootLayout({
           </div>
           </ClientProviders>
           <DynamicDebug />
+          </V4PopupLayer>
         </SeedProvider>
       </body>
     </html>
