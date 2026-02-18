@@ -27,6 +27,9 @@ services:
       # Minimum response size (in bytes) before applying GZIP compression
       GZIP_MIN_SIZE: 1000
 
+      # Health/webs: use Docker network (apps_net) to reach web containers by hostname
+      WEBS_HEALTH_USE_DOCKER_NETWORK: "true"
+
       # Additional data-gen settings come from .env via env_file
     depends_on:
       db:
