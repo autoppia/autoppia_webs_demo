@@ -12,12 +12,17 @@ export interface PopupDef {
   texts: Record<string, string[]>;
 }
 
+/** All placements so popups can appear in different positions. */
+const ALL_PLACEMENTS: PopupPlacement[] = [
+  "center", "bottom-right", "bottom-left", "banner", "top-right", "top-left", "top-banner", "middle-right", "middle-left",
+];
+
 export const POPUPS: PopupDef[] = [
   {
     id: "welcome",
     probability: 1,
     delayMs: [800, 3200],
-    placements: ["center", "bottom-right"],
+    placements: ALL_PLACEMENTS,
     texts: {
       title: ["Welcome to AutoList", "Your smart to-do app", "Get things done"],
       body: [
@@ -32,7 +37,7 @@ export const POPUPS: PopupDef[] = [
     id: "tasks",
     probability: 1,
     delayMs: [1000, 5000],
-    placements: ["bottom-right", "banner", "center"],
+    placements: ALL_PLACEMENTS,
     texts: {
       title: ["Add and complete tasks", "Stay on track", "Your to-dos"],
       body: [
@@ -47,7 +52,7 @@ export const POPUPS: PopupDef[] = [
     id: "lists",
     probability: 1,
     delayMs: [900, 3800],
-    placements: ["banner", "center", "bottom-right"],
+    placements: ALL_PLACEMENTS,
     texts: {
       title: ["Organize with lists", "Create lists", "Group your tasks"],
       body: [
@@ -62,7 +67,7 @@ export const POPUPS: PopupDef[] = [
     id: "reminders",
     probability: 1,
     delayMs: [600, 4000],
-    placements: ["bottom-right", "center"],
+    placements: ALL_PLACEMENTS,
     texts: {
       title: ["Set reminders", "Never forget", "Due dates"],
       body: [
