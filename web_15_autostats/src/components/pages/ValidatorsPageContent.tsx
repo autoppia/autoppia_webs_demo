@@ -8,16 +8,17 @@ import { formatNumber } from '@/library/formatters';
 import { cn } from '@/utils/cn';
 import {
   Search,
-  ArrowUpDown
+  ArrowUpDown,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
-import { MiniChart } from '@/components/charts/MiniChart';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 
 interface ValidatorsPageContentProps {
   validators: ValidatorWithTrend[];
 }
 
-type SortField = 'rank' | 'hotkey' | 'stake' | 'returnPercentage' | 'commission' | 'totalDelegated' | 'nominatorCount' | 'subnet';
+type SortField = 'rank' | 'hotkey' | 'dominance' | 'nominatorCount' | 'nominatorChange24h' | 'activeSubnets' | 'totalWeight' | 'weightChange24h' | 'rootStake' | 'alphaStake' | 'commission';
 type SortDirection = 'asc' | 'desc';
 
 export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps) {
@@ -25,55 +26,55 @@ export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps
   const router = useSeedRouter();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortField, setSortField] = useState<SortField>('stake');
+  const [sortField, setSortField] = useState<SortField>('totalWeight');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
 
   // Local text variants
   const dynamicV3TextVariants: Record<string, string[]> = {
     page_title: ['Validators', 'Network Validators', 'Validator Overview', 'Validators Dashboard', 'Active Validators'],
     page_description: ['Explore active validators on the Bittensor network', 'View all Bittensor validators and their performance', 'Browse network validators and analytics', 'Discover Bittensor validator ecosystem', 'Analyze validator performance metrics'],
-    total_stake_label: ['Total Stake', 'Network Stake', 'Aggregate Stake', 'Combined Stake', 'Stake Total'],
-    avg_commission_label: ['Avg Commission', 'Commission Average', 'Mean Commission', 'Average Fee', 'Commission Rate'],
-    avg_apy_label: ['Avg APY', 'Average APY', 'Mean Return', 'Average Return', 'APY Average'],
+    total_weight_label: ['Total Weight', 'Network Weight', 'Aggregate Weight', 'Combined Weight', 'Weight Total'],
+    avg_commission_label: ['Avg Take', 'Take Average', 'Mean Take', 'Average Fee', 'Commission Rate'],
+    total_noms_label: ['Total Nominators', 'Nominator Count', 'Network Nominators', 'Total Noms', 'Nominators'],
     search_placeholder: ['Search validators...', 'Find validator...', 'Search by hotkey...', 'Filter validators...', 'Search...'],
     top_label: ['Top 10', 'Top Validators', 'Leading 10', 'Top Ten', 'Best 10'],
     rest_label: ['Rest', 'Others', 'Remaining', 'Other Validators', 'The Rest'],
-    min_label: ['Min', 'Minimum', 'Lowest', 'Floor', 'Low'],
-    max_label: ['Max', 'Maximum', 'Highest', 'Ceiling', 'High'],
+    root_label: ['Root', 'Root Stake', 'Root Network', 'Root TAO', 'Root Weight'],
+    alpha_label: ['Alpha', 'Alpha Stake', 'Alpha Subnets', 'Alpha Weight', 'Subnet Alpha'],
   };
 
   // Calculate overview stats
   const stats = useMemo(() => {
-    const sorted = [...validators].sort((a, b) => b.stake - a.stake);
+    const sorted = [...validators].sort((a, b) => b.totalWeight - a.totalWeight);
     const top10 = sorted.slice(0, 10);
     const rest = sorted.slice(10);
 
-    const top10Stake = top10.reduce((sum, v) => sum + v.stake, 0);
-    const restStake = rest.reduce((sum, v) => sum + v.stake, 0);
-    const totalStake = top10Stake + restStake;
+    const top10Weight = top10.reduce((sum, v) => sum + v.totalWeight, 0);
+    const restWeight = rest.reduce((sum, v) => sum + v.totalWeight, 0);
+    const totalWeight = top10Weight + restWeight;
 
-    const commissions = validators.map(v => v.commission);
-    const minCommission = Math.min(...commissions);
-    const maxCommission = Math.max(...commissions);
-    const avgCommission = commissions.reduce((sum, c) => sum + c, 0) / commissions.length;
+    const totalRootStake = validators.reduce((sum, v) => sum + v.rootStake, 0);
+    const totalAlphaStake = validators.reduce((sum, v) => sum + v.alphaStake, 0);
+    const totalStake = totalRootStake + totalAlphaStake;
 
-    const apys = validators.map(v => v.returnPercentage);
-    const minApy = Math.min(...apys);
-    const maxApy = Math.max(...apys);
-    const avgApy = apys.reduce((sum, a) => sum + a, 0) / apys.length;
+    const totalNoms = validators.reduce((sum, v) => sum + v.nominatorCount, 0);
+    const totalNomChange = validators.reduce((sum, v) => sum + v.nominatorChange24h, 0);
 
     return {
-      top10Stake,
-      restStake,
+      top10Weight,
+      restWeight,
+      totalWeight,
+      top10WeightPercent: totalWeight > 0 ? (top10Weight / totalWeight) * 100 : 0,
+      restWeightPercent: totalWeight > 0 ? (restWeight / totalWeight) * 100 : 0,
+      totalRootStake,
+      totalAlphaStake,
       totalStake,
-      top10StakePercent: totalStake > 0 ? (top10Stake / totalStake) * 100 : 0,
-      restStakePercent: totalStake > 0 ? (restStake / totalStake) * 100 : 0,
-      minCommission,
-      maxCommission,
-      avgCommission,
-      minApy,
-      maxApy,
-      avgApy,
+      rootPercent: totalStake > 0 ? (totalRootStake / totalStake) * 100 : 0,
+      alphaPercent: totalStake > 0 ? (totalAlphaStake / totalStake) * 100 : 0,
+      totalNoms,
+      totalNomChange,
     };
   }, [validators]);
 
@@ -102,6 +103,13 @@ export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps
 
     return sorted;
   }, [validators, searchQuery, sortField, sortDirection]);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredAndSortedValidators.length / rowsPerPage);
+  const paginatedValidators = useMemo(() => {
+    const start = (currentPage - 1) * rowsPerPage;
+    return filteredAndSortedValidators.slice(start, start + rowsPerPage);
+  }, [filteredAndSortedValidators, currentPage, rowsPerPage]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -134,6 +142,9 @@ export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps
     return `${address.substring(0, 8)}...${address.substring(address.length - 6)}`;
   };
 
+  const gridCols = '50px 180px 90px 70px 60px 70px 120px 100px 110px 110px 80px';
+  const minW = '1100px';
+
   return (
     <div className="min-h-screen bg-zinc-950 py-8">
       <div className="space-y-8">
@@ -161,43 +172,43 @@ export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps
             {(() => {
               const statsCards = [
                 {
-                  key: 'total-stake-card',
-                  label: dyn.v3.getVariant('total_stake_label', dynamicV3TextVariants),
-                  totalValue: `τ${formatLargeNumber(stats.totalStake)}`,
+                  key: 'total-weight-card',
+                  label: dyn.v3.getVariant('total_weight_label', dynamicV3TextVariants),
+                  totalValue: `τ${formatLargeNumber(stats.totalWeight)}`,
                   leftLabel: dyn.v3.getVariant('top_label', dynamicV3TextVariants),
                   rightLabel: dyn.v3.getVariant('rest_label', dynamicV3TextVariants),
-                  leftValue: `τ${formatLargeNumber(stats.top10Stake)}`,
-                  rightValue: `τ${formatLargeNumber(stats.restStake)}`,
-                  leftPercent: stats.top10StakePercent,
-                  rightPercent: stats.restStakePercent,
+                  leftValue: `τ${formatLargeNumber(stats.top10Weight)}`,
+                  rightValue: `τ${formatLargeNumber(stats.restWeight)}`,
+                  leftPercent: stats.top10WeightPercent,
+                  rightPercent: stats.restWeightPercent,
                   leftColor: 'green' as const,
                   rightColor: 'red' as const,
                 },
                 {
-                  key: 'avg-commission-card',
-                  label: dyn.v3.getVariant('avg_commission_label', dynamicV3TextVariants),
-                  totalValue: `${formatNumber(stats.avgCommission, 2)}%`,
-                  leftLabel: dyn.v3.getVariant('min_label', dynamicV3TextVariants),
-                  rightLabel: dyn.v3.getVariant('max_label', dynamicV3TextVariants),
-                  leftValue: `${formatNumber(stats.minCommission, 2)}%`,
-                  rightValue: `${formatNumber(stats.maxCommission, 2)}%`,
-                  leftPercent: (stats.minCommission + stats.maxCommission) > 0 ? (stats.minCommission / (stats.minCommission + stats.maxCommission)) * 100 : 50,
-                  rightPercent: (stats.minCommission + stats.maxCommission) > 0 ? (stats.maxCommission / (stats.minCommission + stats.maxCommission)) * 100 : 50,
+                  key: 'stake-split-card',
+                  label: 'Stake Split',
+                  totalValue: `τ${formatLargeNumber(stats.totalStake)}`,
+                  leftLabel: dyn.v3.getVariant('root_label', dynamicV3TextVariants),
+                  rightLabel: dyn.v3.getVariant('alpha_label', dynamicV3TextVariants),
+                  leftValue: `τ${formatLargeNumber(stats.totalRootStake)}`,
+                  rightValue: `τ${formatLargeNumber(stats.totalAlphaStake)}`,
+                  leftPercent: stats.rootPercent,
+                  rightPercent: stats.alphaPercent,
                   leftColor: 'green' as const,
                   rightColor: 'red' as const,
                 },
                 {
-                  key: 'avg-apy-card',
-                  label: dyn.v3.getVariant('avg_apy_label', dynamicV3TextVariants),
-                  totalValue: `${formatNumber(stats.avgApy, 2)}%`,
-                  leftLabel: dyn.v3.getVariant('max_label', dynamicV3TextVariants),
-                  rightLabel: dyn.v3.getVariant('min_label', dynamicV3TextVariants),
-                  leftValue: `${formatNumber(stats.maxApy, 2)}%`,
-                  rightValue: `${formatNumber(stats.minApy, 2)}%`,
-                  leftPercent: (stats.maxApy + stats.minApy) > 0 ? (stats.maxApy / (stats.maxApy + stats.minApy)) * 100 : 50,
-                  rightPercent: (stats.maxApy + stats.minApy) > 0 ? (stats.minApy / (stats.maxApy + stats.minApy)) * 100 : 50,
+                  key: 'total-noms-card',
+                  label: dyn.v3.getVariant('total_noms_label', dynamicV3TextVariants),
+                  totalValue: `${formatLargeNumber(stats.totalNoms)}`,
+                  leftLabel: 'Active',
+                  rightLabel: '24h Change',
+                  leftValue: `${formatLargeNumber(stats.totalNoms)}`,
+                  rightValue: `${stats.totalNomChange >= 0 ? '+' : ''}${stats.totalNomChange}`,
+                  leftPercent: 75,
+                  rightPercent: 25,
                   leftColor: 'green' as const,
-                  rightColor: 'red' as const,
+                  rightColor: stats.totalNomChange >= 0 ? 'green' as const : 'red' as const,
                 },
               ];
 
@@ -214,35 +225,24 @@ export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps
                       dyn.v3.getVariant('stats-card', CLASS_VARIANTS_MAP)
                     )}
                   >
-                    {/* Subtle gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
-
-                    {/* Card Content */}
                     <div className="relative z-10">
-                      {/* Card Header */}
                       <div className="flex items-center justify-between mb-3">
                         <div className="text-xs text-zinc-500 font-semibold uppercase tracking-wider">
                           {card.label}
                         </div>
                       </div>
-
-                      {/* Total Value */}
                       <div className="text-3xl font-bold text-white mb-6 tracking-tight">
                         {card.totalValue}
                       </div>
-
-                      {/* Comparison Section */}
                       <div className="space-y-3">
-                        {/* Labels with Percentages */}
                         <div className="flex items-center justify-between text-xs font-medium">
                           <div className="flex items-center gap-2">
                             <div className={cn(
                               'w-2.5 h-2.5 rounded-full',
                               card.leftColor === 'green' ? 'bg-green-500' : 'bg-red-500'
-                            )}></div>
-                            <span className="text-zinc-400">
-                              {card.leftLabel}
-                            </span>
+                            )} />
+                            <span className="text-zinc-400">{card.leftLabel}</span>
                             <span className={cn(
                               'font-bold',
                               card.leftColor === 'green' ? 'text-green-400' : 'text-red-400'
@@ -257,17 +257,13 @@ export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps
                             )}>
                               {formatNumber(card.rightPercent, 1)}%
                             </span>
-                            <span className="text-zinc-400">
-                              {card.rightLabel}
-                            </span>
+                            <span className="text-zinc-400">{card.rightLabel}</span>
                             <div className={cn(
                               'w-2.5 h-2.5 rounded-full',
                               card.rightColor === 'green' ? 'bg-green-500' : 'bg-red-500'
-                            )}></div>
+                            )} />
                           </div>
                         </div>
-
-                        {/* Progress Bar */}
                         <div className="relative h-2.5 bg-zinc-800/80 rounded-full overflow-hidden shadow-inner">
                           <div
                             className={cn(
@@ -288,8 +284,6 @@ export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps
                             style={{ width: `${card.rightPercent}%` }}
                           />
                         </div>
-
-                        {/* Values */}
                         <div className="flex items-center justify-between text-xs">
                           <span className="text-zinc-500 font-medium">{card.leftValue}</span>
                           <span className="text-zinc-600">|</span>
@@ -304,16 +298,16 @@ export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps
           </div>
         ))}
 
-        {/* Search */}
+        {/* Controls: Search + Rows per page */}
         {dyn.v1.addWrapDecoy('validators-controls', (
-          <div className="mb-6 flex flex-col md:flex-row gap-4">
+          <div className="mb-6 flex flex-col md:flex-row gap-4 items-center">
             {dyn.v1.addWrapDecoy('validators-search', (
               <div className="flex-1 relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
                 <input
                   type="text"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
                   placeholder={dyn.v3.getVariant('search_placeholder', dynamicV3TextVariants)}
                   id={dyn.v3.getVariant('validators-search-input', ID_VARIANTS_MAP)}
                   className={cn(
@@ -323,6 +317,25 @@ export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps
                 />
               </div>
             ))}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-zinc-500">Show</span>
+              <div className="flex items-center gap-1 bg-zinc-900 border border-zinc-800 rounded-lg p-1">
+                {[10, 25, 50, 100].map((n) => (
+                  <button
+                    key={n}
+                    onClick={() => { setRowsPerPage(n); setCurrentPage(1); }}
+                    className={cn(
+                      'px-2.5 py-1.5 rounded-md text-xs font-semibold transition-all',
+                      rowsPerPage === n
+                        ? 'bg-blue-500 text-white'
+                        : 'text-zinc-400 hover:text-white hover:bg-zinc-700'
+                    )}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         ))}
 
@@ -332,212 +345,227 @@ export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps
             <div className="overflow-x-auto">
               <div className="inline-block min-w-full">
                 {/* Table Header */}
-                <div className="grid gap-3 px-6 py-4 bg-zinc-800/50 backdrop-blur-sm border-b border-zinc-800 text-xs font-semibold text-zinc-400 uppercase tracking-wider" style={{ gridTemplateColumns: '60px 200px 120px 90px 100px 120px 100px 80px 110px', minWidth: '1000px' }}>
+                <div className="grid gap-3 px-6 py-4 bg-zinc-800/50 backdrop-blur-sm border-b border-zinc-800 text-xs font-semibold text-zinc-400 uppercase tracking-wider" style={{ gridTemplateColumns: gridCols, minWidth: minW }}>
                   <div
                     onClick={() => handleSort('rank')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center gap-1"
                   >
-                    Rank
+                    #
                     {sortField === 'rank' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
                   <div
                     onClick={() => handleSort('hotkey')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center gap-1"
                   >
-                    Address
+                    Name
                     {sortField === 'hotkey' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
                   <div
-                    onClick={() => handleSort('stake')}
+                    onClick={() => handleSort('dominance')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
                   >
-                    Stake
-                    {sortField === 'stake' && <ArrowUpDown className="w-3 h-3" />}
-                  </div>
-                  <div
-                    onClick={() => handleSort('returnPercentage')}
-                    className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
-                  >
-                    APY
-                    {sortField === 'returnPercentage' && <ArrowUpDown className="w-3 h-3" />}
-                  </div>
-                  <div
-                    onClick={() => handleSort('commission')}
-                    className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
-                  >
-                    Commission
-                    {sortField === 'commission' && <ArrowUpDown className="w-3 h-3" />}
-                  </div>
-                  <div
-                    onClick={() => handleSort('totalDelegated')}
-                    className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
-                  >
-                    Delegated
-                    {sortField === 'totalDelegated' && <ArrowUpDown className="w-3 h-3" />}
+                    Dominance
+                    {sortField === 'dominance' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
                   <div
                     onClick={() => handleSort('nominatorCount')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
                   >
-                    Nominators
+                    Noms
                     {sortField === 'nominatorCount' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
                   <div
-                    onClick={() => handleSort('subnet')}
+                    onClick={() => handleSort('nominatorChange24h')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
                   >
-                    Subnet
-                    {sortField === 'subnet' && <ArrowUpDown className="w-3 h-3" />}
+                    24h
+                    {sortField === 'nominatorChange24h' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
-                  <div className="flex items-center justify-center">
-                    Performance
+                  <div
+                    onClick={() => handleSort('activeSubnets')}
+                    className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
+                  >
+                    Active
+                    {sortField === 'activeSubnets' && <ArrowUpDown className="w-3 h-3" />}
+                  </div>
+                  <div
+                    onClick={() => handleSort('totalWeight')}
+                    className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
+                  >
+                    Total Weight
+                    {sortField === 'totalWeight' && <ArrowUpDown className="w-3 h-3" />}
+                  </div>
+                  <div
+                    onClick={() => handleSort('weightChange24h')}
+                    className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
+                  >
+                    Wt 24h
+                    {sortField === 'weightChange24h' && <ArrowUpDown className="w-3 h-3" />}
+                  </div>
+                  <div
+                    onClick={() => handleSort('rootStake')}
+                    className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
+                  >
+                    Root Stake
+                    {sortField === 'rootStake' && <ArrowUpDown className="w-3 h-3" />}
+                  </div>
+                  <div
+                    onClick={() => handleSort('alphaStake')}
+                    className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
+                  >
+                    Alpha Stake
+                    {sortField === 'alphaStake' && <ArrowUpDown className="w-3 h-3" />}
+                  </div>
+                  <div
+                    onClick={() => handleSort('commission')}
+                    className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
+                  >
+                    Take
+                    {sortField === 'commission' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
                 </div>
 
                 {/* Table Body */}
                 <div className="divide-y divide-zinc-800/50">
-                  {filteredAndSortedValidators.map((validator) => {
-                    const trend = validator.performanceTrend.length >= 2
-                      ? validator.performanceTrend[validator.performanceTrend.length - 1] > validator.performanceTrend[0]
-                        ? 'up'
-                        : validator.performanceTrend[validator.performanceTrend.length - 1] < validator.performanceTrend[0]
-                        ? 'down'
-                        : 'neutral'
-                      : 'neutral';
-
-                    return dyn.v1.addWrapDecoy(`validator-row-${validator.rank}`, (
+                  {paginatedValidators.map((validator) => (
+                    dyn.v1.addWrapDecoy(`validator-row-${validator.rank}`, (
                       <div
                         key={validator.hotkey}
                         onClick={() => handleValidatorClick(validator.hotkey)}
-                        className="grid gap-3 px-6 py-5 hover:bg-zinc-800/30 cursor-pointer transition-all duration-200 group items-center"
-                        style={{ gridTemplateColumns: '60px 200px 120px 90px 100px 120px 100px 80px 110px', minWidth: '1000px' }}
+                        className="grid gap-3 px-6 py-4 hover:bg-zinc-800/30 cursor-pointer transition-all duration-200 group items-center"
+                        style={{ gridTemplateColumns: gridCols, minWidth: minW }}
                       >
                         {/* Rank */}
                         <div className="text-zinc-500 font-mono text-sm font-medium">
-                          #{validator.rank}
+                          {validator.rank}
                         </div>
 
-                        {/* Address */}
+                        {/* Name / Address */}
                         <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold shadow-lg transition-transform duration-200 group-hover:scale-110 flex-shrink-0 bg-gradient-to-br from-blue-500 to-cyan-500">
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg transition-transform duration-200 group-hover:scale-110 flex-shrink-0 bg-gradient-to-br from-blue-500 to-cyan-500">
                             {validator.rank}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <div className="text-white font-semibold group-hover:text-blue-400 transition-colors truncate font-mono text-sm">
+                            <div className="text-white font-medium group-hover:text-blue-400 transition-colors truncate font-mono text-sm">
                               {formatAddress(validator.hotkey)}
-                            </div>
-                            <div className="text-xs text-zinc-500 mt-0.5">
-                              SN{validator.subnet}
                             </div>
                           </div>
                         </div>
 
-                        {/* Stake */}
+                        {/* Dominance */}
                         <div className="text-right">
-                          <span className="text-white font-semibold text-sm">
-                            τ{formatLargeNumber(validator.stake)}
+                          <span className="text-white font-medium text-sm">
+                            {formatNumber(validator.dominance, 2)}%
                           </span>
                         </div>
 
-                        {/* APY */}
+                        {/* Noms */}
                         <div className="text-right">
-                          <span className={cn(
-                            'font-semibold text-sm',
-                            validator.returnPercentage > 10 ? 'text-green-400' : validator.returnPercentage < 5 ? 'text-red-400' : 'text-zinc-400'
-                          )}>
-                            {formatNumber(validator.returnPercentage, 2)}%
-                          </span>
-                        </div>
-
-                        {/* Commission */}
-                        <div className="text-right">
-                          <span className="text-zinc-300 font-medium text-sm">
-                            {formatNumber(validator.commission, 2)}%
-                          </span>
-                        </div>
-
-                        {/* Delegated */}
-                        <div className="text-right">
-                          <span className="text-zinc-300 font-medium text-sm">
-                            τ{formatLargeNumber(validator.totalDelegated)}
-                          </span>
-                        </div>
-
-                        {/* Nominators */}
-                        <div className="text-right">
-                          <span className="text-zinc-300 font-medium text-sm">
+                          <span className="text-zinc-300 text-sm">
                             {validator.nominatorCount}
                           </span>
                         </div>
 
-                        {/* Subnet */}
+                        {/* 24h Nom Change */}
                         <div className="text-right">
-                          <span className="text-zinc-300 font-medium text-sm">
-                            SN{validator.subnet}
+                          <span className={cn(
+                            'text-sm font-medium',
+                            validator.nominatorChange24h > 0 ? 'text-green-400' : validator.nominatorChange24h < 0 ? 'text-red-400' : 'text-zinc-500'
+                          )}>
+                            {validator.nominatorChange24h > 0 ? '+' : ''}{validator.nominatorChange24h}
                           </span>
                         </div>
 
-                        {/* Performance */}
-                        <div className="flex justify-center">
-                          <MiniChart
-                            data={validator.performanceTrend}
-                            width={80}
-                            height={30}
-                            trend={trend}
-                          />
+                        {/* Active Subnets */}
+                        <div className="text-right">
+                          <span className="text-zinc-300 text-sm">
+                            {validator.activeSubnets}
+                          </span>
+                        </div>
+
+                        {/* Total Weight */}
+                        <div className="text-right">
+                          <span className="text-white font-semibold text-sm">
+                            τ{formatLargeNumber(validator.totalWeight)}
+                          </span>
+                        </div>
+
+                        {/* Weight 24h Change */}
+                        <div className="text-right">
+                          <span className={cn(
+                            'text-sm font-medium',
+                            validator.weightChange24h > 0 ? 'text-green-400' : validator.weightChange24h < 0 ? 'text-red-400' : 'text-zinc-500'
+                          )}>
+                            {validator.weightChange24h > 0 ? '+' : ''}τ{formatLargeNumber(Math.abs(validator.weightChange24h))}
+                          </span>
+                        </div>
+
+                        {/* Root Stake */}
+                        <div className="text-right">
+                          <span className="text-zinc-300 text-sm">
+                            τ{formatLargeNumber(validator.rootStake)}
+                          </span>
+                        </div>
+
+                        {/* Alpha Stake */}
+                        <div className="text-right">
+                          <span className="text-zinc-300 text-sm">
+                            τ{formatLargeNumber(validator.alphaStake)}
+                          </span>
+                        </div>
+
+                        {/* Take (Commission) */}
+                        <div className="text-right">
+                          <span className="text-zinc-300 text-sm">
+                            {formatNumber(validator.commission, 2)}%
+                          </span>
                         </div>
                       </div>
-                    ));
-                  })}
+                    ))
+                  ))}
                 </div>
 
                 {/* Totals Row */}
                 {filteredAndSortedValidators.length > 0 && (
-                  <div className="grid gap-3 px-6 py-5 bg-zinc-800/30 border-t-2 border-zinc-700 items-center" style={{ gridTemplateColumns: '60px 200px 120px 90px 100px 120px 100px 80px 110px', minWidth: '1000px' }}>
-                    {/* Rank */}
-                    <div></div>
-
-                    {/* Address */}
+                  <div className="grid gap-3 px-6 py-4 bg-zinc-800/30 border-t-2 border-zinc-700 items-center" style={{ gridTemplateColumns: gridCols, minWidth: minW }}>
+                    <div />
                     <div className="flex items-center">
                       <span className="text-white font-bold text-sm">Total</span>
                     </div>
-
-                    {/* Total Stake */}
                     <div className="text-right">
-                      <span className="text-white font-bold text-sm">
-                        τ{formatLargeNumber(
-                          filteredAndSortedValidators.reduce((sum, v) => sum + v.stake, 0)
-                        )}
-                      </span>
+                      <span className="text-white font-bold text-sm">100.00%</span>
                     </div>
-
-                    {/* APY - empty */}
-                    <div></div>
-
-                    {/* Commission - empty */}
-                    <div></div>
-
-                    {/* Total Delegated */}
-                    <div className="text-right">
-                      <span className="text-white font-bold text-sm">
-                        τ{formatLargeNumber(
-                          filteredAndSortedValidators.reduce((sum, v) => sum + v.totalDelegated, 0)
-                        )}
-                      </span>
-                    </div>
-
-                    {/* Total Nominators */}
                     <div className="text-right">
                       <span className="text-white font-bold text-sm">
                         {filteredAndSortedValidators.reduce((sum, v) => sum + v.nominatorCount, 0)}
                       </span>
                     </div>
-
-                    {/* Subnet - empty */}
-                    <div></div>
-
-                    {/* Performance - empty */}
-                    <div></div>
+                    <div className="text-right">
+                      <span className={cn(
+                        'text-sm font-bold',
+                        stats.totalNomChange >= 0 ? 'text-green-400' : 'text-red-400'
+                      )}>
+                        {stats.totalNomChange >= 0 ? '+' : ''}{stats.totalNomChange}
+                      </span>
+                    </div>
+                    <div />
+                    <div className="text-right">
+                      <span className="text-white font-bold text-sm">
+                        τ{formatLargeNumber(filteredAndSortedValidators.reduce((sum, v) => sum + v.totalWeight, 0))}
+                      </span>
+                    </div>
+                    <div />
+                    <div className="text-right">
+                      <span className="text-white font-bold text-sm">
+                        τ{formatLargeNumber(filteredAndSortedValidators.reduce((sum, v) => sum + v.rootStake, 0))}
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-white font-bold text-sm">
+                        τ{formatLargeNumber(filteredAndSortedValidators.reduce((sum, v) => sum + v.alphaStake, 0))}
+                      </span>
+                    </div>
+                    <div />
                   </div>
                 )}
 
@@ -550,13 +578,73 @@ export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps
                 )}
               </div>
             </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between px-6 py-4 border-t border-zinc-800">
+                <div className="text-sm text-zinc-400">
+                  Showing {(currentPage - 1) * rowsPerPage + 1} to {Math.min(currentPage * rowsPerPage, filteredAndSortedValidators.length)} of {filteredAndSortedValidators.length} entries
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className={cn(
+                      'px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-1',
+                      currentPage === 1
+                        ? 'text-zinc-600 cursor-not-allowed'
+                        : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                    )}
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Previous
+                  </button>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                      let page: number;
+                      if (totalPages <= 5) {
+                        page = i + 1;
+                      } else if (currentPage <= 3) {
+                        page = i + 1;
+                      } else if (currentPage >= totalPages - 2) {
+                        page = totalPages - 4 + i;
+                      } else {
+                        page = currentPage - 2 + i;
+                      }
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={cn(
+                            'w-8 h-8 rounded-lg text-sm font-medium transition-all',
+                            currentPage === page
+                              ? 'bg-blue-500 text-white'
+                              : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                          )}
+                        >
+                          {page}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <button
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className={cn(
+                      'px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-1',
+                      currentPage === totalPages
+                        ? 'text-zinc-600 cursor-not-allowed'
+                        : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                    )}
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         ))}
-
-        {/* Results count */}
-        <div className="mt-4 text-sm text-zinc-400 text-center">
-          Showing {filteredAndSortedValidators.length} of {validators.length} validators
-        </div>
       </div>
     </div>
   );

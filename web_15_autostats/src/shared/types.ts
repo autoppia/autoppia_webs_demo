@@ -40,10 +40,36 @@ export interface Validator {
   stake: number;
   returnPercentage: number;
   nominatorCount: number;
+  nominatorChange24h: number;
   totalDelegated: number;
   commission: number;
   subnet: number;
   rank: number;
+  dominance: number;
+  activeSubnets: number;
+  totalWeight: number;
+  rootStake: number;
+  alphaStake: number;
+  weightChange24h: number;
+}
+
+export interface ValidatorSubnetPerformance {
+  netuid: number;
+  subnetName: string;
+  type: 'Key' | 'Server';
+  hotkey: string;
+  take: number;
+  proportion: number;
+  subnetWeight: number;
+  subnetBalance: number;
+  noms: number;
+  familyWeight: number;
+  familyBalance: number;
+  dominance: number;
+  divs: number;
+  uid: number;
+  vtrust: number;
+  updated: number;
 }
 
 export interface Account {
@@ -118,6 +144,7 @@ export interface SubnetWithTrend extends Subnet {
 
 export interface ValidatorWithTrend extends Validator {
   performanceTrend: number[];
+  subnetPerformance: ValidatorSubnetPerformance[];
 }
 
 export interface TransactionWithMethod extends Transfer {

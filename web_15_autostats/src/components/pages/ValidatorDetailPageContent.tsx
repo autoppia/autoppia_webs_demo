@@ -21,7 +21,6 @@ export function ValidatorDetailPageContent({ validator, transactions }: Validato
 
   const [candleSize, setCandleSize] = useState<CandleSize>('1h');
 
-  // Generate candle data based on candle size
   const candleData = useMemo(() => {
     return generateCandleHistory(candleSize, validator.rank);
   }, [candleSize, validator.rank]);
@@ -70,11 +69,8 @@ export function ValidatorDetailPageContent({ validator, transactions }: Validato
   // Derived stats
   const selfStake = Math.max(0, validator.stake - validator.totalDelegated);
   const dailyRewards = validator.stake * (validator.returnPercentage / 100) / 365;
-  const weeklyRewards = dailyRewards * 7;
-  const uptime = 99.2 + (validator.rank % 8) * 0.1;
-  const blocksProduced = 1000 + validator.rank * 47;
-  const activeNominators = Math.floor(validator.nominatorCount * 0.85);
-  const pendingNominators = validator.nominatorCount - activeNominators;
+  const validatorReturn = dailyRewards * (validator.commission / 100);
+  const nominatorReturn = dailyRewards - validatorReturn;
 
   return (
     <div className="min-h-screen bg-zinc-950 py-8">
@@ -89,7 +85,7 @@ export function ValidatorDetailPageContent({ validator, transactions }: Validato
         </button>
 
         {/* Validator Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg bg-gradient-to-br from-blue-500 to-cyan-500">
               V
@@ -101,19 +97,44 @@ export function ValidatorDetailPageContent({ validator, transactions }: Validato
                   Active
                 </span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-zinc-400 mt-1">
-                <span>Subnet: SN{validator.subnet}</span>
-                <span>/</span>
-                <span>Rank: #{validator.rank}</span>
-              </div>
               <div className="text-sm text-zinc-500 mt-1 font-mono">
                 {formatAddress(validator.hotkey)}
               </div>
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-sm text-zinc-500 mb-1">Rank</div>
-            <div className="text-2xl font-bold text-zinc-400">#{validator.rank}</div>
+        </div>
+
+        {/* Top-Level Stats Row (like taostats header) */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-4">
+            <div className="text-xs text-zinc-400 mb-1">Total Weight</div>
+            <div className="text-xl font-bold text-white">τ{formatLargeNumber(validator.totalWeight)}</div>
+            <div className="text-xs text-zinc-500">${formatLargeNumber(validator.totalWeight * 450)}</div>
+          </div>
+          <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-4">
+            <div className="text-xs text-zinc-400 mb-1">Nominator Return</div>
+            <div className="text-xl font-bold text-green-400">τ{formatNumber(nominatorReturn, 4)}</div>
+            <div className="text-xs text-zinc-500">per day</div>
+          </div>
+          <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-4">
+            <div className="text-xs text-zinc-400 mb-1">Validator Return</div>
+            <div className="text-xl font-bold text-blue-400">τ{formatNumber(validatorReturn, 4)}</div>
+            <div className="text-xs text-zinc-500">per day</div>
+          </div>
+          <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-4">
+            <div className="text-xs text-zinc-400 mb-1">Total Nominators</div>
+            <div className="text-xl font-bold text-white">{validator.nominatorCount}</div>
+            <div className={cn(
+              'text-xs font-medium',
+              validator.nominatorChange24h >= 0 ? 'text-green-400' : 'text-red-400'
+            )}>
+              {validator.nominatorChange24h >= 0 ? '+' : ''}{validator.nominatorChange24h} (24h)
+            </div>
+          </div>
+          <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-4">
+            <div className="text-xs text-zinc-400 mb-1">Dominance</div>
+            <div className="text-xl font-bold text-white">{formatNumber(validator.dominance, 2)}%</div>
+            <div className="text-xs text-zinc-500">of network</div>
           </div>
         </div>
 
@@ -124,33 +145,14 @@ export function ValidatorDetailPageContent({ validator, transactions }: Validato
             {/* Stake Card with Mini Chart */}
             <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-4">
               <div className="flex items-center gap-2 text-xs text-zinc-400 mb-2">
-                <span>Total Stake</span>
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <span>Stake Overview</span>
               </div>
 
               <div className="flex items-center justify-between gap-6">
-                {/* Left side - Stake info */}
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <div className="text-2xl font-bold text-white leading-tight">
                       τ{formatLargeNumber(validator.stake)}
-                    </div>
-                    <div className={cn(
-                      'flex items-center gap-1 text-xs font-semibold',
-                      validator.returnPercentage > 10 ? 'text-green-400' : 'text-red-400'
-                    )}>
-                      {validator.returnPercentage > 10 ? (
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                        </svg>
-                      ) : (
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
-                        </svg>
-                      )}
-                      <span>{formatNumber(validator.returnPercentage, 2)}% APY</span>
                     </div>
                   </div>
                   <div className="text-xs text-zinc-500">
@@ -158,7 +160,6 @@ export function ValidatorDetailPageContent({ validator, transactions }: Validato
                   </div>
                 </div>
 
-                {/* Right side - Mini chart */}
                 <div className="w-28 h-8 flex items-center">
                   <svg viewBox="0 0 100 40" className="w-full h-full" preserveAspectRatio="none">
                     {(() => {
@@ -187,279 +188,95 @@ export function ValidatorDetailPageContent({ validator, transactions }: Validato
               </div>
             </div>
 
-            {/* Staking Data Section */}
-            <div className="space-y-2">
-              <h3 className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider px-2">
-                Staking Data
-              </h3>
-
-              {/* Total Delegated */}
-              <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
-                  <span>Total Delegated</span>
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div className="flex items-end justify-between">
-                  <div className="text-xl font-bold text-white">
-                    τ{formatLargeNumber(validator.totalDelegated)}
-                  </div>
-                  <div className="text-xs text-zinc-500">
-                    ${formatLargeNumber(validator.totalDelegated * 450)}
-                  </div>
-                </div>
+            {/* Root vs Alpha Stake */}
+            <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-4 space-y-3">
+              <div className="text-xs text-zinc-400 font-semibold uppercase tracking-wider">Stake Breakdown</div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-zinc-400">Root Stake</span>
+                <span className="text-sm font-bold text-white">τ{formatLargeNumber(validator.rootStake)}</span>
               </div>
-
-              {/* Self Stake */}
-              <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
-                  <span>Self Stake</span>
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div className="flex items-end justify-between">
-                  <div className="text-xl font-bold text-white">
-                    τ{formatLargeNumber(selfStake)}
-                  </div>
-                  <div className="text-xs text-zinc-500">
-                    ${formatLargeNumber(selfStake * 450)}
-                  </div>
-                </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-zinc-400">Root Weight (0.18)</span>
+                <span className="text-sm font-bold text-zinc-300">τ{formatLargeNumber(validator.rootStake * 0.18)}</span>
               </div>
-
-              {/* Three column stats */}
-              <div className="grid grid-cols-3 gap-2">
-                {/* APY */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-[10px] text-zinc-400 mb-1">
-                    <span>APY</span>
-                  </div>
-                  <div className={cn(
-                    'text-base font-bold',
-                    validator.returnPercentage > 10 ? 'text-green-400' : 'text-white'
-                  )}>
-                    {formatNumber(validator.returnPercentage, 2)}%
-                  </div>
-                </div>
-
-                {/* Commission */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-[10px] text-zinc-400 mb-1">
-                    <span>Commission</span>
-                  </div>
-                  <div className="text-base font-bold text-white">
-                    {formatNumber(validator.commission, 2)}%
-                  </div>
-                </div>
-
-                {/* Nominators */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-[10px] text-zinc-400 mb-1">
-                    <span>Nominators</span>
-                  </div>
-                  <div className="text-base font-bold text-white">
-                    {validator.nominatorCount}
-                  </div>
-                </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-zinc-400">Alpha Stake</span>
+                <span className="text-sm font-bold text-white">τ{formatLargeNumber(validator.alphaStake)}</span>
               </div>
-            </div>
-
-            {/* Validator Statistics */}
-            <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-4 space-y-2">
-              {/* Active Subnets */}
-              <div className="flex items-center justify-between py-2 border-b border-zinc-800/50">
-                <div className="flex items-center gap-1 text-xs text-zinc-400">
-                  <span>Active Subnets</span>
-                </div>
-                <div className="text-sm font-bold text-white">
-                  {1 + (validator.rank % 5)}
-                </div>
+              <div className="border-t border-zinc-800 pt-2 flex items-center justify-between">
+                <span className="text-xs text-zinc-400">Total Weight</span>
+                <span className="text-sm font-bold text-blue-400">τ{formatLargeNumber(validator.totalWeight)}</span>
               </div>
-
-              {/* Nominator Count */}
-              <div className="flex items-center justify-between py-2 border-b border-zinc-800/50">
-                <div className="flex items-center gap-1 text-xs text-zinc-400">
-                  <span>Nominator Count</span>
-                </div>
-                <div className="text-sm font-bold text-white">
-                  {validator.nominatorCount}
-                </div>
-              </div>
-
-              {/* Commission */}
-              <div className="flex items-center justify-between py-2 border-b border-zinc-800/50">
-                <div className="flex items-center gap-1 text-xs text-zinc-400">
-                  <span>Commission</span>
-                </div>
-                <div className="text-sm font-bold text-white">
-                  {formatNumber(validator.commission, 2)}%
-                </div>
-              </div>
-
-              {/* APY */}
-              <div className="flex items-center justify-between py-2 border-b border-zinc-800/50">
-                <div className="flex items-center gap-1 text-xs text-zinc-400">
-                  <span>APY</span>
-                </div>
-                <div className={cn(
-                  'text-sm font-bold',
-                  validator.returnPercentage > 10 ? 'text-green-400' : 'text-white'
-                )}>
-                  {formatNumber(validator.returnPercentage, 2)}%
-                </div>
-              </div>
-
-              {/* Delegated */}
-              <div className="flex items-center justify-between py-2 border-b border-zinc-800/50">
-                <div className="flex items-center gap-1 text-xs text-zinc-400">
-                  <span>Delegated</span>
-                </div>
-                <div className="text-sm font-bold text-white">
-                  τ{formatLargeNumber(validator.totalDelegated)}
-                </div>
-              </div>
-
-              {/* Self Stake */}
-              <div className="flex items-center justify-between py-2 border-b border-zinc-800/50">
-                <div className="flex items-center gap-1 text-xs text-zinc-400">
-                  <span>Self Stake</span>
-                </div>
-                <div className="text-sm font-bold text-white">
-                  τ{formatLargeNumber(selfStake)}
-                </div>
-              </div>
-
               {/* Distribution Bar */}
-              <div className="pt-1">
+              <div>
                 <div className="flex items-center justify-between text-[10px] text-zinc-400 mb-1.5">
-                  <span>Self Stake {validator.stake > 0 ? formatNumber((selfStake / validator.stake) * 100, 1) : '0.0'}%</span>
-                  <span>Delegated {validator.stake > 0 ? formatNumber((validator.totalDelegated / validator.stake) * 100, 1) : '0.0'}%</span>
+                  <span>Root {validator.stake > 0 ? formatNumber((validator.rootStake / validator.stake) * 100, 1) : '0.0'}%</span>
+                  <span>Alpha {validator.stake > 0 ? formatNumber((validator.alphaStake / validator.stake) * 100, 1) : '0.0'}%</span>
                 </div>
                 <div className="relative h-1.5 bg-zinc-800 rounded-full overflow-hidden">
                   <div
                     className="absolute left-0 top-0 h-full bg-gradient-to-r from-cyan-500 to-cyan-400"
-                    style={{ width: `${validator.stake > 0 ? (selfStake / validator.stake) * 100 : 0}%` }}
-                  ></div>
+                    style={{ width: `${validator.stake > 0 ? (validator.rootStake / validator.stake) * 100 : 0}%` }}
+                  />
                   <div
                     className="absolute right-0 top-0 h-full bg-gradient-to-l from-blue-500 to-blue-400"
-                    style={{ width: `${validator.stake > 0 ? (validator.totalDelegated / validator.stake) * 100 : 0}%` }}
-                  ></div>
+                    style={{ width: `${validator.stake > 0 ? (validator.alphaStake / validator.stake) * 100 : 0}%` }}
+                  />
                 </div>
               </div>
             </div>
 
-            {/* Performance Stats */}
-            <div className="space-y-2">
-              <h3 className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider px-2">
-                Performance Stats
-              </h3>
+            {/* Staking Data */}
+            <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-4 space-y-2">
+              <div className="text-xs text-zinc-400 font-semibold uppercase tracking-wider mb-2">Staking Data</div>
 
-              <div className="grid grid-cols-2 gap-2">
-                {/* Daily Rewards */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
-                    <span>Daily Rewards</span>
-                  </div>
-                  <div className="text-xl font-bold text-white">τ{formatNumber(dailyRewards, 2)}</div>
-                </div>
-
-                {/* Weekly Rewards */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
-                    <span>Weekly Rewards</span>
-                  </div>
-                  <div className="text-xl font-bold text-white">τ{formatNumber(weeklyRewards, 2)}</div>
-                </div>
-
-                {/* Uptime */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
-                    <span>Uptime</span>
-                  </div>
-                  <div className="text-xl font-bold text-green-400">{formatNumber(uptime, 1)}%</div>
-                </div>
-
-                {/* Blocks */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
-                    <span>Blocks</span>
-                  </div>
-                  <div className="text-xl font-bold text-white">{formatLargeNumber(blocksProduced)}</div>
-                </div>
-
-                {/* Active Nominators */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
-                    <span>Active Nominators</span>
-                  </div>
-                  <div className="text-xl font-bold text-white">{activeNominators}</div>
-                </div>
-
-                {/* Pending Nominators */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
-                    <span>Pending Nominators</span>
-                  </div>
-                  <div className="text-xl font-bold text-white">{pendingNominators}</div>
-                </div>
+              <div className="flex items-center justify-between py-1.5 border-b border-zinc-800/50">
+                <span className="text-xs text-zinc-400">Total Delegated</span>
+                <span className="text-sm font-bold text-white">τ{formatLargeNumber(validator.totalDelegated)}</span>
+              </div>
+              <div className="flex items-center justify-between py-1.5 border-b border-zinc-800/50">
+                <span className="text-xs text-zinc-400">Self Stake</span>
+                <span className="text-sm font-bold text-white">τ{formatLargeNumber(selfStake)}</span>
+              </div>
+              <div className="flex items-center justify-between py-1.5 border-b border-zinc-800/50">
+                <span className="text-xs text-zinc-400">Take (Commission)</span>
+                <span className="text-sm font-bold text-white">{formatNumber(validator.commission, 2)}%</span>
+              </div>
+              <div className="flex items-center justify-between py-1.5 border-b border-zinc-800/50">
+                <span className="text-xs text-zinc-400">Active Subnets</span>
+                <span className="text-sm font-bold text-white">{validator.activeSubnets}</span>
+              </div>
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-xs text-zinc-400">APY</span>
+                <span className={cn(
+                  'text-sm font-bold',
+                  validator.returnPercentage > 10 ? 'text-green-400' : 'text-white'
+                )}>
+                  {formatNumber(validator.returnPercentage, 2)}%
+                </span>
               </div>
             </div>
 
             {/* Network Data */}
-            <div className="space-y-2">
-              <h3 className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider px-2">
-                Network Data
-              </h3>
+            <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-4 space-y-2">
+              <div className="text-xs text-zinc-400 font-semibold uppercase tracking-wider mb-2">Network Data</div>
 
               <div className="grid grid-cols-2 gap-2">
-                {/* Weight Setting */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
-                    <span>Weight Setting</span>
-                  </div>
-                  <div className="text-xl font-bold text-white">{formatNumber(0.5 + (validator.rank % 50) * 0.01, 2)}</div>
+                <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 p-3">
+                  <div className="text-[10px] text-zinc-400 mb-1">VTrust</div>
+                  <div className="text-base font-bold text-white">{formatNumber(0.8 + (validator.rank % 20) * 0.01, 3)}</div>
                 </div>
-
-                {/* VTrust */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
-                    <span>VTrust</span>
-                  </div>
-                  <div className="text-xl font-bold text-white">{formatNumber(0.8 + (validator.rank % 20) * 0.01, 3)}</div>
+                <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 p-3">
+                  <div className="text-[10px] text-zinc-400 mb-1">Bonds</div>
+                  <div className="text-base font-bold text-white">{formatNumber(0.3 + (validator.rank % 70) * 0.01, 3)}</div>
                 </div>
-
-                {/* Bonds */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
-                    <span>Bonds</span>
-                  </div>
-                  <div className="text-xl font-bold text-white">{formatNumber(0.3 + (validator.rank % 70) * 0.01, 3)}</div>
+                <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 p-3">
+                  <div className="text-[10px] text-zinc-400 mb-1">Emissions</div>
+                  <div className="text-base font-bold text-white">{formatNumber(0.01 + (validator.rank % 30) * 0.001, 4)}</div>
                 </div>
-
-                {/* Emissions */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
-                    <span>Emissions</span>
-                  </div>
-                  <div className="text-xl font-bold text-white">{formatNumber(0.01 + (validator.rank % 30) * 0.001, 4)}</div>
-                </div>
-
-                {/* Immunity */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
-                    <span>Immunity</span>
-                  </div>
-                  <div className="text-xl font-bold text-white">{validator.rank % 3 === 0 ? 'Yes' : 'No'}</div>
-                </div>
-
-                {/* Last Update */}
-                <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
-                  <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
-                    <span>Last Update</span>
-                  </div>
-                  <div className="text-xl font-bold text-white">{12 + (validator.rank % 48)}h ago</div>
+                <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 p-3">
+                  <div className="text-[10px] text-zinc-400 mb-1">Immunity</div>
+                  <div className="text-base font-bold text-white">{validator.rank % 3 === 0 ? 'Yes' : 'No'}</div>
                 </div>
               </div>
             </div>
@@ -467,12 +284,10 @@ export function ValidatorDetailPageContent({ validator, transactions }: Validato
 
           {/* Right Content */}
           <div className="space-y-6 min-w-0">
-            {/* Performance Chart */}
+            {/* Staked Chart */}
             <div className="rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-white">Performance Chart</h2>
-
-                {/* Candle Size Selector */}
+                <h2 className="text-xl font-bold text-white">Staked Chart</h2>
                 <div className="flex items-center gap-2 bg-zinc-800/50 rounded-lg p-1">
                   {(['1h', '4h', '1d'] as CandleSize[]).map((size) => (
                     <button
@@ -490,10 +305,120 @@ export function ValidatorDetailPageContent({ validator, transactions }: Validato
                   ))}
                 </div>
               </div>
-
-              {/* Chart */}
               <div className="rounded-xl overflow-hidden border border-zinc-800">
                 <CandlestickChart key={candleSize} data={candleData} height={400} />
+              </div>
+            </div>
+
+            {/* Subnet Performance Table */}
+            <div className="rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 overflow-hidden w-full">
+              <div className="p-6 border-b border-zinc-800">
+                <h2 className="text-xl font-bold text-white">Performance Per Subnet</h2>
+                <p className="text-sm text-zinc-500 mt-1">Validator activity across {validator.activeSubnets} active subnets</p>
+              </div>
+
+              <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-800/50">
+                <table className="w-full min-w-[1200px]">
+                  <thead className="bg-zinc-800/50">
+                    <tr>
+                      <th className="px-3 py-3 text-left whitespace-nowrap">
+                        <span className="text-xs font-semibold text-zinc-400 uppercase">Netuid</span>
+                      </th>
+                      <th className="px-3 py-3 text-left whitespace-nowrap">
+                        <span className="text-xs font-semibold text-zinc-400 uppercase">Subnet</span>
+                      </th>
+                      <th className="px-3 py-3 text-left whitespace-nowrap">
+                        <span className="text-xs font-semibold text-zinc-400 uppercase">Type</span>
+                      </th>
+                      <th className="px-3 py-3 text-right whitespace-nowrap">
+                        <span className="text-xs font-semibold text-zinc-400 uppercase">Take</span>
+                      </th>
+                      <th className="px-3 py-3 text-right whitespace-nowrap">
+                        <span className="text-xs font-semibold text-zinc-400 uppercase">Proportion</span>
+                      </th>
+                      <th className="px-3 py-3 text-right whitespace-nowrap">
+                        <span className="text-xs font-semibold text-zinc-400 uppercase">SN Weight</span>
+                      </th>
+                      <th className="px-3 py-3 text-right whitespace-nowrap">
+                        <span className="text-xs font-semibold text-zinc-400 uppercase">SN Balance</span>
+                      </th>
+                      <th className="px-3 py-3 text-right whitespace-nowrap">
+                        <span className="text-xs font-semibold text-zinc-400 uppercase">Noms</span>
+                      </th>
+                      <th className="px-3 py-3 text-right whitespace-nowrap">
+                        <span className="text-xs font-semibold text-zinc-400 uppercase">Family Wt</span>
+                      </th>
+                      <th className="px-3 py-3 text-right whitespace-nowrap">
+                        <span className="text-xs font-semibold text-zinc-400 uppercase">Dominance</span>
+                      </th>
+                      <th className="px-3 py-3 text-right whitespace-nowrap">
+                        <span className="text-xs font-semibold text-zinc-400 uppercase">Divs</span>
+                      </th>
+                      <th className="px-3 py-3 text-right whitespace-nowrap">
+                        <span className="text-xs font-semibold text-zinc-400 uppercase">UID</span>
+                      </th>
+                      <th className="px-3 py-3 text-right whitespace-nowrap">
+                        <span className="text-xs font-semibold text-zinc-400 uppercase">VTrust</span>
+                      </th>
+                      <th className="px-3 py-3 text-right whitespace-nowrap">
+                        <span className="text-xs font-semibold text-zinc-400 uppercase">Updated</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-zinc-800">
+                    {validator.subnetPerformance.map((sp) => (
+                      <tr key={sp.netuid} className="hover:bg-zinc-800/50 transition-colors">
+                        <td className="px-3 py-3 whitespace-nowrap">
+                          <span className="text-zinc-300 text-sm font-mono">{sp.netuid}</span>
+                        </td>
+                        <td className="px-3 py-3 whitespace-nowrap">
+                          <span className="text-white text-sm font-medium">{sp.subnetName}</span>
+                        </td>
+                        <td className="px-3 py-3 whitespace-nowrap">
+                          <span className={cn(
+                            'text-xs px-2 py-0.5 rounded font-semibold',
+                            sp.type === 'Key' ? 'bg-blue-900/30 text-blue-400' : 'bg-purple-900/30 text-purple-400'
+                          )}>
+                            {sp.type}
+                          </span>
+                        </td>
+                        <td className="px-3 py-3 text-right whitespace-nowrap">
+                          <span className="text-zinc-300 text-sm">{formatNumber(sp.take, 2)}%</span>
+                        </td>
+                        <td className="px-3 py-3 text-right whitespace-nowrap">
+                          <span className="text-zinc-300 text-sm">{formatNumber(sp.proportion, 2)}%</span>
+                        </td>
+                        <td className="px-3 py-3 text-right whitespace-nowrap">
+                          <span className="text-white text-sm font-medium">τ{formatLargeNumber(sp.subnetWeight)}</span>
+                        </td>
+                        <td className="px-3 py-3 text-right whitespace-nowrap">
+                          <span className="text-zinc-300 text-sm">{formatNumber(sp.subnetBalance, 3)}</span>
+                        </td>
+                        <td className="px-3 py-3 text-right whitespace-nowrap">
+                          <span className="text-zinc-300 text-sm">{sp.noms}</span>
+                        </td>
+                        <td className="px-3 py-3 text-right whitespace-nowrap">
+                          <span className="text-zinc-300 text-sm">τ{formatLargeNumber(sp.familyWeight)}</span>
+                        </td>
+                        <td className="px-3 py-3 text-right whitespace-nowrap">
+                          <span className="text-zinc-300 text-sm">{formatNumber(sp.dominance, 2)}%</span>
+                        </td>
+                        <td className="px-3 py-3 text-right whitespace-nowrap">
+                          <span className="text-green-400 text-sm">{formatNumber(sp.divs, 2)}</span>
+                        </td>
+                        <td className="px-3 py-3 text-right whitespace-nowrap">
+                          <span className="text-zinc-300 text-sm font-mono">{sp.uid}</span>
+                        </td>
+                        <td className="px-3 py-3 text-right whitespace-nowrap">
+                          <span className="text-zinc-300 text-sm">{formatNumber(sp.vtrust, 4)}</span>
+                        </td>
+                        <td className="px-3 py-3 text-right whitespace-nowrap">
+                          <span className="text-zinc-400 text-sm">{sp.updated} blocks</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
 
