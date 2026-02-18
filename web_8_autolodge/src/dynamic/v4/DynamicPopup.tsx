@@ -17,11 +17,11 @@ const FIXED_PLACEMENTS = ["bottom-right", "bottom-left", "banner", "top-right", 
 function getPlacementStyle(placement: string): React.CSSProperties {
   switch (placement) {
     case "bottom-right":
-      return { position: "fixed" as const, bottom: 24, right: 24, left: "auto", top: "auto" };
+      return { position: "fixed" as const, bottom: 88, right: 24, left: "auto", top: "auto" };
     case "bottom-left":
-      return { position: "fixed" as const, bottom: 24, left: 24, right: "auto", top: "auto" };
+      return { position: "fixed" as const, bottom: 88, left: 24, right: "auto", top: "auto" };
     case "banner":
-      return { position: "fixed" as const, bottom: 24, left: "50%", right: "auto", top: "auto", transform: "translateX(-50%)" };
+      return { position: "fixed" as const, bottom: 88, left: "50%", right: "auto", top: "auto", transform: "translateX(-50%)" };
     case "top-right":
       return { position: "fixed" as const, top: 24, right: 24, left: "auto", bottom: "auto" };
     case "top-left":
@@ -79,12 +79,8 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
   const placementStyle = isCenter ? undefined : getPlacementStyle(variant.placement);
   const content = (
     <div
-      className={`fixed inset-0 ${isCenter ? "flex items-center justify-center p-4" : ""}`}
-      style={{
-        zIndex: POPUP_LAYER_Z,
-        backgroundColor: "rgba(0,0,0,0.88)",
-        isolation: "isolate",
-      }}
+      className={`fixed inset-0 bg-black/95 backdrop-blur-md ${isCenter ? "flex items-center justify-center p-4" : ""}`}
+      style={{ zIndex: POPUP_LAYER_Z, pointerEvents: "auto" }}
       data-v4="true"
       role="dialog"
       aria-modal="true"
@@ -94,29 +90,27 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
         if (e.target === e.currentTarget) { e.preventDefault(); e.stopPropagation(); }
       }}
       onClick={(e) => {
+        e.preventDefault();
         e.stopPropagation();
-        if (e.target === e.currentTarget) e.preventDefault();
+        if (e.target === e.currentTarget) return;
       }}
+      onPointerDown={(e) => e.stopPropagation()}
     >
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`w-full max-w-md rounded-xl border border-border shadow-lg px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
-        style={{
-          ...placementStyle,
-          position: placementStyle?.position ?? "relative",
-          backgroundColor: "var(--card)",
-          color: "var(--card-foreground)",
-        }}
+        className={`relative w-full max-w-md rounded-xl border-2 border-gray-200 bg-white text-gray-900 shadow-2xl px-6 py-6 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
+        style={placementStyle}
         data-popup-id={variant.popupId}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="absolute left-0 right-0 top-0 h-1 rounded-t-xl bg-gradient-to-r from-primary to-accent" />
-        <h2 className="pr-8 text-xl font-semibold leading-tight text-card-foreground sm:text-2xl">{variant.title}</h2>
-        {variant.body && <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:mt-4 sm:text-base">{variant.body}</p>}
+        <h2 className="pr-8 text-xl font-semibold leading-tight sm:text-2xl">{variant.title}</h2>
+        {variant.body && <p className="mt-3 text-sm leading-relaxed text-gray-600 dark:text-gray-300 sm:mt-4 sm:text-base">{variant.body}</p>}
         <div className="mt-5 flex flex-wrap items-center justify-end gap-3 sm:mt-6">
           <button type="button" onClick={onClose} className="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 transition focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-card">{variant.cta}</button>
         </div>
-        <button type="button" onClick={onClose} className="absolute right-4 top-4 rounded-md p-1.5 text-muted-foreground transition hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-card" aria-label="Close">
+        <button type="button" onClick={onClose} className="absolute right-4 top-4 rounded-md p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-card" aria-label="Close">
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
       </div>

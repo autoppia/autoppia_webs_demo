@@ -12,12 +12,17 @@ export interface PopupDef {
   texts: Record<string, string[]>;
 }
 
+/** Placements that stay visible on screen (center and bottom area). */
+const ALL_PLACEMENTS: PopupPlacement[] = [
+  "center", "bottom-right", "bottom-left", "banner",
+];
+
 export const POPUPS: PopupDef[] = [
   {
     id: "welcome",
     probability: 1,
     delayMs: [800, 3200],
-    placements: ["center", "bottom-right", "top-right", "top-left", "middle-right", "bottom-left"],
+    placements: ALL_PLACEMENTS,
     texts: {
       title: ["Welcome to Autolodge", "Book hotels and stays", "Find your perfect getaway"],
       body: [
@@ -32,7 +37,7 @@ export const POPUPS: PopupDef[] = [
     id: "discover",
     probability: 1,
     delayMs: [1000, 5000],
-    placements: ["bottom-right", "banner", "center", "top-banner", "middle-left"],
+    placements: ALL_PLACEMENTS,
     texts: {
       title: ["Discover hotels and cabins", "Explore the full catalog", "Find your next stay"],
       body: [
@@ -47,7 +52,7 @@ export const POPUPS: PopupDef[] = [
     id: "booking",
     probability: 1,
     delayMs: [900, 3800],
-    placements: ["banner", "center", "bottom-right"],
+    placements: ALL_PLACEMENTS,
     texts: {
       title: ["Book with flexible dates", "Reserve your stay", "Complete your booking"],
       body: [
@@ -62,7 +67,7 @@ export const POPUPS: PopupDef[] = [
     id: "search_tips",
     probability: 1,
     delayMs: [600, 4000],
-    placements: ["bottom-right", "center"],
+    placements: ALL_PLACEMENTS,
     texts: {
       title: ["Search by location or type", "Find stays quickly", "Tips for searching"],
       body: [
