@@ -1,8 +1,9 @@
 function getApiBaseUrl(): string {
   const isServer = typeof window === "undefined";
-  // Server (e.g. Docker): use API_URL so backend is reached at app:8090, not localhost
-  if (isServer && process.env.API_URL) {
-    return process.env.API_URL;
+  // Server (e.g. Docker): use only API_URL so backend is reached at app:8090.
+  // Never use NEXT_PUBLIC_* here — it's inlined at build time (often localhost) and would cause ECONNREFUSED in containers.
+  if (isServer) {
+    return process.env.API_URL || "http://app:8090";
   }
   const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
   const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
