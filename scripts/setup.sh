@@ -9,7 +9,7 @@
 #   --postgres_port=PORT          Set base postgres port (default: 5434)
 #   --webs_port=PORT              Set webs_server port (default: 8090)
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
-#   --demo=NAME                   Deploy specific demo: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all (default: all)
+#   --demo=NAME                   Deploy specific demo: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autofinance, or all (default: all)
 #   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v2,v3)
 #                                            v2 = data by seed (dataset by ?seed=X)
 #   --webs_data_path=PATH         Host dir to bind at /app/data (default: $DEMOS_DIR/webs_server/initial_data)
@@ -42,7 +42,7 @@ Options:
   --postgres_port=PORT          Set base postgres port (default: 5434)
   --webs_port=PORT              Set webs_server port (default: 8090)
   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
-  --demo=NAME                   One of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, all (default: all)
+  --demo=NAME                   One of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autofinance, all (default: all)
   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v2,v3). v2 = data by seed.
   --webs_data_path=PATH         Host dir to bind at /app/data (default: \$DEMOS_DIR/webs_server/initial_data)
   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
@@ -65,7 +65,7 @@ USAGE
 # Paths
 DEMOS_DIR="$(dirname "$SCRIPT_DIR")"
 EXTERNAL_NET="apps_net"
-WEBS_PROJECTS="web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive web_14_autohealth"
+WEBS_PROJECTS="web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive web_14_autohealth web_15_autofinance"
 
 echo "📂 Script directory: $SCRIPT_DIR"
 echo "📂 Demos root:      $DEMOS_DIR"
@@ -185,7 +185,7 @@ done
 
 # Validate demo name
 if ! is_valid_demo "$WEB_DEMO"; then
-  echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."
+  echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autofinance, or all."
   exit 1
 fi
 
@@ -627,6 +627,10 @@ case "$WEB_DEMO" in
     deploy_webs_server
     deploy_project "web_14_autohealth" "$WEB_PORT" "" "autohealth_${WEB_PORT}"
     ;;
+  autofinance)
+    deploy_webs_server
+    deploy_project "web_15_autofinance" "$WEB_PORT" "" "autofinance_${WEB_PORT}"
+    ;;
   all)
     deploy_webs_server
     echo "📦 Deploying all web projects in parallel (max $PARALLEL_JOBS concurrent)..."
@@ -645,6 +649,7 @@ case "$WEB_DEMO" in
     run_with_limit deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
     run_with_limit deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
     run_with_limit deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
+    run_with_limit deploy_project "web_15_autofinance" "$((WEB_PORT + 14))" "" "autofinance_$((WEB_PORT + 14))"
     failed=0
     for pid in "${PARALLEL_PIDS[@]}"; do
       wait "$pid" || failed=1
@@ -653,7 +658,7 @@ case "$WEB_DEMO" in
     [ $failed -eq 0 ] || exit 1
     ;;
   *)
-    echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."
+    echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autofinance, or all."
     exit 1
     ;;
 esac
