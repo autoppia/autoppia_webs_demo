@@ -56,7 +56,7 @@ export const POPUPS: PopupDef[] = [
     id: "featured",
     probability: 1,
     delayMs: [1200, 4500],
-    placements: ["center", "banner"],
+    placements: ["center", "banner", "top-right", "middle-left"],
     texts: {
       title: [
         "Check out this week's featured films",
@@ -75,7 +75,7 @@ export const POPUPS: PopupDef[] = [
     id: "search_tips",
     probability: 1,
     delayMs: [600, 4000],
-    placements: ["bottom-right", "center"],
+    placements: ["bottom-right", "center", "top-banner", "bottom-left", "top-left"],
     texts: {
       title: [
         "Search by title, director, or mood",
@@ -94,7 +94,7 @@ export const POPUPS: PopupDef[] = [
     id: "genres",
     probability: 1,
     delayMs: [900, 3800],
-    placements: ["banner", "center", "bottom-right"],
+    placements: ["banner", "center", "bottom-right", "top-right", "middle-left"],
     texts: {
       title: [
         "Browse films by genre",
@@ -113,7 +113,7 @@ export const POPUPS: PopupDef[] = [
     id: "movie_detail",
     probability: 1,
     delayMs: [700, 3500],
-    placements: ["center", "bottom-right"],
+    placements: ["center", "bottom-right", "top-right", "middle-right"],
     texts: {
       title: [
         "Get the full picture before you watch",
@@ -132,7 +132,7 @@ export const POPUPS: PopupDef[] = [
     id: "related",
     probability: 1,
     delayMs: [1100, 4800],
-    placements: ["bottom-right", "center"],
+    placements: ["bottom-right", "center", "top-left", "middle-right"],
     texts: {
       title: [
         "Discover similar films",
@@ -151,7 +151,7 @@ export const POPUPS: PopupDef[] = [
     id: "weekly",
     probability: 1,
     delayMs: [800, 4200],
-    placements: ["center", "banner", "bottom-right"],
+    placements: ["center", "banner", "bottom-right", "top-left", "middle-right"],
     texts: {
       title: [
         "New titles added regularly",
