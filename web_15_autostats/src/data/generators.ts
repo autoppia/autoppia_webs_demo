@@ -1,4 +1,4 @@
-import type { Block, Subnet, Validator, Transfer, Account, Extrinsic, PriceDataPoint, CandleDataPoint, VolumeDataPoint, SubnetWithTrend, ValidatorWithTrend, ValidatorSubnetPerformance, TransactionWithMethod } from '@/shared/types';
+import type { Block, Subnet, Validator, Transfer, Account, Extrinsic, PriceDataPoint, CandleDataPoint, VolumeDataPoint, SubnetWithTrend, ValidatorWithTrend, ValidatorSubnetPerformance, TransactionWithMethod, AccountWithDetails, Delegation } from '@/shared/types';
 import { SUBNET_NAMES } from '@/shared/constants';
 
 // Seeded random number generator using Linear Congruential Generator (LCG)
@@ -503,6 +503,121 @@ export function generateValidatorsWithTrends(
       subnetPerformance,
     };
   });
+}
+
+function generateSeededHash(rng: () => number): string {
+  const chars = '0123456789abcdef';
+  let hash = '0x';
+  for (let i = 0; i < 64; i++) {
+    hash += chars.charAt(Math.floor(rng() * chars.length));
+  }
+  return hash;
+}
+
+/**
+ * Generate accounts with detailed analytics data
+ * @param count - Number of accounts to generate
+ * @param seed - Seed for deterministic random generation
+ * @returns Array of AccountWithDetails sorted by totalValue descending
+ */
+export function generateAccountsWithDetails(
+  count: number,
+  seed: number
+): AccountWithDetails[] {
+  const rng = seedRandom(seed + 9000);
+  const now = Date.now();
+
+  const accounts: AccountWithDetails[] = [];
+
+  for (let i = 0; i < count; i++) {
+    const address = generateSeededAddress(rng);
+
+    // Exponential distribution: few whales, many small accounts
+    const totalHoldings = Math.max(0.01, Math.pow(rng(), 3) * 500000 + rng() * 1000);
+    const stakingRatio = rng() * 0.9 + 0.05; // 5% to 95% staked
+    const stakedAmount = totalHoldings * stakingRatio;
+    const balance = totalHoldings - stakedAmount; // free balance
+
+    const delegationCount = 2 + Math.floor(rng() * 7); // 2-8
+    const transactionCount = 5 + Math.floor(rng() * 16); // 5-20
+    const balanceChange24h = (rng() - 0.45) * 20; // slight positive bias, -9% to +11%
+
+    // Account type based on stake level + rng
+    const typeRoll = rng();
+    let accountType: AccountWithDetails['accountType'];
+    if (stakedAmount > 100000 && typeRoll < 0.6) {
+      accountType = 'validator';
+    } else if (stakedAmount > 10000 && typeRoll < 0.7) {
+      accountType = 'nominator';
+    } else if (typeRoll < 0.15) {
+      accountType = 'miner';
+    } else {
+      accountType = 'regular';
+    }
+
+    // Time values
+    const firstSeenDaysAgo = 30 + Math.floor(rng() * 700); // 30-730 days ago
+    const lastActiveDaysAgo = Math.floor(rng() * 30); // 0-30 days ago
+
+    // Generate delegations
+    const delegations: Delegation[] = [];
+    for (let d = 0; d < delegationCount; d++) {
+      delegations.push({
+        validator: generateSeededAddress(rng),
+        amount: (stakedAmount / delegationCount) * (0.5 + rng()),
+        timestamp: new Date(now - Math.floor(rng() * 86400000 * 90)),
+      });
+    }
+
+    // Generate transactions
+    const transactions: Transfer[] = [];
+    for (let t = 0; t < transactionCount; t++) {
+      transactions.push({
+        hash: generateSeededHash(rng),
+        from: rng() > 0.5 ? address : generateSeededAddress(rng),
+        to: rng() > 0.5 ? generateSeededAddress(rng) : address,
+        amount: rng() * balance * 0.1,
+        timestamp: new Date(now - Math.floor(rng() * 86400000 * 30)),
+        blockNumber: 1000000 - Math.floor(rng() * 10000),
+        fee: rng() * 0.05,
+        success: rng() > 0.03,
+      });
+    }
+
+    // Sort delegations by amount desc, transactions by timestamp desc
+    delegations.sort((a, b) => b.amount - a.amount);
+    transactions.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+
+    const trendSeed = seed + 9000 + i;
+    const trend = balanceChange24h > 2 ? 'up' : balanceChange24h < -2 ? 'down' : 'neutral';
+    const balanceTrend = generateTrendData(30, trendSeed, trend);
+
+    accounts.push({
+      address,
+      balance,
+      stakedAmount,
+      delegations,
+      transactions,
+      rank: 0,
+      totalValue: totalHoldings,
+      stakingRatio: stakingRatio * 100,
+      delegationCount,
+      transactionCount,
+      balanceChange24h,
+      firstSeen: new Date(now - firstSeenDaysAgo * 86400000),
+      lastActive: new Date(now - lastActiveDaysAgo * 86400000),
+      accountType,
+      balanceTrend,
+    });
+  }
+
+  // Sort by totalValue descending, assign ranks
+  accounts.sort((a, b) => b.totalValue - a.totalValue);
+  accounts.forEach((acc, i) => {
+    acc.rank = i + 1;
+  });
+
+  return accounts;
 }
 
 /**
