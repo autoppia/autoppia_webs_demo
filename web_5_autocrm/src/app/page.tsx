@@ -10,7 +10,7 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 import { initializeClients, initializeEvents, initializeFiles, initializeLogs, initializeMatters } from "@/data/crm-enhanced";
 
 function DashboardContent() {
-  const { seed } = useSeed();
+  const { seed, isSeedReady } = useSeed();
   const v2Seed = seed;
 
   // Log v2 info when it changes (only once per unique v2 seed)
@@ -35,17 +35,8 @@ function DashboardContent() {
     }
   }, [dyn.v2]);
 
-  // Load dynamic counts for all entities (with cleanup to avoid duplicate loads)
-  const lastV2SeedForDataRef = useRef<number | null>(null);
-  const [dataSeed, setDataSeed] = useState<number | undefined>(v2Seed);
-
-  useEffect(() => {
-    const currentV2Seed = seed;
-    if (lastV2SeedForDataRef.current !== currentV2Seed) {
-      lastV2SeedForDataRef.current = currentV2Seed;
-      setDataSeed(currentV2Seed);
-    }
-  }, [seed]);
+  // Only pass seed to API when URL seed is ready to avoid request with seed=1.
+  const dataSeed = isSeedReady ? v2Seed : undefined;
 
   const { data: clientsData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'clients', seedValue: dataSeed });
   const { data: mattersData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'matters', seedValue: dataSeed });

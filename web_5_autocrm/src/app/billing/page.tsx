@@ -39,12 +39,12 @@ export default function BillingPage() {
   const buttonSecondaryBase =
     "h-10 px-4 rounded-xl border border-zinc-200 text-sm";
   const formInputBase = "rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium";
-  const { seed } = useSeed();
+  const { seed, isSeedReady } = useSeed();
   const v2Seed = seed;
   const { data, isLoading, error } = useProjectData<any>({
     projectKey: "web_5_autocrm",
     entityType: "logs",
-    seedValue: v2Seed ?? undefined,
+    seedValue: isSeedReady ? v2Seed : undefined,
   });
   // console.log("[BillingPage] API response", {
   //   seed: v2Seed ?? null,

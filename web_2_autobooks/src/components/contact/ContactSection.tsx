@@ -215,7 +215,7 @@ export function ContactSection() {
                     <textarea
                       value={message}
                       onChange={(event) => setMessage(event.target.value)}
-                      className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "w-full h-32 rounded-xl border border-white/20 bg-white/10 p-4 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all resize-none")}
+                      className="w-full h-32 rounded-xl border border-white/20 bg-neutral-800/90 p-4 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all resize-none"
                       placeholder={dyn.v3.getVariant("message_placeholder", TEXT_VARIANTS_MAP, "Tell us what's on your mind...")}
                       required
                       id={dyn.v3.getVariant("contact-message-textarea", ID_VARIANTS_MAP, "contact-message-textarea")}
