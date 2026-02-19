@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { EmailProvider } from "@/contexts/EmailContext";
 import { LayoutProvider } from "@/contexts/LayoutContext";
 import { SeedProvider } from "@/context/SeedContext";
+import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
 import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -31,8 +32,10 @@ export default function RootLayout({
             <SeedProvider>
               <LayoutProvider>
                 <EmailProvider>
-                  {children}
-                  <DynamicDebug />
+                  <V4PopupLayer>
+                    {children}
+                    <DynamicDebug />
+                  </V4PopupLayer>
                 </EmailProvider>
               </LayoutProvider>
             </SeedProvider>

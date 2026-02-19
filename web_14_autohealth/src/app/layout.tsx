@@ -6,6 +6,7 @@ import Script from "next/script";
 import Navbar from "@/components/site/navbar";
 import Footer from "@/components/site/footer";
 import { SeedProvider } from "@/context/SeedContext";
+import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
 import { DataReadyGate } from "@/components/layout/DataReadyGate";
 
 const geistSans = Geist({
@@ -39,6 +40,7 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning className="antialiased">
         <SeedProvider>
+          <V4PopupLayer>
           <DataReadyGate>
             <ClientBody>
               <div className="min-h-dvh flex flex-col">
@@ -48,6 +50,7 @@ export default function RootLayout({
               </div>
             </ClientBody>
           </DataReadyGate>
+          </V4PopupLayer>
         </SeedProvider>
       </body>
     </html>

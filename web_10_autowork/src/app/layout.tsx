@@ -5,6 +5,7 @@ import "./globals.css";
 import ClientBody from "./ClientBody";
 import Script from "next/script";
 import { SeedProvider } from "@/context/SeedContext";
+import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
 import UserDropdown from "./components/UserDropdown";
 import Sidebar from "./components/Sidebar";
 import DynamicDebug from "./components/DynamicDebug";
@@ -41,6 +42,7 @@ export default function RootLayout({
       <body suppressHydrationWarning className="antialiased bg-[#f5f6fa]">
         <Suspense fallback={<div className="min-h-screen bg-[#f5f6fa]" />}>
           <SeedProvider>
+            <V4PopupLayer>
             <div className="min-h-screen flex">
               {/* Sidebar */}
               <Sidebar />
@@ -67,6 +69,7 @@ export default function RootLayout({
               </div>
             </div>
             <DynamicDebug />
+            </V4PopupLayer>
           </SeedProvider>
         </Suspense>
       </body>

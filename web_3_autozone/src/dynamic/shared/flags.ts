@@ -1,9 +1,10 @@
 /**
- * FLAGS - Enablement control for V1, V2, and V3
+ * FLAGS - Enablement control for V1, V2, V3, and V4
  *
  * V1: DOM structure (wrappers, decoys) - Breaks XPath
  * V2: Data loading (dynamic data)
  * V3: Attributes and text (IDs, classes, texts) - Anti-memorization
+ * V4: Randomized popups - Anti-memorization
  */
 
 /**
@@ -61,4 +62,13 @@ export function isV3Enabled(): boolean {
   }
 
   return enabled;
+}
+
+/**
+ * Checks whether V4 is enabled
+ * V4 shows randomized popups when enabled
+ */
+export function isV4Enabled(): boolean {
+  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V4;
+  return value === "true" || value === true;
 }

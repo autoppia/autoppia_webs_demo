@@ -6,6 +6,7 @@ import ClientBody from "./ClientBody";
 import { SeedProvider } from "@/context/SeedContext";
 import { Suspense } from "react";
 import { SeedRedirect } from "@/components/layout/SeedRedirect";
+import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
 import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
 const geistSans = Geist({
@@ -39,7 +40,9 @@ export default function RootLayout({
               <Suspense fallback={null}>
                 <SeedRedirect />
               </Suspense>
-              {children}
+              <V4PopupLayer>
+                {children}
+              </V4PopupLayer>
               <DynamicDebug />
             </SeedProvider>
           </Suspense>

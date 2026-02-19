@@ -126,7 +126,7 @@ ENABLED_DYNAMIC_VERSIONS="$ENABLED_DYNAMIC_VERSIONS_NORMALIZED"
 # v1 -> ENABLE_DYNAMIC_V1 (seeds + layout variants)
 # v2 -> ENABLE_DYNAMIC_V2 (data by seed)
 # v3 -> ENABLE_DYNAMIC_V3 (changes classes, IDs, structure)
-# v4 -> ENABLE_DYNAMIC_V4
+# v4 -> ENABLE_DYNAMIC_V4 (randomized popups, anti-memorization)
 
 if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
   IFS=',' read -ra VERSION_PARTS <<<"$ENABLED_DYNAMIC_VERSIONS"
@@ -217,7 +217,7 @@ echo "    Dynamic versions:"
 echo "      V1 (seeds/layouts)   →  $ENABLE_DYNAMIC_V1"
 echo "      V2 (data by seed)    →  $ENABLE_DYNAMIC_V2"
 echo "      V3 (HTML structure)  →  $ENABLE_DYNAMIC_V3"
-echo "      V4 (seed HTML)       →  $ENABLE_DYNAMIC_V4"
+echo "      V4 (popups)         →  $ENABLE_DYNAMIC_V4"
 echo "    Enabled versions       →  ${ENABLED_DYNAMIC_VERSIONS:-<none>}"
 echo "    Fast mode              →  $FAST_MODE"
 echo "    Clean all Docker       →  $CLEAN_ALL"
