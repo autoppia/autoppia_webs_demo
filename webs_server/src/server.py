@@ -25,6 +25,13 @@ try:
 except ImportError:
     HAS_FASTJSONSCHEMA = False
 
+try:
+    import httpx
+
+    HAS_HTTPX = True
+except ImportError:
+    HAS_HTTPX = False
+
 from master_dataset_handler import (
     get_pool_info,
     list_available_pools,
@@ -52,6 +59,52 @@ DB_POOL_MIN = int(os.getenv("DB_POOL_MIN", "10"))
 DB_POOL_MAX = int(os.getenv("DB_POOL_MAX", "50"))
 GZIP_MIN_SIZE = int(os.getenv("GZIP_MIN_SIZE", "1000"))
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+WEBS_HEALTH_BASE_URL = os.getenv("WEBS_HEALTH_BASE_URL", "http://localhost")
+WEBS_HEALTH_BASE_PORT = int(os.getenv("WEBS_HEALTH_BASE_PORT", "8000"))
+WEBS_HEALTH_COUNT = int(os.getenv("WEBS_HEALTH_COUNT", "14"))
+
+
+def _use_docker_network_for_webs() -> bool:
+    """True when webserver should reach web containers via Docker network hostnames."""
+    return os.getenv("WEBS_HEALTH_USE_DOCKER_NETWORK", "false").lower() in ("true", "1", "yes")
+
+
+# Docker compose project names when --demo=all (scripts/setup.sh). Index i -> (prefix, port).
+DOCKER_WEB_PROJECTS: List[tuple] = [
+    ("movies", 8000),
+    ("books", 8001),
+    ("autozone", 8002),
+    ("autodining", 8003),
+    ("autocrm", 8004),
+    ("automail", 8005),
+    ("autodelivery", 8006),
+    ("autolodge", 8007),
+    ("autoconnect", 8008),
+    ("autowork", 8009),
+    ("autocalendar", 8010),
+    ("autolist", 8011),
+    ("autodrive", 8012),
+    ("autohealth", 8013),
+]
+
+# Deployed web projects (from scripts/setup.sh WEBS_PROJECTS)
+# Maps project_key -> display name for health reporting
+DEPLOYED_WEBS: List[Dict[str, str]] = [
+    {"project_key": "web_1_autocinema", "name": "autocinema"},
+    {"project_key": "web_2_autobooks", "name": "autobooks"},
+    {"project_key": "web_3_autozone", "name": "autozone"},
+    {"project_key": "web_4_autodining", "name": "autodining"},
+    {"project_key": "web_5_autocrm", "name": "autocrm"},
+    {"project_key": "web_6_automail", "name": "automail"},
+    {"project_key": "web_7_autodelivery", "name": "autodelivery"},
+    {"project_key": "web_8_autolodge", "name": "autolodge"},
+    {"project_key": "web_9_autoconnect", "name": "autoconnect"},
+    {"project_key": "web_10_autowork", "name": "autowork"},
+    {"project_key": "web_11_autocalendar", "name": "autocalendar"},
+    {"project_key": "web_12_autolist", "name": "autolist"},
+    {"project_key": "web_13_autodrive", "name": "autodrive"},
+    {"project_key": "web_14_autohealth", "name": "autohealth"},
+]
 
 
 # --- Helper Function for URL Trimming ---
@@ -316,6 +369,7 @@ async def root():
         "python_version": f"{__import__('sys').version_info.major}.{__import__('sys').version_info.minor}.{__import__('sys').version_info.micro}",
         "endpoints": {
             "health": "/health",
+            "health_webs": "/health/webs",
             "save_events": "/save_events/",
             "get_events": "/get_events/",
             "reset_events": "/reset_events/",
@@ -1060,6 +1114,142 @@ async def health_check_endpoint():
         timestamp=timestamp,
         python_version=f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
         debug_message=debug_message,
+    )
+
+
+# --- Webs Health Models ---
+class WebHealthItem(BaseModel):
+    project_key: str
+    name: str
+    url: str
+    status: str = Field(description="healthy | unhealthy")
+    status_code: Optional[int] = None
+    error: Optional[str] = None
+
+
+class WebsHealthResponse(BaseModel):
+    webs: List[WebHealthItem]
+    healthy_count: int
+    total_count: int
+    overall_status: str = Field(description="healthy | degraded | unhealthy")
+    base_url: str
+    timestamp: datetime
+
+
+# --- Webs Health Check ---
+def _build_web_url(base_url: str, port: int) -> str:
+    """Build full URL from base (e.g. http://localhost) and port."""
+    parsed = urlparse(base_url if "://" in base_url else f"http://{base_url}")
+    scheme = parsed.scheme or "http"
+    netloc = parsed.hostname or parsed.netloc or "localhost"
+    return f"{scheme}://{netloc}:{port}"
+
+
+def _build_docker_web_url(project_prefix: str, port: int) -> str:
+    """Build URL using Docker network hostname (e.g. http://autocrm_8004-web-1:8004)."""
+    return f"http://{project_prefix}_{port}-web-1:{port}"
+
+
+async def _check_single_web_health(client: "httpx.AsyncClient", url: str, web_info: Dict[str, str]) -> WebHealthItem:
+    """Check health of a single deployed web. Returns WebHealthItem."""
+    project_key = web_info["project_key"]
+    name = web_info["name"]
+
+    if not HAS_HTTPX:
+        return WebHealthItem(
+            project_key=project_key,
+            name=name,
+            url=url,
+            status="unhealthy",
+            error="httpx not installed; cannot perform HTTP health checks",
+        )
+
+    try:
+        resp = await client.get(url, timeout=5.0)
+        ok = 200 <= resp.status_code < 400
+        return WebHealthItem(
+            project_key=project_key,
+            name=name,
+            url=url,
+            status="healthy" if ok else "unhealthy",
+            status_code=resp.status_code,
+            error=None if ok else f"HTTP {resp.status_code}",
+        )
+    except Exception as e:
+        return WebHealthItem(
+            project_key=project_key,
+            name=name,
+            url=url,
+            status="unhealthy",
+            error=str(e),
+        )
+
+
+@app.get(
+    "/health/webs",
+    response_model=WebsHealthResponse,
+    summary="Health of all deployed webs",
+)
+async def health_webs_endpoint():
+    """
+    Checks the health of all deployed web demos.
+
+    When WEBS_HEALTH_USE_DOCKER_NETWORK=true (e.g. in Docker with apps_net): uses
+    Docker DNS hostnames like http://autocrm_8004-web-1:8004 to reach web containers.
+    Otherwise uses WEBS_HEALTH_BASE_URL + port (e.g. http://localhost:8004).
+    """
+    use_docker = _use_docker_network_for_webs()
+    webs_to_check = DEPLOYED_WEBS[:WEBS_HEALTH_COUNT]
+    results: List[WebHealthItem] = []
+
+    def build_url(i: int) -> str:
+        if use_docker and i < len(DOCKER_WEB_PROJECTS):
+            prefix, port = DOCKER_WEB_PROJECTS[i]
+            return _build_docker_web_url(prefix, port)
+        base = WEBS_HEALTH_BASE_URL.rstrip("/").rstrip(":")
+        if not base.startswith("http://") and not base.startswith("https://"):
+            base = f"http://{base}"
+        return _build_web_url(base, WEBS_HEALTH_BASE_PORT + i)
+
+    base_url = "docker_network" if use_docker else WEBS_HEALTH_BASE_URL
+    if base_url != "docker_network":
+        base_url = base_url.rstrip("/").rstrip(":")
+        if not base_url.startswith("http://") and not base_url.startswith("https://"):
+            base_url = f"http://{base_url}"
+
+    if HAS_HTTPX:
+        async with httpx.AsyncClient() as client:
+            tasks = [_check_single_web_health(client, build_url(i), webs_to_check[i]) for i in range(len(webs_to_check))]
+            results = await asyncio.gather(*tasks)
+    else:
+        for i, web_info in enumerate(webs_to_check):
+            results.append(
+                WebHealthItem(
+                    project_key=web_info["project_key"],
+                    name=web_info["name"],
+                    url=build_url(i),
+                    status="unhealthy",
+                    error="httpx not installed",
+                )
+            )
+
+    healthy_count = sum(1 for r in results if r.status == "healthy")
+    total_count = len(results)
+
+    if healthy_count == total_count:
+        overall_status = "healthy"
+    elif healthy_count > 0:
+        overall_status = "degraded"
+    else:
+        overall_status = "unhealthy"
+
+    return WebsHealthResponse(
+        webs=results,
+        healthy_count=healthy_count,
+        total_count=total_count,
+        overall_status=overall_status,
+        base_url=base_url,
+        timestamp=datetime.utcnow(),
     )
 
 
