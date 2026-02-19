@@ -1,4 +1,4 @@
-import type { Block, Subnet, Validator, Transfer, Account, Extrinsic, PriceDataPoint, CandleDataPoint, VolumeDataPoint, SubnetWithTrend, ValidatorWithTrend, TransactionWithMethod } from '@/shared/types';
+import type { Block, Subnet, Validator, Transfer, Account, Extrinsic, PriceDataPoint, CandleDataPoint, VolumeDataPoint, SubnetWithTrend, ValidatorWithTrend, ValidatorSubnetPerformance, TransactionWithMethod } from '@/shared/types';
 import { SUBNET_NAMES } from '@/shared/constants';
 
 // Seeded random number generator using Linear Congruential Generator (LCG)
@@ -389,25 +389,118 @@ export function generateSubnetsWithTrends(
  * @param seed - Seed for deterministic random generation
  * @returns Array of ValidatorWithTrend objects with performance trend data
  */
+function generateSeededAddress(rng: () => number): string {
+  const chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+  let address = '5'; // Substrate address prefix
+  for (let i = 0; i < 47; i++) {
+    address += chars.charAt(Math.floor(rng() * chars.length));
+  }
+  return address;
+}
+
+function generateSubnetPerformance(
+  rng: () => number,
+  activeSubnets: number,
+  hotkey: string
+): ValidatorSubnetPerformance[] {
+  const subnetNames = [
+    'Root', 'Text Prompting', 'Image Generation', 'Data Scraping', 'Compute',
+    'Storage', 'Prediction Markets', 'Audio Generation', 'Video Generation',
+    'Translation', 'Code Generation', 'Social Media', 'Gaming', 'DeFi',
+    'NFT Marketplace', 'Identity', 'Governance', 'Search', 'Inference',
+    'Fine Tuning', 'Map Reduce', 'Cortex', 'NAS', 'Multi-Modal',
+    'BitAgent', 'Chunking', 'Pharma', 'Vision', 'Dippy', 'Sturdy',
+    'Wombo', 'MyShell',
+  ];
+
+  const performances: ValidatorSubnetPerformance[] = [];
+  const usedNetuids = new Set<number>();
+
+  for (let i = 0; i < activeSubnets; i++) {
+    let netuid: number;
+    do {
+      netuid = Math.floor(rng() * 32);
+    } while (usedNetuids.has(netuid));
+    usedNetuids.add(netuid);
+
+    performances.push({
+      netuid,
+      subnetName: subnetNames[netuid] || `Subnet ${netuid}`,
+      type: rng() > 0.3 ? 'Key' : 'Server',
+      hotkey,
+      take: rng() * 20,
+      proportion: rng() * 100,
+      subnetWeight: rng() * 50000,
+      subnetBalance: rng() * 2,
+      noms: Math.floor(rng() * 50),
+      familyWeight: rng() * 80000,
+      familyBalance: rng() * 3,
+      dominance: rng() * 15,
+      divs: rng() * 100,
+      uid: Math.floor(rng() * 256),
+      vtrust: rng(),
+      updated: Math.floor(rng() * 500),
+    });
+  }
+
+  return performances.sort((a, b) => b.subnetWeight - a.subnetWeight);
+}
+
 export function generateValidatorsWithTrends(
   count: number,
   seed: number
 ): ValidatorWithTrend[] {
-  // Generate base validator data
-  const validators = generateValidators(count);
-  
-  // Extend each validator with performance trend data
+  // Use seeded RNG so hotkeys are deterministic for a given seed
+  const rng = seedRandom(seed + 5000);
+
+  const validators: Validator[] = [];
+  for (let i = 0; i < count; i++) {
+    const stake = rng() * 1000000;
+    const rootStake = stake * (0.1 + rng() * 0.5);
+    const alphaStake = stake - rootStake;
+    const totalWeight = rootStake * 0.18 + alphaStake;
+    const activeSubnets = 1 + Math.floor(rng() * 8);
+    const nominatorCount = Math.floor(rng() * 100);
+    const nominatorChange24h = Math.floor(rng() * 20) - 5;
+
+    validators.push({
+      hotkey: generateSeededAddress(rng),
+      coldkey: generateSeededAddress(rng),
+      stake,
+      returnPercentage: rng() * 20,
+      nominatorCount,
+      nominatorChange24h,
+      totalDelegated: stake * (rng() * 2 + 1),
+      commission: rng() * 20,
+      subnet: Math.floor(rng() * 32),
+      rank: i + 1,
+      dominance: 0, // computed after sorting
+      activeSubnets,
+      totalWeight,
+      rootStake,
+      alphaStake,
+      weightChange24h: (rng() - 0.4) * totalWeight * 0.05,
+    });
+  }
+  validators.sort((a, b) => b.totalWeight - a.totalWeight);
+  // Reassign ranks and compute dominance after sorting
+  const totalNetworkWeight = validators.reduce((sum, v) => sum + v.totalWeight, 0);
+  validators.forEach((v, i) => {
+    v.rank = i + 1;
+    v.dominance = totalNetworkWeight > 0 ? (v.totalWeight / totalNetworkWeight) * 100 : 0;
+  });
+
+  // Extend each validator with performance trend data and subnet performance
   return validators.map((validator, index) => {
-    // Use index to create unique but deterministic seed for each validator
     const trendSeed = seed + index;
-    
-    // Generate 30-day performance trend (30 data points for sparkline)
-    // Most validators should have upward trending performance
     const performanceTrend = generateTrendData(30, trendSeed, 'up');
-    
+    const subnetRng = seedRandom(seed + 7000 + index);
+    const subnetPerformance = generateSubnetPerformance(subnetRng, validator.activeSubnets, validator.hotkey);
+
     return {
       ...validator,
       performanceTrend,
+      subnetPerformance,
     };
   });
 }

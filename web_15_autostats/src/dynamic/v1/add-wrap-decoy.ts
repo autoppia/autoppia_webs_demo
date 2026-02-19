@@ -72,7 +72,8 @@ export function applyV1Wrapper(
     componentKey.includes("select-dropdown") ||
     componentKey.includes("picker-dropdown") ||
     componentKey.includes("picker-container") ||
-    componentKey.includes("date-time-row");
+    componentKey.includes("date-time-row") ||
+    componentKey.includes("validators-");
   const WrapperElement = useDivWrapper ? "div" : "span";
   
   const core = shouldWrap
