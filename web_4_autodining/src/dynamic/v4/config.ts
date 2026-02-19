@@ -17,7 +17,7 @@ export const POPUPS: PopupDef[] = [
     id: "welcome",
     probability: 1,
     delayMs: [800, 3200],
-    placements: ["center", "bottom-right"],
+    placements: ["center", "bottom-right", "top-right", "middle-right"],
     texts: {
       title: ["Welcome to AutoDining", "Book your table easily", "Discover restaurants and reserve"],
       body: [
@@ -32,7 +32,7 @@ export const POPUPS: PopupDef[] = [
     id: "discover",
     probability: 1,
     delayMs: [1000, 5000],
-    placements: ["bottom-right", "banner", "center"],
+    placements: ["bottom-right", "banner", "center", "top-left", "top-banner"],
     texts: {
       title: ["Discover top dining spots", "Explore the restaurant list", "Find your next reservation"],
       body: [
@@ -47,7 +47,7 @@ export const POPUPS: PopupDef[] = [
     id: "reservations",
     probability: 1,
     delayMs: [900, 3800],
-    placements: ["banner", "center", "bottom-right"],
+    placements: ["banner", "center", "bottom-right", "top-right", "middle-left"],
     texts: {
       title: ["Reserve in a few clicks", "Easy table booking", "Book your table"],
       body: [
@@ -62,7 +62,7 @@ export const POPUPS: PopupDef[] = [
     id: "search_tips",
     probability: 1,
     delayMs: [600, 4000],
-    placements: ["bottom-right", "center"],
+    placements: ["bottom-right", "center", "top-banner", "bottom-left", "top-left"],
     texts: {
       title: ["Search by cuisine or location", "Find restaurants quickly", "Tips for searching"],
       body: [

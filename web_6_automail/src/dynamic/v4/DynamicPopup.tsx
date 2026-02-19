@@ -82,7 +82,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
       className={`fixed inset-0 backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
       style={{
         zIndex: POPUP_LAYER_Z,
-        backgroundColor: "rgba(0,0,0,0.85)",
+        backgroundColor: "rgba(0,0,0,0.88)",
         isolation: "isolate",
       }}
       data-v4="true"
@@ -100,22 +100,20 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`w-full max-w-md rounded-xl border border-border shadow-lg px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
+        className={`w-full max-w-md rounded-xl border-2 border-amber-400/90 bg-neutral-900 text-white shadow-2xl shadow-black/50 px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
         style={{
           ...placementStyle,
           position: (placementStyle?.position as React.CSSProperties["position"]) ?? "relative",
-          backgroundColor: "var(--card)",
-          color: "var(--card-foreground)",
         }}
         data-popup-id={variant.popupId}
       >
-        <div className="absolute left-0 right-0 top-0 h-1 rounded-t-xl bg-gradient-to-r from-primary to-accent" />
-        <h2 className="pr-8 text-xl font-semibold leading-tight text-card-foreground sm:text-2xl">{variant.title}</h2>
-        {variant.body && <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:mt-4 sm:text-base">{variant.body}</p>}
+        <div className="absolute left-0 right-0 top-0 h-1.5 rounded-t-xl bg-gradient-to-r from-amber-400 to-orange-500" />
+        <h2 className="pr-8 text-xl font-semibold leading-tight text-white sm:text-2xl">{variant.title}</h2>
+        {variant.body && <p className="mt-3 text-sm leading-relaxed text-neutral-200 sm:mt-4 sm:text-base">{variant.body}</p>}
         <div className="mt-5 flex flex-wrap items-center justify-end gap-3 sm:mt-6">
-          <button type="button" onClick={onClose} className="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 transition focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-card">{variant.cta}</button>
+          <button type="button" onClick={onClose} className="rounded-lg bg-amber-500 px-5 py-2.5 text-sm font-medium text-black shadow-lg hover:bg-amber-400 transition focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-neutral-900">{variant.cta}</button>
         </div>
-        <button type="button" onClick={onClose} className="absolute right-4 top-4 rounded-md p-1.5 text-muted-foreground transition hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-card" aria-label="Close">
+        <button type="button" onClick={onClose} className="absolute right-4 top-4 rounded-md p-1.5 text-neutral-300 transition hover:bg-white/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-neutral-900" aria-label="Close">
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
       </div>

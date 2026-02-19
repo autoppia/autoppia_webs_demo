@@ -17,7 +17,7 @@ export const POPUPS: PopupDef[] = [
     id: "welcome",
     probability: 1,
     delayMs: [800, 3200],
-    placements: ["center", "bottom-right"],
+    placements: ["center", "bottom-right", "top-right", "middle-right"],
     texts: {
       title: ["Welcome to AutoMail", "Your email client", "Manage your inbox"],
       body: [
@@ -32,7 +32,7 @@ export const POPUPS: PopupDef[] = [
     id: "inbox",
     probability: 1,
     delayMs: [1000, 5000],
-    placements: ["bottom-right", "banner", "center"],
+    placements: ["bottom-right", "banner", "center", "top-left", "top-banner"],
     texts: {
       title: ["Your inbox at a glance", "Read and manage messages", "Stay on top of your mail"],
       body: [
@@ -47,7 +47,7 @@ export const POPUPS: PopupDef[] = [
     id: "compose",
     probability: 1,
     delayMs: [900, 3800],
-    placements: ["banner", "center", "bottom-right"],
+    placements: ["banner", "center", "bottom-right", "top-right", "middle-left"],
     texts: {
       title: ["Compose new messages", "Write and send email", "Start a new message"],
       body: [
@@ -62,7 +62,7 @@ export const POPUPS: PopupDef[] = [
     id: "search_tips",
     probability: 1,
     delayMs: [600, 4000],
-    placements: ["bottom-right", "center"],
+    placements: ["bottom-right", "center", "top-banner", "bottom-left", "top-left"],
     texts: {
       title: ["Search your mail", "Find messages quickly", "Tips for searching"],
       body: [

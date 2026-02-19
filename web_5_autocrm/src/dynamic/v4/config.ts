@@ -17,7 +17,7 @@ export const POPUPS: PopupDef[] = [
     id: "welcome",
     probability: 1,
     delayMs: [800, 3200],
-    placements: ["center", "bottom-right"],
+    placements: ["center", "bottom-right", "top-right", "middle-right"],
     texts: {
       title: ["Welcome to AutoCRM", "Manage clients and matters", "Your CRM dashboard"],
       body: [
@@ -47,7 +47,7 @@ export const POPUPS: PopupDef[] = [
     id: "matters",
     probability: 1,
     delayMs: [900, 3800],
-    placements: ["banner", "center", "bottom-right"],
+    placements: ["banner", "center", "bottom-right", "middle-left"],
     texts: {
       title: ["Track matters and cases", "Matters at a glance", "Manage your matters"],
       body: [
@@ -62,7 +62,7 @@ export const POPUPS: PopupDef[] = [
     id: "documents",
     probability: 1,
     delayMs: [600, 4000],
-    placements: ["bottom-right", "center"],
+    placements: ["bottom-right", "center", "middle-right", "banner"],
     texts: {
       title: ["Documents and files", "Access your documents", "Document management"],
       body: [
