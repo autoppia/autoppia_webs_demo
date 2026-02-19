@@ -1,10 +1,15 @@
 function getApiBaseUrl(): string {
+  const isServer = typeof window === "undefined";
+  // Server (e.g. Docker): use API_URL so backend is reached at app:8090, not localhost
+  if (isServer && process.env.API_URL) {
+    return process.env.API_URL;
+  }
   const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
   const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
   const envIsLocal = envUrl && (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"));
   const originIsLocal = origin && (origin.includes("localhost") || origin.includes("127.0.0.1"));
 
-  if (envUrl && (!(envIsLocal) || originIsLocal)) {
+  if (envUrl && (!envIsLocal || originIsLocal)) {
     return envUrl;
   }
   if (origin) {
