@@ -38,25 +38,27 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen font-sans bg-zinc-50" suppressHydrationWarning>
-        <SeedProvider>
-          <LayoutProvider>
-            <RestaurantProvider>
-              <Suspense fallback={<div className="min-h-screen" />}>
-                <V4PopupLayer>
-                <DataReadyGate>
-                  <Navbar />
-                  {/* Debug badge removed */}
-                  {/* Optionally add persistent cart ui/button here */}
-                  <div className="relative pt-4 pb-12 min-h-[calc(100vh-4rem)]">
-                    {children}
-                  </div>
-                </DataReadyGate>
-                </V4PopupLayer>
-              </Suspense>
-              <DynamicDebug />
-            </RestaurantProvider>
-          </LayoutProvider>
-        </SeedProvider>
+        <div data-v4-inert-root className="min-h-screen">
+          <SeedProvider>
+            <LayoutProvider>
+              <RestaurantProvider>
+                <Suspense fallback={<div className="min-h-screen" />}>
+                  <V4PopupLayer>
+                  <DataReadyGate>
+                    <Navbar />
+                    {/* Debug badge removed */}
+                    {/* Optionally add persistent cart ui/button here */}
+                    <div className="relative pt-4 pb-12 min-h-[calc(100vh-4rem)]">
+                      {children}
+                    </div>
+                  </DataReadyGate>
+                  </V4PopupLayer>
+                </Suspense>
+                <DynamicDebug />
+              </RestaurantProvider>
+            </LayoutProvider>
+          </SeedProvider>
+        </div>
       </body>
     </html>
   );

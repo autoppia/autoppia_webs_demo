@@ -51,6 +51,15 @@ function getPlacementClasses(placement: string): string {
   }
 }
 
+const FOCUSABLE_SELECTOR =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+function getFocusableElements(container: HTMLElement): HTMLElement[] {
+  return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
+    (el) => !el.hasAttribute("disabled") && el.getAttribute("aria-hidden") !== "true"
+  );
+}
+
 export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
 
@@ -60,12 +69,46 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
   }, []);
 
   useEffect(() => {
+    const appRoot = document.querySelector("[data-v4-inert-root]");
+    if (appRoot instanceof HTMLElement) {
+      appRoot.setAttribute("inert", "");
+      appRoot.setAttribute("aria-hidden", "true");
+    }
+    return () => {
+      if (appRoot instanceof HTMLElement) {
+        appRoot.removeAttribute("inert");
+        appRoot.removeAttribute("aria-hidden");
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { onClose(); return; }
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
       const target = e.target as Node;
       if (dialogRef.current && !dialogRef.current.contains(target)) {
         e.preventDefault();
         e.stopPropagation();
+        return;
+      }
+      if (e.key !== "Tab" || !dialogRef.current) return;
+      const focusable = getFocusableElements(dialogRef.current);
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     };
     document.addEventListener("keydown", onKeyDown, true);
@@ -76,14 +119,18 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
   const placementStyle = isCenter ? undefined : getPlacementStyle(variant.placement);
   const content = (
     <div
-      className={`fixed inset-0 z-[100] bg-background/90 backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
+      className={`fixed inset-0 bg-background/90 backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
+      style={{ pointerEvents: "auto", zIndex: 2147483647 }}
       data-v4="true"
       role="dialog"
       aria-modal="true"
       aria-label={variant.title}
       onKeyDown={(e) => {
         if (e.key === "Escape") onClose();
-        if (e.target === e.currentTarget) { e.preventDefault(); e.stopPropagation(); }
+        if (e.target === e.currentTarget) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
       }}
     >
       <div ref={dialogRef} tabIndex={-1} className={`relative w-full max-w-md rounded-xl border border-border bg-card text-card-foreground shadow-lg px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`} style={placementStyle} data-popup-id={variant.popupId}>
