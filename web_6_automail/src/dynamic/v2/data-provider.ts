@@ -2,6 +2,7 @@ import type { Email } from "@/types/email";
 import { emails, initializeEmails, loadEmailsFromDb, writeCachedEmails, readCachedEmails } from "@/data/emails-enhanced";
 import { isV2Enabled } from "@/dynamic/shared/flags";
 import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { sanitizeEmailList } from "@/utils/emailValidation";
 
 // Dynamic data provider that returns either seed data or empty arrays based on config
 export class DynamicDataProvider {
@@ -15,9 +16,10 @@ export class DynamicDataProvider {
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
-    // hydrate from cache if available to keep content stable across reloads
+    // Hydrate from cache if available; sanitize to handle corrupted or outdated shape
     const cached = readCachedEmails();
-    this.emails = Array.isArray(cached) && cached.length > 0 ? cached : emails;
+    const fromCache = Array.isArray(cached) && cached.length > 0 ? sanitizeEmailList(cached) : [];
+    this.emails = fromCache.length > 0 ? fromCache : emails;
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
     });
@@ -37,24 +39,43 @@ export class DynamicDataProvider {
     const seed = this.getSeed();
     this.currentSeed = seed;
 
+    const fallbackCached = (): Email[] => {
+      const cached = readCachedEmails();
+      return Array.isArray(cached) && cached.length > 0 ? cached : [];
+    };
+
+    const fallbackStatic = (): Email[] => (emails.length > 0 ? [...emails] : []);
+
     try {
       const dbEmails = await loadEmailsFromDb(seed);
-      if (dbEmails.length > 0) {
-        this.setEmails(dbEmails);
+      const sanitizedDb = sanitizeEmailList(dbEmails);
+      if (sanitizedDb.length > 0) {
+        this.setEmails(sanitizedDb);
         return;
       }
-
-      const initializedEmails = await initializeEmails(seed);
-      this.setEmails(initializedEmails);
     } catch (error) {
-      console.warn("[automail/data-provider] Failed to load emails:", error);
-      try {
-        const initializedEmails = await initializeEmails(seed);
-        this.setEmails(initializedEmails);
-      } catch {
-        this.setEmails([]);
-      }
+      console.warn("[automail/data-provider] loadEmailsFromDb failed:", error);
     }
+
+    try {
+      const initializedEmails = await initializeEmails(seed);
+      const sanitized = sanitizeEmailList(initializedEmails);
+      if (sanitized.length > 0) {
+        this.setEmails(sanitized);
+        return;
+      }
+    } catch (error) {
+      console.warn("[automail/data-provider] initializeEmails failed:", error);
+    }
+
+    const cached = fallbackCached();
+    if (cached.length > 0) {
+      this.setEmails(cached);
+      return;
+    }
+
+    const staticEmails = fallbackStatic();
+    this.setEmails(staticEmails);
   }
     /**
    * Reload emails with a new seed
@@ -79,8 +100,16 @@ export class DynamicDataProvider {
         });
         previousResolve(); // Unblock any waiter (e.g. DataReadyGate) that was waiting on the old promise
 
-        const initializedEmails = await initializeEmails(v2Seed);
-        this.setEmails(initializedEmails);
+        let loaded: Email[] = [];
+        try {
+          loaded = await initializeEmails(v2Seed);
+        } catch (error) {
+          console.warn("[automail] reload initializeEmails failed:", error);
+          const cached = readCachedEmails();
+          loaded = Array.isArray(cached) && cached.length > 0 ? cached : [];
+        }
+        const sanitized = sanitizeEmailList(loaded);
+        this.setEmails(sanitized.length > 0 ? sanitized : loaded);
       } catch (error) {
         console.warn("[automail] Failed to reload emails:", error);
         this.ready = true;

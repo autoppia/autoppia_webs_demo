@@ -1,3 +1,5 @@
+import { fetchWithRetry } from "./fetchWithRetry";
+
 function getApiBaseUrl(): string {
   const isServer = typeof window === "undefined";
   // Server (e.g. Docker): use only API_URL so backend is reached at app:8090.
@@ -19,6 +21,9 @@ function getApiBaseUrl(): string {
   return envUrl || "http://app:8090";
 }
 
+const DEFAULT_FETCH_TIMEOUT_MS = 12000;
+const DEFAULT_FETCH_MAX_RETRIES = 3;
+
 export interface SeededLoadOptions {
   projectKey: string;
   entityType: string;
@@ -27,6 +32,10 @@ export interface SeededLoadOptions {
   method?: "select" | "shuffle" | "filter" | "distribute";
   filterKey?: string;
   filterValues?: string[];
+  /** Request timeout in ms. Default 12000. */
+  timeoutMs?: number;
+  /** Max fetch retries. Default 3. */
+  maxRetries?: number;
 }
 
 export async function fetchSeededSelection<T = any>(options: SeededLoadOptions): Promise<T[]> {
@@ -47,32 +56,37 @@ export async function fetchSeededSelection<T = any>(options: SeededLoadOptions):
   }
 
   const url = `${baseUrl}/datasets/load?${params.toString()}`;
-  console.log("[automail/seeded-loader] Fetching from:", url);
-  console.log("[automail/seeded-loader] Options:", { projectKey: options.projectKey, entityType: options.entityType, seed, limit, method, filterKey: options.filterKey });
+  const timeoutMs = options.timeoutMs ?? DEFAULT_FETCH_TIMEOUT_MS;
+  const maxRetries = options.maxRetries ?? DEFAULT_FETCH_MAX_RETRIES;
 
   try {
-    const resp = await fetch(url, { method: "GET" });
-    console.log("[automail/seeded-loader] Response status:", resp.status, resp.statusText);
+    const resp = await fetchWithRetry(url, {
+      method: "GET",
+      timeoutMs,
+      maxRetries,
+      retryStatuses: [408, 429, 500, 502, 503, 504],
+    });
 
     if (!resp.ok) {
       const errorText = await resp.text().catch(() => "");
-      console.error("[automail/seeded-loader] Request failed:", resp.status, errorText);
       throw new Error(`Seeded selection request failed: ${resp.status} - ${errorText.slice(0, 200)}`);
     }
 
-    const json = await resp.json();
-    console.log("[automail/seeded-loader] Response keys:", Object.keys(json));
-    console.log("[automail/seeded-loader] Data length:", json?.data?.length, "isArray:", Array.isArray(json?.data));
+    const rawJson = await resp.json().catch(() => null);
+    if (rawJson == null || typeof rawJson !== "object") {
+      console.warn("[automail/seeded-loader] Invalid JSON response");
+      return [] as T[];
+    }
 
-    const result = (json?.data ?? []) as T[];
-    console.log("[automail/seeded-loader] Returning", result.length, "items");
-    return result;
+    const data = (rawJson as { data?: unknown }).data;
+    if (!Array.isArray(data)) {
+      console.warn("[automail/seeded-loader] Response data is not an array", typeof data);
+      return [] as T[];
+    }
+
+    return data as T[];
   } catch (error) {
     console.error("[automail/seeded-loader] Error in fetchSeededSelection:", error);
-    if (error instanceof Error) {
-      console.error("[automail/seeded-loader] Error message:", error.message);
-      console.error("[automail/seeded-loader] Error stack:", error.stack);
-    }
     throw error;
   }
 }
