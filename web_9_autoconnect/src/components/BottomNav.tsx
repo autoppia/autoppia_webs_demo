@@ -11,7 +11,7 @@ export default function BottomNav() {
     { href: "/", label: "Home", event: EVENT_TYPES.HOME_NAVBAR },
     { href: "/jobs", label: "Jobs", event: EVENT_TYPES.JOBS_NAVBAR },
     { href: "/recommendations", label: "Recs", event: EVENT_TYPES.VIEW_ALL_RECOMMENDATIONS },
-    { href: "/profile/alexsmith", label: "Profile", event: null },
+    { href: "/profile/me", label: "Profile", event: null },
   ];
 
   return (

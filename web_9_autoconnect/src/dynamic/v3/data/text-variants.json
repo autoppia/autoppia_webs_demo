@@ -252,8 +252,6 @@
   "jobs_apply_pending": ["Pending", "In review", "Application pending"],
   "jobs_apply_button": ["Apply", "Send application", "Submit"],
   "left_sidebar": ["left-sidebar", "sidebar-left", "nav-sidebar"],
-  "sidebar_name": ["Name", "Profile name", "User name"],
-  "sidebar_title": ["Title", "Role", "Position"],
   "profile_viewers": ["Profile viewers", "Views", "Visits"],
   "view_analytics": ["View analytics", "See stats", "View insights"],
   "premium_hint": ["Achieve more with Premium", "Unlock insights with Premium", "Upgrade to Premium"],

@@ -61,6 +61,11 @@ function ProfileContent({ username }: { username: string }) {
     if (!usersState || usersState.length === 0) return undefined;
     const searchUsername = String(username || "").trim().toLowerCase();
 
+    // "me" = current user (same as elsewhere: users[2] || users[0])
+    if (searchUsername === "me") {
+      return usersState[2] || usersState[0];
+    }
+
     // Strategy 1: Exact match
     let found = usersState.find((u) => {
       const userUsername = String(u.username || "").trim().toLowerCase();
@@ -209,7 +214,15 @@ function ProfileContent({ username }: { username: string }) {
 
       if (!mounted) return;
 
-      const foundUser = dynamicDataProvider.getUserByUsername(username);
+      const normalizedUsername = String(username || "").trim().toLowerCase();
+      let foundUser: { name: string } | undefined;
+
+      if (normalizedUsername === "me") {
+        const users = dynamicDataProvider.getUsers();
+        foundUser = users[2] || users[0];
+      } else {
+        foundUser = dynamicDataProvider.getUserByUsername(username);
+      }
 
       if (foundUser) {
         console.log(`[autoconnect] ✅ User "${username}" found:`, foundUser.name);
@@ -230,10 +243,16 @@ function ProfileContent({ username }: { username: string }) {
     const unsubscribe = dynamicDataProvider.subscribeUsers((users) => {
       if (!mounted) return;
 
+      const normalizedUsername = String(username || "").trim().toLowerCase();
       console.log(`[autoconnect] Users updated (${users.length} users), re-checking user ${username}...`);
       setTimeout(() => {
         if (!mounted) return;
-        const foundUser = dynamicDataProvider.getUserByUsername(username);
+        let foundUser: { name: string } | undefined;
+        if (normalizedUsername === "me") {
+          foundUser = users[2] || users[0];
+        } else {
+          foundUser = dynamicDataProvider.getUserByUsername(username);
+        }
         if (foundUser) {
           console.log(`[autoconnect] ✅ User "${username}" found after update:`, foundUser.name);
           setUserNotFound(false);

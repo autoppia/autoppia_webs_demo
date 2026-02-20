@@ -1,11 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { usePathname } from "next/navigation";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSeed } from "@/context/SeedContext";
-import { dynamicDataProvider } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
@@ -13,8 +10,6 @@ export default function HeaderNav() {
   const pathname = usePathname();
   const dyn = useDynamicSystem();
 
-  // Fix hydration error: use state to get user only on client side
-  const [profileUsername, setProfileUsername] = useState<string>("alexsmith");
   const navTextVariants: Record<string, string[]> = {
     nav_home: ["Home", "Feed", "Dashboard"],
     nav_jobs: ["Jobs", "Careers", "Openings"],
@@ -27,13 +22,6 @@ export default function HeaderNav() {
     nav_recommendations_link: ["nav_recs_link", "nav_recommendations", "nav-suggestions"],
     nav_profile_link: ["nav_profile_link", "nav_profile", "nav-me"],
   };
-
-  useEffect(() => {
-    // Only get user on client side to avoid hydration mismatch
-    const users = dynamicDataProvider.getUsers();
-    const username = users[2]?.username || users[0]?.username || "alexsmith";
-    setProfileUsername(username);
-  }, []);
 
   const linkClass = (href: string) =>
     `px-3 py-2 text-sm font-medium rounded ${
@@ -65,7 +53,7 @@ export default function HeaderNav() {
       idKey: "nav_recommendations_link",
     },
     {
-      href: `/profile/${profileUsername}`,
+      href: "/profile/me",
       label: "Profile",
       eventType: null,
       eventData: null,
