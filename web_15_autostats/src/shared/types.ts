@@ -80,6 +80,19 @@ export interface Account {
   transactions: Transfer[];
 }
 
+export interface AccountWithDetails extends Account {
+  rank: number;
+  totalValue: number;
+  stakingRatio: number;
+  delegationCount: number;
+  transactionCount: number;
+  balanceChange24h: number;
+  firstSeen: Date;
+  lastActive: Date;
+  accountType: 'validator' | 'nominator' | 'miner' | 'regular';
+  balanceTrend: number[];
+}
+
 export interface Delegation {
   validator: string;
   amount: number;
