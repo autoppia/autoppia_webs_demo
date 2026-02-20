@@ -164,3 +164,7 @@ export interface TransactionWithMethod extends Transfer {
   method: string;
   section: string;
 }
+
+export interface TransferWithExtrinsicId extends Transfer {
+  extrinsicId: string; // Format: "blockNumber-index" (e.g., "1234567-2")
+}

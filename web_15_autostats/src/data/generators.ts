@@ -1,4 +1,4 @@
-import type { Block, Subnet, Validator, Transfer, Account, Extrinsic, PriceDataPoint, CandleDataPoint, VolumeDataPoint, SubnetWithTrend, ValidatorWithTrend, ValidatorSubnetPerformance, TransactionWithMethod, AccountWithDetails, Delegation } from '@/shared/types';
+import type { Block, Subnet, Validator, Transfer, Account, Extrinsic, PriceDataPoint, CandleDataPoint, VolumeDataPoint, SubnetWithTrend, ValidatorWithTrend, ValidatorSubnetPerformance, TransactionWithMethod, TransferWithExtrinsicId, AccountWithDetails, Delegation } from '@/shared/types';
 import { SUBNET_NAMES } from '@/shared/constants';
 
 // Seeded random number generator using Linear Congruential Generator (LCG)
@@ -131,6 +131,86 @@ export function generateTransfers(count: number): Transfer[] {
   }
   
   return transfers;
+}
+
+export function generateSeededTransfers(
+  count: number,
+  seed: number
+): TransferWithExtrinsicId[] {
+  const rng = seedRandom(seed + 3000);
+  const transfers: TransferWithExtrinsicId[] = [];
+  const now = Date.now();
+
+  const baseBlock = 1000000 + Math.floor(rng() * 500000);
+
+  for (let i = 0; i < count; i++) {
+    const blockNumber = baseBlock - Math.floor(i / 5);
+    const indexInBlock = i % 5;
+    const extrinsicId = `${blockNumber}-${indexInBlock}`;
+
+    const from = generateSeededAddress(rng);
+    const to = generateSeededAddress(rng);
+    const amount = rng() * 10000;
+    const fee = rng() * 0.1;
+    const success = rng() > 0.05;
+
+    const chars = '0123456789abcdef';
+    let hash = '0x';
+    for (let j = 0; j < 64; j++) {
+      hash += chars.charAt(Math.floor(rng() * chars.length));
+    }
+
+    transfers.push({
+      hash,
+      from,
+      to,
+      amount,
+      timestamp: new Date(now - i * 30000),
+      blockNumber,
+      fee,
+      success,
+      extrinsicId,
+    });
+  }
+
+  return transfers;
+}
+
+export interface TransferChartPoint {
+  date: string;
+  fullDate: string;
+  count: number;
+}
+
+export function generateTransferChartData(seed: number): TransferChartPoint[] {
+  const rng = seedRandom(seed + 4000);
+  const points: TransferChartPoint[] = [];
+  const now = new Date();
+
+  // ~2.5 years of weekly data points (130 weeks)
+  const totalWeeks = 130;
+  let cumulative = 0;
+
+  for (let i = totalWeeks - 1; i >= 0; i--) {
+    const date = new Date(now.getTime() - i * 7 * 24 * 60 * 60 * 1000);
+
+    // Daily transfers increase over time (network growth)
+    // Early: ~500-2000/week, Recent: ~30000-60000/week
+    const progress = (totalWeeks - i) / totalWeeks;
+    const baseDaily = 500 + progress * progress * 55000;
+    const weeklyTransfers = Math.floor(baseDaily * 7 * (0.8 + rng() * 0.4));
+    cumulative += weeklyTransfers;
+
+    const month = date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
+
+    points.push({
+      date: month,
+      fullDate: date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+      count: cumulative,
+    });
+  }
+
+  return points;
 }
 
 export function generateAccounts(count: number): Account[] {
