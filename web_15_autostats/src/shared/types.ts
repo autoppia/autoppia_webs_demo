@@ -22,6 +22,22 @@ export interface Extrinsic {
   success: boolean;
 }
 
+export interface BlockWithDetails extends Block {
+  successRate: number;
+  totalFees: number;
+  sizeKB: number;
+  epoch: number;
+  specVersion: number;
+  extrinsicsRoot: string;
+  extrinsicBreakdown: {
+    balances: number;
+    staking: number;
+    subtensorModule: number;
+    system: number;
+  };
+  timeSinceLastBlock: number;
+}
+
 export interface Subnet {
   id: number;
   name: string;
@@ -56,7 +72,7 @@ export interface Validator {
 export interface ValidatorSubnetPerformance {
   netuid: number;
   subnetName: string;
-  type: 'Key' | 'Server';
+  type: "Key" | "Server";
   hotkey: string;
   take: number;
   proportion: number;
@@ -89,7 +105,7 @@ export interface AccountWithDetails extends Account {
   balanceChange24h: number;
   firstSeen: Date;
   lastActive: Date;
-  accountType: 'validator' | 'nominator' | 'miner' | 'regular';
+  accountType: "validator" | "nominator" | "miner" | "regular";
   balanceTrend: number[];
 }
 
