@@ -116,7 +116,7 @@ export function SendTransferPanel({ open, onClose }: SendTransferPanelProps) {
   if (!open) return null;
 
   return (
-    <div className="rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 overflow-hidden backdrop-blur-sm mb-8">
+    <div className="rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 overflow-hidden backdrop-blur-sm">
       {/* Panel Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800 bg-zinc-800/30">
         <div className="flex items-center gap-2">
@@ -194,12 +194,12 @@ function FormStep({
   onReview: () => void;
 }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {/* Left column: From + To */}
-      <div className="space-y-4">
+    <div className="space-y-5">
+      {/* Row 1: From → To */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-xs font-medium text-zinc-400 mb-1.5">From</label>
-          <div className="rounded-xl bg-zinc-800/50 border border-zinc-700 px-4 py-2.5">
+          <div className="rounded-xl bg-zinc-800/50 border border-zinc-700 px-4 py-2.5 h-[58px] flex flex-col justify-center">
             <div className="font-mono text-sm text-zinc-300 truncate">
               {address || "Not connected"}
             </div>
@@ -220,7 +220,7 @@ function FormStep({
             placeholder="5..."
             className={`w-full rounded-xl bg-zinc-800/50 border ${
               errors.to ? "border-red-500" : "border-zinc-700"
-            } px-4 py-2.5 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 font-mono`}
+            } px-4 h-[58px] text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 font-mono`}
           />
           {errors.to && (
             <div className="flex items-center gap-1.5 mt-1 text-xs text-red-400">
@@ -231,8 +231,8 @@ function FormStep({
         </div>
       </div>
 
-      {/* Right column: Amount + Memo + Submit */}
-      <div className="space-y-4">
+      {/* Row 2: Amount → Memo */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-xs font-medium text-zinc-400 mb-1.5">Amount (TAO)</label>
           <div className="relative">
@@ -245,7 +245,7 @@ function FormStep({
               step="0.0001"
               className={`w-full rounded-xl bg-zinc-800/50 border ${
                 errors.amount ? "border-red-500" : "border-zinc-700"
-              } px-4 py-2.5 pr-16 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500`}
+              } px-4 h-[42px] pr-16 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500`}
             />
             {balance !== null && (
               <button
@@ -273,13 +273,16 @@ function FormStep({
             value={form.memo}
             onChange={(e) => onFormChange({ ...form, memo: e.target.value })}
             placeholder="Add a note..."
-            className="w-full rounded-xl bg-zinc-800/50 border border-zinc-700 px-4 py-2.5 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
+            className="w-full rounded-xl bg-zinc-800/50 border border-zinc-700 px-4 h-[42px] text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
           />
         </div>
+      </div>
 
+      {/* Row 3: Submit */}
+      <div className="flex justify-end">
         <button
           onClick={onReview}
-          className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 py-3 text-sm font-semibold text-white hover:from-blue-700 hover:to-cyan-700 transition-all shadow-lg shadow-blue-500/20"
+          className="rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 px-8 py-2.5 text-sm font-semibold text-white hover:from-blue-700 hover:to-cyan-700 transition-all shadow-lg shadow-blue-500/20"
         >
           Review Transfer
         </button>
