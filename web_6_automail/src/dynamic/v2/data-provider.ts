@@ -73,9 +73,11 @@ export class DynamicDataProvider {
         this.currentSeed = v2Seed;
 
         this.ready = false;
+        const previousResolve = this.resolveReady;
         this.readyPromise = new Promise<void>((resolve) => {
           this.resolveReady = resolve;
         });
+        previousResolve(); // Unblock any waiter (e.g. DataReadyGate) that was waiting on the old promise
 
         const initializedEmails = await initializeEmails(v2Seed);
         this.setEmails(initializedEmails);
