@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import type { SubnetWithTrend, TransactionWithMethod } from '@/shared/types';
 import { formatNumber } from '@/library/formatters';
 import { cn } from '@/utils/cn';
@@ -8,6 +8,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { generateCandleHistory } from '@/data/generators';
 import { CandlestickChart } from '@/components/charts/CandlestickChart';
+import { logEvent, EVENT_TYPES } from '@/library/events';
 
 interface SubnetDetailPageContentProps {
   subnet: SubnetWithTrend;
@@ -24,7 +25,24 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
   const [orderType, setOrderType] = useState<OrderType>('buy');
   const [orderAmount, setOrderAmount] = useState('');
   const [orderPrice, setOrderPrice] = useState('');
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmSide, setConfirmSide] = useState<'buy' | 'sell' | null>(null);
   
+  // Log VIEW_SUBNET when subnet detail is viewed (dataset per use case)
+  useEffect(() => {
+    logEvent(EVENT_TYPES.VIEW_SUBNET, {
+      subnet_name: subnet.name,
+      emission: subnet.emission,
+      price: subnet.price,
+      priceChange1h: subnet.priceChange1h,
+      priceChange24h: subnet.priceChange24h,
+      priceChange1w: subnet.priceChange1w,
+      priceChange1m: subnet.priceChange1m,
+      marketCap: subnet.marketCap,
+      volume24h: subnet.volume24h,
+    }).catch(() => {});
+  }, [subnet]);
+
   // Generate candle data based on candle size - memoized to trigger re-render
   const candleData = useMemo(() => {
     return generateCandleHistory(candleSize, subnet.id);
@@ -48,9 +66,38 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
     router.push('/subnets');
   };
   
-  const handlePlaceOrder = () => {
-    // Order placement logic would go here
-    console.log('Place order:', { type: orderType, amount: orderAmount, price: orderPrice });
+  const handlePlaceOrder = (side: 'buy' | 'sell') => {
+    const amountTAU = Number.parseFloat(orderAmount) || 0;
+    const amountAlpha = Number.parseFloat(orderPrice) || 0;
+    const priceImpact = 0;
+    const maxAvailableTAU = 0;
+    const maxDelegatedAlpha = 0;
+    if (side === 'buy') {
+      logEvent(EVENT_TYPES.EXECUTE_BUY, {
+        subnet_name: subnet.name,
+        orderType: 'market',
+        amountTAU,
+        amountAlpha,
+        priceImpact,
+        maxAvailableTAU,
+      }).catch(() => {});
+    } else {
+      logEvent(EVENT_TYPES.EXECUTE_SELL, {
+        subnet_name: subnet.name,
+        orderType: 'market',
+        amountTAU,
+        amountAlpha,
+        priceImpact,
+        maxDelegatedAlpha,
+      }).catch(() => {});
+    }
+    setConfirmOpen(false);
+    setConfirmSide(null);
+  };
+
+  const openConfirmModal = (side: 'buy' | 'sell') => {
+    setConfirmSide(side);
+    setConfirmOpen(true);
   };
   
   return (
@@ -665,7 +712,11 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                     </div>
                   </div>
                   
-                  <button className="w-full py-3 bg-green-500 hover:bg-green-600 rounded-lg font-semibold text-white transition-colors flex items-center justify-center gap-2 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => openConfirmModal('buy')}
+                    className="w-full py-3 bg-green-500 hover:bg-green-600 rounded-lg font-semibold text-white transition-colors flex items-center justify-center gap-2 mt-2"
+                  >
                     <span>Buy</span>
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -710,7 +761,11 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                     </div>
                   </div>
                   
-                  <button className="w-full py-3 bg-red-500 hover:bg-red-600 rounded-lg font-semibold text-white transition-colors flex items-center justify-center gap-2 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => openConfirmModal('sell')}
+                    className="w-full py-3 bg-red-500 hover:bg-red-600 rounded-lg font-semibold text-white transition-colors flex items-center justify-center gap-2 mt-2"
+                  >
                     <span>Sell</span>
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -855,6 +910,53 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
           </div>
         </div>
       </div>
+
+      {/* Confirm order modal */}
+      {confirmOpen && confirmSide && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="confirm-order-title"
+          onClick={() => { setConfirmOpen(false); setConfirmSide(null); }}
+        >
+          <div
+            className="rounded-xl border border-zinc-700 bg-zinc-900 p-6 shadow-xl w-full max-w-md mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 id="confirm-order-title" className="text-lg font-bold text-white mb-4">
+              {confirmSide === 'buy' ? 'Confirm Buy' : 'Confirm Sell'}
+            </h2>
+            <p className="text-zinc-400 text-sm mb-2">
+              τ {orderAmount || '0'} · α {orderPrice || '0'}
+            </p>
+            <p className="text-zinc-500 text-xs mb-6">
+              {confirmSide === 'buy'
+                ? 'You are about to place a market buy order.'
+                : 'You are about to place a market sell order.'}
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                type="button"
+                onClick={() => { setConfirmOpen(false); setConfirmSide(null); }}
+                className="px-4 py-2 rounded-lg bg-zinc-700 text-zinc-200 hover:bg-zinc-600 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handlePlaceOrder(confirmSide)}
+                className={cn(
+                  'px-4 py-2 rounded-lg font-semibold text-white transition-colors',
+                  confirmSide === 'buy' ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'
+                )}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

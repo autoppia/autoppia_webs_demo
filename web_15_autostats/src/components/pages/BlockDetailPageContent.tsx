@@ -14,7 +14,8 @@ import {
   Copy,
 } from "lucide-react";
 import type React from "react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { logEvent, EVENT_TYPES } from "@/library/events";
 
 interface BlockDetailPageContentProps {
   block: BlockWithDetails;
@@ -31,6 +32,25 @@ export function BlockDetailPageContent({ block }: BlockDetailPageContentProps) {
   const [extPage, setExtPage] = useState(1);
   const [evtRowsPerPage, setEvtRowsPerPage] = useState(25);
   const [evtPage, setEvtPage] = useState(1);
+
+  // Log VIEW_BLOCK when block detail is viewed (dataset per use case)
+  useEffect(() => {
+    logEvent(EVENT_TYPES.VIEW_BLOCK, {
+      number: block.number,
+      timestamp: block.timestamp instanceof Date ? block.timestamp.toISOString() : block.timestamp,
+      hash: block.hash,
+      parentHash: block.parentHash,
+      stateRoot: block.stateRoot,
+      extrinsicsRoot: block.extrinsicsRoot,
+      specVersion: block.specVersion,
+      validator: block.validator,
+      timeSinceLastBlock: block.timeSinceLastBlock,
+      epoch: block.epoch,
+      extrinsicsCount: block.extrinsicsCount,
+      eventsCount: block.eventsCount,
+      extrinsics: block.extrinsics,
+    }).catch(() => {});
+  }, [block]);
 
   // V3 text variants
   const dynamicV3TextVariants: Record<string, string[]> = {

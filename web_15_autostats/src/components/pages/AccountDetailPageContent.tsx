@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import type { AccountWithDetails } from "@/shared/types";
 import { formatNumber } from "@/library/formatters";
 import { cn } from "@/utils/cn";
@@ -8,6 +8,7 @@ import { ArrowLeft } from "lucide-react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { generatePriceHistory } from "@/data/generators";
 import { PriceChart } from "@/components/charts/PriceChart";
+import { logEvent, EVENT_TYPES } from "@/library/events";
 
 interface AccountDetailPageContentProps {
   account: AccountWithDetails;
@@ -88,6 +89,21 @@ function DonutChart({
 
 export function AccountDetailPageContent({ account }: AccountDetailPageContentProps) {
   const router = useSeedRouter();
+
+  // Log VIEW_ACCOUNT when account detail is viewed (dataset per use case)
+  useEffect(() => {
+    logEvent(EVENT_TYPES.VIEW_ACCOUNT, {
+      rank: account.rank,
+      address: account.address,
+      balance: account.balance,
+      stakedAmount: account.stakedAmount,
+      stakingRatio: account.stakingRatio,
+      balanceTrend: account.balanceTrend,
+      balanceChange24h: account.balanceChange24h,
+      accountType: account.accountType,
+      lastActive: account.lastActive instanceof Date ? account.lastActive.toISOString() : account.lastActive,
+    }).catch(() => {});
+  }, [account]);
 
   const [timeRange, setTimeRange] = useState<TimeRange>("7d");
 

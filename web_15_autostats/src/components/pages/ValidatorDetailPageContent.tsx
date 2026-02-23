@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import type { ValidatorWithTrend, TransactionWithMethod } from '@/shared/types';
 import { formatNumber } from '@/library/formatters';
 import { cn } from '@/utils/cn';
@@ -8,6 +8,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { generateCandleHistory } from '@/data/generators';
 import { CandlestickChart } from '@/components/charts/CandlestickChart';
+import { logEvent, EVENT_TYPES } from '@/library/events';
 
 interface ValidatorDetailPageContentProps {
   validator: ValidatorWithTrend;
@@ -20,6 +21,22 @@ export function ValidatorDetailPageContent({ validator, transactions }: Validato
   const router = useSeedRouter();
 
   const [candleSize, setCandleSize] = useState<CandleSize>('1h');
+
+  // Log VIEW_VALIDATOR when validator detail is viewed (dataset per use case)
+  useEffect(() => {
+    logEvent(EVENT_TYPES.VIEW_VALIDATOR, {
+      rank: validator.rank,
+      dominance: validator.dominance,
+      nominatorCount: validator.nominatorCount,
+      nominatorChange24h: validator.nominatorChange24h,
+      activeSubnets: validator.activeSubnets,
+      totalWeight: validator.totalWeight,
+      weightChange24h: validator.weightChange24h,
+      rootStake: validator.rootStake,
+      alphaStake: validator.alphaStake,
+      commission: validator.commission,
+    }).catch(() => {});
+  }, [validator]);
 
   const candleData = useMemo(() => {
     return generateCandleHistory(candleSize, validator.rank);

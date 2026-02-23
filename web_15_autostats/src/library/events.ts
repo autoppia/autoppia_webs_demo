@@ -1,64 +1,43 @@
-// src/lib/logger.ts
+// src/library/events.ts
+// Autostats use-case events. Payloads carry the dataset required for each event.
 
 export const EVENT_TYPES = {
-  SEARCH_RESTAURANT: "SEARCH_RESTAURANT",
-  TIME_DROPDOWN_OPENED: "TIME_DROPDOWN_OPENED",
-  DATE_DROPDOWN_OPENED: "DATE_DROPDOWN_OPENED",
-  PEOPLE_DROPDOWN_OPENED: "PEOPLE_DROPDOWN_OPENED",
-  SCROLL_VIEW: "SCROLL_VIEW",
-  VIEW_RESTAURANT: "VIEW_RESTAURANT",
-  BOOK_RESTAURANT: "BOOK_RESTAURANT",
-  COUNTRY_SELECTED: "COUNTRY_SELECTED",
-  OCCASION_SELECTED: "OCCASION_SELECTED",
-  RESERVATION_COMPLETE: "RESERVATION_COMPLETE",
-  VIEW_FULL_MENU: "VIEW_FULL_MENU",
-  COLLAPSE_MENU: "COLLAPSE_MENU",
-  ABOUT_PAGE_VIEW: "ABOUT_PAGE_VIEW",
-  ABOUT_FEATURE_CLICK: "ABOUT_FEATURE_CLICK",
-  CONTACT_PAGE_VIEW: "CONTACT_PAGE_VIEW",
-  CONTACT_CARD_CLICK: "CONTACT_CARD_CLICK",
-  CONTACT_FORM_SUBMIT: "CONTACT_FORM_SUBMIT",
-  HELP_PAGE_VIEW: "HELP_PAGE_VIEW",
-  HELP_CATEGORY_SELECTED: "HELP_CATEGORY_SELECTED",
-  HELP_FAQ_TOGGLED: "HELP_FAQ_TOGGLED",
+  /** Fired when user views a subnet (detail page). Fields: subnet_name, emission, price, 1h, 24h, 1w, 1M, cap, vol(24h). */
+  VIEW_SUBNET: "VIEW_SUBNET",
+  /** Fired when user views a validator (detail page). Fields:  rank, dominance, nominatorCount, etc. */
+  VIEW_VALIDATOR: "VIEW_VALIDATOR",
+  /** Fired when user views a block (detail page). Fields: number, timestamp, hash, extrinsics, etc. */
+  VIEW_BLOCK: "VIEW_BLOCK",
+  /** Fired when user views an account (detail page). Fields: rank, address, balance, stakedAmount, etc. */
+  VIEW_ACCOUNT: "VIEW_ACCOUNT",
+  /** Fired when user submits a buy order. Fields: orderType (limit|market), amountTAU, amountAlpha, priceImpact, maxAvailableTAU. */
+  EXECUTE_BUY: "EXECUTE_BUY",
+  /** Fired when user submits a sell order. Fields: orderType, amountTAU, amountAlpha, priceImpact, maxDelegatedAlpha. */
+  EXECUTE_SELL: "EXECUTE_SELL",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
 
-// Import the SeedVariationManager for event registration
-import { SeedVariationManager } from "@/library/utils";
-
+/** Returns a Promise so callers can await before redirecting (avoids aborting the request on navigation). */
 export function logEvent(
   eventType: EventType,
-  data: any = {},
+  data: Record<string, unknown> = {},
   extra_headers: Record<string, string> = {}
-) {
-  if (typeof window === "undefined") return;
+): Promise<void> {
+  if (typeof window === "undefined") return Promise.resolve();
 
-  let user = localStorage.getItem("user");
-  if (user === "null") {
-    user = null;
-  }
+  const user = localStorage.getItem("user");
+  const resolvedUser = user === "null" ? null : user;
+
   const webAgentId = localStorage.getItem("web_agent_id");
   const validatorId = localStorage.getItem("validator_id");
   const resolvedWebAgentId = webAgentId && webAgentId !== "null" ? webAgentId : "1";
   const resolvedValidatorId = validatorId && validatorId !== "null" ? validatorId : "1";
 
-  // Register the event with the SeedVariationManager to trigger layout changes
-  try {
-    SeedVariationManager.registerEvent(eventType);
-  } catch (err) {
-    // Ignorar errores en el registro de eventos - no debe romper la página
-    if (process.env.NODE_ENV === "development") {
-      console.warn("⚠️ Error registering event:", err);
-    }
-  }
-
-  // Construir el payload completo que espera el backend
   const eventData = {
     event_name: eventType,
     web_agent_id: resolvedWebAgentId,
-    user_id: user,
+    user_id: resolvedUser,
     data,
     timestamp: new Date().toISOString(),
     validator_id: resolvedValidatorId,
@@ -71,9 +50,9 @@ export function logEvent(
     data: eventData,
   };
 
-  console.log("📦 Logging Event:", backendPayload);
+  console.log("📦 Logging Event:", eventType, eventData);
 
-  fetch("/api/log-event", {
+  return fetch("/api/log-event", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -82,8 +61,12 @@ export function logEvent(
       ...extra_headers,
     },
     body: JSON.stringify(backendPayload),
-  }).catch((error) => {
-    console.error("❌ Failed to log event:", error);
-    throw error;
-  });
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error(`log-event failed: ${res.status}`);
+    })
+    .catch((error) => {
+      console.error("Failed to log event:", error);
+      throw error;
+    });
 }
