@@ -258,7 +258,7 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
 
         {/* Header */}
         {dyn.v1.addWrapDecoy('transfers-header', (
-          <div className="mb-8 flex items-start justify-between gap-4">
+          <div className="flex items-start justify-between gap-4">
             <div>
               <h1
                 id={dyn.v3.getVariant('transfers-page-title', ID_VARIANTS_MAP)}
@@ -288,7 +288,7 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
 
         {/* Stats Overview */}
         {dyn.v1.addWrapDecoy('transfers-stats-section', (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {(() => {
               const statsCards: StatsCard[] = [
                 {
@@ -487,7 +487,7 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-between px-6 py-4 border-t border-zinc-800">
+              <div className="flex flex-col gap-3 items-center md:flex-row md:justify-between px-6 py-4 border-t border-zinc-800">
                 <div className="text-sm text-zinc-400">
                   Showing {(currentPage - 1) * rowsPerPage + 1} to {Math.min(currentPage * rowsPerPage, filteredAndSortedTransfers.length)} of {filteredAndSortedTransfers.length} entries
                 </div>
