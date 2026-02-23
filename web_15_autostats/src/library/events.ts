@@ -14,6 +14,13 @@ export const EVENT_TYPES = {
   EXECUTE_BUY: "EXECUTE_BUY",
   /** Fired when user submits a sell order. Fields: orderType, amountTAU, amountAlpha, priceImpact, maxDelegatedAlpha. */
   EXECUTE_SELL: "EXECUTE_SELL",
+  CONNECT_WALLET: "CONNECT_WALLET",
+  DISCONNECT_WALLET: "DISCONNECT_WALLET",
+  INITIATE_TRANSFER: "INITIATE_TRANSFER",
+  CONFIRM_TRANSFER: "CONFIRM_TRANSFER",
+  TRANSFER_COMPLETE: "TRANSFER_COMPLETE",
+  FAVORITE_SUBNET: "FAVORITE_SUBNET",
+  UNFAVORITE_SUBNET: "UNFAVORITE_SUBNET",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
