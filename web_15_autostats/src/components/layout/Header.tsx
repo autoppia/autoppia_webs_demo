@@ -5,6 +5,7 @@ import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { DynamicWrapper } from '@/dynamic/v1/DynamicWrapper';
 import { DynamicText } from '@/dynamic/v3/DynamicText';
 import { Search } from 'lucide-react';
+import { WalletButton } from '@/components/wallet/WalletButton';
 
 export function Header() {
   const router = useSeedRouter();
@@ -26,14 +27,16 @@ export function Header() {
             <DynamicText value="AutoStats" type="text" />
           </a>
 
-          <div className="flex items-center gap-8">
-            <nav className="hidden md:flex items-center gap-6">
+          <div className="flex items-center gap-4">
+            <nav className="hidden md:flex items-center gap-4 lg:gap-6">
               <NavLink href="/subnets" label="Subnets" />
               <NavLink href="/validators" label="Validators" />
               <NavLink href="/blocks" label="Blocks" />
               <NavLink href="/transfers" label="Transfers" />
               <NavLink href="/accounts" label="Accounts" />
             </nav>
+
+            <WalletButton />
 
             <button className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/10 transition-colors border border-white/10">
               <Search className="h-4 w-4" />
