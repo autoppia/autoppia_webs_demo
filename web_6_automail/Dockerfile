@@ -41,6 +41,11 @@ ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 # Build arg for Git commit hash (passed from setup.sh)
 ARG GIT_COMMIT_HASH=unknown
 
+# Next.js 15: stable Server Actions encryption key (must be set at build time to avoid "Failed to find Server Action")
+# Use a fixed default so builds are deterministic; override via build-arg for cross-instance consistency.
+ARG NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY=
+ENV NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
+
 # Extract version from package.json and combine with Git hash for automatic versioning
 # Format: "1.0.0+abc1234" (base version + git hash)
 # This ensures each build has a unique version without manual updates
@@ -62,6 +67,8 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=8005
+# Default backend URL for server-side fetch (override via docker-compose or run -e)
+ENV API_URL=http://app:8090
 EXPOSE 8005
 
 # Copy package files first (npm ci requires package-lock.json)
