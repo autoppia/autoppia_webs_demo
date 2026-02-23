@@ -5,12 +5,12 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 /**
  * Default seed to use when no seed is in the URL.
- * Layout está fijado al correspondiente a seed 36 (layout 16).
+ * Layout usa seed por defecto (1) cuando no hay seed en la URL.
  */
-const DEFAULT_SEED = 36;
+const DEFAULT_SEED = 1;
 
 /**
- * Component that redirects to seed=36 URL if no seed parameter exists in the URL.
+ * Component that redirects to seed=1 URL if no seed parameter exists in the URL.
  * Esto asegura que siempre haya un seed en la URL, aunque el layout esté fijo.
  */
 export function SeedRedirect() {
@@ -33,7 +33,7 @@ export function SeedRedirect() {
       return;
     }
 
-    // No seed in URL - redirect to add default seed (36)
+    // No seed in URL - redirect to add default seed (1)
     hasRedirectedRef.current = true;
 
     const params = new URLSearchParams(searchParams.toString());
