@@ -30,6 +30,7 @@ export function Header() {
             <nav className="hidden md:flex items-center gap-6">
               <NavLink href="/subnets" label="Subnets" />
               <NavLink href="/validators" label="Validators" />
+              <NavLink href="/blocks" label="Blocks" />
               <NavLink href="/transfers" label="Transfers" />
               <NavLink href="/accounts" label="Accounts" />
             </nav>
