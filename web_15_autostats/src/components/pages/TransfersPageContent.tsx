@@ -254,7 +254,7 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
 
   return (
     <div className="min-h-screen bg-zinc-950 py-8">
-      <div className="space-y-8">
+      <div className="grid gap-8">
 
         {/* Header */}
         {dyn.v1.addWrapDecoy('transfers-header', (
@@ -339,7 +339,7 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
 
         {/* Filter Controls (taostats style) */}
         {dyn.v1.addWrapDecoy('transfers-controls', (
-          <div className="mb-6 flex flex-wrap items-end gap-2">
+          <div className="flex flex-wrap items-end gap-2">
             {/* Amount Filter Dropdown */}
             {dyn.v1.addWrapDecoy('transfers-amount-filter', (
               <div className="relative">
