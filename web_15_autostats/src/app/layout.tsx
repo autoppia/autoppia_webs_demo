@@ -4,11 +4,14 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import { SeedProvider } from "@/context/SeedContext";
+import { WalletProvider } from "@/context/WalletContext";
+import { FavoritesProvider } from "@/context/FavoritesContext";
 import { Suspense } from "react";
 import { SeedRedirect } from "@/components/layout/SeedRedirect";
 import { DynamicDebug } from "@/components/debug/DynamicDebug";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { BottomNav } from "@/components/layout/BottomNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,17 +41,22 @@ export default function RootLayout({
         <ClientBody>
           <Suspense fallback={<div>Loading...</div>}>
             <SeedProvider>
-              <Suspense fallback={null}>
-                <SeedRedirect />
-              </Suspense>
-              <Header />
-              <main className="flex-1 w-full">
-                <div className="container mx-auto px-6 max-w-[1400px]">
-                  {children}
-                </div>
-              </main>
-              <Footer />
-              <DynamicDebug />
+              <WalletProvider>
+                <FavoritesProvider>
+                  <Suspense fallback={null}>
+                    <SeedRedirect />
+                  </Suspense>
+                  <Header />
+                  <main className="flex-1 w-full pb-16 md:pb-0">
+                    <div className="container mx-auto px-6 max-w-[1400px]">
+                      {children}
+                    </div>
+                  </main>
+                  <Footer />
+                  <BottomNav />
+                  <DynamicDebug />
+                </FavoritesProvider>
+              </WalletProvider>
             </SeedProvider>
           </Suspense>
         </ClientBody>
