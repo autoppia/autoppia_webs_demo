@@ -15,7 +15,7 @@ export function Footer() {
 
   return (
     <DynamicWrapper>
-      <footer className="border-t border-zinc-800 bg-zinc-950 mt-auto">
+      <footer className="border-t border-zinc-800 bg-zinc-950 mt-auto pb-16 md:pb-0">
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>

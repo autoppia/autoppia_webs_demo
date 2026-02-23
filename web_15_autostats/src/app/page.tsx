@@ -18,6 +18,7 @@ import {
   generateTransactionsWithMethods,
 } from '@/data/generators';
 import { Rocket } from 'lucide-react';
+import { FavoriteSubnetsSection } from '@/components/landing/FavoriteSubnetsSection';
 
 export default function LandingPage() {
   const { logInteraction } = useEventLogger();
@@ -44,7 +45,7 @@ export default function LandingPage() {
     // Generate data using seed for consistency - always use 'all' timeRange
     const priceData = generatePriceHistory('all', seed);
     const volumeData = generateVolumeData(priceData, seed);
-    const subnets = generateSubnetsWithTrends(5, seed);
+    const subnets = generateSubnetsWithTrends(32, seed);
     const validators = generateValidatorsWithTrends(5, seed);
     const transactions = generateTransactionsWithMethods(10, seed);
     
@@ -92,6 +93,9 @@ export default function LandingPage() {
           />
         </section>
 
+        {/* Favorite Subnets */}
+        <FavoriteSubnetsSection subnets={data.subnets} />
+
         {/* Subnets Overview */}
         <section className="mb-8">
           <div className="mb-6">
@@ -100,7 +104,7 @@ export default function LandingPage() {
               Explore the most active subnets on the Bittensor network
             </p>
           </div>
-          <SubnetsTable subnets={data.subnets} maxRows={5} />
+          <SubnetsTable subnets={data.subnets.slice(0, 5)} maxRows={5} />
         </section>
 
         {/* Validators Overview */}

@@ -184,3 +184,28 @@ export interface TransactionWithMethod extends Transfer {
 export interface TransferWithExtrinsicId extends Transfer {
   extrinsicId: string; // Format: "blockNumber-index" (e.g., "1234567-2")
 }
+
+export interface WalletState {
+  connected: boolean;
+  address: string | null;
+  walletName: string | null;
+  balance: number | null;
+}
+
+export interface TransferFormData {
+  from: string;
+  to: string;
+  amount: string;
+  memo: string;
+}
+
+export interface MockTransactionResult {
+  hash: string;
+  from: string;
+  to: string;
+  amount: number;
+  fee: number;
+  blockNumber: number;
+  timestamp: Date;
+  status: "success" | "failed";
+}

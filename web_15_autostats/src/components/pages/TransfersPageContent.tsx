@@ -9,7 +9,8 @@ import { generateTransferChartData } from '@/data/generators';
 import { useSeed } from '@/context/SeedContext';
 import { cn } from '@/utils/cn';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Search, ArrowUpDown, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
+import { Search, ArrowUpDown, ChevronLeft, ChevronRight, ChevronDown, Send } from 'lucide-react';
+import { SendTransferPanel } from './TransferPageContent';
 
 interface TransfersPageContentProps {
   transfers: TransferWithExtrinsicId[];
@@ -32,6 +33,7 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
   const { seed } = useSeed();
   const chartData = useMemo(() => generateTransferChartData(seed), [seed]);
 
+  const [sendPanelOpen, setSendPanelOpen] = useState(false);
   const [filterQuery, setFilterQuery] = useState('');
   const [amountFilter, setAmountFilter] = useState<AmountFilter>('all');
   const [amountDropdownOpen, setAmountDropdownOpen] = useState(false);
@@ -252,24 +254,41 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
 
   return (
     <div className="min-h-screen bg-zinc-950 py-8">
-      <div className="space-y-8">
+      <div className="grid gap-8">
 
         {/* Header */}
         {dyn.v1.addWrapDecoy('transfers-header', (
-          <div className="mb-8">
-            <h1
-              id={dyn.v3.getVariant('transfers-page-title', ID_VARIANTS_MAP)}
-              className={cn('text-4xl font-bold text-white mb-2', dyn.v3.getVariant('page-title', CLASS_VARIANTS_MAP))}
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h1
+                id={dyn.v3.getVariant('transfers-page-title', ID_VARIANTS_MAP)}
+                className={cn('text-4xl font-bold text-white mb-2', dyn.v3.getVariant('page-title', CLASS_VARIANTS_MAP))}
+              >
+                {v('page_title')}
+              </h1>
+              <p className="text-zinc-400 text-lg">{v('page_description')}</p>
+            </div>
+            <button
+              onClick={() => setSendPanelOpen(!sendPanelOpen)}
+              className={cn(
+                'flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all flex-shrink-0',
+                sendPanelOpen
+                  ? 'bg-zinc-800 border border-zinc-700 text-zinc-300 hover:bg-zinc-700'
+                  : 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/20 hover:from-blue-700 hover:to-cyan-700'
+              )}
             >
-              {v('page_title')}
-            </h1>
-            <p className="text-zinc-400 text-lg">{v('page_description')}</p>
+              <Send className="h-4 w-4" />
+              {sendPanelOpen ? 'Hide' : 'Send Transfer'}
+            </button>
           </div>
         ))}
 
+        {/* Send Transfer Panel */}
+        <SendTransferPanel open={sendPanelOpen} onClose={() => setSendPanelOpen(false)} />
+
         {/* Stats Overview */}
         {dyn.v1.addWrapDecoy('transfers-stats-section', (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {(() => {
               const statsCards: StatsCard[] = [
                 {
@@ -320,7 +339,7 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
 
         {/* Filter Controls (taostats style) */}
         {dyn.v1.addWrapDecoy('transfers-controls', (
-          <div className="mb-6 flex flex-wrap items-end gap-2">
+          <div className="flex flex-wrap items-end gap-2">
             {/* Amount Filter Dropdown */}
             {dyn.v1.addWrapDecoy('transfers-amount-filter', (
               <div className="relative">
@@ -468,7 +487,7 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-between px-6 py-4 border-t border-zinc-800">
+              <div className="flex flex-col gap-3 items-center md:flex-row md:justify-between px-6 py-4 border-t border-zinc-800">
                 <div className="text-sm text-zinc-400">
                   Showing {(currentPage - 1) * rowsPerPage + 1} to {Math.min(currentPage * rowsPerPage, filteredAndSortedTransfers.length)} of {filteredAndSortedTransfers.length} entries
                 </div>
