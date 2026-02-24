@@ -8,6 +8,8 @@ import type { Email, Label, Attachment } from "@/types/email";
 const EMAIL_CATEGORIES = ["primary", "social", "promotions", "updates", "forums", "support"] as const;
 const DEFAULT_CATEGORY = "primary";
 
+let labelFallbackCounter = 0;
+
 function asString(value: unknown, fallback: string): string {
   if (value == null) return fallback;
   const s = String(value).trim();
@@ -48,7 +50,7 @@ function asDate(value: unknown): Date {
 function sanitizeLabel(raw: unknown): Label {
   const o = raw && typeof raw === "object" ? (raw as Record<string, unknown>) : {};
   return {
-    id: asNonEmptyString(o.id, `label-${Math.random().toString(36).slice(2, 9)}`),
+    id: asNonEmptyString(o.id, `label-fallback-${++labelFallbackCounter}`),
     name: asNonEmptyString(o.name, "Unnamed"),
     color: asNonEmptyString(o.color, "#6b7280"),
     type: o.type === "user" ? "user" : "system",
