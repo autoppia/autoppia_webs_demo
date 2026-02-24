@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import { MiniChart } from '@/components/charts/MiniChart';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
-import { FavoriteButton } from '@/components/shared/FavoriteButton';
 
 interface SubnetsPageContentProps {
   subnets: SubnetWithTrend[];
@@ -379,8 +378,7 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
             <div className="overflow-x-auto">
               <div className="inline-block min-w-full">
                 {/* Table Header */}
-                <div className="grid gap-3 px-6 py-4 bg-zinc-800/50 backdrop-blur-sm border-b border-zinc-800 text-xs font-semibold text-zinc-400 uppercase tracking-wider" style={{ gridTemplateColumns: '40px 50px 200px 110px 110px 90px 90px 90px 90px 120px 120px 110px', minWidth: '1230px' }}>
-                  <div />
+                <div className="grid gap-3 px-6 py-4 bg-zinc-800/50 backdrop-blur-sm border-b border-zinc-800 text-xs font-semibold text-zinc-400 uppercase tracking-wider" style={{ gridTemplateColumns: '50px 200px 110px 110px 90px 90px 90px 90px 120px 120px 110px', minWidth: '1190px' }}>
                   <div
                     onClick={() => handleSort('id')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center gap-1"
@@ -466,13 +464,8 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                         key={subnet.id}
                         onClick={() => handleSubnetClick(subnet.id)}
                         className="grid gap-3 px-6 py-5 hover:bg-zinc-800/30 cursor-pointer transition-all duration-200 group items-center"
-                        style={{ gridTemplateColumns: '40px 50px 200px 110px 110px 90px 90px 90px 90px 120px 120px 110px', minWidth: '1230px' }}
+                        style={{ gridTemplateColumns: '50px 200px 110px 110px 90px 90px 90px 90px 120px 120px 110px', minWidth: '1190px' }}
                       >
-                        {/* Favorite */}
-                        <div className="flex items-center justify-center">
-                          <FavoriteButton subnetId={subnet.id} size="sm" />
-                        </div>
-
                         {/* # (ID) */}
                         <div className="text-zinc-500 font-mono text-sm font-medium">
                           {subnet.id}

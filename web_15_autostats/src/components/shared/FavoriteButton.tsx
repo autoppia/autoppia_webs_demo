@@ -6,10 +6,12 @@ import { useFavorites } from "@/context/FavoritesContext";
 
 interface FavoriteButtonProps {
   subnetId: number;
+  /** Subnet name for event payload (enables benchmark prompts like "Add Text Prompting to favorites"). */
+  subnetName?: string;
   size?: "sm" | "md";
 }
 
-export function FavoriteButton({ subnetId, size = "md" }: FavoriteButtonProps) {
+export function FavoriteButton({ subnetId, subnetName, size = "md" }: FavoriteButtonProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const [mounted, setMounted] = useState(false);
 
@@ -32,7 +34,7 @@ export function FavoriteButton({ subnetId, size = "md" }: FavoriteButtonProps) {
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();
-        toggleFavorite(subnetId);
+        toggleFavorite(subnetId, subnetName);
       }}
       className={`transition-colors ${
         active

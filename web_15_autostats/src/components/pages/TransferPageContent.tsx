@@ -63,19 +63,10 @@ export function SendTransferPanel({ open, onClose }: SendTransferPanelProps) {
 
   const handleReview = () => {
     if (!validate()) return;
-    logEvent(EVENT_TYPES.INITIATE_TRANSFER, {
-      to: form.to,
-      amount: form.amount,
-      memo: form.memo,
-    });
     setStep("confirm");
   };
 
   const handleConfirm = async () => {
-    logEvent(EVENT_TYPES.CONFIRM_TRANSFER, {
-      to: form.to,
-      amount: form.amount,
-    });
     setStep("executing");
 
     await new Promise((resolve) => setTimeout(resolve, 2000));

@@ -16,11 +16,9 @@ export const EVENT_TYPES = {
   EXECUTE_SELL: "EXECUTE_SELL",
   CONNECT_WALLET: "CONNECT_WALLET",
   DISCONNECT_WALLET: "DISCONNECT_WALLET",
-  INITIATE_TRANSFER: "INITIATE_TRANSFER",
-  CONFIRM_TRANSFER: "CONFIRM_TRANSFER",
+  /** Fired when a transfer completes successfully. Fields: hash, from, to, amount, block_number. */
   TRANSFER_COMPLETE: "TRANSFER_COMPLETE",
   FAVORITE_SUBNET: "FAVORITE_SUBNET",
-  UNFAVORITE_SUBNET: "UNFAVORITE_SUBNET",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];

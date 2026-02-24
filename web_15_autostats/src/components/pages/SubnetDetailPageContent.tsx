@@ -9,6 +9,7 @@ import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { generateCandleHistory } from '@/data/generators';
 import { CandlestickChart } from '@/components/charts/CandlestickChart';
 import { logEvent, EVENT_TYPES } from '@/library/events';
+import { FavoriteButton } from '@/components/shared/FavoriteButton';
 
 interface SubnetDetailPageContentProps {
   subnet: SubnetWithTrend;
@@ -129,6 +130,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                 <span className="px-3 py-1 bg-cyan-500 text-black text-xs font-bold rounded-md">
                   Immune
                 </span>
+                <FavoriteButton subnetId={subnet.id} subnetName={subnet.name} size="md" />
               </div>
               <div className="flex items-center gap-2 text-sm text-zinc-400 mt-1">
                 <span>TAO</span>

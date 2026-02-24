@@ -8,7 +8,7 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 interface FavoritesContextType {
   favorites: number[];
   isFavorite: (id: number) => boolean;
-  toggleFavorite: (id: number) => void;
+  toggleFavorite: (id: number, subnetName?: string) => void;
 }
 
 const FavoritesContext = createContext<FavoritesContextType>({
@@ -36,16 +36,16 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   );
 
   const toggleFavorite = useCallback(
-    (id: number) => {
+    (id: number, subnetName?: string) => {
       setFavorites((prev) => {
         const isFav = prev.includes(id);
         const next = isFav ? prev.filter((fid) => fid !== id) : [...prev, id];
         writeJson<number[]>(STORAGE_KEY, next);
 
-        if (isFav) {
-          logEvent(EVENT_TYPES.UNFAVORITE_SUBNET, { subnet_id: id });
-        } else {
-          logEvent(EVENT_TYPES.FAVORITE_SUBNET, { subnet_id: id });
+        if (!isFav) {
+          const payload: Record<string, unknown> = { subnet_id: id };
+          if (subnetName !== undefined) payload.subnet_name = subnetName;
+          logEvent(EVENT_TYPES.FAVORITE_SUBNET, payload);
         }
 
         return next;

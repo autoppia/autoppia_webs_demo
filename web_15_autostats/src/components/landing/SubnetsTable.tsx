@@ -7,8 +7,6 @@ import { SubnetWithTrend } from '@/shared/types';
 import { formatNumber } from '@/library/formatters';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { MiniChart } from '@/components/charts/MiniChart';
-import { FavoriteButton } from '@/components/shared/FavoriteButton';
-
 interface SubnetsTableProps {
   subnets: SubnetWithTrend[];
   maxRows?: number;
@@ -45,7 +43,6 @@ export function SubnetsTable({ subnets, maxRows = 5 }: SubnetsTableProps) {
           <table className="w-full">
             <thead className="bg-zinc-800/50">
               <tr>
-                <th className="w-10 px-3 py-3" />
                 <th className="px-6 py-3 text-left">
                   <span className="text-sm font-medium text-zinc-300">
                     <DynamicText value="Name" type="text" />
@@ -90,9 +87,6 @@ export function SubnetsTable({ subnets, maxRows = 5 }: SubnetsTableProps) {
                     onClick={() => handleSubnetClick(subnet.id)}
                     className="hover:bg-zinc-800/50 cursor-pointer transition-colors"
                   >
-                    <td className="w-10 px-3 py-4 text-center">
-                      <FavoriteButton subnetId={subnet.id} size="sm" />
-                    </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         {/* Subnet icon placeholder */}
