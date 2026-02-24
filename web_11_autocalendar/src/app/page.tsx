@@ -1323,11 +1323,14 @@ function CalendarApp() {
                           type="checkbox"
                           checked={cal.enabled}
                           onChange={() => {
-                            logEvent(EVENT_TYPES.CHOOSE_CALENDAR, {
-                              calendarName: cal.name,
-                              selected: !cal.enabled,
-                              color: cal.color,
-                            });
+                            const willBeEnabled = !cal.enabled;
+                            logEvent(
+                              willBeEnabled ? EVENT_TYPES.SELECT_CALENDAR : EVENT_TYPES.UNSELECT_CALENDAR,
+                              {
+                                calendarName: cal.name,
+                                color: cal.color,
+                              }
+                            );
                             setMyCalendars((cals) =>
                               cals.map((c) =>
                                 c.name === cal.name ? { ...c, enabled: !c.enabled } : c
@@ -1531,11 +1534,14 @@ function CalendarApp() {
                           type="checkbox"
                           checked={cal.enabled}
                           onChange={() => {
-                            logEvent(EVENT_TYPES.CHOOSE_CALENDAR, {
-                              calendarName: cal.name,
-                              selected: !cal.enabled,
-                              color: cal.color,
-                            });
+                            const willBeEnabled = !cal.enabled;
+                            logEvent(
+                              willBeEnabled ? EVENT_TYPES.SELECT_CALENDAR : EVENT_TYPES.UNSELECT_CALENDAR,
+                              {
+                                calendarName: cal.name,
+                                color: cal.color,
+                              }
+                            );
                             setMyCalendars((cals) =>
                               cals.map((c) =>
                                 c.name === cal.name ? { ...c, enabled: !c.enabled } : c
