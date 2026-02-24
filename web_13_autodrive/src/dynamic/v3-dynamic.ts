@@ -110,7 +110,7 @@ export function useSeedLayout() {
 
   const generateId = useCallback(
     (key: string, index?: number): string => {
-      const fullKey = index !== undefined ? `${key}-${index}` : key;
+      const fullKey = index === undefined ? key : `${key}-${index}`;
       return coreGenerateId(seed, fullKey, "dyn");
     },
     [seed]

@@ -47,7 +47,7 @@ DEMO_PREFIXES=(
 
 DEMO_CONTAINERS=$(sudo docker ps -a --format "{{.Names}}" | grep -E "^(webs_server|autocinema|autobooks|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|autohealth)($|_)" || true)
 
-if [ -n "$DEMO_CONTAINERS" ]; then
+if [[ -n "$DEMO_CONTAINERS" ]]; then
   for container in $DEMO_CONTAINERS; do
     echo "🗑️ Removing $container..."
     sudo docker rm -f "$container"
@@ -58,7 +58,7 @@ fi
 
 echo "🧹 Removing previous Webs Demo volumes..."
 DEMO_VOLUMES=$(sudo docker volume ls --format "{{.Name}}" | grep -E "^(webs_server|autocinema|autobooks|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|autohealth)($|_)" || true)
-if [ -n "$DEMO_VOLUMES" ]; then
+if [[ -n "$DEMO_VOLUMES" ]]; then
   for volume in $DEMO_VOLUMES; do
     echo "🗑️ Removing volume $volume..."
     sudo docker volume rm "$volume" || true
@@ -69,7 +69,7 @@ fi
 
 echo "🧹 Removing previous Webs Demo images..."
 DEMO_IMAGES=$(sudo docker images --format "{{.Repository}} {{.ID}}" | grep -E "^(webs_server|autocinema|autobooks|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|autohealth)\\b" | awk '{print $2}' || true)
-if [ -n "$DEMO_IMAGES" ]; then
+if [[ -n "$DEMO_IMAGES" ]]; then
   for image in $DEMO_IMAGES; do
     echo "🗑️ Removing image $image..."
     sudo docker rmi -f "$image" || true

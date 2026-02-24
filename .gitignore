@@ -89,3 +89,10 @@ cython_debug/
 
 # Local copies of fallback datasets (copied during Docker build)
 web_*/src/data/original/*.json
+
+# SonarCloud / SonarQube
+.scannerwork/
+sonar-report.json
+sonar-report.html
+*.scannerwork
+.sonar/

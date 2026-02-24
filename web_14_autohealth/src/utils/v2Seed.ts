@@ -7,7 +7,6 @@ export const resolveDatasetSeed = (seedValue?: number | null): number => {
     : 1;
 };
 
-export const waitForDatasetSeed = async (seedValue?: number | null) => {
-  void seedValue;
-  return;
+export const waitForDatasetSeed = async (_seedValue?: number | null): Promise<void> => {
+  return Promise.resolve();
 };

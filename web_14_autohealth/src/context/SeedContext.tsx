@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { createContext, useCallback, useContext, useEffect, useState, Suspense } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 
@@ -21,7 +21,9 @@ const SeedContext = createContext<SeedContextType>({
   isSeedReady: false,
 });
 
-export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
+type SeedProviderProps = Readonly<{ children: React.ReactNode }>;
+
+export const SeedProvider = ({ children }: SeedProviderProps) => {
   return (
     <Suspense fallback={children}>
       <SeedProviderInner>{children}</SeedProviderInner>
@@ -29,26 +31,26 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-function SeedProviderInner({ children }: { children: React.ReactNode }) {
+function SeedProviderInner({ children }: SeedProviderProps) {
   const searchParams = useSearchParams();
-  const [seed, setSeedState] = useState<number>(DEFAULT_SEED);
+  const [seed, setSeed] = useState<number>(DEFAULT_SEED);
   const [isSeedReady, setIsSeedReady] = useState<boolean>(false);
 
   // Source of truth: URL `?seed=` (clamped 1..999). If missing/invalid => 1.
   useEffect(() => {
-    setSeedState(getSeedFromUrl());
+    setSeed(getSeedFromUrl());
     setIsSeedReady(true);
   }, [searchParams]);
 
   // Optional: allow components to update seed and keep it in the URL.
-  const setSeed = useCallback((newSeed: number) => {
+  const setSeedFromChild = useCallback((newSeed: number) => {
     const clamped = clampSeed(newSeed);
-    setSeedState(clamped);
-    if (typeof window !== "undefined") {
+    setSeed(clamped);
+    if (globalThis.window !== undefined) {
       try {
-        const url = new URL(window.location.href);
+        const url = new URL(globalThis.window.location.href);
         url.searchParams.set("seed", String(clamped));
-        window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+        globalThis.window.history.replaceState({}, "", `${url.pathname}${url.search}`);
       } catch {
         // ignore
       }
@@ -61,7 +63,9 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
       if (path.startsWith("http")) return path;
 
       const currentParams =
-        typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
+        globalThis.window === undefined
+          ? new URLSearchParams()
+          : new URLSearchParams(globalThis.window.location.search);
       const [base, qs] = path.split("?");
       const params = new URLSearchParams(qs || "");
       params.set("seed", seed.toString());
@@ -77,11 +81,11 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
     [seed]
   );
 
-  return (
-    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, isSeedReady }}>
-      {children}
-    </SeedContext.Provider>
+  const value = useMemo(
+    () => ({ seed, setSeed: setSeedFromChild, getNavigationUrl, isSeedReady }),
+    [seed, setSeedFromChild, getNavigationUrl, isSeedReady]
   );
+  return <SeedContext.Provider value={value}>{children}</SeedContext.Provider>;
 }
 
 export const useSeed = () => {

@@ -12,9 +12,9 @@ export function clampSeed(seed: number): number {
 }
 
 export function getSeedFromUrl(): number {
-  if (typeof window === "undefined") return SEED_RANGE.defaultValue;
+  if (typeof globalThis.window === "undefined") return SEED_RANGE.defaultValue;
   try {
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(globalThis.window.location.search);
     const raw = params.get("seed");
     if (raw) {
       const parsed = Number.parseInt(raw, 10);

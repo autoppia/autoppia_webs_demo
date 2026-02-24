@@ -47,7 +47,7 @@ export class DynamicDataProvider {
   private getSeed(): number {
     // V2 rule: if V2 is disabled, always act as seed=1.
     if (!isV2Enabled()) return 1;
-    if (typeof window === "undefined") return 1;
+    if (typeof globalThis.window === "undefined") return 1;
     return getSeedFromUrl();
   }
 
@@ -95,7 +95,7 @@ export class DynamicDataProvider {
   }
 
   public reloadIfSeedChanged(seed?: number | null): void {
-    const targetSeed = seed !== undefined && seed !== null ? seed : this.getSeed();
+    const targetSeed = seed ?? this.getSeed();
     if (targetSeed !== this.currentSeed) {
       this.reload(targetSeed);
     }

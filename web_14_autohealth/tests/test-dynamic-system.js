@@ -137,7 +137,7 @@ function testV2DatasetVariation() {
 
   let execFileSync;
   try {
-    ({ execFileSync } = require('child_process'));
+    ({ execFileSync } = require('node:child_process'));
   } catch {
     console.log('   ⚠️  Skipped: could not load child_process');
     return results;
@@ -167,7 +167,7 @@ function testV2DatasetVariation() {
     seedsToTest.forEach((seed) => {
       const url = buildUrl(seed);
       const json = curlJSON(url);
-      const data = Array.isArray(json && json.data) ? json.data : [];
+      const data = Array.isArray(json?.data) ? json.data : [];
       const sig = data
         .slice(0, 10)
         .map((x) => (x && (x.id || x.name)) || '')
@@ -177,7 +177,7 @@ function testV2DatasetVariation() {
       console.log(`   📦 seed=${seed}: items=${data.length}`);
     });
   } catch (err) {
-    const msg = `V2 backend request failed (${baseUrl}): ${err && err.message ? err.message : String(err)}`;
+    const msg = `V2 backend request failed (${baseUrl}): ${err?.message ?? String(err)}`;
     if (strict) {
       console.log(`   ❌ ${msg}`);
       results.failed++;
@@ -911,15 +911,15 @@ function runAllTests() {
   console.log('🧪 DYNAMIC SYSTEM TEST (IMPROVED - COUNTS REAL USAGE)');
   console.log('🧪'.repeat(30));
 
-  const results = [];
-
-  results.push(testFileStructure());
-  results.push(testVariantFiles());
-  results.push(testDeterminism());
-  results.push(testSeedVariation()); // NEW!
-  results.push(testV2DatasetVariation()); // integration (strict by default)
-  results.push(testRealUsage()); // NEW!
-  results.push(testEventCoverage()); // NEW!
+  const results = [
+    testFileStructure(),
+    testVariantFiles(),
+    testDeterminism(),
+    testSeedVariation(),
+    testV2DatasetVariation(),
+    testRealUsage(),
+    testEventCoverage(),
+  ];
 
   if (isBrowser()) {
     results.push(testDOMUsage());

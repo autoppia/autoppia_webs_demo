@@ -2,7 +2,7 @@ import asyncio
 import os
 import re
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional
 from urllib.parse import urlparse
 
@@ -1084,7 +1084,7 @@ async def health_check_endpoint():
 
     db_pool_operational = False
     debug_message = "Database pool not initialized or available."
-    timestamp = datetime.utcnow()
+    timestamp = datetime.now(timezone.utc)
 
     if hasattr(app.state, "pool") and app.state.pool is not None:
         try:
@@ -1152,6 +1152,23 @@ def _build_docker_web_url(project_prefix: str, port: int) -> str:
     return f"http://{project_prefix}_{port}-web-1:{port}"
 
 
+def _normalize_http_base_url(raw: str) -> str:
+    """Ensure base URL has scheme and no trailing slash/colon."""
+    base = raw.rstrip("/").rstrip(":")
+    if not base.startswith("http://") and not base.startswith("https://"):
+        base = f"http://{base}"
+    return base
+
+
+def _webs_overall_status(healthy_count: int, total_count: int) -> str:
+    """Return 'healthy' | 'degraded' | 'unhealthy' from counts."""
+    if healthy_count == total_count:
+        return "healthy"
+    if healthy_count > 0:
+        return "degraded"
+    return "unhealthy"
+
+
 async def _check_single_web_health(client: "httpx.AsyncClient", url: str, web_info: Dict[str, str]) -> WebHealthItem:
     """Check health of a single deployed web. Returns WebHealthItem."""
     project_key = web_info["project_key"]
@@ -1202,48 +1219,35 @@ async def health_webs_endpoint():
     """
     use_docker = _use_docker_network_for_webs()
     webs_to_check = DEPLOYED_WEBS[:WEBS_HEALTH_COUNT]
-    results: List[WebHealthItem] = []
 
     def build_url(i: int) -> str:
         if use_docker and i < len(DOCKER_WEB_PROJECTS):
             prefix, port = DOCKER_WEB_PROJECTS[i]
             return _build_docker_web_url(prefix, port)
-        base = WEBS_HEALTH_BASE_URL.rstrip("/").rstrip(":")
-        if not base.startswith("http://") and not base.startswith("https://"):
-            base = f"http://{base}"
+        base = _normalize_http_base_url(WEBS_HEALTH_BASE_URL)
         return _build_web_url(base, WEBS_HEALTH_BASE_PORT + i)
 
-    base_url = "docker_network" if use_docker else WEBS_HEALTH_BASE_URL
-    if base_url != "docker_network":
-        base_url = base_url.rstrip("/").rstrip(":")
-        if not base_url.startswith("http://") and not base_url.startswith("https://"):
-            base_url = f"http://{base_url}"
+    base_url = "docker_network" if use_docker else _normalize_http_base_url(WEBS_HEALTH_BASE_URL)
 
     if HAS_HTTPX:
         async with httpx.AsyncClient() as client:
             tasks = [_check_single_web_health(client, build_url(i), webs_to_check[i]) for i in range(len(webs_to_check))]
             results = await asyncio.gather(*tasks)
     else:
-        for i, web_info in enumerate(webs_to_check):
-            results.append(
-                WebHealthItem(
-                    project_key=web_info["project_key"],
-                    name=web_info["name"],
-                    url=build_url(i),
-                    status="unhealthy",
-                    error="httpx not installed",
-                )
+        results = [
+            WebHealthItem(
+                project_key=web_info["project_key"],
+                name=web_info["name"],
+                url=build_url(i),
+                status="unhealthy",
+                error="httpx not installed",
             )
+            for i, web_info in enumerate(webs_to_check)
+        ]
 
     healthy_count = sum(1 for r in results if r.status == "healthy")
     total_count = len(results)
-
-    if healthy_count == total_count:
-        overall_status = "healthy"
-    elif healthy_count > 0:
-        overall_status = "degraded"
-    else:
-        overall_status = "unhealthy"
+    overall_status = _webs_overall_status(healthy_count, total_count)
 
     return WebsHealthResponse(
         webs=results,
@@ -1251,7 +1255,7 @@ async def health_webs_endpoint():
         total_count=total_count,
         overall_status=overall_status,
         base_url=base_url,
-        timestamp=datetime.utcnow(),
+        timestamp=datetime.now(timezone.utc),
     )
 
 

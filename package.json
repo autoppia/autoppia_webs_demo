@@ -1,0 +1,10 @@
+{
+  "name": "autoppia-webs-demo",
+  "private": true,
+  "description": "Autoppia webs demo monorepo",
+  "scripts": {
+    "sonar": "./scripts/run-sonar-local.sh",
+    "sonar:issues": "./scripts/get-sonar-issues.sh",
+    "sonar:fix": "npm run sonar && npm run sonar:issues"
+  }
+}

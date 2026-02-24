@@ -11,7 +11,7 @@ from typing import Dict, Any, List, Optional
 from loguru import logger
 
 try:
-    from filelock import FileLock
+    from filelock import FileLock  # type: ignore[import-untyped]
 
     HAS_FILELOCK = True
 except ImportError:
@@ -152,6 +152,25 @@ def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], ent
     return file_path
 
 
+def _load_from_original_dir(
+    entity_type: Optional[str], original_dir: str, data_dir: str
+) -> List[Dict[str, Any]]:
+    """Load data from original/ directory (V2 disabled path)."""
+    all_data: List[Dict[str, Any]] = []
+    if entity_type:
+        original_file = f"{original_dir}/{entity_type}_1.json"
+        fallback_file = f"{data_dir}/{entity_type}_1.json"
+        return _load_json_file_with_fallback(original_file, fallback_file)
+    for filename in sorted(os.listdir(original_dir)):
+        if not filename.endswith(".json"):
+            continue
+        original_file = f"{original_dir}/{filename}"
+        fallback_file = f"{data_dir}/{filename}" if os.path.exists(data_dir) else None
+        items = _load_json_file_with_fallback(original_file, fallback_file)
+        all_data.extend(items)
+    return all_data
+
+
 def load_all_data(
     web_name: str,
     entity_type: Optional[str] = None,
@@ -165,11 +184,8 @@ def load_all_data(
     If V2 DB mode is disabled, loads from original/ directory directly (high quality, fewer records).
     Otherwise, loads from data/ directory as referenced in main.json.
     """
-    # Check if V2 DB mode is disabled - if so, load from original/ directory
-    # v2_disabled is True when ENABLE_DYNAMIC_V2 is "false", "0", "no", or "off"
     v2_disabled_env_flag = os.getenv("ENABLE_DYNAMIC_V2", "false").lower() in {"false", "0", "no", "off"}
-    force_seed_disabled = seed_value == 1
-    v2_disabled = v2_disabled_env_flag or force_seed_disabled
+    v2_disabled = v2_disabled_env_flag or (seed_value == 1)
 
     logger.info(
         "Loading data",
@@ -182,37 +198,32 @@ def load_all_data(
         },
     )
 
-    if v2_disabled:
-        # V2 disabled: load from original/ directory (high quality dataset)
-        original_dir = f"{BASE_PATH}/{web_name}/original"
-        if not os.path.exists(original_dir):
-            # Fallback to main.json if original/ doesn't exist
-            logger.warning(
-                "original directory missing, falling back to main.json",
-                extra={"original_dir": original_dir, "web_name": web_name},
-            )
-            return _load_from_main_json(web_name, entity_type)
-
-        data_dir = get_data_dir(web_name)
-        all_data: List[Dict[str, Any]] = []
-
-        if entity_type:
-            original_file = f"{original_dir}/{entity_type}_1.json"
-            fallback_file = f"{data_dir}/{entity_type}_1.json"
-            all_data = _load_json_file_with_fallback(original_file, fallback_file)
-        else:
-            for filename in sorted(os.listdir(original_dir)):
-                if not filename.endswith(".json"):
-                    continue
-                original_file = f"{original_dir}/{filename}"
-                fallback_file = f"{data_dir}/{filename}" if os.path.exists(data_dir) else None
-                items = _load_json_file_with_fallback(original_file, fallback_file)
-                all_data.extend(items)
-
-        return all_data
-    else:
-        # V2 enabled: load from main.json (which references data/ directory)
+    if not v2_disabled:
         return _load_from_main_json(web_name, entity_type)
+
+    original_dir = f"{BASE_PATH}/{web_name}/original"
+    if not os.path.exists(original_dir):
+        logger.warning(
+            "original directory missing, falling back to main.json",
+            extra={"original_dir": original_dir, "web_name": web_name},
+        )
+        return _load_from_main_json(web_name, entity_type)
+
+    data_dir = get_data_dir(web_name)
+    return _load_from_original_dir(entity_type, original_dir, data_dir)
+
+
+def _get_rel_paths_from_main(main: Any, entity_type: Optional[str]) -> List[str]:
+    """Build list of relative file paths from main.json dict depending on entity filter."""
+    if not isinstance(main, dict):
+        return []
+    if entity_type:
+        return main.get(entity_type) or []
+    rel_paths: List[str] = []
+    for value in main.values():
+        if isinstance(value, list):
+            rel_paths.extend(value)
+    return rel_paths
 
 
 def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> List[Dict[str, Any]]:
@@ -227,29 +238,19 @@ def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> Li
     try:
         with open(main_path, "r", encoding="utf-8") as f:
             main = json.load(f)
-    except Exception as exc:
+    except (OSError, json.JSONDecodeError) as exc:
         logger.error("Failed to read main.json", extra={"web_name": web_name, "path": main_path, "error": str(exc)})
         return []
 
     all_data: List[Dict[str, Any]] = []
-    # Build list of relative paths depending on entity filter
-    if isinstance(main, dict):
-        if entity_type:
-            rel_paths = main.get(entity_type) or []
-        else:
-            # Merge all entity lists
-            rel_paths = []
-            for value in main.values():
-                if isinstance(value, list):
-                    rel_paths.extend(value)
-    else:
-        rel_paths = []
-
-    for rel_path in rel_paths:
+    for rel_path in _get_rel_paths_from_main(main, entity_type):
         normalized_rel = rel_path.lstrip("./")
         abs_path = f"{BASE_PATH}/{web_name}/{normalized_rel}"
         if not os.path.exists(abs_path):
-            logger.warning("Referenced data file missing", extra={"path": abs_path, "rel_path": rel_path, "web_name": web_name})
+            logger.warning(
+                "Referenced data file missing",
+                extra={"path": abs_path, "rel_path": rel_path, "web_name": web_name},
+            )
             continue
         items = _parse_json_file_to_items(abs_path)
         if items is not None:
@@ -351,8 +352,8 @@ def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, 
                 existing_data = json.load(f)
                 if not isinstance(existing_data, list):
                     existing_data = [existing_data]
-        except Exception as e:
-            print(f"Warning: Could not read existing file {file_path}: {e}")
+        except (OSError, json.JSONDecodeError) as e:
+            logger.warning("Could not read existing file", extra={"path": file_path, "error": str(e)})
             existing_data = []
 
     # Append new data
@@ -388,5 +389,8 @@ def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, 
     with open(main_path, "w", encoding="utf-8") as f:
         json.dump(main, f, indent=2, ensure_ascii=False)
 
-    print(f"✅ Appended {len(data)} records to {file_path} (total: {len(combined_data)})")
+    logger.info(
+        "Appended records to file",
+        extra={"path": file_path, "appended": len(data), "total": len(combined_data)},
+    )
     return file_path
