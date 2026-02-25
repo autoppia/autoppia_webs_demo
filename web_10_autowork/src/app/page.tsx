@@ -934,19 +934,30 @@ export default function Home() {
 	const [userJobs, setUserJobs] = useState<any[]>([]);
 	const { layout, getElementAttributes, getText, dyn } = useSeedLayout();
 
-	// Use V2 dynamic data provider
+	// Use V2 dynamic data provider – load full lists for pagination on Experts/Hires pages
 	const [jobs, setJobs] = useState<any[]>([]);
 	const [hires, setHires] = useState<any[]>([]);
 	const [experts, setExperts] = useState<any[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
-	// Subscribe to data changes
+	// Pagination for Experts and Hires dedicated pages (display all fetched data)
+	const PAGE_SIZE = 9;
+	const [expertsPage, setExpertsPage] = useState(1);
+	const [hiresPage, setHiresPage] = useState(1);
+
+	// Reset pagination when navigating to experts/hires pages
+	useEffect(() => {
+		if (pathname?.includes("/experts")) setExpertsPage(1);
+		if (pathname?.includes("/hires")) setHiresPage(1);
+	}, [pathname]);
+
+	// Subscribe to data changes – full lists (no slice) so pagination can show all
 	useEffect(() => {
 		// Wait for data to be ready
 		dyn.v2.whenReady().then(() => {
 			setJobs(dynamicDataProvider.getJobs().slice(0, 6));
-			setHires(dynamicDataProvider.getHires().slice(0, 6));
-			setExperts(dynamicDataProvider.getExperts().slice(0, 6));
+			setHires(dynamicDataProvider.getHires());
+			setExperts(dynamicDataProvider.getExperts());
 			setIsLoading(false);
 		});
 
@@ -955,10 +966,10 @@ export default function Home() {
 			setJobs(updatedJobs.slice(0, 6));
 		});
 		const unsubscribeHires = dynamicDataProvider.subscribeHires((updatedHires) => {
-			setHires(updatedHires.slice(0, 6));
+			setHires(updatedHires);
 		});
 		const unsubscribeExperts = dynamicDataProvider.subscribeExperts((updatedExperts) => {
-			setExperts(updatedExperts.slice(0, 6));
+			setExperts(updatedExperts);
 		});
 
 		return () => {
@@ -1240,7 +1251,7 @@ export default function Home() {
 			const matchingExpert = dynamicDataProvider.getExpertByName(matchingHire.name);
 
 			// Use expert's slug if found, otherwise generate from hire name
-			const slug = matchingExpert?.slug || matchingHire.slug || generateSlug(matchingHire.name);
+			const slug = matchingExpert?.slug || (matchingHire as any).slug || generateSlug(matchingHire.name);
 			console.log(`[autowork] handleViewProfile: hire="${matchingHire.name}", found expert="${matchingExpert?.name || 'none'}", using slug="${slug}"`);
 			router.push(`/expert/${slug}`);
 		};
@@ -1308,9 +1319,17 @@ export default function Home() {
 					</div>
 				</div>
 
-				{/* Hire Cards Grid */}
+				{/* Hire Cards Grid – on /hires show paginated list; on home show preview */}
+				{(() => {
+					const isHiresPage = pathname?.includes("/hires");
+					const displayedHires = isHiresPage
+						? hires.slice((hiresPage - 1) * PAGE_SIZE, hiresPage * PAGE_SIZE)
+						: hires.slice(0, 6);
+					const totalHiresPages = Math.max(1, Math.ceil(hires.length / PAGE_SIZE));
+					return (
+						<>
 				<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-					{hires.map((hire: any, i: number) => (
+					{displayedHires.map((hire: any, i: number) => (
 						dyn.v1.addWrapDecoy("rehire-expert-card", (
 							<div
 								key={hire.name}
@@ -1385,6 +1404,32 @@ export default function Home() {
 						), `rehire-expert-card-wrap-${i}`)
 					))}
 				</div>
+				{isHiresPage && totalHiresPages > 1 && (
+					<nav className="mt-8 flex items-center justify-center gap-3 flex-wrap" aria-label="Hires pagination">
+						<button
+							type="button"
+							onClick={() => setHiresPage((p) => Math.max(1, p - 1))}
+							disabled={hiresPage <= 1}
+							className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+						>
+							Previous
+						</button>
+						<span className="text-sm text-gray-600">
+							Page {hiresPage} of {totalHiresPages}
+						</span>
+						<button
+							type="button"
+							onClick={() => setHiresPage((p) => Math.min(totalHiresPages, p + 1))}
+							disabled={hiresPage >= totalHiresPages}
+							className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+						>
+							Next
+						</button>
+					</nav>
+				)}
+						</>
+					);
+				})()}
 			</section>
 		));
 	};
@@ -1506,9 +1551,17 @@ export default function Home() {
 					</div>
 				</div>
 
-				{/* Expert Cards Grid */}
+				{/* Expert Cards Grid – on /experts show paginated list; on home show preview */}
+				{(() => {
+					const isExpertsPage = pathname?.includes("/experts");
+					const displayedExperts = isExpertsPage
+						? experts.slice((expertsPage - 1) * PAGE_SIZE, expertsPage * PAGE_SIZE)
+						: experts.slice(0, 6);
+					const totalExpertsPages = Math.max(1, Math.ceil(experts.length / PAGE_SIZE));
+					return (
+						<>
 				<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-					{experts.map((expert: any, i: number) => {
+					{displayedExperts.map((expert: any, i: number) => {
 						const isFavorite = favorites.has(expert.name);
 						return (
 							dyn.v1.addWrapDecoy("expert-card", (
@@ -1616,6 +1669,32 @@ export default function Home() {
 						);
 					})}
 				</div>
+				{isExpertsPage && totalExpertsPages > 1 && (
+					<nav className="mt-8 flex items-center justify-center gap-3 flex-wrap" aria-label="Experts pagination">
+						<button
+							type="button"
+							onClick={() => setExpertsPage((p) => Math.max(1, p - 1))}
+							disabled={expertsPage <= 1}
+							className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+						>
+							Previous
+						</button>
+						<span className="text-sm text-gray-600">
+							Page {expertsPage} of {totalExpertsPages}
+						</span>
+						<button
+							type="button"
+							onClick={() => setExpertsPage((p) => Math.min(totalExpertsPages, p + 1))}
+							disabled={expertsPage >= totalExpertsPages}
+							className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+						>
+							Next
+						</button>
+					</nav>
+				)}
+						</>
+					);
+				})()}
 			</section>
 		));
 	};
