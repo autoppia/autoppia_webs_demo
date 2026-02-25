@@ -27,7 +27,9 @@ export default function BottomNav() {
                 }
               }}
               className={`px-3 py-2 rounded text-sm font-medium ${
-                pathname === it.href ? "text-blue-700 bg-blue-50" : "text-gray-700 hover:bg-gray-100"
+                (it.href.startsWith("/profile/") ? pathname.startsWith("/profile/") : pathname === it.href)
+                  ? "text-blue-700 bg-blue-50"
+                  : "text-gray-700 hover:bg-gray-100"
               }`}
             >
               {it.label}
