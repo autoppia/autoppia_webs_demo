@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 150 20% 4%;
+    --foreground: 0 0% 95%;
+    --card: 150 15% 7%;
+    --card-foreground: 0 0% 95%;
+    --popover: 150 15% 7%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 160 84% 39%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 150 10% 15%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 150 10% 15%;
+    --muted-foreground: 150 5% 65%;
+    --accent: 150 10% 15%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 150 10% 15%;
+    --input: 150 10% 15%;
+    --ring: 160 84% 39%;
+    --radius: 0.5rem;
+    --chart-1: 160 84% 39%;
+    --chart-2: 45 93% 47%;
+    --chart-3: 200 70% 50%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Chess board square colors */
+.chess-light {
+  background-color: #779952;
+}
+.chess-dark {
+  background-color: #486632;
+}
+.chess-highlight {
+  background-color: rgba(255, 255, 100, 0.4);
+}
+.chess-selected {
+  background-color: rgba(32, 178, 170, 0.6);
+  box-shadow: inset 0 0 0 2px rgba(32, 178, 170, 0.8);
+}
+.chess-correct {
+  background-color: rgba(34, 197, 94, 0.5);
+  box-shadow: inset 0 0 0 2px rgba(34, 197, 94, 0.7);
+}
+.chess-incorrect {
+  background-color: rgba(239, 68, 68, 0.5);
+  box-shadow: inset 0 0 0 2px rgba(239, 68, 68, 0.7);
+}
+
+/* Responsive chess piece sizing */
+.chess-piece {
+  font-size: clamp(1rem, 6.5vw, 3rem);
+  line-height: 1;
+}
+
+/* Hide the floating Next.js dev overlay icon */
+[data-nextjs-toast], .nextjs-toast-override {
+  display: none !important;
+}
+
+.nextjs-portal {
+  display: none !important;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Native select options dark theme */
+select option {
+  background-color: #111a11;
+  color: #d4d4d8;
+}
