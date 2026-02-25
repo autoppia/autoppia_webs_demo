@@ -14,3 +14,13 @@ export function getBlockByNumber(blockNumber: number) {
 export function getRecentBlocks(count = 10) {
   return mockBlocks.slice(0, count);
 }
+
+export function searchBlocks(query: string) {
+  const lowerQuery = query.toLowerCase().trim();
+  if (!lowerQuery) return mockBlocks.slice(0, 10);
+  return mockBlocks.filter(
+    (block) =>
+      block.number.toString().includes(lowerQuery) ||
+      block.hash.toLowerCase().includes(lowerQuery)
+  );
+}
