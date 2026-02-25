@@ -1,0 +1,67 @@
+export const APP_NAME = "AutoChess";
+export const APP_DESCRIPTION = "Chess Tournament Platform & Tactics Trainer";
+
+export const GAME_TYPES = ["Classical", "Rapid", "Blitz"] as const;
+export const TOURNAMENT_STATUSES = ["upcoming", "active", "completed"] as const;
+export const PLAYER_TITLES = ["", "GM", "IM", "FM", "CM", "WGM", "WIM", "WFM"] as const;
+
+export const PUZZLE_THEMES = [
+  "Fork",
+  "Pin",
+  "Skewer",
+  "Discovery",
+  "Mate in 1",
+  "Mate in 2",
+  "Mate in 3",
+  "Deflection",
+  "Decoy",
+  "Sacrifice",
+  "Trapped Piece",
+  "Zugzwang",
+  "Back Rank",
+  "Overloaded Piece",
+  "Clearance",
+] as const;
+
+export const COUNTRIES: { name: string; code: string }[] = [
+  { name: "Russia", code: "RU" },
+  { name: "United States", code: "US" },
+  { name: "China", code: "CN" },
+  { name: "India", code: "IN" },
+  { name: "Norway", code: "NO" },
+  { name: "France", code: "FR" },
+  { name: "Germany", code: "DE" },
+  { name: "England", code: "GB" },
+  { name: "Spain", code: "ES" },
+  { name: "Netherlands", code: "NL" },
+  { name: "Poland", code: "PL" },
+  { name: "Ukraine", code: "UA" },
+  { name: "Armenia", code: "AM" },
+  { name: "Azerbaijan", code: "AZ" },
+  { name: "Hungary", code: "HU" },
+  { name: "Czech Republic", code: "CZ" },
+  { name: "Israel", code: "IL" },
+  { name: "Iran", code: "IR" },
+  { name: "Cuba", code: "CU" },
+  { name: "Philippines", code: "PH" },
+  { name: "Vietnam", code: "VN" },
+  { name: "Indonesia", code: "ID" },
+  { name: "Argentina", code: "AR" },
+  { name: "Brazil", code: "BR" },
+  { name: "Peru", code: "PE" },
+  { name: "Romania", code: "RO" },
+  { name: "Serbia", code: "RS" },
+  { name: "Croatia", code: "HR" },
+  { name: "Georgia", code: "GE" },
+  { name: "Uzbekistan", code: "UZ" },
+  { name: "Turkey", code: "TR" },
+  { name: "Italy", code: "IT" },
+  { name: "Sweden", code: "SE" },
+  { name: "Australia", code: "AU" },
+  { name: "Canada", code: "CA" },
+  { name: "Egypt", code: "EG" },
+  { name: "South Africa", code: "ZA" },
+  { name: "Japan", code: "JP" },
+  { name: "South Korea", code: "KR" },
+  { name: "Greece", code: "GR" },
+];
