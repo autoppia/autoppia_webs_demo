@@ -16,6 +16,7 @@ export function ErrorState({ message, onRetry }: ErrorStateProps) {
         type="button"
         onClick={onRetry}
         className="px-4 py-2 rounded-md bg-discord-accent hover:bg-discord-accent/90 text-white font-medium transition-colors"
+        data-testid="error-retry"
       >
         Retry
       </button>

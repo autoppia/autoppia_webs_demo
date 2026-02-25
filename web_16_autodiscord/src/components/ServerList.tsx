@@ -11,6 +11,7 @@ interface ServerListProps {
   onSelect: (id: string) => void;
   onViewModeChange: (mode: "servers" | "dms") => void;
   onAddServer: () => void;
+  onGoHome?: () => void;
 }
 
 export function ServerList({
@@ -20,11 +21,18 @@ export function ServerList({
   onSelect,
   onViewModeChange,
   onAddServer,
+  onGoHome,
 }: ServerListProps) {
   const handleSelectServer = (id: string) => {
     onViewModeChange("servers");
     onSelect(id);
     logEvent(EVENT_TYPES.SELECT_SERVER, { server_id: id });
+  };
+
+  const handleHome = () => {
+    onViewModeChange("servers");
+    logEvent(EVENT_TYPES.VIEW_SERVERS, {});
+    onGoHome?.();
   };
 
   const handleDMs = () => {
@@ -40,18 +48,17 @@ export function ServerList({
     <aside
       className="w-[72px] flex-shrink-0 bg-discord-darker flex flex-col items-center py-3 gap-2 scrollbar-thin overflow-y-auto"
       aria-label="Servers"
+      data-testid="server-list"
     >
       <button
         type="button"
-        onClick={() => {
-          onViewModeChange("servers");
-          logEvent(EVENT_TYPES.VIEW_SERVERS, {});
-        }}
+        onClick={handleHome}
         className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${
-          viewMode === "servers" ? "bg-discord-accent text-white rounded-xl" : "text-gray-400 hover:bg-white/10 hover:text-white"
+          viewMode === "servers" && !selectedId ? "bg-discord-accent text-white rounded-xl" : viewMode === "servers" ? "bg-discord-dark text-gray-300 hover:bg-discord-accent hover:text-white rounded-xl" : "text-gray-400 hover:bg-white/10 hover:text-white"
         }`}
-        title="Servers"
-        aria-pressed={viewMode === "servers"}
+        title="Home"
+        aria-pressed={viewMode === "servers" && !selectedId}
+        data-testid="server-list-home"
       >
         <Home className="w-6 h-6" />
       </button>
@@ -63,6 +70,7 @@ export function ServerList({
         }`}
         title="Direct Messages"
         aria-pressed={viewMode === "dms"}
+        data-testid="server-list-dms"
       >
         <MessageCircle className="w-6 h-6" />
       </button>
@@ -82,6 +90,7 @@ export function ServerList({
               }`}
               title={s.name}
               aria-pressed={isSelected}
+              data-testid={`server-${s.id}`}
             >
               {s.name.slice(0, 2).toUpperCase()}
             </button>
@@ -93,6 +102,7 @@ export function ServerList({
         onClick={handleAddServer}
         className="w-12 h-12 rounded-2xl flex items-center justify-center bg-discord-dark text-gray-400 hover:bg-green-600 hover:text-white transition-colors"
         title="Add Server"
+        data-testid="server-list-add"
       >
         <Plus className="w-6 h-6" />
       </button>
@@ -101,6 +111,7 @@ export function ServerList({
         className="mt-auto w-12 h-12 rounded-2xl flex items-center justify-center text-gray-400 hover:bg-white/10 hover:text-white transition-colors"
         title="Settings"
         aria-label="Settings"
+        data-testid="server-list-settings"
       >
         <Settings className="w-5 h-5" />
       </a>

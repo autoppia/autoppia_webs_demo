@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Hash, ThumbsUp } from "lucide-react";
+import { Hash, ThumbsUp, Send } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { formatMessageTime, formatMessageDateGroup } from "@/utils/format";
 import { EmptyState } from "@/components/EmptyState";
@@ -86,7 +86,7 @@ export function ChatPanel({
   const isEmpty = messages.length === 0;
 
   return (
-    <section className="flex-1 flex flex-col bg-discord-channel min-w-0" aria-label="Chat">
+    <section className="flex-1 flex flex-col bg-discord-channel min-w-0" aria-label="Chat" data-testid="chat-panel">
       <header className="h-12 px-4 flex items-center border-b border-black/20 gap-2">
         <Hash className="w-5 h-5 text-gray-400" aria-hidden />
         <span className="font-semibold text-white">{channel.name}</span>
@@ -137,6 +137,7 @@ export function ChatPanel({
                                 onReaction(msg.id, r.emoji);
                               }}
                                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-white/10 hover:bg-white/15 text-gray-300 text-sm"
+                                data-testid={`message-reaction-${msg.id}-${r.emoji}`}
                               >
                                 {r.emoji === "👍" ? <ThumbsUp className="w-3.5 h-3.5" /> : r.emoji}
                                 <span>{r.count}</span>
@@ -153,6 +154,7 @@ export function ChatPanel({
                               }}
                             className="mt-1 opacity-0 group-hover:opacity-100 inline-flex items-center gap-1 px-2 py-0.5 rounded hover:bg-white/10 text-gray-400 text-sm transition-opacity"
                             aria-label="Add reaction"
+                            data-testid={`message-add-reaction-${msg.id}`}
                           >
                             <ThumbsUp className="w-3.5 h-3.5" />
                           </button>
@@ -167,7 +169,7 @@ export function ChatPanel({
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="p-4 border-t border-black/20">
+      <form onSubmit={handleSubmit} className="p-4 border-t border-black/20 flex gap-2">
         <input
           ref={inputRef}
           type="text"
@@ -175,9 +177,19 @@ export function ChatPanel({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           maxLength={2000}
-          className="w-full rounded-md bg-discord-input px-4 py-2.5 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-discord-accent"
+          className="flex-1 rounded-md bg-discord-input px-4 py-2.5 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-discord-accent"
           aria-label={`Message ${channel.name}`}
+          data-testid="chat-message-input"
         />
+        <button
+          type="submit"
+          disabled={!input.trim()}
+          className="p-2.5 rounded-md bg-discord-accent text-white hover:bg-discord-accent/90 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+          aria-label="Send message"
+          data-testid="chat-send-button"
+        >
+          <Send className="w-5 h-5" />
+        </button>
       </form>
     </section>
   );

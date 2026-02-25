@@ -1,6 +1,6 @@
 "use client";
 
-import { Hash, Mic, Settings } from "lucide-react";
+import { Hash, Mic, Plus, Settings } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import type { Server, Channel } from "@/types/discord";
 
@@ -11,6 +11,7 @@ interface ChannelSidebarProps {
   unreadChannelIds?: Set<string>;
   onSelectChannel: (id: string) => void;
   onOpenServerSettings: () => void;
+  onAddChannel?: () => void;
 }
 
 export function ChannelSidebar({
@@ -20,6 +21,7 @@ export function ChannelSidebar({
   unreadChannelIds = new Set(),
   onSelectChannel,
   onOpenServerSettings,
+  onAddChannel,
 }: ChannelSidebarProps) {
   if (!server) return null;
 
@@ -31,7 +33,7 @@ export function ChannelSidebar({
   };
 
   return (
-    <aside className="w-60 flex-shrink-0 bg-discord-sidebar flex flex-col overflow-hidden" aria-label="Channels">
+    <aside className="w-60 flex-shrink-0 bg-discord-sidebar flex flex-col overflow-hidden" aria-label="Channels" data-testid="channel-sidebar">
       <div className="h-12 px-4 flex items-center border-b border-black/20 shadow gap-1">
         <span className="font-semibold text-white truncate flex-1">{server.name}</span>
         <button
@@ -43,6 +45,7 @@ export function ChannelSidebar({
           className="p-1 rounded text-gray-400 hover:text-white hover:bg-white/10"
           title="Server settings"
           aria-label="Server settings"
+          data-testid="channel-sidebar-server-settings"
         >
           <Settings className="w-4 h-4" />
         </button>
@@ -64,6 +67,7 @@ export function ChannelSidebar({
                   isSelected ? "bg-white/10 text-white" : ""
                 } ${hasUnread ? "font-semibold" : ""}`}
                 aria-pressed={isSelected}
+                data-testid={`channel-${ch.id}`}
               >
                 {isText ? <Hash className="w-4 h-4 flex-shrink-0" /> : <Mic className="w-4 h-4 flex-shrink-0" />}
                 <span className="truncate flex-1">{ch.name}</span>
@@ -73,6 +77,18 @@ export function ChannelSidebar({
               </button>
             );
           })
+        )}
+        {onAddChannel && (
+          <button
+            type="button"
+            onClick={onAddChannel}
+            className="w-full px-4 py-1.5 mt-1 flex items-center gap-2 text-left text-gray-400 hover:bg-white/5 hover:text-white"
+            title="Create channel"
+            data-testid="channel-sidebar-add-channel"
+          >
+            <Plus className="w-4 h-4 flex-shrink-0" />
+            <span>Create channel</span>
+          </button>
         )}
       </div>
     </aside>

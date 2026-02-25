@@ -16,12 +16,10 @@ module.exports = defineConfig({
     trace: "on-first-retry",
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
-  webServer: process.env.CI
-    ? undefined
-    : {
-        command: "npm run dev",
-        url: baseURL,
-        reuseExistingServer: !process.env.CI,
-        timeout: 120000,
-      },
+  webServer: {
+    command: "npm run dev",
+    url: baseURL,
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000,
+  },
 });

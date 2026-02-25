@@ -37,6 +37,7 @@ export default function SettingsPage() {
           href="/"
           className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10"
           aria-label="Back"
+          data-testid="settings-back"
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
@@ -54,6 +55,7 @@ export default function SettingsPage() {
                 checked={theme === "dark"}
                 onChange={() => handleThemeChange("dark")}
                 className="rounded-full border-gray-500 text-discord-accent focus:ring-discord-accent"
+                data-testid="settings-theme-dark"
               />
               <span className="text-gray-200">Dark</span>
             </label>
@@ -64,6 +66,7 @@ export default function SettingsPage() {
                 checked={theme === "light"}
                 onChange={() => handleThemeChange("light")}
                 className="rounded-full border-gray-500 text-discord-accent focus:ring-discord-accent"
+                data-testid="settings-theme-light"
               />
               <span className="text-gray-200">Light</span>
             </label>
@@ -79,6 +82,7 @@ export default function SettingsPage() {
               checked={notifications}
               onChange={(e) => handleNotificationsChange(e.target.checked)}
               className="rounded border-gray-500 text-discord-accent focus:ring-discord-accent"
+              data-testid="settings-notifications"
             />
           </div>
         </section>
@@ -94,11 +98,13 @@ export default function SettingsPage() {
               onChange={(e) => setDisplayName(e.target.value)}
               className="w-full rounded-md bg-discord-input px-4 py-2.5 text-gray-200 focus:outline-none focus:ring-1 focus:ring-discord-accent"
               maxLength={32}
+              data-testid="settings-display-name"
             />
             <button
               type="button"
               onClick={handleAccountSave}
               className="px-4 py-2 rounded-md bg-discord-accent text-white hover:bg-discord-accent/90"
+              data-testid="settings-account-save"
             >
               Save
             </button>

@@ -16,7 +16,7 @@ export function DMSidebar({ peers, selectedUserId, onSelectUser }: DMSidebarProp
   };
 
   return (
-    <aside className="w-60 flex-shrink-0 bg-discord-sidebar flex flex-col overflow-hidden" aria-label="Direct messages">
+    <aside className="w-60 flex-shrink-0 bg-discord-sidebar flex flex-col overflow-hidden" aria-label="Direct messages" data-testid="dm-sidebar">
       <div className="h-12 px-4 flex items-center border-b border-black/20 shadow">
         <span className="font-semibold text-white">Direct Messages</span>
       </div>
@@ -35,6 +35,7 @@ export function DMSidebar({ peers, selectedUserId, onSelectUser }: DMSidebarProp
                   isSelected ? "bg-white/10 text-white" : "text-gray-300 hover:bg-white/5 hover:text-white"
                 }`}
                 aria-pressed={isSelected}
+                data-testid={`dm-peer-${m.id}`}
               >
                 <div className="w-8 h-8 rounded-full bg-discord-darker flex items-center justify-center text-sm font-medium flex-shrink-0">
                   {m.displayName.slice(0, 2).toUpperCase()}

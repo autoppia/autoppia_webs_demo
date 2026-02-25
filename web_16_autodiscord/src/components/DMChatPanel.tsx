@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { Send } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { formatMessageTime } from "@/utils/format";
 import { EmptyState } from "@/components/EmptyState";
@@ -43,7 +44,7 @@ export function DMChatPanel({ peer, messages, onSendMessage }: DMChatPanelProps)
   const isEmpty = sorted.length === 0;
 
   return (
-    <section className="flex-1 flex flex-col bg-discord-channel min-w-0" aria-label="DM conversation">
+    <section className="flex-1 flex flex-col bg-discord-channel min-w-0" aria-label="DM conversation" data-testid="dm-chat-panel">
       <header className="h-12 px-4 flex items-center border-b border-black/20 gap-2">
         <div className="w-8 h-8 rounded-full bg-discord-darker flex items-center justify-center text-sm font-medium text-gray-300">
           {peer.displayName.slice(0, 2).toUpperCase()}
@@ -81,7 +82,7 @@ export function DMChatPanel({ peer, messages, onSendMessage }: DMChatPanelProps)
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="p-4 border-t border-black/20">
+      <form onSubmit={handleSubmit} className="p-4 border-t border-black/20 flex gap-2">
         <input
           ref={inputRef}
           type="text"
@@ -89,9 +90,19 @@ export function DMChatPanel({ peer, messages, onSendMessage }: DMChatPanelProps)
           value={input}
           onChange={(e) => setInput(e.target.value)}
           maxLength={2000}
-          className="w-full rounded-md bg-discord-input px-4 py-2.5 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-discord-accent"
+          className="flex-1 rounded-md bg-discord-input px-4 py-2.5 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-discord-accent"
           aria-label={`Message ${peer.displayName}`}
+          data-testid="dm-message-input"
         />
+        <button
+          type="submit"
+          disabled={!input.trim()}
+          className="p-2.5 rounded-md bg-discord-accent text-white hover:bg-discord-accent/90 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+          aria-label="Send message"
+          data-testid="dm-send-button"
+        >
+          <Send className="w-5 h-5" />
+        </button>
       </form>
     </section>
   );
