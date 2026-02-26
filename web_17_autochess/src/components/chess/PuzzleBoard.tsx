@@ -170,7 +170,7 @@ export function PuzzleBoard({ puzzle, onSolve }: PuzzleBoardProps) {
         )}
       </div>
 
-      <div style={{ width: "100%", maxWidth: 480 }}>
+      <div style={{ width: "100%", maxWidth: 480, aspectRatio: "1/1" }}>
         {mounted ? (
           <Chessboard
             options={{
@@ -183,7 +183,8 @@ export function PuzzleBoard({ puzzle, onSolve }: PuzzleBoardProps) {
               boardStyle: {
                 borderRadius: "0.5rem",
                 overflow: "hidden",
-                border: "2px solid rgba(120, 113, 108, 0.3)",
+                border: "2px solid rgba(168, 162, 158, 0.35)",
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.4)",
               },
             }}
           />

@@ -72,7 +72,7 @@ export function Footer() {
 
           <div className="mt-8 pt-8 border-t border-stone-800/80 text-center text-sm text-zinc-500">
             <DynamicText
-              value="2024 AutoChess. All rights reserved."
+              value="2026 AutoChess. All rights reserved."
               type="text"
             />
           </div>

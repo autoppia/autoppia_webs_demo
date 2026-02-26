@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { COUNTRIES, GAME_TYPES, TOURNAMENT_STATUSES } from "@/shared/constants";
 import { TournamentMapLoader } from "@/components/tournaments/TournamentMapLoader";
-import { Search, X, ArrowUpDown, SlidersHorizontal, LayoutList, MapPin } from "lucide-react";
+import { Search, X, ArrowUpDown, Calendar, MapPin, List, Trophy, Zap } from "lucide-react";
 
 type SortField = "name" | "date" | "players" | "elo";
 type SortDir = "asc" | "desc";
@@ -27,32 +27,39 @@ export default function TournamentsPage() {
   const searchParams = useSearchParams();
   const tournaments = useMemo(() => generateTournaments(50, seed), [seed]);
 
-  // Initialize from URL params
   const [search, setSearch] = useState("");
   const [countryFilter, setCountryFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [startDateFilter, setStartDateFilter] = useState("");
   const [endDateFilter, setEndDateFilter] = useState("");
-  const [sortField, setSortField] = useState<SortField>("name");
-  const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [sortField, setSortField] = useState<SortField>("date");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [viewMode, setViewMode] = useState<ViewMode>("list");
 
-  // Read URL params on mount
   useEffect(() => {
     const country = searchParams.get("country");
     const gameType = searchParams.get("gameType");
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
+    const view = searchParams.get("view");
 
     if (country) setCountryFilter(country);
     if (gameType) {
-      // If it's a single type, use it directly; if comma-separated, pick first
       const types = gameType.split(",");
-      if (types.length === 1) setTypeFilter(types[0]);
+      // Single type: use the existing single-select filter
+      if (types.length === 1 && GAME_TYPES.includes(types[0])) {
+        setTypeFilter(types[0]);
+      }
+      // Multiple types: pick the first valid one (single-select filter)
+      else if (types.length > 1) {
+        const firstValid = types.find((t) => GAME_TYPES.includes(t));
+        if (firstValid) setTypeFilter(firstValid);
+      }
     }
     if (startDate) setStartDateFilter(startDate);
     if (endDate) setEndDateFilter(endDate);
+    if (view === "map" || view === "list") setViewMode(view);
   }, [searchParams]);
 
   const handleSearch = useCallback((value: string) => {
@@ -119,45 +126,54 @@ export default function TournamentsPage() {
 
   const getCountryName = (code: string) => COUNTRIES.find((c) => c.code === code)?.name || code;
 
+  const gameTypeIcon = (type: string) => {
+    if (type === "Classical") return <Trophy className="h-3.5 w-3.5" />;
+    return <Zap className="h-3.5 w-3.5" />;
+  };
+
   return (
     <div className="py-6">
+      {/* Page header */}
       <DynamicWrapper>
-        <h1 className="text-3xl font-bold text-white mb-6">
-          <DynamicText value="Tournaments" type="text" />
-        </h1>
-      </DynamicWrapper>
-
-      {/* Search bar */}
-      <DynamicWrapper>
-        <div className="relative mb-4">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-500" />
-          <input
-            type="text"
-            placeholder="Search by tournament name or location..."
-            value={search}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="w-full h-12 pl-12 pr-10 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50 transition-all"
-          />
-          {search && (
-            <button
-              onClick={() => setSearch("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full text-zinc-500 hover:text-white hover:bg-white/10 transition-colors"
-              aria-label="Clear search"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h1 className="text-2xl font-bold text-white">
+              <DynamicText value="Tournament Search" type="text" />
+            </h1>
+            <p className="text-sm text-stone-500 mt-0.5">Find chess tournaments worldwide</p>
+          </div>
+          <div className="text-sm text-stone-400">
+            <span className="text-amber-400 font-semibold">{filtered.length}</span> result{filtered.length !== 1 ? "s" : ""}
+          </div>
         </div>
       </DynamicWrapper>
 
-      {/* Filter bar */}
+      {/* Filter Panel */}
       <DynamicWrapper>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <SlidersHorizontal className="h-4 w-4 text-zinc-500 hidden sm:block" />
+        <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-4 mb-5">
+          {/* Row 1: Search + Country */}
+          <div className="flex flex-col sm:flex-row gap-3 mb-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-500" />
+              <input
+                type="text"
+                placeholder="Search tournament name or location..."
+                value={search}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="w-full h-10 pl-10 pr-9 rounded-lg bg-white/[0.06] border border-stone-700/50 text-white placeholder:text-stone-500 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50 transition-all"
+              />
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded text-stone-500 hover:text-white transition-colors"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
             <Select value={countryFilter} onValueChange={(v) => handleFilter("country", v)}>
-              <SelectTrigger className="w-full sm:w-[160px] bg-white/10 border-white/20 text-zinc-300 h-10">
-                <SelectValue placeholder="Country" />
+              <SelectTrigger className="w-full sm:w-[180px] bg-white/[0.06] border-stone-700/50 text-zinc-300 h-10 text-sm">
+                <SelectValue placeholder="All Countries" />
               </SelectTrigger>
               <SelectContent className="bg-[#1c1917] border-stone-700/50">
                 <SelectItem value="all">All Countries</SelectItem>
@@ -168,19 +184,48 @@ export default function TournamentsPage() {
                 ))}
               </SelectContent>
             </Select>
-            <Select value={typeFilter} onValueChange={(v) => handleFilter("gameType", v)}>
-              <SelectTrigger className="w-full sm:w-[140px] bg-white/10 border-white/20 text-zinc-300 h-10">
-                <SelectValue placeholder="Type" />
-              </SelectTrigger>
-              <SelectContent className="bg-[#1c1917] border-stone-700/50">
-                <SelectItem value="all">All Types</SelectItem>
-                {GAME_TYPES.map((t) => (
-                  <SelectItem key={t} value={t}>{t}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          </div>
+
+          {/* Row 2: Game type toggles + Status + Dates + Sort */}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Game type toggle buttons */}
+            <div className="flex rounded-lg border border-stone-700/50 overflow-hidden">
+              <button
+                onClick={() => handleFilter("gameType", typeFilter === "all" ? "all" : "all")}
+                className={`px-3 py-1.5 text-xs font-medium transition-colors ${
+                  typeFilter === "all"
+                    ? "bg-amber-500/15 text-amber-300"
+                    : "bg-white/[0.03] text-stone-500 hover:text-stone-300"
+                }`}
+              >
+                All
+              </button>
+              {GAME_TYPES.map((type) => {
+                const colors: Record<string, string> = {
+                  Classical: "bg-green-500/15 text-green-400",
+                  Rapid: "bg-blue-500/15 text-blue-400",
+                  Blitz: "bg-amber-500/15 text-amber-400",
+                };
+                return (
+                  <button
+                    key={type}
+                    onClick={() => handleFilter("gameType", typeFilter === type ? "all" : type)}
+                    className={`px-3 py-1.5 text-xs font-medium transition-colors flex items-center gap-1 border-l border-stone-700/50 ${
+                      typeFilter === type
+                        ? colors[type]
+                        : "bg-white/[0.03] text-stone-500 hover:text-stone-300"
+                    }`}
+                  >
+                    {gameTypeIcon(type)}
+                    {type}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Status */}
             <Select value={statusFilter} onValueChange={(v) => handleFilter("status", v)}>
-              <SelectTrigger className="w-full sm:w-[140px] bg-white/10 border-white/20 text-zinc-300 h-10">
+              <SelectTrigger className="w-[130px] bg-white/[0.06] border-stone-700/50 text-zinc-300 h-8 text-xs">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent className="bg-[#1c1917] border-stone-700/50">
@@ -190,132 +235,114 @@ export default function TournamentsPage() {
                 ))}
               </SelectContent>
             </Select>
-            <input
-              type="date"
-              value={startDateFilter}
-              onChange={(e) => setStartDateFilter(e.target.value)}
-              placeholder="Start"
-              className="h-10 px-3 text-sm rounded-lg bg-white/10 border border-white/20 text-zinc-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 w-full sm:w-[140px]"
-            />
-            <input
-              type="date"
-              value={endDateFilter}
-              onChange={(e) => setEndDateFilter(e.target.value)}
-              placeholder="End"
-              className="h-10 px-3 text-sm rounded-lg bg-white/10 border border-white/20 text-zinc-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 w-full sm:w-[140px]"
-            />
+
+            {/* Date range */}
+            <div className="flex items-center gap-1.5">
+              <Calendar className="h-3.5 w-3.5 text-stone-500 flex-shrink-0" />
+              <input
+                type="date"
+                value={startDateFilter}
+                onChange={(e) => setStartDateFilter(e.target.value)}
+                className="h-8 px-2 text-xs rounded-lg bg-white/[0.06] border border-stone-700/50 text-zinc-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 w-[130px]"
+              />
+              <span className="text-stone-600 text-xs">–</span>
+              <input
+                type="date"
+                value={endDateFilter}
+                onChange={(e) => setEndDateFilter(e.target.value)}
+                className="h-8 px-2 text-xs rounded-lg bg-white/[0.06] border border-stone-700/50 text-zinc-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 w-[130px]"
+              />
+            </div>
+
+            {/* Sort */}
+            <Select
+              value={`${sortField}-${sortDir}`}
+              onValueChange={(v) => {
+                const [f, d] = v.split("-") as [SortField, SortDir];
+                setSortField(f);
+                setSortDir(d);
+              }}
+            >
+              <SelectTrigger className="w-[140px] bg-white/[0.06] border-stone-700/50 text-zinc-300 h-8 text-xs">
+                <ArrowUpDown className="h-3 w-3 mr-1 flex-shrink-0" />
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-[#1c1917] border-stone-700/50">
+                <SelectItem value="date-desc">Newest First</SelectItem>
+                <SelectItem value="date-asc">Oldest First</SelectItem>
+                <SelectItem value="name-asc">Name A-Z</SelectItem>
+                <SelectItem value="name-desc">Name Z-A</SelectItem>
+                <SelectItem value="players-desc">Most Players</SelectItem>
+                <SelectItem value="elo-desc">Highest ELO</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* List / Map view toggle */}
+            <div className="flex rounded-lg border border-stone-700/50 overflow-hidden">
+              <button
+                onClick={() => setViewMode("list")}
+                className={`h-8 px-3 text-xs font-medium transition-colors flex items-center gap-1.5 ${
+                  viewMode === "list"
+                    ? "bg-amber-500/15 text-amber-300"
+                    : "bg-white/[0.03] text-stone-500 hover:text-stone-300"
+                }`}
+              >
+                <List className="h-3.5 w-3.5" />
+                List
+              </button>
+              <button
+                onClick={() => setViewMode("map")}
+                className={`h-8 px-3 text-xs font-medium transition-colors flex items-center gap-1.5 border-l border-stone-700/50 ${
+                  viewMode === "map"
+                    ? "bg-amber-500/15 text-amber-300"
+                    : "bg-white/[0.03] text-stone-500 hover:text-stone-300"
+                }`}
+              >
+                <MapPin className="h-3.5 w-3.5" />
+                Map
+              </button>
+            </div>
+
+            {/* Clear filters */}
             {hasActiveFilters && (
               <button
                 onClick={clearAllFilters}
-                className="text-xs text-zinc-400 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5 transition-colors whitespace-nowrap"
+                className="h-8 px-3 text-xs text-stone-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors border border-stone-700/50"
               >
                 Clear all
               </button>
             )}
           </div>
 
-          {/* Sort + View Toggle */}
-          <div className="flex items-center gap-2">
-            <ArrowUpDown className="h-4 w-4 text-zinc-500" />
-            <select
-              value={`${sortField}-${sortDir}`}
-              onChange={(e) => {
-                const [f, d] = e.target.value.split("-") as [SortField, SortDir];
-                setSortField(f);
-                setSortDir(d);
-              }}
-              className="bg-white/10 border border-white/20 text-zinc-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
-            >
-              <option value="name-asc">Name A-Z</option>
-              <option value="name-desc">Name Z-A</option>
-              <option value="date-asc">Date (Oldest)</option>
-              <option value="date-desc">Date (Newest)</option>
-              <option value="players-desc">Most Players</option>
-              <option value="players-asc">Fewest Players</option>
-              <option value="elo-desc">Highest ELO</option>
-              <option value="elo-asc">Lowest ELO</option>
-            </select>
-
-            {/* View Mode Toggle */}
-            <div className="flex rounded-lg border border-white/20 overflow-hidden ml-2">
-              <button
-                onClick={() => setViewMode("list")}
-                className={`px-3 py-2 flex items-center gap-1 text-sm transition-colors ${
-                  viewMode === "list"
-                    ? "bg-amber-600/20 text-amber-300 border-r border-white/20"
-                    : "bg-white/5 text-zinc-400 hover:text-white border-r border-white/20"
-                }`}
-              >
-                <LayoutList className="h-4 w-4" />
-                List
-              </button>
-              <button
-                onClick={() => setViewMode("map")}
-                className={`px-3 py-2 flex items-center gap-1 text-sm transition-colors ${
-                  viewMode === "map"
-                    ? "bg-amber-600/20 text-amber-300"
-                    : "bg-white/5 text-zinc-400 hover:text-white"
-                }`}
-              >
-                <MapPin className="h-4 w-4" />
-                Map
-              </button>
+          {/* Active filter pills */}
+          {hasActiveFilters && (
+            <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-stone-800/60">
+              {search && <FilterPill label={`"${search}"`} onRemove={() => setSearch("")} />}
+              {countryFilter !== "all" && (
+                <FilterPill
+                  label={`${getCountryFlag(countryFilter)} ${getCountryName(countryFilter)}`}
+                  onRemove={() => setCountryFilter("all")}
+                />
+              )}
+              {typeFilter !== "all" && <FilterPill label={typeFilter} onRemove={() => setTypeFilter("all")} />}
+              {statusFilter !== "all" && (
+                <FilterPill label={statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)} onRemove={() => setStatusFilter("all")} />
+              )}
+              {startDateFilter && <FilterPill label={`From ${startDateFilter}`} onRemove={() => setStartDateFilter("")} />}
+              {endDateFilter && <FilterPill label={`To ${endDateFilter}`} onRemove={() => setEndDateFilter("")} />}
             </div>
-          </div>
+          )}
         </div>
       </DynamicWrapper>
 
-      {/* Active filter pills */}
-      {hasActiveFilters && (
+      {/* View: Map or List */}
+      {filtered.length === 0 ? (
         <DynamicWrapper>
-          <div className="flex flex-wrap gap-2 mb-4">
-            {search && (
-              <FilterPill label={`Search: "${search}"`} onRemove={() => setSearch("")} />
-            )}
-            {countryFilter !== "all" && (
-              <FilterPill
-                label={`${getCountryFlag(countryFilter)} ${getCountryName(countryFilter)}`}
-                onRemove={() => setCountryFilter("all")}
-              />
-            )}
-            {typeFilter !== "all" && (
-              <FilterPill label={typeFilter} onRemove={() => setTypeFilter("all")} />
-            )}
-            {statusFilter !== "all" && (
-              <FilterPill
-                label={statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}
-                onRemove={() => setStatusFilter("all")}
-              />
-            )}
-            {startDateFilter && (
-              <FilterPill label={`From: ${startDateFilter}`} onRemove={() => setStartDateFilter("")} />
-            )}
-            {endDateFilter && (
-              <FilterPill label={`To: ${endDateFilter}`} onRemove={() => setEndDateFilter("")} />
-            )}
-          </div>
-        </DynamicWrapper>
-      )}
-
-      {/* Results count */}
-      <DynamicWrapper>
-        <div className="flex items-center justify-between mb-3">
-          <div className="text-sm text-zinc-300">
-            <span className="text-amber-400 font-semibold">{filtered.length}</span> tournament{filtered.length !== 1 ? "s" : ""} found
-          </div>
-        </div>
-      </DynamicWrapper>
-
-      {/* Results: Map or List */}
-      <DynamicWrapper>
-        {viewMode === "map" ? (
-          <TournamentMapLoader tournaments={filtered} />
-        ) : filtered.length === 0 ? (
           <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-12 text-center">
             <Search className="h-12 w-12 text-zinc-700 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-zinc-300 mb-2">No tournaments found</h3>
             <p className="text-sm text-zinc-500 mb-4 max-w-md mx-auto">
-              No tournaments match your current filters. Try adjusting your search terms or removing some filters.
+              No tournaments match your current filters. Try adjusting your search or removing some filters.
             </p>
             <button
               onClick={clearAllFilters}
@@ -324,46 +351,64 @@ export default function TournamentsPage() {
               Clear All Filters
             </button>
           </div>
-        ) : (
+        </DynamicWrapper>
+      ) : viewMode === "map" ? (
+        <DynamicWrapper>
+          <TournamentMapLoader
+            tournaments={filtered}
+            height={560}
+            onTournamentClick={(id) => router.push(`/tournaments/${id}`)}
+          />
+        </DynamicWrapper>
+      ) : (
+        <DynamicWrapper>
           <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl overflow-hidden">
             <Table>
               <TableHeader>
                 <TableRow className="border-stone-800/60 hover:bg-transparent">
+                  <TableHead className="w-10" />
                   <TableHead>
-                    <button className="flex items-center gap-1 text-zinc-400 hover:text-white transition-colors" onClick={() => handleSort("name")}>
+                    <button className="flex items-center gap-1 text-stone-400 hover:text-white transition-colors text-xs" onClick={() => handleSort("name")}>
                       Tournament
                       {sortField === "name" && <ArrowUpDown className="h-3 w-3" />}
                     </button>
                   </TableHead>
-                  <TableHead className="text-zinc-400 hidden md:table-cell">Location</TableHead>
+                  <TableHead className="text-stone-400 hidden md:table-cell text-xs">Location</TableHead>
                   <TableHead className="hidden lg:table-cell">
-                    <button className="flex items-center gap-1 text-zinc-400 hover:text-white transition-colors" onClick={() => handleSort("date")}>
+                    <button className="flex items-center gap-1 text-stone-400 hover:text-white transition-colors text-xs" onClick={() => handleSort("date")}>
                       Dates
                       {sortField === "date" && <ArrowUpDown className="h-3 w-3" />}
                     </button>
                   </TableHead>
-                  <TableHead className="text-zinc-400">Type</TableHead>
+                  <TableHead className="text-stone-400 text-xs">Type</TableHead>
                   <TableHead className="hidden md:table-cell text-right">
-                    <button className="flex items-center gap-1 text-zinc-400 hover:text-white transition-colors ml-auto" onClick={() => handleSort("players")}>
+                    <button className="flex items-center gap-1 text-stone-400 hover:text-white transition-colors ml-auto text-xs" onClick={() => handleSort("players")}>
                       Players
                       {sortField === "players" && <ArrowUpDown className="h-3 w-3" />}
                     </button>
                   </TableHead>
-                  <TableHead className="text-zinc-400">Status</TableHead>
+                  <TableHead className="text-stone-400 text-xs">Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filtered.map((t) => (
                   <TableRow
                     key={t.id}
-                    className="border-stone-800/40 hover:bg-white/5 transition-colors cursor-pointer"
+                    className="border-stone-800/40 hover:bg-white/[0.03] transition-colors cursor-pointer group"
                     onClick={() => router.push(`/tournaments/${t.id}`)}
                   >
-                    <TableCell className="text-white font-medium">{t.name}</TableCell>
-                    <TableCell className="text-zinc-300 hidden md:table-cell">
-                      {getCountryFlag(t.countryCode)} {t.location}
+                    <TableCell className="pr-0 text-center">
+                      <span className="text-base">{getCountryFlag(t.countryCode)}</span>
                     </TableCell>
-                    <TableCell className="text-zinc-300 hidden lg:table-cell text-sm">
+                    <TableCell>
+                      <span className="text-white font-medium text-sm group-hover:text-amber-400 transition-colors">
+                        {t.name}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-stone-400 hidden md:table-cell text-sm">
+                      {t.location}
+                    </TableCell>
+                    <TableCell className="text-stone-400 hidden lg:table-cell text-sm">
                       {formatDateRange(t.startDate, t.endDate)}
                     </TableCell>
                     <TableCell>
@@ -371,7 +416,7 @@ export default function TournamentsPage() {
                         {t.gameType}
                       </span>
                     </TableCell>
-                    <TableCell className="text-right text-zinc-300 hidden md:table-cell">{t.playerCount}</TableCell>
+                    <TableCell className="text-right text-stone-400 hidden md:table-cell text-sm">{t.playerCount}</TableCell>
                     <TableCell>
                       <span className={`text-xs px-2 py-0.5 rounded border ${getStatusBadgeClass(t.status)}`}>
                         {t.status}
@@ -382,21 +427,17 @@ export default function TournamentsPage() {
               </TableBody>
             </Table>
           </div>
-        )}
-      </DynamicWrapper>
+        </DynamicWrapper>
+      )}
     </div>
   );
 }
 
 function FilterPill({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300">
+    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-[11px] font-medium rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-300">
       {label}
-      <button
-        onClick={onRemove}
-        className="hover:text-white transition-colors"
-        aria-label={`Remove filter: ${label}`}
-      >
+      <button onClick={onRemove} className="hover:text-white transition-colors ml-0.5" aria-label={`Remove filter: ${label}`}>
         <X className="h-3 w-3" />
       </button>
     </span>

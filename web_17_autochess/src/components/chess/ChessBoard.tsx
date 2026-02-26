@@ -73,7 +73,7 @@ export function ChessBoard({
   if (!mounted) return <div ref={containerRef} style={size ? { width: size, aspectRatio: "1/1" } : { width: "100%", maxWidth: maxSize, aspectRatio: "1/1" }} className="bg-[#1c1917] rounded-lg" />;
 
   return (
-    <div ref={containerRef} style={size ? { width: size } : { width: "100%", maxWidth: maxSize }}>
+    <div ref={containerRef} style={size ? { width: size, aspectRatio: "1/1" } : { width: "100%", maxWidth: maxSize, aspectRatio: "1/1" }}>
       <Chessboard
         options={{
           position: fen,
@@ -85,7 +85,8 @@ export function ChessBoard({
           boardStyle: {
             borderRadius: "0.5rem",
             overflow: "hidden",
-            border: "2px solid rgba(120, 113, 108, 0.3)",
+            border: "2px solid rgba(168, 162, 158, 0.35)",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.4)",
           },
         }}
       />
@@ -101,7 +102,7 @@ export function MiniChessBoard({ fen, size = 160 }: { fen: string; size?: number
   if (!mounted) return <div style={{ width: size, height: size }} className="bg-[#1c1917] rounded-md" />;
 
   return (
-    <div style={{ width: size }}>
+    <div style={{ width: size, aspectRatio: "1/1" }}>
       <Chessboard
         options={{
           position: fen,
@@ -112,6 +113,7 @@ export function MiniChessBoard({ fen, size = 160 }: { fen: string; size?: number
           boardStyle: {
             borderRadius: "0.375rem",
             overflow: "hidden",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
           },
         }}
       />
