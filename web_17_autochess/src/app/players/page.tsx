@@ -2,7 +2,6 @@
 
 import React, { useMemo, useState, useCallback } from "react";
 import { useSeed } from "@/context/SeedContext";
-import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useEventLogger } from "@/hooks/useEventLogger";
 import { DynamicWrapper } from "@/dynamic/v1/DynamicWrapper";
 import { DynamicText } from "@/dynamic/v3/DynamicText";
@@ -21,7 +20,6 @@ const PAGE_SIZE = 24;
 
 export default function PlayersPage() {
   const { seed } = useSeed();
-  const router = useSeedRouter();
   const { logInteraction } = useEventLogger();
   const players = useMemo(() => generatePlayers(200, seed), [seed]);
 
@@ -98,7 +96,7 @@ export default function PlayersPage() {
             placeholder="Search by player name..."
             value={search}
             onChange={(e) => handleSearch(e.target.value)}
-            className="w-full h-12 pl-12 pr-10 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+            className="w-full h-12 pl-12 pr-10 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50 transition-all"
           />
           {search && (
             <button
@@ -121,7 +119,7 @@ export default function PlayersPage() {
               <SelectTrigger className="w-full sm:w-[160px] bg-white/10 border-white/20 text-zinc-300 h-10">
                 <SelectValue placeholder="Country" />
               </SelectTrigger>
-              <SelectContent className="bg-[#111a11] border-emerald-900/30">
+              <SelectContent className="bg-[#1c1917] border-stone-700/50">
                 <SelectItem value="all">All Countries</SelectItem>
                 {COUNTRIES.map((c) => (
                   <SelectItem key={c.code} value={c.code}>
@@ -134,7 +132,7 @@ export default function PlayersPage() {
               <SelectTrigger className="w-full sm:w-[140px] bg-white/10 border-white/20 text-zinc-300 h-10">
                 <SelectValue placeholder="Title" />
               </SelectTrigger>
-              <SelectContent className="bg-[#111a11] border-emerald-900/30">
+              <SelectContent className="bg-[#1c1917] border-stone-700/50">
                 <SelectItem value="all">All Titles</SelectItem>
                 {PLAYER_TITLES.filter(t => t !== "").map((t) => (
                   <SelectItem key={t} value={t}>{t}</SelectItem>
@@ -162,7 +160,7 @@ export default function PlayersPage() {
                 setSortDir(d);
                 setPage(1);
               }}
-              className="bg-white/10 border border-white/20 text-zinc-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+              className="bg-white/10 border border-white/20 text-zinc-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
             >
               <option value="rating-desc">Rating: High to Low</option>
               <option value="rating-asc">Rating: Low to High</option>
@@ -198,7 +196,7 @@ export default function PlayersPage() {
       {/* Results count */}
       <DynamicWrapper>
         <div className="text-sm text-zinc-300 mb-3">
-          <span className="text-emerald-400 font-semibold">{filtered.length}</span> player{filtered.length !== 1 ? "s" : ""} found
+          <span className="text-amber-400 font-semibold">{filtered.length}</span> player{filtered.length !== 1 ? "s" : ""} found
           {filtered.length > PAGE_SIZE && (
             <span className="text-zinc-500 ml-2">
               (showing {(currentPage - 1) * PAGE_SIZE + 1}-{Math.min(currentPage * PAGE_SIZE, filtered.length)})
@@ -210,7 +208,7 @@ export default function PlayersPage() {
       {/* Results or Empty State */}
       <DynamicWrapper>
         {filtered.length === 0 ? (
-          <div className="bg-[#111a11] border border-emerald-900/30 rounded-xl p-12 text-center">
+          <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-12 text-center">
             <Search className="h-12 w-12 text-zinc-700 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-zinc-300 mb-2">No players found</h3>
             <p className="text-sm text-zinc-500 mb-4 max-w-md mx-auto">
@@ -218,7 +216,7 @@ export default function PlayersPage() {
             </p>
             <button
               onClick={clearAllFilters}
-              className="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
+              className="px-4 py-2 text-sm bg-amber-600 hover:bg-amber-700 text-white rounded-lg transition-colors"
             >
               Clear All Filters
             </button>
@@ -230,7 +228,6 @@ export default function PlayersPage() {
                 <PlayerCard
                   key={p.id}
                   player={p}
-                  onClick={() => router.push(`/players/${p.id}`)}
                 />
               ))}
             </div>
@@ -262,7 +259,7 @@ export default function PlayersPage() {
                         onClick={() => setPage(p)}
                         className={`w-10 h-10 text-sm rounded-lg transition-colors ${
                           currentPage === p
-                            ? "bg-emerald-600 text-white font-semibold"
+                            ? "bg-amber-600 text-white font-semibold"
                             : "bg-white/5 border border-white/10 text-zinc-400 hover:text-white hover:bg-white/10"
                         }`}
                       >
@@ -289,7 +286,7 @@ export default function PlayersPage() {
 
 function FilterPill({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+    <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300">
       {label}
       <button
         onClick={onRemove}

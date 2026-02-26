@@ -15,7 +15,7 @@ export function Footer() {
 
   return (
     <DynamicWrapper>
-      <footer className="border-t border-emerald-900/30 bg-[#0a0f0a] mt-auto">
+      <footer className="border-t border-stone-800/80 bg-[#0c0a09] mt-auto">
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
@@ -70,7 +70,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="mt-8 pt-8 border-t border-emerald-900/30 text-center text-sm text-zinc-500">
+          <div className="mt-8 pt-8 border-t border-stone-800/80 text-center text-sm text-zinc-500">
             <DynamicText
               value="2024 AutoChess. All rights reserved."
               type="text"
@@ -96,7 +96,7 @@ function FooterLink({
       <a
         href={href}
         onClick={onClick}
-        className="text-sm text-zinc-400 hover:text-emerald-400 transition-colors"
+        className="text-sm text-zinc-400 hover:text-amber-400 transition-colors"
       >
         <DynamicText value={label} type="text" />
       </a>

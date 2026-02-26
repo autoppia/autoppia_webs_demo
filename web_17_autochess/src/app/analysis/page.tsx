@@ -115,10 +115,10 @@ export default function AnalysisPage() {
             {/* Game selector */}
             <div className="mb-4">
               <Select value={String(selectedGameIndex)} onValueChange={handleGameSelect}>
-                <SelectTrigger className="bg-[#111a11] border-emerald-900/30 text-zinc-300">
+                <SelectTrigger className="bg-[#1c1917] border-stone-800/80 text-zinc-300">
                   <SelectValue placeholder="Select a game" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#111a11] border-emerald-900/30 max-h-[300px]">
+                <SelectContent className="bg-[#1c1917] border-stone-800/80 max-h-[300px]">
                   {games.slice(0, 50).map((g, idx) => (
                     <SelectItem key={g.id} value={String(idx)}>
                       {g.whitePlayer.name} vs {g.blackPlayer.name} ({g.result})
@@ -129,13 +129,13 @@ export default function AnalysisPage() {
             </div>
 
             {/* Game metadata */}
-            <div className="bg-[#111a11] border border-emerald-900/30 rounded-xl p-4 mb-4">
+            <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-4 mb-4">
               <div className="flex items-center justify-between text-sm">
                 <div>
                   <span className="text-white font-semibold">{game.whitePlayer.name}</span>
                   <span className="text-zinc-400 ml-1">({game.whitePlayer.rating})</span>
                 </div>
-                <span className="text-emerald-400 font-bold text-lg">{game.result}</span>
+                <span className="text-amber-400 font-bold text-lg">{game.result}</span>
                 <div className="text-right">
                   <span className="text-white font-semibold">{game.blackPlayer.name}</span>
                   <span className="text-zinc-400 ml-1">({game.blackPlayer.rating})</span>
@@ -188,8 +188,8 @@ function NavButton({ onClick, children, highlight }: { onClick: () => void; chil
     <button
       className={`p-2 rounded-lg transition-colors ${
         highlight
-          ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-          : "bg-[#111a11] border border-emerald-900/30 text-zinc-400 hover:text-white hover:bg-emerald-900/20"
+          ? "bg-amber-600 hover:bg-amber-700 text-white"
+          : "bg-[#1c1917] border border-stone-800/80 text-zinc-400 hover:text-white hover:bg-white/5"
       }`}
       onClick={onClick}
     >

@@ -61,7 +61,7 @@ export function getStatusBadgeClass(status: string): string {
 export function getGameTypeBadgeClass(gameType: string): string {
   switch (gameType) {
     case "Classical":
-      return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
+      return "bg-cyan-500/20 text-cyan-400 border-cyan-500/30";
     case "Rapid":
       return "bg-blue-500/20 text-blue-400 border-blue-500/30";
     case "Blitz":

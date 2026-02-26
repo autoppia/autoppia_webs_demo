@@ -1,28 +1,7 @@
 "use client";
 
-import React from "react";
-
-const PIECE_UNICODE: Record<string, string> = {
-  K: "\u2654", Q: "\u2655", R: "\u2656", B: "\u2657", N: "\u2658", P: "\u2659",
-  k: "\u265A", q: "\u265B", r: "\u265C", b: "\u265D", n: "\u265E", p: "\u265F",
-};
-
-function parseFEN(fen: string): (string | null)[][] {
-  const board: (string | null)[][] = [];
-  const rows = fen.split(" ")[0].split("/");
-  for (const row of rows) {
-    const boardRow: (string | null)[] = [];
-    for (const ch of row) {
-      if (ch >= "1" && ch <= "8") {
-        for (let i = 0; i < Number.parseInt(ch); i++) boardRow.push(null);
-      } else {
-        boardRow.push(ch);
-      }
-    }
-    board.push(boardRow);
-  }
-  return board;
-}
+import React, { useRef, useState, useEffect, useCallback } from "react";
+import { Chessboard } from "react-chessboard";
 
 interface ChessBoardProps {
   fen: string;
@@ -47,77 +26,95 @@ export function ChessBoard({
   onSquareClick,
   interactive = false,
 }: ChessBoardProps) {
-  const board = parseFEN(fen);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
 
-  const getSquareName = (row: number, col: number): string => {
-    return `${String.fromCharCode(97 + col)}${8 - row}`;
-  };
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  const getSquareClass = (row: number, col: number): string => {
-    const square = getSquareName(row, col);
-    const isLight = (row + col) % 2 === 0;
-    let cls = isLight ? "chess-light" : "chess-dark";
+  const customSquareStyles: Record<string, React.CSSProperties> = {};
 
-    if (correctSquare === square) cls += " chess-correct";
-    else if (incorrectSquare === square) cls += " chess-incorrect";
-    else if (selectedSquare === square) cls += " chess-selected";
-    else if (highlightSquares.includes(square)) cls += " chess-highlight";
+  if (correctSquare) {
+    customSquareStyles[correctSquare] = {
+      backgroundColor: "rgba(34, 197, 94, 0.5)",
+      boxShadow: "inset 0 0 0 2px rgba(34, 197, 94, 0.7)",
+    };
+  }
+  if (incorrectSquare) {
+    customSquareStyles[incorrectSquare] = {
+      backgroundColor: "rgba(239, 68, 68, 0.5)",
+      boxShadow: "inset 0 0 0 2px rgba(239, 68, 68, 0.7)",
+    };
+  }
+  if (selectedSquare) {
+    customSquareStyles[selectedSquare] = {
+      backgroundColor: "rgba(32, 178, 170, 0.6)",
+      boxShadow: "inset 0 0 0 2px rgba(32, 178, 170, 0.8)",
+    };
+  }
+  for (const sq of highlightSquares) {
+    if (!customSquareStyles[sq]) {
+      customSquareStyles[sq] = {
+        backgroundColor: "rgba(255, 255, 100, 0.4)",
+      };
+    }
+  }
 
-    return cls;
-  };
+  const handleSquareClick = useCallback(
+    ({ square }: { piece: unknown; square: string }) => {
+      if (interactive && onSquareClick) {
+        onSquareClick(square);
+      }
+    },
+    [interactive, onSquareClick],
+  );
 
-  // Responsive: use size if provided, otherwise fill container
-  const sizeStyle = size
-    ? { width: size, height: size }
-    : { width: "100%", maxWidth: maxSize, aspectRatio: "1 / 1" };
+  if (!mounted) return <div ref={containerRef} style={size ? { width: size, aspectRatio: "1/1" } : { width: "100%", maxWidth: maxSize, aspectRatio: "1/1" }} className="bg-[#1c1917] rounded-lg" />;
 
   return (
-    <div
-      className="inline-grid grid-cols-8 border-2 border-emerald-900/50 rounded-lg overflow-hidden"
-      style={sizeStyle}
-    >
-      {board.map((row, rowIdx) =>
-        row.map((piece, colIdx) => {
-          const square = getSquareName(rowIdx, colIdx);
-          return (
-            <div
-              key={square}
-              className={`flex items-center justify-center ${getSquareClass(rowIdx, colIdx)} ${
-                interactive ? "cursor-pointer hover:brightness-110 active:brightness-125" : ""
-              }`}
-              style={{ aspectRatio: "1 / 1" }}
-              onClick={() => interactive && onSquareClick?.(square)}
-            >
-              {piece && (
-                <span
-                  className="select-none chess-piece"
-                  role="img"
-                  aria-label={`${piece === piece.toUpperCase() ? "White" : "Black"} ${getPieceName(piece)}`}
-                >
-                  {PIECE_UNICODE[piece] || ""}
-                </span>
-              )}
-            </div>
-          );
-        })
-      )}
+    <div ref={containerRef} style={size ? { width: size } : { width: "100%", maxWidth: maxSize }}>
+      <Chessboard
+        options={{
+          position: fen,
+          allowDragging: false,
+          onSquareClick: handleSquareClick,
+          darkSquareStyle: { backgroundColor: "#486632" },
+          lightSquareStyle: { backgroundColor: "#779952" },
+          squareStyles: customSquareStyles,
+          boardStyle: {
+            borderRadius: "0.5rem",
+            overflow: "hidden",
+            border: "2px solid rgba(120, 113, 108, 0.3)",
+          },
+        }}
+      />
     </div>
   );
 }
 
-function getPieceName(piece: string): string {
-  switch (piece.toLowerCase()) {
-    case "k": return "King";
-    case "q": return "Queen";
-    case "r": return "Rook";
-    case "b": return "Bishop";
-    case "n": return "Knight";
-    case "p": return "Pawn";
-    default: return "";
-  }
-}
-
 // Smaller board for previews/thumbnails
 export function MiniChessBoard({ fen, size = 160 }: { fen: string; size?: number }) {
-  return <ChessBoard fen={fen} size={size} />;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
+  if (!mounted) return <div style={{ width: size, height: size }} className="bg-[#1c1917] rounded-md" />;
+
+  return (
+    <div style={{ width: size }}>
+      <Chessboard
+        options={{
+          position: fen,
+          allowDragging: false,
+          showNotation: false,
+          darkSquareStyle: { backgroundColor: "#486632" },
+          lightSquareStyle: { backgroundColor: "#779952" },
+          boardStyle: {
+            borderRadius: "0.375rem",
+            overflow: "hidden",
+          },
+        }}
+      />
+    </div>
+  );
 }

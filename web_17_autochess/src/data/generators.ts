@@ -5,6 +5,7 @@ import {
   PUZZLE_FENS, PAWN_MOVES, KNIGHT_MOVES, BISHOP_MOVES, ROOK_MOVES,
   QUEEN_MOVES, CASTLING_MOVES,
 } from "./chess-data";
+import { CITY_COORDINATES } from "./city-coordinates";
 
 // Linear Congruential Generator for deterministic random numbers
 export function seedRandom(seed: number): () => number {
@@ -57,11 +58,13 @@ export function generatePlayers(count: number, seed: number): Player[] {
     else if (titleRoll < 0.36) title = "WIM";
 
     const rating = randInt(1200, 2800, rng);
-    const rapidRating = rating + randInt(-100, 50, rng);
-    const blitzRating = rating + randInt(-150, 80, rng);
+    const rapidRating = rating + randInt(-80, 30, rng);
+    const blitzRating = rating + randInt(-120, 20, rng);
     const gamesPlayed = randInt(50, 800, rng);
-    const winRate = randFloat(0.3, 0.65, rng);
-    const drawRate = randFloat(0.15, 0.35, rng);
+    // Ensure win + draw rates don't exceed 1.0
+    const winRate = randFloat(0.25, 0.55, rng);
+    const maxDrawRate = Math.min(0.40, 1.0 - winRate - 0.05);
+    const drawRate = randFloat(0.10, maxDrawRate, rng);
     const wins = Math.floor(gamesPlayed * winRate);
     const draws = Math.floor(gamesPlayed * drawRate);
     const losses = gamesPlayed - wins - draws;
@@ -135,9 +138,19 @@ export function generateTournaments(count: number, seed: number): Tournament[] {
 
     const startYear = status === "upcoming" ? 2026 : randInt(2024, 2025, rng);
     const startMonth = randInt(1, 12, rng);
-    const startDay = randInt(1, 25, rng);
+    const startDay = randInt(1, 22, rng);
     const durationDays = gameType === "Classical" ? randInt(7, 14, rng) : randInt(2, 5, rng);
-    const endDay = Math.min(28, startDay + durationDays);
+    // Calculate proper end date using Date arithmetic
+    const startDateObj = new Date(startYear, startMonth - 1, startDay);
+    const endDateObj = new Date(startDateObj.getTime() + durationDays * 86400000);
+    const endYear = endDateObj.getFullYear();
+    const endMonth = endDateObj.getMonth() + 1;
+    const endDay = endDateObj.getDate();
+
+    // Assign coordinates with small seeded jitter
+    const baseCoords = CITY_COORDINATES[city] || [48.86, 2.35]; // fallback to Paris
+    const lat = baseCoords[0] + (rng() - 0.5) * 0.5;
+    const lng = baseCoords[1] + (rng() - 0.5) * 0.5;
 
     tournaments.push({
       id: i + 1,
@@ -146,7 +159,7 @@ export function generateTournaments(count: number, seed: number): Tournament[] {
       country: country.name,
       countryCode: country.code,
       startDate: formatDate(startYear, startMonth, startDay),
-      endDate: formatDate(startYear, startMonth, endDay),
+      endDate: formatDate(endYear, endMonth, endDay),
       gameType,
       rounds,
       playerCount,
@@ -154,6 +167,8 @@ export function generateTournaments(count: number, seed: number): Tournament[] {
       eloMax,
       status,
       description: `The ${city} ${prefix} brings together ${playerCount} top players for ${rounds} rounds of ${gameType.toLowerCase()} chess.`,
+      lat,
+      lng,
     });
   }
 
@@ -187,13 +202,18 @@ export function generateStandings(tournament: Tournament, players: Player[], see
     const drawCount = randInt(0, Math.min(maxPoints - winCount, Math.floor(maxPoints * 0.4)), rng);
     const lossCount = maxPoints - winCount - drawCount;
     const points = winCount + drawCount * 0.5;
+    // Performance rating: base rating + bonus based on score percentage
+    const scorePercent = points / maxPoints;
+    const performanceRating = Math.round(p.rating + (scorePercent - 0.5) * 400);
 
     standings.push({
       rank: 0,
       playerId: p.id,
       playerName: p.name,
+      playerTitle: p.title,
       playerCountry: p.countryCode,
       rating: p.rating,
+      performanceRating,
       points,
       wins: winCount,
       draws: drawCount,
@@ -248,8 +268,9 @@ export function generateGames(tournaments: Tournament[], players: Player[], coun
     const tournament = pick(tournaments, rng);
     const round = randInt(1, tournament.rounds, rng);
     const opening = pick(OPENINGS, rng);
+    // Realistic result distribution: white wins ~37%, black wins ~28%, draws ~35%
     const resultRoll = rng();
-    const result: Game["result"] = resultRoll < 0.4 ? "1-0" : resultRoll < 0.8 ? "0-1" : "1/2-1/2";
+    const result: Game["result"] = resultRoll < 0.37 ? "1-0" : resultRoll < 0.65 ? "0-1" : "1/2-1/2";
     const moveCount = randInt(20, 65, rng);
 
     const whiteIdx = pickIndex(players.length, rng);
@@ -328,8 +349,9 @@ function boardToFEN(board: (string | null)[][], moveIndex: number): string {
     if (empty > 0) fenRow += empty;
     rows.push(fenRow);
   }
+  // After white's move (even index), it's black's turn; after black's move (odd), white's turn
   const color = moveIndex % 2 === 0 ? "b" : "w";
-  return `${rows.join("/")} ${color} KQkq - 0 ${Math.floor(moveIndex / 2) + 1}`;
+  return `${rows.join("/")} ${color} - - 0 ${Math.floor(moveIndex / 2) + 1}`;
 }
 
 /**

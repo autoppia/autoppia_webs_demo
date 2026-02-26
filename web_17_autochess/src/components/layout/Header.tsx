@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { DynamicWrapper } from "@/dynamic/v1/DynamicWrapper";
 import { DynamicText } from "@/dynamic/v3/DynamicText";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Crown } from "lucide-react";
 
 const NAV_LINKS = [
   { href: "/tournaments", label: "Tournaments" },
@@ -38,13 +38,14 @@ export function Header() {
 
   return (
     <DynamicWrapper>
-      <header className="fixed top-0 z-50 w-full border-b border-emerald-900/30 bg-[#0a0f0a]/90 backdrop-blur-xl">
+      <header className="fixed top-0 z-50 w-full border-b border-stone-800/80 bg-[#0c0a09]/90 backdrop-blur-xl">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <a
             href="/"
             onClick={handleLogoClick}
-            className="rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 px-4 py-2 text-lg font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all duration-200 hover:shadow-emerald-500/40"
+            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 px-4 py-2 text-lg font-semibold text-white shadow-lg shadow-amber-600/20 transition-all duration-200 hover:shadow-amber-500/40"
           >
+            <Crown className="h-5 w-5" />
             <DynamicText value="AutoChess" type="text" />
           </a>
 
@@ -57,13 +58,13 @@ export function Header() {
                 onClick={(e) => handleNavClick(e, link.href)}
                 className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                   isActive(link.href)
-                    ? "text-emerald-400 bg-emerald-400/10"
-                    : "text-zinc-400 hover:text-white hover:bg-white/5"
+                    ? "text-amber-400 bg-amber-400/10"
+                    : "text-stone-400 hover:text-white hover:bg-white/5"
                 }`}
               >
                 <DynamicText value={link.label} type="text" />
                 {isActive(link.href) && (
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-emerald-400 rounded-full" />
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-amber-400 rounded-full" />
                 )}
               </a>
             ))}
@@ -71,7 +72,7 @@ export function Header() {
 
           {/* Mobile hamburger button */}
           <button
-            className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+            className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg text-stone-400 hover:text-white hover:bg-white/10 transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
@@ -81,7 +82,7 @@ export function Header() {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-emerald-900/30 bg-[#0a0f0a]/95 backdrop-blur-xl">
+          <div className="md:hidden border-t border-stone-800/80 bg-[#0c0a09]/95 backdrop-blur-xl">
             <nav className="flex flex-col py-2">
               {NAV_LINKS.map((link) => (
                 <a
@@ -90,8 +91,8 @@ export function Header() {
                   onClick={(e) => handleNavClick(e, link.href)}
                   className={`px-6 py-3 text-sm font-medium transition-colors ${
                     isActive(link.href)
-                      ? "text-emerald-400 bg-emerald-400/10 border-l-2 border-emerald-400"
-                      : "text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent"
+                      ? "text-amber-400 bg-amber-400/10 border-l-2 border-amber-400"
+                      : "text-stone-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent"
                   }`}
                 >
                   <DynamicText value={link.label} type="text" />

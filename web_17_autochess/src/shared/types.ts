@@ -13,14 +13,18 @@ export interface Tournament {
   eloMax: number;
   status: "upcoming" | "active" | "completed";
   description: string;
+  lat: number;
+  lng: number;
 }
 
 export interface TournamentStanding {
   rank: number;
   playerId: number;
   playerName: string;
+  playerTitle: string;
   playerCountry: string;
   rating: number;
+  performanceRating: number;
   points: number;
   wins: number;
   draws: number;

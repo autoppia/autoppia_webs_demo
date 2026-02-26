@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { useSeed } from "@/context/SeedContext";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useEventLogger } from "@/hooks/useEventLogger";
@@ -12,23 +13,47 @@ import { EVENT_TYPES } from "@/library/events";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { COUNTRIES, GAME_TYPES, TOURNAMENT_STATUSES } from "@/shared/constants";
-import { Search, X, ArrowUpDown, SlidersHorizontal } from "lucide-react";
+import { TournamentMapLoader } from "@/components/tournaments/TournamentMapLoader";
+import { Search, X, ArrowUpDown, SlidersHorizontal, LayoutList, MapPin } from "lucide-react";
 
 type SortField = "name" | "date" | "players" | "elo";
 type SortDir = "asc" | "desc";
+type ViewMode = "list" | "map";
 
 export default function TournamentsPage() {
   const { seed } = useSeed();
   const router = useSeedRouter();
   const { logInteraction } = useEventLogger();
+  const searchParams = useSearchParams();
   const tournaments = useMemo(() => generateTournaments(50, seed), [seed]);
 
+  // Initialize from URL params
   const [search, setSearch] = useState("");
   const [countryFilter, setCountryFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [startDateFilter, setStartDateFilter] = useState("");
+  const [endDateFilter, setEndDateFilter] = useState("");
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
+
+  // Read URL params on mount
+  useEffect(() => {
+    const country = searchParams.get("country");
+    const gameType = searchParams.get("gameType");
+    const startDate = searchParams.get("startDate");
+    const endDate = searchParams.get("endDate");
+
+    if (country) setCountryFilter(country);
+    if (gameType) {
+      // If it's a single type, use it directly; if comma-separated, pick first
+      const types = gameType.split(",");
+      if (types.length === 1) setTypeFilter(types[0]);
+    }
+    if (startDate) setStartDateFilter(startDate);
+    if (endDate) setEndDateFilter(endDate);
+  }, [searchParams]);
 
   const handleSearch = useCallback((value: string) => {
     setSearch(value);
@@ -49,13 +74,15 @@ export default function TournamentsPage() {
     });
   }, [countryFilter, typeFilter, statusFilter, logInteraction]);
 
-  const hasActiveFilters = search || countryFilter !== "all" || typeFilter !== "all" || statusFilter !== "all";
+  const hasActiveFilters = search || countryFilter !== "all" || typeFilter !== "all" || statusFilter !== "all" || startDateFilter || endDateFilter;
 
   const clearAllFilters = useCallback(() => {
     setSearch("");
     setCountryFilter("all");
     setTypeFilter("all");
     setStatusFilter("all");
+    setStartDateFilter("");
+    setEndDateFilter("");
   }, []);
 
   const filtered = useMemo(() => {
@@ -64,6 +91,8 @@ export default function TournamentsPage() {
       if (countryFilter !== "all" && t.countryCode !== countryFilter) return false;
       if (typeFilter !== "all" && t.gameType !== typeFilter) return false;
       if (statusFilter !== "all" && t.status !== statusFilter) return false;
+      if (startDateFilter && t.endDate < startDateFilter) return false;
+      if (endDateFilter && t.startDate > endDateFilter) return false;
       return true;
     });
 
@@ -77,7 +106,7 @@ export default function TournamentsPage() {
     });
 
     return result;
-  }, [tournaments, search, countryFilter, typeFilter, statusFilter, sortField, sortDir]);
+  }, [tournaments, search, countryFilter, typeFilter, statusFilter, startDateFilter, endDateFilter, sortField, sortDir]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -107,7 +136,7 @@ export default function TournamentsPage() {
             placeholder="Search by tournament name or location..."
             value={search}
             onChange={(e) => handleSearch(e.target.value)}
-            className="w-full h-12 pl-12 pr-10 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+            className="w-full h-12 pl-12 pr-10 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50 transition-all"
           />
           {search && (
             <button
@@ -130,7 +159,7 @@ export default function TournamentsPage() {
               <SelectTrigger className="w-full sm:w-[160px] bg-white/10 border-white/20 text-zinc-300 h-10">
                 <SelectValue placeholder="Country" />
               </SelectTrigger>
-              <SelectContent className="bg-[#111a11] border-emerald-900/30">
+              <SelectContent className="bg-[#1c1917] border-stone-700/50">
                 <SelectItem value="all">All Countries</SelectItem>
                 {COUNTRIES.map((c) => (
                   <SelectItem key={c.code} value={c.code}>
@@ -143,7 +172,7 @@ export default function TournamentsPage() {
               <SelectTrigger className="w-full sm:w-[140px] bg-white/10 border-white/20 text-zinc-300 h-10">
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
-              <SelectContent className="bg-[#111a11] border-emerald-900/30">
+              <SelectContent className="bg-[#1c1917] border-stone-700/50">
                 <SelectItem value="all">All Types</SelectItem>
                 {GAME_TYPES.map((t) => (
                   <SelectItem key={t} value={t}>{t}</SelectItem>
@@ -154,13 +183,27 @@ export default function TournamentsPage() {
               <SelectTrigger className="w-full sm:w-[140px] bg-white/10 border-white/20 text-zinc-300 h-10">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
-              <SelectContent className="bg-[#111a11] border-emerald-900/30">
+              <SelectContent className="bg-[#1c1917] border-stone-700/50">
                 <SelectItem value="all">All Statuses</SelectItem>
                 {TOURNAMENT_STATUSES.map((s) => (
                   <SelectItem key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
+            <input
+              type="date"
+              value={startDateFilter}
+              onChange={(e) => setStartDateFilter(e.target.value)}
+              placeholder="Start"
+              className="h-10 px-3 text-sm rounded-lg bg-white/10 border border-white/20 text-zinc-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 w-full sm:w-[140px]"
+            />
+            <input
+              type="date"
+              value={endDateFilter}
+              onChange={(e) => setEndDateFilter(e.target.value)}
+              placeholder="End"
+              className="h-10 px-3 text-sm rounded-lg bg-white/10 border border-white/20 text-zinc-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 w-full sm:w-[140px]"
+            />
             {hasActiveFilters && (
               <button
                 onClick={clearAllFilters}
@@ -171,7 +214,7 @@ export default function TournamentsPage() {
             )}
           </div>
 
-          {/* Sort */}
+          {/* Sort + View Toggle */}
           <div className="flex items-center gap-2">
             <ArrowUpDown className="h-4 w-4 text-zinc-500" />
             <select
@@ -181,7 +224,7 @@ export default function TournamentsPage() {
                 setSortField(f);
                 setSortDir(d);
               }}
-              className="bg-white/10 border border-white/20 text-zinc-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+              className="bg-white/10 border border-white/20 text-zinc-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
             >
               <option value="name-asc">Name A-Z</option>
               <option value="name-desc">Name Z-A</option>
@@ -192,6 +235,32 @@ export default function TournamentsPage() {
               <option value="elo-desc">Highest ELO</option>
               <option value="elo-asc">Lowest ELO</option>
             </select>
+
+            {/* View Mode Toggle */}
+            <div className="flex rounded-lg border border-white/20 overflow-hidden ml-2">
+              <button
+                onClick={() => setViewMode("list")}
+                className={`px-3 py-2 flex items-center gap-1 text-sm transition-colors ${
+                  viewMode === "list"
+                    ? "bg-amber-600/20 text-amber-300 border-r border-white/20"
+                    : "bg-white/5 text-zinc-400 hover:text-white border-r border-white/20"
+                }`}
+              >
+                <LayoutList className="h-4 w-4" />
+                List
+              </button>
+              <button
+                onClick={() => setViewMode("map")}
+                className={`px-3 py-2 flex items-center gap-1 text-sm transition-colors ${
+                  viewMode === "map"
+                    ? "bg-amber-600/20 text-amber-300"
+                    : "bg-white/5 text-zinc-400 hover:text-white"
+                }`}
+              >
+                <MapPin className="h-4 w-4" />
+                Map
+              </button>
+            </div>
           </div>
         </div>
       </DynamicWrapper>
@@ -218,6 +287,12 @@ export default function TournamentsPage() {
                 onRemove={() => setStatusFilter("all")}
               />
             )}
+            {startDateFilter && (
+              <FilterPill label={`From: ${startDateFilter}`} onRemove={() => setStartDateFilter("")} />
+            )}
+            {endDateFilter && (
+              <FilterPill label={`To: ${endDateFilter}`} onRemove={() => setEndDateFilter("")} />
+            )}
           </div>
         </DynamicWrapper>
       )}
@@ -226,15 +301,17 @@ export default function TournamentsPage() {
       <DynamicWrapper>
         <div className="flex items-center justify-between mb-3">
           <div className="text-sm text-zinc-300">
-            <span className="text-emerald-400 font-semibold">{filtered.length}</span> tournament{filtered.length !== 1 ? "s" : ""} found
+            <span className="text-amber-400 font-semibold">{filtered.length}</span> tournament{filtered.length !== 1 ? "s" : ""} found
           </div>
         </div>
       </DynamicWrapper>
 
-      {/* Results or Empty State */}
+      {/* Results: Map or List */}
       <DynamicWrapper>
-        {filtered.length === 0 ? (
-          <div className="bg-[#111a11] border border-emerald-900/30 rounded-xl p-12 text-center">
+        {viewMode === "map" ? (
+          <TournamentMapLoader tournaments={filtered} />
+        ) : filtered.length === 0 ? (
+          <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-12 text-center">
             <Search className="h-12 w-12 text-zinc-700 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-zinc-300 mb-2">No tournaments found</h3>
             <p className="text-sm text-zinc-500 mb-4 max-w-md mx-auto">
@@ -242,16 +319,16 @@ export default function TournamentsPage() {
             </p>
             <button
               onClick={clearAllFilters}
-              className="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
+              className="px-4 py-2 text-sm bg-amber-600 hover:bg-amber-700 text-white rounded-lg transition-colors"
             >
               Clear All Filters
             </button>
           </div>
         ) : (
-          <div className="bg-[#111a11] border border-emerald-900/30 rounded-xl overflow-hidden">
+          <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="border-emerald-900/30 hover:bg-transparent">
+                <TableRow className="border-stone-800/60 hover:bg-transparent">
                   <TableHead>
                     <button className="flex items-center gap-1 text-zinc-400 hover:text-white transition-colors" onClick={() => handleSort("name")}>
                       Tournament
@@ -279,7 +356,7 @@ export default function TournamentsPage() {
                 {filtered.map((t) => (
                   <TableRow
                     key={t.id}
-                    className="border-emerald-900/20 hover:bg-emerald-900/10 cursor-pointer transition-colors"
+                    className="border-stone-800/40 hover:bg-white/5 transition-colors cursor-pointer"
                     onClick={() => router.push(`/tournaments/${t.id}`)}
                   >
                     <TableCell className="text-white font-medium">{t.name}</TableCell>
@@ -313,7 +390,7 @@ export default function TournamentsPage() {
 
 function FilterPill({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+    <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300">
       {label}
       <button
         onClick={onRemove}

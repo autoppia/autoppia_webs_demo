@@ -16,12 +16,14 @@ export default function TacticsPage() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [solvedCount, setSolvedCount] = useState(0);
+  const [puzzlesAttempted, setPuzzlesAttempted] = useState(0);
   const [totalAttempts, setTotalAttempts] = useState(0);
   const [streak, setStreak] = useState(0);
 
   const puzzle = puzzles[currentIndex % puzzles.length];
 
   const handleSolve = useCallback((correct: boolean, attempts: number) => {
+    setPuzzlesAttempted((c) => c + 1);
     if (correct) {
       setSolvedCount((c) => c + 1);
       setStreak((s) => s + 1);
@@ -55,7 +57,7 @@ export default function TacticsPage() {
         {/* Puzzle Board */}
         <div className="flex-1">
           <DynamicWrapper>
-            <div className="bg-[#111a11] border border-emerald-900/30 rounded-xl p-6">
+            <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <div className="text-sm text-zinc-400">
@@ -69,7 +71,7 @@ export default function TacticsPage() {
                   </div>
                 </div>
                 <button
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors text-sm"
+                  className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg transition-colors text-sm"
                   onClick={handleNext}
                 >
                   <DynamicText value="Next Puzzle" type="text" />
@@ -90,7 +92,7 @@ export default function TacticsPage() {
         {/* Stats Sidebar */}
         <div className="w-full lg:w-64 space-y-4">
           <DynamicWrapper>
-            <div className="bg-[#111a11] border border-emerald-900/30 rounded-xl p-4">
+            <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-4">
               <h3 className="text-white font-semibold mb-4">
                 <DynamicText value="Your Stats" type="text" />
               </h3>
@@ -98,7 +100,7 @@ export default function TacticsPage() {
                 <StatRow label="Puzzles Solved" value={String(solvedCount)} />
                 <StatRow
                   label="Accuracy"
-                  value={totalAttempts > 0 ? `${((solvedCount / (totalAttempts || 1)) * 100).toFixed(0)}%` : "-"}
+                  value={puzzlesAttempted > 0 ? `${((solvedCount / puzzlesAttempted) * 100).toFixed(0)}%` : "-"}
                 />
                 <StatRow label="Current Streak" value={String(streak)} />
                 <StatRow label="Total Attempts" value={String(totalAttempts)} />
@@ -107,7 +109,7 @@ export default function TacticsPage() {
           </DynamicWrapper>
 
           <DynamicWrapper>
-            <div className="bg-[#111a11] border border-emerald-900/30 rounded-xl p-4">
+            <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-4">
               <h3 className="text-white font-semibold mb-3">
                 <DynamicText value="How to Solve" type="text" />
               </h3>
@@ -129,7 +131,7 @@ function StatRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between">
       <span className="text-zinc-400 text-sm">{label}</span>
-      <span className="text-emerald-400 font-bold">{value}</span>
+      <span className="text-amber-400 font-bold">{value}</span>
     </div>
   );
 }

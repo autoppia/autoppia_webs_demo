@@ -32,9 +32,9 @@ export function MoveList({ moves, activeMoveIndex, onMoveClick }: MoveListProps)
   return (
     <div
       ref={containerRef}
-      className="bg-[#111a11] border border-emerald-900/30 rounded-lg max-h-[400px] overflow-y-auto no-scrollbar"
+      className="bg-[#1c1917] border border-stone-800/80 rounded-lg max-h-[400px] overflow-y-auto no-scrollbar"
     >
-      <div className="sticky top-0 bg-[#111a11] border-b border-emerald-900/20 px-4 py-2.5 z-10">
+      <div className="sticky top-0 bg-[#1c1917] border-b border-stone-800/60 px-4 py-2.5 z-10">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-zinc-300">Moves</h3>
           <span className="text-xs text-zinc-500">
@@ -54,7 +54,7 @@ export function MoveList({ moves, activeMoveIndex, onMoveClick }: MoveListProps)
                 ref={activeMoveIndex === whiteIdx ? activeRef : undefined}
                 className={`px-2 py-0.5 rounded transition-colors ${
                   activeMoveIndex === whiteIdx
-                    ? "bg-emerald-600/30 text-emerald-300 ring-1 ring-emerald-500/40"
+                    ? "bg-amber-600/30 text-amber-300 ring-1 ring-amber-500/40"
                     : "text-zinc-300 hover:bg-white/5"
                 }`}
                 onClick={() => onMoveClick?.(whiteIdx)}
@@ -66,7 +66,7 @@ export function MoveList({ moves, activeMoveIndex, onMoveClick }: MoveListProps)
                   ref={activeMoveIndex === blackIdx ? activeRef : undefined}
                   className={`px-2 py-0.5 rounded transition-colors ${
                     activeMoveIndex === blackIdx
-                      ? "bg-emerald-600/30 text-emerald-300 ring-1 ring-emerald-500/40"
+                      ? "bg-amber-600/30 text-amber-300 ring-1 ring-amber-500/40"
                       : "text-zinc-300 hover:bg-white/5"
                   }`}
                   onClick={() => onMoveClick?.(blackIdx)}
