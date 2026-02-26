@@ -29,7 +29,13 @@ export function ChannelSidebar({
 
   const handleSelectChannel = (id: string) => {
     onSelectChannel(id);
-    logEvent(EVENT_TYPES.SELECT_CHANNEL, { channel_id: id, server_id: server.id });
+    const ch = channels.find((c) => c.id === id);
+    logEvent(EVENT_TYPES.SELECT_CHANNEL, {
+      channel_id: id,
+      channel_name: ch?.name ?? id,
+      server_id: server.id,
+      server_name: server.name,
+    });
   };
 
   return (
@@ -39,7 +45,7 @@ export function ChannelSidebar({
         <button
           type="button"
           onClick={() => {
-            logEvent(EVENT_TYPES.OPEN_SERVER_SETTINGS, { server_id: server.id });
+            logEvent(EVENT_TYPES.OPEN_SERVER_SETTINGS, { server_id: server.id, server_name: server.name });
             onOpenServerSettings();
           }}
           className="p-1 rounded text-gray-400 hover:text-white hover:bg-white/10"

@@ -29,7 +29,12 @@ export function DMChatPanel({ peer, messages, onSendMessage }: DMChatPanelProps)
     e.preventDefault();
     const trimmed = input.trim();
     if (!trimmed || !peer) return;
-    logEvent(EVENT_TYPES.SEND_DM_MESSAGE, { peer_id: peer.id, content_length: trimmed.length });
+    logEvent(EVENT_TYPES.SEND_DM_MESSAGE, {
+      peer_id: peer.id,
+      peer_display_name: peer.displayName,
+      content: trimmed,
+      content_length: trimmed.length,
+    });
     onSendMessage(trimmed);
     setInput("");
   };

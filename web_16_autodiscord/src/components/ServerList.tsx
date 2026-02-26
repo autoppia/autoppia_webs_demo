@@ -26,7 +26,8 @@ export function ServerList({
   const handleSelectServer = (id: string) => {
     onViewModeChange("servers");
     onSelect(id);
-    logEvent(EVENT_TYPES.SELECT_SERVER, { server_id: id });
+    const server = servers.find((s) => s.id === id);
+    logEvent(EVENT_TYPES.SELECT_SERVER, { server_id: id, server_name: server?.name ?? id });
   };
 
   const handleHome = () => {

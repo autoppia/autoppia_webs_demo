@@ -6,7 +6,6 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import { formatMessageTime, formatMessageDateGroup } from "@/utils/format";
 import { EmptyState } from "@/components/EmptyState";
 import { CURRENT_USER } from "@/constants/mock";
-import { useSeed } from "@/context/SeedContext";
 import type { Channel, Message, MessageReaction } from "@/types/discord";
 
 interface ChatPanelProps {
@@ -65,13 +64,16 @@ export function ChatPanel({
   const [input, setInput] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { seed } = useSeed();
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = input.trim();
     if (!trimmed || !channel) return;
-    logEvent(EVENT_TYPES.SEND_MESSAGE, { channel_id: channel.id, content_length: trimmed.length });
+    logEvent(EVENT_TYPES.SEND_MESSAGE, {
+      channel_id: channel.id,
+      channel_name: channel.name,
+      content: trimmed,
+      content_length: trimmed.length,
+    });
     onSendMessage(trimmed);
     setInput("");
   };
@@ -90,7 +92,6 @@ export function ChatPanel({
       <header className="h-12 px-4 flex items-center border-b border-black/20 gap-2">
         <Hash className="w-5 h-5 text-gray-400" aria-hidden />
         <span className="font-semibold text-white">{channel.name}</span>
-        <span className="ml-auto text-xs text-gray-500" title="Dataset seed">Seed: {seed}</span>
       </header>
 
       <div className="flex-1 overflow-y-auto scrollbar-thin p-4 flex flex-col gap-6">
@@ -133,7 +134,12 @@ export function ChatPanel({
                                 key={r.emoji}
                                 type="button"
                                 onClick={() => {
-                                logEvent(EVENT_TYPES.ADD_REACTION, { message_id: msg.id, emoji: r.emoji });
+                                logEvent(EVENT_TYPES.ADD_REACTION, {
+                                  message_id: msg.id,
+                                  emoji: r.emoji,
+                                  channel_id: channel.id,
+                                  channel_name: channel.name,
+                                });
                                 onReaction(msg.id, r.emoji);
                               }}
                                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-white/10 hover:bg-white/15 text-gray-300 text-sm"
@@ -149,7 +155,12 @@ export function ChatPanel({
                           <button
                             type="button"
                             onClick={() => {
-                                logEvent(EVENT_TYPES.ADD_REACTION, { message_id: msg.id, emoji: "👍" });
+                                logEvent(EVENT_TYPES.ADD_REACTION, {
+                                  message_id: msg.id,
+                                  emoji: "👍",
+                                  channel_id: channel.id,
+                                  channel_name: channel.name,
+                                });
                                 onReaction(msg.id, "👍");
                               }}
                             className="mt-1 opacity-0 group-hover:opacity-100 inline-flex items-center gap-1 px-2 py-0.5 rounded hover:bg-white/10 text-gray-400 text-sm transition-opacity"

@@ -11,7 +11,11 @@ interface DMSidebarProps {
 
 export function DMSidebar({ peers, selectedUserId, onSelectUser }: DMSidebarProps) {
   const handleSelect = (userId: string) => {
-    logEvent(EVENT_TYPES.SELECT_DM, { user_id: userId });
+    const peer = peers.find((p) => p.id === userId);
+    logEvent(EVENT_TYPES.SELECT_DM, {
+      user_id: userId,
+      display_name: peer?.displayName ?? userId,
+    });
     onSelectUser(userId);
   };
 

@@ -2,15 +2,18 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 type Theme = "dark" | "light";
 
 export default function SettingsPage() {
+  const router = useRouter();
   const [theme, setTheme] = useState<Theme>("dark");
   const [notifications, setNotifications] = useState(true);
   const [displayName, setDisplayName] = useState("You");
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     logEvent(EVENT_TYPES.OPEN_SETTINGS, {});
@@ -28,6 +31,8 @@ export default function SettingsPage() {
 
   const handleAccountSave = () => {
     logEvent(EVENT_TYPES.SETTINGS_ACCOUNT, { display_name: displayName });
+    setSaving(true);
+    router.push("/");
   };
 
   return (
@@ -103,10 +108,11 @@ export default function SettingsPage() {
             <button
               type="button"
               onClick={handleAccountSave}
-              className="px-4 py-2 rounded-md bg-discord-accent text-white hover:bg-discord-accent/90"
+              disabled={saving}
+              className="px-4 py-2 rounded-md bg-discord-accent text-white hover:bg-discord-accent/90 disabled:opacity-70 disabled:cursor-wait"
               data-testid="settings-account-save"
             >
-              Save
+              {saving ? "Saving…" : "Save"}
             </button>
           </div>
         </section>

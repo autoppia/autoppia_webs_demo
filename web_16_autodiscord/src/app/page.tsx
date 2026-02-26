@@ -223,6 +223,11 @@ export default function DiscordPage() {
     (id: string) => {
       const ch = allChannelsForLookup.find((c) => c.id === id);
       setSelectedChannelId(id);
+      setUnreadChannelIds((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
       if (ch?.type === "voice") {
         setVoicePresence((prev) => {
           const next = { ...prev };
@@ -234,10 +239,16 @@ export default function DiscordPage() {
           return next;
         });
         setVoiceChannelId(id);
-        logEvent(EVENT_TYPES.JOIN_VOICE_CHANNEL, { channel_id: id, server_id: ch.serverId });
+        const serverName = allServers.find((s) => s.id === ch.serverId)?.name ?? ch.serverId;
+        logEvent(EVENT_TYPES.JOIN_VOICE_CHANNEL, {
+          channel_id: id,
+          channel_name: ch.name,
+          server_id: ch.serverId,
+          server_name: serverName,
+        });
       }
     },
-    [allChannelsForLookup, voiceChannelId]
+    [allChannelsForLookup, voiceChannelId, allServers]
   );
 
   const handleVoiceLeave = useCallback(() => {
@@ -357,21 +368,43 @@ export default function DiscordPage() {
       setSelectedChannelId(id);
       updateUrl(selectedServerId, id);
       if (type === "voice") {
-        logEvent(EVENT_TYPES.JOIN_VOICE_CHANNEL, { channel_id: id, server_id: selectedServerId });
+        const serverName = selectedServer?.name ?? selectedServerId;
+        logEvent(EVENT_TYPES.JOIN_VOICE_CHANNEL, {
+          channel_id: id,
+          channel_name: name,
+          server_id: selectedServerId,
+          server_name: serverName,
+        });
         setVoiceChannelId(id);
         setVoicePresence((prev) => ({ ...prev, [id]: ["current"] }));
       }
     },
-    [selectedServerId, channelsForServer, updateUrl]
+    [selectedServerId, selectedServer, channelsForServer, updateUrl]
   );
+
+  const readChannelIds = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (!selectedChannelId) return;
+    readChannelIds.current = new Set([...readChannelIds.current, selectedChannelId]);
+    setUnreadChannelIds((prev) => {
+      const next = new Set(prev);
+      next.delete(selectedChannelId);
+      return next;
+    });
+  }, [selectedChannelId]);
 
   useEffect(() => {
     if (!selectedServerId || channelsForServer.length === 0) return;
     const textChannels = channelsForServer.filter((c) => c.type === "text");
+    const read = readChannelIds.current;
     setUnreadChannelIds(
-      new Set(textChannels.filter((ch) => ch.id !== selectedChannelId).map((ch) => ch.id))
+      new Set(
+        textChannels
+          .filter((ch) => ch.id !== selectedChannelId && !read.has(ch.id))
+          .map((ch) => ch.id)
+      )
     );
-  }, [selectedServerId, selectedChannelId, channelsForServer]);
+  }, [selectedServerId, channelsForServer, selectedChannelId]);
 
   if (loading) return <LoadingSkeleton />;
   if (error) return <ErrorState message={error} onRetry={reload} />;

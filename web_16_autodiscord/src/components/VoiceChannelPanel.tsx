@@ -21,12 +21,16 @@ export function VoiceChannelPanel({
   onLeave,
 }: VoiceChannelPanelProps) {
   const handleMute = () => {
-    logEvent(EVENT_TYPES.VOICE_MUTE_TOGGLE, { channel_id: channel.id, muted: !currentUserMuted });
+    logEvent(EVENT_TYPES.VOICE_MUTE_TOGGLE, {
+      channel_id: channel.id,
+      channel_name: channel.name,
+      muted: !currentUserMuted,
+    });
     onMuteToggle();
   };
 
   const handleLeave = () => {
-    logEvent(EVENT_TYPES.LEAVE_VOICE_CHANNEL, { channel_id: channel.id });
+    logEvent(EVENT_TYPES.LEAVE_VOICE_CHANNEL, { channel_id: channel.id, channel_name: channel.name });
     onLeave();
   };
 

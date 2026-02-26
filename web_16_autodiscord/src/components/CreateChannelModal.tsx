@@ -30,6 +30,7 @@ export function CreateChannelModal({
     const trimmed = name.trim() || (channelType === "text" ? "new-channel" : "Voice");
     logEvent(EVENT_TYPES.CREATE_CHANNEL, {
       server_id: serverId,
+      server_name: serverName,
       channel_name: trimmed,
       channel_type: channelType,
     });
