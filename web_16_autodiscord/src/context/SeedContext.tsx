@@ -1,8 +1,8 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { createContext, useContext, useState, useCallback, useEffect } from "react";
+
+const DEFAULT_SEED = 1;
 
 interface SeedContextType {
   seed: number;
@@ -11,46 +11,26 @@ interface SeedContextType {
 }
 
 const SeedContext = createContext<SeedContextType>({
-  seed: 1,
+  seed: DEFAULT_SEED,
   setSeed: () => {},
   isSeedReady: false,
 });
 
 export function SeedProvider({ children }: { children: React.ReactNode }) {
-  return (
-    <Suspense fallback={children}>
-      <SeedProviderInner>{children}</SeedProviderInner>
-    </Suspense>
-  );
-}
+  const [seed] = useState(DEFAULT_SEED);
+  const setSeed = useCallback(() => {}, []);
 
-function SeedProviderInner({ children }: { children: React.ReactNode }) {
-  const searchParams = useSearchParams();
-  const [seed, setSeedState] = useState(1);
-  const [isSeedReady, setIsSeedReady] = useState(false);
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: searchParams triggers re-run when URL ?seed= changes
   useEffect(() => {
-    setSeedState(getSeedFromUrl());
-    setIsSeedReady(true);
-  }, [searchParams]);
-
-  const setSeed = useCallback((newSeed: number) => {
-    const clamped = clampSeed(newSeed);
-    setSeedState(clamped);
-    if (typeof window !== "undefined") {
-      try {
-        const url = new URL(window.location.href);
-        url.searchParams.set("seed", String(clamped));
-        window.history.replaceState({}, "", `${url.pathname}${url.search}`);
-      } catch {
-        // ignore
-      }
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    if (url.searchParams.has("seed")) {
+      url.searchParams.delete("seed");
+      window.history.replaceState({}, "", url.pathname + url.search);
     }
   }, []);
 
   return (
-    <SeedContext.Provider value={{ seed, setSeed, isSeedReady }}>
+    <SeedContext.Provider value={{ seed, setSeed, isSeedReady: true }}>
       {children}
     </SeedContext.Provider>
   );

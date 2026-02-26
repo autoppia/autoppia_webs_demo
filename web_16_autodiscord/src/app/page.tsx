@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSeed } from "@/context/SeedContext";
 import { useDiscordData } from "@/hooks/useDiscordData";
-import { clampSeed } from "@/shared/seed-resolver";
 import { ServerList } from "@/components/ServerList";
 import { ChannelSidebar } from "@/components/ChannelSidebar";
 import { ChatPanel } from "@/components/ChatPanel";
@@ -36,8 +35,7 @@ function nextId(): string {
 export default function DiscordPage() {
   const searchParams = useSearchParams();
   const { seed } = useSeed();
-  const effectiveSeed = useMemo(() => clampSeed(seed ?? 1), [seed]);
-  const { data, loading, error, reload } = useDiscordData(effectiveSeed);
+  const { data, loading, error, reload } = useDiscordData(seed);
 
   const serverParam = searchParams.get("server");
   const channelParam = searchParams.get("channel");

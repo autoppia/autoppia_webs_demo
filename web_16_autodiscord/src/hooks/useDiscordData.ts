@@ -29,6 +29,44 @@ function ensureArray<T>(value: unknown): T[] {
   return Array.isArray(value) ? (value as T[]) : [];
 }
 
+function dedupeServers(list: Server[]): Server[] {
+  const seen = new Set<string>();
+  return list.filter((s) => {
+    if (seen.has(s.id)) return false;
+    seen.add(s.id);
+    return true;
+  });
+}
+
+function dedupeChannels(list: Channel[]): Channel[] {
+  const seen = new Set<string>();
+  return list.filter((c) => {
+    const key = `${c.serverId}:${c.name}:${c.type}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function dedupeMessages(list: Message[]): Message[] {
+  const seen = new Set<string>();
+  return list.filter((m) => {
+    if (seen.has(m.id)) return false;
+    seen.add(m.id);
+    return true;
+  });
+}
+
+function dedupeMembers(list: Member[]): Member[] {
+  const seen = new Set<string>();
+  return list.filter((m) => {
+    const key = `${m.serverId}:${m.username}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 export function useDiscordData(seed: number): UseDiscordDataResult {
   const [data, setData] = useState<DiscordData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -41,7 +79,7 @@ export function useDiscordData(seed: number): UseDiscordDataResult {
     setError(null);
 
     try {
-      const [servers, channels, messages, members] = await Promise.all([
+      const [serversRaw, channelsRaw, messagesRaw, membersRaw] = await Promise.all([
         fetchDiscordEntities<Server>("servers", seed, LIMITS.servers),
         fetchDiscordEntities<Channel>("channels", seed, LIMITS.channels),
         fetchDiscordEntities<Message>("messages", seed, LIMITS.messages),
@@ -51,10 +89,10 @@ export function useDiscordData(seed: number): UseDiscordDataResult {
       if (cancelledRef.current) return;
 
       setData({
-        servers: ensureArray(servers),
-        channels: ensureArray(channels),
-        messages: ensureArray(messages),
-        members: ensureArray(members),
+        servers: dedupeServers(ensureArray(serversRaw)),
+        channels: dedupeChannels(ensureArray(channelsRaw)),
+        messages: dedupeMessages(ensureArray(messagesRaw)),
+        members: dedupeMembers(ensureArray(membersRaw)),
       });
     } catch (err) {
       if (!cancelledRef.current) {
