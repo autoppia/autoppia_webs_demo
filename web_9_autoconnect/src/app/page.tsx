@@ -259,7 +259,7 @@ function HomeContent() {
       )
     );
 
-    logEvent(EVENT_TYPES.REMOVE_POST, {
+    logEvent(EVENT_TYPES.DELETE_COMMENT, {
       postId,
       commentId,
       author: currentUser.username,
