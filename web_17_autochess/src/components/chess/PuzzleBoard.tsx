@@ -4,13 +4,15 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 import type { Puzzle } from "@/shared/types";
+import type { MoveHistoryEntry } from "@/shared/types";
 
 interface PuzzleBoardProps {
   puzzle: Puzzle;
   onSolve?: (correct: boolean, attempts: number) => void;
+  onMoveAttempt?: (entry: MoveHistoryEntry) => void;
 }
 
-export function PuzzleBoard({ puzzle, onSolve }: PuzzleBoardProps) {
+export function PuzzleBoard({ puzzle, onSolve, onMoveAttempt }: PuzzleBoardProps) {
   const chessRef = useRef(new Chess(puzzle.fen));
   const [currentFen, setCurrentFen] = useState(puzzle.fen);
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
@@ -52,11 +54,12 @@ export function PuzzleBoard({ puzzle, onSolve }: PuzzleBoardProps) {
         chessRef.current.move(opponentMove);
         setCurrentFen(chessRef.current.fen());
         setMoveIndex(nextMoveIdx + 1);
+        onMoveAttempt?.({ type: "opponent", message: `Opponent plays ${opponentMove}`, move: opponentMove });
       } catch {
         // If opponent move fails, puzzle is done
       }
     }, 400);
-  }, [puzzle.solution]);
+  }, [puzzle.solution, onMoveAttempt]);
 
   const handleSquareClick = useCallback(({ square }: { piece: unknown; square: string }) => {
     if (solved) return;
@@ -76,16 +79,15 @@ export function PuzzleBoard({ puzzle, onSolve }: PuzzleBoardProps) {
           setTimeout(() => setIncorrectSquare(null), 800);
           setSelectedSquare(null);
           setLegalMoveSquares([]);
+          onMoveAttempt?.({ type: "incorrect", message: `Incorrect. Try again.`, move: `${selectedSquare}${square}` });
           return;
         }
 
         // Check if this matches the expected solution
-        // Compare SAN (strip check/mate symbols) and from-to UCI notation
         const playedSan = moveResult.san.replace(/[+#]/g, "");
         const expectedSan = expectedMove.replace(/[+#]/g, "");
         const playedUci = `${moveResult.from}${moveResult.to}`;
 
-        // UCI format (e.g. "e2e4") or SAN format (e.g. "Nf3")
         const expectedUci = expectedMove.length >= 4 && expectedMove[0] >= "a" && expectedMove[0] <= "h"
           ? expectedMove.slice(0, 4)
           : "";
@@ -102,7 +104,9 @@ export function PuzzleBoard({ puzzle, onSolve }: PuzzleBoardProps) {
           if (nextMoveIdx >= puzzle.solution.length) {
             setSolved(true);
             onSolve?.(true, newAttempts);
+            onMoveAttempt?.({ type: "correct", message: `Correct! ${moveResult.san}`, move: moveResult.san });
           } else {
+            onMoveAttempt?.({ type: "correct", message: `Correct! ${moveResult.san}`, move: moveResult.san });
             // Play opponent's response and advance
             setMoveIndex(nextMoveIdx);
             playOpponentResponse(nextMoveIdx);
@@ -112,10 +116,12 @@ export function PuzzleBoard({ puzzle, onSolve }: PuzzleBoardProps) {
           chessRef.current.undo();
           setIncorrectSquare(square);
           setTimeout(() => setIncorrectSquare(null), 800);
+          onMoveAttempt?.({ type: "incorrect", message: `Incorrect: ${moveResult.san}. Try again.`, move: moveResult.san });
         }
       } catch {
         setIncorrectSquare(square);
         setTimeout(() => setIncorrectSquare(null), 800);
+        onMoveAttempt?.({ type: "incorrect", message: `Invalid move. Try again.` });
       }
 
       setSelectedSquare(null);
@@ -129,7 +135,15 @@ export function PuzzleBoard({ puzzle, onSolve }: PuzzleBoardProps) {
         setCorrectSquare(null);
       }
     }
-  }, [selectedSquare, solved, attempts, getExpectedMove, moveIndex, puzzle.solution.length, onSolve, playOpponentResponse]);
+  }, [selectedSquare, solved, attempts, getExpectedMove, moveIndex, puzzle.solution.length, onSolve, playOpponentResponse, onMoveAttempt]);
+
+  const handleShowSolution = useCallback(() => {
+    const next = !showSolution;
+    setShowSolution(next);
+    if (next) {
+      onMoveAttempt?.({ type: "hint", message: `Solution revealed: ${puzzle.solution.join(", ")}` });
+    }
+  }, [showSolution, onMoveAttempt, puzzle.solution]);
 
   const customSquareStyles: Record<string, React.CSSProperties> = {};
 
@@ -210,7 +224,7 @@ export function PuzzleBoard({ puzzle, onSolve }: PuzzleBoardProps) {
         {!solved && (
           <button
             className="px-4 py-2 text-sm bg-amber-600/20 text-amber-400 border border-amber-600/30 rounded-lg hover:bg-amber-600/30 transition-colors"
-            onClick={() => setShowSolution(!showSolution)}
+            onClick={handleShowSolution}
           >
             {showSolution ? "Hide Solution" : "Show Solution"}
           </button>

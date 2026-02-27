@@ -129,6 +129,27 @@ export const PUZZLE_FENS: { fen: string; solution: string[]; theme: string; toMo
   { fen: "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2", solution: ["d4", "d5", "Nc3"], theme: "Mate in 3", toMove: "white" },
   { fen: "r1bq1rk1/ppppnppp/4bn2/4p3/2P5/1PN2NP1/PB1PPPBP/R2QK2R w KQ - 6 7", solution: ["d3", "d5", "cxd5"], theme: "Decoy", toMove: "white" },
   { fen: "r1bqk2r/pppp1ppp/2nb1n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 6 5", solution: ["Bb5", "O-O", "O-O"], theme: "Zugzwang", toMove: "white" },
+  // Opening theme
+  { fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1", solution: ["e5", "Nf3", "Nc6"], theme: "Opening", toMove: "black" },
+  { fen: "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2", solution: ["d4", "d5", "Nc3"], theme: "Opening", toMove: "white" },
+  // Middlegame theme
+  { fen: "r1bq1rk1/pp2bppp/2n1pn2/2pp4/3P4/2NBPN2/PPP2PPP/R1BQ1RK1 w - - 0 8", solution: ["dxc5", "Bxc5", "b4"], theme: "Middlegame", toMove: "white" },
+  { fen: "r1b1kb1r/pp1nqppp/2p1pn2/3p4/2PP4/2N1PN2/PP3PPP/R1BQKB1R w KQkq - 0 6", solution: ["Bd3", "dxc4", "Bxc4"], theme: "Middlegame", toMove: "white" },
+  // Endgame theme
+  { fen: "8/5pk1/6p1/8/5PP1/6K1/8/8 w - - 0 1", solution: ["f5", "gxf5", "gxf5"], theme: "Endgame", toMove: "white" },
+  { fen: "8/8/4kpp1/3p4/3P1PP1/4K3/8/8 w - - 0 1", solution: ["fxg6", "Kd6", "Kf4"], theme: "Endgame", toMove: "white" },
+  // Pawn Endgame theme
+  { fen: "8/p7/1p6/8/P7/1P2k3/4p3/4K3 w - - 0 1", solution: ["a5", "bxa5", "b4"], theme: "Pawn Endgame", toMove: "white" },
+  { fen: "8/8/1pk5/p1p5/P1P5/1PK5/8/8 w - - 0 1", solution: ["b4", "axb4+", "Kxb4"], theme: "Pawn Endgame", toMove: "white" },
+  // Rook Endgame theme
+  { fen: "8/8/4k3/R7/4Pp2/5K2/8/4r3 w - - 0 1", solution: ["Ra6+", "Kf5", "Ra5+"], theme: "Rook Endgame", toMove: "white" },
+  { fen: "1R6/8/8/5kp1/8/6K1/6r1/8 w - - 0 1", solution: ["Rb5+", "Kf6", "Rb6+"], theme: "Rook Endgame", toMove: "white" },
+  // Smothered Mate theme
+  { fen: "r1b1kb1r/pppp1ppp/5n2/8/3nq3/5N2/PPPPBPPP/RNBQK2R w KQkq - 4 5", solution: ["Nc3", "Qe7", "Nd5"], theme: "Smothered Mate", toMove: "white" },
+  { fen: "r1bqk2r/pppp1Npp/2n2n2/2b1p3/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 4", solution: ["Qe7", "Nd6+", "Kd8"], theme: "Smothered Mate", toMove: "black" },
+  // Interference theme
+  { fen: "r1bqk2r/pppp1ppp/2n5/2b1p3/2B1P1n1/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5", solution: ["d4", "exd4", "Nd5"], theme: "Interference", toMove: "white" },
+  { fen: "rnbq1rk1/pp2ppbp/2pp1np1/8/2PPP3/2N2NP1/PP3PBP/R1BQK2R w KQ - 0 7", solution: ["d5", "Na5", "Bd2"], theme: "Interference", toMove: "white" },
 ];
 
 // Algebraic move pools for generating plausible-looking games

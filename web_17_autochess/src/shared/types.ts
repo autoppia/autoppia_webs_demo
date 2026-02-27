@@ -78,3 +78,22 @@ export interface SeedContextType {
   setSeed: (seed: number) => void;
   getNavigationUrl: (path: string) => string;
 }
+
+export interface PuzzleThemeInfo {
+  key: string;
+  name: string;
+  description: string;
+  count: number;
+}
+
+export interface PuzzleThemeCategory {
+  name: string;
+  description: string;
+  themes: PuzzleThemeInfo[];
+}
+
+export interface MoveHistoryEntry {
+  type: "info" | "correct" | "incorrect" | "opponent" | "solved" | "hint";
+  message: string;
+  move?: string;
+}

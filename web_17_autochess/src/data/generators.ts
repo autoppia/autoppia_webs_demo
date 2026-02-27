@@ -308,12 +308,16 @@ export function generateGames(tournaments: Tournament[], players: Player[], coun
 // Puzzle Generator
 // ============================================================================
 
-export function generatePuzzles(count: number, seed: number): Puzzle[] {
+export function generatePuzzles(count: number, seed: number, theme?: string): Puzzle[] {
   const rng = seedRandom(seed + 5000);
+  const filteredFens = theme
+    ? PUZZLE_FENS.filter((f) => f.theme === theme)
+    : PUZZLE_FENS;
+  const fenPool = filteredFens.length > 0 ? filteredFens : PUZZLE_FENS;
   const puzzles: Puzzle[] = [];
 
   for (let i = 0; i < count; i++) {
-    const fenData = PUZZLE_FENS[i % PUZZLE_FENS.length];
+    const fenData = fenPool[i % fenPool.length];
     const rating = randInt(800, 2800, rng);
 
     puzzles.push({
@@ -327,6 +331,17 @@ export function generatePuzzles(count: number, seed: number): Puzzle[] {
   }
 
   return puzzles;
+}
+
+export function generatePuzzleThemeCounts(seed: number): Record<string, number> {
+  const rng = seedRandom(seed + 6000);
+  const counts: Record<string, number> = {};
+  const allThemes = new Set(PUZZLE_FENS.map((f) => f.theme));
+  for (const theme of allThemes) {
+    const base = PUZZLE_FENS.filter((f) => f.theme === theme).length;
+    counts[theme] = base * randInt(8, 25, rng);
+  }
+  return counts;
 }
 
 // ============================================================================

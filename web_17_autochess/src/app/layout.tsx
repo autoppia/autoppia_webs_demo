@@ -9,6 +9,7 @@ import { SeedRedirect } from "@/components/layout/SeedRedirect";
 import { DynamicDebug } from "@/components/debug/DynamicDebug";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,17 +39,19 @@ export default function RootLayout({
         <ClientBody>
           <Suspense fallback={<div>Loading...</div>}>
             <SeedProvider>
-              <Suspense fallback={null}>
-                <SeedRedirect />
-              </Suspense>
-              <Header />
-              <main className="flex-1 w-full">
-                <div className="container mx-auto px-6 max-w-[1400px]">
-                  {children}
-                </div>
-              </main>
-              <Footer />
-              <DynamicDebug />
+              <AuthProvider>
+                <Suspense fallback={null}>
+                  <SeedRedirect />
+                </Suspense>
+                <Header />
+                <main className="flex-1 w-full">
+                  <div className="container mx-auto px-6 max-w-[1400px]">
+                    {children}
+                  </div>
+                </main>
+                <Footer />
+                <DynamicDebug />
+              </AuthProvider>
             </SeedProvider>
           </Suspense>
         </ClientBody>

@@ -6,6 +6,10 @@ export const EVENT_TYPES = {
   VIEW_PLAYER: "VIEW_PLAYER",
   SOLVE_PUZZLE: "SOLVE_PUZZLE",
   ANALYZE_GAME: "ANALYZE_GAME",
+  LOGIN: "LOGIN",
+  LOGOUT: "LOGOUT",
+  REGISTRATION: "REGISTRATION",
+  FORGOT_PASSWORD: "FORGOT_PASSWORD",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
@@ -57,7 +61,6 @@ export function logEvent(
       if (!res.ok) throw new Error(`log-event failed: ${res.status}`);
     })
     .catch((error) => {
-      console.error("Failed to log event:", error);
-      throw error;
+      console.warn("Failed to log event:", error);
     });
 }
