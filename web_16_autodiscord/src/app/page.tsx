@@ -33,6 +33,18 @@ function nextId(): string {
   return `local-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
+function normalizeChannelParam(raw: string | null): string | null {
+  if (!raw) return null;
+  const idx = raw.indexOf("/?seed=");
+  return idx >= 0 ? raw.slice(0, idx) : raw;
+}
+
+function extractSeedFromMalformedChannel(raw: string | null): string | null {
+  if (!raw) return null;
+  const match = raw.match(/[?&]seed=(\d+)/);
+  return match?.[1] ?? null;
+}
+
 export default function DiscordPage() {
   const searchParams = useSearchParams();
   const { seed } = useSeed();
@@ -40,7 +52,8 @@ export default function DiscordPage() {
   const { data, loading, error, reload } = useDiscordData(effectiveSeed);
 
   const serverParam = searchParams.get("server");
-  const channelParam = searchParams.get("channel");
+  const rawChannelParam = searchParams.get("channel");
+  const channelParam = normalizeChannelParam(rawChannelParam);
 
   const [selectedServerId, setSelectedServerId] = useState<string | null>(null);
   const [selectedChannelId, setSelectedChannelId] = useState<string | null>(null);
@@ -167,10 +180,15 @@ export default function DiscordPage() {
   const updateUrl = useCallback((serverId: string | null, channelId: string | null) => {
     if (typeof window === "undefined") return;
     const url = new URL(window.location.href);
+    let seedParam = url.searchParams.get("seed");
+    if (!seedParam) {
+      seedParam = extractSeedFromMalformedChannel(url.searchParams.get("channel"));
+    }
     if (serverId) url.searchParams.set("server", serverId);
     else url.searchParams.delete("server");
     if (channelId) url.searchParams.set("channel", channelId);
     else url.searchParams.delete("channel");
+    if (seedParam) url.searchParams.set("seed", seedParam);
     window.history.replaceState({}, "", url.pathname + url.search);
   }, []);
 

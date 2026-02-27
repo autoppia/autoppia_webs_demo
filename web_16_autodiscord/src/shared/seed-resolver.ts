@@ -12,10 +12,22 @@ export function getSeedFromUrl(search: string): number {
   try {
     const params = new URLSearchParams(search.startsWith("?") ? search : `?${search}`);
     const raw = params.get("seed");
-    if (!raw) return SEED_RANGE.defaultValue;
-    const parsed = Number.parseInt(raw, 10);
-    if (!Number.isFinite(parsed)) return SEED_RANGE.defaultValue;
-    return clampSeed(parsed);
+    if (raw) {
+      const parsed = Number.parseInt(raw, 10);
+      if (!Number.isFinite(parsed)) return SEED_RANGE.defaultValue;
+      return clampSeed(parsed);
+    }
+
+    // Backward-compat: tolerate malformed URLs like channel=c1/?seed=43
+    for (const value of params.values()) {
+      const match = value.match(/[?&]seed=(\d+)/);
+      if (!match) continue;
+      const parsed = Number.parseInt(match[1], 10);
+      if (!Number.isFinite(parsed)) continue;
+      return clampSeed(parsed);
+    }
+
+    return SEED_RANGE.defaultValue;
   } catch {
     return SEED_RANGE.defaultValue;
   }
