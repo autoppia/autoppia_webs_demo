@@ -1,6 +1,8 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 
 const DEFAULT_SEED = 1;
 
@@ -17,20 +19,39 @@ const SeedContext = createContext<SeedContextType>({
 });
 
 export function SeedProvider({ children }: { children: React.ReactNode }) {
-  const [seed] = useState(DEFAULT_SEED);
-  const setSeed = useCallback(() => {}, []);
+  return (
+    <Suspense fallback={children}>
+      <SeedProviderInner>{children}</SeedProviderInner>
+    </Suspense>
+  );
+}
+
+function SeedProviderInner({ children }: { children: React.ReactNode }) {
+  const searchParams = useSearchParams();
+  const [seed, setSeedState] = useState(DEFAULT_SEED);
+  const [isSeedReady, setIsSeedReady] = useState(false);
+  const searchString = searchParams.toString();
 
   useEffect(() => {
+    setSeedState(getSeedFromUrl(searchString ? `?${searchString}` : ""));
+    setIsSeedReady(true);
+  }, [searchString]);
+
+  const setSeed = useCallback((newSeed: number) => {
+    const clamped = clampSeed(newSeed);
+    setSeedState(clamped);
     if (typeof window === "undefined") return;
-    const url = new URL(window.location.href);
-    if (url.searchParams.has("seed")) {
-      url.searchParams.delete("seed");
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set("seed", String(clamped));
       window.history.replaceState({}, "", url.pathname + url.search);
+    } catch {
+      // ignore
     }
   }, []);
 
   return (
-    <SeedContext.Provider value={{ seed, setSeed, isSeedReady: true }}>
+    <SeedContext.Provider value={{ seed, setSeed, isSeedReady }}>
       {children}
     </SeedContext.Provider>
   );
