@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 20 14% 4%;
+    --foreground: 0 0% 95%;
+    --card: 24 10% 10%;
+    --card-foreground: 0 0% 95%;
+    --popover: 24 10% 10%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 38 92% 50%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 24 10% 15%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 24 10% 15%;
+    --muted-foreground: 24 5% 65%;
+    --accent: 24 10% 15%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 24 10% 15%;
+    --input: 24 10% 15%;
+    --ring: 38 92% 50%;
+    --radius: 0.5rem;
+    --chart-1: 38 92% 50%;
+    --chart-2: 199 89% 48%;
+    --chart-3: 142 76% 36%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Dark date input styling */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+/* Hide the floating Next.js dev overlay icon */
+[data-nextjs-toast], .nextjs-toast-override {
+  display: none !important;
+}
+
+.nextjs-portal {
+  display: none !important;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Native select options dark theme */
+select option {
+  background-color: #1c1917;
+  color: #d4d4d8;
+}

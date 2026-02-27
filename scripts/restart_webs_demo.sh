@@ -43,9 +43,10 @@ DEMO_PREFIXES=(
   "autolist"
   "autodrive"
   "autohealth"
+  "autochess"
 )
 
-DEMO_CONTAINERS=$(sudo docker ps -a --format "{{.Names}}" | grep -E "^(webs_server|autocinema|autobooks|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|autohealth)($|_)" || true)
+DEMO_CONTAINERS=$(sudo docker ps -a --format "{{.Names}}" | grep -E "^(webs_server|autocinema|autobooks|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|autohealth|autochess)($|_)" || true)
 
 if [ -n "$DEMO_CONTAINERS" ]; then
   for container in $DEMO_CONTAINERS; do
@@ -57,7 +58,7 @@ else
 fi
 
 echo "🧹 Removing previous Webs Demo volumes..."
-DEMO_VOLUMES=$(sudo docker volume ls --format "{{.Name}}" | grep -E "^(webs_server|autocinema|autobooks|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|autohealth)($|_)" || true)
+DEMO_VOLUMES=$(sudo docker volume ls --format "{{.Name}}" | grep -E "^(webs_server|autocinema|autobooks|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|autohealth|autochess)($|_)" || true)
 if [ -n "$DEMO_VOLUMES" ]; then
   for volume in $DEMO_VOLUMES; do
     echo "🗑️ Removing volume $volume..."
@@ -68,7 +69,7 @@ else
 fi
 
 echo "🧹 Removing previous Webs Demo images..."
-DEMO_IMAGES=$(sudo docker images --format "{{.Repository}} {{.ID}}" | grep -E "^(webs_server|autocinema|autobooks|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|autohealth)\\b" | awk '{print $2}' || true)
+DEMO_IMAGES=$(sudo docker images --format "{{.Repository}} {{.ID}}" | grep -E "^(webs_server|autocinema|autobooks|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|autohealth|autochess)\\b" | awk '{print $2}' || true)
 if [ -n "$DEMO_IMAGES" ]; then
   for image in $DEMO_IMAGES; do
     echo "🗑️ Removing image $image..."
