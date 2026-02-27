@@ -10,7 +10,10 @@ interface ErrorStateProps {
 export function ErrorState({ message, onRetry }: ErrorStateProps) {
   return (
     <div className="min-h-screen bg-discord-darkest flex flex-col items-center justify-center gap-4 p-6">
-      <AlertCircle className="w-12 h-12 text-red-400 flex-shrink-0" aria-hidden />
+      <AlertCircle
+        className="w-12 h-12 text-red-400 flex-shrink-0"
+        aria-hidden
+      />
       <p className="text-red-400 text-center max-w-md">{message}</p>
       <button
         type="button"

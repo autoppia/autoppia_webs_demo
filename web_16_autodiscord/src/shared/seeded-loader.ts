@@ -2,7 +2,8 @@ const PROJECT_KEY = "web_16_autodiscord";
 
 function getApiBaseUrl(): string {
   const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
-  const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
+  const origin =
+    typeof window !== "undefined" ? window.location?.origin : undefined;
   if (envUrl && !envUrl.includes("localhost")) return envUrl;
   if (origin) return `${origin}/api`;
   return envUrl || "http://app:8090";
@@ -29,7 +30,9 @@ function validateOptions(options: SeededLoadOptions): void {
  * Fetch a seeded slice of entity data from the webs_server API.
  * @throws Error on network failure, non-OK response, or invalid response body
  */
-export async function fetchSeededSelection<T = unknown>(options: SeededLoadOptions): Promise<T[]> {
+export async function fetchSeededSelection<T = unknown>(
+  options: SeededLoadOptions,
+): Promise<T[]> {
   validateOptions(options);
   const baseUrl = getApiBaseUrl();
   const seed = options.seedValue ?? 1;
@@ -48,13 +51,16 @@ export async function fetchSeededSelection<T = unknown>(options: SeededLoadOptio
   try {
     resp = await fetch(url, { method: "GET" });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Network request failed";
+    const message =
+      err instanceof Error ? err.message : "Network request failed";
     throw new Error(`Seeded selection failed: ${message}`);
   }
 
   if (!resp.ok) {
     const body = await resp.text().catch(() => "");
-    throw new Error(`Seeded selection failed: ${resp.status}${body ? ` — ${body.slice(0, 100)}` : ""}`);
+    throw new Error(
+      `Seeded selection failed: ${resp.status}${body ? ` — ${body.slice(0, 100)}` : ""}`,
+    );
   }
 
   let json: { data?: unknown };
@@ -71,7 +77,11 @@ export async function fetchSeededSelection<T = unknown>(options: SeededLoadOptio
   return data as T[];
 }
 
-export async function fetchDiscordEntities<T>(entityType: string, seedValue: number, limit: number): Promise<T[]> {
+export async function fetchDiscordEntities<T>(
+  entityType: string,
+  seedValue: number,
+  limit: number,
+): Promise<T[]> {
   return fetchSeededSelection<T>({
     projectKey: PROJECT_KEY,
     entityType,

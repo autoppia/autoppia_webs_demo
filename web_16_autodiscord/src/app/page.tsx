@@ -1,27 +1,33 @@
 "use client";
 
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { useSearchParams } from "next/navigation";
-import { useSeed } from "@/context/SeedContext";
-import { useDiscordData } from "@/hooks/useDiscordData";
-import { clampSeed } from "@/shared/seed-resolver";
-import { ServerList } from "@/components/ServerList";
 import { ChannelSidebar } from "@/components/ChannelSidebar";
 import { ChatPanel } from "@/components/ChatPanel";
-import { MemberSidebar } from "@/components/MemberSidebar";
-import { DMSidebar } from "@/components/DMSidebar";
-import { DMChatPanel, type DMMessage } from "@/components/DMChatPanel";
-import { CreateServerModal } from "@/components/CreateServerModal";
 import { CreateChannelModal } from "@/components/CreateChannelModal";
-import { ServerSettingsModal } from "@/components/ServerSettingsModal";
-import { HomeDashboard } from "@/components/HomeDashboard";
-import { VoiceChannelPanel } from "@/components/VoiceChannelPanel";
-import { LoadingSkeleton } from "@/components/LoadingSkeleton";
-import { ErrorState } from "@/components/ErrorState";
+import { CreateServerModal } from "@/components/CreateServerModal";
+import { DMChatPanel, type DMMessage } from "@/components/DMChatPanel";
+import { DMSidebar } from "@/components/DMSidebar";
 import { EmptyState } from "@/components/EmptyState";
+import { ErrorState } from "@/components/ErrorState";
+import { HomeDashboard } from "@/components/HomeDashboard";
+import { LoadingSkeleton } from "@/components/LoadingSkeleton";
+import { MemberSidebar } from "@/components/MemberSidebar";
+import { ServerList } from "@/components/ServerList";
+import { ServerSettingsModal } from "@/components/ServerSettingsModal";
+import { VoiceChannelPanel } from "@/components/VoiceChannelPanel";
 import { CURRENT_USER } from "@/constants/mock";
+import { useSeed } from "@/context/SeedContext";
+import { useDiscordData } from "@/hooks/useDiscordData";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import type { Channel, Message, MessageReaction, Member, Server } from "@/types/discord";
+import { clampSeed } from "@/shared/seed-resolver";
+import type {
+  Channel,
+  Member,
+  Message,
+  MessageReaction,
+  Server,
+} from "@/types/discord";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 function pickDefaultChannel(channels: Channel[]): string | null {
   if (channels.length === 0) return null;
@@ -56,27 +62,39 @@ export default function DiscordPage() {
   const channelParam = normalizeChannelParam(rawChannelParam);
 
   const [selectedServerId, setSelectedServerId] = useState<string | null>(null);
-  const [selectedChannelId, setSelectedChannelId] = useState<string | null>(null);
+  const [selectedChannelId, setSelectedChannelId] = useState<string | null>(
+    null,
+  );
   const [viewMode, setViewMode] = useState<"servers" | "dms">("servers");
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [dmMessages, setDmMessages] = useState<Record<string, DMMessage[]>>({});
-  const [localMessages, setLocalMessages] = useState<Record<string, Message[]>>({});
-  const [localReactions, setLocalReactions] = useState<Record<string, MessageReaction[]>>({});
-  const [userReactions, setUserReactions] = useState<Record<string, Set<string>>>({});
-  const [unreadChannelIds, setUnreadChannelIds] = useState<Set<string>>(new Set());
+  const [localMessages, setLocalMessages] = useState<Record<string, Message[]>>(
+    {},
+  );
+  const [localReactions, setLocalReactions] = useState<
+    Record<string, MessageReaction[]>
+  >({});
+  const [userReactions, setUserReactions] = useState<
+    Record<string, Set<string>>
+  >({});
+  const [unreadChannelIds, setUnreadChannelIds] = useState<Set<string>>(
+    new Set(),
+  );
   const [createServerModalOpen, setCreateServerModalOpen] = useState(false);
   const [createChannelModalOpen, setCreateChannelModalOpen] = useState(false);
   const [serverSettingsModalOpen, setServerSettingsModalOpen] = useState(false);
   const [localServers, setLocalServers] = useState<Server[]>([]);
   /** Local channels (and voice presence) are client-only; not persisted to API. */
   const [localChannels, setLocalChannels] = useState<Channel[]>([]);
-  const [voicePresence, setVoicePresence] = useState<Record<string, string[]>>({});
+  const [voicePresence, setVoicePresence] = useState<Record<string, string[]>>(
+    {},
+  );
   const [voiceChannelId, setVoiceChannelId] = useState<string | null>(null);
   const [voiceMuted, setVoiceMuted] = useState(false);
 
   const allServers = useMemo(
     () => [...(data?.servers ?? []), ...localServers],
-    [data?.servers, localServers]
+    [data?.servers, localServers],
   );
 
   const allServersRef = useRef(allServers);
@@ -86,8 +104,11 @@ export default function DiscordPage() {
 
   const channelsForServer = useMemo(() => {
     if (!selectedServerId) return [];
-    const apiChannels = data?.channels.filter((ch) => ch.serverId === selectedServerId) ?? [];
-    const local = localChannels.filter((ch) => ch.serverId === selectedServerId);
+    const apiChannels =
+      data?.channels.filter((ch) => ch.serverId === selectedServerId) ?? [];
+    const local = localChannels.filter(
+      (ch) => ch.serverId === selectedServerId,
+    );
     const merged = [...apiChannels, ...local];
     return merged.sort((a, b) => a.position - b.position);
   }, [data, selectedServerId, localChannels]);
@@ -98,9 +119,12 @@ export default function DiscordPage() {
   }, [data, selectedChannelId]);
 
   const messagesForChannel = useMemo(() => {
-    const local = selectedChannelId ? localMessages[selectedChannelId] ?? [] : [];
+    const local = selectedChannelId
+      ? (localMessages[selectedChannelId] ?? [])
+      : [];
     const combined = [...apiMessagesForChannel, ...local].sort(
-      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+      (a, b) =>
+        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
     );
     return combined;
   }, [apiMessagesForChannel, localMessages, selectedChannelId]);
@@ -112,15 +136,15 @@ export default function DiscordPage() {
 
   const selectedServer = useMemo(
     () => allServers.find((s) => s.id === selectedServerId) ?? null,
-    [allServers, selectedServerId]
+    [allServers, selectedServerId],
   );
   const allChannelsForLookup = useMemo(
     () => [...(data?.channels ?? []), ...localChannels],
-    [data?.channels, localChannels]
+    [data?.channels, localChannels],
   );
   const selectedChannel = useMemo(
     () => allChannelsForLookup.find((c) => c.id === selectedChannelId) ?? null,
-    [allChannelsForLookup, selectedChannelId]
+    [allChannelsForLookup, selectedChannelId],
   );
 
   const dmPeers = useMemo(() => {
@@ -135,13 +159,16 @@ export default function DiscordPage() {
   }, [data]);
 
   const selectedDMPeer = useMemo(
-    () => (selectedUserId ? dmPeers.find((m) => m.id === selectedUserId) ?? null : null),
-    [dmPeers, selectedUserId]
+    () =>
+      selectedUserId
+        ? (dmPeers.find((m) => m.id === selectedUserId) ?? null)
+        : null,
+    [dmPeers, selectedUserId],
   );
 
   const dmMessagesForPeer = useMemo(
-    () => (selectedUserId ? dmMessages[selectedUserId] ?? [] : []),
-    [dmMessages, selectedUserId]
+    () => (selectedUserId ? (dmMessages[selectedUserId] ?? []) : []),
+    [dmMessages, selectedUserId],
   );
 
   const voiceChannelsWithPresence = useMemo(() => {
@@ -150,7 +177,12 @@ export default function DiscordPage() {
   }, [allChannelsForLookup, voicePresence]);
 
   const membersInVoiceChannel = useMemo((): Member[] => {
-    if (!selectedChannelId || !selectedChannel || selectedChannel.type !== "voice") return [];
+    if (
+      !selectedChannelId ||
+      !selectedChannel ||
+      selectedChannel.type !== "voice"
+    )
+      return [];
     const ids = voicePresence[selectedChannelId] ?? [];
     const members: Member[] = [];
     for (const id of ids) {
@@ -173,40 +205,51 @@ export default function DiscordPage() {
   }, [selectedChannelId, selectedChannel, voicePresence, data?.members]);
 
   const getServerName = useCallback(
-    (serverId: string) => allServers.find((s) => s.id === serverId)?.name ?? serverId,
-    [allServers]
+    (serverId: string) =>
+      allServers.find((s) => s.id === serverId)?.name ?? serverId,
+    [allServers],
   );
 
-  const updateUrl = useCallback((serverId: string | null, channelId: string | null) => {
-    if (typeof window === "undefined") return;
-    const url = new URL(window.location.href);
-    let seedParam = url.searchParams.get("seed");
-    if (!seedParam) {
-      seedParam = extractSeedFromMalformedChannel(url.searchParams.get("channel"));
-    }
-    if (serverId) url.searchParams.set("server", serverId);
-    else url.searchParams.delete("server");
-    if (channelId) url.searchParams.set("channel", channelId);
-    else url.searchParams.delete("channel");
-    if (seedParam) url.searchParams.set("seed", seedParam);
-    window.history.replaceState({}, "", url.pathname + url.search);
-  }, []);
+  const updateUrl = useCallback(
+    (serverId: string | null, channelId: string | null) => {
+      if (typeof window === "undefined") return;
+      const url = new URL(window.location.href);
+      let seedParam = url.searchParams.get("seed");
+      if (!seedParam) {
+        seedParam = extractSeedFromMalformedChannel(
+          url.searchParams.get("channel"),
+        );
+      }
+      if (serverId) url.searchParams.set("server", serverId);
+      else url.searchParams.delete("server");
+      if (channelId) url.searchParams.set("channel", channelId);
+      else url.searchParams.delete("channel");
+      if (seedParam) url.searchParams.set("seed", seedParam);
+      window.history.replaceState({}, "", url.pathname + url.search);
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!data) return;
     const servers = allServersRef.current;
     const local = localChannelsRef.current;
-    const serverId = serverParam && servers.some((s) => s.id === serverParam) ? serverParam : null;
+    const serverId =
+      serverParam && servers.some((s) => s.id === serverParam)
+        ? serverParam
+        : null;
     const firstServerId = servers.length > 0 ? servers[0].id : null;
     const resolvedServerId = serverId ?? firstServerId;
     setSelectedServerId(resolvedServerId);
 
     if (resolvedServerId) {
       const channels = [...(data.channels ?? []), ...local].filter(
-        (ch) => ch.serverId === resolvedServerId
+        (ch) => ch.serverId === resolvedServerId,
       );
       const channelId =
-        channelParam && channels.some((c) => c.id === channelParam) ? channelParam : null;
+        channelParam && channels.some((c) => c.id === channelParam)
+          ? channelParam
+          : null;
       const defaultChannelId = pickDefaultChannel(channels);
       setSelectedChannelId(channelId ?? defaultChannelId);
       updateUrl(resolvedServerId, channelId ?? defaultChannelId);
@@ -214,7 +257,8 @@ export default function DiscordPage() {
   }, [data, serverParam, channelParam, updateUrl]);
 
   useEffect(() => {
-    if (selectedServerId && selectedChannelId) updateUrl(selectedServerId, selectedChannelId);
+    if (selectedServerId && selectedChannelId)
+      updateUrl(selectedServerId, selectedChannelId);
   }, [selectedServerId, selectedChannelId, updateUrl]);
 
   useEffect(() => {
@@ -250,14 +294,20 @@ export default function DiscordPage() {
         setVoicePresence((prev) => {
           const next = { ...prev };
           if (voiceChannelId) {
-            next[voiceChannelId] = (prev[voiceChannelId] ?? []).filter((x) => x !== "current");
+            next[voiceChannelId] = (prev[voiceChannelId] ?? []).filter(
+              (x) => x !== "current",
+            );
             if (next[voiceChannelId].length === 0) delete next[voiceChannelId];
           }
-          next[id] = [...(prev[id] ?? []).filter((x) => x !== "current"), "current"];
+          next[id] = [
+            ...(prev[id] ?? []).filter((x) => x !== "current"),
+            "current",
+          ];
           return next;
         });
         setVoiceChannelId(id);
-        const serverName = allServers.find((s) => s.id === ch.serverId)?.name ?? ch.serverId;
+        const serverName =
+          allServers.find((s) => s.id === ch.serverId)?.name ?? ch.serverId;
         logEvent(EVENT_TYPES.JOIN_VOICE_CHANNEL, {
           channel_id: id,
           channel_name: ch.name,
@@ -266,36 +316,58 @@ export default function DiscordPage() {
         });
       }
     },
-    [allChannelsForLookup, voiceChannelId, allServers]
+    [allChannelsForLookup, voiceChannelId, allServers],
   );
 
   const handleVoiceLeave = useCallback(() => {
     if (!voiceChannelId) return;
+    const ch = allChannelsForLookup.find((c) => c.id === voiceChannelId);
+    logEvent(EVENT_TYPES.LEAVE_VOICE_CHANNEL, {
+      channel_id: voiceChannelId,
+      channel_name: ch?.name ?? voiceChannelId,
+      server_id: ch?.serverId ?? "",
+      server_name: ch ? getServerName(ch.serverId) : "",
+    });
     setVoicePresence((prev) => ({
       ...prev,
-      [voiceChannelId]: (prev[voiceChannelId] ?? []).filter((x) => x !== "current"),
+      [voiceChannelId]: (prev[voiceChannelId] ?? []).filter(
+        (x) => x !== "current",
+      ),
     }));
     setVoiceChannelId(null);
     setSelectedChannelId(null);
-  }, [voiceChannelId]);
+  }, [voiceChannelId, allChannelsForLookup, getServerName]);
 
   const handleVoiceMuteToggle = useCallback(() => {
-    setVoiceMuted((v) => !v);
-  }, []);
-
-  const handleSendDMMessage = useCallback((content: string) => {
-    if (!selectedUserId) return;
-    const msg: DMMessage = {
-      id: nextId(),
-      fromUserId: "current",
-      content,
-      timestamp: new Date().toISOString(),
-    };
-    setDmMessages((prev) => {
-      const list = prev[selectedUserId] ?? [];
-      return { ...prev, [selectedUserId]: [...list, msg] };
+    const ch = voiceChannelId
+      ? allChannelsForLookup.find((c) => c.id === voiceChannelId)
+      : null;
+    logEvent(EVENT_TYPES.VOICE_MUTE_TOGGLE, {
+      channel_id: voiceChannelId,
+      channel_name: ch?.name ?? voiceChannelId ?? "",
+      server_id: ch?.serverId ?? "",
+      server_name: ch ? getServerName(ch.serverId) : "",
+      muted: !voiceMuted,
     });
-  }, [selectedUserId]);
+    setVoiceMuted((v) => !v);
+  }, [voiceChannelId, voiceMuted, allChannelsForLookup, getServerName]);
+
+  const handleSendDMMessage = useCallback(
+    (content: string) => {
+      if (!selectedUserId) return;
+      const msg: DMMessage = {
+        id: nextId(),
+        fromUserId: "current",
+        content,
+        timestamp: new Date().toISOString(),
+      };
+      setDmMessages((prev) => {
+        const list = prev[selectedUserId] ?? [];
+        return { ...prev, [selectedUserId]: [...list, msg] };
+      });
+    },
+    [selectedUserId],
+  );
 
   const handleSendMessage = useCallback(
     (content: string) => {
@@ -312,36 +384,43 @@ export default function DiscordPage() {
         return { ...prev, [selectedChannelId]: [...list, msg] };
       });
     },
-    [selectedChannelId]
+    [selectedChannelId],
   );
 
-  const handleReaction = useCallback((messageId: string, emoji: string) => {
-    const removing = userReactions[messageId]?.has(emoji);
-    setUserReactions((prev) => {
-      const set = new Set(prev[messageId] ?? []);
-      if (removing) set.delete(emoji);
-      else set.add(emoji);
-      return { ...prev, [messageId]: set };
-    });
-    setLocalReactions((prev) => {
-      const list = prev[messageId] ?? [];
-      const existing = list.find((r) => r.emoji === emoji);
-      if (removing) {
-        if (!existing) return prev;
-        return {
-          ...prev,
-          [messageId]:
-            existing.count <= 1
-              ? list.filter((r) => r.emoji !== emoji)
-              : list.map((r) => (r.emoji === emoji ? { ...r, count: r.count - 1 } : r)),
-        };
-      }
-      const next = existing
-        ? list.map((r) => (r.emoji === emoji ? { ...r, count: r.count + 1 } : r))
-        : [...list, { emoji, count: 1 }];
-      return { ...prev, [messageId]: next };
-    });
-  }, [userReactions]);
+  const handleReaction = useCallback(
+    (messageId: string, emoji: string) => {
+      const removing = userReactions[messageId]?.has(emoji);
+      setUserReactions((prev) => {
+        const set = new Set(prev[messageId] ?? []);
+        if (removing) set.delete(emoji);
+        else set.add(emoji);
+        return { ...prev, [messageId]: set };
+      });
+      setLocalReactions((prev) => {
+        const list = prev[messageId] ?? [];
+        const existing = list.find((r) => r.emoji === emoji);
+        if (removing) {
+          if (!existing) return prev;
+          return {
+            ...prev,
+            [messageId]:
+              existing.count <= 1
+                ? list.filter((r) => r.emoji !== emoji)
+                : list.map((r) =>
+                    r.emoji === emoji ? { ...r, count: r.count - 1 } : r,
+                  ),
+          };
+        }
+        const next = existing
+          ? list.map((r) =>
+              r.emoji === emoji ? { ...r, count: r.count + 1 } : r,
+            )
+          : [...list, { emoji, count: 1 }];
+        return { ...prev, [messageId]: next };
+      });
+    },
+    [userReactions],
+  );
 
   const handleCreateServer = useCallback((name: string) => {
     const id = `local-server-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -361,18 +440,26 @@ export default function DiscordPage() {
         setSelectedServerId(remaining.length > 0 ? remaining[0].id : null);
         setSelectedChannelId(null);
         if (voiceChannelId) {
-          setVoicePresence((p) => ({ ...p, [voiceChannelId]: (p[voiceChannelId] ?? []).filter((x) => x !== "current") }));
+          setVoicePresence((p) => ({
+            ...p,
+            [voiceChannelId]: (p[voiceChannelId] ?? []).filter(
+              (x) => x !== "current",
+            ),
+          }));
           setVoiceChannelId(null);
         }
       }
     },
-    [data?.servers, localServers, selectedServerId, voiceChannelId]
+    [data?.servers, localServers, selectedServerId, voiceChannelId],
   );
 
   const handleCreateChannel = useCallback(
     (name: string, type: "text" | "voice") => {
       if (!selectedServerId) return;
-      const maxPosition = channelsForServer.reduce((max, ch) => Math.max(max, ch.position), 0);
+      const maxPosition = channelsForServer.reduce(
+        (max, ch) => Math.max(max, ch.position),
+        0,
+      );
       const id = `local-channel-${selectedServerId}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
       const channel: Channel = {
         id,
@@ -397,13 +484,16 @@ export default function DiscordPage() {
         setVoicePresence((prev) => ({ ...prev, [id]: ["current"] }));
       }
     },
-    [selectedServerId, selectedServer, channelsForServer, updateUrl]
+    [selectedServerId, selectedServer, channelsForServer, updateUrl],
   );
 
   const readChannelIds = useRef<Set<string>>(new Set());
   useEffect(() => {
     if (!selectedChannelId) return;
-    readChannelIds.current = new Set([...readChannelIds.current, selectedChannelId]);
+    readChannelIds.current = new Set([
+      ...readChannelIds.current,
+      selectedChannelId,
+    ]);
     setUnreadChannelIds((prev) => {
       const next = new Set(prev);
       next.delete(selectedChannelId);
@@ -419,8 +509,8 @@ export default function DiscordPage() {
       new Set(
         textChannels
           .filter((ch) => ch.id !== selectedChannelId && !read.has(ch.id))
-          .map((ch) => ch.id)
-      )
+          .map((ch) => ch.id),
+      ),
     );
   }, [selectedServerId, channelsForServer, selectedChannelId]);
 
@@ -500,7 +590,9 @@ export default function DiscordPage() {
                   />
                 ) : (
                   <div className="flex-1 flex flex-col items-center justify-center bg-discord-channel text-gray-500 p-8">
-                    <p className="font-medium">Voice channel: {selectedChannel.name}</p>
+                    <p className="font-medium">
+                      Voice channel: {selectedChannel.name}
+                    </p>
                     <button
                       type="button"
                       onClick={() => handleSelectChannel(selectedChannel.id)}
@@ -514,15 +606,21 @@ export default function DiscordPage() {
               ) : selectedChannel ? (
                 <ChatPanel
                   channel={selectedChannel}
+                  serverName={selectedServer?.name ?? ""}
                   messages={messagesForChannel}
                   localReactions={localReactions}
                   onSendMessage={handleSendMessage}
                   onReaction={handleReaction}
                 />
               ) : (
-                <div className="flex-1 flex flex-col items-center justify-center bg-discord-channel text-gray-500 p-8 text-center" data-testid="empty-channel-state">
+                <div
+                  className="flex-1 flex flex-col items-center justify-center bg-discord-channel text-gray-500 p-8 text-center"
+                  data-testid="empty-channel-state"
+                >
                   <p className="font-medium">
-                    {selectedServer ? "No channels in this server" : "Select a channel"}
+                    {selectedServer
+                      ? "No channels in this server"
+                      : "Select a channel"}
                   </p>
                   <p className="text-sm mt-1 text-gray-600">
                     {selectedServer?.id.startsWith("local-server-")
@@ -549,7 +647,10 @@ export default function DiscordPage() {
               onSendMessage={handleSendDMMessage}
             />
           ) : (
-            <div className="flex-1 flex items-center justify-center bg-discord-channel text-gray-500" data-testid="dm-empty-state">
+            <div
+              className="flex-1 flex items-center justify-center bg-discord-channel text-gray-500"
+              data-testid="dm-empty-state"
+            >
               Select a conversation or switch to Servers.
             </div>
           )}

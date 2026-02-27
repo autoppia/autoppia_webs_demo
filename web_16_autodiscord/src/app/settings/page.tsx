@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { EVENT_TYPES, logEvent } from "@/library/events";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
-import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useEffect, useState } from "react";
 
 type Theme = "dark" | "light";
 
@@ -16,11 +16,15 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    const stored = localStorage.getItem("autodiscord-theme") as Theme | null;
+    if (stored === "light" || stored === "dark") setTheme(stored);
     logEvent(EVENT_TYPES.OPEN_SETTINGS, {});
   }, []);
 
   const handleThemeChange = (value: Theme) => {
     setTheme(value);
+    document.documentElement.setAttribute("data-theme", value);
+    localStorage.setItem("autodiscord-theme", value);
     logEvent(EVENT_TYPES.SETTINGS_APPEARANCE, { theme: value });
   };
 
@@ -30,7 +34,7 @@ export default function SettingsPage() {
   };
 
   const handleAccountSave = () => {
-    logEvent(EVENT_TYPES.SETTINGS_ACCOUNT, { display_name: displayName });
+    logEvent(EVENT_TYPES.SETTINGS_ACCOUNT, { name: displayName });
     setSaving(true);
     router.push("/");
   };
@@ -51,7 +55,9 @@ export default function SettingsPage() {
 
       <main className="max-w-xl mx-auto py-8 px-4 space-y-8">
         <section>
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wide mb-3">Appearance</h2>
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wide mb-3">
+            Appearance
+          </h2>
           <div className="rounded-lg bg-discord-sidebar p-4 space-y-2">
             <label className="flex items-center gap-3 cursor-pointer">
               <input
@@ -79,7 +85,9 @@ export default function SettingsPage() {
         </section>
 
         <section>
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wide mb-3">Notifications</h2>
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wide mb-3">
+            Notifications
+          </h2>
           <div className="rounded-lg bg-discord-sidebar p-4 flex items-center justify-between">
             <span className="text-gray-200">Enable notifications</span>
             <input
@@ -93,9 +101,16 @@ export default function SettingsPage() {
         </section>
 
         <section>
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wide mb-3">Account</h2>
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wide mb-3">
+            Account
+          </h2>
           <div className="rounded-lg bg-discord-sidebar p-4 space-y-3">
-            <label htmlFor="settings-display-name" className="block text-sm text-gray-400">Display name</label>
+            <label
+              htmlFor="settings-display-name"
+              className="block text-sm text-gray-400"
+            >
+              Display name
+            </label>
             <input
               id="settings-display-name"
               type="text"

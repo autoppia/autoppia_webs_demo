@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { X } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { X } from "lucide-react";
+import { useState } from "react";
 
 interface CreateServerModalProps {
   open: boolean;
@@ -10,7 +10,11 @@ interface CreateServerModalProps {
   onCreateServer: (name: string) => void;
 }
 
-export function CreateServerModal({ open, onClose, onCreateServer }: CreateServerModalProps) {
+export function CreateServerModal({
+  open,
+  onClose,
+  onCreateServer,
+}: CreateServerModalProps) {
   const [name, setName] = useState("");
 
   if (!open) return null;
@@ -25,10 +29,20 @@ export function CreateServerModal({ open, onClose, onCreateServer }: CreateServe
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60" aria-modal="true" aria-labelledby="create-server-title" data-testid="create-server-modal">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60"
+      aria-modal="true"
+      aria-labelledby="create-server-title"
+      data-testid="create-server-modal"
+    >
       <div className="w-full max-w-md rounded-xl bg-discord-sidebar shadow-xl border border-white/10">
         <div className="flex items-center justify-between p-4 border-b border-black/20">
-          <h2 id="create-server-title" className="text-lg font-semibold text-white">Create Server</h2>
+          <h2
+            id="create-server-title"
+            className="text-lg font-semibold text-white"
+          >
+            Create Server
+          </h2>
           <button
             type="button"
             onClick={onClose}
@@ -41,7 +55,9 @@ export function CreateServerModal({ open, onClose, onCreateServer }: CreateServe
         </div>
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
           <label className="block">
-            <span className="block text-sm text-gray-400 mb-1">Server name</span>
+            <span className="block text-sm text-gray-400 mb-1">
+              Server name
+            </span>
             <input
               type="text"
               value={name}
@@ -53,10 +69,19 @@ export function CreateServerModal({ open, onClose, onCreateServer }: CreateServe
             />
           </label>
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 rounded-md text-gray-300 hover:bg-white/10" data-testid="create-server-cancel">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 rounded-md text-gray-300 hover:bg-white/10"
+              data-testid="create-server-cancel"
+            >
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 rounded-md bg-discord-accent text-white hover:bg-discord-accent/90" data-testid="create-server-submit">
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-md bg-discord-accent text-white hover:bg-discord-accent/90"
+              data-testid="create-server-submit"
+            >
               Create
             </button>
           </div>

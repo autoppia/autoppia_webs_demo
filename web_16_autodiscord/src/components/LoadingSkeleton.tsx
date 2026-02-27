@@ -5,7 +5,10 @@ export function LoadingSkeleton() {
     <div className="flex h-screen overflow-hidden bg-discord-darkest">
       <div className="w-[72px] flex-shrink-0 bg-discord-darker flex flex-col items-center py-3 gap-2">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="w-12 h-12 rounded-2xl bg-discord-dark animate-pulse" />
+          <div
+            key={i}
+            className="w-12 h-12 rounded-2xl bg-discord-dark animate-pulse"
+          />
         ))}
       </div>
       <div className="w-60 flex-shrink-0 bg-discord-sidebar flex flex-col">
@@ -14,7 +17,10 @@ export function LoadingSkeleton() {
         </div>
         <div className="p-2 space-y-1">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-6 w-full bg-discord-dark/80 rounded animate-pulse" />
+            <div
+              key={i}
+              className="h-6 w-full bg-discord-dark/80 rounded animate-pulse"
+            />
           ))}
         </div>
       </div>

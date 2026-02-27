@@ -8,7 +8,10 @@ export function formatMessageTime(iso: string): string {
   const now = new Date();
   const sameDay = d.toDateString() === now.toDateString();
   if (sameDay) {
-    return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+    return d.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+    });
   }
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
@@ -27,5 +30,10 @@ export function formatMessageDateGroup(iso: string): string {
   const dateStr = d.toDateString();
   if (dateStr === today) return "Today";
   if (dateStr === yesterday.toDateString()) return "Yesterday";
-  return d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+  return d.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
 }

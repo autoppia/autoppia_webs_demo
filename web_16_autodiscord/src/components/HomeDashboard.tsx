@@ -1,8 +1,8 @@
 "use client";
 
-import { Mic } from "lucide-react";
-import type { Channel, Member } from "@/types/discord";
 import { CURRENT_USER } from "@/constants/mock";
+import type { Channel, Member } from "@/types/discord";
+import { Mic } from "lucide-react";
 
 const STATUS_ORDER = ["online", "idle", "dnd", "offline"] as const;
 
@@ -50,7 +50,10 @@ export function HomeDashboard({
       </div>
       <div className="flex-1 overflow-y-auto p-6 space-y-8">
         <section aria-labelledby="online-heading">
-          <h2 id="online-heading" className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
+          <h2
+            id="online-heading"
+            className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3"
+          >
             Online — {onlineMembers.length + 1}
           </h2>
           <ul className="space-y-2">
@@ -93,7 +96,10 @@ export function HomeDashboard({
         </section>
 
         <section aria-labelledby="voice-heading">
-          <h2 id="voice-heading" className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
+          <h2
+            id="voice-heading"
+            className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3"
+          >
             In voice
           </h2>
           {voiceChannels.length === 0 ? (
@@ -112,12 +118,18 @@ export function HomeDashboard({
                     <div className="flex items-center gap-2 text-gray-300 mb-2">
                       <Mic className="w-4 h-4 flex-shrink-0" />
                       <span className="font-medium">{ch.name}</span>
-                      <span className="text-xs text-gray-500">— {serverName}</span>
+                      <span className="text-xs text-gray-500">
+                        — {serverName}
+                      </span>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {memberIds.map((uid) => {
                         const member = memberById.get(uid);
-                        const name = member ? member.displayName : uid === "current" ? CURRENT_USER.displayName : "?";
+                        const name = member
+                          ? member.displayName
+                          : uid === "current"
+                            ? CURRENT_USER.displayName
+                            : "?";
                         return (
                           <span
                             key={uid}

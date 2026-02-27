@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { X } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import type { Channel } from "@/types/discord";
+import { X } from "lucide-react";
+import { useState } from "react";
 
 interface CreateChannelModalProps {
   open: boolean;
@@ -27,7 +27,8 @@ export function CreateChannelModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const trimmed = name.trim() || (channelType === "text" ? "new-channel" : "Voice");
+    const trimmed =
+      name.trim() || (channelType === "text" ? "new-channel" : "Voice");
     logEvent(EVENT_TYPES.CREATE_CHANNEL, {
       server_id: serverId,
       server_name: serverName,
@@ -49,7 +50,10 @@ export function CreateChannelModal({
     >
       <div className="w-full max-w-md rounded-xl bg-discord-sidebar shadow-xl border border-white/10">
         <div className="flex items-center justify-between p-4 border-b border-black/20">
-          <h2 id="create-channel-title" className="text-lg font-semibold text-white">
+          <h2
+            id="create-channel-title"
+            className="text-lg font-semibold text-white"
+          >
             Create channel — {serverName}
           </h2>
           <button
@@ -64,7 +68,9 @@ export function CreateChannelModal({
         </div>
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
           <label className="block">
-            <span className="block text-sm text-gray-400 mb-1">Channel name</span>
+            <span className="block text-sm text-gray-400 mb-1">
+              Channel name
+            </span>
             <input
               type="text"
               value={name}

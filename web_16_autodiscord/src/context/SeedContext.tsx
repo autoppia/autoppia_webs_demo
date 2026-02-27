@@ -1,8 +1,15 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
 import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { useSearchParams } from "next/navigation";
+import {
+  Suspense,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 const DEFAULT_SEED = 1;
 

@@ -10,7 +10,9 @@ export function clampSeed(seed: number): number {
 export function getSeedFromUrl(search: string): number {
   if (!search) return SEED_RANGE.defaultValue;
   try {
-    const params = new URLSearchParams(search.startsWith("?") ? search : `?${search}`);
+    const params = new URLSearchParams(
+      search.startsWith("?") ? search : `?${search}`,
+    );
     const raw = params.get("seed");
     if (raw) {
       const parsed = Number.parseInt(raw, 10);

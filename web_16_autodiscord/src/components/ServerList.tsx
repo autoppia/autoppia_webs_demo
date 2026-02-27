@@ -1,8 +1,8 @@
 "use client";
 
-import { Home, MessageCircle, Plus, Settings } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import type { Server } from "@/types/discord";
+import { Home, MessageCircle, Plus, Settings } from "lucide-react";
 
 interface ServerListProps {
   servers: Server[];
@@ -27,7 +27,10 @@ export function ServerList({
     onViewModeChange("servers");
     onSelect(id);
     const server = servers.find((s) => s.id === id);
-    logEvent(EVENT_TYPES.SELECT_SERVER, { server_id: id, server_name: server?.name ?? id });
+    logEvent(EVENT_TYPES.SELECT_SERVER, {
+      server_id: id,
+      server_name: server?.name ?? id,
+    });
   };
 
   const handleHome = () => {
@@ -55,7 +58,11 @@ export function ServerList({
         type="button"
         onClick={handleHome}
         className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${
-          viewMode === "servers" && !selectedId ? "bg-discord-accent text-white rounded-xl" : viewMode === "servers" ? "bg-discord-dark text-gray-300 hover:bg-discord-accent hover:text-white rounded-xl" : "text-gray-400 hover:bg-white/10 hover:text-white"
+          viewMode === "servers" && !selectedId
+            ? "bg-discord-accent text-white rounded-xl"
+            : viewMode === "servers"
+              ? "bg-discord-dark text-gray-300 hover:bg-discord-accent hover:text-white rounded-xl"
+              : "text-gray-400 hover:bg-white/10 hover:text-white"
         }`}
         title="Home"
         aria-pressed={viewMode === "servers" && !selectedId}
@@ -67,7 +74,9 @@ export function ServerList({
         type="button"
         onClick={handleDMs}
         className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${
-          viewMode === "dms" ? "bg-discord-accent text-white rounded-xl" : "text-gray-400 hover:bg-white/10 hover:text-white"
+          viewMode === "dms"
+            ? "bg-discord-accent text-white rounded-xl"
+            : "text-gray-400 hover:bg-white/10 hover:text-white"
         }`}
         title="Direct Messages"
         aria-pressed={viewMode === "dms"}

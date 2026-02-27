@@ -6,13 +6,13 @@ export default {
     extend: {
       colors: {
         discord: {
-          dark: "#313338",
-          darker: "#2b2d31",
-          darkest: "#1e1f22",
-          sidebar: "#2b2d31",
-          channel: "#313338",
-          input: "#383a40",
-          accent: "#5865f2",
+          dark: "var(--dc-dark)",
+          darker: "var(--dc-darker)",
+          darkest: "var(--dc-darkest)",
+          sidebar: "var(--dc-sidebar)",
+          channel: "var(--dc-channel)",
+          input: "var(--dc-input)",
+          accent: "var(--dc-accent)",
         },
       },
     },

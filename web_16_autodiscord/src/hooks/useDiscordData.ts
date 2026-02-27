@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
 import { fetchDiscordEntities } from "@/shared/seeded-loader";
-import type { Server, Channel, Message, Member } from "@/types/discord";
+import type { Channel, Member, Message, Server } from "@/types/discord";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const LIMITS = {
   servers: 20,
@@ -79,12 +79,13 @@ export function useDiscordData(seed: number): UseDiscordDataResult {
     setError(null);
 
     try {
-      const [serversRaw, channelsRaw, messagesRaw, membersRaw] = await Promise.all([
-        fetchDiscordEntities<Server>("servers", seed, LIMITS.servers),
-        fetchDiscordEntities<Channel>("channels", seed, LIMITS.channels),
-        fetchDiscordEntities<Message>("messages", seed, LIMITS.messages),
-        fetchDiscordEntities<Member>("members", seed, LIMITS.members),
-      ]);
+      const [serversRaw, channelsRaw, messagesRaw, membersRaw] =
+        await Promise.all([
+          fetchDiscordEntities<Server>("servers", seed, LIMITS.servers),
+          fetchDiscordEntities<Channel>("channels", seed, LIMITS.channels),
+          fetchDiscordEntities<Message>("messages", seed, LIMITS.messages),
+          fetchDiscordEntities<Member>("members", seed, LIMITS.members),
+        ]);
 
       if (cancelledRef.current) return;
 

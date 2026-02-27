@@ -1,8 +1,8 @@
 "use client";
 
-import { Trash2, X } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import type { Server } from "@/types/discord";
+import { Trash2, X } from "lucide-react";
 
 interface ServerSettingsModalProps {
   server: Server | null;
@@ -11,23 +11,41 @@ interface ServerSettingsModalProps {
   onDeleteServer?: (serverId: string) => void;
 }
 
-export function ServerSettingsModal({ server, open, onClose, onDeleteServer }: ServerSettingsModalProps) {
+export function ServerSettingsModal({
+  server,
+  open,
+  onClose,
+  onDeleteServer,
+}: ServerSettingsModalProps) {
   if (!open || !server) return null;
 
   const isLocalServer = server.id.startsWith("local-server-");
 
   const handleDelete = () => {
     if (!isLocalServer || !onDeleteServer) return;
-    logEvent(EVENT_TYPES.DELETE_SERVER, { server_id: server.id, server_name: server.name });
+    logEvent(EVENT_TYPES.DELETE_SERVER, {
+      server_id: server.id,
+      server_name: server.name,
+    });
     onDeleteServer(server.id);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60" aria-modal="true" aria-labelledby="server-settings-title" data-testid="server-settings-modal">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60"
+      aria-modal="true"
+      aria-labelledby="server-settings-title"
+      data-testid="server-settings-modal"
+    >
       <div className="w-full max-w-md rounded-xl bg-discord-sidebar shadow-xl border border-white/10">
         <div className="flex items-center justify-between p-4 border-b border-black/20">
-          <h2 id="server-settings-title" className="text-lg font-semibold text-white">Server Settings — {server.name}</h2>
+          <h2
+            id="server-settings-title"
+            className="text-lg font-semibold text-white"
+          >
+            Server Settings — {server.name}
+          </h2>
           <button
             type="button"
             onClick={onClose}
@@ -40,7 +58,8 @@ export function ServerSettingsModal({ server, open, onClose, onDeleteServer }: S
         </div>
         <div className="p-4 space-y-4">
           <p className="text-gray-400 text-sm">
-            Overview, roles, and moderation options appear here. (Demo: settings are mocked.)
+            Overview, roles, and moderation options appear here. (Demo: settings
+            are mocked.)
           </p>
           {isLocalServer && onDeleteServer && (
             <div className="pt-2 border-t border-white/10">

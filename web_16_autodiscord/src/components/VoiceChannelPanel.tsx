@@ -1,9 +1,9 @@
 "use client";
 
-import { Mic, MicOff, PhoneOff } from "lucide-react";
-import { EVENT_TYPES, logEvent } from "@/library/events";
 import { CURRENT_USER } from "@/constants/mock";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 import type { Channel, Member } from "@/types/discord";
+import { Mic, MicOff, PhoneOff } from "lucide-react";
 
 interface VoiceChannelPanelProps {
   channel: Channel;
@@ -30,7 +30,10 @@ export function VoiceChannelPanel({
   };
 
   const handleLeave = () => {
-    logEvent(EVENT_TYPES.LEAVE_VOICE_CHANNEL, { channel_id: channel.id, channel_name: channel.name });
+    logEvent(EVENT_TYPES.LEAVE_VOICE_CHANNEL, {
+      channel_id: channel.id,
+      channel_name: channel.name,
+    });
     onLeave();
   };
 
@@ -46,11 +49,17 @@ export function VoiceChannelPanel({
       </header>
 
       <div className="flex-1 overflow-y-auto p-6 flex flex-col items-center justify-center gap-6">
-        <p className="text-gray-400 text-sm" data-testid="voice-channel-joined-label">
+        <p
+          className="text-gray-400 text-sm"
+          data-testid="voice-channel-joined-label"
+        >
           You have joined the voice channel.
         </p>
 
-        <div className="flex flex-wrap justify-center gap-4" data-testid="voice-channel-members">
+        <div
+          className="flex flex-wrap justify-center gap-4"
+          data-testid="voice-channel-members"
+        >
           {membersInChannel.map((m) => (
             <div
               key={m.id}
@@ -60,7 +69,9 @@ export function VoiceChannelPanel({
               <div className="w-12 h-12 rounded-full bg-discord-darker flex items-center justify-center text-lg font-medium text-gray-300">
                 {m.displayName.slice(0, 2).toUpperCase()}
               </div>
-              <span className="text-sm text-gray-200 truncate max-w-full">{m.displayName}</span>
+              <span className="text-sm text-gray-200 truncate max-w-full">
+                {m.displayName}
+              </span>
             </div>
           ))}
         </div>
@@ -78,7 +89,11 @@ export function VoiceChannelPanel({
             data-testid="voice-mute-toggle"
             title={currentUserMuted ? "Unmute" : "Mute"}
           >
-            {currentUserMuted ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            {currentUserMuted ? (
+              <MicOff className="w-5 h-5" />
+            ) : (
+              <Mic className="w-5 h-5" />
+            )}
             {currentUserMuted ? "Unmute" : "Mute"}
           </button>
           <button

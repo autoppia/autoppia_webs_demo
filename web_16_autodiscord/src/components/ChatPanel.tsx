@@ -1,24 +1,27 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Hash, ThumbsUp, Send } from "lucide-react";
-import { EVENT_TYPES, logEvent } from "@/library/events";
-import { formatMessageTime, formatMessageDateGroup } from "@/utils/format";
 import { EmptyState } from "@/components/EmptyState";
 import { CURRENT_USER } from "@/constants/mock";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 import type { Channel, Message, MessageReaction } from "@/types/discord";
+import { formatMessageDateGroup, formatMessageTime } from "@/utils/format";
+import { Hash, Send, ThumbsUp } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface ChatPanelProps {
   channel: Channel | null;
+  serverName: string;
   messages: Message[];
   localReactions: Record<string, MessageReaction[]>;
   onSendMessage: (content: string) => void;
   onReaction: (messageId: string, emoji: string) => void;
 }
 
-function groupMessagesByDate(messages: Message[]): { dateLabel: string; messages: Message[] }[] {
+function groupMessagesByDate(
+  messages: Message[],
+): { dateLabel: string; messages: Message[] }[] {
   const sorted = [...messages].sort(
-    (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
   );
   const groups: { dateLabel: string; messages: Message[] }[] = [];
   let currentLabel = "";
@@ -44,18 +47,24 @@ function groupMessagesByDate(messages: Message[]): { dateLabel: string; messages
 
 function mergeReactions(
   message: Message,
-  local: MessageReaction[] | undefined
+  local: MessageReaction[] | undefined,
 ): MessageReaction[] {
   const base = message.reactions ?? [];
   if (!local || local.length === 0) return base;
   const byEmoji = new Map<string, number>();
-  for (const r of base) byEmoji.set(r.emoji, (byEmoji.get(r.emoji) ?? 0) + r.count);
-  for (const r of local) byEmoji.set(r.emoji, (byEmoji.get(r.emoji) ?? 0) + r.count);
-  return Array.from(byEmoji.entries()).map(([emoji, count]) => ({ emoji, count }));
+  for (const r of base)
+    byEmoji.set(r.emoji, (byEmoji.get(r.emoji) ?? 0) + r.count);
+  for (const r of local)
+    byEmoji.set(r.emoji, (byEmoji.get(r.emoji) ?? 0) + r.count);
+  return Array.from(byEmoji.entries()).map(([emoji, count]) => ({
+    emoji,
+    count,
+  }));
 }
 
 export function ChatPanel({
   channel,
+  serverName,
   messages,
   localReactions,
   onSendMessage,
@@ -71,6 +80,7 @@ export function ChatPanel({
     logEvent(EVENT_TYPES.SEND_MESSAGE, {
       channel_id: channel.id,
       channel_name: channel.name,
+      server_name: serverName,
       content: trimmed,
       content_length: trimmed.length,
     });
@@ -88,7 +98,11 @@ export function ChatPanel({
   const isEmpty = messages.length === 0;
 
   return (
-    <section className="flex-1 flex flex-col bg-discord-channel min-w-0" aria-label="Chat" data-testid="chat-panel">
+    <section
+      className="flex-1 flex flex-col bg-discord-channel min-w-0"
+      aria-label="Chat"
+      data-testid="chat-panel"
+    >
       <header className="h-12 px-4 flex items-center border-b border-black/20 gap-2">
         <Hash className="w-5 h-5 text-gray-400" aria-hidden />
         <span className="font-semibold text-white">{channel.name}</span>
@@ -112,7 +126,8 @@ export function ChatPanel({
               <div className="space-y-4 mt-2">
                 {groupMessages.map((msg) => {
                   const reactions = mergeReactions(msg, localReactions[msg.id]);
-                  const isCurrentUser = msg.authorUsername === CURRENT_USER.username;
+                  const isCurrentUser =
+                    msg.authorUsername === CURRENT_USER.username;
                   return (
                     <div key={msg.id} className="flex gap-4 group">
                       <div
@@ -123,10 +138,16 @@ export function ChatPanel({
                       </div>
                       <div className="min-w-0 flex-1">
                         <span className="text-sm font-medium text-white mr-2">
-                          {isCurrentUser ? CURRENT_USER.displayName : msg.authorUsername}
+                          {isCurrentUser
+                            ? CURRENT_USER.displayName
+                            : msg.authorUsername}
                         </span>
-                        <span className="text-xs text-gray-500">{formatMessageTime(msg.timestamp)}</span>
-                        <p className="text-gray-300 break-words mt-0.5">{msg.content}</p>
+                        <span className="text-xs text-gray-500">
+                          {formatMessageTime(msg.timestamp)}
+                        </span>
+                        <p className="text-gray-300 break-words mt-0.5">
+                          {msg.content}
+                        </p>
                         {reactions.length > 0 && (
                           <div className="flex flex-wrap gap-1 mt-2">
                             {reactions.map((r) => (
@@ -134,18 +155,24 @@ export function ChatPanel({
                                 key={r.emoji}
                                 type="button"
                                 onClick={() => {
-                                logEvent(EVENT_TYPES.ADD_REACTION, {
-                                  message_id: msg.id,
-                                  emoji: r.emoji,
-                                  channel_id: channel.id,
-                                  channel_name: channel.name,
-                                });
-                                onReaction(msg.id, r.emoji);
-                              }}
+                                  logEvent(EVENT_TYPES.ADD_REACTION, {
+                                    message_id: msg.id,
+                                    emoji: r.emoji,
+                                    channel_id: channel.id,
+                                    channel_name: channel.name,
+                                    server_name: serverName,
+                                    message_content: msg.content,
+                                  });
+                                  onReaction(msg.id, r.emoji);
+                                }}
                                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-white/10 hover:bg-white/15 text-gray-300 text-sm"
                                 data-testid={`message-reaction-${msg.id}-${r.emoji}`}
                               >
-                                {r.emoji === "👍" ? <ThumbsUp className="w-3.5 h-3.5" /> : r.emoji}
+                                {r.emoji === "👍" ? (
+                                  <ThumbsUp className="w-3.5 h-3.5" />
+                                ) : (
+                                  r.emoji
+                                )}
                                 <span>{r.count}</span>
                               </button>
                             ))}
@@ -155,14 +182,16 @@ export function ChatPanel({
                           <button
                             type="button"
                             onClick={() => {
-                                logEvent(EVENT_TYPES.ADD_REACTION, {
-                                  message_id: msg.id,
-                                  emoji: "👍",
-                                  channel_id: channel.id,
-                                  channel_name: channel.name,
-                                });
-                                onReaction(msg.id, "👍");
-                              }}
+                              logEvent(EVENT_TYPES.ADD_REACTION, {
+                                message_id: msg.id,
+                                emoji: "👍",
+                                channel_id: channel.id,
+                                channel_name: channel.name,
+                                server_name: serverName,
+                                message_content: msg.content,
+                              });
+                              onReaction(msg.id, "👍");
+                            }}
                             className="mt-1 opacity-0 group-hover:opacity-100 inline-flex items-center gap-1 px-2 py-0.5 rounded hover:bg-white/10 text-gray-400 text-sm transition-opacity"
                             aria-label="Add reaction"
                             data-testid={`message-add-reaction-${msg.id}`}
@@ -180,7 +209,10 @@ export function ChatPanel({
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="p-4 border-t border-black/20 flex gap-2">
+      <form
+        onSubmit={handleSubmit}
+        className="p-4 border-t border-black/20 flex gap-2"
+      >
         <input
           ref={inputRef}
           type="text"
