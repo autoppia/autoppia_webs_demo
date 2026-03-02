@@ -940,11 +940,12 @@ async def load_dataset_endpoint(
     filter_values: Optional[str] = Query(None, description="Comma-separated values to filter (for filter method)"),
 ):
     """
-    Select data from master pool using seed for reproducible selection.
-    This endpoint uses deterministic seeded selection - same seed always returns same data.
-    No duplicate data storage - all selections are computed from master pool.
+    Load data from a single directory (data/). Original data lives in the first file
+    (e.g. data/{entity_type}_1.json). Full pool = all files for that entity in data/.
 
-    This endpoint is used when projects are deployed with --load_from_db parameter.
+    - v2 disabled or seed=1: return original data only (first file), up to limit.
+    - v2 enabled and 1 < seed <= 999: load full pool from data/, then apply deterministic
+      seeded selection — same seed always returns the same items (reproducible).
     """
     try:
         v2_enabled = _is_v2_enabled()

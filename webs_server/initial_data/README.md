@@ -25,17 +25,21 @@ Cada proyecto de demostración necesita un **pool de datos maestro** del cual se
 
 ## 🎯 TODO: Ampliar a 2000 registros
 
-### Estructura de archivos
+### Estructura de archivos (un solo directorio: data/)
 
-Cada proyecto debe tener:
+Cada proyecto debe tener un único directorio `data/`. El "original" es el primer archivo (`entity_1.json`); el pool completo son todos los archivos referenciados en `main.json`.
+
 ```
 web_X_proyecto/
-├── main.json          # Índice de archivos
+├── main.json          # Índice de archivos (solo rutas bajo data/)
 └── data/
-    ├── entity_1.json  # 100 registros
-    ├── entity_2.json  # 100 registros
+    ├── entity_1.json  # Original (v2 deshabilitado o seed=1)
+    ├── entity_2.json  # Más registros para el pool
     └── ...            # hasta entity_20.json (2000 total)
 ```
+
+- **v2 deshabilitado o seed=1:** se devuelve solo el contenido de `entity_1.json` (original).
+- **v2 habilitado y 1 < seed ≤ 999:** se carga el pool completo desde data/ y se aplica selección con seed (reproducible: mismo seed → mismos datos).
 
 ### Formato de `main.json`
 
@@ -190,6 +194,7 @@ curl "http://localhost:8090/datasets/load?project_key=web_4_autodining&entity_ty
 
 ## 🔍 Notas importantes
 
+- **Un solo directorio:** Solo se usa `data/`. El directorio `original/` ya no se usa. Si migras desde una estructura antigua con `original/` y `data/`, copia el contenido de `original/entity_1.json` a `data/entity_1.json` (para que el “original” sea el primer archivo) y luego puedes eliminar `original/`.
 - Los archivos JSON deben ser válidos (usar `jq` para validar)
 - Los IDs deben ser únicos en todo el pool
 - Mantener consistencia en los campos entre registros

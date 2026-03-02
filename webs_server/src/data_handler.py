@@ -1,6 +1,12 @@
 """
 File-based data storage handler for webs_server.
 Manages reading/writing JSON data files under /app/data.
+
+Single-directory layout: only data/ is used (no separate original/ directory).
+- Original data: first file per entity, e.g. data/{entity_type}_1.json.
+- Full pool: all files for that entity listed in main.json (data/*.json).
+- v2 disabled or seed=1 → load original only (first file).
+- v2 enabled and 1 < seed <= 999 → load full pool and apply seeded selection (reproducible).
 """
 
 import os
@@ -68,24 +74,37 @@ def _parse_json_file_to_items(file_path: str) -> Optional[List[Dict[str, Any]]]:
         return None
 
 
-def _load_json_file_with_fallback(
-    primary_path: str,
-    fallback_path: Optional[str],
-    fallback_label: str = "data/",
-) -> List[Dict[str, Any]]:
-    """Try loading from primary path; on failure or empty, try fallback path. Returns combined list (one source only)."""
-    items = _parse_json_file_to_items(primary_path)
-    if items is not None:
-        return items
-    if fallback_path and os.path.exists(fallback_path):
-        items = _parse_json_file_to_items(fallback_path)
+def _load_first_file_only(web_name: str, entity_type: Optional[str]) -> List[Dict[str, Any]]:
+    """
+    Load only the first file for the entity from data/ (original data).
+    Used when v2 is disabled or seed=1. Single directory: data/ only.
+    """
+    data_dir = get_data_dir(web_name)
+    if entity_type:
+        first_file = f"{data_dir}/{entity_type}_1.json"
+        items = _parse_json_file_to_items(first_file)
+        return items if items is not None else []
+    # No entity_type: load first file of each entity from main.json (first path per entity)
+    main_path = get_main_path(web_name)
+    if not os.path.exists(main_path):
+        return []
+    try:
+        with open(main_path, "r", encoding="utf-8") as f:
+            main = json.load(f)
+    except Exception:
+        return []
+    if not isinstance(main, dict):
+        return []
+    all_data: List[Dict[str, Any]] = []
+    for paths in main.values():
+        if not isinstance(paths, list) or not paths:
+            continue
+        first_rel = paths[0].lstrip("./")
+        abs_path = f"{BASE_PATH}/{web_name}/{first_rel}"
+        items = _parse_json_file_to_items(abs_path)
         if items is not None:
-            logger.info(f"Loaded data from fallback location: {fallback_path}")
-            return items
-        logger.warning(f"Fallback file also empty or invalid: {fallback_path}")
-    else:
-        logger.warning(f"File does not exist in original/, trying fallback to {fallback_label}: {primary_path}")
-    return []
+            all_data.extend(items)
+    return all_data
 
 
 def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], entity_type: str) -> str:
@@ -159,17 +178,16 @@ def load_all_data(
     seed_value: Optional[int] = None,
 ) -> List[Dict[str, Any]]:
     """
-    Load and return all JSON objects referenced in main.json for a given web_name.
-    If entity_type is provided, only load files listed under that entity key.
+    Load data from a single directory (data/) for the given web_name.
 
-    If V2 DB mode is disabled, loads from original/ directory directly (high quality, fewer records).
-    Otherwise, loads from data/ directory as referenced in main.json.
+    - When v2 is disabled or seed=1: return original data only (first file per entity:
+      data/{entity_type}_1.json). Same data every time.
+    - When v2 is enabled and 1 < seed <= 999: load the full pool from data/ (all files
+      referenced in main.json), then the caller applies seeded selection for reproducible
+      picks (same seed => same selection).
     """
-    # Check if V2 DB mode is disabled - if so, load from original/ directory
-    # v2_disabled is True when ENABLE_DYNAMIC_V2 is "false", "0", "no", or "off"
     v2_disabled_env_flag = os.getenv("ENABLE_DYNAMIC_V2", "false").lower() in {"false", "0", "no", "off"}
-    force_seed_disabled = seed_value == 1
-    v2_disabled = v2_disabled_env_flag or force_seed_disabled
+    use_original_only = v2_disabled_env_flag or (seed_value == 1)
 
     logger.info(
         "Loading data",
@@ -177,42 +195,14 @@ def load_all_data(
             "web_name": web_name,
             "entity_type": entity_type,
             "base_path": BASE_PATH,
-            "v2_disabled": v2_disabled,
+            "use_original_only": use_original_only,
             "seed_value": seed_value,
         },
     )
 
-    if v2_disabled:
-        # V2 disabled: load from original/ directory (high quality dataset)
-        original_dir = f"{BASE_PATH}/{web_name}/original"
-        if not os.path.exists(original_dir):
-            # Fallback to main.json if original/ doesn't exist
-            logger.warning(
-                "original directory missing, falling back to main.json",
-                extra={"original_dir": original_dir, "web_name": web_name},
-            )
-            return _load_from_main_json(web_name, entity_type)
-
-        data_dir = get_data_dir(web_name)
-        all_data: List[Dict[str, Any]] = []
-
-        if entity_type:
-            original_file = f"{original_dir}/{entity_type}_1.json"
-            fallback_file = f"{data_dir}/{entity_type}_1.json"
-            all_data = _load_json_file_with_fallback(original_file, fallback_file)
-        else:
-            for filename in sorted(os.listdir(original_dir)):
-                if not filename.endswith(".json"):
-                    continue
-                original_file = f"{original_dir}/{filename}"
-                fallback_file = f"{data_dir}/{filename}" if os.path.exists(data_dir) else None
-                items = _load_json_file_with_fallback(original_file, fallback_file)
-                all_data.extend(items)
-
-        return all_data
-    else:
-        # V2 enabled: load from main.json (which references data/ directory)
-        return _load_from_main_json(web_name, entity_type)
+    if use_original_only:
+        return _load_first_file_only(web_name, entity_type)
+    return _load_from_main_json(web_name, entity_type)
 
 
 def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> List[Dict[str, Any]]:
