@@ -64,6 +64,6 @@ COPY --from=builder /app/package-lock.json ./package-lock.json
 RUN npm ci --omit=dev --ignore-scripts --legacy-peer-deps
 
 COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
+# COPY --from=builder /app/public ./public
 
 CMD ["npm", "start"]
