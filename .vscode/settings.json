@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "autoppia",
+        "projectKey": "autoppia_autoppia_webs_demo"
+    }
+}
