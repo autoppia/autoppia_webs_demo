@@ -792,7 +792,7 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
 
     try:
         # Build prompt from existing examples
-        interface_definition, examples = build_generation_prompt_from_examples(request.project_key, request.entity_type, count=request.count)
+        interface_definition, examples = build_generation_prompt_from_examples(request.project_key, request.entity_type)
 
         # Get metadata for this project/entity
         metadata = get_project_entity_metadata(request.project_key, request.entity_type)
