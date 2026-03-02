@@ -55,3 +55,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # SONAR_TOKEN must be configured in repository secrets
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          # Pass branch so SonarCloud can treat it as long-lived (configure pattern in SonarCloud UI, e.g. fix/*)
+          args: >
+            -Dsonar.branch.name=${{ github.ref_name }}
