@@ -4,7 +4,7 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { usePathname } from "next/navigation";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
 
 export default function HeaderNav() {
   const pathname = usePathname();
@@ -60,8 +60,6 @@ export default function HeaderNav() {
       idKey: "nav_profile_link",
     }
   ];
-  const orderedNavItems = navItems;
-
   return (
     dyn.v1.addWrapDecoy("header", (
     <header
@@ -89,11 +87,14 @@ export default function HeaderNav() {
 
         <div className="flex-1 flex justify-center">
           <nav className="flex items-center gap-3">
-            {orderedNavItems.map((item) => {
-              const isActive = pathname === item.href || (item.href === "/" && pathname === "/");
+            {navItems.map((item) => {
+              const isProfileItem = item.href.startsWith("/profile/");
+              const isActive = isProfileItem
+                ? pathname.startsWith("/profile/")
+                : pathname === item.href || (item.href === "/" && pathname === "/");
               return (
                 <SeedLink
-                  key={item.href}
+                  key={item.idKey}
                   href={item.href}
                   id={dyn.v3.getVariant(item.idKey, navIdVariants, item.idKey)}
                   className={dyn.v3.getVariant(
