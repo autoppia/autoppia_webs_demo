@@ -1,6 +1,158 @@
 [
   {
     "id": 1,
+    "image": "/images/hotel16.png",
+    "title": "Garden Riad",
+    "location": "Marrakech, Morocco",
+    "rating": 4.5,
+    "reviews": 155,
+    "guests": 4,
+    "maxGuests": 4,
+    "bedrooms": 2,
+    "beds": 3,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 240,
+    "host": {
+      "name": "Oliver",
+      "since": 2,
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "💻",
+        "title": "Dedicated workspace",
+        "desc": "Desk and fast wifi for remote work."
+      },
+      {
+        "icon": "📍",
+        "title": "Great location",
+        "desc": "Walkable to key spots and transit."
+      },
+      {
+        "icon": "🔍",
+        "title": "Easy check-in",
+        "desc": "Smart lock with contactless entry."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "image": "/images/hotel17.png",
+    "title": "Highlands Cottage",
+    "location": "Edinburgh, UK",
+    "rating": 4.7,
+    "reviews": 165,
+    "guests": 5,
+    "maxGuests": 5,
+    "bedrooms": 2,
+    "beds": 3,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 260,
+    "host": {
+      "name": "Ava",
+      "since": 3,
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "🚗",
+        "title": "Free parking",
+        "desc": "Private spot next to the property."
+      },
+      {
+        "icon": "🍳",
+        "title": "Equipped kitchen",
+        "desc": "Full kitchen with coffee and basics."
+      },
+      {
+        "icon": "🧺",
+        "title": "Washer & dryer",
+        "desc": "In-unit laundry for longer stays."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "image": "/images/hotel18.png",
+    "title": "Coastal Breeze Inn",
+    "location": "San Sebastián, Spain",
+    "rating": 4.6,
+    "reviews": 185,
+    "guests": 4,
+    "maxGuests": 4,
+    "bedrooms": 2,
+    "beds": 3,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 270,
+    "host": {
+      "name": "Lucas",
+      "since": 4,
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "🏊",
+        "title": "Pool access",
+        "desc": "Outdoor pool with loungers."
+      },
+      {
+        "icon": "❄️",
+        "title": "Climate control",
+        "desc": "Central AC and heating."
+      },
+      {
+        "icon": "🌅",
+        "title": "Balcony views",
+        "desc": "Terrace with seating and sunset views."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "image": "/images/hotel19.jpg",
+    "title": "Lakeview Lodge",
+    "location": "Queenstown, New Zealand",
+    "rating": 4.8,
+    "reviews": 200,
+    "guests": 6,
+    "maxGuests": 6,
+    "bedrooms": 3,
+    "beds": 4,
+    "baths": 3,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 360,
+    "host": {
+      "name": "Mia",
+      "since": 5,
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "🥞",
+        "title": "Breakfast included",
+        "desc": "Daily continental breakfast."
+      },
+      {
+        "icon": "🐾",
+        "title": "Pet friendly",
+        "desc": "Well-behaved pets welcome."
+      },
+      {
+        "icon": "💪",
+        "title": "Gym access",
+        "desc": "On-site fitness room."
+      }
+    ]
+  },
+  {
+    "id": 5,
     "image": "/images/burj-al-arab-jumeirah.jpg",
     "title": "Burj Al Arab Jumeirah",
     "location": "Dubai, United Arab Emirates",
@@ -48,7 +200,7 @@
     ]
   },
   {
-    "id": 2,
+    "id": 6,
     "image": "/images/hotel-d-inghilterra.jpg",
     "title": "Hotel d'Inghilterra",
     "location": "Rome, Italy",
@@ -91,7 +243,7 @@
     ]
   },
   {
-    "id": 3,
+    "id": 7,
     "image": "/images/the-plaza.jpg",
     "title": "The Plaza",
     "location": "New York, United States",
@@ -134,7 +286,7 @@
     ]
   },
   {
-    "id": 4,
+    "id": 8,
     "image": "/images/raffles-singapore.jpg",
     "title": "Raffles Singapore",
     "location": "Singapore, Singapore",
@@ -187,7 +339,7 @@
     ]
   },
   {
-    "id": 5,
+    "id": 9,
     "image": "/images/maison-souquet.jpg",
     "title": "Maison Souquet",
     "location": "Paris, France",
@@ -225,7 +377,7 @@
     ]
   },
   {
-    "id": 6,
+    "id": 10,
     "image": "/images/fairmont-banff-springs.jpg",
     "title": "Fairmont Banff Springs",
     "location": "Banff, Canada",
@@ -273,7 +425,7 @@
     ]
   },
   {
-    "id": 7,
+    "id": 11,
     "image": "/images/the-dorchester.jpg",
     "title": "The Dorchester",
     "location": "London, England",
@@ -316,7 +468,7 @@
     ]
   },
   {
-    "id": 8,
+    "id": 12,
     "image": "/images/hotel-vier-jahreszeiten-kempinski.jpg",
     "title": "Hotel Vier Jahreszeiten Kempinski",
     "location": "Munich, Germany",
@@ -359,7 +511,7 @@
     ]
   },
   {
-    "id": 9,
+    "id": 13,
     "image": "/images/the-peninsula-hong-kong.jpg",
     "title": "The Peninsula Hong Kong",
     "location": "Hong Kong, China",
@@ -407,7 +559,7 @@
     ]
   },
   {
-    "id": 10,
+    "id": 14,
     "image": "/images/mount-nelson-hotel.jpg",
     "title": "Mount Nelson Hotel",
     "location": "Cape Town, South Africa",
@@ -450,7 +602,7 @@
     ]
   },
   {
-    "id": 11,
+    "id": 15,
     "image": "/images/copacabana-palace.jpg",
     "title": "Copacabana Palace",
     "location": "Rio de Janeiro, Brazil",
@@ -503,7 +655,7 @@
     ]
   },
   {
-    "id": 12,
+    "id": 16,
     "image": "/images/hotel-george-v-paris.jpg",
     "title": "Hotel George V, Paris",
     "location": "Paris, France",
@@ -551,7 +703,7 @@
     ]
   },
   {
-    "id": 13,
+    "id": 17,
     "image": "/images/grand-hotel-tremezzo.jpg",
     "title": "Grand Hotel Tremezzo",
     "location": "Lake Como, Italy",
@@ -604,7 +756,7 @@
     ]
   },
   {
-    "id": 14,
+    "id": 18,
     "image": "/images/oneonly-palmilla-resort.jpg",
     "title": "One&Only Palmilla Resort",
     "location": "San José del Cabo, Mexico",
@@ -652,7 +804,7 @@
     ]
   },
   {
-    "id": 15,
+    "id": 19,
     "image": "/images/mandarin-oriental-bangkok.jpg",
     "title": "Mandarin Oriental Bangkok",
     "location": "Bangkok, Thailand",
@@ -695,50 +847,50 @@
     ]
   },
   {
-  "id": 16,
-  "image": "/images/fairmont-royal-york.jpg",
-  "title": "Fairmont Royal York",
-  "location": "Toronto, Canada",
-  "rating": 4.6,
-  "reviews": 2100,
-  "guests": 2,
-  "maxGuests": 3,
-  "bedrooms": 1,
-  "beds": 2,
-  "baths": 1,
-  "datesFrom": "2025-05-01",
-  "datesTo": "2025-11-30",
-  "price": 420,
-  "host": {
-    "name": "Sophia",
-    "since": 5,
-    "avatar": "https://randomuser.me/api/portraits/women/5.jpg"
+    "id": 20,
+    "image": "/images/fairmont-royal-york.jpg",
+    "title": "Fairmont Royal York",
+    "location": "Toronto, Canada",
+    "rating": 4.6,
+    "reviews": 2100,
+    "guests": 2,
+    "maxGuests": 3,
+    "bedrooms": 1,
+    "beds": 2,
+    "baths": 1,
+    "datesFrom": "2025-05-01",
+    "datesTo": "2025-11-30",
+    "price": 420,
+    "host": {
+      "name": "Sophia",
+      "since": 5,
+      "avatar": "https://randomuser.me/api/portraits/women/5.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "🏊‍♂️",
+        "title": "Indoor Pool",
+        "desc": "Heated pool open year-round."
+      },
+      {
+        "icon": "🍽️",
+        "title": "Restaurant",
+        "desc": "On-site fine dining options."
+      },
+      {
+        "icon": "💻",
+        "title": "High-speed Wifi",
+        "desc": "Fast internet for work and leisure."
+      },
+      {
+        "icon": "🅿️",
+        "title": "Parking",
+        "desc": "Secure on-site parking available."
+      }
+    ]
   },
-  "amenities": [
-    {
-      "icon": "🏊‍♂️",
-      "title": "Indoor Pool",
-      "desc": "Heated pool open year-round."
-    },
-    {
-      "icon": "🍽️",
-      "title": "Restaurant",
-      "desc": "On-site fine dining options."
-    },
-    {
-      "icon": "💻",
-      "title": "High-speed Wifi",
-      "desc": "Fast internet for work and leisure."
-    },
-    {
-      "icon": "🅿️",
-      "title": "Parking",
-      "desc": "Secure on-site parking available."
-    }
-  ]
-},
   {
-    "id": 17,
+    "id": 21,
     "image": "/images/belmond-hotel-splendido.jpg",
     "title": "Belmond Hotel Splendido",
     "location": "Portofino, Italy",
@@ -781,7 +933,7 @@
     ]
   },
   {
-    "id": 18,
+    "id": 22,
     "image": "/images/the-beverly-hills-hotel.jpg",
     "title": "The Beverly Hills Hotel",
     "location": "Beverly Hills, United States",
@@ -824,7 +976,7 @@
     ]
   },
   {
-    "id": 19,
+    "id": 23,
     "image": "/images/grosvenor-house-jw-marriott.jpg",
     "title": "Grosvenor House, JW Marriott",
     "location": "London, England",
@@ -877,7 +1029,7 @@
     ]
   },
   {
-    "id": 20,
+    "id": 24,
     "image": "/images/singita-kruger-national-park.jpg",
     "title": "Singita Kruger National Park",
     "location": "Kruger National Park, South Africa",
@@ -915,7 +1067,7 @@
     ]
   },
   {
-    "id": 21,
+    "id": 25,
     "image": "/images/the-ritz-carlton-paris.jpg",
     "title": "The Ritz-Carlton Paris",
     "location": "Paris, France",
@@ -958,7 +1110,7 @@
     ]
   },
   {
-    "id": 22,
+    "id": 26,
     "image": "/images/four-seasons-hotel-new-york.jpg",
     "title": "Four Seasons Hotel New York",
     "location": "New York, United States",
@@ -1011,7 +1163,7 @@
     ]
   },
   {
-    "id": 23,
+    "id": 27,
     "image": "/images/shangri-la-hotel-singapore.jpg",
     "title": "Shangri-La Hotel Singapore",
     "location": "Singapore, Singapore",
@@ -1054,7 +1206,7 @@
     ]
   },
   {
-    "id": 24,
+    "id": 28,
     "image": "/images/the-savoy.jpg",
     "title": "The Savoy",
     "location": "London, England",
@@ -1107,7 +1259,7 @@
     ]
   },
   {
-    "id": 25,
+    "id": 29,
     "image": "/images/hotel-hassler-roma.jpg",
     "title": "Hotel Hassler Roma",
     "location": "Rome, Italy",
@@ -1150,7 +1302,7 @@
     ]
   },
   {
-    "id": 26,
+    "id": 30,
     "image": "/images/the-langham-sydney.jpg",
     "title": "The Langham Sydney",
     "location": "Sydney, Australia",
@@ -1203,7 +1355,7 @@
     ]
   },
   {
-    "id": 27,
+    "id": 31,
     "image": "/images/the-oberoi-udaivilas.jpg",
     "title": "The Oberoi Udaivilas",
     "location": "Udaipur, India",
@@ -1246,7 +1398,7 @@
     ]
   },
   {
-    "id": 28,
+    "id": 32,
     "image": "/images/hotel-del-coronado.jpg",
     "title": "Hotel del Coronado",
     "location": "San Diego, United States",
@@ -1284,7 +1436,7 @@
     ]
   },
   {
-    "id": 29,
+    "id": 33,
     "image": "/images/the-gritti-palace.jpg",
     "title": "The Gritti Palace",
     "location": "Venice, Italy",
@@ -1337,7 +1489,7 @@
     ]
   },
   {
-    "id": 30,
+    "id": 34,
     "image": "/images/the-ritz-london.jpg",
     "title": "The Ritz London",
     "location": "London, England",
@@ -1380,7 +1532,7 @@
     ]
   },
   {
-    "id": 31,
+    "id": 35,
     "image": "/images/amanpuri.jpg",
     "title": "Amanpuri",
     "location": "Phuket, Thailand",
@@ -1418,7 +1570,7 @@
     ]
   },
   {
-    "id": 32,
+    "id": 36,
     "image": "/images/the-breakers-palm-beach.jpg",
     "title": "The Breakers Palm Beach",
     "location": "Palm Beach, United States",
@@ -1471,7 +1623,7 @@
     ]
   },
   {
-    "id": 33,
+    "id": 37,
     "image": "/images/hotel-de-crillon.jpg",
     "title": "Hotel de Crillon",
     "location": "Paris, France",
@@ -1519,7 +1671,7 @@
     ]
   },
   {
-    "id": 34,
+    "id": 38,
     "image": "/images/the-st-regis-bali-resort.jpg",
     "title": "The St. Regis Bali Resort",
     "location": "Bali, Indonesia",
@@ -1562,7 +1714,7 @@
     ]
   },
   {
-    "id": 35,
+    "id": 39,
     "image": "/images/the-connaught.jpg",
     "title": "The Connaught",
     "location": "London, England",
@@ -1605,7 +1757,7 @@
     ]
   },
   {
-    "id": 36,
+    "id": 40,
     "image": "/images/four-seasons-resort-bora-bora.jpg",
     "title": "Four Seasons Resort Bora Bora",
     "location": "Bora Bora, French Polynesia",
@@ -1643,7 +1795,7 @@
     ]
   },
   {
-    "id": 37,
+    "id": 41,
     "image": "/images/the-ritz-carlton-kyoto.jpg",
     "title": "The Ritz-Carlton Kyoto",
     "location": "Kyoto, Japan",
@@ -1681,7 +1833,7 @@
     ]
   },
   {
-    "id": 38,
+    "id": 42,
     "image": "/images/hotel-cipriani.jpg",
     "title": "Hotel Cipriani",
     "location": "Venice, Italy",
@@ -1724,7 +1876,7 @@
     ]
   },
   {
-    "id": 39,
+    "id": 43,
     "image": "/images/the-peninsula-tokyo.jpg",
     "title": "The Peninsula Tokyo",
     "location": "Tokyo, Japan",
@@ -1777,7 +1929,7 @@
     ]
   },
   {
-    "id": 40,
+    "id": 44,
     "image": "/images/the-ritz-carlton-dubai.jpg",
     "title": "The Ritz-Carlton Dubai",
     "location": "Dubai, United Arab Emirates",
@@ -1830,7 +1982,7 @@
     ]
   },
   {
-    "id": 41,
+    "id": 45,
     "image": "/images/the-ritz-carlton-istanbul.jpg",
     "title": "The Ritz-Carlton Istanbul",
     "location": "Istanbul, Turkey",
@@ -1878,7 +2030,7 @@
     ]
   },
   {
-    "id": 42,
+    "id": 46,
     "image": "/images/the-fullerton-hotel-singapore.jpg",
     "title": "The Fullerton Hotel Singapore",
     "location": "Singapore, Singapore",
@@ -1931,7 +2083,7 @@
     ]
   },
   {
-    "id": 43,
+    "id": 47,
     "image": "/images/the-ritz-carlton-moscow.jpg",
     "title": "The Ritz-Carlton Moscow",
     "location": "Moscow, Russia",
@@ -1984,7 +2136,7 @@
     ]
   },
   {
-    "id": 44,
+    "id": 48,
     "image": "/images/the-ritz-carlton-berlin.jpg",
     "title": "The Ritz-Carlton Berlin",
     "location": "Berlin, Germany",
@@ -2032,7 +2184,7 @@
     ]
   },
   {
-    "id": 45,
+    "id": 49,
     "image": "/images/the-ritz-carlton-vienna.jpg",
     "title": "The Ritz-Carlton Vienna",
     "location": "Vienna, Austria",
@@ -2085,7 +2237,7 @@
     ]
   },
   {
-    "id": 46,
+    "id": 50,
     "image": "/images/the-ritz-carlton-barcelona.jpg",
     "title": "The Ritz-Carlton Barcelona",
     "location": "Barcelona, Spain",
@@ -2128,7 +2280,7 @@
     ]
   },
   {
-    "id": 47,
+    "id": 51,
     "image": "/images/the-ritz-carlton-madrid.jpg",
     "title": "The Ritz-Carlton Madrid",
     "location": "Madrid, Spain",
@@ -2171,7 +2323,7 @@
     ]
   },
   {
-    "id": 48,
+    "id": 52,
     "image": "/images/the-ritz-carlton-lisbon.jpg",
     "title": "The Ritz-Carlton Lisbon",
     "location": "Lisbon, Portugal",
@@ -2224,7 +2376,7 @@
     ]
   },
   {
-    "id": 49,
+    "id": 53,
     "image": "/images/the-ritz-carlton-amsterdam.jpg",
     "title": "The Ritz-Carlton Amsterdam",
     "location": "Amsterdam, Netherlands",
@@ -2272,7 +2424,7 @@
     ]
   },
   {
-    "id": 50,
+    "id": 54,
     "image": "/images/the-ritz-carlton-brussels.jpg",
     "title": "The Ritz-Carlton Brussels",
     "location": "Brussels, Belgium",
@@ -2315,7 +2467,7 @@
     ]
   },
   {
-    "id": 51,
+    "id": 55,
     "image": "/images/the-ritz-carlton-stockholm.jpg",
     "title": "The Ritz-Carlton Stockholm",
     "location": "Stockholm, Sweden",
@@ -2368,7 +2520,7 @@
     ]
   },
   {
-    "id": 52,
+    "id": 56,
     "image": "/images/the-ritz-carlton-copenhagen.jpg",
     "title": "The Ritz-Carlton Copenhagen",
     "location": "Copenhagen, Denmark",
@@ -2411,7 +2563,7 @@
     ]
   },
   {
-    "id": 53,
+    "id": 57,
     "image": "/images/the-ritz-carlton-oslo.jpg",
     "title": "The Ritz-Carlton Oslo",
     "location": "Oslo, Norway",
@@ -2464,7 +2616,7 @@
     ]
   },
   {
-    "id": 54,
+    "id": 58,
     "image": "/images/the-ritz-carlton-helsinki.jpg",
     "title": "The Ritz-Carlton Helsinki",
     "location": "Helsinki, Finland",
@@ -2512,7 +2664,7 @@
     ]
   },
   {
-    "id": 55,
+    "id": 59,
     "image": "/images/the-ritz-carlton-warsaw.jpg",
     "title": "The Ritz-Carlton Warsaw",
     "location": "Warsaw, Poland",
@@ -2550,7 +2702,7 @@
     ]
   },
   {
-    "id": 56,
+    "id": 60,
     "image": "/images/the-ritz-carlton-prague.jpg",
     "title": "The Ritz-Carlton Prague",
     "location": "Prague, Czech Republic",
@@ -2598,7 +2750,7 @@
     ]
   },
   {
-    "id": 57,
+    "id": 61,
     "image": "/images/the-ritz-carlton-budapest.jpg",
     "title": "The Ritz-Carlton Budapest",
     "location": "Budapest, Hungary",
@@ -2651,7 +2803,7 @@
     ]
   },
   {
-    "id": 58,
+    "id": 62,
     "image": "/images/the-ritz-carlton-athens.jpg",
     "title": "The Ritz-Carlton Athens",
     "location": "Athens, Greece",
@@ -2689,7 +2841,7 @@
     ]
   },
   {
-    "id": 59,
+    "id": 63,
     "image": "/images/the-ritz-carlton-cairo.jpg",
     "title": "The Ritz-Carlton Cairo",
     "location": "Cairo, Egypt",
@@ -2732,7 +2884,7 @@
     ]
   },
   {
-    "id": 60,
+    "id": 64,
     "image": "/images/the-ritz-carlton-shanghai.jpg",
     "title": "The Ritz-Carlton Shanghai",
     "location": "Shanghai, China",
@@ -2770,7 +2922,7 @@
     ]
   },
   {
-    "id": 61,
+    "id": 65,
     "image": "/images/the-ritz-carlton-beijing.jpg",
     "title": "The Ritz-Carlton Beijing",
     "location": "Beijing, China",
@@ -2813,7 +2965,7 @@
     ]
   },
   {
-    "id": 62,
+    "id": 66,
     "image": "/images/the-ritz-carlton-seoul.jpg",
     "title": "The Ritz-Carlton Seoul",
     "location": "Seoul, South Korea",
@@ -2856,7 +3008,7 @@
     ]
   },
   {
-    "id": 63,
+    "id": 67,
     "image": "/images/the-ritz-carlton-kuala-lumpur.jpg",
     "title": "The Ritz-Carlton Kuala Lumpur",
     "location": "Kuala Lumpur, Malaysia",
@@ -2909,7 +3061,7 @@
     ]
   },
   {
-    "id": 64,
+    "id": 68,
     "image": "/images/the-ritz-carlton-jakarta.jpg",
     "title": "The Ritz-Carlton Jakarta",
     "location": "Jakarta, Indonesia",
@@ -2952,7 +3104,7 @@
     ]
   },
   {
-    "id": 65,
+    "id": 69,
     "image": "/images/the-ritz-carlton-manila.jpg",
     "title": "The Ritz-Carlton Manila",
     "location": "Manila, Philippines",
@@ -3005,7 +3157,7 @@
     ]
   },
   {
-    "id": 66,
+    "id": 70,
     "image": "/images/the-ritz-carlton-bangkok.jpg",
     "title": "The Ritz-Carlton Bangkok",
     "location": "Bangkok, Thailand",
@@ -3043,7 +3195,7 @@
     ]
   },
   {
-    "id": 67,
+    "id": 71,
     "image": "/images/the-ritz-carlton-ho-chi-minh-city.jpg",
     "title": "The Ritz-Carlton Ho Chi Minh City",
     "location": "Ho Chi Minh City, Vietnam",
@@ -3086,7 +3238,7 @@
     ]
   },
   {
-    "id": 68,
+    "id": 72,
     "image": "/images/the-ritz-carlton-mumbai.jpg",
     "title": "The Ritz-Carlton Mumbai",
     "location": "Mumbai, India",
@@ -3134,7 +3286,7 @@
     ]
   },
   {
-    "id": 69,
+    "id": 73,
     "image": "/images/the-ritz-carlton-delhi.jpg",
     "title": "The Ritz-Carlton Delhi",
     "location": "New Delhi, India",
@@ -3172,7 +3324,7 @@
     ]
   },
   {
-    "id": 70,
+    "id": 74,
     "image": "/images/the-ritz-carlton-los-angeles.jpg",
     "title": "The Ritz-Carlton Los Angeles",
     "location": "Los Angeles, United States",
@@ -3220,7 +3372,7 @@
     ]
   },
   {
-    "id": 71,
+    "id": 75,
     "image": "/images/the-ritz-carlton-san-francisco.jpg",
     "title": "The Ritz-Carlton San Francisco",
     "location": "San Francisco, United States",
@@ -3268,7 +3420,7 @@
     ]
   },
   {
-    "id": 72,
+    "id": 76,
     "image": "/images/the-ritz-carlton-chicago.jpg",
     "title": "The Ritz-Carlton Chicago",
     "location": "Chicago, United States",
@@ -3311,7 +3463,7 @@
     ]
   },
   {
-    "id": 73,
+    "id": 77,
     "image": "/images/the-ritz-carlton-boston.jpg",
     "title": "The Ritz-Carlton Boston",
     "location": "Boston, United States",
@@ -3349,7 +3501,7 @@
     ]
   },
   {
-    "id": 74,
+    "id": 78,
     "image": "/images/the-ritz-carlton-washington-dc.jpg",
     "title": "The Ritz-Carlton Washington DC",
     "location": "Washington DC, United States",
@@ -3402,7 +3554,7 @@
     ]
   },
   {
-    "id": 75,
+    "id": 79,
     "image": "/images/the-ritz-carlton-miami.jpg",
     "title": "The Ritz-Carlton Miami",
     "location": "Miami, United States",
@@ -3445,7 +3597,7 @@
     ]
   },
   {
-    "id": 76,
+    "id": 80,
     "image": "/images/the-ritz-carlton-atlanta.jpg",
     "title": "The Ritz-Carlton Atlanta",
     "location": "Atlanta, United States",
@@ -3493,7 +3645,7 @@
     ]
   },
   {
-    "id": 77,
+    "id": 81,
     "image": "/images/the-ritz-carlton-philadelphia.jpg",
     "title": "The Ritz-Carlton Philadelphia",
     "location": "Philadelphia, United States",
@@ -3536,7 +3688,7 @@
     ]
   },
   {
-    "id": 78,
+    "id": 82,
     "image": "/images/the-ritz-carlton-toronto.jpg",
     "title": "The Ritz-Carlton Toronto",
     "location": "Toronto, Canada",
@@ -3584,7 +3736,7 @@
     ]
   },
   {
-    "id": 79,
+    "id": 83,
     "image": "/images/the-ritz-carlton-montreal.jpg",
     "title": "The Ritz-Carlton Montreal",
     "location": "Montreal, Canada",
@@ -3637,7 +3789,7 @@
     ]
   },
   {
-    "id": 80,
+    "id": 84,
     "image": "/images/the-ritz-carlton-santiago.jpg",
     "title": "The Ritz-Carlton Santiago",
     "location": "Santiago, Chile",
@@ -3675,7 +3827,7 @@
     ]
   },
   {
-    "id": 81,
+    "id": 85,
     "image": "/images/the-ritz-carlton-buenos-aires.jpg",
     "title": "The Ritz-Carlton Buenos Aires",
     "location": "Buenos Aires, Argentina",
@@ -3713,7 +3865,7 @@
     ]
   },
   {
-    "id": 82,
+    "id": 86,
     "image": "/images/four-seasons-hotel-london.jpg",
     "title": "Four Seasons Hotel London",
     "location": "London, England",
@@ -3756,7 +3908,7 @@
     ]
   },
   {
-    "id": 83,
+    "id": 87,
     "image": "/images/four-seasons-hotel-paris.jpg",
     "title": "Four Seasons Hotel Paris",
     "location": "Paris, France",
@@ -3809,7 +3961,7 @@
     ]
   },
   {
-    "id": 84,
+    "id": 88,
     "image": "/images/four-seasons-hotel-milan.jpg",
     "title": "Four Seasons Hotel Milan",
     "location": "Milan, Italy",
@@ -3847,7 +3999,7 @@
     ]
   },
   {
-    "id": 85,
+    "id": 89,
     "image": "/images/four-seasons-hotel-istanbul.jpg",
     "title": "Four Seasons Hotel Istanbul",
     "location": "Istanbul, Turkey",
@@ -3900,7 +4052,7 @@
     ]
   },
   {
-    "id": 86,
+    "id": 90,
     "image": "/images/four-seasons-hotel-dubai.jpg",
     "title": "Four Seasons Hotel Dubai",
     "location": "Dubai, United Arab Emirates",
@@ -3953,7 +4105,7 @@
     ]
   },
   {
-    "id": 87,
+    "id": 91,
     "image": "/images/four-seasons-hotel-tokyo.jpg",
     "title": "Four Seasons Hotel Tokyo",
     "location": "Tokyo, Japan",
@@ -4006,7 +4158,7 @@
     ]
   },
   {
-    "id": 88,
+    "id": 92,
     "image": "/images/four-seasons-hotel-singapore.jpg",
     "title": "Four Seasons Hotel Singapore",
     "location": "Singapore, Singapore",
@@ -4059,7 +4211,7 @@
     ]
   },
   {
-    "id": 89,
+    "id": 93,
     "image": "/images/four-seasons-hotel-hong-kong.jpg",
     "title": "Four Seasons Hotel Hong Kong",
     "location": "Hong Kong, China",
@@ -4102,7 +4254,7 @@
     ]
   },
   {
-    "id": 90,
+    "id": 94,
     "image": "/images/four-seasons-hotel-sydney.jpg",
     "title": "Four Seasons Hotel Sydney",
     "location": "Sydney, Australia",
@@ -4140,7 +4292,7 @@
     ]
   },
   {
-    "id": 91,
+    "id": 95,
     "image": "/images/four-seasons-hotel-mumbai.jpg",
     "title": "Four Seasons Hotel Mumbai",
     "location": "Mumbai, India",
@@ -4178,7 +4330,7 @@
     ]
   },
   {
-    "id": 92,
+    "id": 96,
     "image": "/images/mandarin-oriental-new-york.jpg",
     "title": "Mandarin Oriental New York",
     "location": "New York, United States",
@@ -4226,7 +4378,7 @@
     ]
   },
   {
-    "id": 93,
+    "id": 97,
     "image": "/images/mandarin-oriental-london.jpg",
     "title": "Mandarin Oriental London",
     "location": "London, England",
@@ -4264,7 +4416,7 @@
     ]
   },
   {
-    "id": 94,
+    "id": 98,
     "image": "/images/mandarin-oriental-paris.jpg",
     "title": "Mandarin Oriental Paris",
     "location": "Paris, France",
@@ -4317,7 +4469,7 @@
     ]
   },
   {
-    "id": 95,
+    "id": 99,
     "image": "/images/mandarin-oriental-geneva.jpg",
     "title": "Mandarin Oriental Geneva",
     "location": "Geneva, Switzerland",
@@ -4360,7 +4512,7 @@
     ]
   },
   {
-    "id": 96,
+    "id": 100,
     "image": "/images/mandarin-oriental-tokyo.jpg",
     "title": "Mandarin Oriental Tokyo",
     "location": "Tokyo, Japan",
@@ -4408,7 +4560,7 @@
     ]
   },
   {
-    "id": 97,
+    "id": 101,
     "image": "/images/mandarin-oriental-singapore.jpg",
     "title": "Mandarin Oriental Singapore",
     "location": "Singapore, Singapore",
@@ -4456,7 +4608,7 @@
     ]
   },
   {
-    "id": 98,
+    "id": 102,
     "image": "/images/mandarin-oriental-macau.jpg",
     "title": "Mandarin Oriental Macau",
     "location": "Macau, China",
@@ -4499,7 +4651,7 @@
     ]
   },
   {
-    "id": 99,
+    "id": 103,
     "image": "/images/mandarin-oriental-kuala-lumpur.jpg",
     "title": "Mandarin Oriental Kuala Lumpur",
     "location": "Kuala Lumpur, Malaysia",
@@ -4552,7 +4704,7 @@
     ]
   },
   {
-    "id": 100,
+    "id": 104,
     "image": "/images/mandarin-oriental-jakarta.jpg",
     "title": "Mandarin Oriental Jakarta",
     "location": "Jakarta, Indonesia",
@@ -4590,7 +4742,7 @@
     ]
   },
   {
-    "id": 101,
+    "id": 105,
     "image": "/images/mandarin-oriental-miami.jpg",
     "title": "Mandarin Oriental Miami",
     "location": "Miami, United States",
@@ -4628,7 +4780,7 @@
     ]
   },
   {
-    "id": 102,
+    "id": 106,
     "image": "/images/the-peninsula-beverly-hills.jpg",
     "title": "The Peninsula Beverly Hills",
     "location": "Beverly Hills, United States",
@@ -4681,7 +4833,7 @@
     ]
   },
   {
-    "id": 103,
+    "id": 107,
     "image": "/images/the-peninsula-chicago.jpg",
     "title": "The Peninsula Chicago",
     "location": "Chicago, United States",
@@ -4724,7 +4876,7 @@
     ]
   },
   {
-    "id": 104,
+    "id": 108,
     "image": "/images/the-peninsula-manila.jpg",
     "title": "The Peninsula Manila",
     "location": "Manila, Philippines",
@@ -4767,7 +4919,7 @@
     ]
   },
   {
-    "id": 105,
+    "id": 109,
     "image": "/images/the-peninsula-shanghai.jpg",
     "title": "The Peninsula Shanghai",
     "location": "Shanghai, China",
@@ -4810,7 +4962,7 @@
     ]
   },
   {
-    "id": 106,
+    "id": 110,
     "image": "/images/the-peninsula-beijing.jpg",
     "title": "The Peninsula Beijing",
     "location": "Beijing, China",
@@ -4858,7 +5010,7 @@
     ]
   },
   {
-    "id": 107,
+    "id": 111,
     "image": "/images/aman-venice.jpg",
     "title": "Aman Venice",
     "location": "Venice, Italy",
@@ -4896,7 +5048,7 @@
     ]
   },
   {
-    "id": 108,
+    "id": 112,
     "image": "/images/aman-new-york.jpg",
     "title": "Aman New York",
     "location": "New York, United States",
@@ -4939,7 +5091,7 @@
     ]
   },
   {
-    "id": 109,
+    "id": 113,
     "image": "/images/aman-tokyo.jpg",
     "title": "Aman Tokyo",
     "location": "Tokyo, Japan",
@@ -4992,7 +5144,7 @@
     ]
   },
   {
-    "id": 110,
+    "id": 114,
     "image": "/images/aman-sveti-stefan.jpg",
     "title": "Aman Sveti Stefan",
     "location": "Sveti Stefan, Montenegro",
@@ -5040,7 +5192,7 @@
     ]
   },
   {
-    "id": 111,
+    "id": 115,
     "image": "/images/aman-le-melezin.jpg",
     "title": "Aman Le Mélézin",
     "location": "Courchevel, France",
@@ -5093,7 +5245,7 @@
     ]
   },
   {
-    "id": 112,
+    "id": 116,
     "image": "/images/chateau-de-la-messardiere.jpg",
     "title": "Château de la Messardière",
     "location": "Saint-Tropez, France",
@@ -5136,7 +5288,7 @@
     ]
   },
   {
-    "id": 113,
+    "id": 117,
     "image": "/images/hotel-du-cap-eden-roc.jpg",
     "title": "Hotel du Cap-Eden-Roc",
     "location": "Antibes, France",
@@ -5179,7 +5331,7 @@
     ]
   },
   {
-    "id": 114,
+    "id": 118,
     "image": "/images/le-meurice.jpg",
     "title": "Le Meurice",
     "location": "Paris, France",
@@ -5217,7 +5369,7 @@
     ]
   },
   {
-    "id": 115,
+    "id": 119,
     "image": "/images/hotel-plaza-athenee.jpg",
     "title": "Hôtel Plaza Athénée",
     "location": "Paris, France",
@@ -5265,7 +5417,7 @@
     ]
   },
   {
-    "id": 116,
+    "id": 120,
     "image": "/images/the-carlyle.jpg",
     "title": "The Carlyle",
     "location": "New York, United States",
@@ -5308,7 +5460,7 @@
     ]
   },
   {
-    "id": 117,
+    "id": 121,
     "image": "/images/oneonly-reethi-rah.jpg",
     "title": "One&Only Reethi Rah",
     "location": "Maldives",
@@ -5356,7 +5508,7 @@
     ]
   },
   {
-    "id": 118,
+    "id": 122,
     "image": "/images/soneva-jani.jpg",
     "title": "Soneva Jani",
     "location": "Maldives",
@@ -5399,7 +5551,7 @@
     ]
   },
   {
-    "id": 119,
+    "id": 123,
     "image": "/images/cheval-blanc-randheli.jpg",
     "title": "Cheval Blanc Randheli",
     "location": "Maldives",
@@ -5447,7 +5599,7 @@
     ]
   },
   {
-    "id": 120,
+    "id": 124,
     "image": "/images/conrad-maldives-rangali-island.jpg",
     "title": "Conrad Maldives Rangali Island",
     "location": "Maldives",
@@ -5490,7 +5642,7 @@
     ]
   },
   {
-    "id": 121,
+    "id": 125,
     "image": "/images/st-regis-bora-bora-resort.jpg",
     "title": "St. Regis Bora Bora Resort",
     "location": "Bora Bora, French Polynesia",
@@ -5538,7 +5690,7 @@
     ]
   },
   {
-    "id": 122,
+    "id": 126,
     "image": "/images/amangani.jpg",
     "title": "Amangani",
     "location": "Jackson Hole, United States",
@@ -5581,7 +5733,7 @@
     ]
   },
   {
-    "id": 123,
+    "id": 127,
     "image": "/images/the-ritz-carlton-sao-paulo.jpg",
     "title": "The Ritz-Carlton São Paulo",
     "location": "São Paulo, Brazil",
@@ -5629,7 +5781,7 @@
     ]
   },
   {
-    "id": 124,
+    "id": 128,
     "image": "/images/the-ritz-carlton-lima.jpg",
     "title": "The Ritz-Carlton Lima",
     "location": "Lima, Peru",
@@ -5677,7 +5829,7 @@
     ]
   },
   {
-    "id": 125,
+    "id": 129,
     "image": "/images/the-ritz-carlton-bogota.jpg",
     "title": "The Ritz-Carlton Bogotá",
     "location": "Bogotá, Colombia",
@@ -5715,7 +5867,7 @@
     ]
   },
   {
-    "id": 126,
+    "id": 130,
     "image": "/images/the-ritz-carlton-doha.jpg",
     "title": "The Ritz-Carlton Doha",
     "location": "Doha, Qatar",
@@ -5753,7 +5905,7 @@
     ]
   },
   {
-    "id": 127,
+    "id": 131,
     "image": "/images/the-ritz-carlton-abu-dhabi.jpg",
     "title": "The Ritz-Carlton Abu Dhabi",
     "location": "Abu Dhabi, United Arab Emirates",
@@ -5791,7 +5943,7 @@
     ]
   },
   {
-    "id": 128,
+    "id": 132,
     "image": "/images/the-ritz-carlton-riyadh.jpg",
     "title": "The Ritz-Carlton Riyadh",
     "location": "Riyadh, Saudi Arabia",
@@ -5829,7 +5981,7 @@
     ]
   },
   {
-    "id": 129,
+    "id": 133,
     "image": "/images/the-ritz-carlton-jeddah.jpg",
     "title": "The Ritz-Carlton Jeddah",
     "location": "Jeddah, Saudi Arabia",
@@ -5882,7 +6034,7 @@
     ]
   },
   {
-    "id": 130,
+    "id": 134,
     "image": "/images/the-ritz-carlton-marrakech.jpg",
     "title": "The Ritz-Carlton Marrakech",
     "location": "Marrakech, Morocco",
@@ -5925,7 +6077,7 @@
     ]
   },
   {
-    "id": 131,
+    "id": 135,
     "image": "/images/the-ritz-carlton-perth.jpg",
     "title": "The Ritz-Carlton Perth",
     "location": "Perth, Australia",
@@ -5973,7 +6125,7 @@
     ]
   },
   {
-    "id": 132,
+    "id": 136,
     "image": "/images/the-ritz-carlton-melbourne.jpg",
     "title": "The Ritz-Carlton Melbourne",
     "location": "Melbourne, Australia",
@@ -6021,7 +6173,7 @@
     ]
   },
   {
-    "id": 133,
+    "id": 137,
     "image": "/images/the-ritz-carlton-brisbane.jpg",
     "title": "The Ritz-Carlton Brisbane",
     "location": "Brisbane, Australia",
@@ -6074,7 +6226,7 @@
     ]
   },
   {
-    "id": 134,
+    "id": 138,
     "image": "/images/the-ritz-carlton-auckland.jpg",
     "title": "The Ritz-Carlton Auckland",
     "location": "Auckland, New Zealand",
@@ -6127,7 +6279,7 @@
     ]
   },
   {
-    "id": 135,
+    "id": 139,
     "image": "/images/the-ritz-carlton-millenia-singapore.jpg",
     "title": "The Ritz-Carlton Millenia Singapore",
     "location": "Singapore, Singapore",
@@ -6170,7 +6322,7 @@
     ]
   },
   {
-    "id": 136,
+    "id": 140,
     "image": "/images/the-ritz-carlton-millenia-macau.jpg",
     "title": "The Ritz-Carlton Millenia Macau",
     "location": "Macau, China",
@@ -6218,7 +6370,7 @@
     ]
   },
   {
-    "id": 137,
+    "id": 141,
     "image": "/images/the-ritz-carlton-residences-miami.jpg",
     "title": "The Ritz-Carlton Residences Miami",
     "location": "Miami, United States",
@@ -6266,7 +6418,7 @@
     ]
   },
   {
-    "id": 138,
+    "id": 142,
     "image": "/images/the-ritz-carlton-residences-toronto.jpg",
     "title": "The Ritz-Carlton Residences Toronto",
     "location": "Toronto, Canada",
@@ -6304,7 +6456,7 @@
     ]
   },
   {
-    "id": 139,
+    "id": 143,
     "image": "/images/the-ritz-carlton-residences-montreal.jpg",
     "title": "The Ritz-Carlton Residences Montreal",
     "location": "Montreal, Canada",
@@ -6357,7 +6509,7 @@
     ]
   },
   {
-    "id": 140,
+    "id": 144,
     "image": "/images/the-ritz-carlton-residences-vancouver.jpg",
     "title": "The Ritz-Carlton Residences Vancouver",
     "location": "Vancouver, Canada",
@@ -6410,7 +6562,7 @@
     ]
   },
   {
-    "id": 141,
+    "id": 145,
     "image": "/images/the-ritz-carlton-residences-los-angeles.jpg",
     "title": "The Ritz-Carlton Residences Los Angeles",
     "location": "Los Angeles, United States",
@@ -6463,7 +6615,7 @@
     ]
   },
   {
-    "id": 142,
+    "id": 146,
     "image": "/images/the-ritz-carlton-residences-san-francisco.jpg",
     "title": "The Ritz-Carlton Residences San Francisco",
     "location": "San Francisco, United States",
@@ -6511,7 +6663,7 @@
     ]
   },
   {
-    "id": 143,
+    "id": 147,
     "image": "/images/the-ritz-carlton-residences-chicago.jpg",
     "title": "The Ritz-Carlton Residences Chicago",
     "location": "Chicago, United States",
@@ -6549,7 +6701,7 @@
     ]
   },
   {
-    "id": 144,
+    "id": 148,
     "image": "/images/the-ritz-carlton-residences-boston.jpg",
     "title": "The Ritz-Carlton Residences Boston",
     "location": "Boston, United States",
@@ -6592,7 +6744,7 @@
     ]
   },
   {
-    "id": 145,
+    "id": 149,
     "image": "/images/the-ritz-carlton-residences-washington-dc.jpg",
     "title": "The Ritz-Carlton Residences Washington DC",
     "location": "Washington DC, United States",
@@ -6630,7 +6782,7 @@
     ]
   },
   {
-    "id": 146,
+    "id": 150,
     "image": "/images/the-ritz-carlton-residences-miami-beach.jpg",
     "title": "The Ritz-Carlton Residences Miami Beach",
     "location": "Miami Beach, United States",
@@ -6678,7 +6830,7 @@
     ]
   },
   {
-    "id": 147,
+    "id": 151,
     "image": "/images/the-ritz-carlton-residences-atlanta.jpg",
     "title": "The Ritz-Carlton Residences Atlanta",
     "location": "Atlanta, United States",
@@ -6721,7 +6873,7 @@
     ]
   },
   {
-    "id": 148,
+    "id": 152,
     "image": "/images/the-ritz-carlton-residences-philadelphia.jpg",
     "title": "The Ritz-Carlton Residences Philadelphia",
     "location": "Philadelphia, United States",
@@ -6769,7 +6921,7 @@
     ]
   },
   {
-    "id": 149,
+    "id": 153,
     "image": "/images/the-ritz-carlton-residences-new-york.jpg",
     "title": "The Ritz-Carlton Residences New York",
     "location": "New York, United States",
@@ -6807,7 +6959,7 @@
     ]
   },
   {
-    "id": 150,
+    "id": 154,
     "image": "/images/the-ritz-carlton-residences-london.jpg",
     "title": "The Ritz-Carlton Residences London",
     "location": "London, England",
@@ -6855,7 +7007,7 @@
     ]
   },
   {
-    "id": 151,
+    "id": 155,
     "image": "/images/the-ritz-carlton-residences-paris.jpg",
     "title": "The Ritz-Carlton Residences Paris",
     "location": "Paris, France",
@@ -6898,7 +7050,7 @@
     ]
   },
   {
-    "id": 152,
+    "id": 156,
     "image": "/images/the-ritz-carlton-residences-dubai.jpg",
     "title": "The Ritz-Carlton Residences Dubai",
     "location": "Dubai, United Arab Emirates",
@@ -6936,7 +7088,7 @@
     ]
   },
   {
-    "id": 153,
+    "id": 157,
     "image": "/images/the-ritz-carlton-residences-singapore.jpg",
     "title": "The Ritz-Carlton Residences Singapore",
     "location": "Singapore, Singapore",
@@ -6984,7 +7136,7 @@
     ]
   },
   {
-    "id": 154,
+    "id": 158,
     "image": "/images/the-ritz-carlton-residences-hong-kong.jpg",
     "title": "The Ritz-Carlton Residences Hong Kong",
     "location": "Hong Kong, China",
@@ -7032,7 +7184,7 @@
     ]
   },
   {
-    "id": 155,
+    "id": 159,
     "image": "/images/the-ritz-carlton-residences-tokyo.jpg",
     "title": "The Ritz-Carlton Residences Tokyo",
     "location": "Tokyo, Japan",
@@ -7085,7 +7237,7 @@
     ]
   },
   {
-    "id": 156,
+    "id": 160,
     "image": "/images/the-ritz-carlton-residences-shanghai.jpg",
     "title": "The Ritz-Carlton Residences Shanghai",
     "location": "Shanghai, China",
@@ -7128,7 +7280,7 @@
     ]
   },
   {
-    "id": 157,
+    "id": 161,
     "image": "/images/the-ritz-carlton-residences-beijing.jpg",
     "title": "The Ritz-Carlton Residences Beijing",
     "location": "Beijing, China",
@@ -7176,7 +7328,7 @@
     ]
   },
   {
-    "id": 158,
+    "id": 162,
     "image": "/images/the-ritz-carlton-residences-seoul.jpg",
     "title": "The Ritz-Carlton Residences Seoul",
     "location": "Seoul, South Korea",
@@ -7219,7 +7371,7 @@
     ]
   },
   {
-    "id": 159,
+    "id": 163,
     "image": "/images/the-ritz-carlton-residences-kuala-lumpur.jpg",
     "title": "The Ritz-Carlton Residences Kuala Lumpur",
     "location": "Kuala Lumpur, Malaysia",
@@ -7267,7 +7419,7 @@
     ]
   },
   {
-    "id": 160,
+    "id": 164,
     "image": "/images/the-ritz-carlton-residences-jakarta.jpg",
     "title": "The Ritz-Carlton Residences Jakarta",
     "location": "Jakarta, Indonesia",
@@ -7320,7 +7472,7 @@
     ]
   },
   {
-    "id": 161,
+    "id": 165,
     "image": "/images/the-ritz-carlton-residences-manila.jpg",
     "title": "The Ritz-Carlton Residences Manila",
     "location": "Manila, Philippines",
@@ -7373,7 +7525,7 @@
     ]
   },
   {
-    "id": 162,
+    "id": 166,
     "image": "/images/the-ritz-carlton-residences-bangkok.jpg",
     "title": "The Ritz-Carlton Residences Bangkok",
     "location": "Bangkok, Thailand",
@@ -7416,7 +7568,7 @@
     ]
   },
   {
-    "id": 163,
+    "id": 167,
     "image": "/images/the-ritz-carlton-residences-mumbai.jpg",
     "title": "The Ritz-Carlton Residences Mumbai",
     "location": "Mumbai, India",
@@ -7454,7 +7606,7 @@
     ]
   },
   {
-    "id": 164,
+    "id": 168,
     "image": "/images/the-ritz-carlton-residences-delhi.jpg",
     "title": "The Ritz-Carlton Residences Delhi",
     "location": "New Delhi, India",
@@ -7507,7 +7659,7 @@
     ]
   },
   {
-    "id": 165,
+    "id": 169,
     "image": "/images/the-ritz-carlton-residences-sydney.jpg",
     "title": "The Ritz-Carlton Residences Sydney",
     "location": "Sydney, Australia",
@@ -7545,7 +7697,7 @@
     ]
   },
   {
-    "id": 166,
+    "id": 170,
     "image": "/images/the-ritz-carlton-residences-melbourne.jpg",
     "title": "The Ritz-Carlton Residences Melbourne",
     "location": "Melbourne, Australia",
@@ -7598,7 +7750,7 @@
     ]
   },
   {
-    "id": 167,
+    "id": 171,
     "image": "/images/the-ritz-carlton-residences-brisbane.jpg",
     "title": "The Ritz-Carlton Residences Brisbane",
     "location": "Brisbane, Australia",
@@ -7651,7 +7803,7 @@
     ]
   },
   {
-    "id": 168,
+    "id": 172,
     "image": "/images/the-ritz-carlton-residences-auckland.jpg",
     "title": "The Ritz-Carlton Residences Auckland",
     "location": "Auckland, New Zealand",
@@ -7689,7 +7841,7 @@
     ]
   },
   {
-    "id": 169,
+    "id": 173,
     "image": "/images/the-ritz-carlton-residences-dubai-marina.jpg",
     "title": "The Ritz-Carlton Residences Dubai Marina",
     "location": "Dubai, United Arab Emirates",
@@ -7727,7 +7879,7 @@
     ]
   },
   {
-    "id": 170,
+    "id": 174,
     "image": "/images/the-ritz-carlton-residences-abu-dhabi.jpg",
     "title": "The Ritz-Carlton Residences Abu Dhabi",
     "location": "Abu Dhabi, United Arab Emirates",
@@ -7780,7 +7932,7 @@
     ]
   },
   {
-    "id": 171,
+    "id": 175,
     "image": "/images/the-ritz-carlton-residences-doha.jpg",
     "title": "The Ritz-Carlton Residences Doha",
     "location": "Doha, Qatar",
@@ -7833,7 +7985,7 @@
     ]
   },
   {
-    "id": 172,
+    "id": 176,
     "image": "/images/the-ritz-carlton-residences-riyadh.jpg",
     "title": "The Ritz-Carlton Residences Riyadh",
     "location": "Riyadh, Saudi Arabia",
@@ -7876,7 +8028,7 @@
     ]
   },
   {
-    "id": 173,
+    "id": 177,
     "image": "/images/the-ritz-carlton-residences-jeddah.jpg",
     "title": "The Ritz-Carlton Residences Jeddah",
     "location": "Jeddah, Saudi Arabia",
@@ -7924,7 +8076,7 @@
     ]
   },
   {
-    "id": 174,
+    "id": 178,
     "image": "/images/the-ritz-carlton-residences-istanbul.jpg",
     "title": "The Ritz-Carlton Residences Istanbul",
     "location": "Istanbul, Turkey",
@@ -7962,7 +8114,7 @@
     ]
   },
   {
-    "id": 175,
+    "id": 179,
     "image": "/images/the-ritz-carlton-residences-moscow.jpg",
     "title": "The Ritz-Carlton Residences Moscow",
     "location": "Moscow, Russia",
@@ -8015,7 +8167,7 @@
     ]
   },
   {
-    "id": 176,
+    "id": 180,
     "image": "/images/the-ritz-carlton-residences-berlin.jpg",
     "title": "The Ritz-Carlton Residences Berlin",
     "location": "Berlin, Germany",
@@ -8063,7 +8215,7 @@
     ]
   },
   {
-    "id": 177,
+    "id": 181,
     "image": "/images/the-ritz-carlton-residences-vienna.jpg",
     "title": "The Ritz-Carlton Residences Vienna",
     "location": "Vienna, Austria",
@@ -8106,7 +8258,7 @@
     ]
   },
   {
-    "id": 178,
+    "id": 182,
     "image": "/images/the-ritz-carlton-residences-barcelona.jpg",
     "title": "The Ritz-Carlton Residences Barcelona",
     "location": "Barcelona, Spain",
@@ -8144,7 +8296,7 @@
     ]
   },
   {
-    "id": 179,
+    "id": 183,
     "image": "/images/the-ritz-carlton-residences-madrid.jpg",
     "title": "The Ritz-Carlton Residences Madrid",
     "location": "Madrid, Spain",
@@ -8192,7 +8344,7 @@
     ]
   },
   {
-    "id": 180,
+    "id": 184,
     "image": "/images/hotel1.jpeg",
     "title": "Pineview Chalet",
     "location": "Lake Tahoe, USA",
@@ -8230,7 +8382,7 @@
     ]
   },
   {
-    "id": 181,
+    "id": 185,
     "image": "/images/hotel2.jpeg",
     "title": "Seaside Retreat",
     "location": "Malibu, USA",
@@ -8268,7 +8420,7 @@
     ]
   },
   {
-    "id": 182,
+    "id": 186,
     "image": "/images/hotel3.png",
     "title": "Hudson Loft",
     "location": "New York, USA",
@@ -8306,7 +8458,7 @@
     ]
   },
   {
-    "id": 183,
+    "id": 187,
     "image": "/images/hotel4.png",
     "title": "Alpine Escape",
     "location": "Aspen, USA",
@@ -8344,7 +8496,7 @@
     ]
   },
   {
-    "id": 184,
+    "id": 188,
     "image": "/images/hotel5.png",
     "title": "Desert Oasis",
     "location": "Sedona, USA",
@@ -8382,7 +8534,7 @@
     ]
   },
   {
-    "id": 185,
+    "id": 189,
     "image": "/images/hotel6.png",
     "title": "Canal House",
     "location": "Amsterdam, Netherlands",
@@ -8420,7 +8572,7 @@
     ]
   },
   {
-    "id": 186,
+    "id": 190,
     "image": "/images/hotel7.jpg",
     "title": "Summit Lodge",
     "location": "Banff, Canada",
@@ -8458,7 +8610,7 @@
     ]
   },
   {
-    "id": 187,
+    "id": 191,
     "image": "/images/hotel8.jpg",
     "title": "Harbour Suites",
     "location": "Sydney, Australia",
@@ -8496,7 +8648,7 @@
     ]
   },
   {
-    "id": 188,
+    "id": 192,
     "image": "/images/hotel9.jpg",
     "title": "Old Town Residence",
     "location": "Prague, Czech Republic",
@@ -8534,7 +8686,7 @@
     ]
   },
   {
-    "id": 189,
+    "id": 193,
     "image": "/images/hotel10.jpg",
     "title": "Riverfront Hotel",
     "location": "Portland, USA",
@@ -8572,7 +8724,7 @@
     ]
   },
   {
-    "id": 190,
+    "id": 194,
     "image": "/images/hotel11.png",
     "title": "Tropical Bungalow",
     "location": "Bali, Indonesia",
@@ -8610,7 +8762,7 @@
     ]
   },
   {
-    "id": 191,
+    "id": 195,
     "image": "/images/hotel12.png",
     "title": "Nordic Cabin",
     "location": "Reykjavik, Iceland",
@@ -8648,7 +8800,7 @@
     ]
   },
   {
-    "id": 192,
+    "id": 196,
     "image": "/images/hotel13.jpg",
     "title": "Vineyard Villa",
     "location": "Tuscany, Italy",
@@ -8686,7 +8838,7 @@
     ]
   },
   {
-    "id": 193,
+    "id": 197,
     "image": "/images/hotel14.png",
     "title": "Beachfront Haven",
     "location": "Algarve, Portugal",
@@ -8724,7 +8876,7 @@
     ]
   },
   {
-    "id": 194,
+    "id": 198,
     "image": "/images/hotel15.jpg",
     "title": "City Lights Hotel",
     "location": "Tokyo, Japan",
@@ -8762,7 +8914,7 @@
     ]
   },
   {
-    "id": 195,
+    "id": 199,
     "image": "/images/hotel20.jpg",
     "title": "Historic Boutique",
     "location": "Charleston, USA",
@@ -8800,7 +8952,7 @@
     ]
   },
   {
-    "id": 196,
+    "id": 200,
     "image": "/images/the-ritz-carlton-residences-rio-de-janeiro.jpg",
     "title": "The Ritz-Carlton Residences Rio de Janeiro",
     "location": "Rio de Janeiro, Brazil",
@@ -8838,7 +8990,7 @@
     ]
   },
   {
-    "id": 197,
+    "id": 201,
     "image": "/images/the-ritz-carlton-residences-buenos-aires.jpg",
     "title": "The Ritz-Carlton Residences Buenos Aires",
     "location": "Buenos Aires, Argentina",
@@ -8886,7 +9038,7 @@
     ]
   },
   {
-    "id": 198,
+    "id": 202,
     "image": "/images/the-ritz-carlton-residences-santiago.jpg",
     "title": "The Ritz-Carlton Residences Santiago",
     "location": "Santiago, Chile",
@@ -8929,7 +9081,7 @@
     ]
   },
   {
-    "id": 199,
+    "id": 203,
     "image": "/images/the-ritz-carlton-residences-lima.jpg",
     "title": "The Ritz-Carlton Residences Lima",
     "location": "Lima, Peru",
@@ -8967,7 +9119,7 @@
     ]
   },
   {
-    "id": 200,
+    "id": 204,
     "image": "/images/the-ritz-carlton-residences-bogota.jpg",
     "title": "The Ritz-Carlton Residences Bogotá",
     "location": "Bogotá, Colombia",

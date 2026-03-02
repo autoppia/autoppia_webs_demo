@@ -1,1399 +1,1539 @@
 [
   {
-    "id": "MAT-0001",
+    "id": "MAT-001",
+    "name": "Corporate Merger",
+    "status": "Active",
+    "client": "TechCorp Industries",
+    "updated": "Today"
+  },
+  {
+    "id": "MAT-002",
+    "name": "IP Portfolio Review",
+    "status": "Active",
+    "client": "TechCorp Industries",
+    "updated": "Yesterday"
+  },
+  {
+    "id": "MAT-003",
+    "name": "Contract Negotiation",
+    "status": "Active",
+    "client": "TechCorp Industries",
+    "updated": "3d ago"
+  },
+  {
+    "id": "MAT-004",
+    "name": "Regulatory Compliance",
+    "status": "Active",
+    "client": "Global Finance Ltd",
+    "updated": "2d ago"
+  },
+  {
+    "id": "MAT-005",
+    "name": "Employment Agreement",
+    "status": "Active",
+    "client": "Global Finance Ltd",
+    "updated": "1w ago"
+  },
+  {
+    "id": "MAT-006",
+    "name": "Estate Planning",
+    "status": "Active",
+    "client": "Smith & Associates",
+    "updated": "Today"
+  },
+  {
+    "id": "MAT-007",
+    "name": "Real Estate Transaction",
+    "status": "Active",
+    "client": "Smith & Associates",
+    "updated": "1d ago"
+  },
+  {
+    "id": "MAT-008",
+    "name": "Litigation Defense",
+    "status": "Active",
+    "client": "Smith & Associates",
+    "updated": "2d ago"
+  },
+  {
+    "id": "MAT-009",
+    "name": "Trademark Application",
+    "status": "Active",
+    "client": "Smith & Associates",
+    "updated": "1w ago"
+  },
+  {
+    "id": "MAT-010",
+    "name": "Partnership Agreement",
+    "status": "Active",
+    "client": "Smith & Associates",
+    "updated": "3d ago"
+  },
+  {
+    "id": "MAT-011",
+    "name": "Labor Dispute Resolution",
+    "status": "Active",
+    "client": "Johnson Manufacturing",
+    "updated": "4d ago"
+  },
+  {
+    "id": "MAT-012",
+    "name": "Environmental Compliance",
+    "status": "Active",
+    "client": "Green Energy Solutions",
+    "updated": "Today"
+  },
+  {
+    "id": "MAT-013",
+    "name": "Patent Filing",
+    "status": "Active",
+    "client": "Green Energy Solutions",
+    "updated": "1d ago"
+  },
+  {
+    "id": "MAT-014",
+    "name": "Joint Venture Agreement",
+    "status": "Active",
+    "client": "Green Energy Solutions",
+    "updated": "2d ago"
+  },
+  {
+    "id": "MAT-015",
+    "name": "Licensing Agreement",
+    "status": "Active",
+    "client": "Green Energy Solutions",
+    "updated": "1w ago"
+  },
+  {
+    "id": "MAT-016",
+    "name": "Property Acquisition",
+    "status": "Active",
+    "client": "Williams Real Estate",
+    "updated": "Today"
+  },
+  {
+    "id": "MAT-017",
+    "name": "Lease Agreement Review",
+    "status": "Active",
+    "client": "Williams Real Estate",
+    "updated": "3d ago"
+  },
+  {
+    "id": "MAT-018",
+    "name": "FDA Approval Process",
+    "status": "On Hold",
+    "client": "Brown Pharmaceuticals",
+    "updated": "2w ago"
+  },
+  {
+    "id": "MAT-019",
+    "name": "Data Privacy Compliance",
+    "status": "Active",
+    "client": "Davis Technology Group",
+    "updated": "1d ago"
+  },
+  {
+    "id": "MAT-020",
+    "name": "Software License Agreement",
+    "status": "Active",
+    "client": "Davis Technology Group",
+    "updated": "5d ago"
+  },
+  {
+    "id": "MAT-021",
     "name": "Real Estate #330",
     "status": "Pending",
     "client": "Megan Clark",
     "updated": "2w ago"
   },
   {
-    "id": "MAT-0002",
+    "id": "MAT-022",
     "name": "Joint Venture",
     "status": "Pending",
     "client": "Capital Holdings",
     "updated": "Last week"
   },
   {
-    "id": "MAT-0003",
+    "id": "MAT-023",
     "name": "Family Law",
     "status": "Archived",
     "client": "Horizon Business",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0004",
+    "id": "MAT-024",
     "name": "Real Estate",
     "status": "Active",
     "client": "Atlantic Group",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0005",
+    "id": "MAT-025",
     "name": "Litigation Support",
     "status": "Pending",
     "client": "Tech Solutions Inc.",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0006",
+    "id": "MAT-026",
     "name": "Tax Planning",
     "status": "Pending",
     "client": "Premier Advisors",
     "updated": "Yesterday"
   },
   {
-    "id": "MAT-0007",
+    "id": "MAT-027",
     "name": "Criminal Defense",
     "status": "Pending",
     "client": "Nathan Lopez",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0008",
+    "id": "MAT-028",
     "name": "Antitrust Review #604",
     "status": "On Hold",
     "client": "Apex Consulting",
     "updated": "3d ago"
   },
   {
-    "id": "MAT-0009",
+    "id": "MAT-029",
     "name": "Vendor Contract #326",
     "status": "Pending",
     "client": "United Legal",
     "updated": "5d ago"
   },
   {
-    "id": "MAT-0010",
+    "id": "MAT-030",
     "name": "Joint Patent Filing",
     "status": "On Hold",
     "client": "Titan Holdings",
     "updated": "Today"
   },
   {
-    "id": "MAT-0011",
+    "id": "MAT-031",
     "name": "Compliance Review #343",
     "status": "On Hold",
     "client": "Global Ventures LLC",
     "updated": "3d ago"
   },
   {
-    "id": "MAT-0012",
+    "id": "MAT-032",
     "name": "Trademark Registration",
     "status": "Archived",
     "client": "Commercial Legal",
     "updated": "1d ago"
   },
   {
-    "id": "MAT-0013",
+    "id": "MAT-033",
     "name": "Joint Venture",
     "status": "Archived",
     "client": "Andrew Moore",
     "updated": "6d ago"
   },
   {
-    "id": "MAT-0014",
+    "id": "MAT-034",
     "name": "Family Law",
     "status": "Archived",
     "client": "Premier Legal Group",
     "updated": "1mo ago"
   },
   {
-    "id": "MAT-0015",
+    "id": "MAT-035",
     "name": "Compliance Review #734",
     "status": "Pending",
     "client": "Robert Anderson",
     "updated": "This week"
   },
   {
-    "id": "MAT-0016",
+    "id": "MAT-036",
     "name": "Supplier Dispute",
     "status": "Pending",
     "client": "Pacific Associates",
     "updated": "3d ago"
   },
   {
-    "id": "MAT-0017",
+    "id": "MAT-037",
     "name": "Antitrust Review #729",
     "status": "Pending",
     "client": "Meridian Law Firm",
     "updated": "2 days ago"
   },
   {
-    "id": "MAT-0018",
+    "id": "MAT-038",
     "name": "HR Law Training",
     "status": "Archived",
     "client": "Diamond Consulting",
     "updated": "Today"
   },
   {
-    "id": "MAT-0019",
+    "id": "MAT-039",
     "name": "Contract Review",
     "status": "Pending",
     "client": "Summit Enterprises",
     "updated": "This week"
   },
   {
-    "id": "MAT-0020",
+    "id": "MAT-040",
     "name": "Tax Planning",
     "status": "Pending",
     "client": "Michelle Wright",
     "updated": "5d ago"
   },
   {
-    "id": "MAT-0021",
+    "id": "MAT-041",
     "name": "Regulatory Approval",
     "status": "Active",
     "client": "Commercial Legal",
     "updated": "2w ago"
   },
   {
-    "id": "MAT-0022",
+    "id": "MAT-042",
     "name": "Litigation Support",
     "status": "Active",
     "client": "Corporate Counsel",
     "updated": "2d ago"
   },
   {
-    "id": "MAT-0023",
+    "id": "MAT-043",
     "name": "Trademark Registration #432",
     "status": "Archived",
     "client": "Hannah Mitchell",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0024",
+    "id": "MAT-044",
     "name": "Real Estate",
     "status": "Archived",
     "client": "United Legal",
     "updated": "3d ago"
   },
   {
-    "id": "MAT-0025",
+    "id": "MAT-045",
     "name": "Joint Patent Filing",
     "status": "Archived",
     "client": "Nathan Lopez",
     "updated": "4mo ago"
   },
   {
-    "id": "MAT-0026",
+    "id": "MAT-046",
     "name": "Criminal Defense #148",
     "status": "Active",
     "client": "Michelle Wright",
     "updated": "2d ago"
   },
   {
-    "id": "MAT-0027",
+    "id": "MAT-047",
     "name": "Trusts and Estates #760",
     "status": "On Hold",
     "client": "Innovation Labs",
     "updated": "Today"
   },
   {
-    "id": "MAT-0028",
+    "id": "MAT-048",
     "name": "Contract Review",
     "status": "Active",
     "client": "Elite Partners",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0029",
+    "id": "MAT-049",
     "name": "Compliance Review",
     "status": "Pending",
     "client": "Rachel Walker",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0030",
+    "id": "MAT-050",
     "name": "M&A Advice",
     "status": "Archived",
     "client": "Nicole Miller",
     "updated": "2w ago"
   },
   {
-    "id": "MAT-0031",
+    "id": "MAT-051",
     "name": "Startup Advisory",
     "status": "Active",
     "client": "Vertex Legal Services",
     "updated": "6d ago"
   },
   {
-    "id": "MAT-0032",
+    "id": "MAT-052",
     "name": "Asset Purchase",
     "status": "On Hold",
     "client": "Brittany Hill",
     "updated": "2d ago"
   },
   {
-    "id": "MAT-0033",
+    "id": "MAT-053",
     "name": "Estate Planning",
     "status": "Active",
     "client": "Jessica Taylor",
     "updated": "Yesterday"
   },
   {
-    "id": "MAT-0034",
+    "id": "MAT-054",
     "name": "Vendor Contract #769",
     "status": "Active",
     "client": "James Wilson",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0035",
+    "id": "MAT-055",
     "name": "Corporate Law",
     "status": "Pending",
     "client": "Brandon Nelson",
     "updated": "5d ago"
   },
   {
-    "id": "MAT-0036",
+    "id": "MAT-056",
     "name": "Antitrust Review #179",
     "status": "On Hold",
     "client": "Global Ventures LLC",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0037",
+    "id": "MAT-057",
     "name": "Joint Venture #887",
     "status": "Active",
     "client": "Brittany Hill",
     "updated": "6d ago"
   },
   {
-    "id": "MAT-0038",
+    "id": "MAT-058",
     "name": "Estate Planning",
     "status": "Pending",
     "client": "Daniel Garcia",
     "updated": "3w ago"
   },
   {
-    "id": "MAT-0039",
+    "id": "MAT-059",
     "name": "Regulatory Approval #301",
     "status": "On Hold",
     "client": "Kevin Lewis",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0040",
+    "id": "MAT-060",
     "name": "Licensing Agreement",
     "status": "Archived",
     "client": "Nicole Miller",
     "updated": "Yesterday"
   },
   {
-    "id": "MAT-0041",
+    "id": "MAT-061",
     "name": "Environmental Compliance",
     "status": "Active",
     "client": "Commercial Legal",
     "updated": "2w ago"
   },
   {
-    "id": "MAT-0042",
+    "id": "MAT-062",
     "name": "Compliance Review #855",
     "status": "Pending",
     "client": "Diamond Consulting",
     "updated": "1d ago"
   },
   {
-    "id": "MAT-0043",
+    "id": "MAT-063",
     "name": "HR Law Training",
     "status": "Active",
     "client": "Business Law Associates",
     "updated": "Yesterday"
   },
   {
-    "id": "MAT-0044",
+    "id": "MAT-064",
     "name": "Data Privacy #284",
     "status": "Pending",
     "client": "Stephanie Young",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0045",
+    "id": "MAT-065",
     "name": "Estate Planning",
     "status": "Active",
     "client": "Titan Holdings",
     "updated": "Today"
   },
   {
-    "id": "MAT-0046",
+    "id": "MAT-066",
     "name": "Vendor Contract",
     "status": "Pending",
     "client": "Professional Services Group",
     "updated": "Last week"
   },
   {
-    "id": "MAT-0047",
+    "id": "MAT-067",
     "name": "Data Privacy",
     "status": "Archived",
     "client": "Ryan Harris",
     "updated": "Today"
   },
   {
-    "id": "MAT-0048",
+    "id": "MAT-068",
     "name": "Family Law",
     "status": "Pending",
     "client": "Lauren Jackson",
     "updated": "4mo ago"
   },
   {
-    "id": "MAT-0049",
+    "id": "MAT-069",
     "name": "Compliance Review",
     "status": "Active",
     "client": "Atlantic Group",
     "updated": "2w ago"
   },
   {
-    "id": "MAT-0050",
+    "id": "MAT-070",
     "name": "Family Law",
     "status": "Pending",
     "client": "Corporate Counsel",
     "updated": "2 days ago"
   },
   {
-    "id": "MAT-0051",
+    "id": "MAT-071",
     "name": "Criminal Defense",
     "status": "Archived",
     "client": "Stephanie Young",
     "updated": "2d ago"
   },
   {
-    "id": "MAT-0052",
+    "id": "MAT-072",
     "name": "HR Law Training",
     "status": "Archived",
     "client": "Lauren Jackson",
     "updated": "Last week"
   },
   {
-    "id": "MAT-0053",
+    "id": "MAT-073",
     "name": "Family Law",
     "status": "On Hold",
     "client": "Jonathan King",
     "updated": "5d ago"
   },
   {
-    "id": "MAT-0054",
+    "id": "MAT-074",
     "name": "Litigation Support",
     "status": "On Hold",
     "client": "Hannah Mitchell",
     "updated": "Yesterday"
   },
   {
-    "id": "MAT-0055",
+    "id": "MAT-075",
     "name": "Corporate Formation",
     "status": "On Hold",
     "client": "Jennifer Martinez",
     "updated": "5d ago"
   },
   {
-    "id": "MAT-0056",
+    "id": "MAT-076",
     "name": "Antitrust Review",
     "status": "Archived",
     "client": "Christopher Lee",
     "updated": "5d ago"
   },
   {
-    "id": "MAT-0057",
+    "id": "MAT-077",
     "name": "IP Filing",
     "status": "Pending",
     "client": "Quantum Solutions",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0058",
+    "id": "MAT-078",
     "name": "Engineering IP Audit",
     "status": "On Hold",
     "client": "James Wilson",
     "updated": "5d ago"
   },
   {
-    "id": "MAT-0059",
+    "id": "MAT-079",
     "name": "HR Law Training",
     "status": "Pending",
     "client": "Silverstone Legal",
     "updated": "Yesterday"
   },
   {
-    "id": "MAT-0060",
+    "id": "MAT-080",
     "name": "Supplier Dispute #299",
     "status": "Archived",
     "client": "Samantha Adams",
     "updated": "2 days ago"
   },
   {
-    "id": "MAT-0061",
+    "id": "MAT-081",
     "name": "Estate Planning",
     "status": "Pending",
     "client": "Commercial Legal",
     "updated": "This week"
   },
   {
-    "id": "MAT-0062",
+    "id": "MAT-082",
     "name": "Securities Law",
     "status": "Archived",
     "client": "Amanda Davis",
     "updated": "4mo ago"
   },
   {
-    "id": "MAT-0063",
+    "id": "MAT-083",
     "name": "Litigation Support",
     "status": "Archived",
     "client": "Hannah Mitchell",
     "updated": "2d ago"
   },
   {
-    "id": "MAT-0064",
+    "id": "MAT-084",
     "name": "Franchise Agreement #397",
     "status": "Pending",
     "client": "Hannah Mitchell",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0065",
+    "id": "MAT-085",
     "name": "Securities Law",
     "status": "Pending",
     "client": "Premier Legal Group",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0066",
+    "id": "MAT-086",
     "name": "Contract Review",
     "status": "Pending",
     "client": "Tyler Carter",
     "updated": "Today"
   },
   {
-    "id": "MAT-0067",
+    "id": "MAT-087",
     "name": "Employment Law",
     "status": "On Hold",
     "client": "James Wilson",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0068",
+    "id": "MAT-088",
     "name": "Contract Review",
     "status": "Pending",
     "client": "Silverstone Legal",
     "updated": "Today"
   },
   {
-    "id": "MAT-0069",
+    "id": "MAT-089",
     "name": "Environmental Compliance",
     "status": "Archived",
     "client": "Diamond Consulting",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0070",
+    "id": "MAT-090",
     "name": "Estate Planning #917",
     "status": "Archived",
     "client": "Commercial Legal",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0071",
+    "id": "MAT-091",
     "name": "Franchise Agreement #792",
     "status": "On Hold",
     "client": "Sarah Johnson",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0072",
+    "id": "MAT-092",
     "name": "Compliance Review",
     "status": "Archived",
     "client": "Jessica Taylor",
     "updated": "1mo ago"
   },
   {
-    "id": "MAT-0073",
+    "id": "MAT-093",
     "name": "Joint Venture",
     "status": "On Hold",
     "client": "Platinum Ventures",
     "updated": "2 days ago"
   },
   {
-    "id": "MAT-0074",
+    "id": "MAT-094",
     "name": "Joint Venture #457",
     "status": "Archived",
     "client": "Pacific Associates",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0075",
+    "id": "MAT-095",
     "name": "M&A Advice #913",
     "status": "On Hold",
     "client": "Phoenix Advisors",
     "updated": "2 days ago"
   },
   {
-    "id": "MAT-0076",
+    "id": "MAT-096",
     "name": "Joint Venture #437",
     "status": "Active",
     "client": "Tech Solutions Inc.",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0077",
+    "id": "MAT-097",
     "name": "Licensing Agreement",
     "status": "On Hold",
     "client": "Nathan Lopez",
     "updated": "2 days ago"
   },
   {
-    "id": "MAT-0078",
+    "id": "MAT-098",
     "name": "Trusts and Estates #292",
     "status": "Pending",
     "client": "Katherine Baker",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0079",
+    "id": "MAT-099",
     "name": "M&A Advice",
     "status": "Active",
     "client": "Innovation Labs",
     "updated": "2w ago"
   },
   {
-    "id": "MAT-0080",
+    "id": "MAT-100",
     "name": "Family Law",
     "status": "Pending",
     "client": "Success Ventures",
     "updated": "2 days ago"
   },
   {
-    "id": "MAT-0081",
+    "id": "MAT-101",
     "name": "Vendor Contract",
     "status": "Active",
     "client": "Crest Industries",
     "updated": "6d ago"
   },
   {
-    "id": "MAT-0082",
+    "id": "MAT-102",
     "name": "Securities Law #774",
     "status": "Pending",
     "client": "Katherine Baker",
     "updated": "2 days ago"
   },
   {
-    "id": "MAT-0083",
+    "id": "MAT-103",
     "name": "Estate Planning #331",
     "status": "Active",
     "client": "Quantum Solutions",
     "updated": "3d ago"
   },
   {
-    "id": "MAT-0084",
+    "id": "MAT-104",
     "name": "IP Filing",
     "status": "Pending",
     "client": "Brandon Nelson",
     "updated": "1mo ago"
   },
   {
-    "id": "MAT-0085",
+    "id": "MAT-105",
     "name": "Trusts and Estates",
     "status": "Active",
     "client": "Justin Green",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0086",
+    "id": "MAT-106",
     "name": "Vendor Contract",
     "status": "Pending",
     "client": "Lauren Jackson",
     "updated": "2w ago"
   },
   {
-    "id": "MAT-0087",
+    "id": "MAT-107",
     "name": "Compliance Review",
     "status": "On Hold",
     "client": "Success Ventures",
     "updated": "4mo ago"
   },
   {
-    "id": "MAT-0088",
+    "id": "MAT-108",
     "name": "Corporate Formation",
     "status": "Archived",
     "client": "Sarah Johnson",
     "updated": "5d ago"
   },
   {
-    "id": "MAT-0089",
+    "id": "MAT-109",
     "name": "Trusts and Estates",
     "status": "On Hold",
     "client": "Premier Advisors",
     "updated": "3w ago"
   },
   {
-    "id": "MAT-0090",
+    "id": "MAT-110",
     "name": "Corporate Formation #154",
     "status": "Archived",
     "client": "Michelle Wright",
     "updated": "5d ago"
   },
   {
-    "id": "MAT-0091",
+    "id": "MAT-111",
     "name": "Regulatory Approval",
     "status": "Active",
     "client": "Michelle Wright",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0092",
+    "id": "MAT-112",
     "name": "Supplier Dispute #712",
     "status": "Active",
     "client": "David Thompson",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0093",
+    "id": "MAT-113",
     "name": "Environmental Compliance",
     "status": "Pending",
     "client": "Enterprise Solutions",
     "updated": "4mo ago"
   },
   {
-    "id": "MAT-0094",
+    "id": "MAT-114",
     "name": "Joint Venture",
     "status": "Active",
     "client": "Continental Services",
     "updated": "This week"
   },
   {
-    "id": "MAT-0095",
+    "id": "MAT-115",
     "name": "Vendor Contract",
     "status": "On Hold",
     "client": "Phoenix Advisors",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0096",
+    "id": "MAT-116",
     "name": "Estate Planning",
     "status": "Pending",
     "client": "Katherine Baker",
     "updated": "Last week"
   },
   {
-    "id": "MAT-0097",
+    "id": "MAT-117",
     "name": "Trusts and Estates #230",
     "status": "Archived",
     "client": "James Wilson",
     "updated": "2d ago"
   },
   {
-    "id": "MAT-0098",
+    "id": "MAT-118",
     "name": "Antitrust Review",
     "status": "Active",
     "client": "Platinum Ventures",
     "updated": "Last week"
   },
   {
-    "id": "MAT-0099",
+    "id": "MAT-119",
     "name": "Real Estate",
     "status": "Pending",
     "client": "Ashley White",
     "updated": "5d ago"
   },
   {
-    "id": "MAT-0100",
+    "id": "MAT-120",
     "name": "Asset Purchase #672",
     "status": "On Hold",
     "client": "Horizon Business",
     "updated": "Last week"
   },
   {
-    "id": "MAT-0101",
+    "id": "MAT-121",
     "name": "Joint Venture",
     "status": "On Hold",
     "client": "Stephanie Young",
     "updated": "1d ago"
   },
   {
-    "id": "MAT-0102",
+    "id": "MAT-122",
     "name": "Joint Patent Filing",
     "status": "Active",
     "client": "Fortune Partners",
     "updated": "3d ago"
   },
   {
-    "id": "MAT-0103",
+    "id": "MAT-123",
     "name": "Engineering IP Audit",
     "status": "Active",
     "client": "David Thompson",
     "updated": "1mo ago"
   },
   {
-    "id": "MAT-0104",
+    "id": "MAT-124",
     "name": "Franchise Agreement #232",
     "status": "Archived",
     "client": "Summit Enterprises",
     "updated": "2 days ago"
   },
   {
-    "id": "MAT-0105",
+    "id": "MAT-125",
     "name": "Regulatory Approval",
     "status": "Archived",
     "client": "Samantha Adams",
     "updated": "Today"
   },
   {
-    "id": "MAT-0106",
+    "id": "MAT-126",
     "name": "Trademark Registration #436",
     "status": "Active",
     "client": "Sarah Johnson",
     "updated": "3d ago"
   },
   {
-    "id": "MAT-0107",
+    "id": "MAT-127",
     "name": "Estate Planning",
     "status": "On Hold",
     "client": "Ryan Harris",
     "updated": "2 days ago"
   },
   {
-    "id": "MAT-0108",
+    "id": "MAT-128",
     "name": "Real Estate #393",
     "status": "Archived",
     "client": "Fortune Partners",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0109",
+    "id": "MAT-129",
     "name": "Licensing Agreement #632",
     "status": "Pending",
     "client": "Phoenix Advisors",
     "updated": "5d ago"
   },
   {
-    "id": "MAT-0110",
+    "id": "MAT-130",
     "name": "Litigation Support",
     "status": "Active",
     "client": "Diamond Consulting",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0111",
+    "id": "MAT-131",
     "name": "Engineering IP Audit",
     "status": "Pending",
     "client": "Brittany Hill",
     "updated": "2w ago"
   },
   {
-    "id": "MAT-0112",
+    "id": "MAT-132",
     "name": "Corporate Formation",
     "status": "Pending",
     "client": "Andrew Moore",
     "updated": "Last week"
   },
   {
-    "id": "MAT-0113",
+    "id": "MAT-133",
     "name": "Trusts and Estates",
     "status": "Active",
     "client": "Samantha Adams",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0114",
+    "id": "MAT-134",
     "name": "Trusts and Estates",
     "status": "Archived",
     "client": "Atlantic Group",
     "updated": "3w ago"
   },
   {
-    "id": "MAT-0115",
+    "id": "MAT-135",
     "name": "Family Law #150",
     "status": "Pending",
     "client": "Brittany Hill",
     "updated": "1d ago"
   },
   {
-    "id": "MAT-0116",
+    "id": "MAT-136",
     "name": "Securities Law",
     "status": "On Hold",
     "client": "Strategic Partners",
     "updated": "3mo ago"
   },
   {
-    "id": "MAT-0117",
+    "id": "MAT-137",
     "name": "Franchise Agreement #847",
     "status": "On Hold",
     "client": "Jessica Taylor",
     "updated": "6d ago"
   },
   {
-    "id": "MAT-0118",
+    "id": "MAT-138",
     "name": "Criminal Defense",
     "status": "Pending",
     "client": "Golden Gate Law",
     "updated": "1mo ago"
   },
   {
-    "id": "MAT-0119",
+    "id": "MAT-139",
     "name": "Family Law #264",
     "status": "On Hold",
     "client": "Hannah Mitchell",
     "updated": "2w ago"
   },
   {
-    "id": "MAT-0120",
+    "id": "MAT-140",
     "name": "IP Filing",
     "status": "Active",
     "client": "Silverstone Legal",
     "updated": "2d ago"
   },
   {
-    "id": "MAT-0121",
+    "id": "MAT-141",
     "name": "Antitrust Review",
     "status": "Archived",
     "client": "Andrew Moore",
     "updated": "This week"
   },
   {
-    "id": "MAT-0122",
+    "id": "MAT-142",
     "name": "Criminal Defense",
     "status": "Pending",
     "client": "Samantha Adams",
     "updated": "1d ago"
   },
   {
-    "id": "MAT-0123",
+    "id": "MAT-143",
     "name": "Tax Planning",
     "status": "Archived",
     "client": "Executive Solutions",
     "updated": "3w ago"
   },
   {
-    "id": "MAT-0124",
+    "id": "MAT-144",
     "name": "Environmental Compliance",
     "status": "Active",
     "client": "Robert Anderson",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0125",
+    "id": "MAT-145",
     "name": "Antitrust Review",
     "status": "Pending",
     "client": "Enterprise Solutions",
     "updated": "2d ago"
   },
   {
-    "id": "MAT-0126",
+    "id": "MAT-146",
     "name": "HR Law Training",
     "status": "Active",
     "client": "Stellar Group",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0127",
+    "id": "MAT-147",
     "name": "Corporate Law",
     "status": "Pending",
     "client": "Michael Chen",
     "updated": "2 days ago"
   },
   {
-    "id": "MAT-0128",
+    "id": "MAT-148",
     "name": "Securities Law #843",
     "status": "Active",
     "client": "Business Law Associates",
     "updated": "1d ago"
   },
   {
-    "id": "MAT-0129",
+    "id": "MAT-149",
     "name": "Family Law",
     "status": "Active",
     "client": "Phoenix Advisors",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0130",
+    "id": "MAT-150",
     "name": "Joint Venture",
     "status": "Pending",
     "client": "Amanda Davis",
     "updated": "This week"
   },
   {
-    "id": "MAT-0131",
+    "id": "MAT-151",
     "name": "Data Privacy #423",
     "status": "Active",
     "client": "Ashley White",
     "updated": "This week"
   },
   {
-    "id": "MAT-0132",
+    "id": "MAT-152",
     "name": "Estate Planning",
     "status": "On Hold",
     "client": "Justin Green",
     "updated": "3w ago"
   },
   {
-    "id": "MAT-0133",
+    "id": "MAT-153",
     "name": "Contract Review",
     "status": "Pending",
     "client": "Golden Gate Law",
     "updated": "1mo ago"
   },
   {
-    "id": "MAT-0134",
+    "id": "MAT-154",
     "name": "Real Estate",
     "status": "Active",
     "client": "Justin Green",
     "updated": "This week"
   },
   {
-    "id": "MAT-0135",
+    "id": "MAT-155",
     "name": "Asset Purchase #678",
     "status": "Pending",
     "client": "Michelle Wright",
     "updated": "Today"
   },
   {
-    "id": "MAT-0136",
+    "id": "MAT-156",
     "name": "Antitrust Review",
     "status": "Archived",
     "client": "Jonathan King",
     "updated": "2d ago"
   },
   {
-    "id": "MAT-0137",
+    "id": "MAT-157",
     "name": "M&A Advice #670",
     "status": "Archived",
     "client": "Robert Anderson",
     "updated": "6d ago"
   },
   {
-    "id": "MAT-0138",
+    "id": "MAT-158",
     "name": "Corporate Formation",
     "status": "Active",
     "client": "Executive Solutions",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0139",
+    "id": "MAT-159",
     "name": "Corporate Law",
     "status": "On Hold",
     "client": "Lauren Jackson",
     "updated": "1d ago"
   },
   {
-    "id": "MAT-0140",
+    "id": "MAT-160",
     "name": "Compliance Review",
     "status": "Archived",
     "client": "Justin Green",
     "updated": "3w ago"
   },
   {
-    "id": "MAT-0141",
+    "id": "MAT-161",
     "name": "Criminal Defense #242",
     "status": "On Hold",
     "client": "Platinum Ventures",
     "updated": "Today"
   },
   {
-    "id": "MAT-0142",
+    "id": "MAT-162",
     "name": "Criminal Defense",
     "status": "Active",
     "client": "Professional Services Group",
     "updated": "3d ago"
   },
   {
-    "id": "MAT-0143",
+    "id": "MAT-163",
     "name": "Joint Patent Filing #473",
     "status": "Archived",
     "client": "Success Ventures",
     "updated": "3mo ago"
   },
   {
-    "id": "MAT-0144",
+    "id": "MAT-164",
     "name": "Family Law",
     "status": "On Hold",
     "client": "Jonathan King",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0145",
+    "id": "MAT-165",
     "name": "Regulatory Approval #782",
     "status": "Archived",
     "client": "Professional Services Group",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0146",
+    "id": "MAT-166",
     "name": "Regulatory Approval",
     "status": "Active",
     "client": "Megan Clark",
     "updated": "4mo ago"
   },
   {
-    "id": "MAT-0147",
+    "id": "MAT-167",
     "name": "Corporate Formation #308",
     "status": "Pending",
     "client": "Jessica Taylor",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0148",
+    "id": "MAT-168",
     "name": "Real Estate",
     "status": "Pending",
     "client": "Christopher Lee",
     "updated": "1d ago"
   },
   {
-    "id": "MAT-0149",
+    "id": "MAT-169",
     "name": "Estate Planning",
     "status": "Archived",
     "client": "Nathan Lopez",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0150",
+    "id": "MAT-170",
     "name": "Contract Review",
     "status": "Pending",
     "client": "Professional Services Group",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0151",
+    "id": "MAT-171",
     "name": "Joint Venture",
     "status": "Active",
     "client": "James Wilson",
     "updated": "Today"
   },
   {
-    "id": "MAT-0152",
+    "id": "MAT-172",
     "name": "Compliance Review",
     "status": "On Hold",
     "client": "Kevin Lewis",
     "updated": "Today"
   },
   {
-    "id": "MAT-0153",
+    "id": "MAT-173",
     "name": "Compliance Review",
     "status": "Active",
     "client": "Matthew Brown",
     "updated": "1mo ago"
   },
   {
-    "id": "MAT-0154",
+    "id": "MAT-174",
     "name": "Family Law #271",
     "status": "Archived",
     "client": "Brittany Hill",
     "updated": "3mo ago"
   },
   {
-    "id": "MAT-0155",
+    "id": "MAT-175",
     "name": "Compliance Review",
     "status": "Archived",
     "client": "Daniel Garcia",
     "updated": "5d ago"
   },
   {
-    "id": "MAT-0156",
+    "id": "MAT-176",
     "name": "Licensing Agreement",
     "status": "Archived",
     "client": "Apex Consulting",
     "updated": "2w ago"
   },
   {
-    "id": "MAT-0157",
+    "id": "MAT-177",
     "name": "Securities Law",
     "status": "Archived",
     "client": "Executive Solutions",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0158",
+    "id": "MAT-178",
     "name": "Litigation Support",
     "status": "Active",
     "client": "Innovation Labs",
     "updated": "Yesterday"
   },
   {
-    "id": "MAT-0159",
+    "id": "MAT-179",
     "name": "Estate Planning #403",
     "status": "Archived",
     "client": "Fortune Partners",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0160",
+    "id": "MAT-180",
     "name": "IP Filing",
     "status": "Pending",
     "client": "Capital Holdings",
     "updated": "1d ago"
   },
   {
-    "id": "MAT-0161",
+    "id": "MAT-181",
     "name": "Real Estate",
     "status": "Active",
     "client": "Robert Anderson",
     "updated": "3mo ago"
   },
   {
-    "id": "MAT-0162",
+    "id": "MAT-182",
     "name": "Supplier Dispute #748",
     "status": "Archived",
     "client": "Emily Rodriguez",
     "updated": "3mo ago"
   },
   {
-    "id": "MAT-0163",
+    "id": "MAT-183",
     "name": "Tax Planning #358",
     "status": "On Hold",
     "client": "Corporate Counsel",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0164",
+    "id": "MAT-184",
     "name": "Vendor Contract #294",
     "status": "Active",
     "client": "Quantum Solutions",
     "updated": "2w ago"
   },
   {
-    "id": "MAT-0165",
+    "id": "MAT-185",
     "name": "Antitrust Review",
     "status": "Pending",
     "client": "Pacific Associates",
     "updated": "2d ago"
   },
   {
-    "id": "MAT-0166",
+    "id": "MAT-186",
     "name": "Supplier Dispute #732",
     "status": "On Hold",
     "client": "Matthew Brown",
     "updated": "3w ago"
   },
   {
-    "id": "MAT-0167",
+    "id": "MAT-187",
     "name": "Criminal Defense",
     "status": "Active",
     "client": "Matthew Brown",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0168",
+    "id": "MAT-188",
     "name": "Vendor Contract",
     "status": "Pending",
     "client": "Platinum Ventures",
     "updated": "This week"
   },
   {
-    "id": "MAT-0169",
+    "id": "MAT-189",
     "name": "Joint Venture",
     "status": "Pending",
     "client": "Sarah Johnson",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0170",
+    "id": "MAT-190",
     "name": "Franchise Agreement",
     "status": "Archived",
     "client": "Michael Chen",
     "updated": "Yesterday"
   },
   {
-    "id": "MAT-0171",
+    "id": "MAT-191",
     "name": "Family Law #672",
     "status": "Archived",
     "client": "Emily Rodriguez",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0172",
+    "id": "MAT-192",
     "name": "Data Privacy",
     "status": "Active",
     "client": "Robert Anderson",
     "updated": "3d ago"
   },
   {
-    "id": "MAT-0173",
+    "id": "MAT-193",
     "name": "Supplier Dispute",
     "status": "Pending",
     "client": "Business Law Associates",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0174",
+    "id": "MAT-194",
     "name": "Licensing Agreement",
     "status": "Archived",
     "client": "Apex Consulting",
     "updated": "Last week"
   },
   {
-    "id": "MAT-0175",
+    "id": "MAT-195",
     "name": "Data Privacy",
     "status": "On Hold",
     "client": "Meridian Law Firm",
     "updated": "2w ago"
   },
   {
-    "id": "MAT-0176",
+    "id": "MAT-196",
     "name": "Joint Patent Filing",
     "status": "Active",
     "client": "Emily Rodriguez",
     "updated": "This week"
   },
   {
-    "id": "MAT-0177",
+    "id": "MAT-197",
     "name": "Criminal Defense",
     "status": "Archived",
     "client": "Sarah Johnson",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0178",
+    "id": "MAT-198",
     "name": "Vendor Contract",
     "status": "On Hold",
     "client": "Capital Holdings",
     "updated": "1mo ago"
   },
   {
-    "id": "MAT-0179",
+    "id": "MAT-199",
     "name": "Employment Law",
     "status": "On Hold",
     "client": "United Legal",
     "updated": "1d ago"
   },
   {
-    "id": "MAT-0180",
+    "id": "MAT-200",
     "name": "Employment Law",
     "status": "Archived",
     "client": "Stephanie Young",
     "updated": "6d ago"
   },
   {
-    "id": "MAT-0181",
+    "id": "MAT-201",
     "name": "Data Privacy",
     "status": "On Hold",
     "client": "Golden Gate Law",
     "updated": "Last week"
   },
   {
-    "id": "MAT-0182",
+    "id": "MAT-202",
     "name": "Engineering IP Audit",
     "status": "Active",
     "client": "Innovation Labs",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0183",
+    "id": "MAT-203",
     "name": "Trusts and Estates",
     "status": "Pending",
     "client": "Jonathan King",
     "updated": "2 days ago"
   },
   {
-    "id": "MAT-0184",
+    "id": "MAT-204",
     "name": "Startup Advisory",
     "status": "Active",
     "client": "Premier Advisors",
     "updated": "4mo ago"
   },
   {
-    "id": "MAT-0185",
+    "id": "MAT-205",
     "name": "Licensing Agreement",
     "status": "Pending",
     "client": "Christopher Lee",
     "updated": "3mo ago"
   },
   {
-    "id": "MAT-0186",
+    "id": "MAT-206",
     "name": "Vendor Contract",
     "status": "Active",
     "client": "James Wilson",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0187",
+    "id": "MAT-207",
     "name": "Employment Law",
     "status": "Archived",
     "client": "Atlantic Group",
     "updated": "Yesterday"
   },
   {
-    "id": "MAT-0188",
+    "id": "MAT-208",
     "name": "Securities Law",
     "status": "Pending",
     "client": "Enterprise Solutions",
     "updated": "Today"
   },
   {
-    "id": "MAT-0189",
+    "id": "MAT-209",
     "name": "Estate Planning #742",
     "status": "On Hold",
     "client": "Capital Holdings",
     "updated": "3mo ago"
   },
   {
-    "id": "MAT-0190",
+    "id": "MAT-210",
     "name": "Corporate Formation",
     "status": "Pending",
     "client": "Corporate Counsel",
     "updated": "1w ago"
   },
   {
-    "id": "MAT-0191",
+    "id": "MAT-211",
     "name": "Licensing Agreement #472",
     "status": "Archived",
     "client": "Megan Clark",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0192",
+    "id": "MAT-212",
     "name": "Estate Planning",
     "status": "Archived",
     "client": "Diamond Consulting",
     "updated": "1mo ago"
   },
   {
-    "id": "MAT-0193",
+    "id": "MAT-213",
     "name": "Environmental Compliance",
     "status": "Archived",
     "client": "Vertex Legal Services",
     "updated": "2w ago"
   },
   {
-    "id": "MAT-0194",
+    "id": "MAT-214",
     "name": "Family Law #210",
     "status": "Archived",
     "client": "Silverstone Legal",
     "updated": "5d ago"
   },
   {
-    "id": "MAT-0195",
+    "id": "MAT-215",
     "name": "Family Law",
     "status": "On Hold",
     "client": "Phoenix Advisors",
     "updated": "2mo ago"
   },
   {
-    "id": "MAT-0196",
+    "id": "MAT-216",
     "name": "Trademark Registration",
     "status": "On Hold",
     "client": "Nathan Lopez",
     "updated": "1mo ago"
   },
   {
-    "id": "MAT-0197",
+    "id": "MAT-217",
     "name": "Corporate Law",
     "status": "On Hold",
     "client": "Jennifer Martinez",
     "updated": "4d ago"
   },
   {
-    "id": "MAT-0198",
+    "id": "MAT-218",
     "name": "Trademark Registration",
     "status": "Pending",
     "client": "Daniel Garcia",
     "updated": "5d ago"
   },
   {
-    "id": "MAT-0199",
+    "id": "MAT-219",
     "name": "Environmental Compliance",
     "status": "Active",
     "client": "James Wilson",
     "updated": "This week"
   },
   {
-    "id": "MAT-0200",
+    "id": "MAT-220",
     "name": "Data Privacy",
     "status": "On Hold",
     "client": "Continental Services",

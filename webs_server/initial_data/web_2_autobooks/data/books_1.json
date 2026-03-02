@@ -3198,5 +3198,277 @@
     ],
     "img": "/media/gallery/9780064471091.webp",
     "trailer_url": "https://www.bookstores.com/books/edition/_/9780064471091?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-201",
+    "name": "The Lord of the Rings",
+    "desc": "An epic high fantasy trilogy following Frodo Baggins and the Fellowship of the Ring as they journey to destroy the One Ring and defeat the Dark Lord Sauron.",
+    "year": 1954,
+    "img": "/media/gallery/9780544003415.webp",
+    "director": "J.R.R. Tolkien",
+    "duration": 1178,
+    "trailer_url": "https://www.bookstores.com/books/the-lord-of-the-rings/9780544003415",
+    "rating": 4.9,
+    "price": 29.99,
+    "genres": [
+      "Fantasy",
+      "Adventure"
+    ]
+  },
+  {
+    "id": "book-202",
+    "name": "Harry Potter and the Sorcerer's Stone",
+    "desc": "An orphaned boy discovers he is a wizard and begins his journey at Hogwarts School of Witchcraft and Wizardry, where he learns about his mysterious past and faces dark forces.",
+    "year": 1997,
+    "img": "/media/gallery/9780590353427.webp",
+    "director": "J.K. Rowling",
+    "duration": 320,
+    "trailer_url": "https://www.bookstores.com/books/harry-potter-and-the-sorcerers-stone/9780590353427",
+    "rating": 4.8,
+    "price": 12.99,
+    "genres": [
+      "Fantasy",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-203",
+    "name": "The Book Thief",
+    "desc": "Set in Nazi Germany, a young girl's relationship with her foster parents, the other residents of their neighborhood, and a Jewish fist-fighter transforms her life.",
+    "year": 2005,
+    "img": "/media/gallery/9780375831003.webp",
+    "director": "Markus Zusak",
+    "duration": 552,
+    "trailer_url": "https://www.bookstores.com/books/the-book-thief/9780375831003",
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Historical Fiction",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-204",
+    "name": "The Kite Runner",
+    "desc": "An epic tale of fathers and sons, friendship and betrayal, that takes us from Afghanistan in the final days of the monarchy to the atrocities of the present.",
+    "year": 2003,
+    "img": "/media/gallery/9781594631931.webp",
+    "director": "Khaled Hosseini",
+    "duration": 371,
+    "trailer_url": "https://www.bookstores.com/books/the-kite-runner/9781594631931",
+    "rating": 4.7,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-205",
+    "name": "The Alchemist",
+    "desc": "A shepherd boy named Santiago travels from his homeland in Spain to the Egyptian desert in search of a treasure buried near the Pyramids, discovering the importance of following one's dreams.",
+    "year": 1988,
+    "img": "/media/gallery/9780061122415.webp",
+    "director": "Paulo Coelho",
+    "duration": 163,
+    "trailer_url": "https://www.bookstores.com/books/the-alchemist/9780061122415",
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Fiction",
+      "Philosophy"
+    ]
+  },
+  {
+    "id": "book-206",
+    "name": "Life of Pi",
+    "desc": "After a shipwreck, a young man named Pi finds himself adrift in the Pacific Ocean on a lifeboat with a Bengal tiger named Richard Parker, exploring themes of survival and faith.",
+    "year": 2001,
+    "img": "/media/gallery/9780156027328.webp",
+    "director": "Yann Martel",
+    "duration": 319,
+    "trailer_url": "https://www.bookstores.com/books/life-of-pi/9780156027328",
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Adventure"
+    ]
+  },
+  {
+    "id": "book-207",
+    "name": "Moby Dick",
+    "desc": "Ishmael's narrative of the obsessive quest of Ahab, captain of the whaler Pequod, for revenge on Moby Dick, the giant white sperm whale that on the ship's previous voyage bit off Ahab's leg.",
+    "year": 1851,
+    "img": "/media/gallery/9780142437247.webp",
+    "director": "Herman Melville",
+    "duration": 585,
+    "trailer_url": "https://www.bookstores.com/books/moby-dick/9780142437247",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Adventure"
+    ]
+  },
+  {
+    "id": "book-208",
+    "name": "The Adventures of Huckleberry Finn",
+    "desc": "A story of a young boy, Huck Finn, and a runaway slave, Jim, as they travel down the Mississippi River on a raft, exploring themes of freedom and moral growth.",
+    "year": 1884,
+    "img": "/media/gallery/9780142437179.webp",
+    "director": "Mark Twain",
+    "duration": 366,
+    "trailer_url": "https://www.bookstores.com/books/the-adventures-of-huckleberry-finn/9780142437179",
+    "rating": 4.7,
+    "price": 10.99,
+    "genres": [
+      "Fiction",
+      "Adventure"
+    ]
+  },
+  {
+    "id": "book-209",
+    "name": "The Adventures of Tom Sawyer",
+    "desc": "The story of a young boy growing up along the Mississippi River, filled with mischief, adventure, and coming-of-age experiences in a small Missouri town.",
+    "year": 1876,
+    "img": "/media/gallery/9780143039563.webp",
+    "director": "Mark Twain",
+    "duration": 274,
+    "trailer_url": "https://www.bookstores.com/books/the-adventures-of-tom-sawyer/9780143039563",
+    "rating": 4.6,
+    "price": 9.99,
+    "genres": [
+      "Fiction",
+      "Adventure"
+    ]
+  },
+  {
+    "id": "book-210",
+    "name": "Little Women",
+    "desc": "The story of four sisters - Meg, Jo, Beth, and Amy March - as they grow from children to women during the American Civil War, navigating love, loss, and personal growth.",
+    "year": 1868,
+    "img": "/media/gallery/9780143106654.webp",
+    "director": "Louisa May Alcott",
+    "duration": 449,
+    "trailer_url": "https://www.bookstores.com/books/little-women/9780143106654",
+    "rating": 4.7,
+    "price": 11.99,
+    "genres": [
+      "Fiction",
+      "Coming of Age"
+    ]
+  },
+  {
+    "id": "book-211",
+    "name": "One Hundred Years of Solitude",
+    "desc": "The multi-generational story of the Buendía family, whose patriarch, José Arcadio Buendía, founds the town of Macondo, a fictional town in Colombia.",
+    "year": 1967,
+    "img": "/media/gallery/9780060883287.webp",
+    "director": "Gabriel García Márquez",
+    "duration": 417,
+    "trailer_url": "https://www.bookstores.com/books/one-hundred-years-of-solitude/9780060883287",
+    "rating": 4.8,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Magical Realism"
+    ]
+  },
+  {
+    "id": "book-212",
+    "name": "The Stranger",
+    "desc": "A philosophical novel about Meursault, an emotionally detached man who commits a senseless murder and faces the absurdity of human existence.",
+    "year": 1942,
+    "img": "/media/gallery/9780679720201.webp",
+    "director": "Albert Camus",
+    "duration": 123,
+    "trailer_url": "https://www.bookstores.com/books/the-stranger/9780679720201",
+    "rating": 4.6,
+    "price": 10.99,
+    "genres": [
+      "Fiction",
+      "Philosophy"
+    ]
+  },
+  {
+    "id": "book-213",
+    "name": "The Metamorphosis",
+    "desc": "A novella about Gregor Samsa, a traveling salesman who wakes up one morning to find himself transformed into a giant insect, exploring themes of alienation and identity.",
+    "year": 1915,
+    "img": "/media/gallery/9780486290300.webp",
+    "director": "Franz Kafka",
+    "duration": 55,
+    "trailer_url": "https://www.bookstores.com/books/the-metamorphosis/9780486290300",
+    "rating": 4.6,
+    "price": 8.99,
+    "genres": [
+      "Fiction",
+      "Absurdist"
+    ]
+  },
+  {
+    "id": "book-214",
+    "name": "The Little Prince",
+    "desc": "A philosophical tale about a young prince who visits various planets, including Earth, and explores themes of love, loss, and the importance of seeing with the heart.",
+    "year": 1943,
+    "img": "/media/gallery/9780156012195.webp",
+    "director": "Antoine de Saint-Exupéry",
+    "duration": 96,
+    "trailer_url": "https://www.bookstores.com/books/the-little-prince/9780156012195",
+    "rating": 4.8,
+    "price": 9.99,
+    "genres": [
+      "Fiction",
+      "Philosophy"
+    ]
+  },
+  {
+    "id": "book-215",
+    "name": "The Bell Jar",
+    "desc": "A semi-autobiographical novel following Esther Greenwood's descent into mental illness, exploring themes of identity, sexuality, and the constraints of society.",
+    "year": 1963,
+    "img": "/media/gallery/9780060837020.webp",
+    "director": "Sylvia Plath",
+    "duration": 244,
+    "trailer_url": "https://www.bookstores.com/books/the-bell-jar/9780060837020",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Autobiographical"
+    ]
+  },
+  {
+    "id": "book-216",
+    "name": "Things Fall Apart",
+    "desc": "A novel about Okonkwo, a leader in an Igbo village in Nigeria, and the impact of European colonization on traditional African society.",
+    "year": 1958,
+    "img": "/media/gallery/9780385474542.webp",
+    "director": "Chinua Achebe",
+    "duration": 209,
+    "trailer_url": "https://www.bookstores.com/books/things-fall-apart/9780385474542",
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-217",
+    "name": "The Road",
+    "desc": "A post-apocalyptic novel following a father and son as they journey through a desolate landscape, struggling to survive in a world destroyed by an unspecified cataclysm.",
+    "year": 2006,
+    "img": "/media/gallery/9780307387899.webp",
+    "director": "Cormac McCarthy",
+    "duration": 287,
+    "trailer_url": "https://www.bookstores.com/books/the-road/9780307387899",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Post-Apocalyptic"
+    ]
   }
 ]

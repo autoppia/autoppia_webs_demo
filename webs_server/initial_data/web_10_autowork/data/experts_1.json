@@ -1,6 +1,463 @@
 [
   {
-    "slug": "rachel-roberts",
+    "slug": "expert-1",
+    "name": "Sarah Chen",
+    "country": "United States",
+    "role": "Senior Full Stack Developer",
+    "avatar": "/media/avatars/person1.jpg",
+    "rate": "$75.00/hr",
+    "rating": 4.9,
+    "jobs": 342,
+    "consultation": "$150 per hour",
+    "desc": "Expert full stack developer with 8+ years of experience building scalable web applications",
+    "stats": {
+      "earnings": "$85k+",
+      "jobs": 12,
+      "hours": 1134
+    },
+    "about": "I'm a full-stack developer with 8+ years of experience specializing in React, Node.js, and cloud technologies. I've built production applications serving millions of users and love solving complex technical challenges. Available for web development projects, API design, and system architecture consulting.",
+    "hoursPerWeek": "More than 30 hrs/week",
+    "languages": [
+      "English: Native or Bilingual",
+      "Mandarin: Conversational"
+    ],
+    "lastReview": {
+      "title": "Built e-commerce platform from scratch",
+      "stars": 5,
+      "text": "Excellent work! Sarah delivered a robust, scalable solution ahead of schedule. Highly professional and great communication throughout the project.",
+      "price": "$4,500",
+      "rate": "$75/hr",
+      "time": "60 hours",
+      "dates": "Nov 15, 2024 - Nov 28, 2024"
+    },
+    "id": "expert-1"
+  },
+  {
+    "slug": "expert-2",
+    "name": "Michael Rodriguez",
+    "country": "Spain",
+    "role": "DevOps Engineer",
+    "avatar": "/media/avatars/person2.jpg",
+    "rate": "$65.00/hr",
+    "rating": 4.8,
+    "jobs": 287,
+    "consultation": "$130 per hour",
+    "desc": "DevOps specialist with expertise in cloud infrastructure and CI/CD pipelines",
+    "stats": {
+      "earnings": "$62k+",
+      "jobs": 9,
+      "hours": 954
+    },
+    "about": "DevOps engineer with 7 years of experience in cloud infrastructure, containerization, and automation. I specialize in AWS, Kubernetes, Docker, and building robust CI/CD pipelines. I help teams scale their infrastructure and improve deployment reliability.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "Spanish: Native or Bilingual",
+      "English: Fluent",
+      "Portuguese: Conversational"
+    ],
+    "lastReview": {
+      "title": "Migrated infrastructure to Kubernetes",
+      "stars": 5,
+      "text": "Michael's expertise in Kubernetes was invaluable. Smooth migration with zero downtime. Would definitely hire again!",
+      "price": "$3,900",
+      "rate": "$65/hr",
+      "time": "60 hours",
+      "dates": "Nov 10, 2024 - Nov 22, 2024"
+    },
+    "id": "expert-2"
+  },
+  {
+    "slug": "expert-3",
+    "name": "Emily Patel",
+    "country": "India",
+    "role": "Product Manager",
+    "avatar": "/media/avatars/person3.jpg",
+    "rate": "$70.00/hr",
+    "rating": 4.7,
+    "jobs": 198,
+    "consultation": "$140 per hour",
+    "desc": "Product Manager with expertise in fintech and mobile applications",
+    "stats": {
+      "earnings": "$54k+",
+      "jobs": 7,
+      "hours": 771
+    },
+    "about": "Product Manager with 6 years of experience in fintech and mobile applications. I specialize in product strategy, user research, and cross-functional collaboration. I've shipped products used by millions of users and love turning complex problems into simple, elegant solutions.",
+    "hoursPerWeek": "15-20 hrs/week",
+    "languages": [
+      "English: Native or Bilingual",
+      "Hindi: Fluent"
+    ],
+    "lastReview": {
+      "title": "Led product strategy for mobile app launch",
+      "stars": 5,
+      "text": "Emily has excellent product sense and great communication skills. She helped us define a clear roadmap and prioritize features effectively.",
+      "price": "$3,500",
+      "rate": "$70/hr",
+      "time": "50 hours",
+      "dates": "Oct 28, 2024 - Nov 12, 2024"
+    },
+    "id": "expert-3"
+  },
+  {
+    "slug": "expert-4",
+    "name": "David Kim",
+    "country": "South Korea",
+    "role": "Data Scientist",
+    "avatar": "/media/avatars/person4.jpg",
+    "rate": "$80.00/hr",
+    "rating": 4.9,
+    "jobs": 156,
+    "consultation": "$160 per hour",
+    "desc": "Data Scientist specializing in machine learning and predictive analytics",
+    "stats": {
+      "earnings": "$48k+",
+      "jobs": 6,
+      "hours": 600
+    },
+    "about": "Data scientist with 8+ years of experience in machine learning, predictive analytics, and data visualization. I specialize in building ML models, recommendation systems, and turning data into actionable insights. Available for data science consulting and ML model development.",
+    "hoursPerWeek": "More than 30 hrs/week",
+    "languages": [
+      "Korean: Native or Bilingual",
+      "English: Fluent"
+    ],
+    "lastReview": {
+      "title": "Built recommendation system using deep learning",
+      "stars": 5,
+      "text": "David's expertise in ML is outstanding. The recommendation system improved our conversion rate by 35%. Highly recommend!",
+      "price": "$4,800",
+      "rate": "$80/hr",
+      "time": "60 hours",
+      "dates": "Nov 5, 2024 - Nov 19, 2024"
+    },
+    "id": "expert-4"
+  },
+  {
+    "slug": "expert-5",
+    "name": "Lisa Anderson",
+    "country": "United Kingdom",
+    "role": "UX Designer",
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "rate": "$60.00/hr",
+    "rating": 4.6,
+    "jobs": 234,
+    "consultation": "$120 per hour",
+    "desc": "UX Designer with focus on mobile and web user experiences",
+    "stats": {
+      "earnings": "$51k+",
+      "jobs": 8,
+      "hours": 850
+    },
+    "about": "UX Designer with 5 years of experience creating intuitive and delightful user experiences. I specialize in user research, wireframing, prototyping, and design systems. I've designed products used by millions of users across web and mobile platforms.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Native or Bilingual",
+      "French: Conversational"
+    ],
+    "lastReview": {
+      "title": "Redesigned mobile app interface",
+      "stars": 5,
+      "text": "Lisa's design work is exceptional. The new interface is intuitive and beautiful. Great attention to detail and user needs.",
+      "price": "$3,000",
+      "rate": "$60/hr",
+      "time": "50 hours",
+      "dates": "Nov 8, 2024 - Nov 20, 2024"
+    },
+    "id": "expert-5"
+  },
+  {
+    "slug": "expert-6",
+    "name": "James Wilson",
+    "country": "Australia",
+    "role": "Backend Engineer",
+    "avatar": "/media/avatars/person1.jpg",
+    "rate": "$72.00/hr",
+    "rating": 4.8,
+    "jobs": 289,
+    "consultation": "$145 per hour",
+    "desc": "Backend Engineer specializing in microservices and distributed systems",
+    "stats": {
+      "earnings": "$68k+",
+      "jobs": 10,
+      "hours": 944
+    },
+    "about": "Backend engineer with 7 years of experience building scalable distributed systems. I specialize in microservices architecture, API design, and database optimization. I've worked on systems handling millions of requests per day and love solving performance challenges.",
+    "hoursPerWeek": "More than 30 hrs/week",
+    "languages": [
+      "English: Native or Bilingual"
+    ],
+    "lastReview": {
+      "title": "Built payment processing API",
+      "stars": 5,
+      "text": "James built a robust, secure payment API that processes thousands of transactions daily. Excellent work and very reliable.",
+      "price": "$4,320",
+      "rate": "$72/hr",
+      "time": "60 hours",
+      "dates": "Nov 1, 2024 - Nov 14, 2024"
+    },
+    "id": "expert-6"
+  },
+  {
+    "slug": "expert-7",
+    "name": "Maria Garcia",
+    "country": "Mexico",
+    "role": "Frontend Developer",
+    "avatar": "/media/avatars/person2.jpg",
+    "rate": "$55.00/hr",
+    "rating": 4.7,
+    "jobs": 312,
+    "consultation": "$110 per hour",
+    "desc": "Frontend Developer with expertise in React and modern JavaScript",
+    "stats": {
+      "earnings": "$61k+",
+      "jobs": 11,
+      "hours": 1109
+    },
+    "about": "Frontend developer with 6 years of experience building modern web applications. I specialize in React, TypeScript, and creating beautiful, performant user interfaces. I love working with design systems and building reusable component libraries.",
+    "hoursPerWeek": "More than 30 hrs/week",
+    "languages": [
+      "Spanish: Native or Bilingual",
+      "English: Fluent"
+    ],
+    "lastReview": {
+      "title": "Built React component library",
+      "stars": 5,
+      "text": "Maria delivered a comprehensive component library that saved us months of development time. Great code quality!",
+      "price": "$3,300",
+      "rate": "$55/hr",
+      "time": "60 hours",
+      "dates": "Nov 12, 2024 - Nov 25, 2024"
+    },
+    "id": "expert-7"
+  },
+  {
+    "slug": "expert-8",
+    "name": "Robert Lee",
+    "country": "Canada",
+    "role": "Mobile Developer",
+    "avatar": "/media/avatars/person3.jpg",
+    "rate": "$68.00/hr",
+    "rating": 4.8,
+    "jobs": 201,
+    "consultation": "$135 per hour",
+    "desc": "Mobile Developer for iOS and Android applications",
+    "stats": {
+      "earnings": "$49k+",
+      "jobs": 7,
+      "hours": 721
+    },
+    "about": "Mobile developer with 6 years of experience building native iOS and Android applications. I specialize in Swift, Kotlin, and React Native. I've built apps downloaded by millions of users and focus on performance optimization and smooth user experiences.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Native or Bilingual",
+      "French: Conversational"
+    ],
+    "lastReview": {
+      "title": "Developed iOS app for fitness tracking",
+      "stars": 5,
+      "text": "Robert's mobile development skills are top-notch. The app is smooth, performant, and beautifully designed. Highly professional!",
+      "price": "$4,080",
+      "rate": "$68/hr",
+      "time": "60 hours",
+      "dates": "Oct 30, 2024 - Nov 13, 2024"
+    },
+    "id": "expert-8"
+  },
+  {
+    "slug": "expert-9",
+    "name": "Jennifer Brown",
+    "country": "United States",
+    "role": "QA Engineer",
+    "avatar": "/media/avatars/person4.jpg",
+    "rate": "$50.00/hr",
+    "rating": 4.6,
+    "jobs": 278,
+    "consultation": "$100 per hour",
+    "desc": "QA Engineer with expertise in test automation and quality assurance",
+    "stats": {
+      "earnings": "$52k+",
+      "jobs": 10,
+      "hours": 1040
+    },
+    "about": "QA Engineer with 7 years of experience ensuring software quality through automated testing. I specialize in test automation frameworks, CI/CD integration, and comprehensive test planning. I help teams ship bug-free software and maintain high quality standards.",
+    "hoursPerWeek": "More than 30 hrs/week",
+    "languages": [
+      "English: Native or Bilingual"
+    ],
+    "lastReview": {
+      "title": "Set up automated testing infrastructure",
+      "stars": 5,
+      "text": "Jennifer's test automation setup caught dozens of bugs before production. Excellent work and very thorough!",
+      "price": "$3,000",
+      "rate": "$50/hr",
+      "time": "60 hours",
+      "dates": "Nov 3, 2024 - Nov 16, 2024"
+    },
+    "id": "expert-9"
+  },
+  {
+    "slug": "expert-10",
+    "name": "William Taylor",
+    "country": "Ireland",
+    "role": "Security Engineer",
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "rate": "$85.00/hr",
+    "rating": 4.9,
+    "jobs": 145,
+    "consultation": "$170 per hour",
+    "desc": "Security Engineer focused on application security and threat detection",
+    "stats": {
+      "earnings": "$45k+",
+      "jobs": 5,
+      "hours": 529
+    },
+    "about": "Security engineer with 8 years of experience protecting systems and user data. I specialize in application security, penetration testing, and security architecture. I've helped companies secure their applications and respond to security incidents.",
+    "hoursPerWeek": "10-15 hrs/week",
+    "languages": [
+      "English: Native or Bilingual"
+    ],
+    "lastReview": {
+      "title": "Conducted security audit and penetration testing",
+      "stars": 5,
+      "text": "William's security expertise is exceptional. Found critical vulnerabilities we didn't know about. Highly recommend for security audits!",
+      "price": "$5,100",
+      "rate": "$85/hr",
+      "time": "60 hours",
+      "dates": "Nov 7, 2024 - Nov 20, 2024"
+    },
+    "id": "expert-10"
+  },
+  {
+    "slug": "expert-11",
+    "name": "Amanda White",
+    "country": "New Zealand",
+    "role": "UI Designer",
+    "avatar": "/media/avatars/person1.jpg",
+    "rate": "$58.00/hr",
+    "rating": 4.7,
+    "jobs": 267,
+    "consultation": "$115 per hour",
+    "desc": "UI Designer creating beautiful and functional interfaces",
+    "stats": {
+      "earnings": "$56k+",
+      "jobs": 9,
+      "hours": 965
+    },
+    "about": "UI Designer with 5 years of experience creating beautiful and functional user interfaces. I specialize in visual design, design systems, and creating cohesive brand experiences. I've designed interfaces for web and mobile applications used by millions of users.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Native or Bilingual"
+    ],
+    "lastReview": {
+      "title": "Designed complete UI for SaaS platform",
+      "stars": 5,
+      "text": "Amanda's design work is beautiful and professional. The new UI is both elegant and highly functional. Great to work with!",
+      "price": "$3,480",
+      "rate": "$58/hr",
+      "time": "60 hours",
+      "dates": "Nov 14, 2024 - Nov 27, 2024"
+    },
+    "id": "expert-11"
+  },
+  {
+    "slug": "expert-12",
+    "name": "Nicole Thompson",
+    "country": "United States",
+    "role": "UX Researcher",
+    "avatar": "/media/avatars/person3.jpg",
+    "rate": "$65.00/hr",
+    "rating": 4.7,
+    "jobs": 178,
+    "consultation": "$130 per hour",
+    "desc": "UX Researcher focused on understanding user needs and behaviors",
+    "stats": {
+      "earnings": "$42k+",
+      "jobs": 6,
+      "hours": 646
+    },
+    "about": "UX Researcher with 5 years of experience conducting user research and usability studies. I specialize in qualitative research methods, user interviews, and translating insights into actionable design recommendations. I help teams understand users deeply.",
+    "hoursPerWeek": "15-20 hrs/week",
+    "languages": [
+      "English: Native or Bilingual"
+    ],
+    "lastReview": {
+      "title": "Conducted comprehensive user research study",
+      "stars": 5,
+      "text": "Nicole's research insights were invaluable. She helped us understand our users better and make data-driven design decisions.",
+      "price": "$3,250",
+      "rate": "$65/hr",
+      "time": "50 hours",
+      "dates": "Nov 9, 2024 - Nov 22, 2024"
+    },
+    "id": "expert-12"
+  },
+  {
+    "slug": "expert-13",
+    "name": "Daniel Clark",
+    "country": "United Kingdom",
+    "role": "Technical Writer",
+    "avatar": "/media/avatars/person4.jpg",
+    "rate": "$45.00/hr",
+    "rating": 4.8,
+    "jobs": 223,
+    "consultation": "$90 per hour",
+    "desc": "Technical Writer creating clear documentation and developer guides",
+    "stats": {
+      "earnings": "$48k+",
+      "jobs": 10,
+      "hours": 1067
+    },
+    "about": "Technical writer with 6 years of experience creating clear and comprehensive documentation for developers and users. I specialize in API documentation, user guides, and making complex technical concepts accessible. I help teams improve their documentation quality.",
+    "hoursPerWeek": "More than 30 hrs/week",
+    "languages": [
+      "English: Native or Bilingual"
+    ],
+    "lastReview": {
+      "title": "Wrote comprehensive API documentation",
+      "stars": 5,
+      "text": "Daniel's documentation is clear, thorough, and well-organized. It made our API much easier for developers to use. Excellent work!",
+      "price": "$2,700",
+      "rate": "$45/hr",
+      "time": "60 hours",
+      "dates": "Nov 11, 2024 - Nov 24, 2024"
+    },
+    "id": "expert-13"
+  },
+  {
+    "slug": "expert-14",
+    "name": "Sophia Davis",
+    "country": "Germany",
+    "role": "DevOps Engineer",
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "rate": "$70.00/hr",
+    "rating": 4.8,
+    "jobs": 192,
+    "consultation": "$140 per hour",
+    "desc": "DevOps Engineer with expertise in cloud infrastructure and automation",
+    "stats": {
+      "earnings": "$50k+",
+      "jobs": 7,
+      "hours": 714
+    },
+    "about": "DevOps engineer with 6 years of experience in cloud infrastructure and automation. I specialize in AWS, Docker, Kubernetes, and building reliable CI/CD pipelines. I help teams deploy faster and scale their infrastructure efficiently.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "German: Native or Bilingual",
+      "English: Fluent"
+    ],
+    "lastReview": {
+      "title": "Set up cloud infrastructure on AWS",
+      "stars": 5,
+      "text": "Sophia's infrastructure setup is solid and well-architected. Everything is automated and scalable. Great expertise!",
+      "price": "$4,200",
+      "rate": "$70/hr",
+      "time": "60 hours",
+      "dates": "Nov 4, 2024 - Nov 17, 2024"
+    },
+    "id": "expert-14"
+  },
+  {
+    "slug": "expert-15",
     "name": "Rachel Roberts",
     "country": "Austria",
     "role": "Database Administrator",
@@ -28,10 +485,11 @@
       "rate": "$56.00/hr",
       "time": "60 hours",
       "dates": "Oct 05, 2024 - Oct 17, 2024"
-    }
+    },
+    "id": "expert-15"
   },
   {
-    "slug": "michelle-phillips",
+    "slug": "expert-16",
     "name": "Michelle Phillips",
     "country": "Australia",
     "role": "Backend Engineer",
@@ -59,10 +517,11 @@
       "rate": "$69.00/hr",
       "time": "60 hours",
       "dates": "Oct 31, 2024 - Nov 11, 2024"
-    }
+    },
+    "id": "expert-16"
   },
   {
-    "slug": "alexander-richardson",
+    "slug": "expert-17",
     "name": "Alexander Richardson",
     "country": "Philippines",
     "role": "QA Engineer",
@@ -92,10 +551,11 @@
       "rate": "$45.00/hr",
       "time": "50 hours",
       "dates": "Oct 12, 2024 - Oct 26, 2024"
-    }
+    },
+    "id": "expert-17"
   },
   {
-    "slug": "sarah-clark",
+    "slug": "expert-18",
     "name": "Sarah Clark",
     "country": "Nigeria",
     "role": "UX Designer",
@@ -125,10 +585,11 @@
       "rate": "$57.00/hr",
       "time": "60 hours",
       "dates": "Oct 11, 2024 - Oct 24, 2024"
-    }
+    },
+    "id": "expert-18"
   },
   {
-    "slug": "carol-robinson",
+    "slug": "expert-19",
     "name": "Carol Robinson",
     "country": "Denmark",
     "role": "Machine Learning Engineer",
@@ -157,10 +618,11 @@
       "rate": "$87.00/hr",
       "time": "60 hours",
       "dates": "Oct 24, 2024 - Nov 06, 2024"
-    }
+    },
+    "id": "expert-19"
   },
   {
-    "slug": "nathan-perez",
+    "slug": "expert-20",
     "name": "Nathan Perez",
     "country": "Thailand",
     "role": "Data Scientist",
@@ -189,10 +651,11 @@
       "rate": "$75.00/hr",
       "time": "60 hours",
       "dates": "Nov 03, 2024 - Nov 13, 2024"
-    }
+    },
+    "id": "expert-20"
   },
   {
-    "slug": "ashley-clark",
+    "slug": "expert-21",
     "name": "Ashley Clark",
     "country": "Austria",
     "role": "Security Engineer",
@@ -222,10 +685,11 @@
       "rate": "$88.00/hr",
       "time": "60 hours",
       "dates": "Oct 22, 2024 - Nov 02, 2024"
-    }
+    },
+    "id": "expert-21"
   },
   {
-    "slug": "matthew-hughes",
+    "slug": "expert-22",
     "name": "Matthew Hughes",
     "country": "United States",
     "role": "Cloud Architect",
@@ -254,10 +718,11 @@
       "rate": "$88.00/hr",
       "time": "50 hours",
       "dates": "Oct 09, 2024 - Oct 19, 2024"
-    }
+    },
+    "id": "expert-22"
   },
   {
-    "slug": "antonio-king",
+    "slug": "expert-23",
     "name": "Antonio King",
     "country": "United Kingdom",
     "role": "UX Designer",
@@ -286,10 +751,11 @@
       "rate": "$55.00/hr",
       "time": "60 hours",
       "dates": "Oct 18, 2024 - Oct 28, 2024"
-    }
+    },
+    "id": "expert-23"
   },
   {
-    "slug": "kimberly-foster",
+    "slug": "expert-24",
     "name": "Kimberly Foster",
     "country": "Saudi Arabia",
     "role": "DevOps Engineer",
@@ -319,10 +785,11 @@
       "rate": "$67.00/hr",
       "time": "60 hours",
       "dates": "Nov 01, 2024 - Nov 15, 2024"
-    }
+    },
+    "id": "expert-24"
   },
   {
-    "slug": "jerry-perry",
+    "slug": "expert-25",
     "name": "Jerry Perry",
     "country": "United States",
     "role": "QA Engineer",
@@ -350,10 +817,11 @@
       "rate": "$53.00/hr",
       "time": "50 hours",
       "dates": "Oct 11, 2024 - Oct 23, 2024"
-    }
+    },
+    "id": "expert-25"
   },
   {
-    "slug": "emily-torres",
+    "slug": "expert-26",
     "name": "Emily Torres",
     "country": "Argentina",
     "role": "Database Administrator",
@@ -381,10 +849,11 @@
       "rate": "$56.00/hr",
       "time": "60 hours",
       "dates": "Oct 22, 2024 - Nov 01, 2024"
-    }
+    },
+    "id": "expert-26"
   },
   {
-    "slug": "chris-martinez",
+    "slug": "expert-27",
     "name": "Chris Martinez",
     "country": "South Africa",
     "role": "AI Engineer",
@@ -413,10 +882,11 @@
       "rate": "$86.00/hr",
       "time": "50 hours",
       "dates": "Oct 30, 2024 - Nov 11, 2024"
-    }
+    },
+    "id": "expert-27"
   },
   {
-    "slug": "henry-green",
+    "slug": "expert-28",
     "name": "Henry Green",
     "country": "Russia",
     "role": "Game Developer",
@@ -445,10 +915,11 @@
       "rate": "$69.00/hr",
       "time": "60 hours",
       "dates": "Oct 11, 2024 - Oct 24, 2024"
-    }
+    },
+    "id": "expert-28"
   },
   {
-    "slug": "alexander-carter",
+    "slug": "expert-29",
     "name": "Alexander Carter",
     "country": "Ukraine",
     "role": "Software Architect",
@@ -476,10 +947,11 @@
       "rate": "$86.00/hr",
       "time": "60 hours",
       "dates": "Oct 15, 2024 - Oct 30, 2024"
-    }
+    },
+    "id": "expert-29"
   },
   {
-    "slug": "jessica-baker",
+    "slug": "expert-30",
     "name": "Jessica Baker",
     "country": "Netherlands",
     "role": "Embedded Systems Engineer",
@@ -508,10 +980,11 @@
       "rate": "$72.00/hr",
       "time": "50 hours",
       "dates": "Oct 07, 2024 - Oct 17, 2024"
-    }
+    },
+    "id": "expert-30"
   },
   {
-    "slug": "ronald-morgan",
+    "slug": "expert-31",
     "name": "Ronald Morgan",
     "country": "Malaysia",
     "role": "AI Engineer",
@@ -539,10 +1012,11 @@
       "rate": "$80.00/hr",
       "time": "50 hours",
       "dates": "Oct 12, 2024 - Oct 25, 2024"
-    }
+    },
+    "id": "expert-31"
   },
   {
-    "slug": "timothy-long",
+    "slug": "expert-32",
     "name": "Timothy Long",
     "country": "Finland",
     "role": "Game Developer",
@@ -570,10 +1044,11 @@
       "rate": "$75.00/hr",
       "time": "50 hours",
       "dates": "Oct 13, 2024 - Oct 23, 2024"
-    }
+    },
+    "id": "expert-32"
   },
   {
-    "slug": "chris-powell",
+    "slug": "expert-33",
     "name": "Chris Powell",
     "country": "Portugal",
     "role": "Blockchain Developer",
@@ -603,10 +1078,11 @@
       "rate": "$93.00/hr",
       "time": "50 hours",
       "dates": "Oct 20, 2024 - Nov 01, 2024"
-    }
+    },
+    "id": "expert-33"
   },
   {
-    "slug": "debra-brown",
+    "slug": "expert-34",
     "name": "Debra Brown",
     "country": "South Africa",
     "role": "Scrum Master",
@@ -634,10 +1110,11 @@
       "rate": "$63.00/hr",
       "time": "50 hours",
       "dates": "Oct 13, 2024 - Oct 23, 2024"
-    }
+    },
+    "id": "expert-34"
   },
   {
-    "slug": "timothy-cook",
+    "slug": "expert-35",
     "name": "Timothy Cook",
     "country": "Colombia",
     "role": "Full Stack Developer",
@@ -667,10 +1144,11 @@
       "rate": "$69.00/hr",
       "time": "50 hours",
       "dates": "Oct 26, 2024 - Nov 10, 2024"
-    }
+    },
+    "id": "expert-35"
   },
   {
-    "slug": "samantha-young",
+    "slug": "expert-36",
     "name": "Samantha Young",
     "country": "Italy",
     "role": "DevOps Engineer",
@@ -700,10 +1178,11 @@
       "rate": "$67.00/hr",
       "time": "50 hours",
       "dates": "Oct 23, 2024 - Nov 06, 2024"
-    }
+    },
+    "id": "expert-36"
   },
   {
-    "slug": "ronald-rodriguez",
+    "slug": "expert-37",
     "name": "Ronald Rodriguez",
     "country": "Denmark",
     "role": "Network Engineer",
@@ -732,10 +1211,11 @@
       "rate": "$57.00/hr",
       "time": "50 hours",
       "dates": "Oct 17, 2024 - Oct 29, 2024"
-    }
+    },
+    "id": "expert-37"
   },
   {
-    "slug": "matthew-cook",
+    "slug": "expert-38",
     "name": "Matthew Cook",
     "country": "Indonesia",
     "role": "DevOps Engineer",
@@ -764,10 +1244,11 @@
       "rate": "$64.00/hr",
       "time": "60 hours",
       "dates": "Oct 28, 2024 - Nov 12, 2024"
-    }
+    },
+    "id": "expert-38"
   },
   {
-    "slug": "ryan-robinson",
+    "slug": "expert-39",
     "name": "Ryan Robinson",
     "country": "UAE",
     "role": "Software Architect",
@@ -796,10 +1277,11 @@
       "rate": "$87.00/hr",
       "time": "50 hours",
       "dates": "Oct 09, 2024 - Oct 19, 2024"
-    }
+    },
+    "id": "expert-39"
   },
   {
-    "slug": "rachel-adams",
+    "slug": "expert-40",
     "name": "Rachel Adams",
     "country": "Finland",
     "role": "AI Engineer",
@@ -828,10 +1310,11 @@
       "rate": "$81.00/hr",
       "time": "50 hours",
       "dates": "Oct 10, 2024 - Oct 25, 2024"
-    }
+    },
+    "id": "expert-40"
   },
   {
-    "slug": "christopher-sanchez",
+    "slug": "expert-41",
     "name": "Christopher Sanchez",
     "country": "Spain",
     "role": "UX Researcher",
@@ -859,10 +1342,11 @@
       "rate": "$60.00/hr",
       "time": "60 hours",
       "dates": "Oct 19, 2024 - Oct 30, 2024"
-    }
+    },
+    "id": "expert-41"
   },
   {
-    "slug": "deborah-morris",
+    "slug": "expert-42",
     "name": "Deborah Morris",
     "country": "France",
     "role": "Scrum Master",
@@ -891,10 +1375,11 @@
       "rate": "$64.00/hr",
       "time": "50 hours",
       "dates": "Oct 19, 2024 - Oct 29, 2024"
-    }
+    },
+    "id": "expert-42"
   },
   {
-    "slug": "luis-adams",
+    "slug": "expert-43",
     "name": "Luis Adams",
     "country": "New Zealand",
     "role": "Mobile Developer",
@@ -923,10 +1408,11 @@
       "rate": "$73.00/hr",
       "time": "50 hours",
       "dates": "Oct 20, 2024 - Nov 03, 2024"
-    }
+    },
+    "id": "expert-43"
   },
   {
-    "slug": "laura-davis",
+    "slug": "expert-44",
     "name": "Laura Davis",
     "country": "China",
     "role": "Software Architect",
@@ -955,10 +1441,11 @@
       "rate": "$86.00/hr",
       "time": "50 hours",
       "dates": "Oct 27, 2024 - Nov 08, 2024"
-    }
+    },
+    "id": "expert-44"
   },
   {
-    "slug": "janet-white",
+    "slug": "expert-45",
     "name": "Janet White",
     "country": "Australia",
     "role": "AI Engineer",
@@ -986,10 +1473,11 @@
       "rate": "$84.00/hr",
       "time": "50 hours",
       "dates": "Oct 28, 2024 - Nov 09, 2024"
-    }
+    },
+    "id": "expert-45"
   },
   {
-    "slug": "barbara-butler",
+    "slug": "expert-46",
     "name": "Barbara Butler",
     "country": "Mexico",
     "role": "Security Engineer",
@@ -1018,10 +1506,11 @@
       "rate": "$90.00/hr",
       "time": "50 hours",
       "dates": "Oct 13, 2024 - Oct 24, 2024"
-    }
+    },
+    "id": "expert-46"
   },
   {
-    "slug": "carlos-carter",
+    "slug": "expert-47",
     "name": "Carlos Carter",
     "country": "Ukraine",
     "role": "Cloud Architect",
@@ -1050,10 +1539,11 @@
       "rate": "$93.00/hr",
       "time": "50 hours",
       "dates": "Oct 22, 2024 - Nov 03, 2024"
-    }
+    },
+    "id": "expert-47"
   },
   {
-    "slug": "adam-ross",
+    "slug": "expert-48",
     "name": "Adam Ross",
     "country": "India",
     "role": "Scrum Master",
@@ -1082,10 +1572,11 @@
       "rate": "$63.00/hr",
       "time": "50 hours",
       "dates": "Oct 03, 2024 - Oct 16, 2024"
-    }
+    },
+    "id": "expert-48"
   },
   {
-    "slug": "brian-chen",
+    "slug": "expert-49",
     "name": "Brian Chen",
     "country": "Poland",
     "role": "Cybersecurity Specialist",
@@ -1114,10 +1605,11 @@
       "rate": "$85.00/hr",
       "time": "50 hours",
       "dates": "Oct 13, 2024 - Oct 26, 2024"
-    }
+    },
+    "id": "expert-49"
   },
   {
-    "slug": "brandon-robinson",
+    "slug": "expert-50",
     "name": "Brandon Robinson",
     "country": "Poland",
     "role": "System Administrator",
@@ -1147,10 +1639,11 @@
       "rate": "$58.00/hr",
       "time": "50 hours",
       "dates": "Nov 01, 2024 - Nov 12, 2024"
-    }
+    },
+    "id": "expert-50"
   },
   {
-    "slug": "tyler-hayes",
+    "slug": "expert-51",
     "name": "Tyler Hayes",
     "country": "Finland",
     "role": "DevOps Engineer",
@@ -1178,10 +1671,11 @@
       "rate": "$64.00/hr",
       "time": "60 hours",
       "dates": "Oct 16, 2024 - Oct 28, 2024"
-    }
+    },
+    "id": "expert-51"
   },
   {
-    "slug": "patricia-cox",
+    "slug": "expert-52",
     "name": "Patricia Cox",
     "country": "Russia",
     "role": "Full Stack Developer",
@@ -1211,10 +1705,11 @@
       "rate": "$65.00/hr",
       "time": "50 hours",
       "dates": "Oct 31, 2024 - Nov 13, 2024"
-    }
+    },
+    "id": "expert-52"
   },
   {
-    "slug": "marie-chen",
+    "slug": "expert-53",
     "name": "Marie Chen",
     "country": "Austria",
     "role": "Cybersecurity Specialist",
@@ -1242,10 +1737,11 @@
       "rate": "$87.00/hr",
       "time": "50 hours",
       "dates": "Oct 19, 2024 - Nov 02, 2024"
-    }
+    },
+    "id": "expert-53"
   },
   {
-    "slug": "ronald-nelson",
+    "slug": "expert-54",
     "name": "Ronald Nelson",
     "country": "Sweden",
     "role": "UI Designer",
@@ -1275,10 +1771,11 @@
       "rate": "$60.00/hr",
       "time": "60 hours",
       "dates": "Oct 18, 2024 - Oct 31, 2024"
-    }
+    },
+    "id": "expert-54"
   },
   {
-    "slug": "jason-robinson",
+    "slug": "expert-55",
     "name": "Jason Robinson",
     "country": "Colombia",
     "role": "Backend Engineer",
@@ -1306,10 +1803,11 @@
       "rate": "$72.00/hr",
       "time": "60 hours",
       "dates": "Oct 21, 2024 - Nov 05, 2024"
-    }
+    },
+    "id": "expert-55"
   },
   {
-    "slug": "henry-allen",
+    "slug": "expert-56",
     "name": "Henry Allen",
     "country": "Singapore",
     "role": "Embedded Systems Engineer",
@@ -1337,10 +1835,11 @@
       "rate": "$72.00/hr",
       "time": "60 hours",
       "dates": "Oct 11, 2024 - Oct 26, 2024"
-    }
+    },
+    "id": "expert-56"
   },
   {
-    "slug": "raymond-lopez",
+    "slug": "expert-57",
     "name": "Raymond Lopez",
     "country": "Italy",
     "role": "Blockchain Developer",
@@ -1370,10 +1869,11 @@
       "rate": "$85.00/hr",
       "time": "60 hours",
       "dates": "Oct 08, 2024 - Oct 18, 2024"
-    }
+    },
+    "id": "expert-57"
   },
   {
-    "slug": "gary-hughes",
+    "slug": "expert-58",
     "name": "Gary Hughes",
     "country": "UAE",
     "role": "AI Engineer",
@@ -1401,10 +1901,11 @@
       "rate": "$88.00/hr",
       "time": "60 hours",
       "dates": "Oct 26, 2024 - Nov 09, 2024"
-    }
+    },
+    "id": "expert-58"
   },
   {
-    "slug": "jeremy-rivera",
+    "slug": "expert-59",
     "name": "Jeremy Rivera",
     "country": "Chile",
     "role": "Frontend Developer",
@@ -1433,10 +1934,11 @@
       "rate": "$52.00/hr",
       "time": "60 hours",
       "dates": "Oct 28, 2024 - Nov 07, 2024"
-    }
+    },
+    "id": "expert-59"
   },
   {
-    "slug": "betty-watson",
+    "slug": "expert-60",
     "name": "Betty Watson",
     "country": "Ukraine",
     "role": "UX Researcher",
@@ -1466,10 +1968,11 @@
       "rate": "$69.00/hr",
       "time": "60 hours",
       "dates": "Oct 14, 2024 - Oct 26, 2024"
-    }
+    },
+    "id": "expert-60"
   },
   {
-    "slug": "nancy-hall",
+    "slug": "expert-61",
     "name": "Nancy Hall",
     "country": "Finland",
     "role": "Cybersecurity Specialist",
@@ -1497,10 +2000,11 @@
       "rate": "$92.00/hr",
       "time": "60 hours",
       "dates": "Oct 08, 2024 - Oct 18, 2024"
-    }
+    },
+    "id": "expert-61"
   },
   {
-    "slug": "ashley-washington",
+    "slug": "expert-62",
     "name": "Ashley Washington",
     "country": "Sweden",
     "role": "UX Designer",
@@ -1530,10 +2034,11 @@
       "rate": "$56.00/hr",
       "time": "60 hours",
       "dates": "Oct 26, 2024 - Nov 10, 2024"
-    }
+    },
+    "id": "expert-62"
   },
   {
-    "slug": "karen-bell",
+    "slug": "expert-63",
     "name": "Karen Bell",
     "country": "Mexico",
     "role": "Senior Full Stack Developer",
@@ -1563,10 +2068,11 @@
       "rate": "$73.00/hr",
       "time": "50 hours",
       "dates": "Oct 04, 2024 - Oct 16, 2024"
-    }
+    },
+    "id": "expert-63"
   },
   {
-    "slug": "deborah-lee",
+    "slug": "expert-64",
     "name": "Deborah Lee",
     "country": "Portugal",
     "role": "Backend Engineer",
@@ -1594,10 +2100,11 @@
       "rate": "$74.00/hr",
       "time": "50 hours",
       "dates": "Oct 24, 2024 - Nov 03, 2024"
-    }
+    },
+    "id": "expert-64"
   },
   {
-    "slug": "kimberly-gonzalez",
+    "slug": "expert-65",
     "name": "Kimberly Gonzalez",
     "country": "Portugal",
     "role": "System Administrator",
@@ -1626,10 +2133,11 @@
       "rate": "$52.00/hr",
       "time": "50 hours",
       "dates": "Oct 22, 2024 - Nov 06, 2024"
-    }
+    },
+    "id": "expert-65"
   },
   {
-    "slug": "sharon-clark",
+    "slug": "expert-66",
     "name": "Sharon Clark",
     "country": "Austria",
     "role": "Product Manager",
@@ -1658,10 +2166,11 @@
       "rate": "$69.00/hr",
       "time": "50 hours",
       "dates": "Oct 06, 2024 - Oct 18, 2024"
-    }
+    },
+    "id": "expert-66"
   },
   {
-    "slug": "michael-russell",
+    "slug": "expert-67",
     "name": "Michael Russell",
     "country": "Nigeria",
     "role": "Business Analyst",
@@ -1691,10 +2200,11 @@
       "rate": "$54.00/hr",
       "time": "50 hours",
       "dates": "Oct 31, 2024 - Nov 12, 2024"
-    }
+    },
+    "id": "expert-67"
   },
   {
-    "slug": "karen-parker",
+    "slug": "expert-68",
     "name": "Karen Parker",
     "country": "Australia",
     "role": "Embedded Systems Engineer",
@@ -1723,10 +2233,11 @@
       "rate": "$77.00/hr",
       "time": "60 hours",
       "dates": "Oct 16, 2024 - Oct 27, 2024"
-    }
+    },
+    "id": "expert-68"
   },
   {
-    "slug": "alexander-wright",
+    "slug": "expert-69",
     "name": "Alexander Wright",
     "country": "Thailand",
     "role": "Cybersecurity Specialist",
@@ -1756,10 +2267,11 @@
       "rate": "$93.00/hr",
       "time": "50 hours",
       "dates": "Oct 08, 2024 - Oct 21, 2024"
-    }
+    },
+    "id": "expert-69"
   },
   {
-    "slug": "edward-walker",
+    "slug": "expert-70",
     "name": "Edward Walker",
     "country": "Kenya",
     "role": "Blockchain Developer",
@@ -1788,10 +2300,11 @@
       "rate": "$85.00/hr",
       "time": "60 hours",
       "dates": "Oct 08, 2024 - Oct 22, 2024"
-    }
+    },
+    "id": "expert-70"
   },
   {
-    "slug": "christine-butler",
+    "slug": "expert-71",
     "name": "Christine Butler",
     "country": "Finland",
     "role": "QA Engineer",
@@ -1820,10 +2333,11 @@
       "rate": "$55.00/hr",
       "time": "50 hours",
       "dates": "Oct 11, 2024 - Oct 21, 2024"
-    }
+    },
+    "id": "expert-71"
   },
   {
-    "slug": "zachary-garcia",
+    "slug": "expert-72",
     "name": "Zachary Garcia",
     "country": "Netherlands",
     "role": "UI Designer",
@@ -1851,10 +2365,11 @@
       "rate": "$54.00/hr",
       "time": "50 hours",
       "dates": "Oct 07, 2024 - Oct 22, 2024"
-    }
+    },
+    "id": "expert-72"
   },
   {
-    "slug": "david-stewart",
+    "slug": "expert-73",
     "name": "David Stewart",
     "country": "Israel",
     "role": "Game Developer",
@@ -1882,10 +2397,11 @@
       "rate": "$73.00/hr",
       "time": "60 hours",
       "dates": "Oct 10, 2024 - Oct 24, 2024"
-    }
+    },
+    "id": "expert-73"
   },
   {
-    "slug": "rachel-white",
+    "slug": "expert-74",
     "name": "Rachel White",
     "country": "Canada",
     "role": "Senior Full Stack Developer",
@@ -1913,10 +2429,11 @@
       "rate": "$70.00/hr",
       "time": "60 hours",
       "dates": "Oct 17, 2024 - Nov 01, 2024"
-    }
+    },
+    "id": "expert-74"
   },
   {
-    "slug": "gary-rogers",
+    "slug": "expert-75",
     "name": "Gary Rogers",
     "country": "Turkey",
     "role": "Scrum Master",
@@ -1945,10 +2462,11 @@
       "rate": "$61.00/hr",
       "time": "50 hours",
       "dates": "Oct 24, 2024 - Nov 07, 2024"
-    }
+    },
+    "id": "expert-75"
   },
   {
-    "slug": "nicole-kelly",
+    "slug": "expert-76",
     "name": "Nicole Kelly",
     "country": "Thailand",
     "role": "UI Designer",
@@ -1977,10 +2495,11 @@
       "rate": "$63.00/hr",
       "time": "50 hours",
       "dates": "Oct 13, 2024 - Oct 27, 2024"
-    }
+    },
+    "id": "expert-76"
   },
   {
-    "slug": "dennis-hayes",
+    "slug": "expert-77",
     "name": "Dennis Hayes",
     "country": "Spain",
     "role": "Data Scientist",
@@ -2009,10 +2528,11 @@
       "rate": "$81.00/hr",
       "time": "50 hours",
       "dates": "Oct 10, 2024 - Oct 24, 2024"
-    }
+    },
+    "id": "expert-77"
   },
   {
-    "slug": "james-wright",
+    "slug": "expert-78",
     "name": "James Wright",
     "country": "Finland",
     "role": "Technical Writer",
@@ -2042,10 +2562,11 @@
       "rate": "$50.00/hr",
       "time": "60 hours",
       "dates": "Oct 22, 2024 - Nov 03, 2024"
-    }
+    },
+    "id": "expert-78"
   },
   {
-    "slug": "rebecca-stewart",
+    "slug": "expert-79",
     "name": "Rebecca Stewart",
     "country": "China",
     "role": "Database Administrator",
@@ -2073,10 +2594,11 @@
       "rate": "$64.00/hr",
       "time": "50 hours",
       "dates": "Oct 18, 2024 - Oct 29, 2024"
-    }
+    },
+    "id": "expert-79"
   },
   {
-    "slug": "maria-gonzales",
+    "slug": "expert-80",
     "name": "Maria Gonzales",
     "country": "Saudi Arabia",
     "role": "Scrum Master",
@@ -2106,10 +2628,11 @@
       "rate": "$70.00/hr",
       "time": "50 hours",
       "dates": "Oct 11, 2024 - Oct 21, 2024"
-    }
+    },
+    "id": "expert-80"
   },
   {
-    "slug": "sophia-brooks",
+    "slug": "expert-81",
     "name": "Sophia Brooks",
     "country": "Saudi Arabia",
     "role": "QA Engineer",
@@ -2138,10 +2661,11 @@
       "rate": "$46.00/hr",
       "time": "50 hours",
       "dates": "Oct 17, 2024 - Oct 27, 2024"
-    }
+    },
+    "id": "expert-81"
   },
   {
-    "slug": "helen-simmons",
+    "slug": "expert-82",
     "name": "Helen Simmons",
     "country": "Denmark",
     "role": "AI Engineer",
@@ -2169,10 +2693,11 @@
       "rate": "$84.00/hr",
       "time": "50 hours",
       "dates": "Oct 28, 2024 - Nov 09, 2024"
-    }
+    },
+    "id": "expert-82"
   },
   {
-    "slug": "barbara-davis",
+    "slug": "expert-83",
     "name": "Barbara Davis",
     "country": "Brazil",
     "role": "Network Engineer",
@@ -2200,10 +2725,11 @@
       "rate": "$65.00/hr",
       "time": "60 hours",
       "dates": "Oct 08, 2024 - Oct 23, 2024"
-    }
+    },
+    "id": "expert-83"
   },
   {
-    "slug": "nicole-barnes",
+    "slug": "expert-84",
     "name": "Nicole Barnes",
     "country": "Japan",
     "role": "UX Researcher",
@@ -2231,10 +2757,11 @@
       "rate": "$70.00/hr",
       "time": "50 hours",
       "dates": "Oct 14, 2024 - Oct 28, 2024"
-    }
+    },
+    "id": "expert-84"
   },
   {
-    "slug": "jessica-bailey",
+    "slug": "expert-85",
     "name": "Jessica Bailey",
     "country": "Finland",
     "role": "Cybersecurity Specialist",
@@ -2264,10 +2791,11 @@
       "rate": "$91.00/hr",
       "time": "50 hours",
       "dates": "Oct 13, 2024 - Oct 25, 2024"
-    }
+    },
+    "id": "expert-85"
   },
   {
-    "slug": "janet-reed",
+    "slug": "expert-86",
     "name": "Janet Reed",
     "country": "Ireland",
     "role": "Technical Writer",
@@ -2296,10 +2824,11 @@
       "rate": "$44.00/hr",
       "time": "60 hours",
       "dates": "Nov 01, 2024 - Nov 14, 2024"
-    }
+    },
+    "id": "expert-86"
   },
   {
-    "slug": "laura-cook",
+    "slug": "expert-87",
     "name": "Laura Cook",
     "country": "Switzerland",
     "role": "Software Architect",
@@ -2329,10 +2858,11 @@
       "rate": "$83.00/hr",
       "time": "50 hours",
       "dates": "Oct 17, 2024 - Oct 27, 2024"
-    }
+    },
+    "id": "expert-87"
   },
   {
-    "slug": "patrick-flores",
+    "slug": "expert-88",
     "name": "Patrick Flores",
     "country": "Germany",
     "role": "Network Engineer",
@@ -2361,10 +2891,11 @@
       "rate": "$63.00/hr",
       "time": "60 hours",
       "dates": "Oct 03, 2024 - Oct 16, 2024"
-    }
+    },
+    "id": "expert-88"
   },
   {
-    "slug": "samantha-bennett",
+    "slug": "expert-89",
     "name": "Samantha Bennett",
     "country": "United Kingdom",
     "role": "Business Analyst",
@@ -2392,10 +2923,11 @@
       "rate": "$51.00/hr",
       "time": "60 hours",
       "dates": "Oct 16, 2024 - Oct 31, 2024"
-    }
+    },
+    "id": "expert-89"
   },
   {
-    "slug": "frances-anderson",
+    "slug": "expert-90",
     "name": "Frances Anderson",
     "country": "Spain",
     "role": "UX Designer",
@@ -2425,10 +2957,11 @@
       "rate": "$59.00/hr",
       "time": "60 hours",
       "dates": "Oct 08, 2024 - Oct 23, 2024"
-    }
+    },
+    "id": "expert-90"
   },
   {
-    "slug": "rachel-foster",
+    "slug": "expert-91",
     "name": "Rachel Foster",
     "country": "Denmark",
     "role": "UX Researcher",
@@ -2457,10 +2990,11 @@
       "rate": "$70.00/hr",
       "time": "60 hours",
       "dates": "Oct 27, 2024 - Nov 07, 2024"
-    }
+    },
+    "id": "expert-91"
   },
   {
-    "slug": "john-morris",
+    "slug": "expert-92",
     "name": "John Morris",
     "country": "Singapore",
     "role": "Cloud Architect",
@@ -2488,10 +3022,11 @@
       "rate": "$92.00/hr",
       "time": "60 hours",
       "dates": "Oct 28, 2024 - Nov 11, 2024"
-    }
+    },
+    "id": "expert-92"
   },
   {
-    "slug": "stephanie-green",
+    "slug": "expert-93",
     "name": "Stephanie Green",
     "country": "Russia",
     "role": "Data Scientist",
@@ -2521,10 +3056,11 @@
       "rate": "$83.00/hr",
       "time": "60 hours",
       "dates": "Oct 17, 2024 - Oct 30, 2024"
-    }
+    },
+    "id": "expert-93"
   },
   {
-    "slug": "christine-campbell",
+    "slug": "expert-94",
     "name": "Christine Campbell",
     "country": "Australia",
     "role": "Software Architect",
@@ -2554,10 +3090,11 @@
       "rate": "$91.00/hr",
       "time": "50 hours",
       "dates": "Oct 03, 2024 - Oct 18, 2024"
-    }
+    },
+    "id": "expert-94"
   },
   {
-    "slug": "maria-campbell",
+    "slug": "expert-95",
     "name": "Maria Campbell",
     "country": "Nigeria",
     "role": "Backend Engineer",
@@ -2585,10 +3122,11 @@
       "rate": "$65.00/hr",
       "time": "50 hours",
       "dates": "Nov 01, 2024 - Nov 14, 2024"
-    }
+    },
+    "id": "expert-95"
   },
   {
-    "slug": "frank-howard",
+    "slug": "expert-96",
     "name": "Frank Howard",
     "country": "Malaysia",
     "role": "Backend Engineer",
@@ -2616,10 +3154,11 @@
       "rate": "$66.00/hr",
       "time": "50 hours",
       "dates": "Oct 30, 2024 - Nov 14, 2024"
-    }
+    },
+    "id": "expert-96"
   },
   {
-    "slug": "carlos-perez",
+    "slug": "expert-97",
     "name": "Carlos Perez",
     "country": "China",
     "role": "DevOps Engineer",
@@ -2649,10 +3188,11 @@
       "rate": "$67.00/hr",
       "time": "50 hours",
       "dates": "Oct 19, 2024 - Oct 30, 2024"
-    }
+    },
+    "id": "expert-97"
   },
   {
-    "slug": "gregory-brown",
+    "slug": "expert-98",
     "name": "Gregory Brown",
     "country": "Egypt",
     "role": "Game Developer",
@@ -2681,10 +3221,11 @@
       "rate": "$65.00/hr",
       "time": "50 hours",
       "dates": "Oct 25, 2024 - Nov 05, 2024"
-    }
+    },
+    "id": "expert-98"
   },
   {
-    "slug": "jacob-diaz",
+    "slug": "expert-99",
     "name": "Jacob Diaz",
     "country": "Russia",
     "role": "Frontend Developer",
@@ -2713,10 +3254,11 @@
       "rate": "$60.00/hr",
       "time": "50 hours",
       "dates": "Oct 06, 2024 - Oct 16, 2024"
-    }
+    },
+    "id": "expert-99"
   },
   {
-    "slug": "sarah-kelly",
+    "slug": "expert-100",
     "name": "Sarah Kelly",
     "country": "Germany",
     "role": "Data Scientist",
@@ -2744,10 +3286,11 @@
       "rate": "$75.00/hr",
       "time": "60 hours",
       "dates": "Oct 30, 2024 - Nov 09, 2024"
-    }
+    },
+    "id": "expert-100"
   },
   {
-    "slug": "zachary-russell",
+    "slug": "expert-101",
     "name": "Zachary Russell",
     "country": "Argentina",
     "role": "QA Engineer",
@@ -2777,10 +3320,11 @@
       "rate": "$55.00/hr",
       "time": "50 hours",
       "dates": "Oct 17, 2024 - Oct 28, 2024"
-    }
+    },
+    "id": "expert-101"
   },
   {
-    "slug": "melissa-taylor",
+    "slug": "expert-102",
     "name": "Melissa Taylor",
     "country": "Israel",
     "role": "Database Administrator",
@@ -2808,10 +3352,11 @@
       "rate": "$62.00/hr",
       "time": "60 hours",
       "dates": "Oct 18, 2024 - Oct 29, 2024"
-    }
+    },
+    "id": "expert-102"
   },
   {
-    "slug": "helen-bell",
+    "slug": "expert-103",
     "name": "Helen Bell",
     "country": "Argentina",
     "role": "UX Designer",
@@ -2839,10 +3384,11 @@
       "rate": "$65.00/hr",
       "time": "50 hours",
       "dates": "Oct 15, 2024 - Oct 29, 2024"
-    }
+    },
+    "id": "expert-103"
   },
   {
-    "slug": "antonio-young",
+    "slug": "expert-104",
     "name": "Antonio Young",
     "country": "Turkey",
     "role": "Network Engineer",
@@ -2871,10 +3417,11 @@
       "rate": "$62.00/hr",
       "time": "60 hours",
       "dates": "Nov 03, 2024 - Nov 14, 2024"
-    }
+    },
+    "id": "expert-104"
   },
   {
-    "slug": "brandon-mitchell",
+    "slug": "expert-105",
     "name": "Brandon Mitchell",
     "country": "Chile",
     "role": "DevOps Engineer",
@@ -2904,10 +3451,11 @@
       "rate": "$61.00/hr",
       "time": "60 hours",
       "dates": "Oct 27, 2024 - Nov 11, 2024"
-    }
+    },
+    "id": "expert-105"
   },
   {
-    "slug": "jonathan-ross",
+    "slug": "expert-106",
     "name": "Jonathan Ross",
     "country": "South Korea",
     "role": "Senior Full Stack Developer",
@@ -2936,10 +3484,11 @@
       "rate": "$79.00/hr",
       "time": "50 hours",
       "dates": "Oct 31, 2024 - Nov 15, 2024"
-    }
+    },
+    "id": "expert-106"
   },
   {
-    "slug": "jack-perry",
+    "slug": "expert-107",
     "name": "Jack Perry",
     "country": "Poland",
     "role": "Frontend Developer",
@@ -2967,10 +3516,11 @@
       "rate": "$60.00/hr",
       "time": "60 hours",
       "dates": "Oct 27, 2024 - Nov 07, 2024"
-    }
+    },
+    "id": "expert-107"
   },
   {
-    "slug": "betty-walker",
+    "slug": "expert-108",
     "name": "Betty Walker",
     "country": "France",
     "role": "DevOps Engineer",
@@ -2998,10 +3548,11 @@
       "rate": "$63.00/hr",
       "time": "50 hours",
       "dates": "Oct 11, 2024 - Oct 25, 2024"
-    }
+    },
+    "id": "expert-108"
   },
   {
-    "slug": "laura-morgan",
+    "slug": "expert-109",
     "name": "Laura Morgan",
     "country": "Ireland",
     "role": "Network Engineer",
@@ -3030,10 +3581,11 @@
       "rate": "$63.00/hr",
       "time": "60 hours",
       "dates": "Oct 18, 2024 - Oct 31, 2024"
-    }
+    },
+    "id": "expert-109"
   },
   {
-    "slug": "samuel-stewart",
+    "slug": "expert-110",
     "name": "Samuel Stewart",
     "country": "Sweden",
     "role": "System Administrator",
@@ -3063,10 +3615,11 @@
       "rate": "$54.00/hr",
       "time": "50 hours",
       "dates": "Oct 21, 2024 - Oct 31, 2024"
-    }
+    },
+    "id": "expert-110"
   },
   {
-    "slug": "sandra-lewis",
+    "slug": "expert-111",
     "name": "Sandra Lewis",
     "country": "Canada",
     "role": "Database Administrator",
@@ -3096,10 +3649,11 @@
       "rate": "$65.00/hr",
       "time": "50 hours",
       "dates": "Oct 11, 2024 - Oct 23, 2024"
-    }
+    },
+    "id": "expert-111"
   },
   {
-    "slug": "brandon-butler",
+    "slug": "expert-112",
     "name": "Brandon Butler",
     "country": "South Africa",
     "role": "Machine Learning Engineer",
@@ -3127,10 +3681,11 @@
       "rate": "$87.00/hr",
       "time": "50 hours",
       "dates": "Nov 03, 2024 - Nov 14, 2024"
-    }
+    },
+    "id": "expert-112"
   },
   {
-    "slug": "lisa-flores",
+    "slug": "expert-113",
     "name": "Lisa Flores",
     "country": "Ukraine",
     "role": "Cloud Architect",
@@ -3159,10 +3714,11 @@
       "rate": "$91.00/hr",
       "time": "50 hours",
       "dates": "Oct 13, 2024 - Oct 25, 2024"
-    }
+    },
+    "id": "expert-113"
   },
   {
-    "slug": "kevin-torres",
+    "slug": "expert-114",
     "name": "Kevin Torres",
     "country": "India",
     "role": "Scrum Master",
@@ -3192,10 +3748,11 @@
       "rate": "$60.00/hr",
       "time": "60 hours",
       "dates": "Oct 16, 2024 - Oct 26, 2024"
-    }
+    },
+    "id": "expert-114"
   },
   {
-    "slug": "william-martinez",
+    "slug": "expert-115",
     "name": "William Martinez",
     "country": "Italy",
     "role": "Senior Full Stack Developer",
@@ -3224,10 +3781,11 @@
       "rate": "$77.00/hr",
       "time": "60 hours",
       "dates": "Oct 12, 2024 - Oct 23, 2024"
-    }
+    },
+    "id": "expert-115"
   },
   {
-    "slug": "carolyn-turner",
+    "slug": "expert-116",
     "name": "Carolyn Turner",
     "country": "Canada",
     "role": "DevOps Engineer",
@@ -3257,10 +3815,11 @@
       "rate": "$62.00/hr",
       "time": "50 hours",
       "dates": "Oct 06, 2024 - Oct 16, 2024"
-    }
+    },
+    "id": "expert-116"
   },
   {
-    "slug": "larry-rodriguez",
+    "slug": "expert-117",
     "name": "Larry Rodriguez",
     "country": "South Korea",
     "role": "Product Manager",
@@ -3290,10 +3849,11 @@
       "rate": "$70.00/hr",
       "time": "50 hours",
       "dates": "Oct 16, 2024 - Oct 26, 2024"
-    }
+    },
+    "id": "expert-117"
   },
   {
-    "slug": "tyler-watson",
+    "slug": "expert-118",
     "name": "Tyler Watson",
     "country": "Saudi Arabia",
     "role": "AI Engineer",
@@ -3323,10 +3883,11 @@
       "rate": "$82.00/hr",
       "time": "50 hours",
       "dates": "Oct 09, 2024 - Oct 21, 2024"
-    }
+    },
+    "id": "expert-118"
   },
   {
-    "slug": "catherine-henderson",
+    "slug": "expert-119",
     "name": "Catherine Henderson",
     "country": "Germany",
     "role": "Technical Writer",
@@ -3356,10 +3917,11 @@
       "rate": "$40.00/hr",
       "time": "50 hours",
       "dates": "Oct 20, 2024 - Nov 01, 2024"
-    }
+    },
+    "id": "expert-119"
   },
   {
-    "slug": "sophia-martinez",
+    "slug": "expert-120",
     "name": "Sophia Martinez",
     "country": "Philippines",
     "role": "Senior Full Stack Developer",
@@ -3387,10 +3949,11 @@
       "rate": "$70.00/hr",
       "time": "50 hours",
       "dates": "Oct 30, 2024 - Nov 13, 2024"
-    }
+    },
+    "id": "expert-120"
   },
   {
-    "slug": "daniel-ramirez",
+    "slug": "expert-121",
     "name": "Daniel Ramirez",
     "country": "Thailand",
     "role": "Software Architect",
@@ -3420,10 +3983,11 @@
       "rate": "$86.00/hr",
       "time": "60 hours",
       "dates": "Oct 23, 2024 - Nov 02, 2024"
-    }
+    },
+    "id": "expert-121"
   },
   {
-    "slug": "eric-simmons",
+    "slug": "expert-122",
     "name": "Eric Simmons",
     "country": "Russia",
     "role": "Machine Learning Engineer",
@@ -3453,10 +4017,11 @@
       "rate": "$83.00/hr",
       "time": "60 hours",
       "dates": "Oct 14, 2024 - Oct 24, 2024"
-    }
+    },
+    "id": "expert-122"
   },
   {
-    "slug": "kimberly-clark",
+    "slug": "expert-123",
     "name": "Kimberly Clark",
     "country": "China",
     "role": "Product Manager",
@@ -3485,10 +4050,11 @@
       "rate": "$70.00/hr",
       "time": "60 hours",
       "dates": "Oct 28, 2024 - Nov 08, 2024"
-    }
+    },
+    "id": "expert-123"
   },
   {
-    "slug": "eric-powell",
+    "slug": "expert-124",
     "name": "Eric Powell",
     "country": "Denmark",
     "role": "QA Engineer",
@@ -3517,10 +4083,11 @@
       "rate": "$50.00/hr",
       "time": "60 hours",
       "dates": "Oct 22, 2024 - Nov 06, 2024"
-    }
+    },
+    "id": "expert-124"
   },
   {
-    "slug": "douglas-patterson",
+    "slug": "expert-125",
     "name": "Douglas Patterson",
     "country": "Russia",
     "role": "Full Stack Developer",
@@ -3550,10 +4117,11 @@
       "rate": "$68.00/hr",
       "time": "50 hours",
       "dates": "Oct 29, 2024 - Nov 13, 2024"
-    }
+    },
+    "id": "expert-125"
   },
   {
-    "slug": "nancy-brown",
+    "slug": "expert-126",
     "name": "Nancy Brown",
     "country": "South Korea",
     "role": "Frontend Developer",
@@ -3581,10 +4149,11 @@
       "rate": "$56.00/hr",
       "time": "50 hours",
       "dates": "Oct 24, 2024 - Nov 03, 2024"
-    }
+    },
+    "id": "expert-126"
   },
   {
-    "slug": "henry-collins",
+    "slug": "expert-127",
     "name": "Henry Collins",
     "country": "Saudi Arabia",
     "role": "DevOps Engineer",
@@ -3612,10 +4181,11 @@
       "rate": "$69.00/hr",
       "time": "50 hours",
       "dates": "Oct 11, 2024 - Oct 21, 2024"
-    }
+    },
+    "id": "expert-127"
   },
   {
-    "slug": "kimberly-clark",
+    "slug": "expert-128",
     "name": "Kimberly Clark",
     "country": "Malaysia",
     "role": "Scrum Master",
@@ -3644,10 +4214,11 @@
       "rate": "$60.00/hr",
       "time": "50 hours",
       "dates": "Oct 08, 2024 - Oct 23, 2024"
-    }
+    },
+    "id": "expert-128"
   },
   {
-    "slug": "carolyn-martinez",
+    "slug": "expert-129",
     "name": "Carolyn Martinez",
     "country": "Austria",
     "role": "Cybersecurity Specialist",
@@ -3677,10 +4248,11 @@
       "rate": "$89.00/hr",
       "time": "60 hours",
       "dates": "Oct 15, 2024 - Oct 30, 2024"
-    }
+    },
+    "id": "expert-129"
   },
   {
-    "slug": "janet-gonzales",
+    "slug": "expert-130",
     "name": "Janet Gonzales",
     "country": "Netherlands",
     "role": "Technical Writer",
@@ -3710,10 +4282,11 @@
       "rate": "$43.00/hr",
       "time": "50 hours",
       "dates": "Nov 04, 2024 - Nov 15, 2024"
-    }
+    },
+    "id": "expert-130"
   },
   {
-    "slug": "janet-wilson",
+    "slug": "expert-131",
     "name": "Janet Wilson",
     "country": "New Zealand",
     "role": "UX Designer",
@@ -3743,10 +4316,11 @@
       "rate": "$62.00/hr",
       "time": "50 hours",
       "dates": "Oct 03, 2024 - Oct 17, 2024"
-    }
+    },
+    "id": "expert-131"
   },
   {
-    "slug": "adam-ramirez",
+    "slug": "expert-132",
     "name": "Adam Ramirez",
     "country": "Egypt",
     "role": "Frontend Developer",
@@ -3774,10 +4348,11 @@
       "rate": "$55.00/hr",
       "time": "60 hours",
       "dates": "Oct 09, 2024 - Oct 20, 2024"
-    }
+    },
+    "id": "expert-132"
   },
   {
-    "slug": "nathan-gray",
+    "slug": "expert-133",
     "name": "Nathan Gray",
     "country": "New Zealand",
     "role": "Product Manager",
@@ -3807,10 +4382,11 @@
       "rate": "$74.00/hr",
       "time": "60 hours",
       "dates": "Oct 04, 2024 - Oct 19, 2024"
-    }
+    },
+    "id": "expert-133"
   },
   {
-    "slug": "rebecca-rivera",
+    "slug": "expert-134",
     "name": "Rebecca Rivera",
     "country": "Nigeria",
     "role": "Mobile Developer",
@@ -3838,10 +4414,11 @@
       "rate": "$66.00/hr",
       "time": "60 hours",
       "dates": "Oct 28, 2024 - Nov 12, 2024"
-    }
+    },
+    "id": "expert-134"
   },
   {
-    "slug": "elizabeth-adams",
+    "slug": "expert-135",
     "name": "Elizabeth Adams",
     "country": "UAE",
     "role": "Cybersecurity Specialist",
@@ -3871,10 +4448,11 @@
       "rate": "$84.00/hr",
       "time": "50 hours",
       "dates": "Oct 09, 2024 - Oct 23, 2024"
-    }
+    },
+    "id": "expert-135"
   },
   {
-    "slug": "debra-barnes",
+    "slug": "expert-136",
     "name": "Debra Barnes",
     "country": "United Kingdom",
     "role": "DevOps Engineer",
@@ -3902,10 +4480,11 @@
       "rate": "$66.00/hr",
       "time": "50 hours",
       "dates": "Oct 13, 2024 - Oct 23, 2024"
-    }
+    },
+    "id": "expert-136"
   },
   {
-    "slug": "brandon-turner",
+    "slug": "expert-137",
     "name": "Brandon Turner",
     "country": "Portugal",
     "role": "Game Developer",
@@ -3935,10 +4514,11 @@
       "rate": "$73.00/hr",
       "time": "60 hours",
       "dates": "Nov 03, 2024 - Nov 13, 2024"
-    }
+    },
+    "id": "expert-137"
   },
   {
-    "slug": "joshua-turner",
+    "slug": "expert-138",
     "name": "Joshua Turner",
     "country": "Philippines",
     "role": "UX Researcher",
@@ -3968,10 +4548,11 @@
       "rate": "$70.00/hr",
       "time": "60 hours",
       "dates": "Oct 22, 2024 - Nov 01, 2024"
-    }
+    },
+    "id": "expert-138"
   },
   {
-    "slug": "zachary-peterson",
+    "slug": "expert-139",
     "name": "Zachary Peterson",
     "country": "Saudi Arabia",
     "role": "Cloud Architect",
@@ -4000,10 +4581,11 @@
       "rate": "$88.00/hr",
       "time": "50 hours",
       "dates": "Oct 05, 2024 - Oct 16, 2024"
-    }
+    },
+    "id": "expert-139"
   },
   {
-    "slug": "sharon-gray",
+    "slug": "expert-140",
     "name": "Sharon Gray",
     "country": "Nigeria",
     "role": "Data Scientist",
@@ -4033,10 +4615,11 @@
       "rate": "$75.00/hr",
       "time": "50 hours",
       "dates": "Oct 24, 2024 - Nov 05, 2024"
-    }
+    },
+    "id": "expert-140"
   },
   {
-    "slug": "michelle-jenkins",
+    "slug": "expert-141",
     "name": "Michelle Jenkins",
     "country": "Peru",
     "role": "Scrum Master",
@@ -4066,10 +4649,11 @@
       "rate": "$67.00/hr",
       "time": "60 hours",
       "dates": "Oct 28, 2024 - Nov 12, 2024"
-    }
+    },
+    "id": "expert-141"
   },
   {
-    "slug": "brian-scott",
+    "slug": "expert-142",
     "name": "Brian Scott",
     "country": "Vietnam",
     "role": "Data Analyst",
@@ -4097,10 +4681,11 @@
       "rate": "$60.00/hr",
       "time": "50 hours",
       "dates": "Oct 30, 2024 - Nov 09, 2024"
-    }
+    },
+    "id": "expert-142"
   },
   {
-    "slug": "joseph-alexander",
+    "slug": "expert-143",
     "name": "Joseph Alexander",
     "country": "Ireland",
     "role": "Full Stack Developer",
@@ -4128,10 +4713,11 @@
       "rate": "$61.00/hr",
       "time": "50 hours",
       "dates": "Oct 26, 2024 - Nov 10, 2024"
-    }
+    },
+    "id": "expert-143"
   },
   {
-    "slug": "laura-mitchell",
+    "slug": "expert-144",
     "name": "Laura Mitchell",
     "country": "Saudi Arabia",
     "role": "Security Engineer",
@@ -4160,10 +4746,11 @@
       "rate": "$87.00/hr",
       "time": "60 hours",
       "dates": "Oct 31, 2024 - Nov 15, 2024"
-    }
+    },
+    "id": "expert-144"
   },
   {
-    "slug": "nicole-white",
+    "slug": "expert-145",
     "name": "Nicole White",
     "country": "Brazil",
     "role": "QA Engineer",
@@ -4192,10 +4779,11 @@
       "rate": "$52.00/hr",
       "time": "60 hours",
       "dates": "Oct 31, 2024 - Nov 11, 2024"
-    }
+    },
+    "id": "expert-145"
   },
   {
-    "slug": "douglas-powell",
+    "slug": "expert-146",
     "name": "Douglas Powell",
     "country": "Greece",
     "role": "Network Engineer",
@@ -4224,10 +4812,11 @@
       "rate": "$60.00/hr",
       "time": "60 hours",
       "dates": "Oct 17, 2024 - Oct 29, 2024"
-    }
+    },
+    "id": "expert-146"
   },
   {
-    "slug": "nathan-perry",
+    "slug": "expert-147",
     "name": "Nathan Perry",
     "country": "Chile",
     "role": "Database Administrator",
@@ -4256,10 +4845,11 @@
       "rate": "$62.00/hr",
       "time": "60 hours",
       "dates": "Oct 10, 2024 - Oct 20, 2024"
-    }
+    },
+    "id": "expert-147"
   },
   {
-    "slug": "benjamin-jenkins",
+    "slug": "expert-148",
     "name": "Benjamin Jenkins",
     "country": "South Africa",
     "role": "QA Engineer",
@@ -4288,10 +4878,11 @@
       "rate": "$51.00/hr",
       "time": "50 hours",
       "dates": "Oct 21, 2024 - Nov 01, 2024"
-    }
+    },
+    "id": "expert-148"
   },
   {
-    "slug": "shirley-wood",
+    "slug": "expert-149",
     "name": "Shirley Wood",
     "country": "Thailand",
     "role": "Data Analyst",
@@ -4321,10 +4912,11 @@
       "rate": "$59.00/hr",
       "time": "60 hours",
       "dates": "Oct 21, 2024 - Oct 31, 2024"
-    }
+    },
+    "id": "expert-149"
   },
   {
-    "slug": "benjamin-campbell",
+    "slug": "expert-150",
     "name": "Benjamin Campbell",
     "country": "Australia",
     "role": "Frontend Developer",
@@ -4353,10 +4945,11 @@
       "rate": "$52.00/hr",
       "time": "60 hours",
       "dates": "Oct 23, 2024 - Nov 02, 2024"
-    }
+    },
+    "id": "expert-150"
   },
   {
-    "slug": "maria-robinson",
+    "slug": "expert-151",
     "name": "Maria Robinson",
     "country": "Israel",
     "role": "Data Scientist",
@@ -4384,10 +4977,11 @@
       "rate": "$76.00/hr",
       "time": "60 hours",
       "dates": "Oct 29, 2024 - Nov 08, 2024"
-    }
+    },
+    "id": "expert-151"
   },
   {
-    "slug": "carolyn-robinson",
+    "slug": "expert-152",
     "name": "Carolyn Robinson",
     "country": "Turkey",
     "role": "Business Analyst",
@@ -4415,10 +5009,11 @@
       "rate": "$57.00/hr",
       "time": "60 hours",
       "dates": "Oct 07, 2024 - Oct 19, 2024"
-    }
+    },
+    "id": "expert-152"
   },
   {
-    "slug": "linda-reed",
+    "slug": "expert-153",
     "name": "Linda Reed",
     "country": "Germany",
     "role": "Data Analyst",
@@ -4446,10 +5041,11 @@
       "rate": "$56.00/hr",
       "time": "60 hours",
       "dates": "Oct 27, 2024 - Nov 10, 2024"
-    }
+    },
+    "id": "expert-153"
   },
   {
-    "slug": "larry-jenkins",
+    "slug": "expert-154",
     "name": "Larry Jenkins",
     "country": "Sweden",
     "role": "Frontend Developer",
@@ -4478,10 +5074,11 @@
       "rate": "$57.00/hr",
       "time": "50 hours",
       "dates": "Oct 21, 2024 - Nov 04, 2024"
-    }
+    },
+    "id": "expert-154"
   },
   {
-    "slug": "jack-chen",
+    "slug": "expert-155",
     "name": "Jack Chen",
     "country": "Germany",
     "role": "Full Stack Developer",
@@ -4509,10 +5106,11 @@
       "rate": "$70.00/hr",
       "time": "50 hours",
       "dates": "Oct 15, 2024 - Oct 27, 2024"
-    }
+    },
+    "id": "expert-155"
   },
   {
-    "slug": "carlos-long",
+    "slug": "expert-156",
     "name": "Carlos Long",
     "country": "South Africa",
     "role": "Embedded Systems Engineer",
@@ -4541,10 +5139,11 @@
       "rate": "$78.00/hr",
       "time": "50 hours",
       "dates": "Oct 11, 2024 - Oct 22, 2024"
-    }
+    },
+    "id": "expert-156"
   },
   {
-    "slug": "gregory-brown",
+    "slug": "expert-157",
     "name": "Gregory Brown",
     "country": "Sweden",
     "role": "Data Scientist",
@@ -4574,10 +5173,11 @@
       "rate": "$76.00/hr",
       "time": "50 hours",
       "dates": "Oct 10, 2024 - Oct 23, 2024"
-    }
+    },
+    "id": "expert-157"
   },
   {
-    "slug": "brandon-bennett",
+    "slug": "expert-158",
     "name": "Brandon Bennett",
     "country": "Argentina",
     "role": "DevOps Engineer",
@@ -4605,10 +5205,11 @@
       "rate": "$66.00/hr",
       "time": "60 hours",
       "dates": "Oct 16, 2024 - Oct 27, 2024"
-    }
+    },
+    "id": "expert-158"
   },
   {
-    "slug": "joseph-price",
+    "slug": "expert-159",
     "name": "Joseph Price",
     "country": "Malaysia",
     "role": "DevOps Engineer",
@@ -4638,10 +5239,11 @@
       "rate": "$61.00/hr",
       "time": "60 hours",
       "dates": "Oct 05, 2024 - Oct 17, 2024"
-    }
+    },
+    "id": "expert-159"
   },
   {
-    "slug": "brian-russell",
+    "slug": "expert-160",
     "name": "Brian Russell",
     "country": "Vietnam",
     "role": "UX Researcher",
@@ -4671,10 +5273,11 @@
       "rate": "$62.00/hr",
       "time": "50 hours",
       "dates": "Oct 06, 2024 - Oct 18, 2024"
-    }
+    },
+    "id": "expert-160"
   },
   {
-    "slug": "sarah-diaz",
+    "slug": "expert-161",
     "name": "Sarah Diaz",
     "country": "Portugal",
     "role": "Blockchain Developer",
@@ -4704,10 +5307,11 @@
       "rate": "$87.00/hr",
       "time": "60 hours",
       "dates": "Oct 17, 2024 - Oct 30, 2024"
-    }
+    },
+    "id": "expert-161"
   },
   {
-    "slug": "angela-walker",
+    "slug": "expert-162",
     "name": "Angela Walker",
     "country": "Egypt",
     "role": "DevOps Engineer",
@@ -4736,10 +5340,11 @@
       "rate": "$64.00/hr",
       "time": "50 hours",
       "dates": "Oct 27, 2024 - Nov 11, 2024"
-    }
+    },
+    "id": "expert-162"
   },
   {
-    "slug": "ethan-ward",
+    "slug": "expert-163",
     "name": "Ethan Ward",
     "country": "Saudi Arabia",
     "role": "Data Scientist",
@@ -4769,10 +5374,11 @@
       "rate": "$81.00/hr",
       "time": "60 hours",
       "dates": "Nov 02, 2024 - Nov 14, 2024"
-    }
+    },
+    "id": "expert-163"
   },
   {
-    "slug": "nancy-evans",
+    "slug": "expert-164",
     "name": "Nancy Evans",
     "country": "Ukraine",
     "role": "Game Developer",
@@ -4801,10 +5407,11 @@
       "rate": "$69.00/hr",
       "time": "60 hours",
       "dates": "Oct 24, 2024 - Nov 03, 2024"
-    }
+    },
+    "id": "expert-164"
   },
   {
-    "slug": "carol-barnes",
+    "slug": "expert-165",
     "name": "Carol Barnes",
     "country": "Japan",
     "role": "Data Analyst",
@@ -4833,10 +5440,11 @@
       "rate": "$57.00/hr",
       "time": "60 hours",
       "dates": "Oct 18, 2024 - Oct 31, 2024"
-    }
+    },
+    "id": "expert-165"
   },
   {
-    "slug": "jessica-cox",
+    "slug": "expert-166",
     "name": "Jessica Cox",
     "country": "Israel",
     "role": "System Administrator",
@@ -4866,10 +5474,11 @@
       "rate": "$53.00/hr",
       "time": "50 hours",
       "dates": "Oct 08, 2024 - Oct 20, 2024"
-    }
+    },
+    "id": "expert-166"
   },
   {
-    "slug": "melissa-garcia",
+    "slug": "expert-167",
     "name": "Melissa Garcia",
     "country": "United States",
     "role": "Cloud Architect",
@@ -4897,10 +5506,11 @@
       "rate": "$90.00/hr",
       "time": "50 hours",
       "dates": "Oct 21, 2024 - Nov 05, 2024"
-    }
+    },
+    "id": "expert-167"
   },
   {
-    "slug": "timothy-alexander",
+    "slug": "expert-168",
     "name": "Timothy Alexander",
     "country": "Saudi Arabia",
     "role": "Data Scientist",
@@ -4930,10 +5540,11 @@
       "rate": "$77.00/hr",
       "time": "60 hours",
       "dates": "Oct 25, 2024 - Nov 08, 2024"
-    }
+    },
+    "id": "expert-168"
   },
   {
-    "slug": "carlos-flores",
+    "slug": "expert-169",
     "name": "Carlos Flores",
     "country": "Ukraine",
     "role": "Network Engineer",
@@ -4963,10 +5574,11 @@
       "rate": "$65.00/hr",
       "time": "50 hours",
       "dates": "Nov 01, 2024 - Nov 12, 2024"
-    }
+    },
+    "id": "expert-169"
   },
   {
-    "slug": "joshua-ward",
+    "slug": "expert-170",
     "name": "Joshua Ward",
     "country": "United States",
     "role": "UX Designer",
@@ -4995,10 +5607,11 @@
       "rate": "$58.00/hr",
       "time": "50 hours",
       "dates": "Oct 06, 2024 - Oct 16, 2024"
-    }
+    },
+    "id": "expert-170"
   },
   {
-    "slug": "gregory-white",
+    "slug": "expert-171",
     "name": "Gregory White",
     "country": "Germany",
     "role": "Business Analyst",
@@ -5027,10 +5640,11 @@
       "rate": "$50.00/hr",
       "time": "50 hours",
       "dates": "Oct 31, 2024 - Nov 11, 2024"
-    }
+    },
+    "id": "expert-171"
   },
   {
-    "slug": "frank-phillips",
+    "slug": "expert-172",
     "name": "Frank Phillips",
     "country": "New Zealand",
     "role": "Data Analyst",
@@ -5060,10 +5674,11 @@
       "rate": "$59.00/hr",
       "time": "50 hours",
       "dates": "Oct 30, 2024 - Nov 14, 2024"
-    }
+    },
+    "id": "expert-172"
   },
   {
-    "slug": "jacob-powell",
+    "slug": "expert-173",
     "name": "Jacob Powell",
     "country": "Egypt",
     "role": "QA Engineer",
@@ -5093,10 +5708,11 @@
       "rate": "$54.00/hr",
       "time": "50 hours",
       "dates": "Oct 05, 2024 - Oct 16, 2024"
-    }
+    },
+    "id": "expert-173"
   },
   {
-    "slug": "carol-miller",
+    "slug": "expert-174",
     "name": "Carol Miller",
     "country": "Colombia",
     "role": "Software Architect",
@@ -5124,10 +5740,11 @@
       "rate": "$84.00/hr",
       "time": "50 hours",
       "dates": "Oct 24, 2024 - Nov 08, 2024"
-    }
+    },
+    "id": "expert-174"
   },
   {
-    "slug": "jack-henderson",
+    "slug": "expert-175",
     "name": "Jack Henderson",
     "country": "Ukraine",
     "role": "DevOps Engineer",
@@ -5156,10 +5773,11 @@
       "rate": "$62.00/hr",
       "time": "50 hours",
       "dates": "Oct 26, 2024 - Nov 05, 2024"
-    }
+    },
+    "id": "expert-175"
   },
   {
-    "slug": "michelle-robinson",
+    "slug": "expert-176",
     "name": "Michelle Robinson",
     "country": "Ukraine",
     "role": "Scrum Master",
@@ -5188,10 +5806,11 @@
       "rate": "$65.00/hr",
       "time": "50 hours",
       "dates": "Oct 11, 2024 - Oct 21, 2024"
-    }
+    },
+    "id": "expert-176"
   },
   {
-    "slug": "laura-nelson",
+    "slug": "expert-177",
     "name": "Laura Nelson",
     "country": "Kenya",
     "role": "Data Scientist",
@@ -5219,10 +5838,11 @@
       "rate": "$76.00/hr",
       "time": "50 hours",
       "dates": "Oct 03, 2024 - Oct 18, 2024"
-    }
+    },
+    "id": "expert-177"
   },
   {
-    "slug": "william-lopez",
+    "slug": "expert-178",
     "name": "William Lopez",
     "country": "France",
     "role": "Database Administrator",
@@ -5250,10 +5870,11 @@
       "rate": "$58.00/hr",
       "time": "50 hours",
       "dates": "Oct 25, 2024 - Nov 06, 2024"
-    }
+    },
+    "id": "expert-178"
   },
   {
-    "slug": "dennis-campbell",
+    "slug": "expert-179",
     "name": "Dennis Campbell",
     "country": "United States",
     "role": "Data Scientist",
@@ -5283,10 +5904,11 @@
       "rate": "$85.00/hr",
       "time": "50 hours",
       "dates": "Oct 10, 2024 - Oct 20, 2024"
-    }
+    },
+    "id": "expert-179"
   },
   {
-    "slug": "michelle-lewis",
+    "slug": "expert-180",
     "name": "Michelle Lewis",
     "country": "Russia",
     "role": "Backend Engineer",
@@ -5314,10 +5936,11 @@
       "rate": "$72.00/hr",
       "time": "60 hours",
       "dates": "Oct 26, 2024 - Nov 10, 2024"
-    }
+    },
+    "id": "expert-180"
   },
   {
-    "slug": "deborah-hughes",
+    "slug": "expert-181",
     "name": "Deborah Hughes",
     "country": "Italy",
     "role": "Blockchain Developer",
@@ -5346,10 +5969,11 @@
       "rate": "$89.00/hr",
       "time": "50 hours",
       "dates": "Oct 04, 2024 - Oct 17, 2024"
-    }
+    },
+    "id": "expert-181"
   },
   {
-    "slug": "noah-kelly",
+    "slug": "expert-182",
     "name": "Noah Kelly",
     "country": "Portugal",
     "role": "Mobile Developer",
@@ -5378,10 +6002,11 @@
       "rate": "$72.00/hr",
       "time": "50 hours",
       "dates": "Oct 27, 2024 - Nov 11, 2024"
-    }
+    },
+    "id": "expert-182"
   },
   {
-    "slug": "susan-bell",
+    "slug": "expert-183",
     "name": "Susan Bell",
     "country": "Turkey",
     "role": "Business Analyst",
@@ -5409,10 +6034,11 @@
       "rate": "$58.00/hr",
       "time": "50 hours",
       "dates": "Oct 21, 2024 - Nov 02, 2024"
-    }
+    },
+    "id": "expert-183"
   },
   {
-    "slug": "daniel-garcia",
+    "slug": "expert-184",
     "name": "Daniel Garcia",
     "country": "Germany",
     "role": "QA Engineer",
@@ -5440,10 +6066,11 @@
       "rate": "$48.00/hr",
       "time": "60 hours",
       "dates": "Oct 25, 2024 - Nov 06, 2024"
-    }
+    },
+    "id": "expert-184"
   },
   {
-    "slug": "angela-cook",
+    "slug": "expert-185",
     "name": "Angela Cook",
     "country": "South Africa",
     "role": "Product Manager",
@@ -5473,10 +6100,11 @@
       "rate": "$69.00/hr",
       "time": "50 hours",
       "dates": "Oct 04, 2024 - Oct 19, 2024"
-    }
+    },
+    "id": "expert-185"
   },
   {
-    "slug": "sharon-baker",
+    "slug": "expert-186",
     "name": "Sharon Baker",
     "country": "Turkey",
     "role": "Database Administrator",
@@ -5505,10 +6133,11 @@
       "rate": "$58.00/hr",
       "time": "50 hours",
       "dates": "Oct 07, 2024 - Oct 21, 2024"
-    }
+    },
+    "id": "expert-186"
   },
   {
-    "slug": "patricia-bell",
+    "slug": "expert-187",
     "name": "Patricia Bell",
     "country": "Poland",
     "role": "Business Analyst",
@@ -5536,10 +6165,11 @@
       "rate": "$57.00/hr",
       "time": "60 hours",
       "dates": "Oct 19, 2024 - Oct 30, 2024"
-    }
+    },
+    "id": "expert-187"
   },
   {
-    "slug": "robert-bryant",
+    "slug": "expert-188",
     "name": "Robert Bryant",
     "country": "Egypt",
     "role": "Machine Learning Engineer",
@@ -5567,10 +6197,11 @@
       "rate": "$83.00/hr",
       "time": "50 hours",
       "dates": "Oct 10, 2024 - Oct 23, 2024"
-    }
+    },
+    "id": "expert-188"
   },
   {
-    "slug": "dennis-parker",
+    "slug": "expert-189",
     "name": "Dennis Parker",
     "country": "Colombia",
     "role": "Senior Full Stack Developer",
@@ -5598,10 +6229,11 @@
       "rate": "$76.00/hr",
       "time": "60 hours",
       "dates": "Oct 16, 2024 - Oct 30, 2024"
-    }
+    },
+    "id": "expert-189"
   },
   {
-    "slug": "betty-kim",
+    "slug": "expert-190",
     "name": "Betty Kim",
     "country": "Kenya",
     "role": "Software Architect",
@@ -5629,10 +6261,11 @@
       "rate": "$89.00/hr",
       "time": "50 hours",
       "dates": "Oct 25, 2024 - Nov 05, 2024"
-    }
+    },
+    "id": "expert-190"
   },
   {
-    "slug": "andrew-kim",
+    "slug": "expert-191",
     "name": "Andrew Kim",
     "country": "Sweden",
     "role": "AI Engineer",
@@ -5662,10 +6295,11 @@
       "rate": "$85.00/hr",
       "time": "50 hours",
       "dates": "Oct 19, 2024 - Oct 31, 2024"
-    }
+    },
+    "id": "expert-191"
   },
   {
-    "slug": "chris-hughes",
+    "slug": "expert-192",
     "name": "Chris Hughes",
     "country": "United States",
     "role": "Game Developer",
@@ -5693,10 +6327,11 @@
       "rate": "$68.00/hr",
       "time": "50 hours",
       "dates": "Nov 01, 2024 - Nov 13, 2024"
-    }
+    },
+    "id": "expert-192"
   },
   {
-    "slug": "betty-garcia",
+    "slug": "expert-193",
     "name": "Betty Garcia",
     "country": "Brazil",
     "role": "Game Developer",
@@ -5726,10 +6361,11 @@
       "rate": "$75.00/hr",
       "time": "50 hours",
       "dates": "Oct 29, 2024 - Nov 10, 2024"
-    }
+    },
+    "id": "expert-193"
   },
   {
-    "slug": "carlos-carter",
+    "slug": "expert-194",
     "name": "Carlos Carter",
     "country": "Italy",
     "role": "Data Scientist",
@@ -5759,10 +6395,11 @@
       "rate": "$78.00/hr",
       "time": "50 hours",
       "dates": "Oct 04, 2024 - Oct 19, 2024"
-    }
+    },
+    "id": "expert-194"
   },
   {
-    "slug": "debra-rogers",
+    "slug": "expert-195",
     "name": "Debra Rogers",
     "country": "United Kingdom",
     "role": "Scrum Master",
@@ -5792,10 +6429,11 @@
       "rate": "$61.00/hr",
       "time": "50 hours",
       "dates": "Oct 12, 2024 - Oct 23, 2024"
-    }
+    },
+    "id": "expert-195"
   },
   {
-    "slug": "lisa-diaz",
+    "slug": "expert-196",
     "name": "Lisa Diaz",
     "country": "Indonesia",
     "role": "Cybersecurity Specialist",
@@ -5824,10 +6462,11 @@
       "rate": "$86.00/hr",
       "time": "60 hours",
       "dates": "Oct 23, 2024 - Nov 02, 2024"
-    }
+    },
+    "id": "expert-196"
   },
   {
-    "slug": "carlos-barnes",
+    "slug": "expert-197",
     "name": "Carlos Barnes",
     "country": "United Kingdom",
     "role": "Network Engineer",
@@ -5857,10 +6496,11 @@
       "rate": "$65.00/hr",
       "time": "50 hours",
       "dates": "Oct 22, 2024 - Nov 05, 2024"
-    }
+    },
+    "id": "expert-197"
   },
   {
-    "slug": "gary-reed",
+    "slug": "expert-198",
     "name": "Gary Reed",
     "country": "Turkey",
     "role": "Network Engineer",
@@ -5888,10 +6528,11 @@
       "rate": "$63.00/hr",
       "time": "50 hours",
       "dates": "Oct 27, 2024 - Nov 07, 2024"
-    }
+    },
+    "id": "expert-198"
   },
   {
-    "slug": "brandon-anderson",
+    "slug": "expert-199",
     "name": "Brandon Anderson",
     "country": "United Kingdom",
     "role": "Backend Engineer",
@@ -5920,10 +6561,11 @@
       "rate": "$67.00/hr",
       "time": "60 hours",
       "dates": "Oct 25, 2024 - Nov 06, 2024"
-    }
+    },
+    "id": "expert-199"
   },
   {
-    "slug": "donna-simmons",
+    "slug": "expert-200",
     "name": "Donna Simmons",
     "country": "Nigeria",
     "role": "Product Manager",
@@ -5951,10 +6593,11 @@
       "rate": "$75.00/hr",
       "time": "50 hours",
       "dates": "Oct 20, 2024 - Nov 04, 2024"
-    }
+    },
+    "id": "expert-200"
   },
   {
-    "slug": "ruth-lee",
+    "slug": "expert-201",
     "name": "Ruth Lee",
     "country": "Portugal",
     "role": "Scrum Master",
@@ -5984,10 +6627,11 @@
       "rate": "$66.00/hr",
       "time": "60 hours",
       "dates": "Nov 01, 2024 - Nov 12, 2024"
-    }
+    },
+    "id": "expert-201"
   },
   {
-    "slug": "jeremy-sanchez",
+    "slug": "expert-202",
     "name": "Jeremy Sanchez",
     "country": "Poland",
     "role": "Technical Writer",
@@ -6017,10 +6661,11 @@
       "rate": "$44.00/hr",
       "time": "60 hours",
       "dates": "Nov 02, 2024 - Nov 14, 2024"
-    }
+    },
+    "id": "expert-202"
   },
   {
-    "slug": "cynthia-garcia",
+    "slug": "expert-203",
     "name": "Cynthia Garcia",
     "country": "South Korea",
     "role": "Business Analyst",
@@ -6050,10 +6695,11 @@
       "rate": "$58.00/hr",
       "time": "50 hours",
       "dates": "Oct 21, 2024 - Oct 31, 2024"
-    }
+    },
+    "id": "expert-203"
   },
   {
-    "slug": "michelle-bailey",
+    "slug": "expert-204",
     "name": "Michelle Bailey",
     "country": "Chile",
     "role": "Network Engineer",
@@ -6082,10 +6728,11 @@
       "rate": "$65.00/hr",
       "time": "60 hours",
       "dates": "Nov 01, 2024 - Nov 11, 2024"
-    }
+    },
+    "id": "expert-204"
   },
   {
-    "slug": "nicole-bryant",
+    "slug": "expert-205",
     "name": "Nicole Bryant",
     "country": "Denmark",
     "role": "Cloud Architect",
@@ -6114,10 +6761,11 @@
       "rate": "$89.00/hr",
       "time": "50 hours",
       "dates": "Nov 01, 2024 - Nov 11, 2024"
-    }
+    },
+    "id": "expert-205"
   },
   {
-    "slug": "sarah-martinez",
+    "slug": "expert-206",
     "name": "Sarah Martinez",
     "country": "Portugal",
     "role": "Cybersecurity Specialist",
@@ -6145,10 +6793,11 @@
       "rate": "$90.00/hr",
       "time": "50 hours",
       "dates": "Oct 12, 2024 - Oct 26, 2024"
-    }
+    },
+    "id": "expert-206"
   },
   {
-    "slug": "nicholas-bailey",
+    "slug": "expert-207",
     "name": "Nicholas Bailey",
     "country": "Philippines",
     "role": "QA Engineer",
@@ -6176,10 +6825,11 @@
       "rate": "$47.00/hr",
       "time": "60 hours",
       "dates": "Oct 25, 2024 - Nov 07, 2024"
-    }
+    },
+    "id": "expert-207"
   },
   {
-    "slug": "barbara-bell",
+    "slug": "expert-208",
     "name": "Barbara Bell",
     "country": "Chile",
     "role": "Mobile Developer",
@@ -6209,10 +6859,11 @@
       "rate": "$63.00/hr",
       "time": "50 hours",
       "dates": "Oct 08, 2024 - Oct 19, 2024"
-    }
+    },
+    "id": "expert-208"
   },
   {
-    "slug": "jerry-sanchez",
+    "slug": "expert-209",
     "name": "Jerry Sanchez",
     "country": "United Kingdom",
     "role": "UX Designer",
@@ -6240,10 +6891,11 @@
       "rate": "$64.00/hr",
       "time": "50 hours",
       "dates": "Oct 19, 2024 - Oct 29, 2024"
-    }
+    },
+    "id": "expert-209"
   },
   {
-    "slug": "noah-lopez",
+    "slug": "expert-210",
     "name": "Noah Lopez",
     "country": "UAE",
     "role": "Cybersecurity Specialist",
@@ -6271,10 +6923,11 @@
       "rate": "$87.00/hr",
       "time": "60 hours",
       "dates": "Oct 13, 2024 - Oct 27, 2024"
-    }
+    },
+    "id": "expert-210"
   },
   {
-    "slug": "kimberly-murphy",
+    "slug": "expert-211",
     "name": "Kimberly Murphy",
     "country": "Israel",
     "role": "Database Administrator",
@@ -6302,10 +6955,11 @@
       "rate": "$57.00/hr",
       "time": "60 hours",
       "dates": "Oct 12, 2024 - Oct 27, 2024"
-    }
+    },
+    "id": "expert-211"
   },
   {
-    "slug": "jeremy-patel",
+    "slug": "expert-212",
     "name": "Jeremy Patel",
     "country": "Ireland",
     "role": "Database Administrator",
@@ -6335,10 +6989,11 @@
       "rate": "$64.00/hr",
       "time": "60 hours",
       "dates": "Oct 07, 2024 - Oct 18, 2024"
-    }
+    },
+    "id": "expert-212"
   },
   {
-    "slug": "raymond-gonzalez",
+    "slug": "expert-213",
     "name": "Raymond Gonzalez",
     "country": "China",
     "role": "UI Designer",
@@ -6368,10 +7023,11 @@
       "rate": "$56.00/hr",
       "time": "50 hours",
       "dates": "Oct 18, 2024 - Nov 01, 2024"
-    }
+    },
+    "id": "expert-213"
   },
   {
-    "slug": "rebecca-lewis",
+    "slug": "expert-214",
     "name": "Rebecca Lewis",
     "country": "Poland",
     "role": "UX Designer",
@@ -6400,6 +7056,7 @@
       "rate": "$63.00/hr",
       "time": "50 hours",
       "dates": "Oct 31, 2024 - Nov 11, 2024"
-    }
+    },
+    "id": "expert-214"
   }
 ]

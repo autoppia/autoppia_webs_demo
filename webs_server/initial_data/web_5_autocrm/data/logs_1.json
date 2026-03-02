@@ -1,6 +1,186 @@
 [
   {
     "id": 1,
+    "matter": "Corporate Merger",
+    "client": "TechCorp Industries",
+    "date": "2025-12-01",
+    "hours": 3.5,
+    "description": "Merger agreement review and analysis",
+    "status": "Billable"
+  },
+  {
+    "id": 2,
+    "matter": "IP Portfolio Review",
+    "client": "TechCorp Industries",
+    "date": "2025-12-02",
+    "hours": 2.0,
+    "description": "Intellectual property assessment",
+    "status": "Billable"
+  },
+  {
+    "id": 3,
+    "matter": "Contract Negotiation",
+    "client": "TechCorp Industries",
+    "date": "2025-12-03",
+    "hours": 4.0,
+    "description": "Contract terms negotiation call",
+    "status": "Billed"
+  },
+  {
+    "id": 4,
+    "matter": "Regulatory Compliance",
+    "client": "Global Finance Ltd",
+    "date": "2025-12-01",
+    "hours": 2.5,
+    "description": "Compliance documentation review",
+    "status": "Billable"
+  },
+  {
+    "id": 5,
+    "matter": "Employment Agreement",
+    "client": "Global Finance Ltd",
+    "date": "2025-12-04",
+    "hours": 1.5,
+    "description": "Draft employment contract",
+    "status": "Billable"
+  },
+  {
+    "id": 6,
+    "matter": "Estate Planning",
+    "client": "Smith & Associates",
+    "date": "2025-12-01",
+    "hours": 2.0,
+    "description": "Estate planning consultation",
+    "status": "Billable"
+  },
+  {
+    "id": 7,
+    "matter": "Real Estate Transaction",
+    "client": "Smith & Associates",
+    "date": "2025-12-02",
+    "hours": 3.0,
+    "description": "Property title review",
+    "status": "Billed"
+  },
+  {
+    "id": 8,
+    "matter": "Litigation Defense",
+    "client": "Smith & Associates",
+    "date": "2025-12-03",
+    "hours": 5.0,
+    "description": "Case preparation and strategy",
+    "status": "Billable"
+  },
+  {
+    "id": 9,
+    "matter": "Trademark Application",
+    "client": "Smith & Associates",
+    "date": "2025-12-04",
+    "hours": 1.0,
+    "description": "Trademark filing preparation",
+    "status": "Billable"
+  },
+  {
+    "id": 10,
+    "matter": "Partnership Agreement",
+    "client": "Smith & Associates",
+    "date": "2025-12-05",
+    "hours": 3.5,
+    "description": "Partnership terms drafting",
+    "status": "Billable"
+  },
+  {
+    "id": 11,
+    "matter": "Labor Dispute Resolution",
+    "client": "Johnson Manufacturing",
+    "date": "2025-12-01",
+    "hours": 4.5,
+    "description": "Labor dispute mediation",
+    "status": "Billed"
+  },
+  {
+    "id": 12,
+    "matter": "Environmental Compliance",
+    "client": "Green Energy Solutions",
+    "date": "2025-12-02",
+    "hours": 2.5,
+    "description": "Environmental regulations review",
+    "status": "Billable"
+  },
+  {
+    "id": 13,
+    "matter": "Patent Filing",
+    "client": "Green Energy Solutions",
+    "date": "2025-12-03",
+    "hours": 3.0,
+    "description": "Patent application preparation",
+    "status": "Billable"
+  },
+  {
+    "id": 14,
+    "matter": "Joint Venture Agreement",
+    "client": "Green Energy Solutions",
+    "date": "2025-12-04",
+    "hours": 4.0,
+    "description": "JV agreement negotiation",
+    "status": "Billable"
+  },
+  {
+    "id": 15,
+    "matter": "Licensing Agreement",
+    "client": "Green Energy Solutions",
+    "date": "2025-12-05",
+    "hours": 2.0,
+    "description": "License terms review",
+    "status": "Billable"
+  },
+  {
+    "id": 16,
+    "matter": "Property Acquisition",
+    "client": "Williams Real Estate",
+    "date": "2025-12-02",
+    "hours": 2.5,
+    "description": "Property due diligence",
+    "status": "Billable"
+  },
+  {
+    "id": 17,
+    "matter": "Lease Agreement Review",
+    "client": "Williams Real Estate",
+    "date": "2025-12-03",
+    "hours": 1.5,
+    "description": "Lease terms analysis",
+    "status": "Billed"
+  },
+  {
+    "id": 18,
+    "matter": "FDA Approval Process",
+    "client": "Brown Pharmaceuticals",
+    "date": "2025-11-25",
+    "hours": 5.0,
+    "description": "FDA submission preparation",
+    "status": "Billable"
+  },
+  {
+    "id": 19,
+    "matter": "Data Privacy Compliance",
+    "client": "Davis Technology Group",
+    "date": "2025-12-01",
+    "hours": 3.5,
+    "description": "Privacy policy review",
+    "status": "Billable"
+  },
+  {
+    "id": 20,
+    "matter": "Software License Agreement",
+    "client": "Davis Technology Group",
+    "date": "2025-12-04",
+    "hours": 2.5,
+    "description": "Software license drafting",
+    "status": "Billable"
+  },
+  {
+    "id": 21,
     "matter": "Criminal Defense",
     "client": "Fortune Partners",
     "date": "2027-02-04",
@@ -9,7 +189,7 @@
     "status": "Billed"
   },
   {
-    "id": 2,
+    "id": 22,
     "matter": "Startup Advisory",
     "client": "Atlantic Group",
     "date": "2026-06-17",
@@ -18,7 +198,7 @@
     "status": "Billed"
   },
   {
-    "id": 3,
+    "id": 23,
     "matter": "Environmental Compliance",
     "client": "Megan Clark",
     "date": "2026-03-21",
@@ -27,7 +207,7 @@
     "status": "Billable"
   },
   {
-    "id": 4,
+    "id": 24,
     "matter": "Trademark Registration",
     "client": "Stephanie Young",
     "date": "2027-02-08",
@@ -36,7 +216,7 @@
     "status": "Billable"
   },
   {
-    "id": 5,
+    "id": 25,
     "matter": "Asset Purchase",
     "client": "Fortune Partners",
     "date": "2026-05-17",
@@ -45,7 +225,7 @@
     "status": "Billed"
   },
   {
-    "id": 6,
+    "id": 26,
     "matter": "Engineering IP Audit",
     "client": "Michael Chen",
     "date": "2026-05-29",
@@ -54,7 +234,7 @@
     "status": "Billable"
   },
   {
-    "id": 7,
+    "id": 27,
     "matter": "Compliance Review",
     "client": "Justin Green",
     "date": "2026-06-09",
@@ -63,7 +243,7 @@
     "status": "Billable"
   },
   {
-    "id": 8,
+    "id": 28,
     "matter": "Contract Review",
     "client": "Corporate Counsel",
     "date": "2026-08-13",
@@ -72,7 +252,7 @@
     "status": "Billed"
   },
   {
-    "id": 9,
+    "id": 29,
     "matter": "M&A Advice",
     "client": "Nexus Corporation",
     "date": "2026-06-08",
@@ -81,7 +261,7 @@
     "status": "Billed"
   },
   {
-    "id": 10,
+    "id": 30,
     "matter": "Startup Advisory",
     "client": "Emily Rodriguez",
     "date": "2026-08-10",
@@ -90,7 +270,7 @@
     "status": "Billable"
   },
   {
-    "id": 11,
+    "id": 31,
     "matter": "Startup Advisory",
     "client": "Continental Services",
     "date": "2027-02-10",
@@ -99,7 +279,7 @@
     "status": "Billable"
   },
   {
-    "id": 12,
+    "id": 32,
     "matter": "Antitrust Review",
     "client": "Tyler Carter",
     "date": "2026-08-08",
@@ -108,7 +288,7 @@
     "status": "Billed"
   },
   {
-    "id": 13,
+    "id": 33,
     "matter": "Litigation Support",
     "client": "Tech Solutions Inc.",
     "date": "2026-04-19",
@@ -117,7 +297,7 @@
     "status": "Billed"
   },
   {
-    "id": 14,
+    "id": 34,
     "matter": "IP Filing",
     "client": "Hannah Mitchell",
     "date": "2027-01-26",
@@ -126,7 +306,7 @@
     "status": "Billed"
   },
   {
-    "id": 15,
+    "id": 35,
     "matter": "Criminal Defense",
     "client": "Tech Solutions Inc.",
     "date": "2026-11-18",
@@ -135,7 +315,7 @@
     "status": "Billed"
   },
   {
-    "id": 16,
+    "id": 36,
     "matter": "Trusts and Estates",
     "client": "Ashley White",
     "date": "2026-05-19",
@@ -144,7 +324,7 @@
     "status": "Billable"
   },
   {
-    "id": 17,
+    "id": 37,
     "matter": "Employment Law",
     "client": "Rachel Walker",
     "date": "2027-03-07",
@@ -153,7 +333,7 @@
     "status": "Billable"
   },
   {
-    "id": 18,
+    "id": 38,
     "matter": "Data Privacy",
     "client": "Diamond Consulting",
     "date": "2026-09-29",
@@ -162,7 +342,7 @@
     "status": "Billable"
   },
   {
-    "id": 19,
+    "id": 39,
     "matter": "Corporate Formation",
     "client": "Jessica Taylor",
     "date": "2026-10-12",
@@ -171,7 +351,7 @@
     "status": "Billed"
   },
   {
-    "id": 20,
+    "id": 40,
     "matter": "Corporate Formation",
     "client": "Phoenix Advisors",
     "date": "2026-07-11",
@@ -180,7 +360,7 @@
     "status": "Billable"
   },
   {
-    "id": 21,
+    "id": 41,
     "matter": "Real Estate",
     "client": "Hannah Mitchell",
     "date": "2026-10-23",
@@ -189,7 +369,7 @@
     "status": "Billable"
   },
   {
-    "id": 22,
+    "id": 42,
     "matter": "Litigation Support",
     "client": "Robert Anderson",
     "date": "2026-10-13",
@@ -198,7 +378,7 @@
     "status": "Billable"
   },
   {
-    "id": 23,
+    "id": 43,
     "matter": "Engineering IP Audit",
     "client": "Emily Rodriguez",
     "date": "2026-03-13",
@@ -207,7 +387,7 @@
     "status": "Billed"
   },
   {
-    "id": 24,
+    "id": 44,
     "matter": "Supplier Dispute",
     "client": "Megan Clark",
     "date": "2027-03-09",
@@ -216,7 +396,7 @@
     "status": "Billed"
   },
   {
-    "id": 25,
+    "id": 45,
     "matter": "Regulatory Approval",
     "client": "Tyler Carter",
     "date": "2026-09-08",
@@ -225,7 +405,7 @@
     "status": "Billed"
   },
   {
-    "id": 26,
+    "id": 46,
     "matter": "Supplier Dispute",
     "client": "James Wilson",
     "date": "2026-09-20",
@@ -234,7 +414,7 @@
     "status": "Billed"
   },
   {
-    "id": 27,
+    "id": 47,
     "matter": "Supplier Dispute",
     "client": "Premier Advisors",
     "date": "2026-12-11",
@@ -243,7 +423,7 @@
     "status": "Billed"
   },
   {
-    "id": 28,
+    "id": 48,
     "matter": "Corporate Law",
     "client": "Commercial Legal",
     "date": "2026-03-31",
@@ -252,7 +432,7 @@
     "status": "Billed"
   },
   {
-    "id": 29,
+    "id": 49,
     "matter": "Securities Law",
     "client": "Katherine Baker",
     "date": "2026-04-04",
@@ -261,7 +441,7 @@
     "status": "Billed"
   },
   {
-    "id": 30,
+    "id": 50,
     "matter": "Licensing Agreement",
     "client": "Diamond Consulting",
     "date": "2027-02-14",
@@ -270,7 +450,7 @@
     "status": "Billed"
   },
   {
-    "id": 31,
+    "id": 51,
     "matter": "Data Privacy",
     "client": "Megan Clark",
     "date": "2026-09-05",
@@ -279,7 +459,7 @@
     "status": "Billed"
   },
   {
-    "id": 32,
+    "id": 52,
     "matter": "Compliance Review",
     "client": "Sarah Johnson",
     "date": "2026-08-31",
@@ -288,7 +468,7 @@
     "status": "Billable"
   },
   {
-    "id": 33,
+    "id": 53,
     "matter": "IP Filing",
     "client": "Vertex Legal Services",
     "date": "2026-11-28",
@@ -297,7 +477,7 @@
     "status": "Billable"
   },
   {
-    "id": 34,
+    "id": 54,
     "matter": "Franchise Agreement",
     "client": "Emily Rodriguez",
     "date": "2027-02-28",
@@ -306,7 +486,7 @@
     "status": "Billable"
   },
   {
-    "id": 35,
+    "id": 55,
     "matter": "Engineering IP Audit",
     "client": "Success Ventures",
     "date": "2026-05-28",
@@ -315,7 +495,7 @@
     "status": "Billed"
   },
   {
-    "id": 36,
+    "id": 56,
     "matter": "Licensing Agreement",
     "client": "Justin Green",
     "date": "2026-04-01",
@@ -324,7 +504,7 @@
     "status": "Billable"
   },
   {
-    "id": 37,
+    "id": 57,
     "matter": "Asset Purchase",
     "client": "Pacific Associates",
     "date": "2026-05-15",
@@ -333,7 +513,7 @@
     "status": "Billed"
   },
   {
-    "id": 38,
+    "id": 58,
     "matter": "Engineering IP Audit",
     "client": "Brittany Hill",
     "date": "2026-11-21",
@@ -342,7 +522,7 @@
     "status": "Billable"
   },
   {
-    "id": 39,
+    "id": 59,
     "matter": "Contract Review",
     "client": "Andrew Moore",
     "date": "2027-03-01",
@@ -351,7 +531,7 @@
     "status": "Billable"
   },
   {
-    "id": 40,
+    "id": 60,
     "matter": "Estate Planning",
     "client": "Hannah Mitchell",
     "date": "2026-11-10",
@@ -360,7 +540,7 @@
     "status": "Billed"
   },
   {
-    "id": 41,
+    "id": 61,
     "matter": "Joint Venture",
     "client": "Vertex Legal Services",
     "date": "2026-12-02",
@@ -369,7 +549,7 @@
     "status": "Billed"
   },
   {
-    "id": 42,
+    "id": 62,
     "matter": "Trusts and Estates",
     "client": "Vertex Legal Services",
     "date": "2027-01-25",
@@ -378,7 +558,7 @@
     "status": "Billed"
   },
   {
-    "id": 43,
+    "id": 63,
     "matter": "Corporate Formation",
     "client": "Summit Enterprises",
     "date": "2026-07-23",
@@ -387,7 +567,7 @@
     "status": "Billable"
   },
   {
-    "id": 44,
+    "id": 64,
     "matter": "Vendor Contract",
     "client": "Enterprise Solutions",
     "date": "2026-10-05",
@@ -396,7 +576,7 @@
     "status": "Billed"
   },
   {
-    "id": 45,
+    "id": 65,
     "matter": "Securities Law",
     "client": "Business Law Associates",
     "date": "2026-07-18",
@@ -405,7 +585,7 @@
     "status": "Billable"
   },
   {
-    "id": 46,
+    "id": 66,
     "matter": "M&A Advice",
     "client": "Success Ventures",
     "date": "2026-11-17",
@@ -414,7 +594,7 @@
     "status": "Billed"
   },
   {
-    "id": 47,
+    "id": 67,
     "matter": "IP Filing",
     "client": "Katherine Baker",
     "date": "2026-12-14",
@@ -423,7 +603,7 @@
     "status": "Billed"
   },
   {
-    "id": 48,
+    "id": 68,
     "matter": "Antitrust Review",
     "client": "Atlantic Group",
     "date": "2026-04-25",
@@ -432,7 +612,7 @@
     "status": "Billed"
   },
   {
-    "id": 49,
+    "id": 69,
     "matter": "Estate Planning",
     "client": "Enterprise Solutions",
     "date": "2026-10-28",
@@ -441,7 +621,7 @@
     "status": "Billable"
   },
   {
-    "id": 50,
+    "id": 70,
     "matter": "Real Estate",
     "client": "Jessica Taylor",
     "date": "2026-03-10",
@@ -450,7 +630,7 @@
     "status": "Billable"
   },
   {
-    "id": 51,
+    "id": 71,
     "matter": "Franchise Agreement",
     "client": "Nicole Miller",
     "date": "2026-04-23",
@@ -459,7 +639,7 @@
     "status": "Billed"
   },
   {
-    "id": 52,
+    "id": 72,
     "matter": "Data Privacy",
     "client": "Success Ventures",
     "date": "2027-01-24",
@@ -468,7 +648,7 @@
     "status": "Billed"
   },
   {
-    "id": 53,
+    "id": 73,
     "matter": "Estate Planning",
     "client": "Success Ventures",
     "date": "2027-01-26",
@@ -477,7 +657,7 @@
     "status": "Billed"
   },
   {
-    "id": 54,
+    "id": 74,
     "matter": "Trusts and Estates",
     "client": "Brittany Hill",
     "date": "2026-12-25",
@@ -486,7 +666,7 @@
     "status": "Billed"
   },
   {
-    "id": 55,
+    "id": 75,
     "matter": "Contract Review",
     "client": "Amanda Davis",
     "date": "2026-06-17",
@@ -495,7 +675,7 @@
     "status": "Billed"
   },
   {
-    "id": 56,
+    "id": 76,
     "matter": "IP Filing",
     "client": "Silverstone Legal",
     "date": "2026-05-24",
@@ -504,7 +684,7 @@
     "status": "Billable"
   },
   {
-    "id": 57,
+    "id": 77,
     "matter": "Corporate Formation",
     "client": "Megan Clark",
     "date": "2026-09-26",
@@ -513,7 +693,7 @@
     "status": "Billable"
   },
   {
-    "id": 58,
+    "id": 78,
     "matter": "Litigation Support",
     "client": "Meridian Law Firm",
     "date": "2027-02-11",
@@ -522,7 +702,7 @@
     "status": "Billed"
   },
   {
-    "id": 59,
+    "id": 79,
     "matter": "Family Law",
     "client": "Amanda Davis",
     "date": "2026-08-22",
@@ -531,7 +711,7 @@
     "status": "Billed"
   },
   {
-    "id": 60,
+    "id": 80,
     "matter": "IP Filing",
     "client": "Phoenix Advisors",
     "date": "2026-07-30",
@@ -540,7 +720,7 @@
     "status": "Billed"
   },
   {
-    "id": 61,
+    "id": 81,
     "matter": "Criminal Defense",
     "client": "Elite Partners",
     "date": "2026-09-14",
@@ -549,7 +729,7 @@
     "status": "Billable"
   },
   {
-    "id": 62,
+    "id": 82,
     "matter": "Contract Review",
     "client": "Emily Rodriguez",
     "date": "2026-03-25",
@@ -558,7 +738,7 @@
     "status": "Billed"
   },
   {
-    "id": 63,
+    "id": 83,
     "matter": "Securities Law",
     "client": "Summit Enterprises",
     "date": "2026-06-07",
@@ -567,7 +747,7 @@
     "status": "Billed"
   },
   {
-    "id": 64,
+    "id": 84,
     "matter": "Vendor Contract",
     "client": "Premier Legal Group",
     "date": "2026-06-07",
@@ -576,7 +756,7 @@
     "status": "Billable"
   },
   {
-    "id": 65,
+    "id": 85,
     "matter": "Compliance Review",
     "client": "Brittany Hill",
     "date": "2026-07-05",
@@ -585,7 +765,7 @@
     "status": "Billable"
   },
   {
-    "id": 66,
+    "id": 86,
     "matter": "Regulatory Approval",
     "client": "Hannah Mitchell",
     "date": "2027-01-17",
@@ -594,7 +774,7 @@
     "status": "Billable"
   },
   {
-    "id": 67,
+    "id": 87,
     "matter": "Supplier Dispute",
     "client": "Matthew Brown",
     "date": "2026-08-19",
@@ -603,7 +783,7 @@
     "status": "Billable"
   },
   {
-    "id": 68,
+    "id": 88,
     "matter": "M&A Advice",
     "client": "Enterprise Solutions",
     "date": "2026-08-01",
@@ -612,7 +792,7 @@
     "status": "Billable"
   },
   {
-    "id": 69,
+    "id": 89,
     "matter": "Vendor Contract",
     "client": "Nexus Corporation",
     "date": "2027-02-25",
@@ -621,7 +801,7 @@
     "status": "Billed"
   },
   {
-    "id": 70,
+    "id": 90,
     "matter": "Trusts and Estates",
     "client": "Nicole Miller",
     "date": "2026-08-31",
@@ -630,7 +810,7 @@
     "status": "Billable"
   },
   {
-    "id": 71,
+    "id": 91,
     "matter": "Engineering IP Audit",
     "client": "Ryan Harris",
     "date": "2026-12-10",
@@ -639,7 +819,7 @@
     "status": "Billed"
   },
   {
-    "id": 72,
+    "id": 92,
     "matter": "Estate Planning",
     "client": "Justin Green",
     "date": "2026-12-02",
@@ -648,7 +828,7 @@
     "status": "Billable"
   },
   {
-    "id": 73,
+    "id": 93,
     "matter": "HR Law Training",
     "client": "Amanda Davis",
     "date": "2026-05-23",
@@ -657,7 +837,7 @@
     "status": "Billable"
   },
   {
-    "id": 74,
+    "id": 94,
     "matter": "Regulatory Approval",
     "client": "Jonathan King",
     "date": "2026-08-14",
@@ -666,7 +846,7 @@
     "status": "Billed"
   },
   {
-    "id": 75,
+    "id": 95,
     "matter": "Licensing Agreement",
     "client": "Matthew Brown",
     "date": "2027-02-02",
@@ -675,7 +855,7 @@
     "status": "Billable"
   },
   {
-    "id": 76,
+    "id": 96,
     "matter": "Environmental Compliance",
     "client": "Rachel Walker",
     "date": "2026-03-27",
@@ -684,7 +864,7 @@
     "status": "Billed"
   },
   {
-    "id": 77,
+    "id": 97,
     "matter": "Regulatory Approval",
     "client": "Meridian Law Firm",
     "date": "2026-12-17",
@@ -693,7 +873,7 @@
     "status": "Billable"
   },
   {
-    "id": 78,
+    "id": 98,
     "matter": "Trademark Registration",
     "client": "Professional Services Group",
     "date": "2026-07-12",
@@ -702,7 +882,7 @@
     "status": "Billable"
   },
   {
-    "id": 79,
+    "id": 99,
     "matter": "Criminal Defense",
     "client": "Andrew Moore",
     "date": "2026-05-23",
@@ -711,7 +891,7 @@
     "status": "Billed"
   },
   {
-    "id": 80,
+    "id": 100,
     "matter": "Contract Review",
     "client": "Strategic Partners",
     "date": "2026-07-08",
@@ -720,7 +900,7 @@
     "status": "Billed"
   },
   {
-    "id": 81,
+    "id": 101,
     "matter": "Franchise Agreement",
     "client": "Tyler Carter",
     "date": "2026-06-06",
@@ -729,7 +909,7 @@
     "status": "Billable"
   },
   {
-    "id": 82,
+    "id": 102,
     "matter": "HR Law Training",
     "client": "Amanda Davis",
     "date": "2026-08-24",
@@ -738,7 +918,7 @@
     "status": "Billed"
   },
   {
-    "id": 83,
+    "id": 103,
     "matter": "Joint Venture",
     "client": "Professional Services Group",
     "date": "2026-11-05",
@@ -747,7 +927,7 @@
     "status": "Billable"
   },
   {
-    "id": 84,
+    "id": 104,
     "matter": "Compliance Review",
     "client": "Diamond Consulting",
     "date": "2027-01-27",
@@ -756,7 +936,7 @@
     "status": "Billed"
   },
   {
-    "id": 85,
+    "id": 105,
     "matter": "Litigation Support",
     "client": "Rachel Walker",
     "date": "2026-09-21",
@@ -765,7 +945,7 @@
     "status": "Billed"
   },
   {
-    "id": 86,
+    "id": 106,
     "matter": "Asset Purchase",
     "client": "Amanda Davis",
     "date": "2026-03-26",
@@ -774,7 +954,7 @@
     "status": "Billed"
   },
   {
-    "id": 87,
+    "id": 107,
     "matter": "Asset Purchase",
     "client": "Titan Holdings",
     "date": "2026-08-09",
@@ -783,7 +963,7 @@
     "status": "Billable"
   },
   {
-    "id": 88,
+    "id": 108,
     "matter": "Litigation Support",
     "client": "Daniel Garcia",
     "date": "2027-01-28",
@@ -792,7 +972,7 @@
     "status": "Billed"
   },
   {
-    "id": 89,
+    "id": 109,
     "matter": "Engineering IP Audit",
     "client": "Corporate Counsel",
     "date": "2026-06-22",
@@ -801,7 +981,7 @@
     "status": "Billed"
   },
   {
-    "id": 90,
+    "id": 110,
     "matter": "Corporate Formation",
     "client": "Professional Services Group",
     "date": "2026-12-30",
@@ -810,7 +990,7 @@
     "status": "Billed"
   },
   {
-    "id": 91,
+    "id": 111,
     "matter": "Franchise Agreement",
     "client": "Nicole Miller",
     "date": "2026-12-03",
@@ -819,7 +999,7 @@
     "status": "Billed"
   },
   {
-    "id": 92,
+    "id": 112,
     "matter": "IP Filing",
     "client": "Lauren Jackson",
     "date": "2026-06-02",
@@ -828,7 +1008,7 @@
     "status": "Billable"
   },
   {
-    "id": 93,
+    "id": 113,
     "matter": "Supplier Dispute",
     "client": "Summit Enterprises",
     "date": "2027-01-17",
@@ -837,7 +1017,7 @@
     "status": "Billed"
   },
   {
-    "id": 94,
+    "id": 114,
     "matter": "Regulatory Approval",
     "client": "Michael Chen",
     "date": "2026-04-20",
@@ -846,7 +1026,7 @@
     "status": "Billed"
   },
   {
-    "id": 95,
+    "id": 115,
     "matter": "M&A Advice",
     "client": "Pacific Associates",
     "date": "2026-12-24",
@@ -855,7 +1035,7 @@
     "status": "Billable"
   },
   {
-    "id": 96,
+    "id": 116,
     "matter": "Data Privacy",
     "client": "Success Ventures",
     "date": "2027-02-09",
@@ -864,7 +1044,7 @@
     "status": "Billed"
   },
   {
-    "id": 97,
+    "id": 117,
     "matter": "Corporate Formation",
     "client": "Atlantic Group",
     "date": "2026-11-29",
@@ -873,7 +1053,7 @@
     "status": "Billed"
   },
   {
-    "id": 98,
+    "id": 118,
     "matter": "Joint Venture",
     "client": "Success Ventures",
     "date": "2026-08-20",
@@ -882,7 +1062,7 @@
     "status": "Billed"
   },
   {
-    "id": 99,
+    "id": 119,
     "matter": "Trusts and Estates",
     "client": "Jessica Taylor",
     "date": "2026-05-19",
@@ -891,7 +1071,7 @@
     "status": "Billable"
   },
   {
-    "id": 100,
+    "id": 120,
     "matter": "Securities Law",
     "client": "Michael Chen",
     "date": "2026-05-25",
@@ -900,7 +1080,7 @@
     "status": "Billable"
   },
   {
-    "id": 101,
+    "id": 121,
     "matter": "Franchise Agreement",
     "client": "Ashley White",
     "date": "2026-06-02",
@@ -909,7 +1089,7 @@
     "status": "Billed"
   },
   {
-    "id": 102,
+    "id": 122,
     "matter": "M&A Advice",
     "client": "Amanda Davis",
     "date": "2026-10-21",
@@ -918,7 +1098,7 @@
     "status": "Billed"
   },
   {
-    "id": 103,
+    "id": 123,
     "matter": "Compliance Review",
     "client": "Global Ventures LLC",
     "date": "2027-03-07",
@@ -927,7 +1107,7 @@
     "status": "Billed"
   },
   {
-    "id": 104,
+    "id": 124,
     "matter": "Estate Planning",
     "client": "Enterprise Solutions",
     "date": "2026-09-09",
@@ -936,7 +1116,7 @@
     "status": "Billed"
   },
   {
-    "id": 105,
+    "id": 125,
     "matter": "Compliance Review",
     "client": "Platinum Ventures",
     "date": "2026-09-24",
@@ -945,7 +1125,7 @@
     "status": "Billed"
   },
   {
-    "id": 106,
+    "id": 126,
     "matter": "Regulatory Approval",
     "client": "Emily Rodriguez",
     "date": "2026-07-19",
@@ -954,7 +1134,7 @@
     "status": "Billed"
   },
   {
-    "id": 107,
+    "id": 127,
     "matter": "Tax Planning",
     "client": "Matthew Brown",
     "date": "2026-09-01",
@@ -963,7 +1143,7 @@
     "status": "Billed"
   },
   {
-    "id": 108,
+    "id": 128,
     "matter": "Antitrust Review",
     "client": "Lauren Jackson",
     "date": "2026-12-06",
@@ -972,7 +1152,7 @@
     "status": "Billable"
   },
   {
-    "id": 109,
+    "id": 129,
     "matter": "Criminal Defense",
     "client": "Nicole Miller",
     "date": "2026-10-12",
@@ -981,7 +1161,7 @@
     "status": "Billable"
   },
   {
-    "id": 110,
+    "id": 130,
     "matter": "Joint Venture",
     "client": "Phoenix Advisors",
     "date": "2026-06-28",
@@ -990,7 +1170,7 @@
     "status": "Billable"
   },
   {
-    "id": 111,
+    "id": 131,
     "matter": "Compliance Review",
     "client": "Pacific Associates",
     "date": "2026-09-22",
@@ -999,7 +1179,7 @@
     "status": "Billable"
   },
   {
-    "id": 112,
+    "id": 132,
     "matter": "M&A Advice",
     "client": "Business Law Associates",
     "date": "2026-10-15",
@@ -1008,7 +1188,7 @@
     "status": "Billable"
   },
   {
-    "id": 113,
+    "id": 133,
     "matter": "Joint Venture",
     "client": "Platinum Ventures",
     "date": "2026-04-19",
@@ -1017,7 +1197,7 @@
     "status": "Billable"
   },
   {
-    "id": 114,
+    "id": 134,
     "matter": "Startup Advisory",
     "client": "Golden Gate Law",
     "date": "2026-09-08",
@@ -1026,7 +1206,7 @@
     "status": "Billed"
   },
   {
-    "id": 115,
+    "id": 135,
     "matter": "Trademark Registration",
     "client": "Ashley White",
     "date": "2026-12-06",
@@ -1035,7 +1215,7 @@
     "status": "Billable"
   },
   {
-    "id": 116,
+    "id": 136,
     "matter": "Vendor Contract",
     "client": "James Wilson",
     "date": "2026-12-13",
@@ -1044,7 +1224,7 @@
     "status": "Billed"
   },
   {
-    "id": 117,
+    "id": 137,
     "matter": "Criminal Defense",
     "client": "Executive Solutions",
     "date": "2027-01-24",
@@ -1053,7 +1233,7 @@
     "status": "Billable"
   },
   {
-    "id": 118,
+    "id": 138,
     "matter": "Startup Advisory",
     "client": "Titan Holdings",
     "date": "2026-08-08",
@@ -1062,7 +1242,7 @@
     "status": "Billed"
   },
   {
-    "id": 119,
+    "id": 139,
     "matter": "Criminal Defense",
     "client": "Amanda Davis",
     "date": "2026-07-09",
@@ -1071,7 +1251,7 @@
     "status": "Billed"
   },
   {
-    "id": 120,
+    "id": 140,
     "matter": "Litigation Support",
     "client": "Quantum Solutions",
     "date": "2026-05-24",
@@ -1080,7 +1260,7 @@
     "status": "Billable"
   },
   {
-    "id": 121,
+    "id": 141,
     "matter": "Trusts and Estates",
     "client": "Professional Services Group",
     "date": "2026-10-13",
@@ -1089,7 +1269,7 @@
     "status": "Billed"
   },
   {
-    "id": 122,
+    "id": 142,
     "matter": "Tax Planning",
     "client": "Phoenix Advisors",
     "date": "2026-11-14",
@@ -1098,7 +1278,7 @@
     "status": "Billed"
   },
   {
-    "id": 123,
+    "id": 143,
     "matter": "Real Estate",
     "client": "Nathan Lopez",
     "date": "2026-08-24",
@@ -1107,7 +1287,7 @@
     "status": "Billable"
   },
   {
-    "id": 124,
+    "id": 144,
     "matter": "Startup Advisory",
     "client": "Jennifer Martinez",
     "date": "2026-10-04",
@@ -1116,7 +1296,7 @@
     "status": "Billed"
   },
   {
-    "id": 125,
+    "id": 145,
     "matter": "Compliance Review",
     "client": "Nexus Corporation",
     "date": "2026-10-24",
@@ -1125,7 +1305,7 @@
     "status": "Billable"
   },
   {
-    "id": 126,
+    "id": 146,
     "matter": "Startup Advisory",
     "client": "Premier Legal Group",
     "date": "2027-01-07",
@@ -1134,7 +1314,7 @@
     "status": "Billable"
   },
   {
-    "id": 127,
+    "id": 147,
     "matter": "Employment Law",
     "client": "Christopher Lee",
     "date": "2026-11-26",
@@ -1143,7 +1323,7 @@
     "status": "Billable"
   },
   {
-    "id": 128,
+    "id": 148,
     "matter": "Engineering IP Audit",
     "client": "Premier Advisors",
     "date": "2026-07-07",
@@ -1152,7 +1332,7 @@
     "status": "Billable"
   },
   {
-    "id": 129,
+    "id": 149,
     "matter": "Estate Planning",
     "client": "Capital Holdings",
     "date": "2026-11-30",
@@ -1161,7 +1341,7 @@
     "status": "Billed"
   },
   {
-    "id": 130,
+    "id": 150,
     "matter": "Corporate Formation",
     "client": "Michael Chen",
     "date": "2027-02-06",
@@ -1170,7 +1350,7 @@
     "status": "Billed"
   },
   {
-    "id": 131,
+    "id": 151,
     "matter": "Joint Patent Filing",
     "client": "Andrew Moore",
     "date": "2026-03-17",
@@ -1179,7 +1359,7 @@
     "status": "Billed"
   },
   {
-    "id": 132,
+    "id": 152,
     "matter": "Corporate Law",
     "client": "Michael Chen",
     "date": "2026-11-24",
@@ -1188,7 +1368,7 @@
     "status": "Billed"
   },
   {
-    "id": 133,
+    "id": 153,
     "matter": "Data Privacy",
     "client": "Stephanie Young",
     "date": "2026-03-16",
@@ -1197,7 +1377,7 @@
     "status": "Billable"
   },
   {
-    "id": 134,
+    "id": 154,
     "matter": "Litigation Support",
     "client": "Jennifer Martinez",
     "date": "2026-06-02",
@@ -1206,7 +1386,7 @@
     "status": "Billable"
   },
   {
-    "id": 135,
+    "id": 155,
     "matter": "IP Filing",
     "client": "Sarah Johnson",
     "date": "2027-02-18",
@@ -1215,7 +1395,7 @@
     "status": "Billed"
   },
   {
-    "id": 136,
+    "id": 156,
     "matter": "Contract Review",
     "client": "Daniel Garcia",
     "date": "2026-04-27",
@@ -1224,7 +1404,7 @@
     "status": "Billed"
   },
   {
-    "id": 137,
+    "id": 157,
     "matter": "HR Law Training",
     "client": "Quantum Solutions",
     "date": "2026-07-14",
@@ -1233,7 +1413,7 @@
     "status": "Billable"
   },
   {
-    "id": 138,
+    "id": 158,
     "matter": "Regulatory Approval",
     "client": "Success Ventures",
     "date": "2026-10-30",
@@ -1242,7 +1422,7 @@
     "status": "Billable"
   },
   {
-    "id": 139,
+    "id": 159,
     "matter": "Startup Advisory",
     "client": "Strategic Partners",
     "date": "2026-07-29",
@@ -1251,7 +1431,7 @@
     "status": "Billed"
   },
   {
-    "id": 140,
+    "id": 160,
     "matter": "IP Filing",
     "client": "Fortune Partners",
     "date": "2026-06-07",
@@ -1260,7 +1440,7 @@
     "status": "Billable"
   },
   {
-    "id": 141,
+    "id": 161,
     "matter": "Compliance Review",
     "client": "Golden Gate Law",
     "date": "2026-05-08",
@@ -1269,7 +1449,7 @@
     "status": "Billable"
   },
   {
-    "id": 142,
+    "id": 162,
     "matter": "Antitrust Review",
     "client": "Andrew Moore",
     "date": "2026-05-02",
@@ -1278,7 +1458,7 @@
     "status": "Billable"
   },
   {
-    "id": 143,
+    "id": 163,
     "matter": "Licensing Agreement",
     "client": "United Legal",
     "date": "2026-09-14",
@@ -1287,7 +1467,7 @@
     "status": "Billed"
   },
   {
-    "id": 144,
+    "id": 164,
     "matter": "M&A Advice",
     "client": "Crest Industries",
     "date": "2026-12-30",
@@ -1296,7 +1476,7 @@
     "status": "Billable"
   },
   {
-    "id": 145,
+    "id": 165,
     "matter": "Licensing Agreement",
     "client": "Brian Hall",
     "date": "2026-06-08",
@@ -1305,7 +1485,7 @@
     "status": "Billed"
   },
   {
-    "id": 146,
+    "id": 166,
     "matter": "Compliance Review",
     "client": "Jonathan King",
     "date": "2026-08-18",
@@ -1314,7 +1494,7 @@
     "status": "Billable"
   },
   {
-    "id": 147,
+    "id": 167,
     "matter": "Environmental Compliance",
     "client": "Business Law Associates",
     "date": "2026-04-14",
@@ -1323,7 +1503,7 @@
     "status": "Billable"
   },
   {
-    "id": 148,
+    "id": 168,
     "matter": "Antitrust Review",
     "client": "Matthew Brown",
     "date": "2026-08-01",
@@ -1332,7 +1512,7 @@
     "status": "Billable"
   },
   {
-    "id": 149,
+    "id": 169,
     "matter": "Trusts and Estates",
     "client": "Summit Enterprises",
     "date": "2026-10-10",
@@ -1341,7 +1521,7 @@
     "status": "Billable"
   },
   {
-    "id": 150,
+    "id": 170,
     "matter": "Criminal Defense",
     "client": "Business Law Associates",
     "date": "2026-11-14",
@@ -1350,7 +1530,7 @@
     "status": "Billable"
   },
   {
-    "id": 151,
+    "id": 171,
     "matter": "Securities Law",
     "client": "Nathan Lopez",
     "date": "2026-06-04",
@@ -1359,7 +1539,7 @@
     "status": "Billable"
   },
   {
-    "id": 152,
+    "id": 172,
     "matter": "Corporate Formation",
     "client": "Crest Industries",
     "date": "2026-04-13",
@@ -1368,7 +1548,7 @@
     "status": "Billed"
   },
   {
-    "id": 153,
+    "id": 173,
     "matter": "Engineering IP Audit",
     "client": "Samantha Adams",
     "date": "2026-03-13",
@@ -1377,7 +1557,7 @@
     "status": "Billable"
   },
   {
-    "id": 154,
+    "id": 174,
     "matter": "Estate Planning",
     "client": "Jennifer Martinez",
     "date": "2026-08-01",
@@ -1386,7 +1566,7 @@
     "status": "Billed"
   },
   {
-    "id": 155,
+    "id": 175,
     "matter": "Criminal Defense",
     "client": "Titan Holdings",
     "date": "2026-04-01",
@@ -1395,7 +1575,7 @@
     "status": "Billed"
   },
   {
-    "id": 156,
+    "id": 176,
     "matter": "Engineering IP Audit",
     "client": "Brandon Nelson",
     "date": "2026-12-13",
@@ -1404,7 +1584,7 @@
     "status": "Billable"
   },
   {
-    "id": 157,
+    "id": 177,
     "matter": "Trademark Registration",
     "client": "Premier Advisors",
     "date": "2026-07-14",
@@ -1413,7 +1593,7 @@
     "status": "Billable"
   },
   {
-    "id": 158,
+    "id": 178,
     "matter": "Asset Purchase",
     "client": "Vertex Legal Services",
     "date": "2026-05-31",
@@ -1422,7 +1602,7 @@
     "status": "Billed"
   },
   {
-    "id": 159,
+    "id": 179,
     "matter": "Securities Law",
     "client": "Tech Solutions Inc.",
     "date": "2026-09-01",
@@ -1431,7 +1611,7 @@
     "status": "Billed"
   },
   {
-    "id": 160,
+    "id": 180,
     "matter": "Joint Venture",
     "client": "Business Law Associates",
     "date": "2026-05-22",
@@ -1440,7 +1620,7 @@
     "status": "Billable"
   },
   {
-    "id": 161,
+    "id": 181,
     "matter": "Data Privacy",
     "client": "United Legal",
     "date": "2027-03-06",
@@ -1449,7 +1629,7 @@
     "status": "Billable"
   },
   {
-    "id": 162,
+    "id": 182,
     "matter": "Antitrust Review",
     "client": "Stephanie Young",
     "date": "2026-05-01",
@@ -1458,7 +1638,7 @@
     "status": "Billed"
   },
   {
-    "id": 163,
+    "id": 183,
     "matter": "IP Filing",
     "client": "Business Law Associates",
     "date": "2026-12-13",
@@ -1467,7 +1647,7 @@
     "status": "Billed"
   },
   {
-    "id": 164,
+    "id": 184,
     "matter": "Engineering IP Audit",
     "client": "Elite Partners",
     "date": "2026-08-09",
@@ -1476,7 +1656,7 @@
     "status": "Billed"
   },
   {
-    "id": 165,
+    "id": 185,
     "matter": "Regulatory Approval",
     "client": "Jonathan King",
     "date": "2026-04-10",
@@ -1485,7 +1665,7 @@
     "status": "Billed"
   },
   {
-    "id": 166,
+    "id": 186,
     "matter": "Corporate Law",
     "client": "Apex Consulting",
     "date": "2026-07-14",
@@ -1494,7 +1674,7 @@
     "status": "Billable"
   },
   {
-    "id": 167,
+    "id": 187,
     "matter": "Environmental Compliance",
     "client": "Katherine Baker",
     "date": "2027-01-30",
@@ -1503,7 +1683,7 @@
     "status": "Billable"
   },
   {
-    "id": 168,
+    "id": 188,
     "matter": "Employment Law",
     "client": "Tech Solutions Inc.",
     "date": "2026-07-31",
@@ -1512,7 +1692,7 @@
     "status": "Billable"
   },
   {
-    "id": 169,
+    "id": 189,
     "matter": "Supplier Dispute",
     "client": "Commercial Legal",
     "date": "2027-02-19",
@@ -1521,7 +1701,7 @@
     "status": "Billed"
   },
   {
-    "id": 170,
+    "id": 190,
     "matter": "HR Law Training",
     "client": "Daniel Garcia",
     "date": "2026-07-16",
@@ -1530,7 +1710,7 @@
     "status": "Billable"
   },
   {
-    "id": 171,
+    "id": 191,
     "matter": "Litigation Support",
     "client": "Elite Partners",
     "date": "2026-06-14",
@@ -1539,7 +1719,7 @@
     "status": "Billable"
   },
   {
-    "id": 172,
+    "id": 192,
     "matter": "Criminal Defense",
     "client": "Megan Clark",
     "date": "2026-08-07",
@@ -1548,7 +1728,7 @@
     "status": "Billed"
   },
   {
-    "id": 173,
+    "id": 193,
     "matter": "Regulatory Approval",
     "client": "Pacific Associates",
     "date": "2026-09-08",
@@ -1557,7 +1737,7 @@
     "status": "Billed"
   },
   {
-    "id": 174,
+    "id": 194,
     "matter": "Joint Patent Filing",
     "client": "Amanda Davis",
     "date": "2026-04-01",
@@ -1566,7 +1746,7 @@
     "status": "Billed"
   },
   {
-    "id": 175,
+    "id": 195,
     "matter": "Corporate Law",
     "client": "Innovation Labs",
     "date": "2026-07-30",
@@ -1575,7 +1755,7 @@
     "status": "Billable"
   },
   {
-    "id": 176,
+    "id": 196,
     "matter": "Joint Venture",
     "client": "Brian Hall",
     "date": "2026-09-08",
@@ -1584,7 +1764,7 @@
     "status": "Billable"
   },
   {
-    "id": 177,
+    "id": 197,
     "matter": "Corporate Law",
     "client": "Justin Green",
     "date": "2026-11-04",
@@ -1593,7 +1773,7 @@
     "status": "Billed"
   },
   {
-    "id": 178,
+    "id": 198,
     "matter": "Joint Venture",
     "client": "Meridian Law Firm",
     "date": "2027-01-30",
@@ -1602,7 +1782,7 @@
     "status": "Billed"
   },
   {
-    "id": 179,
+    "id": 199,
     "matter": "Antitrust Review",
     "client": "Horizon Business",
     "date": "2027-02-24",
@@ -1611,7 +1791,7 @@
     "status": "Billed"
   },
   {
-    "id": 180,
+    "id": 200,
     "matter": "Criminal Defense",
     "client": "Quantum Solutions",
     "date": "2026-05-22",
@@ -1620,7 +1800,7 @@
     "status": "Billable"
   },
   {
-    "id": 181,
+    "id": 201,
     "matter": "M&A Advice",
     "client": "Amanda Davis",
     "date": "2026-09-22",
@@ -1629,7 +1809,7 @@
     "status": "Billable"
   },
   {
-    "id": 182,
+    "id": 202,
     "matter": "Trusts and Estates",
     "client": "Brian Hall",
     "date": "2027-01-14",
@@ -1638,7 +1818,7 @@
     "status": "Billable"
   },
   {
-    "id": 183,
+    "id": 203,
     "matter": "Employment Law",
     "client": "Phoenix Advisors",
     "date": "2026-03-19",
@@ -1647,7 +1827,7 @@
     "status": "Billed"
   },
   {
-    "id": 184,
+    "id": 204,
     "matter": "Compliance Review",
     "client": "Jonathan King",
     "date": "2027-01-13",
@@ -1656,7 +1836,7 @@
     "status": "Billed"
   },
   {
-    "id": 185,
+    "id": 205,
     "matter": "HR Law Training",
     "client": "Pacific Associates",
     "date": "2027-01-14",
@@ -1665,7 +1845,7 @@
     "status": "Billable"
   },
   {
-    "id": 186,
+    "id": 206,
     "matter": "Trademark Registration",
     "client": "Crest Industries",
     "date": "2026-06-06",
@@ -1674,7 +1854,7 @@
     "status": "Billable"
   },
   {
-    "id": 187,
+    "id": 207,
     "matter": "Antitrust Review",
     "client": "Brandon Nelson",
     "date": "2026-12-13",
@@ -1683,7 +1863,7 @@
     "status": "Billed"
   },
   {
-    "id": 188,
+    "id": 208,
     "matter": "Family Law",
     "client": "Stellar Group",
     "date": "2026-10-16",
@@ -1692,7 +1872,7 @@
     "status": "Billable"
   },
   {
-    "id": 189,
+    "id": 209,
     "matter": "Corporate Law",
     "client": "Justin Green",
     "date": "2026-05-29",
@@ -1701,7 +1881,7 @@
     "status": "Billed"
   },
   {
-    "id": 190,
+    "id": 210,
     "matter": "Franchise Agreement",
     "client": "Capital Holdings",
     "date": "2026-09-21",
@@ -1710,7 +1890,7 @@
     "status": "Billed"
   },
   {
-    "id": 191,
+    "id": 211,
     "matter": "HR Law Training",
     "client": "Strategic Partners",
     "date": "2026-05-13",
@@ -1719,7 +1899,7 @@
     "status": "Billable"
   },
   {
-    "id": 192,
+    "id": 212,
     "matter": "Tax Planning",
     "client": "Rachel Walker",
     "date": "2026-10-11",
@@ -1728,7 +1908,7 @@
     "status": "Billed"
   },
   {
-    "id": 193,
+    "id": 213,
     "matter": "Tax Planning",
     "client": "Nathan Lopez",
     "date": "2026-04-17",
@@ -1737,7 +1917,7 @@
     "status": "Billed"
   },
   {
-    "id": 194,
+    "id": 214,
     "matter": "Startup Advisory",
     "client": "Justin Green",
     "date": "2026-03-26",
@@ -1746,7 +1926,7 @@
     "status": "Billed"
   },
   {
-    "id": 195,
+    "id": 215,
     "matter": "Franchise Agreement",
     "client": "Andrew Moore",
     "date": "2026-05-09",
@@ -1755,7 +1935,7 @@
     "status": "Billable"
   },
   {
-    "id": 196,
+    "id": 216,
     "matter": "Joint Venture",
     "client": "Apex Consulting",
     "date": "2026-07-24",
@@ -1764,7 +1944,7 @@
     "status": "Billable"
   },
   {
-    "id": 197,
+    "id": 217,
     "matter": "Engineering IP Audit",
     "client": "Emily Rodriguez",
     "date": "2026-09-03",
@@ -1773,7 +1953,7 @@
     "status": "Billed"
   },
   {
-    "id": 198,
+    "id": 218,
     "matter": "Regulatory Approval",
     "client": "Platinum Ventures",
     "date": "2026-10-22",
@@ -1782,7 +1962,7 @@
     "status": "Billed"
   },
   {
-    "id": 199,
+    "id": 219,
     "matter": "HR Law Training",
     "client": "Tech Solutions Inc.",
     "date": "2026-09-15",
@@ -1791,7 +1971,7 @@
     "status": "Billed"
   },
   {
-    "id": 200,
+    "id": 220,
     "matter": "M&A Advice",
     "client": "Matthew Brown",
     "date": "2026-06-26",

@@ -2,6 +2,1014 @@
   {
     "id": "email1",
     "from": {
+      "name": "Michael Chen",
+      "email": "michael.chen@designstudio.com",
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Re: Design Mockups Ready for Review",
+    "body": "Hello,\n\nThe design mockups for the new website are ready. I've attached them for your review. Let me know your thoughts!\n\nThanks,\nMichael",
+    "snippet": "The design mockups for the new website are ready...",
+    "timestamp": "2025-12-01T10:30:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread2",
+    "attachments": [
+      {
+        "id": "attach1",
+        "name": "mockups-v2.pdf",
+        "size": 2456789,
+        "type": "application/pdf",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "id": "email2",
+    "from": {
+      "name": "Emily Rodriguez",
+      "email": "emily.r@startup.io",
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Partnership Opportunity Discussion",
+    "body": "Hi there,\n\nI hope this email finds you well. I wanted to reach out about a potential partnership opportunity that might interest you. Are you available for a call this week?\n\nBest,\nEmily",
+    "snippet": "I wanted to reach out about a potential partnership opportunity...",
+    "timestamp": "2025-12-01T14:15:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "business",
+        "name": "Business",
+        "color": "#0b8043",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread3",
+    "attachments": []
+  },
+  {
+    "id": "email3",
+    "from": {
+      "name": "David Kim",
+      "email": "david.kim@financegroup.com",
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Quarterly Report - Q3 2025",
+    "body": "Dear Team,\n\nPlease find attached the quarterly financial report for Q3 2025. Review at your convenience and let me know if you have any questions.\n\nRegards,\nDavid",
+    "snippet": "Please find attached the quarterly financial report for Q3 2025...",
+    "timestamp": "2025-12-02T08:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread4",
+    "attachments": [
+      {
+        "id": "attach2",
+        "name": "Q3-2025-Report.pdf",
+        "size": 3456789,
+        "type": "application/pdf",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "id": "email4",
+    "from": {
+      "name": "Lisa Anderson",
+      "email": "lisa.anderson@marketing.co",
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Campaign Launch - Tomorrow at 9 AM",
+    "body": "Hi,\n\nJust a reminder that our new marketing campaign launches tomorrow at 9 AM. All assets are ready and approved. Looking forward to seeing the results!\n\nCheers,\nLisa",
+    "snippet": "Just a reminder that our new marketing campaign launches tomorrow...",
+    "timestamp": "2025-12-02T16:45:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread5",
+    "attachments": []
+  },
+  {
+    "id": "email5",
+    "from": {
+      "name": "James Wilson",
+      "email": "james.wilson@consulting.com",
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Invoice #INV-2025-001",
+    "body": "Dear Client,\n\nPlease find attached invoice #INV-2025-001 for services rendered. Payment is due within 30 days.\n\nThank you,\nJames",
+    "snippet": "Please find attached invoice #INV-2025-001 for services rendered...",
+    "timestamp": "2025-12-03T11:20:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "finance",
+        "name": "Finance",
+        "color": "#f15c00",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread6",
+    "attachments": [
+      {
+        "id": "attach3",
+        "name": "INV-2025-001.pdf",
+        "size": 123456,
+        "type": "application/pdf",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "id": "email6",
+    "from": {
+      "name": "Maria Garcia",
+      "email": "maria.garcia@hrdep.com",
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Building Event - Save the Date",
+    "body": "Hello Everyone,\n\nSave the date for our annual team building event on December 15th. More details to follow soon!\n\nBest,\nMaria",
+    "snippet": "Save the date for our annual team building event on December 15th...",
+    "timestamp": "2025-12-03T13:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "personal",
+        "name": "Personal",
+        "color": "#8e24aa",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread7",
+    "attachments": []
+  },
+  {
+    "id": "email7",
+    "from": {
+      "name": "Robert Taylor",
+      "email": "robert.taylor@techsupport.com",
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "System Maintenance - Scheduled for Saturday",
+    "body": "Hi,\n\nThis is to inform you that system maintenance is scheduled for this Saturday from 2 AM to 6 AM. Services will be temporarily unavailable during this time.\n\nThanks,\nRobert",
+    "snippet": "System maintenance is scheduled for this Saturday from 2 AM to 6 AM...",
+    "timestamp": "2025-12-03T15:30:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread8",
+    "attachments": []
+  },
+  {
+    "id": "email8",
+    "from": {
+      "name": "Jennifer Lee",
+      "email": "jennifer.lee@research.org",
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Research Paper Submission Deadline",
+    "body": "Dear Colleague,\n\nJust a friendly reminder that the deadline for the research paper submission is December 10th. Please submit your papers through the portal.\n\nBest regards,\nJennifer",
+    "snippet": "The deadline for the research paper submission is December 10th...",
+    "timestamp": "2025-12-04T09:15:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread9",
+    "attachments": []
+  },
+  {
+    "id": "email9",
+    "from": {
+      "name": "Thomas Brown",
+      "email": "thomas.brown@sales.com",
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Follow-up: Product Demo Request",
+    "body": "Hi,\n\nFollowing up on our conversation, I'd like to schedule a product demo for next week. What day works best for you?\n\nThanks,\nThomas",
+    "snippet": "I'd like to schedule a product demo for next week...",
+    "timestamp": "2025-12-04T11:00:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "sales",
+        "name": "Sales",
+        "color": "#e67c73",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread10",
+    "attachments": []
+  },
+  {
+    "id": "email10",
+    "from": {
+      "name": "Amanda White",
+      "email": "amanda.white@training.net",
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Training Session Registration Open",
+    "body": "Hello,\n\nRegistration for the upcoming leadership training session is now open. Limited spots available, so please register soon!\n\nBest,\nAmanda",
+    "snippet": "Registration for the upcoming leadership training session is now open...",
+    "timestamp": "2025-12-04T14:20:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread11",
+    "attachments": []
+  },
+  {
+    "id": "email11",
+    "from": {
+      "name": "Daniel Martinez",
+      "email": "daniel.martinez@legal.com",
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Contract Review - Please Review and Sign",
+    "body": "Dear Sir/Madam,\n\nPlease review the attached contract and let me know if you have any questions. Once approved, please sign and return.\n\nRegards,\nDaniel",
+    "snippet": "Please review the attached contract and let me know if you have any questions...",
+    "timestamp": "2025-12-05T08:30:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread12",
+    "attachments": [
+      {
+        "id": "attach4",
+        "name": "Contract-2025-Review.pdf",
+        "size": 3456789,
+        "type": "application/pdf",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "id": "email12",
+    "from": {
+      "name": "Rachel Green",
+      "email": "rachel.green@support.io",
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Ticket #12345 - Issue Resolved",
+    "body": "Hi,\n\nYour support ticket #12345 has been resolved. Please confirm that everything is working correctly now.\n\nBest regards,\nRachel",
+    "snippet": "Your support ticket #12345 has been resolved...",
+    "timestamp": "2025-12-05T10:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "support",
+        "name": "Support",
+        "color": "#c7254e",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread13",
+    "attachments": []
+  },
+  {
+    "id": "email13",
+    "from": {
+      "name": "Christopher Moore",
+      "email": "chris.moore@newsletter.com",
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Newsletter - December 1st Edition",
+    "body": "Hello,\n\nCheck out this week's newsletter with industry updates and company news. Don't forget to share with your colleagues!\n\nThanks,\nChris",
+    "snippet": "Check out this week's newsletter with industry updates...",
+    "timestamp": "2025-12-05T12:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "newsletter",
+        "name": "Newsletter",
+        "color": "#7986cb",
+        "type": "user"
+      }
+    ],
+    "category": "updates",
+    "threadId": "thread14",
+    "attachments": []
+  },
+  {
+    "id": "email14",
+    "from": {
+      "name": "Patricia Davis",
+      "email": "patricia.davis@events.com",
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Event Invitation: Annual Conference 2026",
+    "body": "Dear Colleague,\n\nYou're invited to our annual conference in January 2026. Early bird registration is available until December 15th.\n\nLooking forward to seeing you there!\nPatricia",
+    "snippet": "You're invited to our annual conference in January 2026...",
+    "timestamp": "2025-12-05T15:00:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "events",
+        "name": "Events",
+        "color": "#009688",
+        "type": "user"
+      }
+    ],
+    "category": "updates",
+    "threadId": "thread15",
+    "attachments": []
+  },
+  {
+    "id": "email15",
+    "from": {
+      "name": "Kevin Jackson",
+      "email": "kevin.jackson@devteam.com",
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Code Review Request - Feature Branch",
+    "body": "Hi,\n\nCould you please review the code changes in the feature branch? Pull request is ready for review.\n\nThanks,\nKevin",
+    "snippet": "Could you please review the code changes in the feature branch...",
+    "timestamp": "2025-12-06T09:00:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread16",
+    "attachments": []
+  },
+  {
+    "id": "email16",
+    "from": {
+      "name": "Nicole Thompson",
+      "email": "nicole.thompson@feedback.org",
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Survey: Help Us Improve Our Services",
+    "body": "Hello,\n\nWe'd love to hear your feedback! Please take a moment to complete our brief survey and help us improve our services.\n\nThank you,\nNicole",
+    "snippet": "We'd love to hear your feedback! Please take a moment to complete our brief survey...",
+    "timestamp": "2025-12-06T11:30:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "feedback",
+        "name": "Feedback",
+        "color": "#f6bf26",
+        "type": "user"
+      }
+    ],
+    "category": "updates",
+    "threadId": "thread17",
+    "attachments": []
+  },
+  {
+    "id": "email17",
+    "from": {
+      "name": "Andrew Harris",
+      "email": "andrew.harris@security.com",
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Security Alert: Password Reset Required",
+    "body": "Hi,\n\nFor security reasons, please reset your password by clicking the link below. This is a required security update.\n\nBest,\nAndrew",
+    "snippet": "For security reasons, please reset your password...",
+    "timestamp": "2025-12-06T13:00:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "security",
+        "name": "Security",
+        "color": "#d93025",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread18",
+    "attachments": []
+  },
+  {
+    "id": "email18",
+    "from": {
+      "name": "Samantha Clark",
+      "email": "samantha.clark@client.com",
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Re: Proposal Review - Questions",
+    "body": "Hi,\n\nI've reviewed the proposal and have a few questions. Could we schedule a call to discuss them in detail?\n\nThanks,\nSamantha",
+    "snippet": "I've reviewed the proposal and have a few questions...",
+    "timestamp": "2025-12-06T14:30:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread19",
+    "attachments": []
+  },
+  {
+    "id": "email19",
+    "from": {
+      "name": "Ryan Lewis",
+      "email": "ryan.lewis@partners.com",
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Partnership Agreement - Final Version",
+    "body": "Hello,\n\nPlease find attached the final version of our partnership agreement. Let me know if you have any final changes.\n\nBest,\nRyan",
+    "snippet": "Please find attached the final version of our partnership agreement...",
+    "timestamp": "2025-12-07T08:00:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread20",
+    "attachments": [
+      {
+        "id": "attach5",
+        "name": "Partnership-Agreement-Final.pdf",
+        "size": 4567890,
+        "type": "application/pdf",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "id": "email20",
+    "from": {
+      "name": "Lauren Walker",
+      "email": "lauren.walker@hr.com",
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Benefits Enrollment - Open Until Dec 15",
+    "body": "Hello,\n\nDon't forget that benefits enrollment is open until December 15th. Please complete your selections before the deadline.\n\nBest,\nLauren",
+    "snippet": "Don't forget that benefits enrollment is open until December 15th...",
+    "timestamp": "2025-12-07T10:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "hr",
+        "name": "HR",
+        "color": "#7b1fa2",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread21",
+    "attachments": []
+  },
+  {
+    "id": "email21",
+    "from": {
+      "name": "Jonathan Young",
+      "email": "jonathan.young@analytics.com",
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Monthly Analytics Report - November 2025",
+    "body": "Hi,\n\nHere's your monthly analytics report for November 2025. Key metrics show strong growth across all channels.\n\nRegards,\nJonathan",
+    "snippet": "Here's your monthly analytics report for November 2025...",
+    "timestamp": "2025-12-07T12:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread22",
+    "attachments": [
+      {
+        "id": "attach6",
+        "name": "Analytics-Nov-2025.pdf",
+        "size": 2345678,
+        "type": "application/pdf",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "id": "email22",
+    "from": {
+      "name": "Michelle King",
+      "email": "michelle.king@promotions.com",
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Special Offer - 50% Off Annual Subscription",
+    "body": "Hello,\n\nAs a valued customer, we're offering you 50% off an annual subscription. This offer expires December 31st. Don't miss out!\n\nBest,\nMichelle",
+    "snippet": "As a valued customer, we're offering you 50% off an annual subscription...",
+    "timestamp": "2025-12-07T14:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "promotions",
+        "name": "Promotions",
+        "color": "#f4511e",
+        "type": "user"
+      }
+    ],
+    "category": "promotions",
+    "threadId": "thread23",
+    "attachments": []
+  },
+  {
+    "id": "email23",
+    "from": {
+      "name": "Brandon Wright",
+      "email": "brandon.wright@operations.com",
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Office Hours Update - Holiday Schedule",
+    "body": "Hi Everyone,\n\nPlease note that our office will have reduced hours during the holiday season. Check the attached schedule for details.\n\nThanks,\nBrandon",
+    "snippet": "Please note that our office will have reduced hours during the holiday season...",
+    "timestamp": "2025-12-08T08:30:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread24",
+    "attachments": [
+      {
+        "id": "attach7",
+        "name": "Holiday-Schedule-2025.pdf",
+        "size": 123456,
+        "type": "application/pdf",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "id": "email24",
+    "from": {
+      "name": "Stephanie Lopez",
+      "email": "stephanie.lopez@projects.com",
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Status Update - Phase 2 Complete",
+    "body": "Hi Team,\n\nGreat news! Phase 2 of the project is now complete. We're on track for the final phase. Well done everyone!\n\nBest,\nStephanie",
+    "snippet": "Great news! Phase 2 of the project is now complete...",
+    "timestamp": "2025-12-08T11:00:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread25",
+    "attachments": []
+  },
+  {
+    "id": "email25",
+    "from": {
+      "name": "Nathan Hill",
+      "email": "nathan.hill@webinar.com",
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Webinar Reminder: Digital Marketing Strategies",
+    "body": "Hello,\n\nThis is a reminder that our webinar on Digital Marketing Strategies is tomorrow at 2 PM. Join us for valuable insights!\n\nSee you there,\nNathan",
+    "snippet": "This is a reminder that our webinar on Digital Marketing Strategies is tomorrow...",
+    "timestamp": "2025-12-08T15:00:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "events",
+        "name": "Events",
+        "color": "#009688",
+        "type": "user"
+      }
+    ],
+    "category": "updates",
+    "threadId": "thread26",
+    "attachments": []
+  },
+  {
+    "id": "email26",
+    "from": {
+      "name": "Olivia Scott",
+      "email": "olivia.scott@compliance.com",
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Compliance Training - Mandatory Completion",
+    "body": "Hi,\n\nPlease complete the mandatory compliance training by December 20th. This is required for all employees. Access the training portal through the link below.\n\nThanks,\nOlivia",
+    "snippet": "Please complete the mandatory compliance training by December 20th...",
+    "timestamp": "2025-12-09T09:00:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread27",
+    "attachments": []
+  },
+  {
+    "id": "email27",
+    "from": {
+      "name": "Justin Green",
+      "email": "justin.green@clientrelations.com",
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Client Feedback - Very Positive Response",
+    "body": "Hi,\n\nJust wanted to share that we received very positive feedback from the client on your recent work. Great job!\n\nBest,\nJustin",
+    "snippet": "Just wanted to share that we received very positive feedback from the client...",
+    "timestamp": "2025-12-09T13:00:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread28",
+    "attachments": []
+  },
+  {
+    "id": "email28",
+    "from": {
+      "name": "Eric Baker",
+      "email": "eric.baker@management.com",
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Year-End Review Meeting - Schedule",
+    "body": "Hi,\n\nLet's schedule your year-end review meeting. Please share your availability for the next two weeks.\n\nBest,\nEric",
+    "snippet": "Let's schedule your year-end review meeting...",
+    "timestamp": "2025-12-10T10:00:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread30",
+    "attachments": []
+  },
+  {
+    "id": "email29",
+    "from": {
       "name": "Rachel Clark",
       "email": "rachel.clark@promotions.com",
       "avatar": "/media/avatars/person10.jpg"
@@ -34,7 +1042,7 @@
     "attachments": []
   },
   {
-    "id": "email2",
+    "id": "email30",
     "from": {
       "name": "Amanda Garcia",
       "email": "amanda.garcia@webinar.com",
@@ -68,7 +1076,7 @@
     "attachments": []
   },
   {
-    "id": "email3",
+    "id": "email31",
     "from": {
       "name": "Ashley Sanchez",
       "email": "ashley.sanchez@offers.com",
@@ -102,7 +1110,7 @@
     "attachments": []
   },
   {
-    "id": "email4",
+    "id": "email32",
     "from": {
       "name": "Ashley Thompson",
       "email": "ashley.thompson@webinar.com",
@@ -136,7 +1144,7 @@
     "attachments": []
   },
   {
-    "id": "email5",
+    "id": "email33",
     "from": {
       "name": "Eric Cook",
       "email": "eric.cook@sales.com",
@@ -170,7 +1178,7 @@
     "attachments": []
   },
   {
-    "id": "email6",
+    "id": "email34",
     "from": {
       "name": "Katherine Rodriguez",
       "email": "katherine.rodriguez@outlook.com",
@@ -204,7 +1212,7 @@
     "attachments": []
   },
   {
-    "id": "email7",
+    "id": "email35",
     "from": {
       "name": "Maria Walker",
       "email": "maria.walker@accounts.com",
@@ -238,7 +1246,7 @@
     "attachments": []
   },
   {
-    "id": "email8",
+    "id": "email36",
     "from": {
       "name": "Tyler Wright",
       "email": "tyler.wright@accounts.com",
@@ -272,7 +1280,7 @@
     "attachments": []
   },
   {
-    "id": "email9",
+    "id": "email37",
     "from": {
       "name": "Jennifer Morgan",
       "email": "jennifer.morgan@startup.io",
@@ -306,7 +1314,7 @@
     "attachments": []
   },
   {
-    "id": "email10",
+    "id": "email38",
     "from": {
       "name": "Alexis Morgan",
       "email": "alexis.morgan@sales.com",
@@ -348,7 +1356,7 @@
     ]
   },
   {
-    "id": "email11",
+    "id": "email39",
     "from": {
       "name": "Cameron Wilson",
       "email": "cameron.wilson@deals.com",
@@ -382,7 +1390,7 @@
     "attachments": []
   },
   {
-    "id": "email12",
+    "id": "email40",
     "from": {
       "name": "Michael King",
       "email": "michael.king@deals.com",
@@ -416,7 +1424,7 @@
     "attachments": []
   },
   {
-    "id": "email13",
+    "id": "email41",
     "from": {
       "name": "Daniel Adams",
       "email": "daniel.adams@designstudio.com",
@@ -450,7 +1458,7 @@
     "attachments": []
   },
   {
-    "id": "email14",
+    "id": "email42",
     "from": {
       "name": "Robert Bell",
       "email": "robert.bell@gmail.com",
@@ -484,7 +1492,7 @@
     "attachments": []
   },
   {
-    "id": "email15",
+    "id": "email43",
     "from": {
       "name": "Andrew Bell",
       "email": "andrew.bell@offers.com",
@@ -518,7 +1526,7 @@
     "attachments": []
   },
   {
-    "id": "email16",
+    "id": "email44",
     "from": {
       "name": "Sarah Turner",
       "email": "sarah.turner@newsletter.com",
@@ -552,7 +1560,7 @@
     "attachments": []
   },
   {
-    "id": "email17",
+    "id": "email45",
     "from": {
       "name": "James Jackson",
       "email": "james.jackson@systems.com",
@@ -586,7 +1594,7 @@
     "attachments": []
   },
   {
-    "id": "email18",
+    "id": "email46",
     "from": {
       "name": "Samantha Lopez",
       "email": "samantha.lopez@startup.io",
@@ -620,7 +1628,7 @@
     "attachments": []
   },
   {
-    "id": "email19",
+    "id": "email47",
     "from": {
       "name": "Katherine Sanchez",
       "email": "katherine.sanchez@marketing.co",
@@ -654,7 +1662,7 @@
     "attachments": []
   },
   {
-    "id": "email20",
+    "id": "email48",
     "from": {
       "name": "Noah Parker",
       "email": "noah.parker@hotmail.com",
@@ -688,7 +1696,7 @@
     "attachments": []
   },
   {
-    "id": "email21",
+    "id": "email49",
     "from": {
       "name": "Ryan Chen",
       "email": "ryan.chen@offers.com",
@@ -722,7 +1730,7 @@
     "attachments": []
   },
   {
-    "id": "email22",
+    "id": "email50",
     "from": {
       "name": "Lisa Edwards",
       "email": "lisa.edwards@bank.com",
@@ -756,7 +1764,7 @@
     "attachments": []
   },
   {
-    "id": "email23",
+    "id": "email51",
     "from": {
       "name": "Stephanie Clark",
       "email": "stephanie.clark@webinar.com",
@@ -790,7 +1798,7 @@
     "attachments": []
   },
   {
-    "id": "email24",
+    "id": "email52",
     "from": {
       "name": "Zachary King",
       "email": "zachary.king@accounting.com",
@@ -832,7 +1840,7 @@
     ]
   },
   {
-    "id": "email25",
+    "id": "email53",
     "from": {
       "name": "David White",
       "email": "david.white@enterprise.com",
@@ -866,7 +1874,7 @@
     "attachments": []
   },
   {
-    "id": "email26",
+    "id": "email54",
     "from": {
       "name": "Jordan Brown",
       "email": "jordan.brown@offers.com",
@@ -908,7 +1916,7 @@
     ]
   },
   {
-    "id": "email27",
+    "id": "email55",
     "from": {
       "name": "Samantha Green",
       "email": "samantha.green@yahoo.com",
@@ -942,7 +1950,7 @@
     "attachments": []
   },
   {
-    "id": "email28",
+    "id": "email56",
     "from": {
       "name": "Jennifer King",
       "email": "jennifer.king@payments.com",
@@ -976,7 +1984,7 @@
     "attachments": []
   },
   {
-    "id": "email29",
+    "id": "email57",
     "from": {
       "name": "Taylor Taylor",
       "email": "taylor.taylor@accounts.com",
@@ -1010,7 +2018,7 @@
     "attachments": []
   },
   {
-    "id": "email30",
+    "id": "email58",
     "from": {
       "name": "Daniel Scott",
       "email": "daniel.scott@techcorp.com",
@@ -1044,7 +2052,7 @@
     "attachments": []
   },
   {
-    "id": "email31",
+    "id": "email59",
     "from": {
       "name": "Connor Anderson",
       "email": "connor.anderson@hotmail.com",
@@ -1078,7 +2086,7 @@
     "attachments": []
   },
   {
-    "id": "email32",
+    "id": "email60",
     "from": {
       "name": "Megan White",
       "email": "megan.white@marketing.co",
@@ -1112,7 +2120,7 @@
     "attachments": []
   },
   {
-    "id": "email33",
+    "id": "email61",
     "from": {
       "name": "Michelle Clark",
       "email": "michelle.clark@offers.com",
@@ -1146,7 +2154,7 @@
     "attachments": []
   },
   {
-    "id": "email34",
+    "id": "email62",
     "from": {
       "name": "Nicole Davis",
       "email": "nicole.davis@innovation.com",
@@ -1188,7 +2196,7 @@
     ]
   },
   {
-    "id": "email35",
+    "id": "email63",
     "from": {
       "name": "Eric Carter",
       "email": "eric.carter@gmail.com",
@@ -1222,7 +2230,7 @@
     "attachments": []
   },
   {
-    "id": "email36",
+    "id": "email64",
     "from": {
       "name": "Katherine King",
       "email": "katherine.king@hotmail.com",
@@ -1256,7 +2264,7 @@
     "attachments": []
   },
   {
-    "id": "email37",
+    "id": "email65",
     "from": {
       "name": "Sarah Harris",
       "email": "sarah.harris@projects.com",
@@ -1290,7 +2298,7 @@
     "attachments": []
   },
   {
-    "id": "email38",
+    "id": "email66",
     "from": {
       "name": "Emily Bell",
       "email": "emily.bell@gmail.com",
@@ -1324,7 +2332,7 @@
     "attachments": []
   },
   {
-    "id": "email39",
+    "id": "email67",
     "from": {
       "name": "Jessica Turner",
       "email": "jessica.turner@sales.com",
@@ -1358,7 +2366,7 @@
     "attachments": []
   },
   {
-    "id": "email40",
+    "id": "email68",
     "from": {
       "name": "Amanda Edwards",
       "email": "amanda.edwards@billing.com",
@@ -1392,7 +2400,7 @@
     "attachments": []
   },
   {
-    "id": "email41",
+    "id": "email69",
     "from": {
       "name": "Ryan Perez",
       "email": "ryan.perez@offers.com",
@@ -1426,7 +2434,7 @@
     "attachments": []
   },
   {
-    "id": "email42",
+    "id": "email70",
     "from": {
       "name": "Connor Mitchell",
       "email": "connor.mitchell@sales.com",
@@ -1460,7 +2468,7 @@
     "attachments": []
   },
   {
-    "id": "email43",
+    "id": "email71",
     "from": {
       "name": "Jordan White",
       "email": "jordan.white@hrdep.com",
@@ -1494,7 +2502,7 @@
     "attachments": []
   },
   {
-    "id": "email44",
+    "id": "email72",
     "from": {
       "name": "Hannah Jackson",
       "email": "hannah.jackson@bank.com",
@@ -1528,7 +2536,7 @@
     "attachments": []
   },
   {
-    "id": "email45",
+    "id": "email73",
     "from": {
       "name": "Amanda Morgan",
       "email": "amanda.morgan@yahoo.com",
@@ -1570,7 +2578,7 @@
     ]
   },
   {
-    "id": "email46",
+    "id": "email74",
     "from": {
       "name": "Kevin Sanchez",
       "email": "kevin.sanchez@deals.com",
@@ -1612,7 +2620,7 @@
     ]
   },
   {
-    "id": "email47",
+    "id": "email75",
     "from": {
       "name": "Emily Walker",
       "email": "emily.walker@offers.com",
@@ -1646,7 +2654,7 @@
     "attachments": []
   },
   {
-    "id": "email48",
+    "id": "email76",
     "from": {
       "name": "Brandon Green",
       "email": "brandon.green@creditunion.org",
@@ -1680,7 +2688,7 @@
     "attachments": []
   },
   {
-    "id": "email49",
+    "id": "email77",
     "from": {
       "name": "Amanda Garcia",
       "email": "amanda.garcia@invoice.com",
@@ -1714,7 +2722,7 @@
     "attachments": []
   },
   {
-    "id": "email50",
+    "id": "email78",
     "from": {
       "name": "Daniel Bell",
       "email": "daniel.bell@offers.com",
@@ -1748,7 +2756,7 @@
     "attachments": []
   },
   {
-    "id": "email51",
+    "id": "email79",
     "from": {
       "name": "Kevin Scott",
       "email": "kevin.scott@invoice.com",
@@ -1782,7 +2790,7 @@
     "attachments": []
   },
   {
-    "id": "email52",
+    "id": "email80",
     "from": {
       "name": "Amanda Jackson",
       "email": "amanda.jackson@deals.com",
@@ -1816,7 +2824,7 @@
     "attachments": []
   },
   {
-    "id": "email53",
+    "id": "email81",
     "from": {
       "name": "Michelle Anderson",
       "email": "michelle.anderson@sales.com",
@@ -1850,7 +2858,7 @@
     "attachments": []
   },
   {
-    "id": "email54",
+    "id": "email82",
     "from": {
       "name": "Ryan Garcia",
       "email": "ryan.garcia@deals.com",
@@ -1884,7 +2892,7 @@
     "attachments": []
   },
   {
-    "id": "email55",
+    "id": "email83",
     "from": {
       "name": "Rachel Garcia",
       "email": "rachel.garcia@support.io",
@@ -1918,7 +2926,7 @@
     "attachments": []
   },
   {
-    "id": "email56",
+    "id": "email84",
     "from": {
       "name": "Jordan Garcia",
       "email": "jordan.garcia@techsupport.com",
@@ -1952,7 +2960,7 @@
     "attachments": []
   },
   {
-    "id": "email57",
+    "id": "email85",
     "from": {
       "name": "Jessica Hill",
       "email": "jessica.hill@billing.com",
@@ -1986,7 +2994,7 @@
     "attachments": []
   },
   {
-    "id": "email58",
+    "id": "email86",
     "from": {
       "name": "Justin Nelson",
       "email": "justin.nelson@solutions.com",
@@ -2020,7 +3028,7 @@
     "attachments": []
   },
   {
-    "id": "email59",
+    "id": "email87",
     "from": {
       "name": "Nathan Moore",
       "email": "nathan.moore@accounts.com",
@@ -2054,7 +3062,7 @@
     "attachments": []
   },
   {
-    "id": "email60",
+    "id": "email88",
     "from": {
       "name": "James Collins",
       "email": "james.collins@training.net",
@@ -2088,7 +3096,7 @@
     "attachments": []
   },
   {
-    "id": "email61",
+    "id": "email89",
     "from": {
       "name": "Amanda Garcia",
       "email": "amanda.garcia@notifications.io",
@@ -2122,7 +3130,7 @@
     "attachments": []
   },
   {
-    "id": "email62",
+    "id": "email90",
     "from": {
       "name": "Justin Stewart",
       "email": "justin.stewart@cloud.com",
@@ -2156,7 +3164,7 @@
     "attachments": []
   },
   {
-    "id": "email63",
+    "id": "email91",
     "from": {
       "name": "Cameron Parker",
       "email": "cameron.parker@hrdep.com",
@@ -2190,7 +3198,7 @@
     "attachments": []
   },
   {
-    "id": "email64",
+    "id": "email92",
     "from": {
       "name": "Samantha Green",
       "email": "samantha.green@operations.com",
@@ -2224,7 +3232,7 @@
     "attachments": []
   },
   {
-    "id": "email65",
+    "id": "email93",
     "from": {
       "name": "Joshua Rogers",
       "email": "joshua.rogers@billing.com",
@@ -2258,7 +3266,7 @@
     "attachments": []
   },
   {
-    "id": "email66",
+    "id": "email94",
     "from": {
       "name": "Samantha Campbell",
       "email": "samantha.campbell@promotions.com",
@@ -2292,7 +3300,7 @@
     "attachments": []
   },
   {
-    "id": "email67",
+    "id": "email95",
     "from": {
       "name": "Michelle Collins",
       "email": "michelle.collins@invoice.com",
@@ -2326,7 +3334,7 @@
     "attachments": []
   },
   {
-    "id": "email68",
+    "id": "email96",
     "from": {
       "name": "David Stewart",
       "email": "david.stewart@notifications.io",
@@ -2360,7 +3368,7 @@
     "attachments": []
   },
   {
-    "id": "email69",
+    "id": "email97",
     "from": {
       "name": "David Moore",
       "email": "david.moore@promotions.com",
@@ -2394,7 +3402,7 @@
     "attachments": []
   },
   {
-    "id": "email70",
+    "id": "email98",
     "from": {
       "name": "Olivia Morgan",
       "email": "olivia.morgan@newsletter.com",
@@ -2436,7 +3444,7 @@
     ]
   },
   {
-    "id": "email71",
+    "id": "email99",
     "from": {
       "name": "Connor Martinez",
       "email": "connor.martinez@hotmail.com",
@@ -2470,7 +3478,7 @@
     "attachments": []
   },
   {
-    "id": "email72",
+    "id": "email100",
     "from": {
       "name": "Eric Young",
       "email": "eric.young@app.com",
@@ -2512,7 +3520,7 @@
     ]
   },
   {
-    "id": "email73",
+    "id": "email101",
     "from": {
       "name": "Ryan Edwards",
       "email": "ryan.edwards@innovation.com",
@@ -2554,7 +3562,7 @@
     ]
   },
   {
-    "id": "email74",
+    "id": "email102",
     "from": {
       "name": "Andrew Carter",
       "email": "andrew.carter@innovation.com",
@@ -2588,7 +3596,7 @@
     "attachments": []
   },
   {
-    "id": "email75",
+    "id": "email103",
     "from": {
       "name": "Amanda Adams",
       "email": "amanda.adams@marketing.com",
@@ -2622,7 +3630,7 @@
     "attachments": []
   },
   {
-    "id": "email76",
+    "id": "email104",
     "from": {
       "name": "Nicole Cook",
       "email": "nicole.cook@creditunion.org",
@@ -2656,7 +3664,7 @@
     "attachments": []
   },
   {
-    "id": "email77",
+    "id": "email105",
     "from": {
       "name": "Michael Lopez",
       "email": "michael.lopez@api.com",
@@ -2690,7 +3698,7 @@
     "attachments": []
   },
   {
-    "id": "email78",
+    "id": "email106",
     "from": {
       "name": "Joshua Morgan",
       "email": "joshua.morgan@offers.com",
@@ -2724,7 +3732,7 @@
     "attachments": []
   },
   {
-    "id": "email79",
+    "id": "email107",
     "from": {
       "name": "Thomas Moore",
       "email": "thomas.moore@billing.com",
@@ -2758,7 +3766,7 @@
     "attachments": []
   },
   {
-    "id": "email80",
+    "id": "email108",
     "from": {
       "name": "Lisa Wilson",
       "email": "lisa.wilson@designstudio.com",
@@ -2792,7 +3800,7 @@
     "attachments": []
   },
   {
-    "id": "email81",
+    "id": "email109",
     "from": {
       "name": "Jessica Nelson",
       "email": "jessica.nelson@sales.com",
@@ -2826,7 +3834,7 @@
     "attachments": []
   },
   {
-    "id": "email82",
+    "id": "email110",
     "from": {
       "name": "Noah Turner",
       "email": "noah.turner@compliance.com",
@@ -2860,7 +3868,7 @@
     "attachments": []
   },
   {
-    "id": "email83",
+    "id": "email111",
     "from": {
       "name": "Jordan Parker",
       "email": "jordan.parker@offers.com",
@@ -2894,7 +3902,7 @@
     "attachments": []
   },
   {
-    "id": "email84",
+    "id": "email112",
     "from": {
       "name": "Brittany Parker",
       "email": "brittany.parker@platform.io",
@@ -2928,7 +3936,7 @@
     "attachments": []
   },
   {
-    "id": "email85",
+    "id": "email113",
     "from": {
       "name": "Emily Mitchell",
       "email": "emily.mitchell@techsupport.com",
@@ -2962,7 +3970,7 @@
     "attachments": []
   },
   {
-    "id": "email86",
+    "id": "email114",
     "from": {
       "name": "Connor White",
       "email": "connor.white@promotions.com",
@@ -2996,7 +4004,7 @@
     "attachments": []
   },
   {
-    "id": "email87",
+    "id": "email115",
     "from": {
       "name": "Rachel Walker",
       "email": "rachel.walker@designstudio.com",
@@ -3030,7 +4038,7 @@
     "attachments": []
   },
   {
-    "id": "email88",
+    "id": "email116",
     "from": {
       "name": "Michael King",
       "email": "michael.king@bank.com",
@@ -3064,7 +4072,7 @@
     "attachments": []
   },
   {
-    "id": "email89",
+    "id": "email117",
     "from": {
       "name": "Samantha Parker",
       "email": "samantha.parker@hotmail.com",
@@ -3098,7 +4106,7 @@
     "attachments": []
   },
   {
-    "id": "email90",
+    "id": "email118",
     "from": {
       "name": "Patricia Lopez",
       "email": "patricia.lopez@invoice.com",
@@ -3132,7 +4140,7 @@
     "attachments": []
   },
   {
-    "id": "email91",
+    "id": "email119",
     "from": {
       "name": "Katherine Lopez",
       "email": "katherine.lopez@devteam.com",
@@ -3174,7 +4182,7 @@
     ]
   },
   {
-    "id": "email92",
+    "id": "email120",
     "from": {
       "name": "Michelle Edwards",
       "email": "michelle.edwards@legal.com",
@@ -3208,7 +4216,7 @@
     "attachments": []
   },
   {
-    "id": "email93",
+    "id": "email121",
     "from": {
       "name": "Olivia Edwards",
       "email": "olivia.edwards@offers.com",
@@ -3242,7 +4250,7 @@
     "attachments": []
   },
   {
-    "id": "email94",
+    "id": "email122",
     "from": {
       "name": "Alexis Wright",
       "email": "alexis.wright@hotmail.com",
@@ -3276,7 +4284,7 @@
     "attachments": []
   },
   {
-    "id": "email95",
+    "id": "email123",
     "from": {
       "name": "Maria Brown",
       "email": "maria.brown@cloud.com",
@@ -3310,7 +4318,7 @@
     "attachments": []
   },
   {
-    "id": "email96",
+    "id": "email124",
     "from": {
       "name": "Lauren Collins",
       "email": "lauren.collins@tool.com",
@@ -3344,7 +4352,7 @@
     "attachments": []
   },
   {
-    "id": "email97",
+    "id": "email125",
     "from": {
       "name": "Christopher Young",
       "email": "christopher.young@promotions.com",
@@ -3378,7 +4386,7 @@
     "attachments": []
   },
   {
-    "id": "email98",
+    "id": "email126",
     "from": {
       "name": "Jennifer Brown",
       "email": "jennifer.brown@icloud.com",
@@ -3412,7 +4420,7 @@
     "attachments": []
   },
   {
-    "id": "email99",
+    "id": "email127",
     "from": {
       "name": "Connor Mitchell",
       "email": "connor.mitchell@bank.com",
@@ -3446,7 +4454,7 @@
     "attachments": []
   },
   {
-    "id": "email100",
+    "id": "email128",
     "from": {
       "name": "Connor White",
       "email": "connor.white@startup.io",
@@ -3480,7 +4488,7 @@
     "attachments": []
   },
   {
-    "id": "email101",
+    "id": "email129",
     "from": {
       "name": "Tyler Taylor",
       "email": "tyler.taylor@financegroup.com",
@@ -3514,7 +4522,7 @@
     "attachments": []
   },
   {
-    "id": "email102",
+    "id": "email130",
     "from": {
       "name": "Samantha Garcia",
       "email": "samantha.garcia@newsletter.com",
@@ -3556,7 +4564,7 @@
     ]
   },
   {
-    "id": "email103",
+    "id": "email131",
     "from": {
       "name": "David Anderson",
       "email": "david.anderson@platform.io",
@@ -3590,7 +4598,7 @@
     "attachments": []
   },
   {
-    "id": "email104",
+    "id": "email132",
     "from": {
       "name": "Amanda Lee",
       "email": "amanda.lee@promotions.com",
@@ -3624,7 +4632,7 @@
     "attachments": []
   },
   {
-    "id": "email105",
+    "id": "email133",
     "from": {
       "name": "Stephanie Kim",
       "email": "stephanie.kim@marketing.com",
@@ -3658,7 +4666,7 @@
     "attachments": []
   },
   {
-    "id": "email106",
+    "id": "email134",
     "from": {
       "name": "Stephanie Martinez",
       "email": "stephanie.martinez@sales.com",
@@ -3692,7 +4700,7 @@
     "attachments": []
   },
   {
-    "id": "email107",
+    "id": "email135",
     "from": {
       "name": "Joshua Green",
       "email": "joshua.green@innovation.com",
@@ -3726,7 +4734,7 @@
     "attachments": []
   },
   {
-    "id": "email108",
+    "id": "email136",
     "from": {
       "name": "Maria Lopez",
       "email": "maria.lopez@gmail.com",
@@ -3760,7 +4768,7 @@
     "attachments": []
   },
   {
-    "id": "email109",
+    "id": "email137",
     "from": {
       "name": "Brittany Stewart",
       "email": "brittany.stewart@marketing.com",
@@ -3794,7 +4802,7 @@
     "attachments": []
   },
   {
-    "id": "email110",
+    "id": "email138",
     "from": {
       "name": "Melissa Lewis",
       "email": "melissa.lewis@deals.com",
@@ -3828,7 +4836,7 @@
     "attachments": []
   },
   {
-    "id": "email111",
+    "id": "email139",
     "from": {
       "name": "Brandon Johnson",
       "email": "brandon.johnson@app.com",
@@ -3862,7 +4870,7 @@
     "attachments": []
   },
   {
-    "id": "email112",
+    "id": "email140",
     "from": {
       "name": "Samantha Bell",
       "email": "samantha.bell@management.com",
@@ -3896,7 +4904,7 @@
     "attachments": []
   },
   {
-    "id": "email113",
+    "id": "email141",
     "from": {
       "name": "Rachel Wright",
       "email": "rachel.wright@gmail.com",
@@ -3930,7 +4938,7 @@
     "attachments": []
   },
   {
-    "id": "email114",
+    "id": "email142",
     "from": {
       "name": "Alexis Reed",
       "email": "alexis.reed@app.com",
@@ -3972,7 +4980,7 @@
     ]
   },
   {
-    "id": "email115",
+    "id": "email143",
     "from": {
       "name": "Matthew Cook",
       "email": "matthew.cook@startup.io",
@@ -4014,7 +5022,7 @@
     ]
   },
   {
-    "id": "email116",
+    "id": "email144",
     "from": {
       "name": "Alexis Thompson",
       "email": "alexis.thompson@platform.io",
@@ -4048,7 +5056,7 @@
     "attachments": []
   },
   {
-    "id": "email117",
+    "id": "email145",
     "from": {
       "name": "David Martinez",
       "email": "david.martinez@marketing.com",
@@ -4082,7 +5090,7 @@
     "attachments": []
   },
   {
-    "id": "email118",
+    "id": "email146",
     "from": {
       "name": "Patricia Wright",
       "email": "patricia.wright@promotions.com",
@@ -4116,7 +5124,7 @@
     "attachments": []
   },
   {
-    "id": "email119",
+    "id": "email147",
     "from": {
       "name": "Michelle Young",
       "email": "michelle.young@solutions.com",
@@ -4150,7 +5158,7 @@
     "attachments": []
   },
   {
-    "id": "email120",
+    "id": "email148",
     "from": {
       "name": "Joshua Jackson",
       "email": "joshua.jackson@api.com",
@@ -4184,7 +5192,7 @@
     "attachments": []
   },
   {
-    "id": "email121",
+    "id": "email149",
     "from": {
       "name": "Sarah Lee",
       "email": "sarah.lee@promotions.com",
@@ -4218,7 +5226,7 @@
     "attachments": []
   },
   {
-    "id": "email122",
+    "id": "email150",
     "from": {
       "name": "Lauren Young",
       "email": "lauren.young@management.com",
@@ -4252,7 +5260,7 @@
     "attachments": []
   },
   {
-    "id": "email123",
+    "id": "email151",
     "from": {
       "name": "Brittany Reed",
       "email": "brittany.reed@gmail.com",
@@ -4286,7 +5294,7 @@
     "attachments": []
   },
   {
-    "id": "email124",
+    "id": "email152",
     "from": {
       "name": "Olivia Parker",
       "email": "olivia.parker@accounting.com",
@@ -4320,7 +5328,7 @@
     "attachments": []
   },
   {
-    "id": "email125",
+    "id": "email153",
     "from": {
       "name": "Brandon Thompson",
       "email": "brandon.thompson@creditunion.org",
@@ -4354,7 +5362,7 @@
     "attachments": []
   },
   {
-    "id": "email126",
+    "id": "email154",
     "from": {
       "name": "Megan Kim",
       "email": "megan.kim@marketing.co",
@@ -4388,7 +5396,7 @@
     "attachments": []
   },
   {
-    "id": "email127",
+    "id": "email155",
     "from": {
       "name": "Maria Martinez",
       "email": "maria.martinez@outlook.com",
@@ -4422,7 +5430,7 @@
     "attachments": []
   },
   {
-    "id": "email128",
+    "id": "email156",
     "from": {
       "name": "Andrew Phillips",
       "email": "andrew.phillips@software.com",
@@ -4456,7 +5464,7 @@
     "attachments": []
   },
   {
-    "id": "email129",
+    "id": "email157",
     "from": {
       "name": "Joshua Green",
       "email": "joshua.green@accounting.com",
@@ -4490,7 +5498,7 @@
     "attachments": []
   },
   {
-    "id": "email130",
+    "id": "email158",
     "from": {
       "name": "Katherine Jackson",
       "email": "katherine.jackson@financegroup.com",
@@ -4524,7 +5532,7 @@
     "attachments": []
   },
   {
-    "id": "email131",
+    "id": "email159",
     "from": {
       "name": "Megan Evans",
       "email": "megan.evans@financegroup.com",
@@ -4558,7 +5566,7 @@
     "attachments": []
   },
   {
-    "id": "email132",
+    "id": "email160",
     "from": {
       "name": "Austin Harris",
       "email": "austin.harris@techcorp.com",
@@ -4592,7 +5600,7 @@
     "attachments": []
   },
   {
-    "id": "email133",
+    "id": "email161",
     "from": {
       "name": "Amanda Johnson",
       "email": "amanda.johnson@systems.com",
@@ -4626,7 +5634,7 @@
     "attachments": []
   },
   {
-    "id": "email134",
+    "id": "email162",
     "from": {
       "name": "Jennifer Morris",
       "email": "jennifer.morris@gmail.com",
@@ -4660,7 +5668,7 @@
     "attachments": []
   },
   {
-    "id": "email135",
+    "id": "email163",
     "from": {
       "name": "Jonathan Martinez",
       "email": "jonathan.martinez@promotions.com",
@@ -4694,7 +5702,7 @@
     "attachments": []
   },
   {
-    "id": "email136",
+    "id": "email164",
     "from": {
       "name": "Michelle Baker",
       "email": "michelle.baker@app.com",
@@ -4728,7 +5736,7 @@
     "attachments": []
   },
   {
-    "id": "email137",
+    "id": "email165",
     "from": {
       "name": "Patricia Davis",
       "email": "patricia.davis@support.io",
@@ -4762,7 +5770,7 @@
     "attachments": []
   },
   {
-    "id": "email138",
+    "id": "email166",
     "from": {
       "name": "Jessica Parker",
       "email": "jessica.parker@accounting.com",
@@ -4796,7 +5804,7 @@
     "attachments": []
   },
   {
-    "id": "email139",
+    "id": "email167",
     "from": {
       "name": "Jessica Jackson",
       "email": "jessica.jackson@newsletter.com",
@@ -4838,7 +5846,7 @@
     ]
   },
   {
-    "id": "email140",
+    "id": "email168",
     "from": {
       "name": "Andrew Edwards",
       "email": "andrew.edwards@billing.com",
@@ -4872,7 +5880,7 @@
     "attachments": []
   },
   {
-    "id": "email141",
+    "id": "email169",
     "from": {
       "name": "Amanda Nelson",
       "email": "amanda.nelson@invoice.com",
@@ -4914,7 +5922,7 @@
     ]
   },
   {
-    "id": "email142",
+    "id": "email170",
     "from": {
       "name": "Lisa Thompson",
       "email": "lisa.thompson@deals.com",
@@ -4948,7 +5956,7 @@
     "attachments": []
   },
   {
-    "id": "email143",
+    "id": "email171",
     "from": {
       "name": "David Walker",
       "email": "david.walker@sales.com",
@@ -4982,7 +5990,7 @@
     "attachments": []
   },
   {
-    "id": "email144",
+    "id": "email172",
     "from": {
       "name": "Megan Rodriguez",
       "email": "megan.rodriguez@platform.io",
@@ -5016,7 +6024,7 @@
     "attachments": []
   },
   {
-    "id": "email145",
+    "id": "email173",
     "from": {
       "name": "Tyler Evans",
       "email": "tyler.evans@creditunion.org",
@@ -5050,7 +6058,7 @@
     "attachments": []
   },
   {
-    "id": "email146",
+    "id": "email174",
     "from": {
       "name": "Jessica Harris",
       "email": "jessica.harris@projects.com",
@@ -5084,7 +6092,7 @@
     "attachments": []
   },
   {
-    "id": "email147",
+    "id": "email175",
     "from": {
       "name": "Andrew Wright",
       "email": "andrew.wright@outlook.com",
@@ -5118,7 +6126,7 @@
     "attachments": []
   },
   {
-    "id": "email148",
+    "id": "email176",
     "from": {
       "name": "Stephanie Stewart",
       "email": "stephanie.stewart@accounts.com",
@@ -5152,7 +6160,7 @@
     "attachments": []
   },
   {
-    "id": "email149",
+    "id": "email177",
     "from": {
       "name": "Kevin Lopez",
       "email": "kevin.lopez@deals.com",
@@ -5186,7 +6194,7 @@
     "attachments": []
   },
   {
-    "id": "email150",
+    "id": "email178",
     "from": {
       "name": "Sarah Baker",
       "email": "sarah.baker@accounts.com",
@@ -5220,7 +6228,7 @@
     "attachments": []
   },
   {
-    "id": "email151",
+    "id": "email179",
     "from": {
       "name": "Olivia Edwards",
       "email": "olivia.edwards@hotmail.com",
@@ -5254,7 +6262,7 @@
     "attachments": []
   },
   {
-    "id": "email152",
+    "id": "email180",
     "from": {
       "name": "Sarah Green",
       "email": "sarah.green@innovation.com",
@@ -5288,7 +6296,7 @@
     "attachments": []
   },
   {
-    "id": "email153",
+    "id": "email181",
     "from": {
       "name": "Tyler Moore",
       "email": "tyler.moore@newsletter.com",
@@ -5322,7 +6330,7 @@
     "attachments": []
   },
   {
-    "id": "email154",
+    "id": "email182",
     "from": {
       "name": "James Nelson",
       "email": "james.nelson@notifications.io",
@@ -5356,7 +6364,7 @@
     "attachments": []
   },
   {
-    "id": "email155",
+    "id": "email183",
     "from": {
       "name": "Lauren Moore",
       "email": "lauren.moore@accounting.com",
@@ -5398,7 +6406,7 @@
     ]
   },
   {
-    "id": "email156",
+    "id": "email184",
     "from": {
       "name": "Jordan Wright",
       "email": "jordan.wright@analytics.com",
@@ -5432,7 +6440,7 @@
     "attachments": []
   },
   {
-    "id": "email157",
+    "id": "email185",
     "from": {
       "name": "Joshua Clark",
       "email": "joshua.clark@icloud.com",
@@ -5466,7 +6474,7 @@
     "attachments": []
   },
   {
-    "id": "email158",
+    "id": "email186",
     "from": {
       "name": "Amanda White",
       "email": "amanda.white@digital.com",
@@ -5500,7 +6508,7 @@
     "attachments": []
   },
   {
-    "id": "email159",
+    "id": "email187",
     "from": {
       "name": "Nathan Evans",
       "email": "nathan.evans@techsupport.com",
@@ -5542,7 +6550,7 @@
     ]
   },
   {
-    "id": "email160",
+    "id": "email188",
     "from": {
       "name": "Joshua Rogers",
       "email": "joshua.rogers@designstudio.com",
@@ -5576,7 +6584,7 @@
     "attachments": []
   },
   {
-    "id": "email161",
+    "id": "email189",
     "from": {
       "name": "Samantha Evans",
       "email": "samantha.evans@hrdep.com",
@@ -5610,7 +6618,7 @@
     "attachments": []
   },
   {
-    "id": "email162",
+    "id": "email190",
     "from": {
       "name": "Eric Green",
       "email": "eric.green@offers.com",
@@ -5644,7 +6652,7 @@
     "attachments": []
   },
   {
-    "id": "email163",
+    "id": "email191",
     "from": {
       "name": "David Johnson",
       "email": "david.johnson@outlook.com",
@@ -5678,7 +6686,7 @@
     "attachments": []
   },
   {
-    "id": "email164",
+    "id": "email192",
     "from": {
       "name": "Tyler Wilson",
       "email": "tyler.wilson@yahoo.com",
@@ -5712,7 +6720,7 @@
     "attachments": []
   },
   {
-    "id": "email165",
+    "id": "email193",
     "from": {
       "name": "Christopher Morgan",
       "email": "christopher.morgan@marketing.com",
@@ -5746,7 +6754,7 @@
     "attachments": []
   },
   {
-    "id": "email166",
+    "id": "email194",
     "from": {
       "name": "Christopher Taylor",
       "email": "christopher.taylor@invoice.com",
@@ -5780,7 +6788,7 @@
     "attachments": []
   },
   {
-    "id": "email167",
+    "id": "email195",
     "from": {
       "name": "Ryan Moore",
       "email": "ryan.moore@enterprise.com",
@@ -5822,7 +6830,7 @@
     ]
   },
   {
-    "id": "email168",
+    "id": "email196",
     "from": {
       "name": "Michelle Moore",
       "email": "michelle.moore@hotmail.com",
@@ -5856,7 +6864,7 @@
     "attachments": []
   },
   {
-    "id": "email169",
+    "id": "email197",
     "from": {
       "name": "Ashley Wright",
       "email": "ashley.wright@outlook.com",
@@ -5890,7 +6898,7 @@
     "attachments": []
   },
   {
-    "id": "email170",
+    "id": "email198",
     "from": {
       "name": "Ashley Walker",
       "email": "ashley.walker@payments.com",
@@ -5932,7 +6940,7 @@
     ]
   },
   {
-    "id": "email171",
+    "id": "email199",
     "from": {
       "name": "Nathan Chen",
       "email": "nathan.chen@app.com",
@@ -5966,7 +6974,7 @@
     "attachments": []
   },
   {
-    "id": "email172",
+    "id": "email200",
     "from": {
       "name": "Jonathan Brown",
       "email": "jonathan.brown@clientrelations.com",
@@ -6000,7 +7008,7 @@
     "attachments": []
   },
   {
-    "id": "email173",
+    "id": "email201",
     "from": {
       "name": "Rachel Brown",
       "email": "rachel.brown@hotmail.com",
@@ -6034,7 +7042,7 @@
     "attachments": []
   },
   {
-    "id": "email174",
+    "id": "email202",
     "from": {
       "name": "Tyler Walker",
       "email": "tyler.walker@billing.com",
@@ -6068,7 +7076,7 @@
     "attachments": []
   },
   {
-    "id": "email175",
+    "id": "email203",
     "from": {
       "name": "Daniel Edwards",
       "email": "daniel.edwards@sales.com",
@@ -6102,7 +7110,7 @@
     "attachments": []
   },
   {
-    "id": "email176",
+    "id": "email204",
     "from": {
       "name": "James Morris",
       "email": "james.morris@newsletter.com",
@@ -6136,7 +7144,7 @@
     "attachments": []
   },
   {
-    "id": "email177",
+    "id": "email205",
     "from": {
       "name": "Zachary Kim",
       "email": "zachary.kim@bank.com",
@@ -6170,7 +7178,7 @@
     "attachments": []
   },
   {
-    "id": "email178",
+    "id": "email206",
     "from": {
       "name": "Cameron Johnson",
       "email": "cameron.johnson@icloud.com",
@@ -6212,7 +7220,7 @@
     ]
   },
   {
-    "id": "email179",
+    "id": "email207",
     "from": {
       "name": "Amanda Lopez",
       "email": "amanda.lopez@accounting.com",
@@ -6246,7 +7254,7 @@
     "attachments": []
   },
   {
-    "id": "email180",
+    "id": "email208",
     "from": {
       "name": "Taylor Lee",
       "email": "taylor.lee@webinar.com",
@@ -6280,7 +7288,7 @@
     "attachments": []
   },
   {
-    "id": "email181",
+    "id": "email209",
     "from": {
       "name": "Noah Thompson",
       "email": "noah.thompson@yahoo.com",
@@ -6322,7 +7330,7 @@
     ]
   },
   {
-    "id": "email182",
+    "id": "email210",
     "from": {
       "name": "Noah Edwards",
       "email": "noah.edwards@sales.com",
@@ -6356,7 +7364,7 @@
     "attachments": []
   },
   {
-    "id": "email183",
+    "id": "email211",
     "from": {
       "name": "Rachel Stewart",
       "email": "rachel.stewart@enterprise.com",
@@ -6390,7 +7398,7 @@
     "attachments": []
   },
   {
-    "id": "email184",
+    "id": "email212",
     "from": {
       "name": "Nathan Lewis",
       "email": "nathan.lewis@cloud.com",
@@ -6424,7 +7432,7 @@
     "attachments": []
   },
   {
-    "id": "email185",
+    "id": "email213",
     "from": {
       "name": "Alexis Mitchell",
       "email": "alexis.mitchell@accounting.com",
@@ -6458,7 +7466,7 @@
     "attachments": []
   },
   {
-    "id": "email186",
+    "id": "email214",
     "from": {
       "name": "Robert Green",
       "email": "robert.green@hrdep.com",
@@ -6492,7 +7500,7 @@
     "attachments": []
   },
   {
-    "id": "email187",
+    "id": "email215",
     "from": {
       "name": "Michelle Chen",
       "email": "michelle.chen@innovation.com",
@@ -6526,7 +7534,7 @@
     "attachments": []
   },
   {
-    "id": "email188",
+    "id": "email216",
     "from": {
       "name": "Thomas Jackson",
       "email": "thomas.jackson@accounting.com",
@@ -6560,7 +7568,7 @@
     "attachments": []
   },
   {
-    "id": "email189",
+    "id": "email217",
     "from": {
       "name": "Jessica Wilson",
       "email": "jessica.wilson@outlook.com",
@@ -6594,7 +7602,7 @@
     "attachments": []
   },
   {
-    "id": "email190",
+    "id": "email218",
     "from": {
       "name": "Noah Lopez",
       "email": "noah.lopez@accounting.com",
@@ -6628,7 +7636,7 @@
     "attachments": []
   },
   {
-    "id": "email191",
+    "id": "email219",
     "from": {
       "name": "Brittany Evans",
       "email": "brittany.evans@sales.com",
@@ -6662,7 +7670,7 @@
     "attachments": []
   },
   {
-    "id": "email192",
+    "id": "email220",
     "from": {
       "name": "Samantha Garcia",
       "email": "samantha.garcia@analytics.com",
@@ -6696,7 +7704,7 @@
     "attachments": []
   },
   {
-    "id": "email193",
+    "id": "email221",
     "from": {
       "name": "Michelle Morris",
       "email": "michelle.morris@software.com",
@@ -6730,7 +7738,7 @@
     "attachments": []
   },
   {
-    "id": "email194",
+    "id": "email222",
     "from": {
       "name": "Christopher Turner",
       "email": "christopher.turner@sales.com",
@@ -6764,7 +7772,7 @@
     "attachments": []
   },
   {
-    "id": "email195",
+    "id": "email223",
     "from": {
       "name": "Cameron Chen",
       "email": "cameron.chen@compliance.com",
@@ -6798,7 +7806,7 @@
     "attachments": []
   },
   {
-    "id": "email196",
+    "id": "email224",
     "from": {
       "name": "Amanda Sanchez",
       "email": "amanda.sanchez@sales.com",
@@ -6832,7 +7840,7 @@
     "attachments": []
   },
   {
-    "id": "email197",
+    "id": "email225",
     "from": {
       "name": "Tyler Wilson",
       "email": "tyler.wilson@accounting.com",
@@ -6866,7 +7874,7 @@
     "attachments": []
   },
   {
-    "id": "email198",
+    "id": "email226",
     "from": {
       "name": "Megan Martinez",
       "email": "megan.martinez@accounts.com",
@@ -6900,7 +7908,7 @@
     "attachments": []
   },
   {
-    "id": "email199",
+    "id": "email227",
     "from": {
       "name": "Emily Mitchell",
       "email": "emily.mitchell@icloud.com",
@@ -6942,7 +7950,7 @@
     ]
   },
   {
-    "id": "email200",
+    "id": "email228",
     "from": {
       "name": "Zachary Johnson",
       "email": "zachary.johnson@clientrelations.com",

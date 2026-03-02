@@ -7,6 +7,9 @@ Single-directory layout: only data/ is used (no separate original/ directory).
 - Full pool: all files for that entity listed in main.json (data/*.json).
 - v2 disabled or seed=1 → load original only (first file).
 - v2 enabled and 1 < seed <= 999 → load full pool and apply seeded selection (reproducible).
+
+Debug: set log level to DEBUG (e.g. LOG_LEVEL=DEBUG or loguru level=DEBUG) to see
+detailed flow (paths, file counts, load/save branches) from this module.
 """
 
 import os
@@ -32,19 +35,26 @@ DATA_FILE_MAX_BYTES = int(os.getenv("DATA_FILE_MAX_BYTES", 10 * 1024 * 1024))
 
 def get_main_path(web_name: str) -> str:
     """Return path to main.json for a given web_name."""
-    return f"{BASE_PATH}/{web_name}/main.json"
+    path = f"{BASE_PATH}/{web_name}/main.json"
+    logger.debug("get_main_path", extra={"web_name": web_name, "path": path})
+    return path
 
 
 def get_data_dir(web_name: str) -> str:
     """Return path to data directory for a given web_name."""
-    return f"{BASE_PATH}/{web_name}/data"
+    path = f"{BASE_PATH}/{web_name}/data"
+    logger.debug("get_data_dir", extra={"web_name": web_name, "path": path})
+    return path
 
 
 def _ensure_dir(path: str) -> None:
     """Ensure directory exists, creating it if necessary."""
     try:
+        existed = os.path.isdir(path)
         os.makedirs(path, exist_ok=True)
+        logger.debug("_ensure_dir", extra={"path": path, "created": not existed})
     except OSError as e:
+        logger.error("_ensure_dir failed", extra={"path": path, "error": str(e)})
         raise IOError(f"OS error while creating directory: {path}: {e}") from e
 
 
@@ -54,6 +64,7 @@ def _parse_json_file_to_items(file_path: str) -> Optional[List[Dict[str, Any]]]:
     Returns None if file is missing, empty, or invalid.
     """
     if not os.path.exists(file_path):
+        logger.debug("_parse_json_file_to_items: file missing", extra={"path": file_path})
         return None
     try:
         if os.path.getsize(file_path) == 0:
@@ -62,9 +73,12 @@ def _parse_json_file_to_items(file_path: str) -> Optional[List[Dict[str, Any]]]:
         with open(file_path, "r", encoding="utf-8") as f:
             contents = json.load(f)
         if isinstance(contents, list):
+            logger.debug("_parse_json_file_to_items: loaded list", extra={"path": file_path, "count": len(contents)})
             return contents
         if isinstance(contents, dict):
+            logger.debug("_parse_json_file_to_items: loaded single dict as list", extra={"path": file_path, "count": 1})
             return [contents]
+        logger.debug("_parse_json_file_to_items: unexpected type", extra={"path": file_path, "type": type(contents).__name__})
         return None
     except json.JSONDecodeError as e:
         logger.error(f"Invalid JSON in file {file_path}: {e}")
@@ -82,28 +96,41 @@ def _load_first_file_only(web_name: str, entity_type: Optional[str]) -> List[Dic
     data_dir = get_data_dir(web_name)
     if entity_type:
         first_file = f"{data_dir}/{entity_type}_1.json"
+        logger.debug(
+            "_load_first_file_only: single entity",
+            extra={"web_name": web_name, "entity_type": entity_type, "first_file": first_file, "exists": os.path.exists(first_file)},
+        )
         items = _parse_json_file_to_items(first_file)
-        return items if items is not None else []
+        result = items if items is not None else []
+        logger.debug("_load_first_file_only: result", extra={"entity_type": entity_type, "count": len(result)})
+        return result
     # No entity_type: load first file of each entity from main.json (first path per entity)
     main_path = get_main_path(web_name)
     if not os.path.exists(main_path):
+        logger.debug("_load_first_file_only: no main.json", extra={"web_name": web_name, "main_path": main_path})
         return []
     try:
         with open(main_path, "r", encoding="utf-8") as f:
             main = json.load(f)
-    except Exception:
+    except Exception as e:
+        logger.debug("_load_first_file_only: failed to read main", extra={"web_name": web_name, "error": str(e)})
         return []
     if not isinstance(main, dict):
+        logger.debug("_load_first_file_only: main is not dict", extra={"web_name": web_name})
         return []
     all_data: List[Dict[str, Any]] = []
-    for paths in main.values():
+    for entity_key, paths in main.items():
         if not isinstance(paths, list) or not paths:
+            logger.debug("_load_first_file_only: skip non-list or empty", extra={"entity_key": entity_key})
             continue
         first_rel = paths[0].lstrip("./")
         abs_path = f"{BASE_PATH}/{web_name}/{first_rel}"
+        logger.debug("_load_first_file_only: loading first file", extra={"entity_key": entity_key, "abs_path": abs_path})
         items = _parse_json_file_to_items(abs_path)
         if items is not None:
             all_data.extend(items)
+            logger.debug("_load_first_file_only: added items", extra={"entity_key": entity_key, "added": len(items), "total_so_far": len(all_data)})
+    logger.debug("_load_first_file_only: total loaded", extra={"web_name": web_name, "total_count": len(all_data)})
     return all_data
 
 
@@ -125,6 +152,10 @@ def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], ent
     _ensure_dir(data_dir)
 
     file_path = f"{data_dir}/{filename}"
+    logger.debug(
+        "save_data_file: writing",
+        extra={"web_name": web_name, "filename": filename, "entity_type": entity_type, "item_count": len(data), "file_path": file_path},
+    )
 
     # Write data atomically
     temp_path = f"{file_path}.tmp"
@@ -168,6 +199,7 @@ def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], ent
     with open(main_path, "w", encoding="utf-8") as f:
         json.dump(main, f, indent=2, ensure_ascii=False)
 
+    logger.debug("save_data_file: done", extra={"web_name": web_name, "file_path": file_path})
     return file_path
 
 
@@ -201,8 +233,12 @@ def load_all_data(
     )
 
     if use_original_only:
-        return _load_first_file_only(web_name, entity_type)
-    return _load_from_main_json(web_name, entity_type)
+        result = _load_first_file_only(web_name, entity_type)
+        logger.debug("load_all_data: branch=first_file_only", extra={"web_name": web_name, "entity_type": entity_type, "count": len(result)})
+        return result
+    result = _load_from_main_json(web_name, entity_type)
+    logger.debug("load_all_data: branch=main_json", extra={"web_name": web_name, "entity_type": entity_type, "count": len(result)})
+    return result
 
 
 def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> List[Dict[str, Any]]:
@@ -226,14 +262,17 @@ def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> Li
     if isinstance(main, dict):
         if entity_type:
             rel_paths = main.get(entity_type) or []
+            logger.debug("_load_from_main_json: entity filter", extra={"web_name": web_name, "entity_type": entity_type, "rel_paths": rel_paths})
         else:
             # Merge all entity lists
             rel_paths = []
-            for value in main.values():
+            for key, value in main.items():
                 if isinstance(value, list):
                     rel_paths.extend(value)
+            logger.debug("_load_from_main_json: all entities", extra={"web_name": web_name, "main_keys": list(main.keys()), "rel_paths_count": len(rel_paths)})
     else:
         rel_paths = []
+        logger.debug("_load_from_main_json: main is not dict", extra={"web_name": web_name})
 
     for rel_path in rel_paths:
         normalized_rel = rel_path.lstrip("./")
@@ -244,7 +283,12 @@ def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> Li
         items = _parse_json_file_to_items(abs_path)
         if items is not None:
             all_data.extend(items)
+            logger.debug(
+                "_load_from_main_json: file loaded",
+                extra={"rel_path": rel_path, "abs_path": abs_path, "items_added": len(items), "total_after": len(all_data)},
+            )
 
+    logger.debug("_load_from_main_json: total", extra={"web_name": web_name, "entity_type": entity_type, "total_count": len(all_data)})
     return all_data
 
 
@@ -268,6 +312,10 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
 
     # Get existing files for this entity
     entity_files = main.get(entity_type, [])
+    logger.debug(
+        "append_or_rollover_entity_data: state",
+        extra={"web_name": web_name, "entity_type": entity_type, "entity_files_count": len(entity_files), "data_count": len(data)},
+    )
 
     # Determine if we append to existing or create new
     should_create_new = True
@@ -287,12 +335,27 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
                 # Append to existing file
                 should_create_new = False
                 target_file = last_file_abs
+                logger.debug(
+                    "append_or_rollover_entity_data: will append",
+                    extra={"target_file": target_file, "file_size": file_size, "estimated_new_size": estimated_new_size},
+                )
+            else:
+                logger.debug(
+                    "append_or_rollover_entity_data: rollover (size)",
+                    extra={"last_file_abs": last_file_abs, "file_size": file_size, "estimated_new_size": estimated_new_size, "max_bytes": DATA_FILE_MAX_BYTES},
+                )
+        else:
+            logger.debug("append_or_rollover_entity_data: last file missing, will create new", extra={"last_file_abs": last_file_abs})
+    else:
+        logger.debug("append_or_rollover_entity_data: no entity files yet, will create new", extra={"web_name": web_name, "entity_type": entity_type})
 
     if should_create_new:
         # Create new file with timestamp
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"{entity_type}_{timestamp}.json"
-        return save_data_file(web_name, filename, data, entity_type)
+        out_path = save_data_file(web_name, filename, data, entity_type)
+        logger.debug("append_or_rollover_entity_data: created new file", extra={"web_name": web_name, "entity_type": entity_type, "path": out_path})
+        return out_path
     else:
         # Append to existing file
         with open(target_file, "r", encoding="utf-8") as f:
@@ -308,6 +371,10 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
         with open(target_file, "w", encoding="utf-8") as f:
             json.dump(existing_data, f, indent=2, ensure_ascii=False)
 
+        logger.debug(
+            "append_or_rollover_entity_data: appended to existing",
+            extra={"target_file": target_file, "appended_count": len(data), "total_count": len(existing_data)},
+        )
         return target_file
 
 
@@ -332,6 +399,10 @@ def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, 
 
     filename = f"{entity_type}_1.json"
     file_path = f"{data_dir}/{filename}"
+    logger.debug(
+        "append_to_entity_data: start",
+        extra={"web_name": web_name, "entity_type": entity_type, "file_path": file_path, "data_count": len(data)},
+    )
 
     # Read existing data if file exists
     existing_data = []
@@ -341,9 +412,12 @@ def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, 
                 existing_data = json.load(f)
                 if not isinstance(existing_data, list):
                     existing_data = [existing_data]
+            logger.debug("append_to_entity_data: read existing", extra={"file_path": file_path, "existing_count": len(existing_data)})
         except Exception as e:
-            print(f"Warning: Could not read existing file {file_path}: {e}")
+            logger.warning("append_to_entity_data: could not read existing file", extra={"file_path": file_path, "error": str(e)})
             existing_data = []
+    else:
+        logger.debug("append_to_entity_data: file does not exist, will create", extra={"file_path": file_path})
 
     # Append new data
     combined_data = existing_data + data
@@ -378,5 +452,8 @@ def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, 
     with open(main_path, "w", encoding="utf-8") as f:
         json.dump(main, f, indent=2, ensure_ascii=False)
 
-    print(f"✅ Appended {len(data)} records to {file_path} (total: {len(combined_data)})")
+    logger.info(
+        "append_to_entity_data: done",
+        extra={"file_path": file_path, "appended": len(data), "total": len(combined_data)},
+    )
     return file_path

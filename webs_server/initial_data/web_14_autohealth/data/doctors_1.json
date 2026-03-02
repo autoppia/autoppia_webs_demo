@@ -1,6 +1,3644 @@
 [
   {
     "id": "d1",
+    "name": "Dr. Alice Thompson",
+    "specialty": "Cardiology",
+    "rating": 4.8,
+    "bio": "Experienced cardiologist with over 15 years of practice, specializing in preventive cardiology and interventional procedures. Dr. Thompson is dedicated to providing comprehensive heart care with a focus on patient education and lifestyle modifications.",
+    "experience": 15,
+    "education": [
+      "MD - Harvard Medical School",
+      "Residency - Johns Hopkins Hospital",
+      "Fellowship - Mayo Clinic Cardiology"
+    ],
+    "certifications": [
+      "Board Certified in Internal Medicine",
+      "Board Certified in Cardiovascular Disease",
+      "Fellow of the American College of Cardiology"
+    ],
+    "languages": [
+      "English",
+      "Spanish"
+    ],
+    "hospitalAffiliations": [
+      "City Medical Center",
+      "Regional Heart Institute"
+    ],
+    "officeLocation": "123 Heart Street, Medical District",
+    "phone": "(555) 123-4567",
+    "email": "alice.thompson@citymedical.com",
+    "consultationFee": 250,
+    "insuranceAccepted": [
+      "Blue Cross Blue Shield",
+      "Aetna",
+      "Cigna",
+      "Medicare",
+      "Medicaid"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 3:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Preventive Cardiology",
+      "Interventional Cardiology",
+      "Heart Failure Management",
+      "Arrhythmia Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Dr. Thompson is amazing! She took the time to explain everything clearly and made me feel comfortable.",
+        "patientName": "Sarah M.",
+        "date": "2024-01-15"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Highly recommend for heart health.",
+        "patientName": "John D.",
+        "date": "2024-01-10"
+      }
+    ],
+    "awards": [
+      "Top Cardiologist 2023 - City Medical Journal",
+      "Patient Choice Award 2022"
+    ],
+    "publications": [
+      "Preventive Cardiology in Modern Practice - 2023",
+      "Advances in Interventional Cardiology - 2022"
+    ],
+    "procedures": [
+      "Cardiac Catheterization",
+      "Angioplasty",
+      "Pacemaker Implantation",
+      "Echocardiography"
+    ]
+  },
+  {
+    "id": "d2",
+    "name": "Dr. Brian Patel",
+    "specialty": "Dermatology",
+    "rating": 4.5,
+    "bio": "Board-certified dermatologist with expertise in medical and cosmetic dermatology. Dr. Patel specializes in skin cancer detection, acne treatment, and advanced dermatological procedures.",
+    "experience": 12,
+    "education": [
+      "MD - Stanford University School of Medicine",
+      "Residency - UCSF Dermatology",
+      "Fellowship - Mohs Surgery"
+    ],
+    "certifications": [
+      "Board Certified in Dermatology",
+      "Mohs Surgery Certified",
+      "Cosmetic Dermatology Specialist"
+    ],
+    "languages": [
+      "English",
+      "Hindi",
+      "Gujarati"
+    ],
+    "hospitalAffiliations": [
+      "Skin Care Specialists",
+      "City Medical Center"
+    ],
+    "officeLocation": "456 Skin Avenue, Dermatology Plaza",
+    "phone": "(555) 234-5678",
+    "email": "brian.patel@skincare.com",
+    "consultationFee": 200,
+    "insuranceAccepted": [
+      "Blue Cross Blue Shield",
+      "Aetna",
+      "Cigna",
+      "UnitedHealth"
+    ],
+    "availability": {
+      "monday": "9:00 AM - 6:00 PM",
+      "tuesday": "9:00 AM - 6:00 PM",
+      "wednesday": "9:00 AM - 6:00 PM",
+      "thursday": "9:00 AM - 6:00 PM",
+      "friday": "9:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 2:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Skin Cancer Detection",
+      "Acne Treatment",
+      "Mohs Surgery",
+      "Cosmetic Dermatology"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great dermatologist, very thorough in skin cancer screening.",
+        "patientName": "Lisa K.",
+        "date": "2024-01-12"
+      },
+      {
+        "rating": 5,
+        "comment": "Helped clear up my acne completely. Very knowledgeable!",
+        "patientName": "Mike R.",
+        "date": "2024-01-08"
+      }
+    ],
+    "awards": [
+      "Best Dermatologist 2023 - Local Health Magazine",
+      "Excellence in Mohs Surgery 2022"
+    ],
+    "publications": [
+      "Advanced Skin Cancer Detection Techniques - 2023",
+      "Modern Acne Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Mohs Surgery",
+      "Skin Biopsy",
+      "Chemical Peels",
+      "Laser Treatment"
+    ]
+  },
+  {
+    "id": "d3",
+    "name": "Dr. Clara Nguyen",
+    "specialty": "Pediatrics",
+    "rating": 4.9,
+    "bio": "Pediatrician with a passion for child wellness and family-centered care. Dr. Nguyen has extensive experience in preventive care, developmental assessments, and managing complex pediatric conditions.",
+    "experience": 18,
+    "education": [
+      "MD - University of California San Francisco",
+      "Residency - Children's Hospital Los Angeles",
+      "Fellowship - Pediatric Emergency Medicine"
+    ],
+    "certifications": [
+      "Board Certified in Pediatrics",
+      "Pediatric Advanced Life Support",
+      "Child Development Specialist"
+    ],
+    "languages": [
+      "English",
+      "Vietnamese",
+      "Spanish"
+    ],
+    "hospitalAffiliations": [
+      "Children's Medical Center",
+      "City General Hospital"
+    ],
+    "officeLocation": "789 Kids Lane, Pediatric Center",
+    "phone": "(555) 345-6789",
+    "email": "clara.nguyen@childrensmed.com",
+    "consultationFee": 180,
+    "insuranceAccepted": [
+      "Blue Cross Blue Shield",
+      "Aetna",
+      "Cigna",
+      "Medicaid",
+      "CHIP"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 6:00 PM",
+      "tuesday": "8:00 AM - 6:00 PM",
+      "wednesday": "8:00 AM - 6:00 PM",
+      "thursday": "8:00 AM - 6:00 PM",
+      "friday": "8:00 AM - 5:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Well-Child Care",
+      "Developmental Assessments",
+      "Vaccination Programs",
+      "Pediatric Emergency Care"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Dr. Nguyen is wonderful with children. My kids love going to see her!",
+        "patientName": "Maria G.",
+        "date": "2024-01-14"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent pediatrician, very thorough and caring.",
+        "patientName": "David L.",
+        "date": "2024-01-11"
+      }
+    ],
+    "awards": [
+      "Pediatrician of the Year 2023",
+      "Family Choice Award 2022"
+    ],
+    "publications": [
+      "Childhood Vaccination Best Practices - 2023",
+      "Developmental Milestones in Modern Pediatrics - 2022"
+    ],
+    "procedures": [
+      "Well-Child Examinations",
+      "Vaccinations",
+      "Developmental Screenings",
+      "Minor Procedures"
+    ]
+  },
+  {
+    "id": "d4",
+    "name": "Dr. Daniel Ruiz",
+    "specialty": "Orthopedics",
+    "rating": 4.6,
+    "bio": "Orthopedic surgeon specializing in sports medicine and minimally invasive techniques. Dr. Ruiz has extensive experience in joint replacement, arthroscopic surgery, and sports injury treatment.",
+    "experience": 14,
+    "education": [
+      "MD - University of Texas Southwestern",
+      "Residency - Hospital for Special Surgery",
+      "Fellowship - Sports Medicine"
+    ],
+    "certifications": [
+      "Board Certified in Orthopedic Surgery",
+      "Sports Medicine Specialist",
+      "Arthroscopic Surgery Certified"
+    ],
+    "languages": [
+      "English",
+      "Spanish"
+    ],
+    "hospitalAffiliations": [
+      "Sports Medicine Institute",
+      "City Orthopedic Center"
+    ],
+    "officeLocation": "321 Bone Street, Orthopedic Plaza",
+    "phone": "(555) 456-7890",
+    "email": "daniel.ruiz@sportsmed.com",
+    "consultationFee": 300,
+    "insuranceAccepted": [
+      "Blue Cross Blue Shield",
+      "Aetna",
+      "Cigna",
+      "Workers' Compensation"
+    ],
+    "availability": {
+      "monday": "7:00 AM - 5:00 PM",
+      "tuesday": "7:00 AM - 5:00 PM",
+      "wednesday": "7:00 AM - 5:00 PM",
+      "thursday": "7:00 AM - 5:00 PM",
+      "friday": "7:00 AM - 3:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Sports Medicine",
+      "Joint Replacement",
+      "Arthroscopic Surgery",
+      "Trauma Surgery"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great surgeon, helped me get back to sports quickly.",
+        "patientName": "Alex T.",
+        "date": "2024-01-13"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Highly recommend!",
+        "patientName": "Jennifer W.",
+        "date": "2024-01-09"
+      }
+    ],
+    "awards": [
+      "Top Orthopedic Surgeon 2023",
+      "Sports Medicine Excellence Award 2022"
+    ],
+    "publications": [
+      "Advances in Arthroscopic Surgery - 2023",
+      "Sports Injury Prevention and Treatment - 2022"
+    ],
+    "procedures": [
+      "Knee Arthroscopy",
+      "Hip Replacement",
+      "Shoulder Surgery",
+      "ACL Reconstruction"
+    ]
+  },
+  {
+    "id": "d5",
+    "name": "Dr. Sarah Johnson",
+    "specialty": "Internal Medicine",
+    "rating": 4.7,
+    "bio": "Internal medicine physician with a focus on preventive care and chronic disease management. Dr. Johnson provides comprehensive primary care for adults with emphasis on wellness and health maintenance.",
+    "experience": 16,
+    "education": [
+      "MD - Yale School of Medicine",
+      "Residency - Massachusetts General Hospital",
+      "Fellowship - Geriatric Medicine"
+    ],
+    "certifications": [
+      "Board Certified in Internal Medicine",
+      "Geriatric Medicine Specialist",
+      "Preventive Medicine Certified"
+    ],
+    "languages": [
+      "English",
+      "French"
+    ],
+    "hospitalAffiliations": [
+      "City Medical Center",
+      "Senior Care Clinic"
+    ],
+    "officeLocation": "654 Health Boulevard, Medical Plaza",
+    "phone": "(555) 567-8901",
+    "email": "sarah.johnson@citymedical.com",
+    "consultationFee": 220,
+    "insuranceAccepted": [
+      "Blue Cross Blue Shield",
+      "Aetna",
+      "Cigna",
+      "Medicare",
+      "Medicaid"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Preventive Medicine",
+      "Chronic Disease Management",
+      "Geriatric Care",
+      "Health Screenings"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Dr. Johnson is thorough and caring. Great primary care physician.",
+        "patientName": "Robert H.",
+        "date": "2024-01-16"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent preventive care and health management.",
+        "patientName": "Linda P.",
+        "date": "2024-01-12"
+      }
+    ],
+    "awards": [
+      "Primary Care Physician of the Year 2023",
+      "Excellence in Geriatric Care 2022"
+    ],
+    "publications": [
+      "Preventive Medicine in Primary Care - 2023",
+      "Managing Chronic Conditions in Older Adults - 2022"
+    ],
+    "procedures": [
+      "Annual Physical Examinations",
+      "Health Screenings",
+      "Chronic Disease Management",
+      "Vaccinations"
+    ]
+  },
+  {
+    "id": "d6",
+    "name": "Dr. Michael Chen",
+    "specialty": "Gastroenterology",
+    "rating": 4.4,
+    "bio": "Gastroenterologist specializing in digestive health, endoscopy, and liver disease. Dr. Chen provides comprehensive care for gastrointestinal conditions with advanced diagnostic and therapeutic procedures.",
+    "experience": 13,
+    "education": [
+      "MD - Johns Hopkins School of Medicine",
+      "Residency - Cleveland Clinic",
+      "Fellowship - Gastroenterology"
+    ],
+    "certifications": [
+      "Board Certified in Internal Medicine",
+      "Board Certified in Gastroenterology",
+      "Advanced Endoscopy Certified"
+    ],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "hospitalAffiliations": [
+      "Gastroenterology Associates",
+      "City Medical Center"
+    ],
+    "officeLocation": "987 Digestive Drive, GI Center",
+    "phone": "(555) 678-9012",
+    "email": "michael.chen@giassociates.com",
+    "consultationFee": 280,
+    "insuranceAccepted": [
+      "Blue Cross Blue Shield",
+      "Aetna",
+      "Cigna",
+      "Medicare"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 3:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Endoscopy",
+      "Liver Disease",
+      "Inflammatory Bowel Disease",
+      "Colon Cancer Screening"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Very thorough and professional. Made the procedure comfortable.",
+        "patientName": "Thomas B.",
+        "date": "2024-01-15"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent gastroenterologist, highly recommend!",
+        "patientName": "Nancy M.",
+        "date": "2024-01-10"
+      }
+    ],
+    "awards": [
+      "Gastroenterologist of the Year 2023",
+      "Excellence in Endoscopy 2022"
+    ],
+    "publications": [
+      "Advanced Endoscopic Techniques - 2023",
+      "Liver Disease Management - 2022"
+    ],
+    "procedures": [
+      "Colonoscopy",
+      "Upper Endoscopy",
+      "ERCP",
+      "Liver Biopsy"
+    ]
+  },
+  {
+    "id": "d7",
+    "name": "Dr. Emily Rodriguez",
+    "specialty": "Neurology",
+    "rating": 4.8,
+    "bio": "Neurologist specializing in headache disorders, epilepsy, and movement disorders. Dr. Rodriguez provides comprehensive neurological care with advanced diagnostic capabilities and personalized treatment plans.",
+    "experience": 11,
+    "education": [
+      "MD - University of Pennsylvania",
+      "Residency - Mayo Clinic Neurology",
+      "Fellowship - Movement Disorders"
+    ],
+    "certifications": [
+      "Board Certified in Neurology",
+      "Epilepsy Specialist",
+      "Movement Disorders Certified"
+    ],
+    "languages": [
+      "English",
+      "Spanish"
+    ],
+    "hospitalAffiliations": [
+      "Neurological Institute",
+      "City Medical Center"
+    ],
+    "officeLocation": "147 Brain Street, Neuro Center",
+    "phone": "(555) 789-0123",
+    "email": "emily.rodriguez@neuroinstitute.com",
+    "consultationFee": 320,
+    "insuranceAccepted": [
+      "Blue Cross Blue Shield",
+      "Aetna",
+      "Cigna",
+      "Medicare"
+    ],
+    "availability": {
+      "monday": "9:00 AM - 5:00 PM",
+      "tuesday": "9:00 AM - 5:00 PM",
+      "wednesday": "9:00 AM - 5:00 PM",
+      "thursday": "9:00 AM - 5:00 PM",
+      "friday": "9:00 AM - 3:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Headache Disorders",
+      "Epilepsy",
+      "Movement Disorders",
+      "Multiple Sclerosis"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Dr. Rodriguez helped me manage my migraines effectively.",
+        "patientName": "Amanda K.",
+        "date": "2024-01-14"
+      },
+      {
+        "rating": 4,
+        "comment": "Very knowledgeable and caring neurologist.",
+        "patientName": "James R.",
+        "date": "2024-01-11"
+      }
+    ],
+    "awards": [
+      "Neurologist of the Year 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Modern Treatment of Headache Disorders - 2023",
+      "Advances in Epilepsy Management - 2022"
+    ],
+    "procedures": [
+      "EEG",
+      "EMG",
+      "Botulinum Toxin Injections",
+      "Deep Brain Stimulation"
+    ]
+  },
+  {
+    "id": "d8",
+    "name": "Dr. Jennifer Thompson",
+    "specialty": "Oncology",
+    "rating": 3.9,
+    "bio": "Experienced oncology specialist with over 24 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 24,
+    "education": [
+      "MD - Mayo Clinic School of Medicine",
+      "Residency - Medical Associates",
+      "Fellowship - Oncology"
+    ],
+    "certifications": [
+      "Board Certified in Oncology",
+      "Oncology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "English"
+    ],
+    "hospitalAffiliations": [
+      "University Hospital"
+    ],
+    "officeLocation": "108 Medical Street, Healthcare District",
+    "phone": "(208) 100-0008",
+    "email": "jennifer.thompson8@medical.com",
+    "consultationFee": 296,
+    "insuranceAccepted": [
+      "Anthem",
+      "Cigna",
+      "Workers' Compensation",
+      "CHIP",
+      "Aetna",
+      "UnitedHealth"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Oncology - General",
+      "Oncology - Advanced",
+      "Oncology - Specialized Care",
+      "Oncology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Joshua K.",
+        "date": "2024-04-19"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Helen R.",
+        "date": "2024-07-25"
+      }
+    ],
+    "awards": [
+      "Top Oncology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Oncology - 2023",
+      "Oncology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Oncology Procedure 1",
+      "Oncology Procedure 2",
+      "Oncology Procedure 3",
+      "Oncology Procedure 4"
+    ]
+  },
+  {
+    "id": "d9",
+    "name": "Dr. David Thompson",
+    "specialty": "Psychiatry",
+    "rating": 4.4,
+    "bio": "Experienced psychiatry specialist with over 14 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 14,
+    "education": [
+      "MD - Stanford University School of Medicine",
+      "Residency - Specialty Clinic",
+      "Fellowship - Psychiatry"
+    ],
+    "certifications": [
+      "Board Certified in Psychiatry",
+      "Psychiatry Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "English",
+      "Russian"
+    ],
+    "hospitalAffiliations": [
+      "University Hospital"
+    ],
+    "officeLocation": "109 Medical Street, Healthcare District",
+    "phone": "(209) 100-0009",
+    "email": "david.thompson9@medical.com",
+    "consultationFee": 240,
+    "insuranceAccepted": [
+      "Kaiser Permanente",
+      "CHIP",
+      "Cigna",
+      "Anthem"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Psychiatry - General",
+      "Psychiatry - Advanced",
+      "Psychiatry - Specialized Care",
+      "Psychiatry - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Charles L.",
+        "date": "2024-06-01"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Mark D.",
+        "date": "2024-09-09"
+      }
+    ],
+    "awards": [
+      "Top Psychiatry Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Psychiatry - 2023",
+      "Psychiatry Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Psychiatry Procedure 1",
+      "Psychiatry Procedure 2",
+      "Psychiatry Procedure 3",
+      "Psychiatry Procedure 4"
+    ]
+  },
+  {
+    "id": "d10",
+    "name": "Dr. Lisa Thompson",
+    "specialty": "Endocrinology",
+    "rating": 4.8,
+    "bio": "Experienced endocrinology specialist with over 11 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 11,
+    "education": [
+      "MD - Duke University School of Medicine",
+      "Residency - Memorial Hospital",
+      "Fellowship - Endocrinology"
+    ],
+    "certifications": [
+      "Board Certified in Endocrinology",
+      "Endocrinology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "English",
+      "Tagalog",
+      "Portuguese"
+    ],
+    "hospitalAffiliations": [
+      "Regional Hospital",
+      "Children's Hospital"
+    ],
+    "officeLocation": "110 Medical Street, Healthcare District",
+    "phone": "(210) 100-0010",
+    "email": "lisa.thompson10@medical.com",
+    "consultationFee": 175,
+    "insuranceAccepted": [
+      "Blue Cross Blue Shield",
+      "Molina Healthcare",
+      "Anthem",
+      "Medicaid",
+      "CHIP",
+      "Aetna"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Endocrinology - General",
+      "Endocrinology - Advanced",
+      "Endocrinology - Specialized Care",
+      "Endocrinology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Sarah K.",
+        "date": "2024-07-08"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Richard D.",
+        "date": "2024-11-05"
+      }
+    ],
+    "awards": [
+      "Top Endocrinology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Endocrinology - 2023",
+      "Endocrinology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Endocrinology Procedure 1",
+      "Endocrinology Procedure 2",
+      "Endocrinology Procedure 3",
+      "Endocrinology Procedure 4"
+    ]
+  },
+  {
+    "id": "d11",
+    "name": "Dr. Robert Thompson",
+    "specialty": "Rheumatology",
+    "rating": 3.7,
+    "bio": "Experienced rheumatology specialist with over 11 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 11,
+    "education": [
+      "MD - Emory University",
+      "Residency - Healthcare Center",
+      "Fellowship - Rheumatology"
+    ],
+    "certifications": [
+      "Board Certified in Rheumatology",
+      "Rheumatology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "French",
+      "German"
+    ],
+    "hospitalAffiliations": [
+      "Regional Hospital"
+    ],
+    "officeLocation": "111 Medical Street, Healthcare District",
+    "phone": "(211) 100-0011",
+    "email": "robert.thompson11@medical.com",
+    "consultationFee": 340,
+    "insuranceAccepted": [
+      "UnitedHealth",
+      "Aetna",
+      "Workers' Compensation",
+      "Molina Healthcare"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Rheumatology - General",
+      "Rheumatology - Advanced",
+      "Rheumatology - Specialized Care",
+      "Rheumatology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Michael D.",
+        "date": "2024-01-07"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Nancy D.",
+        "date": "2024-05-22"
+      }
+    ],
+    "awards": [
+      "Top Rheumatology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Rheumatology - 2023",
+      "Rheumatology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Rheumatology Procedure 1",
+      "Rheumatology Procedure 2",
+      "Rheumatology Procedure 3",
+      "Rheumatology Procedure 4"
+    ]
+  },
+  {
+    "id": "d12",
+    "name": "Dr. Maria Thompson",
+    "specialty": "Pulmonology",
+    "rating": 4.2,
+    "bio": "Experienced pulmonology specialist with over 11 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 11,
+    "education": [
+      "MD - University of Washington",
+      "Residency - Health Center",
+      "Fellowship - Pulmonology"
+    ],
+    "certifications": [
+      "Board Certified in Pulmonology",
+      "Pulmonology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Arabic"
+    ],
+    "hospitalAffiliations": [
+      "Children's Hospital"
+    ],
+    "officeLocation": "112 Medical Street, Healthcare District",
+    "phone": "(212) 100-0012",
+    "email": "maria.thompson12@medical.com",
+    "consultationFee": 233,
+    "insuranceAccepted": [
+      "Anthem",
+      "Medicaid",
+      "UnitedHealth",
+      "Cigna",
+      "Molina Healthcare",
+      "Blue Cross Blue Shield"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Pulmonology - General",
+      "Pulmonology - Advanced",
+      "Pulmonology - Specialized Care",
+      "Pulmonology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Carol L.",
+        "date": "2024-10-10"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Kimberly R.",
+        "date": "2024-02-07"
+      }
+    ],
+    "awards": [
+      "Top Pulmonology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Pulmonology - 2023",
+      "Pulmonology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Pulmonology Procedure 1",
+      "Pulmonology Procedure 2",
+      "Pulmonology Procedure 3",
+      "Pulmonology Procedure 4"
+    ]
+  },
+  {
+    "id": "d13",
+    "name": "Dr. William Thompson",
+    "specialty": "Nephrology",
+    "rating": 4.3,
+    "bio": "Experienced nephrology specialist with over 9 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 9,
+    "education": [
+      "MD - University of Chicago",
+      "Residency - City Medical Center",
+      "Fellowship - Nephrology"
+    ],
+    "certifications": [
+      "Board Certified in Nephrology",
+      "Nephrology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Hindi",
+      "Portuguese",
+      "Spanish"
+    ],
+    "hospitalAffiliations": [
+      "Medical Center",
+      "General Hospital"
+    ],
+    "officeLocation": "113 Medical Street, Healthcare District",
+    "phone": "(213) 100-0013",
+    "email": "william.thompson13@medical.com",
+    "consultationFee": 277,
+    "insuranceAccepted": [
+      "Anthem",
+      "Kaiser Permanente",
+      "UnitedHealth",
+      "Molina Healthcare",
+      "CHIP"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Nephrology - General",
+      "Nephrology - Advanced",
+      "Nephrology - Specialized Care",
+      "Nephrology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Sharon K.",
+        "date": "2024-09-15"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Kenneth R.",
+        "date": "2024-09-20"
+      }
+    ],
+    "awards": [
+      "Top Nephrology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Nephrology - 2023",
+      "Nephrology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Nephrology Procedure 1",
+      "Nephrology Procedure 2",
+      "Nephrology Procedure 3",
+      "Nephrology Procedure 4"
+    ]
+  },
+  {
+    "id": "d14",
+    "name": "Dr. Patricia Thompson",
+    "specialty": "Ophthalmology",
+    "rating": 4.5,
+    "bio": "Experienced ophthalmology specialist with over 22 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 22,
+    "education": [
+      "MD - Mayo Clinic School of Medicine",
+      "Residency - Medical Associates",
+      "Fellowship - Ophthalmology"
+    ],
+    "certifications": [
+      "Board Certified in Ophthalmology",
+      "Ophthalmology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Russian",
+      "English"
+    ],
+    "hospitalAffiliations": [
+      "Children's Hospital",
+      "Memorial Hospital"
+    ],
+    "officeLocation": "114 Medical Street, Healthcare District",
+    "phone": "(214) 100-0014",
+    "email": "patricia.thompson14@medical.com",
+    "consultationFee": 234,
+    "insuranceAccepted": [
+      "Blue Cross Blue Shield",
+      "Cigna",
+      "Medicaid",
+      "Kaiser Permanente"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Ophthalmology - General",
+      "Ophthalmology - Advanced",
+      "Ophthalmology - Specialized Care",
+      "Ophthalmology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Karen M.",
+        "date": "2024-11-14"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Paul D.",
+        "date": "2024-05-03"
+      }
+    ],
+    "awards": [
+      "Top Ophthalmology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Ophthalmology - 2023",
+      "Ophthalmology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Ophthalmology Procedure 1",
+      "Ophthalmology Procedure 2",
+      "Ophthalmology Procedure 3",
+      "Ophthalmology Procedure 4"
+    ]
+  },
+  {
+    "id": "d15",
+    "name": "Dr. Richard Thompson",
+    "specialty": "Otolaryngology",
+    "rating": 4.7,
+    "bio": "Experienced otolaryngology specialist with over 9 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 9,
+    "education": [
+      "MD - University of California San Francisco",
+      "Residency - City Medical Center",
+      "Fellowship - Otolaryngology"
+    ],
+    "certifications": [
+      "Board Certified in Otolaryngology",
+      "Otolaryngology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "German"
+    ],
+    "hospitalAffiliations": [
+      "Children's Hospital",
+      "Medical Associates"
+    ],
+    "officeLocation": "115 Medical Street, Healthcare District",
+    "phone": "(215) 100-0015",
+    "email": "richard.thompson15@medical.com",
+    "consultationFee": 188,
+    "insuranceAccepted": [
+      "Molina Healthcare",
+      "Kaiser Permanente",
+      "CHIP"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Otolaryngology - General",
+      "Otolaryngology - Advanced",
+      "Otolaryngology - Specialized Care",
+      "Otolaryngology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Sandra R.",
+        "date": "2024-05-22"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Elizabeth R.",
+        "date": "2024-03-04"
+      }
+    ],
+    "awards": [
+      "Top Otolaryngology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Otolaryngology - 2023",
+      "Otolaryngology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Otolaryngology Procedure 1",
+      "Otolaryngology Procedure 2",
+      "Otolaryngology Procedure 3",
+      "Otolaryngology Procedure 4"
+    ]
+  },
+  {
+    "id": "d16",
+    "name": "Dr. Linda Thompson",
+    "specialty": "Anesthesiology",
+    "rating": 4.5,
+    "bio": "Experienced anesthesiology specialist with over 14 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 14,
+    "education": [
+      "MD - Vanderbilt University",
+      "Residency - Medical Associates",
+      "Fellowship - Anesthesiology"
+    ],
+    "certifications": [
+      "Board Certified in Anesthesiology",
+      "Anesthesiology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Polish"
+    ],
+    "hospitalAffiliations": [
+      "University Hospital"
+    ],
+    "officeLocation": "116 Medical Street, Healthcare District",
+    "phone": "(216) 100-0016",
+    "email": "linda.thompson16@medical.com",
+    "consultationFee": 202,
+    "insuranceAccepted": [
+      "Medicare",
+      "Anthem",
+      "UnitedHealth"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Anesthesiology - General",
+      "Anesthesiology - Advanced",
+      "Anesthesiology - Specialized Care",
+      "Anesthesiology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Betty K.",
+        "date": "2024-03-21"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Maria D.",
+        "date": "2024-04-27"
+      }
+    ],
+    "awards": [
+      "Top Anesthesiology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Anesthesiology - 2023",
+      "Anesthesiology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Anesthesiology Procedure 1",
+      "Anesthesiology Procedure 2",
+      "Anesthesiology Procedure 3",
+      "Anesthesiology Procedure 4"
+    ]
+  },
+  {
+    "id": "d17",
+    "name": "Dr. Joseph Thompson",
+    "specialty": "Radiology",
+    "rating": 4.7,
+    "bio": "Experienced radiology specialist with over 5 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 5,
+    "education": [
+      "MD - University of Pennsylvania",
+      "Residency - University Hospital",
+      "Fellowship - Radiology"
+    ],
+    "certifications": [
+      "Board Certified in Radiology",
+      "Radiology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "English"
+    ],
+    "hospitalAffiliations": [
+      "City Medical Center"
+    ],
+    "officeLocation": "117 Medical Street, Healthcare District",
+    "phone": "(217) 100-0017",
+    "email": "joseph.thompson17@medical.com",
+    "consultationFee": 349,
+    "insuranceAccepted": [
+      "Medicare",
+      "Cigna",
+      "Medicaid",
+      "Molina Healthcare"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Radiology - General",
+      "Radiology - Advanced",
+      "Radiology - Specialized Care",
+      "Radiology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Barbara K.",
+        "date": "2024-09-27"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Sharon M.",
+        "date": "2024-04-04"
+      }
+    ],
+    "awards": [
+      "Top Radiology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Radiology - 2023",
+      "Radiology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Radiology Procedure 1",
+      "Radiology Procedure 2",
+      "Radiology Procedure 3",
+      "Radiology Procedure 4"
+    ]
+  },
+  {
+    "id": "d18",
+    "name": "Dr. Barbara Thompson",
+    "specialty": "Pathology",
+    "rating": 3.9,
+    "bio": "Experienced pathology specialist with over 21 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 21,
+    "education": [
+      "MD - Stanford University School of Medicine",
+      "Residency - Healthcare Center",
+      "Fellowship - Pathology"
+    ],
+    "certifications": [
+      "Board Certified in Pathology",
+      "Pathology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Mandarin"
+    ],
+    "hospitalAffiliations": [
+      "Regional Hospital",
+      "Medical Associates"
+    ],
+    "officeLocation": "118 Medical Street, Healthcare District",
+    "phone": "(218) 100-0018",
+    "email": "barbara.thompson18@medical.com",
+    "consultationFee": 312,
+    "insuranceAccepted": [
+      "Blue Cross Blue Shield",
+      "Workers' Compensation",
+      "Molina Healthcare",
+      "UnitedHealth",
+      "Humana",
+      "Medicaid"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Pathology - General",
+      "Pathology - Advanced",
+      "Pathology - Specialized Care",
+      "Pathology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Laura L.",
+        "date": "2024-03-05"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Joseph L.",
+        "date": "2024-02-14"
+      }
+    ],
+    "awards": [
+      "Top Pathology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Pathology - 2023",
+      "Pathology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Pathology Procedure 1",
+      "Pathology Procedure 2",
+      "Pathology Procedure 3",
+      "Pathology Procedure 4"
+    ]
+  },
+  {
+    "id": "d19",
+    "name": "Dr. Thomas Thompson",
+    "specialty": "Emergency Medicine",
+    "rating": 4.3,
+    "bio": "Experienced emergency medicine specialist with over 5 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 5,
+    "education": [
+      "MD - Duke University School of Medicine",
+      "Residency - Regional Hospital",
+      "Fellowship - Emergency Medicine"
+    ],
+    "certifications": [
+      "Board Certified in Emergency Medicine",
+      "Emergency Medicine Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Spanish"
+    ],
+    "hospitalAffiliations": [
+      "Medical Center"
+    ],
+    "officeLocation": "119 Medical Street, Healthcare District",
+    "phone": "(219) 100-0019",
+    "email": "thomas.thompson19@medical.com",
+    "consultationFee": 237,
+    "insuranceAccepted": [
+      "Medicare",
+      "Medicaid",
+      "CHIP"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Emergency Medicine - General",
+      "Emergency Medicine - Advanced",
+      "Emergency Medicine - Specialized Care",
+      "Emergency Medicine - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Carol D.",
+        "date": "2024-04-06"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Lisa R.",
+        "date": "2024-11-08"
+      }
+    ],
+    "awards": [
+      "Top Emergency Medicine Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Emergency Medicine - 2023",
+      "Emergency Medicine Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Emergency Medicine Procedure 1",
+      "Emergency Medicine Procedure 2",
+      "Emergency Medicine Procedure 3",
+      "Emergency Medicine Procedure 4"
+    ]
+  },
+  {
+    "id": "d20",
+    "name": "Dr. Elizabeth Thompson",
+    "specialty": "Cardiology",
+    "rating": 3.7,
+    "bio": "Experienced cardiology specialist with over 10 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 10,
+    "education": [
+      "MD - Emory University",
+      "Residency - Medical Associates",
+      "Fellowship - Cardiology"
+    ],
+    "certifications": [
+      "Board Certified in Cardiology",
+      "Cardiology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Portuguese",
+      "Tagalog",
+      "Hindi"
+    ],
+    "hospitalAffiliations": [
+      "Memorial Hospital",
+      "Healthcare Center"
+    ],
+    "officeLocation": "120 Medical Street, Healthcare District",
+    "phone": "(220) 100-0020",
+    "email": "elizabeth.thompson20@medical.com",
+    "consultationFee": 244,
+    "insuranceAccepted": [
+      "Medicare",
+      "Blue Cross Blue Shield",
+      "CHIP",
+      "Kaiser Permanente"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Cardiology - General",
+      "Cardiology - Advanced",
+      "Cardiology - Specialized Care",
+      "Cardiology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Christopher R.",
+        "date": "2024-10-22"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Matthew R.",
+        "date": "2024-12-07"
+      }
+    ],
+    "awards": [
+      "Top Cardiology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Cardiology - 2023",
+      "Cardiology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Cardiology Procedure 1",
+      "Cardiology Procedure 2",
+      "Cardiology Procedure 3",
+      "Cardiology Procedure 4"
+    ]
+  },
+  {
+    "id": "d21",
+    "name": "Dr. Christopher Thompson",
+    "specialty": "Dermatology",
+    "rating": 4.4,
+    "bio": "Experienced dermatology specialist with over 13 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 13,
+    "education": [
+      "MD - Emory University",
+      "Residency - Regional Hospital",
+      "Fellowship - Dermatology"
+    ],
+    "certifications": [
+      "Board Certified in Dermatology",
+      "Dermatology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "hospitalAffiliations": [
+      "Memorial Hospital",
+      "Community Health Center"
+    ],
+    "officeLocation": "121 Medical Street, Healthcare District",
+    "phone": "(221) 100-0021",
+    "email": "christopher.thompson21@medical.com",
+    "consultationFee": 288,
+    "insuranceAccepted": [
+      "UnitedHealth",
+      "Blue Cross Blue Shield",
+      "CHIP",
+      "Kaiser Permanente",
+      "Anthem"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Dermatology - General",
+      "Dermatology - Advanced",
+      "Dermatology - Specialized Care",
+      "Dermatology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Elizabeth L.",
+        "date": "2024-05-16"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Emily M.",
+        "date": "2024-10-15"
+      }
+    ],
+    "awards": [
+      "Top Dermatology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Dermatology - 2023",
+      "Dermatology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Dermatology Procedure 1",
+      "Dermatology Procedure 2",
+      "Dermatology Procedure 3",
+      "Dermatology Procedure 4"
+    ]
+  },
+  {
+    "id": "d22",
+    "name": "Dr. Jessica Thompson",
+    "specialty": "Pediatrics",
+    "rating": 4.8,
+    "bio": "Experienced pediatrics specialist with over 16 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 16,
+    "education": [
+      "MD - Harvard Medical School",
+      "Residency - Children's Hospital",
+      "Fellowship - Pediatrics"
+    ],
+    "certifications": [
+      "Board Certified in Pediatrics",
+      "Pediatrics Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "French"
+    ],
+    "hospitalAffiliations": [
+      "Community Health Center",
+      "General Hospital"
+    ],
+    "officeLocation": "122 Medical Street, Healthcare District",
+    "phone": "(222) 100-0022",
+    "email": "jessica.thompson22@medical.com",
+    "consultationFee": 300,
+    "insuranceAccepted": [
+      "Aetna",
+      "Anthem",
+      "Molina Healthcare",
+      "Medicare"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Pediatrics - General",
+      "Pediatrics - Advanced",
+      "Pediatrics - Specialized Care",
+      "Pediatrics - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Patricia R.",
+        "date": "2024-12-27"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Patricia M.",
+        "date": "2024-06-08"
+      }
+    ],
+    "awards": [
+      "Top Pediatrics Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Pediatrics - 2023",
+      "Pediatrics Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Pediatrics Procedure 1",
+      "Pediatrics Procedure 2",
+      "Pediatrics Procedure 3",
+      "Pediatrics Procedure 4"
+    ]
+  },
+  {
+    "id": "d23",
+    "name": "Dr. Charles Thompson",
+    "specialty": "Orthopedics",
+    "rating": 4.7,
+    "bio": "Experienced orthopedics specialist with over 10 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 10,
+    "education": [
+      "MD - University of Chicago",
+      "Residency - Healthcare Center",
+      "Fellowship - Orthopedics"
+    ],
+    "certifications": [
+      "Board Certified in Orthopedics",
+      "Orthopedics Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Russian",
+      "German",
+      "English"
+    ],
+    "hospitalAffiliations": [
+      "Memorial Hospital",
+      "Healthcare Center"
+    ],
+    "officeLocation": "123 Medical Street, Healthcare District",
+    "phone": "(223) 100-0023",
+    "email": "charles.thompson23@medical.com",
+    "consultationFee": 322,
+    "insuranceAccepted": [
+      "Aetna",
+      "Molina Healthcare",
+      "Workers' Compensation",
+      "Humana"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Orthopedics - General",
+      "Orthopedics - Advanced",
+      "Orthopedics - Specialized Care",
+      "Orthopedics - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Jennifer K.",
+        "date": "2024-09-06"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Matthew L.",
+        "date": "2024-03-25"
+      }
+    ],
+    "awards": [
+      "Top Orthopedics Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Orthopedics - 2023",
+      "Orthopedics Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Orthopedics Procedure 1",
+      "Orthopedics Procedure 2",
+      "Orthopedics Procedure 3",
+      "Orthopedics Procedure 4"
+    ]
+  },
+  {
+    "id": "d24",
+    "name": "Dr. Susan Thompson",
+    "specialty": "Internal Medicine",
+    "rating": 4.7,
+    "bio": "Experienced internal medicine specialist with over 20 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 20,
+    "education": [
+      "MD - Baylor College of Medicine",
+      "Residency - General Hospital",
+      "Fellowship - Internal Medicine"
+    ],
+    "certifications": [
+      "Board Certified in Internal Medicine",
+      "Internal Medicine Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Tagalog",
+      "Mandarin"
+    ],
+    "hospitalAffiliations": [
+      "General Hospital",
+      "Health Center"
+    ],
+    "officeLocation": "124 Medical Street, Healthcare District",
+    "phone": "(224) 100-0024",
+    "email": "susan.thompson24@medical.com",
+    "consultationFee": 233,
+    "insuranceAccepted": [
+      "CHIP",
+      "UnitedHealth",
+      "Blue Cross Blue Shield",
+      "Molina Healthcare"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Internal Medicine - General",
+      "Internal Medicine - Advanced",
+      "Internal Medicine - Specialized Care",
+      "Internal Medicine - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Ruth L.",
+        "date": "2024-07-15"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Joseph R.",
+        "date": "2024-02-04"
+      }
+    ],
+    "awards": [
+      "Top Internal Medicine Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Internal Medicine - 2023",
+      "Internal Medicine Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Internal Medicine Procedure 1",
+      "Internal Medicine Procedure 2",
+      "Internal Medicine Procedure 3",
+      "Internal Medicine Procedure 4"
+    ]
+  },
+  {
+    "id": "d25",
+    "name": "Dr. Andrew Thompson",
+    "specialty": "Gastroenterology",
+    "rating": 4.2,
+    "bio": "Experienced gastroenterology specialist with over 14 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 14,
+    "education": [
+      "MD - Cornell University",
+      "Residency - Regional Hospital",
+      "Fellowship - Gastroenterology"
+    ],
+    "certifications": [
+      "Board Certified in Gastroenterology",
+      "Gastroenterology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Russian",
+      "Japanese",
+      "French"
+    ],
+    "hospitalAffiliations": [
+      "Children's Hospital",
+      "Regional Hospital"
+    ],
+    "officeLocation": "125 Medical Street, Healthcare District",
+    "phone": "(225) 100-0025",
+    "email": "andrew.thompson25@medical.com",
+    "consultationFee": 201,
+    "insuranceAccepted": [
+      "Workers' Compensation",
+      "UnitedHealth",
+      "Medicaid",
+      "Cigna",
+      "Humana"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Gastroenterology - General",
+      "Gastroenterology - Advanced",
+      "Gastroenterology - Specialized Care",
+      "Gastroenterology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Nancy K.",
+        "date": "2024-11-08"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Daniel R.",
+        "date": "2024-09-28"
+      }
+    ],
+    "awards": [
+      "Top Gastroenterology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Gastroenterology - 2023",
+      "Gastroenterology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Gastroenterology Procedure 1",
+      "Gastroenterology Procedure 2",
+      "Gastroenterology Procedure 3",
+      "Gastroenterology Procedure 4"
+    ]
+  },
+  {
+    "id": "d26",
+    "name": "Dr. Karen Thompson",
+    "specialty": "Neurology",
+    "rating": 3.9,
+    "bio": "Experienced neurology specialist with over 21 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 21,
+    "education": [
+      "MD - Harvard Medical School",
+      "Residency - Specialty Clinic",
+      "Fellowship - Neurology"
+    ],
+    "certifications": [
+      "Board Certified in Neurology",
+      "Neurology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Italian"
+    ],
+    "hospitalAffiliations": [
+      "General Hospital"
+    ],
+    "officeLocation": "126 Medical Street, Healthcare District",
+    "phone": "(226) 100-0026",
+    "email": "karen.thompson26@medical.com",
+    "consultationFee": 203,
+    "insuranceAccepted": [
+      "UnitedHealth",
+      "Kaiser Permanente",
+      "Cigna"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Neurology - General",
+      "Neurology - Advanced",
+      "Neurology - Specialized Care",
+      "Neurology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Mark R.",
+        "date": "2024-03-02"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Anthony K.",
+        "date": "2024-10-10"
+      }
+    ],
+    "awards": [
+      "Top Neurology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Neurology - 2023",
+      "Neurology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Neurology Procedure 1",
+      "Neurology Procedure 2",
+      "Neurology Procedure 3",
+      "Neurology Procedure 4"
+    ]
+  },
+  {
+    "id": "d27",
+    "name": "Dr. Matthew Thompson",
+    "specialty": "Urology",
+    "rating": 3.6,
+    "bio": "Experienced urology specialist with over 24 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 24,
+    "education": [
+      "MD - University of Pennsylvania",
+      "Residency - Regional Hospital",
+      "Fellowship - Urology"
+    ],
+    "certifications": [
+      "Board Certified in Urology",
+      "Urology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "English"
+    ],
+    "hospitalAffiliations": [
+      "Health Center"
+    ],
+    "officeLocation": "127 Medical Street, Healthcare District",
+    "phone": "(227) 100-0027",
+    "email": "matthew.thompson27@medical.com",
+    "consultationFee": 239,
+    "insuranceAccepted": [
+      "Aetna",
+      "Blue Cross Blue Shield",
+      "Cigna",
+      "Medicare",
+      "Humana",
+      "UnitedHealth"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Urology - General",
+      "Urology - Advanced",
+      "Urology - Specialized Care",
+      "Urology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Alice M.",
+        "date": "2024-12-25"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Alice K.",
+        "date": "2024-09-13"
+      }
+    ],
+    "awards": [
+      "Top Urology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Urology - 2023",
+      "Urology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Urology Procedure 1",
+      "Urology Procedure 2",
+      "Urology Procedure 3",
+      "Urology Procedure 4"
+    ]
+  },
+  {
+    "id": "d28",
+    "name": "Dr. Nancy Thompson",
+    "specialty": "Oncology",
+    "rating": 4,
+    "bio": "Experienced oncology specialist with over 7 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 7,
+    "education": [
+      "MD - Cornell University",
+      "Residency - General Hospital",
+      "Fellowship - Oncology"
+    ],
+    "certifications": [
+      "Board Certified in Oncology",
+      "Oncology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "English",
+      "Spanish",
+      "Russian"
+    ],
+    "hospitalAffiliations": [
+      "General Hospital",
+      "Regional Hospital"
+    ],
+    "officeLocation": "128 Medical Street, Healthcare District",
+    "phone": "(228) 100-0028",
+    "email": "nancy.thompson28@medical.com",
+    "consultationFee": 331,
+    "insuranceAccepted": [
+      "Medicare",
+      "Workers' Compensation",
+      "Humana",
+      "Molina Healthcare"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Oncology - General",
+      "Oncology - Advanced",
+      "Oncology - Specialized Care",
+      "Oncology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Emily K.",
+        "date": "2024-01-11"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Carol M.",
+        "date": "2024-05-20"
+      }
+    ],
+    "awards": [
+      "Top Oncology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Oncology - 2023",
+      "Oncology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Oncology Procedure 1",
+      "Oncology Procedure 2",
+      "Oncology Procedure 3",
+      "Oncology Procedure 4"
+    ]
+  },
+  {
+    "id": "d29",
+    "name": "Dr. Betty Thompson",
+    "specialty": "Endocrinology",
+    "rating": 4.5,
+    "bio": "Experienced endocrinology specialist with over 12 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 12,
+    "education": [
+      "MD - University of Michigan",
+      "Residency - University Hospital",
+      "Fellowship - Endocrinology"
+    ],
+    "certifications": [
+      "Board Certified in Endocrinology",
+      "Endocrinology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "German"
+    ],
+    "hospitalAffiliations": [
+      "General Hospital",
+      "Health Center"
+    ],
+    "officeLocation": "130 Medical Street, Healthcare District",
+    "phone": "(230) 100-0030",
+    "email": "betty.thompson30@medical.com",
+    "consultationFee": 298,
+    "insuranceAccepted": [
+      "Medicare",
+      "Blue Cross Blue Shield",
+      "CHIP",
+      "Workers' Compensation",
+      "Molina Healthcare",
+      "Aetna"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Endocrinology - General",
+      "Endocrinology - Advanced",
+      "Endocrinology - Specialized Care",
+      "Endocrinology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Robert L.",
+        "date": "2024-01-16"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Emily L.",
+        "date": "2024-11-19"
+      }
+    ],
+    "awards": [
+      "Top Endocrinology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Endocrinology - 2023",
+      "Endocrinology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Endocrinology Procedure 1",
+      "Endocrinology Procedure 2",
+      "Endocrinology Procedure 3",
+      "Endocrinology Procedure 4"
+    ]
+  },
+  {
+    "id": "d30",
+    "name": "Dr. Mark Thompson",
+    "specialty": "Rheumatology",
+    "rating": 4.2,
+    "bio": "Experienced rheumatology specialist with over 17 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 17,
+    "education": [
+      "MD - University of Michigan",
+      "Residency - Regional Hospital",
+      "Fellowship - Rheumatology"
+    ],
+    "certifications": [
+      "Board Certified in Rheumatology",
+      "Rheumatology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Italian",
+      "Portuguese",
+      "Russian"
+    ],
+    "hospitalAffiliations": [
+      "Medical Center"
+    ],
+    "officeLocation": "131 Medical Street, Healthcare District",
+    "phone": "(231) 100-0031",
+    "email": "mark.thompson31@medical.com",
+    "consultationFee": 274,
+    "insuranceAccepted": [
+      "Molina Healthcare",
+      "Blue Cross Blue Shield",
+      "Humana"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Rheumatology - General",
+      "Rheumatology - Advanced",
+      "Rheumatology - Specialized Care",
+      "Rheumatology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Karen M.",
+        "date": "2024-01-25"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "David M.",
+        "date": "2024-09-22"
+      }
+    ],
+    "awards": [
+      "Top Rheumatology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Rheumatology - 2023",
+      "Rheumatology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Rheumatology Procedure 1",
+      "Rheumatology Procedure 2",
+      "Rheumatology Procedure 3",
+      "Rheumatology Procedure 4"
+    ]
+  },
+  {
+    "id": "d31",
+    "name": "Dr. Helen Thompson",
+    "specialty": "Pulmonology",
+    "rating": 5,
+    "bio": "Experienced pulmonology specialist with over 10 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 10,
+    "education": [
+      "MD - University of California San Francisco",
+      "Residency - General Hospital",
+      "Fellowship - Pulmonology"
+    ],
+    "certifications": [
+      "Board Certified in Pulmonology",
+      "Pulmonology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Russian",
+      "Italian",
+      "Hindi"
+    ],
+    "hospitalAffiliations": [
+      "Health Center",
+      "Medical Associates"
+    ],
+    "officeLocation": "132 Medical Street, Healthcare District",
+    "phone": "(232) 100-0032",
+    "email": "helen.thompson32@medical.com",
+    "consultationFee": 324,
+    "insuranceAccepted": [
+      "Medicaid",
+      "Kaiser Permanente",
+      "Anthem",
+      "CHIP",
+      "Blue Cross Blue Shield"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Pulmonology - General",
+      "Pulmonology - Advanced",
+      "Pulmonology - Specialized Care",
+      "Pulmonology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Susan L.",
+        "date": "2024-11-23"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Christopher L.",
+        "date": "2024-05-06"
+      }
+    ],
+    "awards": [
+      "Top Pulmonology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Pulmonology - 2023",
+      "Pulmonology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Pulmonology Procedure 1",
+      "Pulmonology Procedure 2",
+      "Pulmonology Procedure 3",
+      "Pulmonology Procedure 4"
+    ]
+  },
+  {
+    "id": "d32",
+    "name": "Dr. Donald Thompson",
+    "specialty": "Nephrology",
+    "rating": 4.9,
+    "bio": "Experienced nephrology specialist with over 15 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 15,
+    "education": [
+      "MD - University of Washington",
+      "Residency - Memorial Hospital",
+      "Fellowship - Nephrology"
+    ],
+    "certifications": [
+      "Board Certified in Nephrology",
+      "Nephrology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Arabic",
+      "English",
+      "Polish"
+    ],
+    "hospitalAffiliations": [
+      "City Medical Center",
+      "University Hospital"
+    ],
+    "officeLocation": "133 Medical Street, Healthcare District",
+    "phone": "(233) 100-0033",
+    "email": "donald.thompson33@medical.com",
+    "consultationFee": 226,
+    "insuranceAccepted": [
+      "Kaiser Permanente",
+      "CHIP",
+      "Cigna"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Nephrology - General",
+      "Nephrology - Advanced",
+      "Nephrology - Specialized Care",
+      "Nephrology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Nancy D.",
+        "date": "2024-05-02"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Anthony D.",
+        "date": "2024-12-16"
+      }
+    ],
+    "awards": [
+      "Top Nephrology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Nephrology - 2023",
+      "Nephrology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Nephrology Procedure 1",
+      "Nephrology Procedure 2",
+      "Nephrology Procedure 3",
+      "Nephrology Procedure 4"
+    ]
+  },
+  {
+    "id": "d33",
+    "name": "Dr. Sandra Thompson",
+    "specialty": "Ophthalmology",
+    "rating": 4.8,
+    "bio": "Experienced ophthalmology specialist with over 13 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 13,
+    "education": [
+      "MD - Johns Hopkins School of Medicine",
+      "Residency - Healthcare Center",
+      "Fellowship - Ophthalmology"
+    ],
+    "certifications": [
+      "Board Certified in Ophthalmology",
+      "Ophthalmology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "English"
+    ],
+    "hospitalAffiliations": [
+      "Regional Hospital",
+      "Specialty Clinic"
+    ],
+    "officeLocation": "134 Medical Street, Healthcare District",
+    "phone": "(234) 100-0034",
+    "email": "sandra.thompson34@medical.com",
+    "consultationFee": 349,
+    "insuranceAccepted": [
+      "Medicare",
+      "Humana",
+      "UnitedHealth",
+      "Blue Cross Blue Shield",
+      "Aetna",
+      "CHIP"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Ophthalmology - General",
+      "Ophthalmology - Advanced",
+      "Ophthalmology - Specialized Care",
+      "Ophthalmology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Karen D.",
+        "date": "2024-09-05"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Helen L.",
+        "date": "2024-08-17"
+      }
+    ],
+    "awards": [
+      "Top Ophthalmology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Ophthalmology - 2023",
+      "Ophthalmology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Ophthalmology Procedure 1",
+      "Ophthalmology Procedure 2",
+      "Ophthalmology Procedure 3",
+      "Ophthalmology Procedure 4"
+    ]
+  },
+  {
+    "id": "d34",
+    "name": "Dr. Steven Thompson",
+    "specialty": "Otolaryngology",
+    "rating": 4.6,
+    "bio": "Experienced otolaryngology specialist with over 20 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 20,
+    "education": [
+      "MD - Columbia University",
+      "Residency - Healthcare Center",
+      "Fellowship - Otolaryngology"
+    ],
+    "certifications": [
+      "Board Certified in Otolaryngology",
+      "Otolaryngology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Arabic",
+      "Polish"
+    ],
+    "hospitalAffiliations": [
+      "Medical Associates"
+    ],
+    "officeLocation": "135 Medical Street, Healthcare District",
+    "phone": "(235) 100-0035",
+    "email": "steven.thompson35@medical.com",
+    "consultationFee": 169,
+    "insuranceAccepted": [
+      "Kaiser Permanente",
+      "Humana",
+      "Medicaid",
+      "Medicare"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Otolaryngology - General",
+      "Otolaryngology - Advanced",
+      "Otolaryngology - Specialized Care",
+      "Otolaryngology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Elizabeth L.",
+        "date": "2024-09-10"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Sandra M.",
+        "date": "2024-09-09"
+      }
+    ],
+    "awards": [
+      "Top Otolaryngology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Otolaryngology - 2023",
+      "Otolaryngology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Otolaryngology Procedure 1",
+      "Otolaryngology Procedure 2",
+      "Otolaryngology Procedure 3",
+      "Otolaryngology Procedure 4"
+    ]
+  },
+  {
+    "id": "d35",
+    "name": "Dr. Donna Thompson",
+    "specialty": "Anesthesiology",
+    "rating": 3.5,
+    "bio": "Experienced anesthesiology specialist with over 15 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 15,
+    "education": [
+      "MD - University of California San Francisco",
+      "Residency - Healthcare Center",
+      "Fellowship - Anesthesiology"
+    ],
+    "certifications": [
+      "Board Certified in Anesthesiology",
+      "Anesthesiology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Vietnamese",
+      "French",
+      "Spanish"
+    ],
+    "hospitalAffiliations": [
+      "Children's Hospital",
+      "Medical Center"
+    ],
+    "officeLocation": "136 Medical Street, Healthcare District",
+    "phone": "(236) 100-0036",
+    "email": "donna.thompson36@medical.com",
+    "consultationFee": 174,
+    "insuranceAccepted": [
+      "Humana",
+      "UnitedHealth",
+      "Medicare",
+      "CHIP",
+      "Blue Cross Blue Shield",
+      "Molina Healthcare"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Anesthesiology - General",
+      "Anesthesiology - Advanced",
+      "Anesthesiology - Specialized Care",
+      "Anesthesiology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Kevin R.",
+        "date": "2024-09-04"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Charles L.",
+        "date": "2024-10-02"
+      }
+    ],
+    "awards": [
+      "Top Anesthesiology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Anesthesiology - 2023",
+      "Anesthesiology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Anesthesiology Procedure 1",
+      "Anesthesiology Procedure 2",
+      "Anesthesiology Procedure 3",
+      "Anesthesiology Procedure 4"
+    ]
+  },
+  {
+    "id": "d36",
+    "name": "Dr. Carol Thompson",
+    "specialty": "Pathology",
+    "rating": 4.7,
+    "bio": "Experienced pathology specialist with over 9 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 9,
+    "education": [
+      "MD - Vanderbilt University",
+      "Residency - Community Health Center",
+      "Fellowship - Pathology"
+    ],
+    "certifications": [
+      "Board Certified in Pathology",
+      "Pathology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Russian",
+      "Tagalog"
+    ],
+    "hospitalAffiliations": [
+      "Memorial Hospital"
+    ],
+    "officeLocation": "138 Medical Street, Healthcare District",
+    "phone": "(238) 100-0038",
+    "email": "carol.thompson38@medical.com",
+    "consultationFee": 197,
+    "insuranceAccepted": [
+      "Kaiser Permanente",
+      "Medicare",
+      "UnitedHealth",
+      "Anthem",
+      "Cigna"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Pathology - General",
+      "Pathology - Advanced",
+      "Pathology - Specialized Care",
+      "Pathology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Laura K.",
+        "date": "2024-03-10"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Thomas K.",
+        "date": "2024-05-12"
+      }
+    ],
+    "awards": [
+      "Top Pathology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Pathology - 2023",
+      "Pathology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Pathology Procedure 1",
+      "Pathology Procedure 2",
+      "Pathology Procedure 3",
+      "Pathology Procedure 4"
+    ]
+  },
+  {
+    "id": "d37",
+    "name": "Dr. Kenneth Thompson",
+    "specialty": "Emergency Medicine",
+    "rating": 4.5,
+    "bio": "Experienced emergency medicine specialist with over 19 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 19,
+    "education": [
+      "MD - Johns Hopkins School of Medicine",
+      "Residency - Medical Center",
+      "Fellowship - Emergency Medicine"
+    ],
+    "certifications": [
+      "Board Certified in Emergency Medicine",
+      "Emergency Medicine Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "English"
+    ],
+    "hospitalAffiliations": [
+      "City Medical Center"
+    ],
+    "officeLocation": "139 Medical Street, Healthcare District",
+    "phone": "(239) 100-0039",
+    "email": "kenneth.thompson39@medical.com",
+    "consultationFee": 151,
+    "insuranceAccepted": [
+      "CHIP",
+      "Aetna",
+      "Medicaid",
+      "Blue Cross Blue Shield",
+      "Medicare"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Emergency Medicine - General",
+      "Emergency Medicine - Advanced",
+      "Emergency Medicine - Specialized Care",
+      "Emergency Medicine - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Jennifer D.",
+        "date": "2024-07-14"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Robert K.",
+        "date": "2024-03-25"
+      }
+    ],
+    "awards": [
+      "Top Emergency Medicine Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Emergency Medicine - 2023",
+      "Emergency Medicine Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Emergency Medicine Procedure 1",
+      "Emergency Medicine Procedure 2",
+      "Emergency Medicine Procedure 3",
+      "Emergency Medicine Procedure 4"
+    ]
+  },
+  {
+    "id": "d38",
+    "name": "Dr. Ruth Thompson",
+    "specialty": "Cardiology",
+    "rating": 4.6,
+    "bio": "Experienced cardiology specialist with over 12 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 12,
+    "education": [
+      "MD - University of Michigan",
+      "Residency - Medical Associates",
+      "Fellowship - Cardiology"
+    ],
+    "certifications": [
+      "Board Certified in Cardiology",
+      "Cardiology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Mandarin",
+      "Italian"
+    ],
+    "hospitalAffiliations": [
+      "University Hospital"
+    ],
+    "officeLocation": "140 Medical Street, Healthcare District",
+    "phone": "(240) 100-0040",
+    "email": "ruth.thompson40@medical.com",
+    "consultationFee": 262,
+    "insuranceAccepted": [
+      "Medicare",
+      "UnitedHealth",
+      "Cigna",
+      "Molina Healthcare"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Cardiology - General",
+      "Cardiology - Advanced",
+      "Cardiology - Specialized Care",
+      "Cardiology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Matthew R.",
+        "date": "2024-09-20"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Brian K.",
+        "date": "2024-06-28"
+      }
+    ],
+    "awards": [
+      "Top Cardiology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Cardiology - 2023",
+      "Cardiology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Cardiology Procedure 1",
+      "Cardiology Procedure 2",
+      "Cardiology Procedure 3",
+      "Cardiology Procedure 4"
+    ]
+  },
+  {
+    "id": "d39",
+    "name": "Dr. Joshua Thompson",
+    "specialty": "Dermatology",
+    "rating": 4.4,
+    "bio": "Experienced dermatology specialist with over 10 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 10,
+    "education": [
+      "MD - Yale School of Medicine",
+      "Residency - University Hospital",
+      "Fellowship - Dermatology"
+    ],
+    "certifications": [
+      "Board Certified in Dermatology",
+      "Dermatology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "English"
+    ],
+    "hospitalAffiliations": [
+      "Medical Associates"
+    ],
+    "officeLocation": "141 Medical Street, Healthcare District",
+    "phone": "(241) 100-0041",
+    "email": "joshua.thompson41@medical.com",
+    "consultationFee": 242,
+    "insuranceAccepted": [
+      "UnitedHealth",
+      "Medicaid",
+      "Aetna",
+      "Anthem",
+      "Medicare"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Dermatology - General",
+      "Dermatology - Advanced",
+      "Dermatology - Specialized Care",
+      "Dermatology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Michael D.",
+        "date": "2024-12-26"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Steven L.",
+        "date": "2024-10-19"
+      }
+    ],
+    "awards": [
+      "Top Dermatology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Dermatology - 2023",
+      "Dermatology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Dermatology Procedure 1",
+      "Dermatology Procedure 2",
+      "Dermatology Procedure 3",
+      "Dermatology Procedure 4"
+    ]
+  },
+  {
+    "id": "d40",
+    "name": "Dr. Sharon Thompson",
+    "specialty": "Pediatrics",
+    "rating": 4.5,
+    "bio": "Experienced pediatrics specialist with over 23 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 23,
+    "education": [
+      "MD - Stanford University School of Medicine",
+      "Residency - City Medical Center",
+      "Fellowship - Pediatrics"
+    ],
+    "certifications": [
+      "Board Certified in Pediatrics",
+      "Pediatrics Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Italian",
+      "English",
+      "Spanish"
+    ],
+    "hospitalAffiliations": [
+      "City Medical Center",
+      "Community Health Center"
+    ],
+    "officeLocation": "142 Medical Street, Healthcare District",
+    "phone": "(242) 100-0042",
+    "email": "sharon.thompson42@medical.com",
+    "consultationFee": 258,
+    "insuranceAccepted": [
+      "Aetna",
+      "Medicaid",
+      "Medicare",
+      "Anthem",
+      "Humana"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Pediatrics - General",
+      "Pediatrics - Advanced",
+      "Pediatrics - Specialized Care",
+      "Pediatrics - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Laura L.",
+        "date": "2024-09-26"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Sharon R.",
+        "date": "2024-02-06"
+      }
+    ],
+    "awards": [
+      "Top Pediatrics Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Pediatrics - 2023",
+      "Pediatrics Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Pediatrics Procedure 1",
+      "Pediatrics Procedure 2",
+      "Pediatrics Procedure 3",
+      "Pediatrics Procedure 4"
+    ]
+  },
+  {
+    "id": "d41",
+    "name": "Dr. Kevin Thompson",
+    "specialty": "Orthopedics",
+    "rating": 4,
+    "bio": "Experienced orthopedics specialist with over 12 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 12,
+    "education": [
+      "MD - University of Pittsburgh",
+      "Residency - Community Health Center",
+      "Fellowship - Orthopedics"
+    ],
+    "certifications": [
+      "Board Certified in Orthopedics",
+      "Orthopedics Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Vietnamese"
+    ],
+    "hospitalAffiliations": [
+      "Children's Hospital"
+    ],
+    "officeLocation": "143 Medical Street, Healthcare District",
+    "phone": "(243) 100-0043",
+    "email": "kevin.thompson43@medical.com",
+    "consultationFee": 291,
+    "insuranceAccepted": [
+      "Medicaid",
+      "Workers' Compensation",
+      "CHIP",
+      "Molina Healthcare",
+      "Blue Cross Blue Shield",
+      "Aetna"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Orthopedics - General",
+      "Orthopedics - Advanced",
+      "Orthopedics - Specialized Care",
+      "Orthopedics - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Helen R.",
+        "date": "2024-08-26"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Paul M.",
+        "date": "2024-04-20"
+      }
+    ],
+    "awards": [
+      "Top Orthopedics Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Orthopedics - 2023",
+      "Orthopedics Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Orthopedics Procedure 1",
+      "Orthopedics Procedure 2",
+      "Orthopedics Procedure 3",
+      "Orthopedics Procedure 4"
+    ]
+  },
+  {
+    "id": "d42",
+    "name": "Dr. Michelle Thompson",
+    "specialty": "Internal Medicine",
+    "rating": 3.7,
+    "bio": "Experienced internal medicine specialist with over 12 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 12,
+    "education": [
+      "MD - Northwestern University",
+      "Residency - Health Center",
+      "Fellowship - Internal Medicine"
+    ],
+    "certifications": [
+      "Board Certified in Internal Medicine",
+      "Internal Medicine Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Italian",
+      "Polish",
+      "Russian"
+    ],
+    "hospitalAffiliations": [
+      "Community Health Center",
+      "Medical Center"
+    ],
+    "officeLocation": "144 Medical Street, Healthcare District",
+    "phone": "(244) 100-0044",
+    "email": "michelle.thompson44@medical.com",
+    "consultationFee": 182,
+    "insuranceAccepted": [
+      "Humana",
+      "Medicare",
+      "UnitedHealth"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Internal Medicine - General",
+      "Internal Medicine - Advanced",
+      "Internal Medicine - Specialized Care",
+      "Internal Medicine - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Clara R.",
+        "date": "2024-07-14"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Ruth R.",
+        "date": "2024-03-23"
+      }
+    ],
+    "awards": [
+      "Top Internal Medicine Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Internal Medicine - 2023",
+      "Internal Medicine Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Internal Medicine Procedure 1",
+      "Internal Medicine Procedure 2",
+      "Internal Medicine Procedure 3",
+      "Internal Medicine Procedure 4"
+    ]
+  },
+  {
+    "id": "d43",
+    "name": "Dr. Brian Thompson",
+    "specialty": "Gastroenterology",
+    "rating": 5,
+    "bio": "Experienced gastroenterology specialist with over 19 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 19,
+    "education": [
+      "MD - Johns Hopkins School of Medicine",
+      "Residency - Specialty Clinic",
+      "Fellowship - Gastroenterology"
+    ],
+    "certifications": [
+      "Board Certified in Gastroenterology",
+      "Gastroenterology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Arabic",
+      "English",
+      "Mandarin"
+    ],
+    "hospitalAffiliations": [
+      "Health Center",
+      "Medical Center"
+    ],
+    "officeLocation": "145 Medical Street, Healthcare District",
+    "phone": "(245) 100-0045",
+    "email": "brian.thompson45@medical.com",
+    "consultationFee": 199,
+    "insuranceAccepted": [
+      "Kaiser Permanente",
+      "Workers' Compensation",
+      "Blue Cross Blue Shield"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Gastroenterology - General",
+      "Gastroenterology - Advanced",
+      "Gastroenterology - Specialized Care",
+      "Gastroenterology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Edward M.",
+        "date": "2024-01-25"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Steven R.",
+        "date": "2024-10-19"
+      }
+    ],
+    "awards": [
+      "Top Gastroenterology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Gastroenterology - 2023",
+      "Gastroenterology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Gastroenterology Procedure 1",
+      "Gastroenterology Procedure 2",
+      "Gastroenterology Procedure 3",
+      "Gastroenterology Procedure 4"
+    ]
+  },
+  {
+    "id": "d44",
+    "name": "Dr. Laura Thompson",
+    "specialty": "Neurology",
+    "rating": 3.8,
+    "bio": "Experienced neurology specialist with over 10 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 10,
+    "education": [
+      "MD - University of Chicago",
+      "Residency - General Hospital",
+      "Fellowship - Neurology"
+    ],
+    "certifications": [
+      "Board Certified in Neurology",
+      "Neurology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Mandarin"
+    ],
+    "hospitalAffiliations": [
+      "Children's Hospital",
+      "City Medical Center"
+    ],
+    "officeLocation": "146 Medical Street, Healthcare District",
+    "phone": "(246) 100-0046",
+    "email": "laura.thompson46@medical.com",
+    "consultationFee": 293,
+    "insuranceAccepted": [
+      "Molina Healthcare",
+      "Kaiser Permanente",
+      "Humana"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Neurology - General",
+      "Neurology - Advanced",
+      "Neurology - Specialized Care",
+      "Neurology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 4,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Emily M.",
+        "date": "2024-11-08"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Linda D.",
+        "date": "2024-01-11"
+      }
+    ],
+    "awards": [
+      "Top Neurology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Neurology - 2023",
+      "Neurology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Neurology Procedure 1",
+      "Neurology Procedure 2",
+      "Neurology Procedure 3",
+      "Neurology Procedure 4"
+    ]
+  },
+  {
+    "id": "d45",
+    "name": "Dr. Kimberly Thompson",
+    "specialty": "Oncology",
+    "rating": 4.5,
+    "bio": "Experienced oncology specialist with over 20 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 20,
+    "education": [
+      "MD - Harvard Medical School",
+      "Residency - University Hospital",
+      "Fellowship - Oncology"
+    ],
+    "certifications": [
+      "Board Certified in Oncology",
+      "Oncology Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Spanish",
+      "English"
+    ],
+    "hospitalAffiliations": [
+      "Health Center",
+      "Healthcare Center"
+    ],
+    "officeLocation": "148 Medical Street, Healthcare District",
+    "phone": "(248) 100-0048",
+    "email": "kimberly.thompson48@medical.com",
+    "consultationFee": 335,
+    "insuranceAccepted": [
+      "Molina Healthcare",
+      "CHIP",
+      "Medicaid"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Oncology - General",
+      "Oncology - Advanced",
+      "Oncology - Specialized Care",
+      "Oncology - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Linda R.",
+        "date": "2024-05-25"
+      },
+      {
+        "rating": 5,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Joseph R.",
+        "date": "2024-09-12"
+      }
+    ],
+    "awards": [
+      "Top Oncology Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Oncology - 2023",
+      "Oncology Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Oncology Procedure 1",
+      "Oncology Procedure 2",
+      "Oncology Procedure 3",
+      "Oncology Procedure 4"
+    ]
+  },
+  {
+    "id": "d46",
+    "name": "Dr. Edward Thompson",
+    "specialty": "Psychiatry",
+    "rating": 4.7,
+    "bio": "Experienced psychiatry specialist with over 22 years of practice, dedicated to providing comprehensive care with a focus on patient-centered treatment and evidence-based medicine.",
+    "experience": 22,
+    "education": [
+      "MD - Yale School of Medicine",
+      "Residency - City Medical Center",
+      "Fellowship - Psychiatry"
+    ],
+    "certifications": [
+      "Board Certified in Psychiatry",
+      "Psychiatry Specialist",
+      "Advanced Medical Training"
+    ],
+    "languages": [
+      "Mandarin",
+      "French",
+      "Polish"
+    ],
+    "hospitalAffiliations": [
+      "Children's Hospital"
+    ],
+    "officeLocation": "149 Medical Street, Healthcare District",
+    "phone": "(249) 100-0049",
+    "email": "edward.thompson49@medical.com",
+    "consultationFee": 179,
+    "insuranceAccepted": [
+      "Blue Cross Blue Shield",
+      "Medicaid",
+      "Aetna",
+      "Molina Healthcare",
+      "UnitedHealth",
+      "Medicare"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 4:00 PM",
+      "saturday": "9:00 AM - 1:00 PM",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Psychiatry - General",
+      "Psychiatry - Advanced",
+      "Psychiatry - Specialized Care",
+      "Psychiatry - Treatment"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Great doctor, very professional and caring. Highly recommend!",
+        "patientName": "Clara K.",
+        "date": "2024-03-14"
+      },
+      {
+        "rating": 4,
+        "comment": "Excellent care and follow-up. Very satisfied with the treatment.",
+        "patientName": "Donna R.",
+        "date": "2024-04-02"
+      }
+    ],
+    "awards": [
+      "Top Psychiatry Specialist 2023",
+      "Excellence in Patient Care 2022"
+    ],
+    "publications": [
+      "Advances in Psychiatry - 2023",
+      "Psychiatry Treatment Protocols - 2022"
+    ],
+    "procedures": [
+      "Psychiatry Procedure 1",
+      "Psychiatry Procedure 2",
+      "Psychiatry Procedure 3",
+      "Psychiatry Procedure 4"
+    ]
+  },
+  {
+    "id": "d47",
     "name": "Dr. Lisa Green",
     "specialty": "Psychiatry",
     "rating": 5.0,
@@ -75,7 +3713,7 @@
     ]
   },
   {
-    "id": "d2",
+    "id": "d48",
     "name": "Dr. Linda Lewis",
     "specialty": "Internal Medicine",
     "rating": 4.1,
@@ -157,7 +3795,7 @@
     ]
   },
   {
-    "id": "d3",
+    "id": "d49",
     "name": "Dr. Michael Carter",
     "specialty": "Pediatrics",
     "rating": 5.0,
@@ -238,7 +3876,7 @@
     ]
   },
   {
-    "id": "d4",
+    "id": "d50",
     "name": "Dr. Paul Turner",
     "specialty": "Oncology",
     "rating": 4.7,
@@ -313,7 +3951,7 @@
     ]
   },
   {
-    "id": "d5",
+    "id": "d51",
     "name": "Dr. Joshua Hill",
     "specialty": "Radiology",
     "rating": 4.6,
@@ -400,7 +4038,7 @@
     ]
   },
   {
-    "id": "d6",
+    "id": "d52",
     "name": "Dr. Ryan Martinez",
     "specialty": "Otolaryngology",
     "rating": 4.6,
@@ -469,7 +4107,7 @@
     ]
   },
   {
-    "id": "d7",
+    "id": "d53",
     "name": "Dr. Amanda Chen",
     "specialty": "Emergency Medicine",
     "rating": 4.0,
@@ -553,7 +4191,7 @@
     ]
   },
   {
-    "id": "d8",
+    "id": "d54",
     "name": "Dr. Barbara Hill",
     "specialty": "General Surgery",
     "rating": 3.9,
@@ -640,7 +4278,7 @@
     ]
   },
   {
-    "id": "d9",
+    "id": "d55",
     "name": "Dr. Maria Roberts",
     "specialty": "Family Medicine",
     "rating": 3.8,
@@ -725,7 +4363,7 @@
     ]
   },
   {
-    "id": "d10",
+    "id": "d56",
     "name": "Dr. Betty Lewis",
     "specialty": "Cardiothoracic Surgery",
     "rating": 4.5,
@@ -804,7 +4442,7 @@
     ]
   },
   {
-    "id": "d11",
+    "id": "d57",
     "name": "Dr. Anthony Martin",
     "specialty": "Pediatrics",
     "rating": 4.5,
@@ -881,7 +4519,7 @@
     ]
   },
   {
-    "id": "d12",
+    "id": "d58",
     "name": "Dr. Anthony Thompson",
     "specialty": "Pathology",
     "rating": 4.7,
@@ -958,7 +4596,7 @@
     ]
   },
   {
-    "id": "d13",
+    "id": "d59",
     "name": "Dr. Brian Wright",
     "specialty": "Cardiology",
     "rating": 4.0,
@@ -1041,7 +4679,7 @@
     ]
   },
   {
-    "id": "d14",
+    "id": "d60",
     "name": "Dr. Justin Moore",
     "specialty": "Cardiothoracic Surgery",
     "rating": 3.9,
@@ -1125,7 +4763,7 @@
     ]
   },
   {
-    "id": "d15",
+    "id": "d61",
     "name": "Dr. Linda Hernandez",
     "specialty": "Endocrinology",
     "rating": 4.0,
@@ -1208,7 +4846,7 @@
     ]
   },
   {
-    "id": "d16",
+    "id": "d62",
     "name": "Dr. Joshua Harris",
     "specialty": "Cardiology",
     "rating": 4.9,
@@ -1299,7 +4937,7 @@
     ]
   },
   {
-    "id": "d17",
+    "id": "d63",
     "name": "Dr. Emily Walker",
     "specialty": "General Surgery",
     "rating": 4.6,
@@ -1371,7 +5009,7 @@
     ]
   },
   {
-    "id": "d18",
+    "id": "d64",
     "name": "Dr. Elizabeth Clark",
     "specialty": "Sports Medicine",
     "rating": 4.9,
@@ -1447,7 +5085,7 @@
     ]
   },
   {
-    "id": "d19",
+    "id": "d65",
     "name": "Dr. Paul Ruiz",
     "specialty": "Pathology",
     "rating": 4.0,
@@ -1526,7 +5164,7 @@
     ]
   },
   {
-    "id": "d20",
+    "id": "d66",
     "name": "Dr. Lisa Robinson",
     "specialty": "Rheumatology",
     "rating": 4.4,
@@ -1600,7 +5238,7 @@
     ]
   },
   {
-    "id": "d21",
+    "id": "d67",
     "name": "Dr. Karen Martin",
     "specialty": "Family Medicine",
     "rating": 4.8,
@@ -1683,7 +5321,7 @@
     ]
   },
   {
-    "id": "d22",
+    "id": "d68",
     "name": "Dr. Jonathan Scott",
     "specialty": "Plastic Surgery",
     "rating": 4.5,
@@ -1753,7 +5391,7 @@
     ]
   },
   {
-    "id": "d23",
+    "id": "d69",
     "name": "Dr. Jason Chen",
     "specialty": "Sports Medicine",
     "rating": 4.9,
@@ -1825,7 +5463,7 @@
     ]
   },
   {
-    "id": "d24",
+    "id": "d70",
     "name": "Dr. Nancy Hill",
     "specialty": "Sports Medicine",
     "rating": 3.9,
@@ -1909,7 +5547,7 @@
     ]
   },
   {
-    "id": "d25",
+    "id": "d71",
     "name": "Dr. Karen King",
     "specialty": "Emergency Medicine",
     "rating": 4.1,
@@ -1992,7 +5630,7 @@
     ]
   },
   {
-    "id": "d26",
+    "id": "d72",
     "name": "Dr. Laura King",
     "specialty": "Cardiology",
     "rating": 4.9,
@@ -2068,7 +5706,7 @@
     ]
   },
   {
-    "id": "d27",
+    "id": "d73",
     "name": "Dr. Kimberly Chen",
     "specialty": "Gastroenterology",
     "rating": 4.1,
@@ -2150,7 +5788,7 @@
     ]
   },
   {
-    "id": "d28",
+    "id": "d74",
     "name": "Dr. Ruth Roberts",
     "specialty": "Allergy and Immunology",
     "rating": 4.6,
@@ -2224,7 +5862,7 @@
     ]
   },
   {
-    "id": "d29",
+    "id": "d75",
     "name": "Dr. Lauren Ramirez",
     "specialty": "Pulmonology",
     "rating": 4.3,
@@ -2306,7 +5944,7 @@
     ]
   },
   {
-    "id": "d30",
+    "id": "d76",
     "name": "Dr. Alice Jackson",
     "specialty": "Pediatrics",
     "rating": 4.3,
@@ -2382,7 +6020,7 @@
     ]
   },
   {
-    "id": "d31",
+    "id": "d77",
     "name": "Dr. Elizabeth Baker",
     "specialty": "Allergy and Immunology",
     "rating": 4.9,
@@ -2454,7 +6092,7 @@
     ]
   },
   {
-    "id": "d32",
+    "id": "d78",
     "name": "Dr. Jessica Hill",
     "specialty": "Sports Medicine",
     "rating": 4.9,
@@ -2538,7 +6176,7 @@
     ]
   },
   {
-    "id": "d33",
+    "id": "d79",
     "name": "Dr. Jonathan Robinson",
     "specialty": "Pathology",
     "rating": 4.2,
@@ -2611,7 +6249,7 @@
     ]
   },
   {
-    "id": "d34",
+    "id": "d80",
     "name": "Dr. Anthony Robinson",
     "specialty": "Plastic Surgery",
     "rating": 4.9,
@@ -2694,7 +6332,7 @@
     ]
   },
   {
-    "id": "d35",
+    "id": "d81",
     "name": "Dr. James Nelson",
     "specialty": "Internal Medicine",
     "rating": 3.9,
@@ -2768,7 +6406,7 @@
     ]
   },
   {
-    "id": "d36",
+    "id": "d82",
     "name": "Dr. Donna Wilson",
     "specialty": "Ophthalmology",
     "rating": 4.8,
@@ -2846,7 +6484,7 @@
     ]
   },
   {
-    "id": "d37",
+    "id": "d83",
     "name": "Dr. Ryan Robinson",
     "specialty": "Family Medicine",
     "rating": 4.8,
@@ -2916,7 +6554,7 @@
     ]
   },
   {
-    "id": "d38",
+    "id": "d84",
     "name": "Dr. Lisa Harris",
     "specialty": "Ophthalmology",
     "rating": 4.0,
@@ -2994,7 +6632,7 @@
     ]
   },
   {
-    "id": "d39",
+    "id": "d85",
     "name": "Dr. Helen Harris",
     "specialty": "Radiology",
     "rating": 4.4,
@@ -3078,7 +6716,7 @@
     ]
   },
   {
-    "id": "d40",
+    "id": "d86",
     "name": "Dr. Kimberly Walker",
     "specialty": "Pathology",
     "rating": 3.9,
@@ -3150,7 +6788,7 @@
     ]
   },
   {
-    "id": "d41",
+    "id": "d87",
     "name": "Dr. Andrew Nguyen",
     "specialty": "Gastroenterology",
     "rating": 4.1,
@@ -3226,7 +6864,7 @@
     ]
   },
   {
-    "id": "d42",
+    "id": "d88",
     "name": "Dr. Sharon Green",
     "specialty": "Pediatrics",
     "rating": 4.2,
@@ -3303,7 +6941,7 @@
     ]
   },
   {
-    "id": "d43",
+    "id": "d89",
     "name": "Dr. Ryan Johnson",
     "specialty": "Obstetrics and Gynecology",
     "rating": 5.0,
@@ -3379,7 +7017,7 @@
     ]
   },
   {
-    "id": "d44",
+    "id": "d90",
     "name": "Dr. Daniel Walker",
     "specialty": "Neurosurgery",
     "rating": 4.4,
@@ -3451,7 +7089,7 @@
     ]
   },
   {
-    "id": "d45",
+    "id": "d91",
     "name": "Dr. Nicole Scott",
     "specialty": "Internal Medicine",
     "rating": 4.4,
@@ -3534,7 +7172,7 @@
     ]
   },
   {
-    "id": "d46",
+    "id": "d92",
     "name": "Dr. Patricia Nguyen",
     "specialty": "Anesthesiology",
     "rating": 4.9,
@@ -3613,7 +7251,7 @@
     ]
   },
   {
-    "id": "d47",
+    "id": "d93",
     "name": "Dr. Amanda Lopez",
     "specialty": "Obstetrics and Gynecology",
     "rating": 4.7,
@@ -3698,7 +7336,7 @@
     ]
   },
   {
-    "id": "d48",
+    "id": "d94",
     "name": "Dr. William Moore",
     "specialty": "Neurology",
     "rating": 4.5,
@@ -3783,7 +7421,7 @@
     ]
   },
   {
-    "id": "d49",
+    "id": "d95",
     "name": "Dr. Elizabeth Gonzalez",
     "specialty": "Obstetrics and Gynecology",
     "rating": 4.5,
@@ -3854,7 +7492,7 @@
     ]
   },
   {
-    "id": "d50",
+    "id": "d96",
     "name": "Dr. Sarah Hill",
     "specialty": "Neurosurgery",
     "rating": 4.9,
@@ -3941,7 +7579,7 @@
     ]
   },
   {
-    "id": "d51",
+    "id": "d97",
     "name": "Dr. Kimberly Gonzalez",
     "specialty": "Nephrology",
     "rating": 4.4,
@@ -4012,7 +7650,7 @@
     ]
   },
   {
-    "id": "d52",
+    "id": "d98",
     "name": "Dr. Alice Hernandez",
     "specialty": "Rheumatology",
     "rating": 4.7,
@@ -4084,7 +7722,7 @@
     ]
   },
   {
-    "id": "d53",
+    "id": "d99",
     "name": "Dr. Clara Chen",
     "specialty": "Cardiology",
     "rating": 4.0,
@@ -4160,7 +7798,7 @@
     ]
   },
   {
-    "id": "d54",
+    "id": "d100",
     "name": "Dr. Kenneth Nguyen",
     "specialty": "Family Medicine",
     "rating": 4.3,
@@ -4237,7 +7875,7 @@
     ]
   },
   {
-    "id": "d55",
+    "id": "d101",
     "name": "Dr. Maria Anderson",
     "specialty": "Cardiothoracic Surgery",
     "rating": 4.7,
@@ -4308,7 +7946,7 @@
     ]
   },
   {
-    "id": "d56",
+    "id": "d102",
     "name": "Dr. William Martinez",
     "specialty": "Dermatology",
     "rating": 4.1,
@@ -4382,7 +8020,7 @@
     ]
   },
   {
-    "id": "d57",
+    "id": "d103",
     "name": "Dr. David Baker",
     "specialty": "Neurosurgery",
     "rating": 5.0,
@@ -4458,7 +8096,7 @@
     ]
   },
   {
-    "id": "d58",
+    "id": "d104",
     "name": "Dr. Jonathan Moore",
     "specialty": "Anesthesiology",
     "rating": 4.0,
@@ -4529,7 +8167,7 @@
     ]
   },
   {
-    "id": "d59",
+    "id": "d105",
     "name": "Dr. Melissa Taylor",
     "specialty": "Internal Medicine",
     "rating": 3.9,
@@ -4609,7 +8247,7 @@
     ]
   },
   {
-    "id": "d60",
+    "id": "d106",
     "name": "Dr. Linda Rodriguez",
     "specialty": "General Surgery",
     "rating": 3.8,
@@ -4691,7 +8329,7 @@
     ]
   },
   {
-    "id": "d61",
+    "id": "d107",
     "name": "Dr. Ruth Wilson",
     "specialty": "Otolaryngology",
     "rating": 4.5,
@@ -4760,7 +8398,7 @@
     ]
   },
   {
-    "id": "d62",
+    "id": "d108",
     "name": "Dr. Emily Baker",
     "specialty": "Oncology",
     "rating": 4.6,
@@ -4841,7 +8479,7 @@
     ]
   },
   {
-    "id": "d63",
+    "id": "d109",
     "name": "Dr. Michael Green",
     "specialty": "Oncology",
     "rating": 4.6,
@@ -4917,7 +8555,7 @@
     ]
   },
   {
-    "id": "d64",
+    "id": "d110",
     "name": "Dr. Elizabeth Lewis",
     "specialty": "Psychiatry",
     "rating": 3.8,
@@ -4997,7 +8635,7 @@
     ]
   },
   {
-    "id": "d65",
+    "id": "d111",
     "name": "Dr. Paul Thompson",
     "specialty": "Pulmonology",
     "rating": 4.9,
@@ -5072,7 +8710,7 @@
     ]
   },
   {
-    "id": "d66",
+    "id": "d112",
     "name": "Dr. Elizabeth Mitchell",
     "specialty": "Plastic Surgery",
     "rating": 4.2,
@@ -5154,7 +8792,7 @@
     ]
   },
   {
-    "id": "d67",
+    "id": "d113",
     "name": "Dr. Michael Mitchell",
     "specialty": "Allergy and Immunology",
     "rating": 4.6,
@@ -5240,7 +8878,7 @@
     ]
   },
   {
-    "id": "d68",
+    "id": "d114",
     "name": "Dr. Richard Hill",
     "specialty": "Oncology",
     "rating": 4.5,
@@ -5326,7 +8964,7 @@
     ]
   },
   {
-    "id": "d69",
+    "id": "d115",
     "name": "Dr. Michelle White",
     "specialty": "Rheumatology",
     "rating": 4.3,
@@ -5396,7 +9034,7 @@
     ]
   },
   {
-    "id": "d70",
+    "id": "d116",
     "name": "Dr. Christopher Martin",
     "specialty": "Pathology",
     "rating": 4.0,
@@ -5473,7 +9111,7 @@
     ]
   },
   {
-    "id": "d71",
+    "id": "d117",
     "name": "Dr. Christopher Harris",
     "specialty": "Anesthesiology",
     "rating": 4.4,
@@ -5548,7 +9186,7 @@
     ]
   },
   {
-    "id": "d72",
+    "id": "d118",
     "name": "Dr. James Wilson",
     "specialty": "Oncology",
     "rating": 3.8,
@@ -5625,7 +9263,7 @@
     ]
   },
   {
-    "id": "d73",
+    "id": "d119",
     "name": "Dr. Sarah Wright",
     "specialty": "Cardiology",
     "rating": 3.9,
@@ -5706,7 +9344,7 @@
     ]
   },
   {
-    "id": "d74",
+    "id": "d120",
     "name": "Dr. Lauren Carter",
     "specialty": "Pathology",
     "rating": 4.1,
@@ -5778,7 +9416,7 @@
     ]
   },
   {
-    "id": "d75",
+    "id": "d121",
     "name": "Dr. Clara Mitchell",
     "specialty": "Internal Medicine",
     "rating": 4.3,
@@ -5854,7 +9492,7 @@
     ]
   },
   {
-    "id": "d76",
+    "id": "d122",
     "name": "Dr. Robert Baker",
     "specialty": "Psychiatry",
     "rating": 4.2,
@@ -5938,7 +9576,7 @@
     ]
   },
   {
-    "id": "d77",
+    "id": "d123",
     "name": "Dr. Thomas Patel",
     "specialty": "Nephrology",
     "rating": 4.3,
@@ -6021,7 +9659,7 @@
     ]
   },
   {
-    "id": "d78",
+    "id": "d124",
     "name": "Dr. Barbara Perez",
     "specialty": "Radiology",
     "rating": 4.6,
@@ -6106,7 +9744,7 @@
     ]
   },
   {
-    "id": "d79",
+    "id": "d125",
     "name": "Dr. Nancy Thomas",
     "specialty": "Gastroenterology",
     "rating": 4.0,
@@ -6187,7 +9825,7 @@
     ]
   },
   {
-    "id": "d80",
+    "id": "d126",
     "name": "Dr. Ruth Hernandez",
     "specialty": "Orthopedics",
     "rating": 4.6,
@@ -6269,7 +9907,7 @@
     ]
   },
   {
-    "id": "d81",
+    "id": "d127",
     "name": "Dr. Melissa Green",
     "specialty": "Psychiatry",
     "rating": 4.2,
@@ -6354,7 +9992,7 @@
     ]
   },
   {
-    "id": "d82",
+    "id": "d128",
     "name": "Dr. Richard Ramirez",
     "specialty": "Rheumatology",
     "rating": 4.7,
@@ -6440,7 +10078,7 @@
     ]
   },
   {
-    "id": "d83",
+    "id": "d129",
     "name": "Dr. Daniel White",
     "specialty": "Gastroenterology",
     "rating": 4.3,
@@ -6530,7 +10168,7 @@
     ]
   },
   {
-    "id": "d84",
+    "id": "d130",
     "name": "Dr. Linda Lopez",
     "specialty": "Neurosurgery",
     "rating": 4.1,
@@ -6598,7 +10236,7 @@
     ]
   },
   {
-    "id": "d85",
+    "id": "d131",
     "name": "Dr. Linda Gonzalez",
     "specialty": "Dermatology",
     "rating": 4.4,
@@ -6675,7 +10313,7 @@
     ]
   },
   {
-    "id": "d86",
+    "id": "d132",
     "name": "Dr. George Thompson",
     "specialty": "Allergy and Immunology",
     "rating": 3.8,
@@ -6749,7 +10387,7 @@
     ]
   },
   {
-    "id": "d87",
+    "id": "d133",
     "name": "Dr. Patricia Mitchell",
     "specialty": "Ophthalmology",
     "rating": 4.7,
@@ -6824,7 +10462,7 @@
     ]
   },
   {
-    "id": "d88",
+    "id": "d134",
     "name": "Dr. Steven Robinson",
     "specialty": "Orthopedics",
     "rating": 4.5,
@@ -6915,7 +10553,7 @@
     ]
   },
   {
-    "id": "d89",
+    "id": "d135",
     "name": "Dr. Linda Martinez",
     "specialty": "General Surgery",
     "rating": 4.1,
@@ -6986,7 +10624,7 @@
     ]
   },
   {
-    "id": "d90",
+    "id": "d136",
     "name": "Dr. Steven Nguyen",
     "specialty": "Plastic Surgery",
     "rating": 4.9,
@@ -7059,7 +10697,7 @@
     ]
   },
   {
-    "id": "d91",
+    "id": "d137",
     "name": "Dr. Alice Scott",
     "specialty": "Cardiology",
     "rating": 4.2,
@@ -7145,7 +10783,7 @@
     ]
   },
   {
-    "id": "d92",
+    "id": "d138",
     "name": "Dr. Jennifer Wright",
     "specialty": "Radiology",
     "rating": 4.7,
@@ -7222,7 +10860,7 @@
     ]
   },
   {
-    "id": "d93",
+    "id": "d139",
     "name": "Dr. Alice Adams",
     "specialty": "Emergency Medicine",
     "rating": 4.5,
@@ -7294,7 +10932,7 @@
     ]
   },
   {
-    "id": "d94",
+    "id": "d140",
     "name": "Dr. Robert Ruiz",
     "specialty": "Orthopedics",
     "rating": 3.9,
@@ -7375,7 +11013,7 @@
     ]
   },
   {
-    "id": "d95",
+    "id": "d141",
     "name": "Dr. Nicole Johnson",
     "specialty": "Neurosurgery",
     "rating": 5.0,
@@ -7456,7 +11094,7 @@
     ]
   },
   {
-    "id": "d96",
+    "id": "d142",
     "name": "Dr. Maria Green",
     "specialty": "Pathology",
     "rating": 4.4,
@@ -7534,7 +11172,7 @@
     ]
   },
   {
-    "id": "d97",
+    "id": "d143",
     "name": "Dr. Justin Hill",
     "specialty": "Plastic Surgery",
     "rating": 4.6,
@@ -7603,7 +11241,7 @@
     ]
   },
   {
-    "id": "d98",
+    "id": "d144",
     "name": "Dr. Jonathan Mitchell",
     "specialty": "Psychiatry",
     "rating": 3.8,
@@ -7688,7 +11326,7 @@
     ]
   },
   {
-    "id": "d99",
+    "id": "d145",
     "name": "Dr. William White",
     "specialty": "Orthopedics",
     "rating": 4.6,
@@ -7773,7 +11411,7 @@
     ]
   },
   {
-    "id": "d100",
+    "id": "d146",
     "name": "Dr. Donna Baker",
     "specialty": "Dermatology",
     "rating": 4.1,
@@ -7855,7 +11493,7 @@
     ]
   },
   {
-    "id": "d101",
+    "id": "d147",
     "name": "Dr. Jennifer Mitchell",
     "specialty": "Plastic Surgery",
     "rating": 4.6,
@@ -7934,7 +11572,7 @@
     ]
   },
   {
-    "id": "d102",
+    "id": "d148",
     "name": "Dr. Linda Adams",
     "specialty": "Pediatrics",
     "rating": 4.5,
@@ -8011,7 +11649,7 @@
     ]
   },
   {
-    "id": "d103",
+    "id": "d149",
     "name": "Dr. Betty Rodriguez",
     "specialty": "Pathology",
     "rating": 4.3,
@@ -8097,7 +11735,7 @@
     ]
   },
   {
-    "id": "d104",
+    "id": "d150",
     "name": "Dr. Michelle Taylor",
     "specialty": "Oncology",
     "rating": 4.7,
@@ -8182,7 +11820,7 @@
     ]
   },
   {
-    "id": "d105",
+    "id": "d151",
     "name": "Dr. Carol Hernandez",
     "specialty": "Sports Medicine",
     "rating": 4.6,
@@ -8256,7 +11894,7 @@
     ]
   },
   {
-    "id": "d106",
+    "id": "d152",
     "name": "Dr. Clara Lopez",
     "specialty": "Neurology",
     "rating": 4.8,
@@ -8341,7 +11979,7 @@
     ]
   },
   {
-    "id": "d107",
+    "id": "d153",
     "name": "Dr. Matthew Hill",
     "specialty": "Oncology",
     "rating": 4.2,
@@ -8430,7 +12068,7 @@
     ]
   },
   {
-    "id": "d108",
+    "id": "d154",
     "name": "Dr. Amanda Hernandez",
     "specialty": "Ophthalmology",
     "rating": 4.2,
@@ -8505,7 +12143,7 @@
     ]
   },
   {
-    "id": "d109",
+    "id": "d155",
     "name": "Dr. Andrew Roberts",
     "specialty": "Oncology",
     "rating": 4.1,
@@ -8580,7 +12218,7 @@
     ]
   },
   {
-    "id": "d110",
+    "id": "d156",
     "name": "Dr. Michael Lewis",
     "specialty": "Obstetrics and Gynecology",
     "rating": 4.7,
@@ -8666,7 +12304,7 @@
     ]
   },
   {
-    "id": "d111",
+    "id": "d157",
     "name": "Dr. Eric Hill",
     "specialty": "Cardiothoracic Surgery",
     "rating": 4.9,
@@ -8752,7 +12390,7 @@
     ]
   },
   {
-    "id": "d112",
+    "id": "d158",
     "name": "Dr. Matthew Ruiz",
     "specialty": "Oncology",
     "rating": 4.6,
@@ -8825,7 +12463,7 @@
     ]
   },
   {
-    "id": "d113",
+    "id": "d159",
     "name": "Dr. Michelle Nguyen",
     "specialty": "Rheumatology",
     "rating": 4.8,
@@ -8912,7 +12550,7 @@
     ]
   },
   {
-    "id": "d114",
+    "id": "d160",
     "name": "Dr. Edward Roberts",
     "specialty": "General Surgery",
     "rating": 4.0,
@@ -8994,7 +12632,7 @@
     ]
   },
   {
-    "id": "d115",
+    "id": "d161",
     "name": "Dr. Ryan Martinez",
     "specialty": "Psychiatry",
     "rating": 3.9,
@@ -9075,7 +12713,7 @@
     ]
   },
   {
-    "id": "d116",
+    "id": "d162",
     "name": "Dr. George Hill",
     "specialty": "Orthopedics",
     "rating": 4.6,
@@ -9161,7 +12799,7 @@
     ]
   },
   {
-    "id": "d117",
+    "id": "d163",
     "name": "Dr. Susan Moore",
     "specialty": "Cardiothoracic Surgery",
     "rating": 4.4,
@@ -9233,7 +12871,7 @@
     ]
   },
   {
-    "id": "d118",
+    "id": "d164",
     "name": "Dr. Nancy Gonzalez",
     "specialty": "Neurology",
     "rating": 4.6,
@@ -9306,7 +12944,7 @@
     ]
   },
   {
-    "id": "d119",
+    "id": "d165",
     "name": "Dr. Karen Martin",
     "specialty": "Internal Medicine",
     "rating": 4.1,
@@ -9384,7 +13022,7 @@
     ]
   },
   {
-    "id": "d120",
+    "id": "d166",
     "name": "Dr. Clara Baker",
     "specialty": "Anesthesiology",
     "rating": 4.2,
@@ -9470,7 +13108,7 @@
     ]
   },
   {
-    "id": "d121",
+    "id": "d167",
     "name": "Dr. Melissa Wilson",
     "specialty": "Plastic Surgery",
     "rating": 4.5,
@@ -9560,7 +13198,7 @@
     ]
   },
   {
-    "id": "d122",
+    "id": "d168",
     "name": "Dr. Emily Martin",
     "specialty": "General Surgery",
     "rating": 4.0,
@@ -9632,7 +13270,7 @@
     ]
   },
   {
-    "id": "d123",
+    "id": "d169",
     "name": "Dr. Patricia Ruiz",
     "specialty": "Oncology",
     "rating": 4.1,
@@ -9705,7 +13343,7 @@
     ]
   },
   {
-    "id": "d124",
+    "id": "d170",
     "name": "Dr. George Chen",
     "specialty": "Emergency Medicine",
     "rating": 4.0,
@@ -9779,7 +13417,7 @@
     ]
   },
   {
-    "id": "d125",
+    "id": "d171",
     "name": "Dr. Maria Rodriguez",
     "specialty": "Emergency Medicine",
     "rating": 4.4,
@@ -9856,7 +13494,7 @@
     ]
   },
   {
-    "id": "d126",
+    "id": "d172",
     "name": "Dr. Joseph Moore",
     "specialty": "Cardiology",
     "rating": 4.1,
@@ -9936,7 +13574,7 @@
     ]
   },
   {
-    "id": "d127",
+    "id": "d173",
     "name": "Dr. Laura King",
     "specialty": "Gastroenterology",
     "rating": 3.9,
@@ -10027,7 +13665,7 @@
     ]
   },
   {
-    "id": "d128",
+    "id": "d174",
     "name": "Dr. Kimberly Jackson",
     "specialty": "Plastic Surgery",
     "rating": 4.3,
@@ -10103,7 +13741,7 @@
     ]
   },
   {
-    "id": "d129",
+    "id": "d175",
     "name": "Dr. Melissa Moore",
     "specialty": "Sports Medicine",
     "rating": 4.7,
@@ -10185,7 +13823,7 @@
     ]
   },
   {
-    "id": "d130",
+    "id": "d176",
     "name": "Dr. Stephanie Ramirez",
     "specialty": "Sports Medicine",
     "rating": 4.3,
@@ -10255,7 +13893,7 @@
     ]
   },
   {
-    "id": "d131",
+    "id": "d177",
     "name": "Dr. David Rodriguez",
     "specialty": "General Surgery",
     "rating": 3.9,
@@ -10340,7 +13978,7 @@
     ]
   },
   {
-    "id": "d132",
+    "id": "d178",
     "name": "Dr. Eric Ruiz",
     "specialty": "Otolaryngology",
     "rating": 4.3,
@@ -10419,7 +14057,7 @@
     ]
   },
   {
-    "id": "d133",
+    "id": "d179",
     "name": "Dr. Amanda Scott",
     "specialty": "Emergency Medicine",
     "rating": 5.0,
@@ -10496,7 +14134,7 @@
     ]
   },
   {
-    "id": "d134",
+    "id": "d180",
     "name": "Dr. Kenneth Young",
     "specialty": "Ophthalmology",
     "rating": 4.7,
@@ -10579,7 +14217,7 @@
     ]
   },
   {
-    "id": "d135",
+    "id": "d181",
     "name": "Dr. Patricia Patel",
     "specialty": "Endocrinology",
     "rating": 4.8,
@@ -10653,7 +14291,7 @@
     ]
   },
   {
-    "id": "d136",
+    "id": "d182",
     "name": "Dr. George Martinez",
     "specialty": "Rheumatology",
     "rating": 4.9,
@@ -10736,7 +14374,7 @@
     ]
   },
   {
-    "id": "d137",
+    "id": "d183",
     "name": "Dr. Jessica Lopez",
     "specialty": "Pediatrics",
     "rating": 4.9,
@@ -10818,7 +14456,7 @@
     ]
   },
   {
-    "id": "d138",
+    "id": "d184",
     "name": "Dr. Sharon Turner",
     "specialty": "General Surgery",
     "rating": 5.0,
@@ -10902,7 +14540,7 @@
     ]
   },
   {
-    "id": "d139",
+    "id": "d185",
     "name": "Dr. Thomas Thomas",
     "specialty": "Family Medicine",
     "rating": 4.7,
@@ -10986,7 +14624,7 @@
     ]
   },
   {
-    "id": "d140",
+    "id": "d186",
     "name": "Dr. Justin Harris",
     "specialty": "General Surgery",
     "rating": 4.1,
@@ -11074,7 +14712,7 @@
     ]
   },
   {
-    "id": "d141",
+    "id": "d187",
     "name": "Dr. Alice Johnson",
     "specialty": "Urology",
     "rating": 4.7,
@@ -11150,7 +14788,7 @@
     ]
   },
   {
-    "id": "d142",
+    "id": "d188",
     "name": "Dr. Paul Lopez",
     "specialty": "Dermatology",
     "rating": 4.8,
@@ -11229,7 +14867,7 @@
     ]
   },
   {
-    "id": "d143",
+    "id": "d189",
     "name": "Dr. Ryan Ramirez",
     "specialty": "Cardiothoracic Surgery",
     "rating": 4.5,
@@ -11298,7 +14936,7 @@
     ]
   },
   {
-    "id": "d144",
+    "id": "d190",
     "name": "Dr. Jessica Jackson",
     "specialty": "Rheumatology",
     "rating": 4.1,
@@ -11370,7 +15008,7 @@
     ]
   },
   {
-    "id": "d145",
+    "id": "d191",
     "name": "Dr. Elizabeth Turner",
     "specialty": "Urology",
     "rating": 3.9,
@@ -11451,7 +15089,7 @@
     ]
   },
   {
-    "id": "d146",
+    "id": "d192",
     "name": "Dr. Sarah Martinez",
     "specialty": "Neurology",
     "rating": 4.3,
@@ -11533,7 +15171,7 @@
     ]
   },
   {
-    "id": "d147",
+    "id": "d193",
     "name": "Dr. Steven Scott",
     "specialty": "Radiology",
     "rating": 5.0,
@@ -11616,7 +15254,7 @@
     ]
   },
   {
-    "id": "d148",
+    "id": "d194",
     "name": "Dr. Nicole Anderson",
     "specialty": "Orthopedics",
     "rating": 4.1,
@@ -11691,7 +15329,7 @@
     ]
   },
   {
-    "id": "d149",
+    "id": "d195",
     "name": "Dr. Helen Martinez",
     "specialty": "Neurology",
     "rating": 4.0,
@@ -11782,7 +15420,7 @@
     ]
   },
   {
-    "id": "d150",
+    "id": "d196",
     "name": "Dr. Joseph Hill",
     "specialty": "Pediatrics",
     "rating": 4.2,
@@ -11855,7 +15493,7 @@
     ]
   },
   {
-    "id": "d151",
+    "id": "d197",
     "name": "Dr. Jason Lewis",
     "specialty": "Emergency Medicine",
     "rating": 4.2,
@@ -11927,7 +15565,7 @@
     ]
   },
   {
-    "id": "d152",
+    "id": "d198",
     "name": "Dr. Thomas Mitchell",
     "specialty": "Obstetrics and Gynecology",
     "rating": 5.0,
@@ -11999,7 +15637,7 @@
     ]
   },
   {
-    "id": "d153",
+    "id": "d199",
     "name": "Dr. Steven Johnson",
     "specialty": "Sports Medicine",
     "rating": 3.9,
@@ -12067,7 +15705,7 @@
     ]
   },
   {
-    "id": "d154",
+    "id": "d200",
     "name": "Dr. George Robinson",
     "specialty": "Otolaryngology",
     "rating": 5.0,
@@ -12152,7 +15790,7 @@
     ]
   },
   {
-    "id": "d155",
+    "id": "d201",
     "name": "Dr. Laura Martin",
     "specialty": "Radiology",
     "rating": 4.6,
@@ -12227,7 +15865,7 @@
     ]
   },
   {
-    "id": "d156",
+    "id": "d202",
     "name": "Dr. Karen Chen",
     "specialty": "Pediatrics",
     "rating": 4.4,
@@ -12314,7 +15952,7 @@
     ]
   },
   {
-    "id": "d157",
+    "id": "d203",
     "name": "Dr. Rebecca Harris",
     "specialty": "Emergency Medicine",
     "rating": 4.9,
@@ -12388,7 +16026,7 @@
     ]
   },
   {
-    "id": "d158",
+    "id": "d204",
     "name": "Dr. Rebecca Clark",
     "specialty": "Obstetrics and Gynecology",
     "rating": 4.2,
@@ -12467,7 +16105,7 @@
     ]
   },
   {
-    "id": "d159",
+    "id": "d205",
     "name": "Dr. Jessica Scott",
     "specialty": "Internal Medicine",
     "rating": 4.8,
@@ -12548,7 +16186,7 @@
     ]
   },
   {
-    "id": "d160",
+    "id": "d206",
     "name": "Dr. Betty Thomas",
     "specialty": "Cardiology",
     "rating": 4.1,
@@ -12639,7 +16277,7 @@
     ]
   },
   {
-    "id": "d161",
+    "id": "d207",
     "name": "Dr. Lauren King",
     "specialty": "Rheumatology",
     "rating": 4.7,
@@ -12722,7 +16360,7 @@
     ]
   },
   {
-    "id": "d162",
+    "id": "d208",
     "name": "Dr. Lisa Roberts",
     "specialty": "General Surgery",
     "rating": 4.3,
@@ -12802,7 +16440,7 @@
     ]
   },
   {
-    "id": "d163",
+    "id": "d209",
     "name": "Dr. David Nelson",
     "specialty": "Oncology",
     "rating": 4.3,
@@ -12876,7 +16514,7 @@
     ]
   },
   {
-    "id": "d164",
+    "id": "d210",
     "name": "Dr. George Wright",
     "specialty": "Cardiology",
     "rating": 3.8,
@@ -12957,7 +16595,7 @@
     ]
   },
   {
-    "id": "d165",
+    "id": "d211",
     "name": "Dr. Carol Lopez",
     "specialty": "Plastic Surgery",
     "rating": 4.6,
@@ -13044,7 +16682,7 @@
     ]
   },
   {
-    "id": "d166",
+    "id": "d212",
     "name": "Dr. Barbara Perez",
     "specialty": "Pulmonology",
     "rating": 5.0,
@@ -13124,7 +16762,7 @@
     ]
   },
   {
-    "id": "d167",
+    "id": "d213",
     "name": "Dr. Steven Lopez",
     "specialty": "Obstetrics and Gynecology",
     "rating": 3.9,
@@ -13202,7 +16840,7 @@
     ]
   },
   {
-    "id": "d168",
+    "id": "d214",
     "name": "Dr. Kimberly Moore",
     "specialty": "Endocrinology",
     "rating": 4.2,
@@ -13277,7 +16915,7 @@
     ]
   },
   {
-    "id": "d169",
+    "id": "d215",
     "name": "Dr. Melissa Patel",
     "specialty": "Ophthalmology",
     "rating": 4.4,
@@ -13346,7 +16984,7 @@
     ]
   },
   {
-    "id": "d170",
+    "id": "d216",
     "name": "Dr. Thomas Scott",
     "specialty": "Ophthalmology",
     "rating": 4.3,
@@ -13423,7 +17061,7 @@
     ]
   },
   {
-    "id": "d171",
+    "id": "d217",
     "name": "Dr. Kenneth Baker",
     "specialty": "Sports Medicine",
     "rating": 3.9,
@@ -13499,7 +17137,7 @@
     ]
   },
   {
-    "id": "d172",
+    "id": "d218",
     "name": "Dr. Stephanie Baker",
     "specialty": "Pediatrics",
     "rating": 4.2,
@@ -13575,7 +17213,7 @@
     ]
   },
   {
-    "id": "d173",
+    "id": "d219",
     "name": "Dr. Lauren Green",
     "specialty": "Allergy and Immunology",
     "rating": 4.4,
@@ -13657,7 +17295,7 @@
     ]
   },
   {
-    "id": "d174",
+    "id": "d220",
     "name": "Dr. Sarah Sanchez",
     "specialty": "Dermatology",
     "rating": 4.2,
@@ -13743,7 +17381,7 @@
     ]
   },
   {
-    "id": "d175",
+    "id": "d221",
     "name": "Dr. Lisa Robinson",
     "specialty": "Neurosurgery",
     "rating": 4.5,
@@ -13821,7 +17459,7 @@
     ]
   },
   {
-    "id": "d176",
+    "id": "d222",
     "name": "Dr. Elizabeth Baker",
     "specialty": "Sports Medicine",
     "rating": 4.5,
@@ -13896,7 +17534,7 @@
     ]
   },
   {
-    "id": "d177",
+    "id": "d223",
     "name": "Dr. Anthony Jackson",
     "specialty": "Psychiatry",
     "rating": 4.9,
@@ -13974,7 +17612,7 @@
     ]
   },
   {
-    "id": "d178",
+    "id": "d224",
     "name": "Dr. Rebecca Patel",
     "specialty": "Neurology",
     "rating": 4.7,
@@ -14061,7 +17699,7 @@
     ]
   },
   {
-    "id": "d179",
+    "id": "d225",
     "name": "Dr. Kevin Taylor",
     "specialty": "Anesthesiology",
     "rating": 3.8,
@@ -14146,7 +17784,7 @@
     ]
   },
   {
-    "id": "d180",
+    "id": "d226",
     "name": "Dr. Nicole Clark",
     "specialty": "Internal Medicine",
     "rating": 4.6,
@@ -14232,7 +17870,7 @@
     ]
   },
   {
-    "id": "d181",
+    "id": "d227",
     "name": "Dr. Thomas Walker",
     "specialty": "Pathology",
     "rating": 4.1,
@@ -14316,7 +17954,7 @@
     ]
   },
   {
-    "id": "d182",
+    "id": "d228",
     "name": "Dr. Amanda Chen",
     "specialty": "Cardiothoracic Surgery",
     "rating": 4.5,
@@ -14397,7 +18035,7 @@
     ]
   },
   {
-    "id": "d183",
+    "id": "d229",
     "name": "Dr. Amanda Turner",
     "specialty": "Anesthesiology",
     "rating": 5.0,
@@ -14468,7 +18106,7 @@
     ]
   },
   {
-    "id": "d184",
+    "id": "d230",
     "name": "Dr. Kenneth Martinez",
     "specialty": "Pulmonology",
     "rating": 4.0,
@@ -14540,7 +18178,7 @@
     ]
   },
   {
-    "id": "d185",
+    "id": "d231",
     "name": "Dr. Eric Hernandez",
     "specialty": "Pathology",
     "rating": 4.7,
@@ -14622,7 +18260,7 @@
     ]
   },
   {
-    "id": "d186",
+    "id": "d232",
     "name": "Dr. Sandra King",
     "specialty": "Neurology",
     "rating": 4.9,
@@ -14708,7 +18346,7 @@
     ]
   },
   {
-    "id": "d187",
+    "id": "d233",
     "name": "Dr. Helen Green",
     "specialty": "Family Medicine",
     "rating": 4.7,
@@ -14788,7 +18426,7 @@
     ]
   },
   {
-    "id": "d188",
+    "id": "d234",
     "name": "Dr. Kimberly Patel",
     "specialty": "Pediatrics",
     "rating": 4.3,
@@ -14875,7 +18513,7 @@
     ]
   },
   {
-    "id": "d189",
+    "id": "d235",
     "name": "Dr. Paul Turner",
     "specialty": "Pathology",
     "rating": 4.9,
@@ -14956,7 +18594,7 @@
     ]
   },
   {
-    "id": "d190",
+    "id": "d236",
     "name": "Dr. Paul Harris",
     "specialty": "Endocrinology",
     "rating": 4.6,
@@ -15040,7 +18678,7 @@
     ]
   },
   {
-    "id": "d191",
+    "id": "d237",
     "name": "Dr. Kenneth Mitchell",
     "specialty": "Orthopedics",
     "rating": 4.5,
@@ -15116,7 +18754,7 @@
     ]
   },
   {
-    "id": "d192",
+    "id": "d238",
     "name": "Dr. Eric Hernandez",
     "specialty": "Emergency Medicine",
     "rating": 4.2,
@@ -15187,7 +18825,7 @@
     ]
   },
   {
-    "id": "d193",
+    "id": "d239",
     "name": "Dr. Jonathan Mitchell",
     "specialty": "Orthopedics",
     "rating": 4.8,
@@ -15269,7 +18907,7 @@
     ]
   },
   {
-    "id": "d194",
+    "id": "d240",
     "name": "Dr. Anthony Thomas",
     "specialty": "Rheumatology",
     "rating": 4.0,
@@ -15355,7 +18993,7 @@
     ]
   },
   {
-    "id": "d195",
+    "id": "d241",
     "name": "Dr. Steven Lopez",
     "specialty": "Allergy and Immunology",
     "rating": 4.6,
@@ -15425,7 +19063,7 @@
     ]
   },
   {
-    "id": "d196",
+    "id": "d242",
     "name": "Dr. Brian Lewis",
     "specialty": "Radiology",
     "rating": 5.0,
@@ -15501,7 +19139,7 @@
     ]
   },
   {
-    "id": "d197",
+    "id": "d243",
     "name": "Dr. Ryan Patel",
     "specialty": "Psychiatry",
     "rating": 4.6,
@@ -15588,7 +19226,7 @@
     ]
   },
   {
-    "id": "d198",
+    "id": "d244",
     "name": "Dr. Nicole Thompson",
     "specialty": "Pathology",
     "rating": 4.9,
@@ -15667,7 +19305,7 @@
     ]
   },
   {
-    "id": "d199",
+    "id": "d245",
     "name": "Dr. Patricia Anderson",
     "specialty": "Psychiatry",
     "rating": 4.3,
@@ -15748,7 +19386,7 @@
     ]
   },
   {
-    "id": "d200",
+    "id": "d246",
     "name": "Dr. Thomas Thomas",
     "specialty": "Pediatrics",
     "rating": 4.1,
