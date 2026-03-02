@@ -336,7 +336,7 @@ def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, 
     Returns:
         Path to the updated file
     """
-    # Target file is always {entity_type}_1.json
+    # Target file is always {entity_type}_1.json 
     data_dir = get_data_dir(web_name)
     _ensure_dir(data_dir)
 
