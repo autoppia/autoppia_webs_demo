@@ -104,15 +104,13 @@ def infer_typescript_interface(examples: List[Dict[str, Any]], entity_type: str)
     return "\n".join(interface_lines)
 
 
-def build_generation_prompt_from_examples(project_key: str, entity_type: str, count: int = 200, additional_requirements: Optional[str] = None) -> Tuple[str, List[Dict[str, Any]]]:
+def build_generation_prompt_from_examples(project_key: str, entity_type: str) -> Tuple[str, List[Dict[str, Any]]]:
     """
     Build a complete generation prompt by reading existing examples.
 
     Args:
         project_key: Project key (e.g., 'web_5_autocrm')
         entity_type: Entity type (e.g., 'logs', 'clients')
-        count: Number of items to generate
-        additional_requirements: Optional additional requirements
 
     Returns:
         Tuple of (interface_definition, examples)
