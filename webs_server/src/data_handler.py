@@ -4,6 +4,7 @@ Manages reading/writing JSON data files under /app/data.
 """
 
 import os
+import re
 import json
 import fcntl
 from datetime import datetime
@@ -32,6 +33,42 @@ def get_main_path(web_name: str) -> str:
 def get_data_dir(web_name: str) -> str:
     """Return path to data directory for a given web_name."""
     return f"{BASE_PATH}/{web_name}/data"
+
+
+# Safe path segment: alphanumeric, underscore, hyphen (e.g. web_4_autodining, restaurants)
+_SAFE_SEGMENT_RE = re.compile(r"^[a-zA-Z0-9_-]+$")
+# Safe filename: alphanumeric, underscore, hyphen, dot (e.g. logs_20250117.json)
+_SAFE_FILENAME_RE = re.compile(r"^[a-zA-Z0-9_.-]+$")
+
+
+def _validate_safe_segment(value: str, name: str = "value") -> None:
+    """Raise ValueError if value is not a safe path segment (prevents path traversal)."""
+    if not value or not _SAFE_SEGMENT_RE.match(value):
+        raise ValueError(f"Invalid {name}: only alphanumeric, underscore, hyphen allowed")
+
+
+def _validate_safe_filename(filename: str) -> None:
+    """Raise ValueError if filename is not safe (no path separators or traversal)."""
+    if not filename or ".." in filename or os.path.sep in filename:
+        raise ValueError("Invalid filename: path separators or '..' not allowed")
+    if not _SAFE_FILENAME_RE.match(filename):
+        raise ValueError("Invalid filename: only alphanumeric, underscore, hyphen, dot allowed")
+
+
+def _resolve_path_under_base(base_dir: str, relative_path: str) -> Optional[str]:
+    """
+    Return absolute path if relative_path resolves under base_dir; else None.
+    Prevents path traversal when building paths from untrusted data (e.g. main.json).
+    """
+    try:
+        base_real = os.path.realpath(base_dir)
+        combined = os.path.normpath(os.path.join(base_dir, relative_path))
+        combined_real = os.path.realpath(combined)
+        if os.path.commonpath([base_real, combined_real]) != base_real:
+            return None
+        return combined_real
+    except (ValueError, OSError):
+        return None
 
 
 def _ensure_dir(path: str) -> None:
@@ -102,6 +139,10 @@ def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], ent
     Returns:
         Path to saved file
     """
+    _validate_safe_segment(web_name, "web_name")
+    _validate_safe_segment(entity_type, "entity_type")
+    _validate_safe_filename(filename)
+
     data_dir = get_data_dir(web_name)
     _ensure_dir(data_dir)
 
@@ -165,6 +206,10 @@ def load_all_data(
     If V2 DB mode is disabled, loads from original/ directory directly (high quality, fewer records).
     Otherwise, loads from data/ directory as referenced in main.json.
     """
+    _validate_safe_segment(web_name, "web_name")
+    if entity_type is not None:
+        _validate_safe_segment(entity_type, "entity_type")
+
     # Check if V2 DB mode is disabled - if so, load from original/ directory
     # v2_disabled is True when ENABLE_DYNAMIC_V2 is "false", "0", "no", or "off"
     v2_disabled_env_flag = os.getenv("ENABLE_DYNAMIC_V2", "false").lower() in {"false", "0", "no", "off"}
@@ -219,6 +264,9 @@ def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> Li
     """
     Helper function to load data from main.json (used when V2 is enabled or as fallback).
     """
+    _validate_safe_segment(web_name, "web_name")
+    if entity_type is not None:
+        _validate_safe_segment(entity_type, "entity_type")
     main_path = get_main_path(web_name)
     if not os.path.exists(main_path):
         logger.warning("main.json missing for web", extra={"web_name": web_name, "path": main_path})
@@ -245,11 +293,15 @@ def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> Li
     else:
         rel_paths = []
 
+    web_base = f"{BASE_PATH}/{web_name}"
     for rel_path in rel_paths:
         normalized_rel = rel_path.lstrip("./")
-        abs_path = f"{BASE_PATH}/{web_name}/{normalized_rel}"
-        if not os.path.exists(abs_path):
-            logger.warning("Referenced data file missing", extra={"path": abs_path, "rel_path": rel_path, "web_name": web_name})
+        abs_path = _resolve_path_under_base(web_base, normalized_rel)
+        if abs_path is None or not os.path.exists(abs_path):
+            if abs_path is None:
+                logger.warning("Referenced path outside base", extra={"rel_path": rel_path, "web_name": web_name})
+            else:
+                logger.warning("Referenced data file missing", extra={"path": abs_path, "rel_path": rel_path, "web_name": web_name})
             continue
         items = _parse_json_file_to_items(abs_path)
         if items is not None:
@@ -267,6 +319,9 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
     Returns:
         Path to the file where data was saved
     """
+    _validate_safe_segment(web_name, "web_name")
+    _validate_safe_segment(entity_type, "entity_type")
+
     main_path = get_main_path(web_name)
 
     # Load or create main.json
@@ -282,13 +337,14 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
     # Determine if we append to existing or create new
     should_create_new = True
     target_file = None
+    web_base = f"{BASE_PATH}/{web_name}"
 
     if entity_files:
-        # Get the last file
+        # Get the last file; resolve path safely to prevent path traversal
         last_file_rel = entity_files[-1].lstrip("./")
-        last_file_abs = f"{BASE_PATH}/{web_name}/{last_file_rel}"
+        last_file_abs = _resolve_path_under_base(web_base, last_file_rel)
 
-        if os.path.exists(last_file_abs):
+        if last_file_abs and os.path.exists(last_file_abs):
             # Check file size
             file_size = os.path.getsize(last_file_abs)
             estimated_new_size = file_size + len(json.dumps(data))
@@ -336,7 +392,10 @@ def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, 
     Returns:
         Path to the updated file
     """
-    # Target file is always {entity_type}_1.json 
+    _validate_safe_segment(web_name, "web_name")
+    _validate_safe_segment(entity_type, "entity_type")
+
+    # Target file is always {entity_type}_1.json
     data_dir = get_data_dir(web_name)
     _ensure_dir(data_dir)
 
