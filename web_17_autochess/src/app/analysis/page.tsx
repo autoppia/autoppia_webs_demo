@@ -6,20 +6,18 @@ import { EvalBar } from "@/components/chess/EvalBar";
 import { MoveList } from "@/components/chess/MoveList";
 import { OpeningExplorer } from "@/components/chess/OpeningExplorer";
 import { PgnInput } from "@/components/chess/PgnInput";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
 import {
-  type Game,
-  generateGamePositions,
   generateGames,
   generateOpeningBook,
   generatePlayers,
   generateTournaments,
-  stripMoveCounters,
 } from "@/data/generators";
 import { DynamicWrapper } from "@/dynamic/v1/DynamicWrapper";
 import { DynamicText } from "@/dynamic/v3/DynamicText";
+import { useAnalysisBoard } from "@/hooks/useAnalysisBoard";
 import { useEventLogger } from "@/hooks/useEventLogger";
-import { evaluateGameMoves, evaluatePosition } from "@/library/engine";
 import { EVENT_TYPES } from "@/library/events";
 import { Chess } from "chess.js";
 import {
@@ -28,12 +26,13 @@ import {
   ChevronLeft,
   ChevronRight,
   Pause,
+  PenTool,
   Play,
   RotateCcw,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import type React from "react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -53,36 +52,15 @@ export default function AnalysisPage() {
     [games, seed],
   );
 
-  // Core state
-  const [moves, setMoves] = useState<string[]>([]);
-  const [activeMoveIndex, setActiveMoveIndex] = useState(-1);
-  const [boardOrientation, setBoardOrientation] = useState<"white" | "black">(
-    "white",
-  );
-  const [isPlaying, setIsPlaying] = useState(false);
+  // Page-specific state
   const [pgnError, setPgnError] = useState<string | null>(null);
-  const [boardHeight, setBoardHeight] = useState(480);
-  const [showEngine, setShowEngine] = useState(true);
-  const [startFen, setStartFen] = useState(START_FEN);
 
-  // Chess.js for interactive board moves
-  const chessRef = useRef<Chess>(new Chess());
-  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
-  const [legalMoveSquares, setLegalMoveSquares] = useState<string[]>([]);
-
-  // Board size measurement
-  const boardContainerRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = boardContainerRef.current;
-    if (!el) return;
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setBoardHeight(entry.contentRect.width);
-      }
-    });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  // Use the shared analysis board hook
+  const board = useAnalysisBoard({
+    seed,
+    openingBook,
+    logInteraction,
+  });
 
   // Load custom FEN from URL param
   useEffect(() => {
@@ -90,69 +68,14 @@ export default function AnalysisPage() {
     if (fenParam) {
       try {
         new Chess(fenParam);
-        setStartFen(fenParam);
-        setMoves([]);
-        setActiveMoveIndex(-1);
+        board.setStartFen(fenParam);
+        board.setMoves([]);
+        board.setActiveMoveIndex(-1);
       } catch {
         // Invalid FEN — ignore
       }
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Derived data
-  const annotatedMoves = useMemo(
-    () => evaluateGameMoves(moves, seed, startFen),
-    [moves, seed, startFen],
-  );
-  const positions = useMemo(
-    () => generateGamePositions(moves, startFen),
-    [moves, startFen],
-  );
-
-  const currentFen =
-    activeMoveIndex >= 0 && activeMoveIndex < positions.length
-      ? positions[activeMoveIndex]
-      : startFen;
-
-  const currentEval = useMemo(() => {
-    if (activeMoveIndex >= 0 && activeMoveIndex < annotatedMoves.length) {
-      return annotatedMoves[activeMoveIndex].eval;
-    }
-    return evaluatePosition(startFen, seed);
-  }, [activeMoveIndex, annotatedMoves, seed, startFen]);
-
-  const openingData = useMemo(() => {
-    const key = stripMoveCounters(currentFen);
-    return openingBook.get(key) || null;
-  }, [currentFen, openingBook]);
-
-  // Derive lastMove from the current annotated move (replay through chess.js for from/to)
-  const lastMove = useMemo(() => {
-    if (activeMoveIndex < 0 || activeMoveIndex >= moves.length) return null;
-    const chess = new Chess(startFen);
-    for (let i = 0; i <= activeMoveIndex; i++) {
-      try {
-        const result = chess.move(moves[i]);
-        if (i === activeMoveIndex && result) {
-          return { from: result.from, to: result.to };
-        }
-      } catch {
-        return null;
-      }
-    }
-    return null;
-  }, [activeMoveIndex, moves, startFen]);
-
-  // Sync chess.js instance to current position
-  useEffect(() => {
-    try {
-      chessRef.current = new Chess(currentFen);
-    } catch {
-      chessRef.current = new Chess();
-    }
-    setSelectedSquare(null);
-    setLegalMoveSquares([]);
-  }, [currentFen]);
 
   // Load game from URL param on mount
   useEffect(() => {
@@ -160,8 +83,8 @@ export default function AnalysisPage() {
     if (gameId) {
       const idx = games.findIndex((g) => g.id === Number(gameId));
       if (idx >= 0) {
-        setMoves(games[idx].moves);
-        setActiveMoveIndex(-1);
+        board.setMoves(games[idx].moves);
+        board.setActiveMoveIndex(-1);
         logInteraction(EVENT_TYPES.ANALYZE_GAME, {
           game_id: games[idx].id,
           white: games[idx].whitePlayer.name,
@@ -172,22 +95,7 @@ export default function AnalysisPage() {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Auto-play
-  useEffect(() => {
-    if (!isPlaying) return;
-    const timer = setInterval(() => {
-      setActiveMoveIndex((prev) => {
-        if (prev >= moves.length - 1) {
-          setIsPlaying(false);
-          return prev;
-        }
-        return prev + 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [isPlaying, moves.length]);
-
-  // --- Handlers ---
+  // --- Page-specific handlers ---
 
   const handleLoadPgn = useCallback(
     (pgn: string) => {
@@ -199,28 +107,28 @@ export default function AnalysisPage() {
           setPgnError("No moves found in PGN");
           return;
         }
-        setMoves(history);
-        setActiveMoveIndex(-1);
-        setIsPlaying(false);
+        board.setMoves(history);
+        board.setActiveMoveIndex(-1);
+        board.setIsPlaying(false);
         setPgnError(null);
-        setStartFen(START_FEN);
+        board.setStartFen(START_FEN);
         logInteraction(EVENT_TYPES.LOAD_PGN, { move_count: history.length });
       } catch {
         setPgnError("Invalid PGN format");
       }
     },
-    [logInteraction],
+    [logInteraction, board],
   );
 
   const handleLoadGame = useCallback(
     (index: number) => {
       const game = games[index];
       if (!game) return;
-      setMoves(game.moves);
-      setActiveMoveIndex(-1);
-      setIsPlaying(false);
+      board.setMoves(game.moves);
+      board.setActiveMoveIndex(-1);
+      board.setIsPlaying(false);
       setPgnError(null);
-      setStartFen(START_FEN);
+      board.setStartFen(START_FEN);
       logInteraction(EVENT_TYPES.ANALYZE_GAME, {
         game_id: game.id,
         white: game.whitePlayer.name,
@@ -229,170 +137,8 @@ export default function AnalysisPage() {
         opening: game.opening,
       });
     },
-    [games, logInteraction],
+    [games, logInteraction, board],
   );
-
-  const handleMoveClick = useCallback(
-    (index: number) => {
-      setActiveMoveIndex(index);
-      setIsPlaying(false);
-      logInteraction(EVENT_TYPES.NAVIGATE_MOVE, { move_index: index });
-    },
-    [logInteraction],
-  );
-
-  const handleOpeningExplorerMoveClick = useCallback(
-    (san: string) => {
-      // Make the move from the current position — truncate future moves and append
-      const chess = new Chess(currentFen);
-      try {
-        chess.move(san);
-        const newMoves = moves.slice(0, activeMoveIndex + 1);
-        newMoves.push(san);
-        setMoves(newMoves);
-        setActiveMoveIndex(newMoves.length - 1);
-        setIsPlaying(false);
-        logInteraction(EVENT_TYPES.EXPLORE_OPENING, { move: san });
-      } catch {
-        // Invalid move — ignore
-      }
-    },
-    [currentFen, moves, activeMoveIndex, logInteraction],
-  );
-
-  const handleBoardMove = useCallback(
-    (from: string, to: string): boolean => {
-      setIsPlaying(false);
-      const chess = new Chess(currentFen);
-      const result = chess.move({ from, to, promotion: "q" });
-      if (result) {
-        const newMoves = moves.slice(0, activeMoveIndex + 1);
-        newMoves.push(result.san);
-        setMoves(newMoves);
-        setActiveMoveIndex(newMoves.length - 1);
-        setSelectedSquare(null);
-        setLegalMoveSquares([]);
-        logInteraction(EVENT_TYPES.MAKE_ANALYSIS_MOVE, {
-          move: result.san,
-          from,
-          to,
-        });
-        return true;
-      }
-      return false;
-    },
-    [currentFen, moves, activeMoveIndex, logInteraction],
-  );
-
-  const handleSquareClick = useCallback(
-    (square: string) => {
-      setIsPlaying(false);
-      const chess = chessRef.current;
-
-      if (selectedSquare) {
-        if (selectedSquare === square) {
-          setSelectedSquare(null);
-          setLegalMoveSquares([]);
-          return;
-        }
-
-        // Re-select if clicking another own piece
-        const clickedMoves = chess.moves({
-          square: square as never,
-          verbose: true,
-        });
-        if (clickedMoves.length > 0 && !legalMoveSquares.includes(square)) {
-          setSelectedSquare(square);
-          setLegalMoveSquares(clickedMoves.map((m) => m.to));
-          return;
-        }
-
-        // Try to make the move via handleBoardMove (which truncates + appends)
-        handleBoardMove(selectedSquare, square);
-        setSelectedSquare(null);
-        setLegalMoveSquares([]);
-      } else {
-        const sqMoves = chess.moves({ square: square as never, verbose: true });
-        if (sqMoves.length > 0) {
-          setSelectedSquare(square);
-          setLegalMoveSquares(sqMoves.map((m) => m.to));
-        }
-      }
-    },
-    [selectedSquare, legalMoveSquares, handleBoardMove],
-  );
-
-  const handleDrop = useCallback(
-    (from: string, to: string) => {
-      return handleBoardMove(from, to);
-    },
-    [handleBoardMove],
-  );
-
-  // Navigation
-  const goFirst = () => {
-    setActiveMoveIndex(-1);
-    setIsPlaying(false);
-  };
-  const goPrev = () => {
-    setActiveMoveIndex((p) => Math.max(-1, p - 1));
-    setIsPlaying(false);
-  };
-  const goNext = () => {
-    setActiveMoveIndex((p) => Math.min(moves.length - 1, p + 1));
-    setIsPlaying(false);
-  };
-  const goLast = () => {
-    setActiveMoveIndex(moves.length - 1);
-    setIsPlaying(false);
-  };
-  const togglePlay = () => setIsPlaying((p) => !p);
-
-  const flipBoard = () => {
-    setBoardOrientation((o) => (o === "white" ? "black" : "white"));
-    logInteraction(EVENT_TYPES.FLIP_BOARD, {
-      orientation: boardOrientation === "white" ? "black" : "white",
-    });
-  };
-
-  const toggleEngine = () => {
-    setShowEngine((v) => !v);
-    logInteraction(EVENT_TYPES.TOGGLE_ENGINE, { enabled: !showEngine });
-  };
-
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        e.target instanceof HTMLTextAreaElement ||
-        e.target instanceof HTMLInputElement
-      )
-        return;
-      switch (e.key) {
-        case "ArrowLeft":
-          e.preventDefault();
-          goPrev();
-          break;
-        case "ArrowRight":
-          e.preventDefault();
-          goNext();
-          break;
-        case "Home":
-          e.preventDefault();
-          goFirst();
-          break;
-        case "End":
-          e.preventDefault();
-          goLast();
-          break;
-        case "f":
-          flipBoard();
-          break;
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }); // intentionally no deps — uses closures over latest state
 
   return (
     <div className="py-4 sm:py-6">
@@ -406,23 +152,23 @@ export default function AnalysisPage() {
         {/* Left column: Board + Controls + PGN Input */}
         <div className="flex-1 min-w-0">
           {/* Engine eval display */}
-          {showEngine && (
+          {board.showEngine && (
             <DynamicWrapper>
               <div className="flex items-center gap-2 mb-2 px-1">
                 <span className="text-xs text-zinc-500 font-mono">Engine:</span>
                 <span
                   className={`text-sm font-bold font-mono ${
-                    currentEval.cp > 50
+                    board.currentEval.cp > 50
                       ? "text-zinc-100"
-                      : currentEval.cp < -50
+                      : board.currentEval.cp < -50
                         ? "text-zinc-400"
                         : "text-zinc-300"
                   }`}
                 >
-                  {currentEval.display}
+                  {board.currentEval.display}
                 </span>
                 <span className="text-[10px] text-zinc-600 font-mono">
-                  depth {currentEval.depth}
+                  depth {board.currentEval.depth}
                 </span>
               </div>
             </DynamicWrapper>
@@ -430,65 +176,75 @@ export default function AnalysisPage() {
 
           {/* EvalBar + Board */}
           <div className="flex gap-1.5 mb-3">
-            {showEngine && (
+            {board.showEngine && (
               <EvalBar
-                eval={currentEval}
-                boardHeight={boardHeight}
-                flipped={boardOrientation === "black"}
+                eval={board.currentEval}
+                boardHeight={board.boardHeight}
+                flipped={board.boardOrientation === "black"}
               />
             )}
-            <div ref={boardContainerRef} className="flex-1 min-w-0">
+            <div
+              ref={board.boardContainerRef}
+              className="flex-1 min-w-0 max-w-[min(100%,calc(100vh-260px))]"
+            >
               <ChessBoard
-                fen={currentFen}
+                fen={board.currentFen}
                 maxSize={9999}
                 interactive
                 allowDragging
-                boardOrientation={boardOrientation}
-                selectedSquare={selectedSquare}
-                highlightSquares={legalMoveSquares}
-                lastMove={lastMove}
-                onSquareClick={handleSquareClick}
-                onDrop={handleDrop}
+                boardOrientation={board.boardOrientation}
+                selectedSquare={board.selectedSquare}
+                highlightSquares={board.legalMoveSquares}
+                lastMove={board.lastMove}
+                onSquareClick={board.handleSquareClick}
+                onDrop={board.handleDrop}
               />
             </div>
           </div>
 
           {/* Navigation Controls */}
           <div className="flex items-center justify-center gap-1.5">
-            <NavButton onClick={flipBoard} title="Flip board (F)">
+            <NavButton onClick={board.flipBoard} title="Flip board (F)">
               <RotateCcw className="h-4 w-4" />
             </NavButton>
-            <NavButton onClick={goFirst} title="First move (Home)">
+            <NavButton onClick={board.goFirst} title="First move (Home)">
               <ChevronFirst className="h-5 w-5" />
             </NavButton>
-            <NavButton onClick={goPrev} title="Previous (Left)">
+            <NavButton onClick={board.goPrev} title="Previous (Left)">
               <ChevronLeft className="h-5 w-5" />
             </NavButton>
-            <NavButton onClick={togglePlay} highlight title="Auto-play">
-              {isPlaying ? (
+            <NavButton onClick={board.togglePlay} highlight title="Auto-play">
+              {board.isPlaying ? (
                 <Pause className="h-5 w-5" />
               ) : (
                 <Play className="h-5 w-5" />
               )}
             </NavButton>
-            <NavButton onClick={goNext} title="Next (Right)">
+            <NavButton onClick={board.goNext} title="Next (Right)">
               <ChevronRight className="h-5 w-5" />
             </NavButton>
-            <NavButton onClick={goLast} title="Last move (End)">
+            <NavButton onClick={board.goLast} title="Last move (End)">
               <ChevronLast className="h-5 w-5" />
             </NavButton>
+            <SeedLink
+              href={`/editor?fen=${encodeURIComponent(board.currentFen)}`}
+              className="p-2 rounded-lg transition-colors bg-[#1c1917] border border-amber-600/60 text-amber-400 hover:text-amber-300 hover:bg-amber-600/10"
+              title="Board Editor"
+            >
+              <PenTool className="h-4 w-4" />
+            </SeedLink>
             <AnalysisToolsMenu
-              onFlipBoard={flipBoard}
-              showEngine={showEngine}
-              onToggleEngine={toggleEngine}
+              onFlipBoard={board.flipBoard}
+              showEngine={board.showEngine}
+              onToggleEngine={board.toggleEngine}
             />
           </div>
 
           <div className="text-center text-xs text-zinc-500 mt-1.5 mb-4">
-            {moves.length > 0
-              ? activeMoveIndex >= 0
-                ? `Move ${activeMoveIndex + 1} of ${moves.length}`
-                : `Start position \u2014 ${moves.length} moves`
+            {board.moves.length > 0
+              ? board.activeMoveIndex >= 0
+                ? `Move ${board.activeMoveIndex + 1} of ${board.moves.length}`
+                : `Start position \u2014 ${board.moves.length} moves`
               : "Play a move or load a game to begin"}
           </div>
 
@@ -504,13 +260,13 @@ export default function AnalysisPage() {
         {/* Right column: Move List + Opening Explorer */}
         <div className="w-full lg:w-80 flex flex-col gap-4">
           <MoveList
-            annotatedMoves={annotatedMoves}
-            activeMoveIndex={activeMoveIndex}
-            onMoveClick={handleMoveClick}
+            annotatedMoves={board.annotatedMoves}
+            activeMoveIndex={board.activeMoveIndex}
+            onMoveClick={board.handleMoveClick}
           />
           <OpeningExplorer
-            data={openingData}
-            onMoveClick={handleOpeningExplorerMoveClick}
+            data={board.openingData}
+            onMoveClick={board.handleOpeningExplorerMoveClick}
           />
         </div>
       </div>
