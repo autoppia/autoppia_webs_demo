@@ -65,6 +65,8 @@ jobs:
           # SONAR_TOKEN must be configured in repository secrets
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          # Pass branch so SonarCloud can treat it as long-lived (configure pattern in SonarCloud UI, e.g. fix/*)
+            # Pass branch so SonarCloud can treat it as long-lived (configure pattern in SonarCloud UI, e.g. fix/*)
+            # Import dependency-check SARIF so dependency risks appear as external issues (no Enterprise)
           args: >
             -Dsonar.branch.name=${{ github.ref_name }}
+            -Dsonar.sarifReportPaths=reports/dependency-check-report.sarif
