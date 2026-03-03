@@ -1,5 +1,6 @@
-# Core API and Logging
-fastapi==0.115.12
+# Core API and Logging (FastAPI>=0.134 allows starlette 0.49.x; starlette>=0.49.1 fixes CVE-2025-54121, CVE-2025-62727)
+fastapi>=0.134.0
+starlette>=0.49.1
 uvicorn[standard]==0.34.2
 loguru==0.7.3
 
@@ -9,8 +10,8 @@ pydantic==2.11.5
 # Database
 asyncpg==0.30.0
 
-# Performance
-orjson==3.10.18
+# Performance (>=3.11.6 fixes CVE-2025-67221)
+orjson>=3.11.6
 
 # Environment Variables
 python-dotenv==1.1.0
@@ -26,6 +27,3 @@ filelock>=3.20.3
 
 # HTTP client for health checks
 httpx>=0.27.0
-
-# TEST ONLY: vulnerable dependency to verify dependency-check (CVE-2020-14343). Remove after testing.
-PyYAML==5.1
