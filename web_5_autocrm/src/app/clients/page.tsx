@@ -36,7 +36,7 @@ const STORAGE_KEY_PREFIX = "clients";
 function ClientsDirectoryContent() {
   const [query, setQuery] = useState("");
   const dyn = useDynamicSystem();
-  const { seed } = useSeed();
+  const { seed, isSeedReady } = useSeed();
   const v2Seed = seed;
   const searchInputBase =
     "w-full h-12 pl-12 pr-4 rounded-2xl bg-neutral-bg-dark border border-zinc-200 text-md focus:outline-accent-forest focus:border-accent-forest placeholder-zinc-400 font-medium";
@@ -49,6 +49,7 @@ function ClientsDirectoryContent() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!isSeedReady) return;
     const loadClients = async () => {
       setIsLoading(true);
       try {
@@ -88,7 +89,7 @@ function ClientsDirectoryContent() {
     };
 
     loadClients();
-  }, [seed, v2Seed]);
+  }, [seed, v2Seed, isSeedReady]);
   const [clientList, setClientList] = useState(clients);
 
   useEffect(() => {

@@ -23,3 +23,6 @@ fastjsonschema==2.21.1
 
 # Optional file locking for safe concurrent writes
 filelock>=3.20.3
+
+# HTTP client for health checks
+httpx>=0.27.0

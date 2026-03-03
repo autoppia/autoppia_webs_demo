@@ -17,7 +17,7 @@ const LOADING_UI = (
 export function DataReadyGate({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const { seed } = useSeed();
+  const { seed, isSeedReady } = useSeed();
   const prevSeedRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -45,9 +45,9 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
     };
   }, [mounted]);
 
-  // On seed change: wait for reload so the email list appears with the right data
+  // On seed change: wait for reload so the email list appears with the right data. Only when URL seed is ready to avoid reload(1).
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || !isSeedReady) return;
     if (prevSeedRef.current === null) {
       prevSeedRef.current = seed;
       return;
@@ -67,7 +67,7 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
     };
 
     reloadData();
-  }, [seed, mounted]);
+  }, [seed, mounted, isSeedReady]);
 
   if (typeof window === "undefined") {
     return LOADING_UI;

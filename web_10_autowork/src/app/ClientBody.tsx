@@ -9,7 +9,7 @@ export default function ClientBody({
 }: {
   children: React.ReactNode;
 }) {
-  const { seed } = useSeed();
+  const { seed, isSeedReady } = useSeed();
 
   // Remove any extension-added classes during hydration
   useEffect(() => {
@@ -28,10 +28,11 @@ export default function ClientBody({
     }
   }, []);
 
-  // Keep V2 data in sync with the URL seed.
+  // Keep V2 data in sync with the URL seed. Only run when URL seed is ready to avoid duplicate call with seed=1.
   useEffect(() => {
+    if (!isSeedReady) return;
     dynamicDataProvider.reloadIfSeedChanged(seed);
-  }, [seed]);
+  }, [seed, isSeedReady]);
 
   return <div className="antialiased">{children}</div>;
 }

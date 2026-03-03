@@ -12,7 +12,7 @@ interface DataReadyGateProps {
  * DataReadyGate ensures autoconnect data is loaded before rendering children
  */
 export function DataReadyGate({ children, fallback }: DataReadyGateProps) {
-  const { seed } = useSeed();
+  const { seed, isSeedReady } = useSeed();
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -21,8 +21,10 @@ export function DataReadyGate({ children, fallback }: DataReadyGateProps) {
 
     const checkDataReady = async () => {
       try {
-        // Ensure provider is reloaded when seed changes.
-        dynamicDataProvider.reloadIfSeedChanged(seed);
+        // Only reload when URL seed is ready; avoid triggering reload(1) on first render.
+        if (isSeedReady) {
+          dynamicDataProvider.reloadIfSeedChanged(seed);
+        }
         await dynamicDataProvider.whenReady();
         if (!mounted) return;
         setIsReady(true);
@@ -59,7 +61,7 @@ export function DataReadyGate({ children, fallback }: DataReadyGateProps) {
       unsubscribeUsers();
       unsubscribePosts();
     };
-  }, [seed]);
+  }, [seed, isSeedReady]);
 
   if (isLoading) {
     return (

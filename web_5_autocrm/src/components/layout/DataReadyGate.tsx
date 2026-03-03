@@ -9,7 +9,7 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
   // Then verify on the client if it is actually ready
   const [ready, setReady] = useState(true);
   const [mounted, setMounted] = useState(false);
-  const { seed } = useSeed();
+  const { seed, isSeedReady } = useSeed();
 
   useEffect(() => {
     setMounted(true);
@@ -34,14 +34,14 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Reload data when seed changes
+  // Reload data when seed changes. Only run when URL seed is ready to avoid reload(1).
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || !isSeedReady) return;
 
     const reloadData = async () => {
       setReady(false);
       try {
-        await dynamicDataProvider.reload();
+        await dynamicDataProvider.reload(seed);
         setReady(true);
       } catch (error) {
         console.error("[autocrm] Failed to reload data on seed change", error);
@@ -50,7 +50,7 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
     };
 
     reloadData();
-  }, [seed, mounted]);
+  }, [seed, mounted, isSeedReady]);
 
   // During SSR and the first client render, show children
   // Only show loading if we are on the client and it truly is not ready

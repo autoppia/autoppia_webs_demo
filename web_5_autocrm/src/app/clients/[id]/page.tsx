@@ -55,7 +55,7 @@ function ClientProfilePageContent() {
   const clientId = params?.id as string;
   const seedRouter = useSeedRouter();
   const searchParams = useSearchParams();
-  const { seed } = useSeed();
+  const { seed, isSeedReady } = useSeed();
   const v2Seed = seed;
   const storageKey = useMemo(
     () => `${STORAGE_KEY_PREFIX}_${v2Seed ?? "default"}`,
@@ -67,7 +67,7 @@ function ClientProfilePageContent() {
     entityType: "clients",
     generateCount: 60,
     version: "v1",
-    seedValue: v2Seed ?? undefined,
+    seedValue: isSeedReady ? v2Seed : undefined,
   });
   const [fallbackClients, setFallbackClients] = useState<any[]>([]);
   useEffect(() => {
