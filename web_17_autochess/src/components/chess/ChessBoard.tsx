@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Chessboard } from "react-chessboard";
 
 interface ChessBoardProps {
@@ -11,8 +11,12 @@ interface ChessBoardProps {
   selectedSquare?: string | null;
   correctSquare?: string | null;
   incorrectSquare?: string | null;
+  lastMove?: { from: string; to: string } | null;
   onSquareClick?: (square: string) => void;
+  onDrop?: (from: string, to: string) => boolean;
   interactive?: boolean;
+  allowDragging?: boolean;
+  boardOrientation?: "white" | "black";
 }
 
 export function ChessBoard({
@@ -23,10 +27,13 @@ export function ChessBoard({
   selectedSquare = null,
   correctSquare = null,
   incorrectSquare = null,
+  lastMove = null,
   onSquareClick,
+  onDrop,
   interactive = false,
+  allowDragging = false,
+  boardOrientation = "white",
 }: ChessBoardProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -53,6 +60,16 @@ export function ChessBoard({
       boxShadow: "inset 0 0 0 2px rgba(32, 178, 170, 0.8)",
     };
   }
+  // Last move highlight (yellow tint on from/to squares)
+  if (lastMove) {
+    for (const sq of [lastMove.from, lastMove.to]) {
+      if (!customSquareStyles[sq]) {
+        customSquareStyles[sq] = {
+          backgroundColor: "rgba(255, 255, 0, 0.25)",
+        };
+      }
+    }
+  }
   for (const sq of highlightSquares) {
     if (!customSquareStyles[sq]) {
       customSquareStyles[sq] = {
@@ -61,6 +78,7 @@ export function ChessBoard({
     }
   }
 
+  // Only use onSquareClick (no onPieceClick) to avoid double-fire bug
   const handleSquareClick = useCallback(
     ({ square }: { piece: unknown; square: string }) => {
       if (interactive && onSquareClick) {
@@ -70,15 +88,25 @@ export function ChessBoard({
     [interactive, onSquareClick],
   );
 
-  if (!mounted) return <div ref={containerRef} style={size ? { width: size, aspectRatio: "1/1" } : { width: "100%", maxWidth: maxSize, aspectRatio: "1/1" }} className="bg-[#1c1917] rounded-lg" />;
+  const handlePieceDrop = useCallback(
+    ({ sourceSquare, targetSquare }: { piece: unknown; sourceSquare: string; targetSquare: string | null }) => {
+      if (!interactive || !onDrop || !targetSquare) return false;
+      return onDrop(sourceSquare, targetSquare);
+    },
+    [interactive, onDrop],
+  );
+
+  if (!mounted) return <div style={size ? { width: size, maxWidth: "100%", aspectRatio: "1/1" } : { width: "100%", maxWidth: maxSize, aspectRatio: "1/1" }} className="bg-[#1c1917] rounded-lg" />;
 
   return (
-    <div ref={containerRef} style={size ? { width: size, aspectRatio: "1/1" } : { width: "100%", maxWidth: maxSize, aspectRatio: "1/1" }}>
+    <div style={size ? { width: size, maxWidth: "100%", aspectRatio: "1/1" } : { width: "100%", maxWidth: maxSize, aspectRatio: "1/1" }}>
       <Chessboard
         options={{
           position: fen,
-          allowDragging: false,
+          allowDragging: allowDragging && interactive,
+          boardOrientation,
           onSquareClick: handleSquareClick,
+          onPieceDrop: handlePieceDrop,
           darkSquareStyle: { backgroundColor: "#486632" },
           lightSquareStyle: { backgroundColor: "#779952" },
           squareStyles: customSquareStyles,
@@ -99,10 +127,10 @@ export function MiniChessBoard({ fen, size = 160 }: { fen: string; size?: number
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
-  if (!mounted) return <div style={{ width: size, height: size }} className="bg-[#1c1917] rounded-md" />;
+  if (!mounted) return <div style={{ width: size, maxWidth: "100%", height: size }} className="bg-[#1c1917] rounded-md" />;
 
   return (
-    <div style={{ width: size, aspectRatio: "1/1" }}>
+    <div style={{ width: size, maxWidth: "100%", aspectRatio: "1/1" }}>
       <Chessboard
         options={{
           position: fen,

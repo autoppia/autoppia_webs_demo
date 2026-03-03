@@ -18,23 +18,23 @@ export function FeaturedTournaments({ tournaments }: FeaturedTournamentsProps) {
 
   return (
     <DynamicWrapper>
-      <section className="my-8">
-        <div className="flex items-center justify-between mb-5">
+      <section className="my-4 sm:my-8">
+        <div className="flex items-center justify-between mb-4 sm:mb-5">
           <div>
-            <h2 className="text-xl font-bold text-white">
+            <h2 className="text-lg sm:text-xl font-bold text-white">
               <DynamicText value="Featured Tournaments" type="text" />
             </h2>
-            <p className="text-sm text-stone-500 mt-0.5">Upcoming and ongoing events</p>
+            <p className="text-xs sm:text-sm text-stone-500 mt-0.5">Upcoming and ongoing events</p>
           </div>
           <button
             onClick={() => router.push("/tournaments")}
-            className="flex items-center gap-1 text-sm text-amber-400 hover:text-amber-300 transition-colors group"
+            className="flex items-center gap-1 text-sm text-amber-400 hover:text-amber-300 transition-colors group flex-shrink-0"
           >
             View all
             <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {featured.map((t, idx) => (
             <div
               key={t.id}
