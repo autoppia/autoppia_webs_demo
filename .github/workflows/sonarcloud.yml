@@ -43,6 +43,30 @@ jobs:
           pip install -r webs_server/requirements.txt
           pip install pytest pytest-cov httpx
 
+      - name: Audit (pip-audit)
+        run: |
+          pip install pip-audit
+          mkdir -p reports
+          pip-audit -f json 2>/dev/null > reports/pip-audit.json || true
+        continue-on-error: true
+
+      - name: Count (direct deps vulns)
+        id: pip_audit
+        run: |
+          count=$(python .github/scripts/pip_audit_count.py)
+          echo "pip_audit_vuln_count=$count" >> "$GITHUB_OUTPUT"
+          echo "Direct dependency vulnerabilities: $count"
+
+      - name: List (pip-audit table)
+        if: steps.pip_audit.outputs.pip_audit_vuln_count != '0'
+        run: pip-audit
+
+      - name: Fail if direct deps have vulnerabilities
+        if: steps.pip_audit.outputs.pip_audit_vuln_count != '0'
+        run: |
+          echo "::error::Dependency vulnerabilities found (pip-audit: ${{ steps.pip_audit.outputs.pip_audit_vuln_count }}). Fix them before merging."
+          exit 1
+
       - name: Run tests with coverage
         working-directory: webs_server
         run: |
