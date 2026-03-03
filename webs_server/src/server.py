@@ -492,12 +492,12 @@ async def get_events_endpoint(
     web_url: Annotated[str, Query(description="The specific web URL to filter events for.")],
     web_agent_id: Annotated[
         str,
-        Query(default="UNKNOWN_AGENT", max_length=255, description="The specific web agent ID to filter events for."),
-    ],
+        Query(max_length=255, description="The specific web agent ID to filter events for."),
+    ] = "UNKNOWN_AGENT",
     validator_id: Annotated[
         str,
-        Query(default="UNKNOWN_VALIDATOR", max_length=255, description="The specific validator ID to filter events for."),
-    ],
+        Query(max_length=255, description="The specific validator ID to filter events for."),
+    ] = "UNKNOWN_VALIDATOR",
 ):
     """
     Retrieves events, utilizing prepared statements.
@@ -564,9 +564,12 @@ async def reset_events_endpoint(
     web_url: Annotated[str, Query(description="The web URL for which all events should be deleted.")],
     web_agent_id: Annotated[
         str,
-        Query(default="UNKNOWN_AGENT", max_length=255, description="The specific web agent ID."),
-    ],
-    validator_id: Annotated[str, Query(description="The validator ID associated with the events.")],
+        Query(max_length=255, description="The specific web agent ID."),
+    ] = "UNKNOWN_AGENT",
+    validator_id: Annotated[
+        str,
+        Query(max_length=255, description="The validator ID associated with the events."),
+    ] = "UNKNOWN_VALIDATOR",
 ):
     """
     Deletes all events for a given web_url, web_agent_id, and validator_id using a prepared statement.
@@ -945,11 +948,11 @@ async def load_dataset_endpoint(
     project_key: Annotated[str, Query(description=DESC_PROJECT_KEY)],
     entity_type: Annotated[str, Query(description=DESC_ENTITY_TYPE)],
     seed_value: Annotated[int, Query(description="Seed value for deterministic selection")],
-    limit: Annotated[int, Query(default=50, ge=1, le=500, description="Maximum items to return")],
+    limit: Annotated[int, Query(ge=1, le=500, description="Maximum items to return")] = 50,
     method: Annotated[
         str,
-        Query(default="select", description="Selection method: select, shuffle, filter, distribute"),
-    ],
+        Query(description="Selection method: select, shuffle, filter, distribute"),
+    ] = "select",
     filter_key: Annotated[Optional[str], Query(description="Key to filter on (for filter method)")] = None,
     filter_values: Annotated[Optional[str], Query(description="Comma-separated values to filter (for filter method)")] = None,
 ):
