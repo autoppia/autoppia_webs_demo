@@ -1,6 +1,5 @@
 import asyncio
 import os
-import re
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from typing import Annotated, List, Dict, Any, Optional
@@ -142,19 +141,32 @@ def extract_json_from_content(content: str) -> str:
     if content.startswith("[") and content.endswith("]"):
         return content
 
-    # Try to extract from markdown code blocks
-    # Match ```json ... ``` or ``` ... ``` (non-greedy, multiline)
-    markdown_pattern = r"```(?:json)?\s*\n?(.*?)\n?```"
-    matches = list(re.finditer(markdown_pattern, content, re.DOTALL))
-    if matches:
-        # Try each match, return the first one that looks like a JSON array
-        for match in matches:
-            extracted = match.group(1).strip()
+    # Try to extract from markdown code blocks (```json ... ``` or ``` ... ```)
+    # Use string search instead of regex to avoid ReDoS (S5852).
+    block_start = "```"
+    start = 0
+    code_blocks: List[str] = []
+    while True:
+        open_idx = content.find(block_start, start)
+        if open_idx == -1:
+            break
+        pos = open_idx + len(block_start)
+        while pos < len(content) and content[pos] in " \t\n\r":
+            pos += 1
+        if pos + 4 <= len(content) and content[pos : pos + 4].lower() == "json":
+            pos += 4
+        while pos < len(content) and content[pos] in " \t\n\r":
+            pos += 1
+        close_idx = content.find(block_start, pos)
+        if close_idx == -1:
+            break
+        code_blocks.append(content[pos:close_idx].strip())
+        start = close_idx + len(block_start)
+    if code_blocks:
+        for extracted in code_blocks:
             if extracted.startswith("[") and extracted.endswith("]"):
                 return extracted
-        # If none start with [, return the last match (most likely to be the data)
-        if matches:
-            return matches[-1].group(1).strip()
+        return code_blocks[-1]
 
     # Try to find JSON array by finding first [ and last ]
     # This handles cases where there's text before/after the JSON
