@@ -272,7 +272,7 @@ Generate a JSON dataset with OpenAI and save it to file storage under `/app/data
 
 Requirements:
   * **Optional:** Set `OPENAI_API_KEY` in your environment only if you want to generate additional data. Each web already has static datasets in `initial_data/`, so this endpoint is **not required** for basic operation.
-  * To save, provide both `project_key` and `entity_type`. The server saves to `/app/data/<project_key>/data/`.
+  * To save, provide both `project_key` and `entity_type`. The server saves to `/app/data/<project_key>/`.
 
 Request Body (DataGenerationRequest):
   * `interface_definition` (string, required): TypeScript interface describing the target shape.
@@ -309,15 +309,15 @@ Success Response (200):
   "generated_data": [ /* array of Product */ ],
   "count": 25,
   "generation_time": 1.82,
-  "saved_path": "/app/data/demo_shop/data/products_20250101_123456.json"
+  "saved_path": "/app/data/demo_shop/products_20250101_123456.json"
 }
 ```
 
 Notes on File Storage:
-  * Files are stored under `/app/data/<project_key>/data/`.
+  * Files are stored under `/app/data/<project_key>/`.
   * The server maintains `/app/data/<project_key>/main.json` as an index:
     ```json
-    { "products": ["./data/products_20250101_123456.json", "./data/products_20250101_133000.json"] }
+    { "products": ["./products_20250101_123456.json", "./products_20250101_133000.json"] }
     ```
   * New data is appended to the latest file for the entity; when the file would exceed `DATA_FILE_MAX_BYTES`, the server rolls over to a new file automatically.
   * Writes use file locks (if `filelock` is installed) and atomic replace to avoid partial JSON on disk.

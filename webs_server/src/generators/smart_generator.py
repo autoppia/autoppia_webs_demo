@@ -2,7 +2,7 @@
 Smart data generator that automatically infers structure from existing data.
 
 This module provides utilities to generate data for any project/entity by:
-1. Reading existing example data from initial_data/{project_key}/data/{entity_type}_1.json
+1. Reading existing example data from initial_data/{project_key}/{entity_type}_1.json
 2. Using those examples to generate a prompt for OpenAI
 3. Generating new data with the same structure
 """
@@ -28,8 +28,8 @@ def load_example_data(project_key: str, entity_type: str, max_examples: int = 3)
     Returns:
         List of example objects
     """
-    # Try to load from initial_data first
-    data_file = BASE_DATA_PATH / project_key / "data" / f"{entity_type}_1.json"
+    # Try to load from project directory (flat layout)
+    data_file = BASE_DATA_PATH / project_key / f"{entity_type}_1.json"
 
     if not data_file.exists():
         raise FileNotFoundError(f"No example data found at {data_file}")

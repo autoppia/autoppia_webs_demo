@@ -710,7 +710,7 @@ Output strictly a JSON array only.
 def save_generated_data_file_storage(data: List[Dict[str, Any]], project_key: str, entity_type: str) -> str:
     """
     Save generated data to file storage using the new persistent volume structure:
-    /app/data/<project_key>/data/<entity_type>_<timestamp>.json
+    /app/data/<project_key>/<entity_type>_<timestamp>.json
     Returns the absolute path where the file was saved.
     """
     saved_path = append_or_rollover_entity_data(project_key, entity_type, data)
@@ -783,10 +783,10 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
         }
 
     The system will:
-    1. Read existing examples from initial_data/{project_key}/data/{entity_type}_1.json
+    1. Read existing examples from initial_data/{project_key}/{entity_type}_1.json
     2. Infer the TypeScript interface from those examples
     3. Use OpenAI to generate new data with the same structure
-    4. Save to initial_data/{project_key}/data/{entity_type}_N.json
+    4. Save to initial_data/{project_key}/{entity_type}_N.json
     """
     start = datetime.now()
 
@@ -940,11 +940,11 @@ async def load_dataset_endpoint(
     filter_values: Optional[str] = Query(None, description="Comma-separated values to filter (for filter method)"),
 ):
     """
-    Load data from a single directory (data/). Original data lives in the first file
-    (e.g. data/{entity_type}_1.json). Full pool = all files for that entity in data/.
+    Load data from the project directory (flat layout). Original data lives in the first file
+    (e.g. {entity_type}_1.json). Full pool = all files for that entity listed in main.json.
 
     - v2 disabled or seed=1: return original data only (first file), up to limit.
-    - v2 enabled and 1 < seed <= 999: load full pool from data/, then apply deterministic
+    - v2 enabled and 1 < seed <= 999: load full pool, then apply deterministic
       seeded selection — same seed always returns the same items (reproducible).
     """
     try:

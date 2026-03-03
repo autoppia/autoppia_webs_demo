@@ -2,9 +2,10 @@
 File-based data storage handler for webs_server.
 Manages reading/writing JSON data files under /app/data.
 
-Single-directory layout: only data/ is used (no separate original/ directory).
-- Original data: first file per entity, e.g. data/{entity_type}_1.json.
-- Full pool: all files for that entity listed in main.json (data/*.json).
+Flat layout: entity files (e.g. {entity_type}_1.json) live next to main.json
+under {BASE_PATH}/{web_name}/ (no data/ subdirectory).
+- Original data: first file per entity, e.g. {entity_type}_1.json.
+- Full pool: all files for that entity listed in main.json.
 - v2 disabled or seed=1 → load original only (first file).
 - v2 enabled and 1 < seed <= 999 → load full pool and apply seeded selection (reproducible).
 
@@ -41,8 +42,8 @@ def get_main_path(web_name: str) -> str:
 
 
 def get_data_dir(web_name: str) -> str:
-    """Return path to data directory for a given web_name."""
-    path = f"{BASE_PATH}/{web_name}/data"
+    """Return path to project directory for a given web_name (flat layout: no data/ subdir)."""
+    path = f"{BASE_PATH}/{web_name}"
     logger.debug("get_data_dir", extra={"web_name": web_name, "path": path})
     return path
 
@@ -90,8 +91,8 @@ def _parse_json_file_to_items(file_path: str) -> Optional[List[Dict[str, Any]]]:
 
 def _load_first_file_only(web_name: str, entity_type: Optional[str]) -> List[Dict[str, Any]]:
     """
-    Load only the first file for the entity from data/ (original data).
-    Used when v2 is disabled or seed=1. Single directory: data/ only.
+    Load only the first file for the entity from the project directory (original data).
+    Used when v2 is disabled or seed=1. Flat layout: files next to main.json.
     """
     data_dir = get_data_dir(web_name)
     if entity_type:
@@ -136,7 +137,7 @@ def _load_first_file_only(web_name: str, entity_type: Optional[str]) -> List[Dic
 
 def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], entity_type: str) -> str:
     """
-    Save data to a single file under {BASE_PATH}/{web_name}/data/{filename}.
+    Save data to a single file under {BASE_PATH}/{web_name}/{filename}.
     Also updates main.json to reference this file under the entity_type key.
 
     Args:
@@ -188,7 +189,7 @@ def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], ent
         main = {}
 
     # Add file reference under entity_type
-    relative_path = f"./data/{filename}"
+    relative_path = f"./{filename}"
     if entity_type not in main:
         main[entity_type] = []
 
@@ -210,11 +211,11 @@ def load_all_data(
     seed_value: Optional[int] = None,
 ) -> List[Dict[str, Any]]:
     """
-    Load data from a single directory (data/) for the given web_name.
+    Load data from the project directory (flat layout) for the given web_name.
 
     - When v2 is disabled or seed=1: return original data only (first file per entity:
-      data/{entity_type}_1.json). Same data every time.
-    - When v2 is enabled and 1 < seed <= 999: load the full pool from data/ (all files
+      {entity_type}_1.json). Same data every time.
+    - When v2 is enabled and 1 < seed <= 999: load the full pool (all files
       referenced in main.json), then the caller applies seeded selection for reproducible
       picks (same seed => same selection).
     """
@@ -442,7 +443,7 @@ def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, 
     else:
         main = {}
 
-    relative_path = f"./data/{filename}"
+    relative_path = f"./{filename}"
     if entity_type not in main:
         main[entity_type] = []
 

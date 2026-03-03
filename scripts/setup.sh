@@ -485,7 +485,7 @@ deploy_webs_server() {
   for project in $WEBS_PROJECTS; do
     if [ ! -f "$WEBS_DATA_PATH/$project/main.json" ]; then
       echo "  → Initializing $project master pool (100 records)..."
-      mkdir -p "$WEBS_DATA_PATH/$project/data"
+      mkdir -p "$WEBS_DATA_PATH/$project"
       if [ -d "$DEMOS_DIR/webs_server/initial_data/$project" ]; then
         cp -r "$DEMOS_DIR/webs_server/initial_data/$project"/* "$WEBS_DATA_PATH/$project/"
         echo "  ✅ $project master pool initialized"
@@ -493,31 +493,29 @@ deploy_webs_server() {
         echo "  ⚠️  No initial data found for $project (will need to generate)"
       fi
     else
-  echo "  ✓ $project master pool already exists ($(cat "$WEBS_DATA_PATH/$project/main.json" | grep -o '"./data/[^"]*"' | wc -l) files)"
+  echo "  ✓ $project master pool already exists ($(cat "$WEBS_DATA_PATH/$project/main.json" | grep -o '"\.[^"]*\.json"' | wc -l) files)"
   fi
 done
 
 echo "✅ Master pools ready"
 
-# Copy data from repo to container (single directory: data/ only; original = first file in data/)
+# Copy data from repo to container (flat layout: main.json and entity JSONs in project dir)
 if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
   REPO_DATA_DIR="$DEMOS_DIR/webs_server/initial_data"
   echo "📦 Copying data pools from repo to webs_server container..."
   for project in $WEBS_PROJECTS; do
     SRC_MAIN="$REPO_DATA_DIR/$project/main.json"
-    SRC_DATA_DIR="$REPO_DATA_DIR/$project/data"
+    SRC_PROJECT_DIR="$REPO_DATA_DIR/$project"
 
-    if [ -f "$SRC_MAIN" ] || [ -d "$SRC_DATA_DIR" ]; then
+    if [ -f "$SRC_MAIN" ] || [ -d "$SRC_PROJECT_DIR" ]; then
       echo "  → Copying $project to container (from repo)..."
-      docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data 2>/dev/null || true
+      docker exec -u root webs_server-app-1 mkdir -p /app/data/$project 2>/dev/null || true
       [ -f "$SRC_MAIN" ] && docker cp "$SRC_MAIN" webs_server-app-1:/app/data/$project/main.json 2>/dev/null || true
-      if [ -d "$SRC_DATA_DIR" ]; then
-        for data_file in "$SRC_DATA_DIR"/*.json; do
-          if [ -f "$data_file" ]; then
-            docker cp "$data_file" webs_server-app-1:/app/data/$project/data/ 2>/dev/null || true
-          fi
-        done
-      fi
+      for data_file in "$SRC_PROJECT_DIR"/*.json; do
+        if [ -f "$data_file" ] && [ "$(basename "$data_file")" != "main.json" ]; then
+          docker cp "$data_file" webs_server-app-1:/app/data/$project/ 2>/dev/null || true
+        fi
+      done
       docker exec -u root webs_server-app-1 chown -R appuser:appuser /app/data/$project 2>/dev/null || true
       echo "  ✅ $project copied to container"
     fi
@@ -617,19 +615,19 @@ case "$WEB_DEMO" in
     deploy_webs_server
     echo "📦 Deploying all web projects in parallel (max $PARALLEL_JOBS concurrent)..."
     open_sem "$PARALLEL_JOBS"
-    run_with_limit deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
-    run_with_limit deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
-    run_with_limit deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
-    run_with_limit deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
-    run_with_limit deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
-    run_with_limit deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
-    run_with_limit deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
-    run_with_limit deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
-    run_with_limit deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
-    run_with_limit deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-    run_with_limit deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
-    run_with_limit deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
-    run_with_limit deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
+#    run_with_limit deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
+#    run_with_limit deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
+#    run_with_limit deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
+#    run_with_limit deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
+#    run_with_limit deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
+#    run_with_limit deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
+#    run_with_limit deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
+#    run_with_limit deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
+#    run_with_limit deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
+#    run_with_limit deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+#    run_with_limit deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
+#    run_with_limit deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+#    run_with_limit deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
     run_with_limit deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     failed=0
     for pid in "${PARALLEL_PIDS[@]}"; do
