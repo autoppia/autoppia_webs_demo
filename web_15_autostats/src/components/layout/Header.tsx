@@ -1,14 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { DynamicWrapper } from '@/dynamic/v1/DynamicWrapper';
 import { DynamicText } from '@/dynamic/v3/DynamicText';
 import { Search } from 'lucide-react';
 import { WalletButton } from '@/components/wallet/WalletButton';
+import { GlobalSearchModal } from '@/components/search/GlobalSearchModal';
 
 export function Header() {
   const router = useSeedRouter();
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -38,13 +40,19 @@ export function Header() {
 
             <WalletButton />
 
-            <button className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/10 transition-colors border border-white/10">
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/10 transition-colors border border-white/10"
+              aria-label="Open search"
+            >
               <Search className="h-4 w-4" />
               <span className="hidden sm:inline">Search</span>
             </button>
           </div>
         </div>
       </header>
+      <GlobalSearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
       {/* Spacer to prevent content from going under fixed header */}
       <div className="h-16" />
     </DynamicWrapper>
