@@ -1,13 +1,17 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useSeed } from '@/context/SeedContext';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
-import { searchSubnets } from '@/data/mockSubnets';
-import { searchValidators } from '@/data/mockValidators';
-import { searchBlocks } from '@/data/mockBlocks';
-import { searchAccounts } from '@/data/mockAccounts';
+import {
+  generateSubnetsWithTrends,
+  generateValidatorsWithTrends,
+  generateBlocksWithDetails,
+  generateAccountsWithDetails,
+} from '@/data/generators';
 import { Input } from '@/components/ui/input';
 import { Network, Shield, Blocks, Wallet, Search, X } from 'lucide-react';
+import type { SubnetWithTrend, ValidatorWithTrend, BlockWithDetails, AccountWithDetails } from '@/shared/types';
 
 const MAX_PER_CATEGORY = 5;
 
@@ -16,28 +20,91 @@ interface GlobalSearchModalProps {
   onClose: () => void;
 }
 
+function filterSubnets(subnets: SubnetWithTrend[], q: string): SubnetWithTrend[] {
+  if (!q) return subnets.slice(0, MAX_PER_CATEGORY);
+  const lower = q.toLowerCase();
+  return subnets
+    .filter(
+      (s) =>
+        s.name.toLowerCase().includes(lower) ||
+        s.id.toString().includes(lower) ||
+        s.description.toLowerCase().includes(lower)
+    )
+    .slice(0, MAX_PER_CATEGORY);
+}
+
+function filterValidators(validators: ValidatorWithTrend[], q: string): ValidatorWithTrend[] {
+  if (!q) return validators.slice(0, MAX_PER_CATEGORY);
+  const lower = q.toLowerCase();
+  return validators
+    .filter(
+      (v) =>
+        v.hotkey.toLowerCase().includes(lower) ||
+        v.coldkey.toLowerCase().includes(lower)
+    )
+    .slice(0, MAX_PER_CATEGORY);
+}
+
+function filterBlocks(blocks: BlockWithDetails[], q: string): BlockWithDetails[] {
+  if (!q) return blocks.slice(0, MAX_PER_CATEGORY);
+  const lower = q.toLowerCase();
+  return blocks
+    .filter(
+      (b) =>
+        b.number.toString().includes(lower) ||
+        b.hash.toLowerCase().includes(lower)
+    )
+    .slice(0, MAX_PER_CATEGORY);
+}
+
+function filterAccounts(accounts: AccountWithDetails[], q: string): AccountWithDetails[] {
+  if (!q) return accounts.slice(0, MAX_PER_CATEGORY);
+  const lower = q.toLowerCase();
+  return accounts
+    .filter((a) => a.address.toLowerCase().includes(lower))
+    .slice(0, MAX_PER_CATEGORY);
+}
+
 export function GlobalSearchModal({ open, onClose }: GlobalSearchModalProps) {
   const router = useSeedRouter();
+  const { seed } = useSeed();
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const [seededData, setSeededData] = useState<{
+    subnets: SubnetWithTrend[];
+    validators: ValidatorWithTrend[];
+    blocks: BlockWithDetails[];
+    accounts: AccountWithDetails[];
+  } | null>(null);
 
+  // Generate same seeded data as list pages when modal opens so search matches what user sees
+  useEffect(() => {
+    if (!open || seed == null) return;
+    setSeededData({
+      subnets: generateSubnetsWithTrends(32, seed),
+      validators: generateValidatorsWithTrends(100, seed),
+      blocks: generateBlocksWithDetails(200, seed),
+      accounts: generateAccountsWithDetails(200, seed),
+    });
+  }, [open, seed]);
+
+  const trimmedQuery = query.trim();
   const results = useMemo(() => {
-    const q = query.trim();
-    if (!q) {
+    if (!seededData) {
       return {
-        subnets: searchSubnets('').slice(0, MAX_PER_CATEGORY),
-        validators: searchValidators('').slice(0, MAX_PER_CATEGORY),
-        blocks: searchBlocks('').slice(0, MAX_PER_CATEGORY),
-        accounts: searchAccounts('').slice(0, MAX_PER_CATEGORY),
+        subnets: [],
+        validators: [],
+        blocks: [],
+        accounts: [],
       };
     }
     return {
-      subnets: searchSubnets(q).slice(0, MAX_PER_CATEGORY),
-      validators: searchValidators(q).slice(0, MAX_PER_CATEGORY),
-      blocks: searchBlocks(q).slice(0, MAX_PER_CATEGORY),
-      accounts: searchAccounts(q).slice(0, MAX_PER_CATEGORY),
+      subnets: filterSubnets(seededData.subnets, trimmedQuery),
+      validators: filterValidators(seededData.validators, trimmedQuery),
+      blocks: filterBlocks(seededData.blocks, trimmedQuery),
+      accounts: filterAccounts(seededData.accounts, trimmedQuery),
     };
-  }, [query]);
+  }, [seededData, trimmedQuery]);
 
   const hasAny =
     results.subnets.length > 0 ||
@@ -111,12 +178,17 @@ export function GlobalSearchModal({ open, onClose }: GlobalSearchModalProps) {
         </div>
 
         <div className="max-h-[60vh] overflow-y-auto p-2">
-          {query.trim() && !hasAny && (
+          {seededData == null && (
             <p className="px-2 py-6 text-sm text-zinc-500 text-center">
-              No results for &quot;{query}&quot;
+              Loading search index…
             </p>
           )}
-          {hasAny && (
+          {seededData != null && trimmedQuery && !hasAny && (
+            <p className="px-2 py-6 text-sm text-zinc-500 text-center">
+              No results for &quot;{trimmedQuery}&quot;
+            </p>
+          )}
+          {seededData != null && hasAny && (
             <div className="space-y-4">
               {results.subnets.length > 0 && (
                 <section>
@@ -137,7 +209,7 @@ export function GlobalSearchModal({ open, onClose }: GlobalSearchModalProps) {
                       </li>
                     ))}
                   </ul>
-                  {query.trim() && (
+                  {trimmedQuery && (
                     <button
                       type="button"
                       onClick={() => navigateAndClose('/subnets')}
@@ -170,7 +242,7 @@ export function GlobalSearchModal({ open, onClose }: GlobalSearchModalProps) {
                       </li>
                     ))}
                   </ul>
-                  {query.trim() && (
+                  {trimmedQuery && (
                     <button
                       type="button"
                       onClick={() => navigateAndClose('/validators')}
@@ -202,7 +274,7 @@ export function GlobalSearchModal({ open, onClose }: GlobalSearchModalProps) {
                       </li>
                     ))}
                   </ul>
-                  {query.trim() && (
+                  {trimmedQuery && (
                     <button
                       type="button"
                       onClick={() => navigateAndClose('/blocks')}
@@ -237,7 +309,7 @@ export function GlobalSearchModal({ open, onClose }: GlobalSearchModalProps) {
                       </li>
                     ))}
                   </ul>
-                  {query.trim() && (
+                  {trimmedQuery && (
                     <button
                       type="button"
                       onClick={() => navigateAndClose('/accounts')}
