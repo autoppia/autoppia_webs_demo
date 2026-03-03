@@ -45,11 +45,9 @@ def discover_projects_and_entities(initial_data_dir: str) -> Dict[str, Set[str]]
         for filename in os.listdir(project_dir):
             if not filename.endswith(".json") or filename == "main.json":
                 continue
-            # Expect format like '<entity>_1.json' or '<entity>_20241120.json'
+            # Accept '<entity>.json', '<entity>_1.json', or '<entity>_20241120.json'
             name, _ext = os.path.splitext(filename)
-            if "_" not in name:
-                continue
-            entity = name.rsplit("_", 1)[0]
+            entity = name.rsplit("_", 1)[0] if "_" in name else name
             if entity:
                 entity_types.add(entity)
 
