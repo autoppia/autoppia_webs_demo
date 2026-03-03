@@ -18,7 +18,7 @@
     "dayjs": "^1.11.13",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.475.0",
-    "next": "^15.5.8",
+    "next": "^15.5.10",
     "react": "^18.3.1",
     "react-day-picker": "8.10.1",
     "react-dom": "^18.3.1",
@@ -41,7 +41,7 @@
   "overrides": {
     "glob": ">=10.5.0",
     "js-yaml": ">=4.1.1",
-    "minimatch": ">=9.0.7",
+    "minimatch": ">=10.2.3",
     "@isaacs/brace-expansion": ">=5.0.1"
   }
 }
