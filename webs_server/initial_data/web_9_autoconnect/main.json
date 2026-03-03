@@ -1,14 +1,14 @@
 {
   "jobs": [
-    "./jobs_1.json"
+    "./jobs.json"
   ],
   "posts": [
-    "./posts_1.json"
+    "./posts.json"
   ],
   "users": [
-    "./users_1.json"
+    "./users.json"
   ],
   "recommendations": [
-    "./recommendations_1.json"
+    "./recommendations.json"
   ]
 }

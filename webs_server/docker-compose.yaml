@@ -36,9 +36,6 @@ services:
         condition: service_healthy
     networks:
       - apps_net
-    volumes:
-      # Use WEBS_DATA_PATH env var (set by setup.sh, works on any server)
-      - ${WEBS_DATA_PATH}:/app/data
 
   db:
     image: postgres:15-alpine
@@ -71,7 +68,6 @@ services:
 
 volumes:
   webs_postgres_data:
-  webs_data:
 
 networks:
   apps_net:
