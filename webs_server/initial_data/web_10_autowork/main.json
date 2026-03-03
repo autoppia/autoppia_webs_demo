@@ -1,14 +1,14 @@
 {
   "experts": [
-    "./experts_1.json"
+    "./experts.json"
   ],
   "hires": [
-    "./hires_1.json"
+    "./hires.json"
   ],
   "jobs": [
-    "./jobs_1.json"
+    "./jobs.json"
   ],
   "skills": [
-    "./skills_1.json"
+    "./skills.json"
   ]
 }
