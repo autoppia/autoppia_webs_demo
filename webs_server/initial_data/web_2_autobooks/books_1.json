@@ -1,0 +1,3474 @@
+[
+  {
+    "id": "book-1",
+    "name": "The Odyssey",
+    "desc": "An epic poem following Odysseus's ten-year journey home after the Trojan War, encountering gods, monsters, and temptations.",
+    "year": -800,
+    "img": "/media/gallery/9780140268867.webp",
+    "director": "Homer",
+    "duration": 541,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140268867?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Epic",
+      "Classic"
+    ]
+  },
+  {
+    "id": "book-2",
+    "name": "The Iliad",
+    "desc": "An epic poem about the Trojan War, focusing on the rage of Achilles and the consequences of war.",
+    "year": -750,
+    "img": "/media/gallery/9780140275360.webp",
+    "director": "Homer",
+    "duration": 683,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140275360?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Epic",
+      "Classic"
+    ]
+  },
+  {
+    "id": "book-3",
+    "name": "Hamlet",
+    "desc": "A tragedy about Prince Hamlet's quest for revenge against his uncle who murdered his father, the King of Denmark.",
+    "year": 1603,
+    "img": "/media/gallery/9780486272788.webp",
+    "director": "William Shakespeare",
+    "duration": 342,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486272788?hl=en&gbpv=1",
+    "rating": 4.8,
+    "price": 9.99,
+    "genres": [
+      "Drama",
+      "Classic"
+    ]
+  },
+  {
+    "id": "book-4",
+    "name": "Romeo and Juliet",
+    "desc": "A tragic love story about two young star-crossed lovers whose deaths ultimately unite their feuding families.",
+    "year": 1597,
+    "img": "/media/gallery/9780486275574.webp",
+    "director": "William Shakespeare",
+    "duration": 281,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486275574?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 8.99,
+    "genres": [
+      "Romance",
+      "Drama"
+    ]
+  },
+  {
+    "id": "book-5",
+    "name": "Macbeth",
+    "desc": "A tragedy about a Scottish general who receives a prophecy that he will become King of Scotland and commits regicide to fulfill it.",
+    "year": 1623,
+    "img": "/media/gallery/9780486278025.webp",
+    "director": "William Shakespeare",
+    "duration": 249,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486278025?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 9.99,
+    "genres": [
+      "Drama",
+      "Tragedy"
+    ]
+  },
+  {
+    "id": "book-6",
+    "name": "The Canterbury Tales",
+    "desc": "A collection of 24 stories told by pilgrims traveling to Canterbury, providing a vivid portrait of medieval English society.",
+    "year": 1400,
+    "img": "/media/gallery/9780140422344.webp",
+    "director": "Geoffrey Chaucer",
+    "duration": 504,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140422344?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Poetry",
+      "Classic"
+    ]
+  },
+  {
+    "id": "book-7",
+    "name": "Paradise Lost",
+    "desc": "An epic poem retelling the biblical story of the Fall of Man, focusing on Satan's rebellion and Adam and Eve's expulsion from Eden.",
+    "year": 1667,
+    "img": "/media/gallery/9780140424393.webp",
+    "director": "John Milton",
+    "duration": 453,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140424393?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 12.99,
+    "genres": [
+      "Poetry",
+      "Epic"
+    ]
+  },
+  {
+    "id": "book-8",
+    "name": "Robinson Crusoe",
+    "desc": "The story of a man shipwrecked on a desert island for 28 years, learning to survive and eventually finding companionship with Friday.",
+    "year": 1719,
+    "img": "/media/gallery/9780141439822.webp",
+    "director": "Daniel Defoe",
+    "duration": 320,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780141439822?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 10.99,
+    "genres": [
+      "Adventure",
+      "Fiction"
+    ]
+  },
+  {
+    "id": "book-9",
+    "name": "Gulliver's Travels",
+    "desc": "A satirical novel following Lemuel Gulliver's travels to four fantastical lands, satirizing human nature and society.",
+    "year": 1726,
+    "img": "/media/gallery/9780141439495.webp",
+    "director": "Jonathan Swift",
+    "duration": 306,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780141439495?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Satire",
+      "Fantasy"
+    ]
+  },
+  {
+    "id": "book-10",
+    "name": "Candide",
+    "desc": "A satirical novella following the optimistic Candide as he experiences numerous misfortunes, questioning the philosophy of optimism.",
+    "year": 1759,
+    "img": "/media/gallery/9780486266893.webp",
+    "director": "Voltaire",
+    "duration": 129,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486266893?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 9.99,
+    "genres": [
+      "Satire",
+      "Philosophy"
+    ]
+  },
+  {
+    "id": "book-11",
+    "name": "The Scarlet Letter",
+    "desc": "Set in Puritan Massachusetts, the story of Hester Prynne who bears a child out of wedlock and must wear a scarlet 'A' as punishment.",
+    "year": 1850,
+    "img": "/media/gallery/9780486280486.webp",
+    "director": "Nathaniel Hawthorne",
+    "duration": 238,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486280486?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 10.99,
+    "genres": [
+      "Fiction",
+      "Classic"
+    ]
+  },
+  {
+    "id": "book-12",
+    "name": "Uncle Tom's Cabin",
+    "desc": "An anti-slavery novel that depicts the harsh reality of slavery and its impact on families, contributing to the abolitionist movement.",
+    "year": 1852,
+    "img": "/media/gallery/9780486440281.webp",
+    "director": "Harriet Beecher Stowe",
+    "duration": 438,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486440281?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-13",
+    "name": "Walden",
+    "desc": "A reflection on simple living in natural surroundings, documenting Thoreau's two-year experiment in self-sufficient living near Walden Pond.",
+    "year": 1854,
+    "img": "/media/gallery/9780486284956.webp",
+    "director": "Henry David Thoreau",
+    "duration": 352,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486284956?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Philosophy",
+      "Non-Fiction"
+    ]
+  },
+  {
+    "id": "book-14",
+    "name": "Leaves of Grass",
+    "desc": "A collection of poetry celebrating democracy, nature, love, and friendship, written in free verse and considered a masterpiece of American literature.",
+    "year": 1855,
+    "img": "/media/gallery/9780486419211.webp",
+    "director": "Walt Whitman",
+    "duration": 624,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486419211?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Poetry",
+      "Classic"
+    ]
+  },
+  {
+    "id": "book-15",
+    "name": "Madame Bovary",
+    "desc": "The story of Emma Bovary, a doctor's wife who seeks escape from her provincial life through romantic affairs and material excess.",
+    "year": 1856,
+    "img": "/media/gallery/9780486284772.webp",
+    "director": "Gustave Flaubert",
+    "duration": 329,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486284772?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Realism"
+    ]
+  },
+  {
+    "id": "book-16",
+    "name": "Great Expectations",
+    "desc": "A bildungsroman following Pip, an orphan who receives a mysterious fortune and navigates social class, love, and identity in Victorian England.",
+    "year": 1861,
+    "img": "/media/gallery/9780486419264.webp",
+    "director": "Charles Dickens",
+    "duration": 505,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486419264?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Classic"
+    ]
+  },
+  {
+    "id": "book-17",
+    "name": "A Tale of Two Cities",
+    "desc": "Set during the French Revolution, the story follows characters in London and Paris, exploring themes of sacrifice, resurrection, and justice.",
+    "year": 1859,
+    "img": "/media/gallery/9780486406512.webp",
+    "director": "Charles Dickens",
+    "duration": 489,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486406512?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Historical Fiction",
+      "Classic"
+    ]
+  },
+  {
+    "id": "book-18",
+    "name": "Oliver Twist",
+    "desc": "The story of an orphan boy who escapes from a workhouse and falls in with a gang of pickpockets in London.",
+    "year": 1838,
+    "img": "/media/gallery/9780486424538.webp",
+    "director": "Charles Dickens",
+    "duration": 608,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486424538?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Classic"
+    ]
+  },
+  {
+    "id": "book-19",
+    "name": "David Copperfield",
+    "desc": "A semi-autobiographical novel following David Copperfield from childhood to maturity, chronicling his personal growth and relationships.",
+    "year": 1850,
+    "img": "/media/gallery/9780486419211.webp",
+    "director": "Charles Dickens",
+    "duration": 928,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486419211?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 15.99,
+    "genres": [
+      "Fiction",
+      "Coming of Age"
+    ]
+  },
+  {
+    "id": "book-20",
+    "name": "Bleak House",
+    "desc": "A complex novel satirizing the English judicial system through the interminable case of Jarndyce and Jarndyce.",
+    "year": 1853,
+    "img": "/media/gallery/9780486419211.webp",
+    "director": "Charles Dickens",
+    "duration": 1017,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486419211?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 16.99,
+    "genres": [
+      "Fiction",
+      "Classic"
+    ]
+  },
+  {
+    "id": "book-21",
+    "name": "Ulysses",
+    "desc": "A modernist novel following Leopold Bloom and Stephen Dedalus through Dublin on a single day, using stream-of-consciousness technique.",
+    "year": 1922,
+    "img": "/media/gallery/9780486292730.webp",
+    "director": "James Joyce",
+    "duration": 730,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486292730?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Modernist"
+    ]
+  },
+  {
+    "id": "book-22",
+    "name": "The Sound and the Fury",
+    "desc": "A complex novel about the decline of the Compson family, told from multiple perspectives using stream-of-consciousness narration.",
+    "year": 1929,
+    "img": "/media/gallery/9780679732242.webp",
+    "director": "William Faulkner",
+    "duration": 326,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780679732242?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Southern Gothic"
+    ]
+  },
+  {
+    "id": "book-23",
+    "name": "As I Lay Dying",
+    "desc": "The story of the Bundren family's journey to bury their mother, Addie, told from 15 different perspectives.",
+    "year": 1930,
+    "img": "/media/gallery/9780679732259.webp",
+    "director": "William Faulkner",
+    "duration": 267,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780679732259?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Fiction",
+      "Southern Gothic"
+    ]
+  },
+  {
+    "id": "book-24",
+    "name": "Light in August",
+    "desc": "A novel exploring themes of race, identity, and community in the American South through interconnected stories.",
+    "year": 1932,
+    "img": "/media/gallery/9780679732266.webp",
+    "director": "William Faulkner",
+    "duration": 507,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780679732266?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Southern Gothic"
+    ]
+  },
+  {
+    "id": "book-25",
+    "name": "Absalom, Absalom!",
+    "desc": "A complex narrative about Thomas Sutpen and his family, exploring the legacy of slavery and the decline of the South.",
+    "year": 1936,
+    "img": "/media/gallery/9780679732266.webp",
+    "director": "William Faulkner",
+    "duration": 384,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780679732266?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Southern Gothic"
+    ]
+  },
+  {
+    "id": "book-26",
+    "name": "The Grapes of Wrath",
+    "desc": "The story of the Joad family's migration from Oklahoma to California during the Dust Bowl, exposing the harsh realities of migrant workers.",
+    "year": 1939,
+    "img": "/media/gallery/9780143039433.webp",
+    "director": "John Steinbeck",
+    "duration": 464,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780143039433?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-27",
+    "name": "Of Mice and Men",
+    "desc": "A tragic story of two displaced migrant ranch workers during the Great Depression, exploring themes of friendship and dreams.",
+    "year": 1937,
+    "img": "/media/gallery/9780140177398.webp",
+    "director": "John Steinbeck",
+    "duration": 107,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140177398?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 9.99,
+    "genres": [
+      "Fiction",
+      "Tragedy"
+    ]
+  },
+  {
+    "id": "book-28",
+    "name": "East of Eden",
+    "desc": "A multi-generational saga set in California's Salinas Valley, retelling the biblical story of Cain and Abel.",
+    "year": 1952,
+    "img": "/media/gallery/9780142004234.webp",
+    "director": "John Steinbeck",
+    "duration": 601,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780142004234?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Epic"
+    ]
+  },
+  {
+    "id": "book-29",
+    "name": "Cannery Row",
+    "desc": "A novel about the colorful characters living in a rundown waterfront district of Monterey, California.",
+    "year": 1945,
+    "img": "/media/gallery/9780140177381.webp",
+    "director": "John Steinbeck",
+    "duration": 208,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140177381?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ]
+  },
+  {
+    "id": "book-30",
+    "name": "The Pearl",
+    "desc": "A parable about a poor Mexican pearl diver who finds a valuable pearl, only to have it bring tragedy to his family.",
+    "year": 1947,
+    "img": "/media/gallery/9780140177374.webp",
+    "director": "John Steinbeck",
+    "duration": 96,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140177374?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 9.99,
+    "genres": [
+      "Fiction",
+      "Allegory"
+    ]
+  },
+  {
+    "id": "book-31",
+    "name": "Invisible Man",
+    "desc": "A groundbreaking novel about an unnamed African American man's journey from the South to Harlem, exploring identity and invisibility.",
+    "year": 1952,
+    "img": "/media/gallery/9780679732761.webp",
+    "director": "Ralph Ellison",
+    "duration": 581,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780679732761?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ]
+  },
+  {
+    "id": "book-32",
+    "name": "On the Road",
+    "desc": "A semi-autobiographical novel about Sal Paradise's cross-country road trips with his friend Dean Moriarty, capturing the Beat Generation spirit.",
+    "year": 1957,
+    "img": "/media/gallery/9780140283297.webp",
+    "director": "Jack Kerouac",
+    "duration": 320,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140283297?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Beat Generation"
+    ]
+  },
+  {
+    "id": "book-33",
+    "name": "Lolita",
+    "desc": "A controversial novel about Humbert Humbert's obsession with a 12-year-old girl, written in beautiful, complex prose.",
+    "year": 1955,
+    "img": "/media/gallery/9780679723165.webp",
+    "director": "Vladimir Nabokov",
+    "duration": 317,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780679723165?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ]
+  },
+  {
+    "id": "book-34",
+    "name": "Catch-22",
+    "desc": "A satirical anti-war novel about Captain Yossarian's attempts to avoid combat missions during World War II.",
+    "year": 1961,
+    "img": "/media/gallery/9780684833392.webp",
+    "director": "Joseph Heller",
+    "duration": 453,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780684833392?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Satire"
+    ]
+  },
+  {
+    "id": "book-35",
+    "name": "Slaughterhouse-Five",
+    "desc": "An anti-war novel about Billy Pilgrim, a World War II veteran who becomes 'unstuck in time' and experiences his life out of order.",
+    "year": 1969,
+    "img": "/media/gallery/9780385333849.webp",
+    "director": "Kurt Vonnegut",
+    "duration": 275,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385333849?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Science Fiction",
+      "Satire"
+    ]
+  },
+  {
+    "id": "book-36",
+    "name": "The Crying of Lot 49",
+    "desc": "A postmodern novel about Oedipa Maas's investigation into a mysterious conspiracy involving a secret postal system.",
+    "year": 1966,
+    "img": "/media/gallery/9780060913076.webp",
+    "director": "Thomas Pynchon",
+    "duration": 152,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780060913076?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Fiction",
+      "Postmodern"
+    ]
+  },
+  {
+    "id": "book-37",
+    "name": "Gravity's Rainbow",
+    "desc": "A complex postmodern novel set during World War II, following various characters connected to the V-2 rocket program.",
+    "year": 1973,
+    "img": "/media/gallery/9780140188599.webp",
+    "director": "Thomas Pynchon",
+    "duration": 760,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140188599?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 16.99,
+    "genres": [
+      "Fiction",
+      "Postmodern"
+    ]
+  },
+  {
+    "id": "book-38",
+    "name": "One Flew Over the Cuckoo's Nest",
+    "desc": "A novel about Randle McMurphy's rebellion against the oppressive Nurse Ratched in a mental institution.",
+    "year": 1962,
+    "img": "/media/gallery/9780451163967.webp",
+    "director": "Ken Kesey",
+    "duration": 320,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780451163967?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ]
+  },
+  {
+    "id": "book-39",
+    "name": "The Master and Margarita",
+    "desc": "A satirical novel about the Devil's visit to Moscow, interwoven with the story of Pontius Pilate and Jesus.",
+    "year": 1967,
+    "img": "/media/gallery/9780679760801.webp",
+    "director": "Mikhail Bulgakov",
+    "duration": 384,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780679760801?hl=en&gbpv=1",
+    "rating": 4.8,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Satire"
+    ]
+  },
+  {
+    "id": "book-40",
+    "name": "The Unbearable Lightness of Being",
+    "desc": "A philosophical novel about love, politics, and the meaning of life, set during the Prague Spring of 1968.",
+    "year": 1984,
+    "img": "/media/gallery/9780061148521.webp",
+    "director": "Milan Kundera",
+    "duration": 320,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780061148521?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Philosophy"
+    ]
+  },
+  {
+    "id": "book-41",
+    "name": "The Secret History",
+    "desc": "A psychological thriller about a group of elite college students who become involved in a murder, exploring themes of morality and guilt.",
+    "year": 1992,
+    "img": "/media/gallery/9781400031702.webp",
+    "director": "Donna Tartt",
+    "duration": 559,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781400031702?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Mystery"
+    ]
+  },
+  {
+    "id": "book-42",
+    "name": "The Goldfinch",
+    "desc": "A coming-of-age novel about Theo Decker, who survives a terrorist attack at an art museum and becomes obsessed with a stolen painting.",
+    "year": 2013,
+    "img": "/media/gallery/9780316055437.webp",
+    "director": "Donna Tartt",
+    "duration": 771,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780316055437?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 16.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ]
+  },
+  {
+    "id": "book-43",
+    "name": "The Little Friend",
+    "desc": "A mystery novel about 12-year-old Harriet Cleve Dufresnes's investigation into her brother's murder in a small Mississippi town.",
+    "year": 2002,
+    "img": "/media/gallery/9781400031702.webp",
+    "director": "Donna Tartt",
+    "duration": 555,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781400031702?hl=en&gbpv=1",
+    "rating": 4.5,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Mystery"
+    ]
+  },
+  {
+    "id": "book-44",
+    "name": "The Amazing Adventures of Kavalier & Clay",
+    "desc": "A novel about two Jewish cousins who create a comic book superhero during the Golden Age of comics, exploring themes of escape and identity.",
+    "year": 2000,
+    "img": "/media/gallery/9780312282998.webp",
+    "director": "Michael Chabon",
+    "duration": 639,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780312282998?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 15.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-45",
+    "name": "The Yiddish Policemen's Union",
+    "desc": "An alternate history detective novel set in a Jewish settlement in Alaska, following detective Meyer Landsman's investigation.",
+    "year": 2007,
+    "img": "/media/gallery/9780007149827.webp",
+    "director": "Michael Chabon",
+    "duration": 414,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780007149827?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Mystery"
+    ]
+  },
+  {
+    "id": "book-46",
+    "name": "Middlesex",
+    "desc": "A multigenerational saga about Calliope Stephanides, an intersex person of Greek descent, exploring identity and family history.",
+    "year": 2002,
+    "img": "/media/gallery/9780312427733.webp",
+    "director": "Jeffrey Eugenides",
+    "duration": 529,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780312427733?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ]
+  },
+  {
+    "id": "book-47",
+    "name": "The Virgin Suicides",
+    "desc": "A novel about the mysterious suicides of five sisters in suburban Detroit, told from the perspective of neighborhood boys.",
+    "year": 1993,
+    "img": "/media/gallery/9780312428815.webp",
+    "director": "Jeffrey Eugenides",
+    "duration": 243,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780312428815?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ]
+  },
+  {
+    "id": "book-48",
+    "name": "White Teeth",
+    "desc": "A multi-generational novel about two families in London, exploring themes of race, immigration, and cultural identity.",
+    "year": 2000,
+    "img": "/media/gallery/9780375703867.webp",
+    "director": "Zadie Smith",
+    "duration": 542,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780375703867?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ]
+  },
+  {
+    "id": "book-49",
+    "name": "On Beauty",
+    "desc": "A novel about two feuding academic families, exploring themes of beauty, race, and class in contemporary America.",
+    "year": 2005,
+    "img": "/media/gallery/9780143037743.webp",
+    "director": "Zadie Smith",
+    "duration": 445,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780143037743?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ]
+  },
+  {
+    "id": "book-50",
+    "name": "NW",
+    "desc": "A novel about four Londoners from the same housing estate, exploring class, friendship, and the complexities of modern urban life.",
+    "year": 2012,
+    "img": "/media/gallery/9781594203978.webp",
+    "director": "Zadie Smith",
+    "duration": 401,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781594203978?hl=en&gbpv=1",
+    "rating": 4.5,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ]
+  },
+  {
+    "id": "book-51",
+    "name": "The Girl with the Dragon Tattoo",
+    "desc": "A journalist and a hacker investigate a decades-old disappearance, uncovering dark family secrets and corruption.",
+    "year": 2005,
+    "img": "/media/gallery/9780307269751.webp",
+    "director": "Stieg Larsson",
+    "duration": 465,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780307269751?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-52",
+    "name": "The Girl Who Played with Fire",
+    "desc": "Lisbeth Salander becomes the prime suspect in a triple murder, forcing her to confront her traumatic past.",
+    "year": 2006,
+    "img": "/media/gallery/9780307269980.webp",
+    "director": "Stieg Larsson",
+    "duration": 503,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780307269980?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-53",
+    "name": "The Girl Who Kicked the Hornet's Nest",
+    "desc": "The final book in the trilogy, as Salander fights for her life and freedom while exposing a government conspiracy.",
+    "year": 2007,
+    "img": "/media/gallery/9780307269997.webp",
+    "director": "Stieg Larsson",
+    "duration": 563,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780307269997?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-54",
+    "name": "Gone Girl",
+    "desc": "A psychological thriller about the disappearance of Amy Dunne and the suspicion that falls on her husband Nick.",
+    "year": 2012,
+    "img": "/media/gallery/9780307588364.webp",
+    "director": "Gillian Flynn",
+    "duration": 415,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780307588364?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-55",
+    "name": "Sharp Objects",
+    "desc": "A journalist returns to her hometown to cover a series of murders, confronting her own traumatic past.",
+    "year": 2006,
+    "img": "/media/gallery/9780307341546.webp",
+    "director": "Gillian Flynn",
+    "duration": 254,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780307341546?hl=en&gbpv=1",
+    "rating": 4.5,
+    "price": 12.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-56",
+    "name": "Dark Places",
+    "desc": "A woman who survived her family's massacre investigates what really happened that night, uncovering shocking truths.",
+    "year": 2009,
+    "img": "/media/gallery/9780307341577.webp",
+    "director": "Gillian Flynn",
+    "duration": 349,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780307341577?hl=en&gbpv=1",
+    "rating": 4.5,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-57",
+    "name": "The Da Vinci Code",
+    "desc": "A symbologist and a cryptologist race to solve a murder and uncover a secret that could shake the foundations of Christianity.",
+    "year": 2003,
+    "img": "/media/gallery/9780385504201.webp",
+    "director": "Dan Brown",
+    "duration": 454,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385504201?hl=en&gbpv=1",
+    "rating": 4.5,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-58",
+    "name": "Angels & Demons",
+    "desc": "Robert Langdon investigates a murder at CERN and uncovers a plot by the Illuminati to destroy the Vatican.",
+    "year": 2000,
+    "img": "/media/gallery/9780671027360.webp",
+    "director": "Dan Brown",
+    "duration": 496,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780671027360?hl=en&gbpv=1",
+    "rating": 4.4,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-59",
+    "name": "The Lost Symbol",
+    "desc": "Robert Langdon races through Washington D.C. to solve mysteries involving Freemasonry and ancient symbols.",
+    "year": 2009,
+    "img": "/media/gallery/9780385504225.webp",
+    "director": "Dan Brown",
+    "duration": 509,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385504225?hl=en&gbpv=1",
+    "rating": 4.3,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-60",
+    "name": "Inferno",
+    "desc": "Robert Langdon wakes up in Florence with amnesia and must race against time to prevent a global catastrophe.",
+    "year": 2013,
+    "img": "/media/gallery/9780385537858.webp",
+    "director": "Dan Brown",
+    "duration": 461,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385537858?hl=en&gbpv=1",
+    "rating": 4.3,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-61",
+    "name": "The Shining",
+    "desc": "A writer takes a job as winter caretaker at an isolated hotel, where supernatural forces drive him to madness.",
+    "year": 1977,
+    "img": "/media/gallery/9780307743657.webp",
+    "director": "Stephen King",
+    "duration": 447,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780307743657?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Horror",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-62",
+    "name": "It",
+    "desc": "Seven adults return to their hometown to confront a shape-shifting evil that terrorized them as children.",
+    "year": 1986,
+    "img": "/media/gallery/9781501142970.webp",
+    "director": "Stephen King",
+    "duration": 1138,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781501142970?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 18.99,
+    "genres": [
+      "Horror",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-63",
+    "name": "The Stand",
+    "desc": "A post-apocalyptic novel about survivors of a plague that wipes out most of humanity, forming two opposing camps.",
+    "year": 1978,
+    "img": "/media/gallery/9780307743671.webp",
+    "director": "Stephen King",
+    "duration": 1153,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780307743671?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 18.99,
+    "genres": [
+      "Horror",
+      "Post-Apocalyptic"
+    ]
+  },
+  {
+    "id": "book-64",
+    "name": "Carrie",
+    "desc": "A bullied high school girl with telekinetic powers seeks revenge on her tormentors at the prom.",
+    "year": 1974,
+    "img": "/media/gallery/9780307743664.webp",
+    "director": "Stephen King",
+    "duration": 253,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780307743664?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Horror",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-65",
+    "name": "Pet Sematary",
+    "desc": "A doctor discovers an ancient burial ground that brings the dead back to life, with horrifying consequences.",
+    "year": 1983,
+    "img": "/media/gallery/9780307743671.webp",
+    "director": "Stephen King",
+    "duration": 373,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780307743671?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 12.99,
+    "genres": [
+      "Horror",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-66",
+    "name": "Misery",
+    "desc": "A novelist is held captive by his 'number one fan' who forces him to write a new book to her specifications.",
+    "year": 1987,
+    "img": "/media/gallery/9781501143106.webp",
+    "director": "Stephen King",
+    "duration": 370,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781501143106?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Horror",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-67",
+    "name": "The Green Mile",
+    "desc": "A death row corrections officer's experiences with an inmate who possesses mysterious healing powers.",
+    "year": 1996,
+    "img": "/media/gallery/9780671024222.webp",
+    "director": "Stephen King",
+    "duration": 592,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780671024222?hl=en&gbpv=1",
+    "rating": 4.8,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Drama"
+    ]
+  },
+  {
+    "id": "book-68",
+    "name": "11/22/63",
+    "desc": "A high school teacher travels back in time to prevent the assassination of John F. Kennedy.",
+    "year": 2011,
+    "img": "/media/gallery/9781451627282.webp",
+    "director": "Stephen King",
+    "duration": 849,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781451627282?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 16.99,
+    "genres": [
+      "Science Fiction",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-69",
+    "name": "The Outsider",
+    "desc": "A detective investigates a brutal murder, but the evidence points to an impossible suspect.",
+    "year": 2018,
+    "img": "/media/gallery/9781501180989.webp",
+    "director": "Stephen King",
+    "duration": 561,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781501180989?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Horror",
+      "Mystery"
+    ]
+  },
+  {
+    "id": "book-70",
+    "name": "The Institute",
+    "desc": "A boy with telekinetic powers is kidnapped and taken to a secret facility where children with special abilities are studied.",
+    "year": 2019,
+    "img": "/media/gallery/9781982110567.webp",
+    "director": "Stephen King",
+    "duration": 576,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781982110567?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Horror",
+      "Science Fiction"
+    ]
+  },
+  {
+    "id": "book-71",
+    "name": "The Help",
+    "desc": "Set in 1960s Mississippi, a young white woman and black maids work together to write a book exposing racial injustice.",
+    "year": 2009,
+    "img": "/media/gallery/9780425232200.webp",
+    "director": "Kathryn Stockett",
+    "duration": 444,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780425232200?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Historical Fiction",
+      "Fiction"
+    ]
+  },
+  {
+    "id": "book-72",
+    "name": "Water for Elephants",
+    "desc": "An elderly man recalls his experiences as a veterinarian in a traveling circus during the Great Depression.",
+    "year": 2006,
+    "img": "/media/gallery/9781565125605.webp",
+    "director": "Sara Gruen",
+    "duration": 335,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781565125605?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Historical Fiction",
+      "Fiction"
+    ]
+  },
+  {
+    "id": "book-73",
+    "name": "The Time Traveler's Wife",
+    "desc": "A love story about a man with a genetic disorder that causes him to time travel unpredictably and his wife who waits for him.",
+    "year": 2003,
+    "img": "/media/gallery/9780156029438.webp",
+    "director": "Audrey Niffenegger",
+    "duration": 518,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780156029438?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Romance",
+      "Science Fiction"
+    ]
+  },
+  {
+    "id": "book-74",
+    "name": "The Lovely Bones",
+    "desc": "A murdered 14-year-old girl watches from heaven as her family deals with her death and searches for her killer.",
+    "year": 2002,
+    "img": "/media/gallery/9780316666343.webp",
+    "director": "Alice Sebold",
+    "duration": 328,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780316666343?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Mystery"
+    ]
+  },
+  {
+    "id": "book-75",
+    "name": "A Thousand Splendid Suns",
+    "desc": "The story of two Afghan women from different generations whose lives become intertwined through marriage to the same abusive man.",
+    "year": 2007,
+    "img": "/media/gallery/9781594483851.webp",
+    "director": "Khaled Hosseini",
+    "duration": 372,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781594483851?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-76",
+    "name": "And the Mountains Echoed",
+    "desc": "A multi-generational novel about how a single act of sacrifice affects families across decades and continents.",
+    "year": 2013,
+    "img": "/media/gallery/9781594631764.webp",
+    "director": "Khaled Hosseini",
+    "duration": 402,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781594631764?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-77",
+    "name": "I Am the Messenger",
+    "desc": "A 19-year-old cab driver receives mysterious playing cards that lead him to help people in need.",
+    "year": 2002,
+    "img": "/media/gallery/9780375836671.webp",
+    "director": "Markus Zusak",
+    "duration": 357,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780375836671?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-78",
+    "name": "Bridge of Clay",
+    "desc": "The story of five brothers and their journey to build a bridge that will bring their family back together.",
+    "year": 2018,
+    "img": "/media/gallery/9781984830259.webp",
+    "director": "Markus Zusak",
+    "duration": 544,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781984830259?hl=en&gbpv=1",
+    "rating": 4.5,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-79",
+    "name": "The Seven Husbands of Evelyn Hugo",
+    "desc": "A reclusive Hollywood icon finally decides to tell her life story to an unknown journalist, revealing secrets about her seven marriages.",
+    "year": 2017,
+    "img": "/media/gallery/9781501139239.webp",
+    "director": "Taylor Jenkins Reid",
+    "duration": 400,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781501139239?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-80",
+    "name": "Daisy Jones & The Six",
+    "desc": "An oral history of a fictional 1970s rock band, told through interviews with band members and those who knew them.",
+    "year": 2019,
+    "img": "/media/gallery/9781524798628.webp",
+    "director": "Taylor Jenkins Reid",
+    "duration": 355,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781524798628?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-81",
+    "name": "Malibu Rising",
+    "desc": "Four famous siblings throw an epic party that ends in disaster, revealing family secrets and changing their lives forever.",
+    "year": 2021,
+    "img": "/media/gallery/9781524798659.webp",
+    "director": "Taylor Jenkins Reid",
+    "duration": 369,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781524798659?hl=en&gbpv=1",
+    "rating": 4.5,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-82",
+    "name": "The Midnight Library",
+    "desc": "A woman finds herself in a library between life and death where she can try out different versions of her life.",
+    "year": 2020,
+    "img": "/media/gallery/9780525559474.webp",
+    "director": "Matt Haig",
+    "duration": 288,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780525559474?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Philosophy"
+    ]
+  },
+  {
+    "id": "book-83",
+    "name": "The Thursday Murder Club",
+    "desc": "Four retirees in a retirement village form a murder club and find themselves investigating a real murder.",
+    "year": 2020,
+    "img": "/media/gallery/9781984880988.webp",
+    "director": "Richard Osman",
+    "duration": 384,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781984880988?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Fiction"
+    ]
+  },
+  {
+    "id": "book-84",
+    "name": "The Man Who Died Twice",
+    "desc": "The Thursday Murder Club returns to solve another mystery involving stolen diamonds and a dangerous criminal.",
+    "year": 2021,
+    "img": "/media/gallery/9781984881008.webp",
+    "director": "Richard Osman",
+    "duration": 368,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781984881008?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Fiction"
+    ]
+  },
+  {
+    "id": "book-85",
+    "name": "The Bullet That Missed",
+    "desc": "The Thursday Murder Club investigates a cold case involving a missing journalist and a mysterious death.",
+    "year": 2022,
+    "img": "/media/gallery/9781984881015.webp",
+    "director": "Richard Osman",
+    "duration": 352,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781984881015?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Fiction"
+    ]
+  },
+  {
+    "id": "book-86",
+    "name": "Project Hail Mary",
+    "desc": "A lone astronaut must save humanity from an extinction-level event, using science and ingenuity to solve impossible problems.",
+    "year": 2021,
+    "img": "/media/gallery/9780593135204.webp",
+    "director": "Andy Weir",
+    "duration": 476,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780593135204?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 14.99,
+    "genres": [
+      "Science Fiction",
+      "Fiction"
+    ]
+  },
+  {
+    "id": "book-87",
+    "name": "The Martian",
+    "desc": "An astronaut stranded on Mars must use his engineering skills and resourcefulness to survive until rescue.",
+    "year": 2011,
+    "img": "/media/gallery/9780553418026.webp",
+    "director": "Andy Weir",
+    "duration": 369,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780553418026?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Science Fiction",
+      "Fiction"
+    ]
+  },
+  {
+    "id": "book-88",
+    "name": "Artemis",
+    "desc": "A smuggler on the moon city of Artemis gets caught up in a conspiracy that threatens the entire settlement.",
+    "year": 2017,
+    "img": "/media/gallery/9780553448122.webp",
+    "director": "Andy Weir",
+    "duration": 305,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780553448122?hl=en&gbpv=1",
+    "rating": 4.5,
+    "price": 13.99,
+    "genres": [
+      "Science Fiction",
+      "Fiction"
+    ]
+  },
+  {
+    "id": "book-89",
+    "name": "The Testaments",
+    "desc": "The sequel to The Handmaid's Tale, told from the perspectives of three women in Gilead, revealing how the regime might fall.",
+    "year": 2019,
+    "img": "/media/gallery/9780385543781.webp",
+    "director": "Margaret Atwood",
+    "duration": 432,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385543781?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Dystopian",
+      "Fiction"
+    ]
+  },
+  {
+    "id": "book-90",
+    "name": "Oryx and Crake",
+    "desc": "A post-apocalyptic novel about Snowman, possibly the last human, who recalls his friendship with the brilliant but dangerous Crake.",
+    "year": 2003,
+    "img": "/media/gallery/9780385503853.webp",
+    "director": "Margaret Atwood",
+    "duration": 374,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385503853?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Science Fiction",
+      "Dystopian"
+    ]
+  },
+  {
+    "id": "book-91",
+    "name": "The Year of the Flood",
+    "desc": "A parallel narrative to Oryx and Crake, following two women in a religious group who survive a global pandemic.",
+    "year": 2009,
+    "img": "/media/gallery/9780385528771.webp",
+    "director": "Margaret Atwood",
+    "duration": 431,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385528771?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Science Fiction",
+      "Dystopian"
+    ]
+  },
+  {
+    "id": "book-92",
+    "name": "MaddAddam",
+    "desc": "The conclusion of the trilogy, as survivors of the pandemic work to rebuild civilization with the help of genetically engineered beings.",
+    "year": 2013,
+    "img": "/media/gallery/9780385538428.webp",
+    "director": "Margaret Atwood",
+    "duration": 394,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385538428?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Science Fiction",
+      "Dystopian"
+    ]
+  },
+  {
+    "id": "book-93",
+    "name": "Alias Grace",
+    "desc": "Based on a true story, a doctor interviews Grace Marks, a convicted murderer, to determine if she is guilty or insane.",
+    "year": 1996,
+    "img": "/media/gallery/9780385490443.webp",
+    "director": "Margaret Atwood",
+    "duration": 468,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385490443?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Historical Fiction",
+      "Mystery"
+    ]
+  },
+  {
+    "id": "book-94",
+    "name": "The Blind Assassin",
+    "desc": "An elderly woman writes a memoir revealing the truth about her sister's death and a novel within a novel.",
+    "year": 2000,
+    "img": "/media/gallery/9780385720953.webp",
+    "director": "Margaret Atwood",
+    "duration": 521,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385720953?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ]
+  },
+  {
+    "id": "book-95",
+    "name": "Cat's Eye",
+    "desc": "A painter returns to Toronto and confronts memories of her childhood, particularly her complex relationship with a childhood friend.",
+    "year": 1988,
+    "img": "/media/gallery/9780385491020.webp",
+    "director": "Margaret Atwood",
+    "duration": 462,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385491020?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ]
+  },
+  {
+    "id": "book-96",
+    "name": "Surfacing",
+    "desc": "A woman returns to her childhood home in remote Quebec to search for her missing father, undergoing a psychological transformation.",
+    "year": 1972,
+    "img": "/media/gallery/9780385491051.webp",
+    "director": "Margaret Atwood",
+    "duration": 199,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385491051?hl=en&gbpv=1",
+    "rating": 4.5,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ]
+  },
+  {
+    "id": "book-97",
+    "name": "The Edible Woman",
+    "desc": "A young woman's engagement triggers an identity crisis, causing her to develop an eating disorder as a form of rebellion.",
+    "year": 1969,
+    "img": "/media/gallery/9780385491037.webp",
+    "director": "Margaret Atwood",
+    "duration": 281,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385491037?hl=en&gbpv=1",
+    "rating": 4.5,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ]
+  },
+  {
+    "id": "book-98",
+    "name": "Harry Potter and the Chamber of Secrets",
+    "desc": "Harry's second year at Hogwarts is threatened by a mysterious monster attacking students, and he must uncover the truth about the Chamber of Secrets.",
+    "year": 1998,
+    "img": "/media/gallery/9780439064873.webp",
+    "director": "J.K. Rowling",
+    "duration": 341,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780439064873?hl=en&gbpv=1",
+    "rating": 4.8,
+    "price": 12.99,
+    "genres": [
+      "Fantasy",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-99",
+    "name": "Harry Potter and the Prisoner of Azkaban",
+    "desc": "Harry learns about his parents' past and confronts Sirius Black, an escaped prisoner who may be after him.",
+    "year": 1999,
+    "img": "/media/gallery/9780439136365.webp",
+    "director": "J.K. Rowling",
+    "duration": 435,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780439136365?hl=en&gbpv=1",
+    "rating": 4.8,
+    "price": 13.99,
+    "genres": [
+      "Fantasy",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-100",
+    "name": "Harry Potter and the Goblet of Fire",
+    "desc": "Harry is mysteriously entered into the Triwizard Tournament, facing dangerous challenges and the return of Lord Voldemort.",
+    "year": 2000,
+    "img": "/media/gallery/9780439139601.webp",
+    "director": "J.K. Rowling",
+    "duration": 734,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780439139601?hl=en&gbpv=1",
+    "rating": 4.8,
+    "price": 15.99,
+    "genres": [
+      "Fantasy",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-101",
+    "name": "Harry Potter and the Order of the Phoenix",
+    "desc": "Harry forms Dumbledore's Army to fight against the Ministry's denial of Voldemort's return and prepares for the coming war.",
+    "year": 2003,
+    "img": "/media/gallery/9780439358071.webp",
+    "director": "J.K. Rowling",
+    "duration": 870,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780439358071?hl=en&gbpv=1",
+    "rating": 4.8,
+    "price": 16.99,
+    "genres": [
+      "Fantasy",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-102",
+    "name": "Harry Potter and the Half-Blood Prince",
+    "desc": "Harry learns about Voldemort's past through Dumbledore's memories while the wizarding world prepares for war.",
+    "year": 2005,
+    "img": "/media/gallery/9780439785969.webp",
+    "director": "J.K. Rowling",
+    "duration": 652,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780439785969?hl=en&gbpv=1",
+    "rating": 4.8,
+    "price": 15.99,
+    "genres": [
+      "Fantasy",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-103",
+    "name": "Harry Potter and the Deathly Hallows",
+    "desc": "Harry, Ron, and Hermione search for Horcruxes while Voldemort takes control of the wizarding world, leading to the final battle.",
+    "year": 2007,
+    "img": "/media/gallery/9780545010221.webp",
+    "director": "J.K. Rowling",
+    "duration": 759,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780545010221?hl=en&gbpv=1",
+    "rating": 4.9,
+    "price": 16.99,
+    "genres": [
+      "Fantasy",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-104",
+    "name": "The Hunger Games: Catching Fire",
+    "desc": "Katniss and Peeta are forced to compete in a special edition of the Hunger Games with previous winners.",
+    "year": 2009,
+    "img": "/media/gallery/9780439023498.webp",
+    "director": "Suzanne Collins",
+    "duration": 391,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780439023498?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Science Fiction",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-105",
+    "name": "The Hunger Games: Mockingjay",
+    "desc": "Katniss becomes the symbol of rebellion as the districts rise up against the Capitol in a full-scale revolution.",
+    "year": 2010,
+    "img": "/media/gallery/9780439023511.webp",
+    "director": "Suzanne Collins",
+    "duration": 390,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780439023511?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Science Fiction",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-106",
+    "name": "The Ballad of Songbirds and Snakes",
+    "desc": "A prequel to The Hunger Games, following a young Coriolanus Snow as he mentors a tribute in the 10th Hunger Games.",
+    "year": 2020,
+    "img": "/media/gallery/9781338635171.webp",
+    "director": "Suzanne Collins",
+    "duration": 517,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781338635171?hl=en&gbpv=1",
+    "rating": 4.5,
+    "price": 14.99,
+    "genres": [
+      "Science Fiction",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-107",
+    "name": "The Night Circus",
+    "desc": "Two young magicians are bound in a competition that takes place in a mysterious circus that only appears at night.",
+    "year": 2011,
+    "img": "/media/gallery/9780307744432.webp",
+    "director": "Erin Morgenstern",
+    "duration": 387,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780307744432?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fantasy",
+      "Romance"
+    ]
+  },
+  {
+    "id": "book-108",
+    "name": "The Starless Sea",
+    "desc": "A graduate student discovers a mysterious book that leads him to a hidden underground library filled with stories.",
+    "year": 2019,
+    "img": "/media/gallery/9780385541213.webp",
+    "director": "Erin Morgenstern",
+    "duration": 512,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385541213?hl=en&gbpv=1",
+    "rating": 4.5,
+    "price": 14.99,
+    "genres": [
+      "Fantasy",
+      "Fiction"
+    ]
+  },
+  {
+    "id": "book-109",
+    "name": "Circe",
+    "desc": "A retelling of Greek mythology from the perspective of Circe, the witch who turned Odysseus's men into pigs.",
+    "year": 2018,
+    "img": "/media/gallery/9780316556347.webp",
+    "director": "Madeline Miller",
+    "duration": 393,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780316556347?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 14.99,
+    "genres": [
+      "Fantasy",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-110",
+    "name": "The Song of Achilles",
+    "desc": "A retelling of the Iliad from the perspective of Patroclus, focusing on his relationship with Achilles.",
+    "year": 2011,
+    "img": "/media/gallery/9780062060617.webp",
+    "director": "Madeline Miller",
+    "duration": 352,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780062060617?hl=en&gbpv=1",
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Fantasy",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-111",
+    "name": "The Seven Deaths of Evelyn Hardcastle",
+    "desc": "A man wakes up in a different body each day at a party, reliving the same day until he solves a murder.",
+    "year": 2018,
+    "img": "/media/gallery/9781492670124.webp",
+    "director": "Stuart Turton",
+    "duration": 432,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781492670124?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-112",
+    "name": "The Devil and the Dark Water",
+    "desc": "A detective and his assistant investigate supernatural occurrences on a ship crossing the Indian Ocean in 1634.",
+    "year": 2020,
+    "img": "/media/gallery/9781492670131.webp",
+    "director": "Stuart Turton",
+    "duration": 463,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781492670131?hl=en&gbpv=1",
+    "rating": 4.5,
+    "price": 14.99,
+    "genres": [
+      "Mystery",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-113",
+    "name": "The Silent Patient",
+    "desc": "A psychotherapist becomes obsessed with treating a woman who refuses to speak after allegedly murdering her husband.",
+    "year": 2019,
+    "img": "/media/gallery/9781250301697.webp",
+    "director": "Alex Michaelides",
+    "duration": 323,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781250301697?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-114",
+    "name": "The Maidens",
+    "desc": "A group therapist investigates a series of murders at Cambridge University, suspecting a Greek tragedy professor.",
+    "year": 2021,
+    "img": "/media/gallery/9781250301697.webp",
+    "director": "Alex Michaelides",
+    "duration": 337,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781250301697?hl=en&gbpv=1",
+    "rating": 4.4,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-115",
+    "name": "The Guest List",
+    "desc": "A wedding on a remote Irish island turns deadly when a guest is murdered, and everyone has a motive.",
+    "year": 2020,
+    "img": "/media/gallery/9780062868930.webp",
+    "director": "Lucy Foley",
+    "duration": 320,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780062868930?hl=en&gbpv=1",
+    "rating": 4.5,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-116",
+    "name": "The Paris Apartment",
+    "desc": "A woman arrives in Paris to stay with her half-brother, only to find him missing and his neighbors suspicious.",
+    "year": 2022,
+    "img": "/media/gallery/9780063003057.webp",
+    "director": "Lucy Foley",
+    "duration": 368,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780063003057?hl=en&gbpv=1",
+    "rating": 4.4,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ]
+  },
+  {
+    "id": "book-117",
+    "name": "The Invisible Life of Addie LaRue",
+    "desc": "A young woman makes a deal with the devil for immortality, but is cursed to be forgotten by everyone she meets.",
+    "year": 2020,
+    "img": "/media/gallery/9780765387561.webp",
+    "director": "V.E. Schwab",
+    "duration": 444,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780765387561?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fantasy",
+      "Fiction"
+    ]
+  },
+  {
+    "id": "book-118",
+    "name": "A Darker Shade of Magic",
+    "desc": "A magician who can travel between parallel Londons must stop a dangerous artifact from destroying all worlds.",
+    "year": 2015,
+    "img": "/media/gallery/9780765376466.webp",
+    "director": "V.E. Schwab",
+    "duration": 400,
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780765376466?hl=en&gbpv=1",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fantasy",
+      "Fiction"
+    ]
+  },
+  {
+    "id": "book-119",
+    "name": "Don Quixote",
+    "desc": "The story of a man who reads so many chivalric romances that he loses his sanity and decides to become a knight-errant.",
+    "year": 1605,
+    "director": "Miguel de Cervantes",
+    "duration": 1072,
+    "rating": 4.7,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Classic"
+    ],
+    "img": "/media/gallery/9780142437230.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780142437230?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-120",
+    "name": "The Count of Monte Cristo",
+    "desc": "A tale of revenge and redemption following Edmond Dantès, who escapes from prison and seeks vengeance against those who wronged him.",
+    "year": 1844,
+    "director": "Alexandre Dumas",
+    "duration": 1276,
+    "rating": 4.8,
+    "price": 16.99,
+    "genres": [
+      "Adventure",
+      "Fiction"
+    ],
+    "img": "/media/gallery/9780140449266.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140449266?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-121",
+    "name": "Les Misérables",
+    "desc": "An epic novel about Jean Valjean's journey from prisoner to mayor, set against the backdrop of the French Revolution.",
+    "year": 1862,
+    "director": "Victor Hugo",
+    "duration": 1463,
+    "rating": 4.8,
+    "price": 16.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ],
+    "img": "/media/gallery/9780140444308.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140444308?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-122",
+    "name": "War and Peace",
+    "desc": "A sweeping epic about five aristocratic families during the Napoleonic Wars, exploring themes of love, war, and destiny.",
+    "year": 1869,
+    "director": "Leo Tolstoy",
+    "duration": 1392,
+    "rating": 4.8,
+    "price": 16.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ],
+    "img": "/media/gallery/9780140447934.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140447934?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-123",
+    "name": "Anna Karenina",
+    "desc": "A tragic love story about Anna Karenina, a married aristocrat who falls in love with Count Vronsky.",
+    "year": 1877,
+    "director": "Leo Tolstoy",
+    "duration": 864,
+    "rating": 4.8,
+    "price": 15.99,
+    "genres": [
+      "Fiction",
+      "Romance"
+    ],
+    "img": "/media/gallery/9780143035008.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780143035008?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-124",
+    "name": "Crime and Punishment",
+    "desc": "A psychological thriller about Raskolnikov, a poor student who commits murder and struggles with guilt and redemption.",
+    "year": 1866,
+    "director": "Fyodor Dostoevsky",
+    "duration": 671,
+    "rating": 4.8,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Psychological"
+    ],
+    "img": "/media/gallery/9780140449136.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140449136?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-125",
+    "name": "The Brothers Karamazov",
+    "desc": "A philosophical novel about three brothers and their relationships with their father, exploring themes of faith, doubt, and morality.",
+    "year": 1880,
+    "director": "Fyodor Dostoevsky",
+    "duration": 796,
+    "rating": 4.8,
+    "price": 15.99,
+    "genres": [
+      "Fiction",
+      "Philosophy"
+    ],
+    "img": "/media/gallery/9780140449242.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140449242?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-126",
+    "name": "The Picture of Dorian Gray",
+    "desc": "A philosophical novel about a young man who remains youthful while his portrait ages, exploring themes of beauty and morality.",
+    "year": 1890,
+    "director": "Oscar Wilde",
+    "duration": 254,
+    "rating": 4.7,
+    "price": 11.99,
+    "genres": [
+      "Fiction",
+      "Gothic"
+    ],
+    "img": "/media/gallery/9780141442464.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780141442464?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-127",
+    "name": "Dracula",
+    "desc": "An epistolary novel about Count Dracula's attempt to move from Transylvania to England and the battle to stop him.",
+    "year": 1897,
+    "director": "Bram Stoker",
+    "duration": 418,
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Horror",
+      "Gothic"
+    ],
+    "img": "/media/gallery/9780141439846.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780141439846?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-128",
+    "name": "Frankenstein",
+    "desc": "The story of Victor Frankenstein, a scientist who creates a sentient creature in an unorthodox scientific experiment.",
+    "year": 1818,
+    "director": "Mary Shelley",
+    "duration": 280,
+    "rating": 4.7,
+    "price": 11.99,
+    "genres": [
+      "Horror",
+      "Science Fiction"
+    ],
+    "img": "/media/gallery/9780141439471.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780141439471?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-129",
+    "name": "The Great Gatsby",
+    "desc": "A story about Jay Gatsby's obsession with Daisy Buchanan, set in the Jazz Age of 1920s America.",
+    "year": 1925,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.7,
+    "price": 10.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780743273565.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780743273565?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-130",
+    "name": "The Sun Also Rises",
+    "desc": "A novel about a group of American and British expatriates who travel from Paris to Pamplona for the running of the bulls.",
+    "year": 1926,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780743297332.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780743297332?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-131",
+    "name": "A Farewell to Arms",
+    "desc": "A love story set during World War I, following an American ambulance driver and a British nurse.",
+    "year": 1929,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "War"
+    ],
+    "img": "/media/gallery/9780684801469.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780684801469?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-132",
+    "name": "For Whom the Bell Tolls",
+    "desc": "A novel about an American fighting in the Spanish Civil War, exploring themes of love, death, and sacrifice.",
+    "year": 1940,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "War"
+    ],
+    "img": "/media/gallery/9780684801469.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780684801469?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-133",
+    "name": "The Old Man and the Sea",
+    "desc": "The story of an aging Cuban fisherman's struggle with a giant marlin far out in the Gulf Stream.",
+    "year": 1952,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.7,
+    "price": 9.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780684801223.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780684801223?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-134",
+    "name": "Beloved",
+    "desc": "A novel about Sethe, a former slave haunted by the ghost of her dead daughter, exploring the trauma of slavery.",
+    "year": 1987,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.8,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ],
+    "img": "/media/gallery/9781400033416.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781400033416?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-135",
+    "name": "Song of Solomon",
+    "desc": "A coming-of-age story about Macon Dead III, exploring themes of identity, family, and African American history.",
+    "year": 1977,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9781400033423.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781400033423?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-136",
+    "name": "The Color Purple",
+    "desc": "An epistolary novel about Celie, an African American woman in the South, and her journey to self-discovery.",
+    "year": 1982,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.8,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780151191536.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780151191536?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-137",
+    "name": "Their Eyes Were Watching God",
+    "desc": "The story of Janie Crawford's search for love and identity through three marriages in early 20th century Florida.",
+    "year": 1937,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780061120060.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780061120060?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-138",
+    "name": "Native Son",
+    "desc": "A novel about Bigger Thomas, a young African American man whose life takes a tragic turn after he accidentally kills a white woman.",
+    "year": 1940,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780060837563.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780060837563?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-139",
+    "name": "Bel Canto",
+    "desc": "A novel about a hostage situation at a birthday party for a Japanese businessman in South America.",
+    "year": 2001,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780061565311.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780061565311?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-140",
+    "name": "Commonwealth",
+    "desc": "A novel spanning five decades about two families brought together by an affair and a tragic accident.",
+    "year": 2016,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.5,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780062491794.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780062491794?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-141",
+    "name": "The Dutch House",
+    "desc": "A story about a brother and sister who are exiled from their childhood home and their bond that lasts a lifetime.",
+    "year": 2019,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780062963673.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780062963673?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-142",
+    "name": "The Overstory",
+    "desc": "A novel about nine Americans whose lives become intertwined with trees, exploring humanity's relationship with nature.",
+    "year": 2018,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780393356687.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780393356687?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-143",
+    "name": "The Echo Maker",
+    "desc": "A novel about a man who suffers from Capgras delusion after a car accident and his sister's quest to help him.",
+    "year": 2006,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.5,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780312420139.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780312420139?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-144",
+    "name": "The Orphan Master's Son",
+    "desc": "A novel about Jun Do, an orphan in North Korea who rises through the ranks of the regime.",
+    "year": 2012,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780812992793.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780812992793?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-145",
+    "name": "The Sympathizer",
+    "desc": "A novel about a Vietnamese spy who flees to America after the fall of Saigon, exploring themes of identity and loyalty.",
+    "year": 2015,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ],
+    "img": "/media/gallery/9780802123459.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780802123459?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-146",
+    "name": "The Committed",
+    "desc": "The sequel to The Sympathizer, following the protagonist as he becomes involved in the drug trade in Paris.",
+    "year": 2021,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.5,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780802157072.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780802157072?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-147",
+    "name": "Lincoln in the Bardo",
+    "desc": "A novel about Abraham Lincoln's grief over his son's death, told from the perspective of ghosts in a cemetery.",
+    "year": 2017,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780812995343.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780812995343?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-148",
+    "name": "Tenth of December",
+    "desc": "A collection of short stories exploring themes of class, power, and human connection in contemporary America.",
+    "year": 2013,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Short Stories"
+    ],
+    "img": "/media/gallery/9780812984255.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780812984255?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-149",
+    "name": "Where the Crawdads Sing",
+    "desc": "A mystery novel about Kya, the 'Marsh Girl' who grows up isolated in the marshes of North Carolina.",
+    "year": 2018,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Mystery"
+    ],
+    "img": "/media/gallery/9780735219090.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780735219090?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-150",
+    "name": "Educated",
+    "desc": "A memoir about a woman who grows up in a survivalist Mormon family and eventually earns a PhD from Cambridge.",
+    "year": 2018,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.8,
+    "price": 13.99,
+    "genres": [
+      "Memoir",
+      "Non-Fiction"
+    ],
+    "img": "/media/gallery/9780399590504.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780399590504?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-151",
+    "name": "Becoming",
+    "desc": "A memoir by the former First Lady of the United States, chronicling her life from childhood to the White House.",
+    "year": 2018,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.8,
+    "price": 14.99,
+    "genres": [
+      "Memoir",
+      "Non-Fiction"
+    ],
+    "img": "/media/gallery/9781524763138.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781524763138?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-152",
+    "name": "The Tattooist of Auschwitz",
+    "desc": "A novel based on the true story of Lale Sokolov, a Slovakian Jew who became the tattooist at Auschwitz.",
+    "year": 2018,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 12.99,
+    "genres": [
+      "Historical Fiction",
+      "Fiction"
+    ],
+    "img": "/media/gallery/9780062797155.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780062797155?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-153",
+    "name": "The Boy in the Striped Pajamas",
+    "desc": "A story about the friendship between a German boy and a Jewish boy in a concentration camp during World War II.",
+    "year": 2006,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Historical Fiction",
+      "Young Adult"
+    ],
+    "img": "/media/gallery/9780385751537.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385751537?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-154",
+    "name": "The Book of Lost Names",
+    "desc": "A novel about a young woman who forges documents to help Jewish children escape Nazi-occupied France.",
+    "year": 2020,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Historical Fiction",
+      "Fiction"
+    ],
+    "img": "/media/gallery/9781982131869.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781982131869?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-155",
+    "name": "The Nightingale",
+    "desc": "A novel about two sisters in France during World War II and their different paths of resistance.",
+    "year": 2015,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Historical Fiction",
+      "Fiction"
+    ],
+    "img": "/media/gallery/9780312577223.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780312577223?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-156",
+    "name": "The Four Winds",
+    "desc": "A novel about a woman's struggle to survive during the Great Depression and the Dust Bowl.",
+    "year": 2021,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Historical Fiction",
+      "Fiction"
+    ],
+    "img": "/media/gallery/9781250178602.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781250178602?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-157",
+    "name": "Firefly Lane",
+    "desc": "A story about the lifelong friendship between two women from their teenage years through adulthood.",
+    "year": 2008,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Romance"
+    ],
+    "img": "/media/gallery/9780140268867.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780312553647?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-158",
+    "name": "The Giver",
+    "desc": "A dystopian novel about a boy who discovers the dark truth behind his seemingly perfect society.",
+    "year": 1993,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.7,
+    "price": 10.99,
+    "genres": [
+      "Science Fiction",
+      "Young Adult"
+    ],
+    "img": "/media/gallery/9780544336261.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780544336261?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-159",
+    "name": "The Maze Runner",
+    "desc": "A dystopian novel about Thomas, who wakes up in a maze with no memory and must find a way out.",
+    "year": 2009,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.5,
+    "price": 11.99,
+    "genres": [
+      "Science Fiction",
+      "Young Adult"
+    ],
+    "img": "/media/gallery/9780385737951.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385737951?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-160",
+    "name": "The Scorch Trials",
+    "desc": "The second book in the Maze Runner series, following Thomas and his friends through the Scorch.",
+    "year": 2010,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.4,
+    "price": 11.99,
+    "genres": [
+      "Science Fiction",
+      "Young Adult"
+    ],
+    "img": "/media/gallery/9780385738767.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385738767?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-161",
+    "name": "The Death Cure",
+    "desc": "The final book in the Maze Runner trilogy, as Thomas fights to save his friends and find a cure.",
+    "year": 2011,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.4,
+    "price": 11.99,
+    "genres": [
+      "Science Fiction",
+      "Young Adult"
+    ],
+    "img": "/media/gallery/9780385738781.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385738781?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-162",
+    "name": "Divergent",
+    "desc": "A dystopian novel about Beatrice Prior, who lives in a society divided into five factions.",
+    "year": 2011,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.6,
+    "price": 12.99,
+    "genres": [
+      "Science Fiction",
+      "Young Adult"
+    ],
+    "img": "/media/gallery/9780140268867.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780062024022?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-163",
+    "name": "Insurgent",
+    "desc": "The second book in the Divergent series, as Tris fights against the faction system.",
+    "year": 2012,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.5,
+    "price": 12.99,
+    "genres": [
+      "Science Fiction",
+      "Young Adult"
+    ],
+    "img": "/media/gallery/9780062024046.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780062024046?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-164",
+    "name": "Allegiant",
+    "desc": "The final book in the Divergent trilogy, revealing the truth about the world outside the city.",
+    "year": 2013,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.3,
+    "price": 12.99,
+    "genres": [
+      "Science Fiction",
+      "Young Adult"
+    ],
+    "img": "/media/gallery/9780062024060.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780062024060?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-165",
+    "name": "The Fault in Our Stars",
+    "desc": "A love story about two teenagers who meet in a cancer support group.",
+    "year": 2012,
+    "director": "Homer",
+    "duration": 541,
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Young Adult"
+    ],
+    "img": "/media/gallery/9780525478812.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780525478812?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-166",
+    "name": "The Adventures of Sherlock Holmes",
+    "desc": "A collection of twelve short stories featuring the famous detective Sherlock Holmes and his friend Dr. Watson.",
+    "year": 1892,
+    "director": "Arthur Conan Doyle",
+    "duration": 307,
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Fiction"
+    ],
+    "img": "/media/gallery/9780140439073.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140439073?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-167",
+    "name": "The Hound of the Baskervilles",
+    "desc": "Sherlock Holmes investigates the mysterious death of Sir Charles Baskerville and the legend of a supernatural hound.",
+    "year": 1902,
+    "director": "Arthur Conan Doyle",
+    "duration": 256,
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Fiction"
+    ],
+    "img": "/media/gallery/9780140437864.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780140437864?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-168",
+    "name": "Pride and Prejudice",
+    "desc": "The story of Elizabeth Bennet and Mr. Darcy, exploring themes of love, class, and social expectations in Regency England.",
+    "year": 1813,
+    "director": "Jane Austen",
+    "duration": 432,
+    "rating": 4.8,
+    "price": 12.99,
+    "genres": [
+      "Romance",
+      "Fiction"
+    ],
+    "img": "/media/gallery/9780141439518.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780141439518?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-169",
+    "name": "Sense and Sensibility",
+    "desc": "The story of the Dashwood sisters, Elinor and Marianne, as they navigate love and loss in early 19th-century England.",
+    "year": 1811,
+    "director": "Jane Austen",
+    "duration": 409,
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Romance",
+      "Fiction"
+    ],
+    "img": "/media/gallery/9780141439662.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780141439662?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-170",
+    "name": "Emma",
+    "desc": "A comedy of manners about Emma Woodhouse, a wealthy young woman who meddles in the romantic lives of others.",
+    "year": 1815,
+    "director": "Jane Austen",
+    "duration": 474,
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Romance",
+      "Fiction"
+    ],
+    "img": "/media/gallery/9780141439587.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780141439587?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-171",
+    "name": "Jane Eyre",
+    "desc": "The story of Jane Eyre, an orphan who becomes a governess and falls in love with her employer, Mr. Rochester.",
+    "year": 1847,
+    "director": "Charlotte Brontë",
+    "duration": 532,
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Romance",
+      "Gothic"
+    ],
+    "img": "/media/gallery/9780141441146.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780141441146?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-172",
+    "name": "Wuthering Heights",
+    "desc": "A tale of passion and revenge on the Yorkshire moors, following Heathcliff and Catherine's destructive love.",
+    "year": 1847,
+    "director": "Emily Brontë",
+    "duration": 416,
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Romance",
+      "Gothic"
+    ],
+    "img": "/media/gallery/9780141439556.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780141439556?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-173",
+    "name": "Tender Is the Night",
+    "desc": "The story of a young psychiatrist and his wife, exploring themes of love, wealth, and mental illness in the 1920s.",
+    "year": 1934,
+    "director": "F. Scott Fitzgerald",
+    "duration": 320,
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780684801544.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780684801544?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-174",
+    "name": "This Side of Paradise",
+    "desc": "Fitzgerald's debut novel about Amory Blaine, a young man's journey through Princeton and the Jazz Age.",
+    "year": 1920,
+    "director": "F. Scott Fitzgerald",
+    "duration": 304,
+    "rating": 4.5,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Coming of Age"
+    ],
+    "img": "/media/gallery/9780743273565.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780743273565?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-175",
+    "name": "Origin",
+    "desc": "Robert Langdon travels to Spain to attend a major announcement that will change the face of science forever.",
+    "year": 2017,
+    "director": "Dan Brown",
+    "duration": 461,
+    "rating": 4.3,
+    "price": 13.99,
+    "genres": [
+      "Mystery",
+      "Thriller"
+    ],
+    "img": "/media/gallery/9780525560926.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780525560926?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-176",
+    "name": "The Handmaid's Tale",
+    "desc": "A totalitarian society subjects women to state-sanctioned sexual servitude.",
+    "year": 1985,
+    "director": "Margaret Atwood",
+    "duration": 311,
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Dystopian",
+      "Fiction"
+    ],
+    "img": "/media/gallery/9780385490818.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780385490818?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-177",
+    "name": "The Hunger Games",
+    "desc": "In a dystopian future, Katniss Everdeen volunteers to take her sister's place in a televised fight to the death.",
+    "year": 2008,
+    "director": "Suzanne Collins",
+    "duration": 374,
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Science Fiction",
+      "Young Adult"
+    ],
+    "img": "/media/gallery/9780439023481.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780439023481?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-178",
+    "name": "A Gathering of Shadows",
+    "desc": "The second book in the Shades of Magic series, as Kell and Lila compete in a magical tournament.",
+    "year": 2016,
+    "director": "V.E. Schwab",
+    "duration": 512,
+    "rating": 4.6,
+    "price": 14.99,
+    "genres": [
+      "Fantasy",
+      "Fiction"
+    ],
+    "img": "/media/gallery/9780765376473.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780765376473?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-179",
+    "name": "A Conjuring of Light",
+    "desc": "The final book in the Shades of Magic trilogy, as an ancient enemy threatens to destroy all worlds.",
+    "year": 2017,
+    "director": "V.E. Schwab",
+    "duration": 624,
+    "rating": 4.7,
+    "price": 15.99,
+    "genres": [
+      "Fantasy",
+      "Fiction"
+    ],
+    "img": "/media/gallery/9780765376480.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780765376480?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-180",
+    "name": "The Invisible Man",
+    "desc": "A scientist discovers how to make himself invisible, but the power drives him to madness and crime.",
+    "year": 1897,
+    "director": "H.G. Wells",
+    "duration": 192,
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Science Fiction",
+      "Horror"
+    ],
+    "img": "/media/gallery/9780486264642.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486264642?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-181",
+    "name": "The Time Machine",
+    "desc": "A Victorian scientist travels to the year 802,701 AD and discovers a divided human race.",
+    "year": 1895,
+    "director": "H.G. Wells",
+    "duration": 118,
+    "rating": 4.6,
+    "price": 10.99,
+    "genres": [
+      "Science Fiction",
+      "Adventure"
+    ],
+    "img": "/media/gallery/9780486284726.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486284726?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-182",
+    "name": "The War of the Worlds",
+    "desc": "Martians invade Earth, and humanity must fight for survival against superior alien technology.",
+    "year": 1898,
+    "director": "H.G. Wells",
+    "duration": 192,
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Science Fiction",
+      "Horror"
+    ],
+    "img": "/media/gallery/9780486295060.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486295060?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-183",
+    "name": "The Island of Dr. Moreau",
+    "desc": "A shipwrecked man discovers an island where a mad scientist creates human-animal hybrids.",
+    "year": 1896,
+    "director": "H.G. Wells",
+    "duration": 144,
+    "rating": 4.5,
+    "price": 11.99,
+    "genres": [
+      "Science Fiction",
+      "Horror"
+    ],
+    "img": "/media/gallery/9780486284719.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486284719?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-184",
+    "name": "The First Men in the Moon",
+    "desc": "Two men travel to the moon and discover an advanced civilization of insect-like creatures.",
+    "year": 1901,
+    "director": "H.G. Wells",
+    "duration": 192,
+    "rating": 4.5,
+    "price": 11.99,
+    "genres": [
+      "Science Fiction",
+      "Adventure"
+    ],
+    "img": "/media/gallery/9780486419464.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486419464?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-185",
+    "name": "The Food of the Gods",
+    "desc": "Scientists create a food that causes massive growth, leading to a conflict between giants and normal humans.",
+    "year": 1904,
+    "director": "H.G. Wells",
+    "duration": 192,
+    "rating": 4.4,
+    "price": 11.99,
+    "genres": [
+      "Science Fiction",
+      "Fiction"
+    ],
+    "img": "/media/gallery/9780486419457.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780486419457?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-186",
+    "name": "The Catcher in the Rye",
+    "desc": "The story of Holden Caulfield, a troubled teenager who wanders New York City after being expelled from prep school.",
+    "year": 1951,
+    "director": "J.D. Salinger",
+    "duration": 277,
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Coming of Age"
+    ],
+    "img": "/media/gallery/9780316769174.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780316769174?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-187",
+    "name": "To Kill a Mockingbird",
+    "desc": "A young girl in the American South witnesses racial injustice and learns about empathy and courage from her father.",
+    "year": 1960,
+    "director": "Harper Lee",
+    "duration": 376,
+    "rating": 4.8,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Literary"
+    ],
+    "img": "/media/gallery/9780061120084.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780061120084?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-188",
+    "name": "1984",
+    "desc": "A dystopian novel about Winston Smith, who rebels against a totalitarian regime that controls every aspect of life.",
+    "year": 1949,
+    "director": "George Orwell",
+    "duration": 328,
+    "rating": 4.8,
+    "price": 13.99,
+    "genres": [
+      "Dystopian",
+      "Science Fiction"
+    ],
+    "img": "/media/gallery/9780452284234.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780452284234?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-189",
+    "name": "Animal Farm",
+    "desc": "An allegorical novella about farm animals who rebel against their human owner, only to face a new tyranny.",
+    "year": 1945,
+    "director": "George Orwell",
+    "duration": 112,
+    "rating": 4.7,
+    "price": 11.99,
+    "genres": [
+      "Fiction",
+      "Satire"
+    ],
+    "img": "/media/gallery/9780452284241.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780452284241?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-190",
+    "name": "Lord of the Flies",
+    "desc": "A group of British boys stranded on an uninhabited island attempt to govern themselves, with disastrous results.",
+    "year": 1954,
+    "director": "William Golding",
+    "duration": 182,
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Allegory"
+    ],
+    "img": "/media/gallery/9780571056866.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780571056866?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-191",
+    "name": "Brave New World",
+    "desc": "A dystopian novel set in a futuristic world where society is controlled through pleasure and conditioning.",
+    "year": 1932,
+    "director": "Aldous Huxley",
+    "duration": 311,
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Dystopian",
+      "Science Fiction"
+    ],
+    "img": "/media/gallery/9780060850524.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780060850524?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-192",
+    "name": "Fahrenheit 451",
+    "desc": "A firefighter in a future society where books are banned must question his role and beliefs.",
+    "year": 1953,
+    "director": "Ray Bradbury",
+    "duration": 256,
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Dystopian",
+      "Science Fiction"
+    ],
+    "img": "/media/gallery/9781451673319.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9781451673319?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-193",
+    "name": "The Lord of the Rings: The Fellowship of the Ring",
+    "desc": "The first volume of The Lord of the Rings, following Frodo Baggins as he begins his quest to destroy the One Ring.",
+    "year": 1954,
+    "director": "J.R.R. Tolkien",
+    "duration": 423,
+    "rating": 4.9,
+    "price": 14.99,
+    "genres": [
+      "Fantasy",
+      "Adventure"
+    ],
+    "img": "/media/gallery/9780547928210.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780547928210?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-194",
+    "name": "The Lord of the Rings: The Two Towers",
+    "desc": "The second volume, as the Fellowship is broken and the war for Middle-earth intensifies.",
+    "year": 1954,
+    "director": "J.R.R. Tolkien",
+    "duration": 352,
+    "rating": 4.9,
+    "price": 14.99,
+    "genres": [
+      "Fantasy",
+      "Adventure"
+    ],
+    "img": "/media/gallery/9780547928203.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780547928203?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-195",
+    "name": "The Lord of the Rings: The Return of the King",
+    "desc": "The final volume, as the forces of good and evil clash in the ultimate battle for Middle-earth.",
+    "year": 1955,
+    "director": "J.R.R. Tolkien",
+    "duration": 416,
+    "rating": 4.9,
+    "price": 14.99,
+    "genres": [
+      "Fantasy",
+      "Adventure"
+    ],
+    "img": "/media/gallery/9780547928197.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780547928197?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-196",
+    "name": "The Hobbit",
+    "desc": "The story of Bilbo Baggins, a hobbit who joins a group of dwarves on a quest to reclaim their homeland.",
+    "year": 1937,
+    "director": "J.R.R. Tolkien",
+    "duration": 310,
+    "rating": 4.8,
+    "price": 13.99,
+    "genres": [
+      "Fantasy",
+      "Adventure"
+    ],
+    "img": "/media/gallery/9780547928227.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780547928227?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-197",
+    "name": "The Chronicles of Narnia: The Lion, the Witch and the Wardrobe",
+    "desc": "Four children enter a magical world through a wardrobe and help Aslan defeat the White Witch.",
+    "year": 1950,
+    "director": "C.S. Lewis",
+    "duration": 208,
+    "rating": 4.8,
+    "price": 12.99,
+    "genres": [
+      "Fantasy",
+      "Children's"
+    ],
+    "img": "/media/gallery/9780064471046.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780064471046?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-198",
+    "name": "The Chronicles of Narnia: Prince Caspian",
+    "desc": "The Pevensie children return to Narnia to help Prince Caspian reclaim his throne.",
+    "year": 1951,
+    "director": "C.S. Lewis",
+    "duration": 240,
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Fantasy",
+      "Children's"
+    ],
+    "img": "/media/gallery/9780060598242.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780060598242?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-199",
+    "name": "The Chronicles of Narnia: The Voyage of the Dawn Treader",
+    "desc": "Edmund and Lucy join Prince Caspian on a voyage to find seven lost lords of Narnia.",
+    "year": 1952,
+    "director": "C.S. Lewis",
+    "duration": 256,
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Fantasy",
+      "Children's"
+    ],
+    "img": "/media/gallery/9780064471077.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780064471077?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-200",
+    "name": "The Chronicles of Narnia: The Silver Chair",
+    "desc": "Eustace and Jill must find Prince Rilian, who has been captured by an evil witch.",
+    "year": 1953,
+    "director": "C.S. Lewis",
+    "duration": 272,
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Fantasy",
+      "Children's"
+    ],
+    "img": "/media/gallery/9780064471091.webp",
+    "trailer_url": "https://www.bookstores.com/books/edition/_/9780064471091?hl=en&gbpv=1"
+  },
+  {
+    "id": "book-201",
+    "name": "The Lord of the Rings",
+    "desc": "An epic high fantasy trilogy following Frodo Baggins and the Fellowship of the Ring as they journey to destroy the One Ring and defeat the Dark Lord Sauron.",
+    "year": 1954,
+    "img": "/media/gallery/9780544003415.webp",
+    "director": "J.R.R. Tolkien",
+    "duration": 1178,
+    "trailer_url": "https://www.bookstores.com/books/the-lord-of-the-rings/9780544003415",
+    "rating": 4.9,
+    "price": 29.99,
+    "genres": [
+      "Fantasy",
+      "Adventure"
+    ]
+  },
+  {
+    "id": "book-202",
+    "name": "Harry Potter and the Sorcerer's Stone",
+    "desc": "An orphaned boy discovers he is a wizard and begins his journey at Hogwarts School of Witchcraft and Wizardry, where he learns about his mysterious past and faces dark forces.",
+    "year": 1997,
+    "img": "/media/gallery/9780590353427.webp",
+    "director": "J.K. Rowling",
+    "duration": 320,
+    "trailer_url": "https://www.bookstores.com/books/harry-potter-and-the-sorcerers-stone/9780590353427",
+    "rating": 4.8,
+    "price": 12.99,
+    "genres": [
+      "Fantasy",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-203",
+    "name": "The Book Thief",
+    "desc": "Set in Nazi Germany, a young girl's relationship with her foster parents, the other residents of their neighborhood, and a Jewish fist-fighter transforms her life.",
+    "year": 2005,
+    "img": "/media/gallery/9780375831003.webp",
+    "director": "Markus Zusak",
+    "duration": 552,
+    "trailer_url": "https://www.bookstores.com/books/the-book-thief/9780375831003",
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Historical Fiction",
+      "Young Adult"
+    ]
+  },
+  {
+    "id": "book-204",
+    "name": "The Kite Runner",
+    "desc": "An epic tale of fathers and sons, friendship and betrayal, that takes us from Afghanistan in the final days of the monarchy to the atrocities of the present.",
+    "year": 2003,
+    "img": "/media/gallery/9781594631931.webp",
+    "director": "Khaled Hosseini",
+    "duration": 371,
+    "trailer_url": "https://www.bookstores.com/books/the-kite-runner/9781594631931",
+    "rating": 4.7,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-205",
+    "name": "The Alchemist",
+    "desc": "A shepherd boy named Santiago travels from his homeland in Spain to the Egyptian desert in search of a treasure buried near the Pyramids, discovering the importance of following one's dreams.",
+    "year": 1988,
+    "img": "/media/gallery/9780061122415.webp",
+    "director": "Paulo Coelho",
+    "duration": 163,
+    "trailer_url": "https://www.bookstores.com/books/the-alchemist/9780061122415",
+    "rating": 4.6,
+    "price": 11.99,
+    "genres": [
+      "Fiction",
+      "Philosophy"
+    ]
+  },
+  {
+    "id": "book-206",
+    "name": "Life of Pi",
+    "desc": "After a shipwreck, a young man named Pi finds himself adrift in the Pacific Ocean on a lifeboat with a Bengal tiger named Richard Parker, exploring themes of survival and faith.",
+    "year": 2001,
+    "img": "/media/gallery/9780156027328.webp",
+    "director": "Yann Martel",
+    "duration": 319,
+    "trailer_url": "https://www.bookstores.com/books/life-of-pi/9780156027328",
+    "rating": 4.7,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Adventure"
+    ]
+  },
+  {
+    "id": "book-207",
+    "name": "Moby Dick",
+    "desc": "Ishmael's narrative of the obsessive quest of Ahab, captain of the whaler Pequod, for revenge on Moby Dick, the giant white sperm whale that on the ship's previous voyage bit off Ahab's leg.",
+    "year": 1851,
+    "img": "/media/gallery/9780142437247.webp",
+    "director": "Herman Melville",
+    "duration": 585,
+    "trailer_url": "https://www.bookstores.com/books/moby-dick/9780142437247",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Adventure"
+    ]
+  },
+  {
+    "id": "book-208",
+    "name": "The Adventures of Huckleberry Finn",
+    "desc": "A story of a young boy, Huck Finn, and a runaway slave, Jim, as they travel down the Mississippi River on a raft, exploring themes of freedom and moral growth.",
+    "year": 1884,
+    "img": "/media/gallery/9780142437179.webp",
+    "director": "Mark Twain",
+    "duration": 366,
+    "trailer_url": "https://www.bookstores.com/books/the-adventures-of-huckleberry-finn/9780142437179",
+    "rating": 4.7,
+    "price": 10.99,
+    "genres": [
+      "Fiction",
+      "Adventure"
+    ]
+  },
+  {
+    "id": "book-209",
+    "name": "The Adventures of Tom Sawyer",
+    "desc": "The story of a young boy growing up along the Mississippi River, filled with mischief, adventure, and coming-of-age experiences in a small Missouri town.",
+    "year": 1876,
+    "img": "/media/gallery/9780143039563.webp",
+    "director": "Mark Twain",
+    "duration": 274,
+    "trailer_url": "https://www.bookstores.com/books/the-adventures-of-tom-sawyer/9780143039563",
+    "rating": 4.6,
+    "price": 9.99,
+    "genres": [
+      "Fiction",
+      "Adventure"
+    ]
+  },
+  {
+    "id": "book-210",
+    "name": "Little Women",
+    "desc": "The story of four sisters - Meg, Jo, Beth, and Amy March - as they grow from children to women during the American Civil War, navigating love, loss, and personal growth.",
+    "year": 1868,
+    "img": "/media/gallery/9780143106654.webp",
+    "director": "Louisa May Alcott",
+    "duration": 449,
+    "trailer_url": "https://www.bookstores.com/books/little-women/9780143106654",
+    "rating": 4.7,
+    "price": 11.99,
+    "genres": [
+      "Fiction",
+      "Coming of Age"
+    ]
+  },
+  {
+    "id": "book-211",
+    "name": "One Hundred Years of Solitude",
+    "desc": "The multi-generational story of the Buendía family, whose patriarch, José Arcadio Buendía, founds the town of Macondo, a fictional town in Colombia.",
+    "year": 1967,
+    "img": "/media/gallery/9780060883287.webp",
+    "director": "Gabriel García Márquez",
+    "duration": 417,
+    "trailer_url": "https://www.bookstores.com/books/one-hundred-years-of-solitude/9780060883287",
+    "rating": 4.8,
+    "price": 14.99,
+    "genres": [
+      "Fiction",
+      "Magical Realism"
+    ]
+  },
+  {
+    "id": "book-212",
+    "name": "The Stranger",
+    "desc": "A philosophical novel about Meursault, an emotionally detached man who commits a senseless murder and faces the absurdity of human existence.",
+    "year": 1942,
+    "img": "/media/gallery/9780679720201.webp",
+    "director": "Albert Camus",
+    "duration": 123,
+    "trailer_url": "https://www.bookstores.com/books/the-stranger/9780679720201",
+    "rating": 4.6,
+    "price": 10.99,
+    "genres": [
+      "Fiction",
+      "Philosophy"
+    ]
+  },
+  {
+    "id": "book-213",
+    "name": "The Metamorphosis",
+    "desc": "A novella about Gregor Samsa, a traveling salesman who wakes up one morning to find himself transformed into a giant insect, exploring themes of alienation and identity.",
+    "year": 1915,
+    "img": "/media/gallery/9780486290300.webp",
+    "director": "Franz Kafka",
+    "duration": 55,
+    "trailer_url": "https://www.bookstores.com/books/the-metamorphosis/9780486290300",
+    "rating": 4.6,
+    "price": 8.99,
+    "genres": [
+      "Fiction",
+      "Absurdist"
+    ]
+  },
+  {
+    "id": "book-214",
+    "name": "The Little Prince",
+    "desc": "A philosophical tale about a young prince who visits various planets, including Earth, and explores themes of love, loss, and the importance of seeing with the heart.",
+    "year": 1943,
+    "img": "/media/gallery/9780156012195.webp",
+    "director": "Antoine de Saint-Exupéry",
+    "duration": 96,
+    "trailer_url": "https://www.bookstores.com/books/the-little-prince/9780156012195",
+    "rating": 4.8,
+    "price": 9.99,
+    "genres": [
+      "Fiction",
+      "Philosophy"
+    ]
+  },
+  {
+    "id": "book-215",
+    "name": "The Bell Jar",
+    "desc": "A semi-autobiographical novel following Esther Greenwood's descent into mental illness, exploring themes of identity, sexuality, and the constraints of society.",
+    "year": 1963,
+    "img": "/media/gallery/9780060837020.webp",
+    "director": "Sylvia Plath",
+    "duration": 244,
+    "trailer_url": "https://www.bookstores.com/books/the-bell-jar/9780060837020",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Autobiographical"
+    ]
+  },
+  {
+    "id": "book-216",
+    "name": "Things Fall Apart",
+    "desc": "A novel about Okonkwo, a leader in an Igbo village in Nigeria, and the impact of European colonization on traditional African society.",
+    "year": 1958,
+    "img": "/media/gallery/9780385474542.webp",
+    "director": "Chinua Achebe",
+    "duration": 209,
+    "trailer_url": "https://www.bookstores.com/books/things-fall-apart/9780385474542",
+    "rating": 4.7,
+    "price": 12.99,
+    "genres": [
+      "Fiction",
+      "Historical Fiction"
+    ]
+  },
+  {
+    "id": "book-217",
+    "name": "The Road",
+    "desc": "A post-apocalyptic novel following a father and son as they journey through a desolate landscape, struggling to survive in a world destroyed by an unspecified cataclysm.",
+    "year": 2006,
+    "img": "/media/gallery/9780307387899.webp",
+    "director": "Cormac McCarthy",
+    "duration": 287,
+    "trailer_url": "https://www.bookstores.com/books/the-road/9780307387899",
+    "rating": 4.6,
+    "price": 13.99,
+    "genres": [
+      "Fiction",
+      "Post-Apocalyptic"
+    ]
+  }
+]

@@ -424,16 +424,14 @@ deploy_webs_server() {
     INITIAL_DATA_DIR="$DEMOS_DIR/webs_server/initial_data"
 
     # Initialize data directory if it doesn't exist (copy from repo)
-    # This copies both 'original/' (high quality, fewer records) and 'data/' (more records)
-    # The container will use 'original/' if v2 is disabled, 'data/' if v2 is enabled
+    # Single directory: only data/ is used. Original = first file (e.g. entity_1.json) in data/
     if [ ! -d "$WEBS_DATA_ABS_PATH" ] || [ -z "$(ls -A "$WEBS_DATA_ABS_PATH" 2>/dev/null)" ]; then
       echo "  [INFO] Initializing data directory from repo (first time only)..."
-      echo "  [INFO] Copying both 'original/' (high quality) and 'data/' (more records) directories..."
+      echo "  [INFO] Copying project data (data/ and main.json)..."
       mkdir -p "$WEBS_DATA_ABS_PATH"
       if [ -d "$INITIAL_DATA_DIR" ]; then
         cp -r "$INITIAL_DATA_DIR"/* "$WEBS_DATA_ABS_PATH/" 2>/dev/null || true
         echo "  ✅ Data copied from $INITIAL_DATA_DIR to $WEBS_DATA_ABS_PATH"
-        echo "  ✅ Both 'original/' and 'data/' directories are available"
       fi
     fi
 
@@ -484,10 +482,32 @@ deploy_webs_server() {
   fi
   mkdir -p "$WEBS_DATA_PATH"
 
+  # When --fast=false, flatten host data: remove old data/ and original/ subdirs and sync from repo
+  if [ "$FAST_MODE" = false ]; then
+    echo "📐 Flattening host data (remove data/ and original/, sync from repo)..."
+    for project in $WEBS_PROJECTS; do
+      dest="$WEBS_DATA_PATH/$project"
+      if [ -d "$DEMOS_DIR/webs_server/initial_data/$project" ]; then
+        mkdir -p "$dest"
+        # Use a one-off container to remove dirs (files may be owned by container user)
+        if [ -d "$dest/data" ] || [ -d "$dest/original" ]; then
+          echo "  [$project] Removing old data/ and original/ subdirectories..."
+          docker run --rm -v "${WEBS_DATA_PATH}:/data:rw" -u root alpine sh -c "rm -rf \"/data/${project}/data\" \"/data/${project}/original\"" 2>/dev/null || true
+        fi
+        cp "$DEMOS_DIR/webs_server/initial_data/$project/main.json" "$dest/" 2>/dev/null || true
+        for f in "$DEMOS_DIR/webs_server/initial_data/$project"/*.json; do
+          [ -f "$f" ] && [ "$(basename "$f")" != "main.json" ] && cp "$f" "$dest/" 2>/dev/null || true
+        done
+        echo "  [$project] Synced flat layout from repo"
+      fi
+    done
+    echo "✅ Host data flattened"
+  fi
+
   for project in $WEBS_PROJECTS; do
     if [ ! -f "$WEBS_DATA_PATH/$project/main.json" ]; then
       echo "  → Initializing $project master pool (100 records)..."
-      mkdir -p "$WEBS_DATA_PATH/$project/data"
+      mkdir -p "$WEBS_DATA_PATH/$project"
       if [ -d "$DEMOS_DIR/webs_server/initial_data/$project" ]; then
         cp -r "$DEMOS_DIR/webs_server/initial_data/$project"/* "$WEBS_DATA_PATH/$project/"
         echo "  ✅ $project master pool initialized"
@@ -495,43 +515,33 @@ deploy_webs_server() {
         echo "  ⚠️  No initial data found for $project (will need to generate)"
       fi
     else
-  echo "  ✓ $project master pool already exists ($(cat "$WEBS_DATA_PATH/$project/main.json" | grep -o '"./data/[^"]*"' | wc -l) files)"
+  echo "  ✓ $project master pool already exists ($(cat "$WEBS_DATA_PATH/$project/main.json" | grep -o '"\.[^"]*\.json"' | wc -l) files)"
   fi
 done
 
 echo "✅ Master pools ready"
 
-# If DB mode (v2) is disabled, we won't sync into repo; originals will be copied directly into the container later
-
-# Copy data from repo to container (repo is always up to date)
+# Copy data from repo to container (flat layout: main.json and entity JSONs in project dir)
 if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
   REPO_DATA_DIR="$DEMOS_DIR/webs_server/initial_data"
   echo "📦 Copying data pools from repo to webs_server container..."
   for project in $WEBS_PROJECTS; do
     SRC_MAIN="$REPO_DATA_DIR/$project/main.json"
-    SRC_ORIG_DIR="$REPO_DATA_DIR/$project/original"
-    SRC_DATA_DIR="$REPO_DATA_DIR/$project/data"
+    SRC_PROJECT_DIR="$REPO_DATA_DIR/$project"
 
-    if [ -f "$SRC_MAIN" ]; then
+    if [ -f "$SRC_MAIN" ] || [ -d "$SRC_PROJECT_DIR" ]; then
       echo "  → Copying $project to container (from repo)..."
-      docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data /app/data/$project/original 2>/dev/null || true
-      docker cp "$SRC_MAIN" webs_server-app-1:/app/data/$project/main.json 2>/dev/null || true
-      # Prefer originals if DB mode is disabled; otherwise copy data files
-      if [ "$ENABLE_DYNAMIC_V2" = false ]; then
-        if [ -d "$SRC_ORIG_DIR" ] && ls "$SRC_ORIG_DIR"/*.json >/dev/null 2>&1; then
-          for data_file in "$SRC_ORIG_DIR"/*.json; do
-            if [ -f "$data_file" ]; then
-              docker cp "$data_file" webs_server-app-1:/app/data/$project/original/ 2>/dev/null || true
-            fi
-          done
-        fi
-      elif [ -d "$SRC_DATA_DIR" ]; then
-        for data_file in "$SRC_DATA_DIR"/*.json; do
-          if [ -f "$data_file" ]; then
-            docker cp "$data_file" webs_server-app-1:/app/data/$project/data/ 2>/dev/null || true
-          fi
-        done
+      docker exec -u root webs_server-app-1 mkdir -p /app/data/$project 2>/dev/null || true
+      if [ "$FAST_MODE" = false ]; then
+        docker exec -u root webs_server-app-1 rm -rf "/app/data/$project/data" 2>/dev/null || true
+        docker exec -u root webs_server-app-1 rm -rf "/app/data/$project/original" 2>/dev/null || true
       fi
+      [ -f "$SRC_MAIN" ] && docker cp "$SRC_MAIN" webs_server-app-1:/app/data/$project/main.json 2>/dev/null || true
+      for data_file in "$SRC_PROJECT_DIR"/*.json; do
+        if [ -f "$data_file" ] && [ "$(basename "$data_file")" != "main.json" ]; then
+          docker cp "$data_file" webs_server-app-1:/app/data/$project/ 2>/dev/null || true
+        fi
+      done
       docker exec -u root webs_server-app-1 chown -R appuser:appuser /app/data/$project 2>/dev/null || true
       echo "  ✅ $project copied to container"
     fi
