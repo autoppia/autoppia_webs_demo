@@ -359,11 +359,11 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
         filename = f"{entity_type}_{timestamp}.json"
         return save_data_file(web_name, filename, data, entity_type)
     else:
-        # Append to existing file; use resolved path only (Sonar: no path from user-controlled data)
+        # Append to existing file; path is sanitized by _resolve_path_under_base (under web_base only)
         safe_path = _resolve_path_under_base(web_base, last_file_rel or "")
         if not safe_path:
             raise ValueError("Resolved path is not under base")
-        with open(safe_path, "r", encoding="utf-8") as f:
+        with open(safe_path, "r", encoding="utf-8") as f:  # NOSONAR (S2083) path from _resolve_path_under_base
             existing_data = json.load(f)
 
         if isinstance(existing_data, list):
@@ -373,7 +373,7 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
             existing_data = [existing_data] + data
 
         # Write back
-        with open(safe_path, "w", encoding="utf-8") as f:
+        with open(safe_path, "w", encoding="utf-8") as f:  # NOSONAR (S2083) path from _resolve_path_under_base
             json.dump(existing_data, f, indent=2, ensure_ascii=False)
 
         return safe_path
