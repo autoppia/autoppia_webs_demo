@@ -49,6 +49,15 @@ jobs:
           pytest tests/ --cov=src --cov-report=xml --cov-report=term
         continue-on-error: true  # Continue even if tests fail
 
+      - name: OWASP Dependency-Check (SARIF for SonarCloud)
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: "autoppia_webs_demo"
+          path: "webs_server"
+          format: "SARIF"
+          out: "reports"
+        continue-on-error: true  # Do not fail job if dependency-check fails (e.g. network)
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
