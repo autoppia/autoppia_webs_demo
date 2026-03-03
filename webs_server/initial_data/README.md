@@ -25,27 +25,30 @@ Cada proyecto de demostración necesita un **pool de datos maestro** del cual se
 
 ## 🎯 TODO: Ampliar a 2000 registros
 
-### Estructura de archivos
+### Estructura de archivos (layout plano: sin subdirectorio data/)
 
-Cada proyecto debe tener:
+Cada proyecto tiene `main.json` y los archivos de entidad en el mismo directorio (flat layout). El "original" es el primer archivo (`entity_1.json`); el pool completo son todos los archivos referenciados en `main.json`.
+
 ```
 web_X_proyecto/
-├── main.json          # Índice de archivos
-└── data/
-    ├── entity_1.json  # 100 registros
-    ├── entity_2.json  # 100 registros
-    └── ...            # hasta entity_20.json (2000 total)
+├── main.json          # Índice de archivos (rutas relativas ./*.json)
+├── entity_1.json      # Original (v2 deshabilitado o seed=1)
+├── entity_2.json      # Más registros para el pool
+└── ...                # hasta entity_20.json (2000 total)
 ```
+
+- **v2 deshabilitado o seed=1:** se devuelve solo el contenido de `entity_1.json` (original).
+- **v2 habilitado y 1 < seed ≤ 999:** se carga el pool completo y se aplica selección con seed (reproducible: mismo seed → mismos datos).
 
 ### Formato de `main.json`
 
 ```json
 {
   "restaurants": [
-    "./data/restaurants_1.json",
-    "./data/restaurants_2.json",
+    "./restaurants_1.json",
+    "./restaurants_2.json",
     ...
-    "./data/restaurants_20.json"
+    "./restaurants_20.json"
   ]
 }
 ```
@@ -133,7 +136,7 @@ Cada archivo `emails_X.json` debe contener 100 emails:
 
 1. **Duplicar y modificar los archivos existentes**
    ```bash
-   cd webs_server/initial_data/web_4_autodining/data
+   cd webs_server/initial_data/web_4_autodining
    # Crear 19 archivos adicionales (restaurants_2.json a restaurants_20.json)
    ```
 
@@ -152,10 +155,10 @@ Cada archivo `emails_X.json` debe contener 100 emails:
    ```json
    {
      "restaurants": [
-       "./data/restaurants_1.json",
-       "./data/restaurants_2.json",
+       "./restaurants_1.json",
+       "./restaurants_2.json",
        ...
-       "./data/restaurants_20.json"
+       "./restaurants_20.json"
      ]
    }
    ```
@@ -178,7 +181,7 @@ Para verificar que los datos están correctamente inicializados:
 
 ```bash
 # Ver cuántos archivos hay
-ls -la ~/webs_data/web_4_autodining/data/ | wc -l
+ls -la ~/webs_data/web_4_autodining/*.json | wc -l
 
 # Ver el contenido de main.json
 cat ~/webs_data/web_4_autodining/main.json | jq
@@ -190,6 +193,7 @@ curl "http://localhost:8090/datasets/load?project_key=web_4_autodining&entity_ty
 
 ## 🔍 Notas importantes
 
+- **Layout plano:** Los archivos de entidad (p. ej. `entity_1.json`) están en el mismo directorio que `main.json`; no hay subdirectorio `data/`. El directorio `original/` ya no se usa.
 - Los archivos JSON deben ser válidos (usar `jq` para validar)
 - Los IDs deben ser únicos en todo el pool
 - Mantener consistencia en los campos entre registros
