@@ -28,11 +28,11 @@ export default function ThemesPage() {
   };
 
   return (
-    <div className="py-6">
+    <div className="py-4 sm:py-6">
       <DynamicWrapper>
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6 sm:mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">
               <DynamicText value="Puzzle Themes" type="text" />
             </h1>
             <p className="text-zinc-400 text-sm mt-1">
@@ -40,9 +40,9 @@ export default function ThemesPage() {
             </p>
           </div>
           {isAuthenticated && currentUser && (
-            <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl px-5 py-3 text-center">
+            <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl px-4 sm:px-5 py-2 sm:py-3 text-center flex-shrink-0">
               <div className="text-xs text-zinc-500 uppercase tracking-wider">Your Rating</div>
-              <div className="text-2xl font-bold text-amber-400">{currentUser.puzzleRating}</div>
+              <div className="text-xl sm:text-2xl font-bold text-amber-400">{currentUser.puzzleRating}</div>
             </div>
           )}
         </div>
@@ -50,7 +50,7 @@ export default function ThemesPage() {
 
       {!isAuthenticated && (
         <DynamicWrapper>
-          <div className="mb-6 bg-amber-600/10 border border-amber-600/30 rounded-xl px-5 py-3 flex items-center justify-between">
+          <div className="mb-6 bg-amber-600/10 border border-amber-600/30 rounded-xl px-3 sm:px-5 py-3 flex items-center justify-between gap-3">
             <span className="text-amber-400 text-sm">Login to track your puzzle rating and progress</span>
             <a
               href="/login"
