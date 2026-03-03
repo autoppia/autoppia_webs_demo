@@ -336,7 +336,7 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
 
     # Determine if we append to existing or create new
     should_create_new = True
-    target_file = None
+    last_file_rel: Optional[str] = None
     web_base = f"{BASE_PATH}/{web_name}"
 
     if entity_files:
@@ -352,7 +352,6 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
             if estimated_new_size < DATA_FILE_MAX_BYTES:
                 # Append to existing file
                 should_create_new = False
-                target_file = last_file_abs
 
     if should_create_new:
         # Create new file with timestamp
@@ -360,8 +359,11 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
         filename = f"{entity_type}_{timestamp}.json"
         return save_data_file(web_name, filename, data, entity_type)
     else:
-        # Append to existing file
-        with open(target_file, "r", encoding="utf-8") as f:
+        # Append to existing file; use resolved path only (Sonar: no path from user-controlled data)
+        safe_path = _resolve_path_under_base(web_base, last_file_rel or "")
+        if not safe_path:
+            raise ValueError("Resolved path is not under base")
+        with open(safe_path, "r", encoding="utf-8") as f:
             existing_data = json.load(f)
 
         if isinstance(existing_data, list):
@@ -371,10 +373,10 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
             existing_data = [existing_data] + data
 
         # Write back
-        with open(target_file, "w", encoding="utf-8") as f:
+        with open(safe_path, "w", encoding="utf-8") as f:
             json.dump(existing_data, f, indent=2, ensure_ascii=False)
 
-        return target_file
+        return safe_path
 
 
 def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, Any]]) -> str:
