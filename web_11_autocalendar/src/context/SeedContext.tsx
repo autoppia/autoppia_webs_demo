@@ -38,7 +38,7 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setSeedState(getSeedFromUrl());
     setIsSeedReady(true);
-  }, [searchParams]);
+  }, []); // Run once on mount; URL changes handled by navigation
 
   // Optional: allow components to update seed and keep it in the URL.
   const setSeed = useCallback((newSeed: number) => {

@@ -182,5 +182,5 @@ export function useDynamicSystem() {
      */
     selectVariantIndex: (key: string, count: number) =>
       selectVariantIndex(seed, key, count),
-  }), [seed]);
+  }), [seed, dynamicDataProvider]);
 }

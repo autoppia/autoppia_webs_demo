@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import { WherePopover } from "@/components/WherePopover";
@@ -129,11 +129,12 @@ function HomeContent() {
       to: urlTo,
     });
     setGuests(nextGuests);
+    setCurrentPage(1);
   }, [searchParams]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [committedSearch, dateRange, guests]);
+  }, []);
 
   // Listen for data refresh events from DynamicDataProvider
   useEffect(() => {
@@ -193,12 +194,12 @@ function HomeContent() {
 
   const regions = useMemo(() => {
     const unique = new Set<string>();
-    hotels.forEach((hotel) => {
+    for (const hotel of hotels) {
       const [, country] = hotel.location.split(",").map((part) => part.trim());
       if (country) {
         unique.add(country);
       }
-    });
+    }
     return Array.from(unique);
   }, [hotels]);
 
@@ -300,7 +301,7 @@ function HomeContent() {
     }
 
     return parts.join(", ");
-  }, [dyn.v3, guests, dynamicV3TextVariants]);
+  }, [dyn.v3, guests]);
 
   const { seed: layoutSeed, layout } = useSeedLayout("stay");
   const SearchWrapperTag = (layout?.searchBar?.wrapper ?? "section") as keyof JSX.IntrinsicElements;
@@ -313,6 +314,7 @@ function HomeContent() {
 
   const handleSearch = () => {
     setCommittedSearch(searchTerm);
+    setCurrentPage(1);
     logEvent(EVENT_TYPES.SEARCH_HOTEL, {
       searchTerm,
       dateRange: {
@@ -486,7 +488,7 @@ function HomeContent() {
     </div>
   ));
 
-  const eventComponents: Record<string, JSX.Element> = {
+  const eventComponents: Record<string, ReactNode> = {
     search: searchFieldNode,
     dates: dyn.v1.addWrapDecoy("search-dates", (
       <div className="flex flex-1 gap-2 min-w-[260px]">{checkInNode}{checkOutNode}</div>
@@ -549,7 +551,7 @@ function HomeContent() {
   const orderedPaginatedResults = useMemo(() => {
     const order = dyn.v1.changeOrderElements("home-property-cards", paginatedResults.length);
     return order.map((idx) => paginatedResults[idx]).filter(Boolean);
-  }, [dyn.seed, paginatedResults]);
+  }, [dyn.v1.changeOrderElements, paginatedResults]);
 
   return <div className="flex flex-col w-full items-center mt-4 pb-12">
       {dyn.v1.addWrapDecoy("search-bar-container", (

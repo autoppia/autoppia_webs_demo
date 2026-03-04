@@ -41,7 +41,7 @@ export function GuestSelectorPopover({
 
   const rowOrder = useMemo(
     () => dyn.v1.changeOrderElements("guest-rows", DEFAULTS.length),
-    [dyn.seed]
+    [dyn.v1.changeOrderElements]
   );
 
   const changeCount = (key: keyof GuestCounts, delta: number) => {

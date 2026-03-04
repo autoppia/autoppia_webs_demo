@@ -1,6 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useCallback } from "react";
+import type React from "react";
+import { createContext, useContext, useCallback } from "react";
 import { useSeed } from "@/context/SeedContext";
 
 // SeedLayout type definition (previously from v1-layouts)
@@ -169,11 +170,11 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
   const { seed, getNavigationUrl: seedGetNavigationUrl } = useSeed();
   const v2Seed = seed;
 
-  const getElementAttributes = (elementType: string, index: number = 0): Record<string, string> => ({
+  const getElementAttributes = (elementType: string, index = 0): Record<string, string> => ({
     "data-element-type": elementType,
   });
 
-  const generateId = (context: string, index: number = 0) => `${context}-${index}`;
+  const generateId = (context: string, index = 0) => `${context}-${index}`;
 
   const generateSeedClass = (baseClass: string) => baseClass;
 

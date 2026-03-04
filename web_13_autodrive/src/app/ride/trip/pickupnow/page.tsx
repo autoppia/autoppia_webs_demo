@@ -6,7 +6,6 @@ import RideNavbar from "../../../../components/RideNavbar";
 import { EVENT_TYPES, logEvent } from "@/library/event";
 import { DatePickerInput } from "../../../../components/DatePicker";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
-import { getEffectiveSeed } from "@/dynamic/v2-data";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
@@ -18,8 +17,8 @@ function getTimeSlotsForDate(dateStr: string) {
     const [yyyy, mm, dd] = dateStr.split("-");
     base = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
   }
-  let startHour = 0,
-    startMin = 0;
+  let startHour = 0;
+  let startMin = 0;
   const todayStr = format(new Date(), "yyyy-MM-dd");
   if (dateStr === todayStr) {
     // If today, start at now rounded up to next slot
@@ -627,7 +626,7 @@ export default function PickupNowPage() {
             >
               {variant.infoItems.map((item, index) => (
                 <li
-                  key={index}
+                  key={item.text ?? `info-${index}`}
                   className="flex items-start py-3 px-0 gap-3"
                   id={generateId(`info-item-${index}`, 0)}
                 >
@@ -770,7 +769,7 @@ export default function PickupNowPage() {
             >
               {variant.infoItems.map((item, index) => (
                 <li
-                  key={index}
+                  key={item.text ?? `info-${index}`}
                   className="flex items-start py-3 px-0 gap-3"
                   id={generateId(`info-item-${index}`, 0)}
                 >
@@ -783,7 +782,7 @@ export default function PickupNowPage() {
 
           <a
             className="text-xs underline text-[#222] mb-5"
-            href="#"
+            href="#terms"
             id={generateId('terms-link', 0)}
           >
             {variant.termsLinkText}
@@ -796,8 +795,12 @@ export default function PickupNowPage() {
                 backgroundColor: variant.accentColor,
                 '--hover-color': `${variant.accentColor}dd`
               } as React.CSSProperties}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = `${variant.accentColor}dd`}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = variant.accentColor}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = `${variant.accentColor}dd`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = variant.accentColor;
+              }}
               id={dyn.v3.getVariant("pickupnow-next-button-id", ID_VARIANTS_MAP, generateId('next-button', 0))}
             >
               {variant.nextButtonText}

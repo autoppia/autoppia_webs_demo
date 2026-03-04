@@ -42,7 +42,7 @@ export default function ConfirmationPage() {
     price: number;
     icon?: string;
   } | null>(null);
-  const [reserveRideData, setReserveRideData] = useState<any>(null);
+  const [reserveRideData, setReserveRideData] = useState<{ rideId?: number; rideName?: string; [key: string]: unknown } | null>(null);
   const [tripSaved, setTripSaved] = useState(false);
   const router = useRouter();
   const dyn = useDynamicSystem();
@@ -174,7 +174,7 @@ export default function ConfirmationPage() {
         try {
           const reservedTrips = JSON.parse(localStorage.getItem("reservedTrips") || "[]");
           // Check if trip already exists (avoid duplicates)
-          if (!reservedTrips.find((t: any) => t.id === tripId)) {
+          if (!reservedTrips.find((t: { id?: string }) => t.id === tripId)) {
             reservedTrips.push(newTrip);
             localStorage.setItem("reservedTrips", JSON.stringify(reservedTrips));
             setTripSaved(true);
@@ -278,7 +278,7 @@ export default function ConfirmationPage() {
                       alt="Driver"
                       className="w-16 h-16 rounded-full object-cover border-2 border-[#2095d2]"
                     />
-                    <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                    <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white" />
                   </div>
                   <div className="flex-1">
                     <div className="font-bold text-xl text-gray-900">
@@ -435,7 +435,7 @@ export default function ConfirmationPage() {
                         price: ride.price,
                         oldPrice: oldPrice,
                         seats: rideTemplate.seats,
-                        eta: "5 min away · " + (data.time || new Date().toTimeString().slice(0, 5)),
+                        eta: `5 min away · ${data.time || new Date().toTimeString().slice(0, 5)}`,
                         pickup: data.pickup,
                         dropoff: data.dropoff,
                         scheduled: scheduled,
@@ -450,7 +450,7 @@ export default function ConfirmationPage() {
                           rideType: ride.name,
                           price: ride.price,
                           totalSeats: rideTemplate.seats,
-                          estimatedArrival: "5 min away · " + (data.time || new Date().toTimeString().slice(0, 5))
+                          estimatedArrival: `5 min away · ${data.time || new Date().toTimeString().slice(0, 5)}`
                         }
                       });
                     }

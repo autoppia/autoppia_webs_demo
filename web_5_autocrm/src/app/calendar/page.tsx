@@ -31,13 +31,15 @@ const COLORS = {
   zinc: "bg-zinc-200 text-zinc-700 border-zinc-300",
 };
 
-const normalizeEvent = (ev: any, index: number): CalendarEvent => ({
-  id: ev?.id ?? index + 1,
-  date: ev?.date ?? new Date().toISOString().slice(0, 10),
-  label: ev?.label ?? "Event",
-  time: ev?.time ?? "2:00pm",
-  color: (["forest", "indigo", "blue", "zinc"].includes(ev?.color) ? ev.color : "forest") as keyof typeof COLORS,
-});
+function normalizeEvent(ev: Record<string, unknown> & { id?: number; date?: string; label?: string; time?: string; color?: string }, index: number): CalendarEvent {
+  return {
+    id: typeof ev?.id === "number" ? ev.id : index + 1,
+    date: String(ev?.date ?? new Date().toISOString().slice(0, 10)),
+    label: String(ev?.label ?? "Event"),
+    time: String(ev?.time ?? "2:00pm"),
+    color: ["forest", "indigo", "blue", "zinc"].includes(ev?.color as string) ? (ev?.color as keyof typeof COLORS) : "forest",
+  };
+}
 
 const LoadingNotice = ({ message }: { message: string }) => (
   <div className="flex items-center gap-2 text-sm text-zinc-500">
@@ -70,7 +72,7 @@ export default function CalendarPage() {
   const { getText, getId } = useDynamicStructure();
   const { seed, isSeedReady } = useSeed();
   const v2Seed = seed;
-  const { data, isLoading, error } = useProjectData<any>({
+  const { data, isLoading, error } = useProjectData<CalendarEvent>({
     projectKey: "web_5_autocrm",
     entityType: "events",
     seedValue: isSeedReady ? v2Seed : undefined,
@@ -92,11 +94,11 @@ export default function CalendarPage() {
   const [fallbackEvents, setFallbackEvents] = useState<CalendarEvent[]>([]);
   useEffect(() => {
     initializeEvents().then((rows) =>
-      setFallbackEvents(rows.map((ev, idx) => normalizeEvent(ev, idx)))
+      setFallbackEvents(rows.map((ev, idx) => normalizeEvent(ev as Record<string, unknown> & { id?: number; date?: string; label?: string; time?: string; color?: string }, idx)))
     );
   }, []);
 
-  const normalizedApi = useMemo(() => (data || []).map((ev, idx) => normalizeEvent(ev, idx)), [data]);
+  const normalizedApi = useMemo(() => (data || []).map((ev, idx) => normalizeEvent(ev as Record<string, unknown> & { id?: number; date?: string; label?: string; time?: string; color?: string }, idx)), [data]);
   const resolvedEvents = normalizedApi.length > 0 ? normalizedApi : fallbackEvents;
   const [events, setEvents] = useState<CalendarEvent[]>(resolvedEvents);
   useEffect(() => {
@@ -148,9 +150,13 @@ export default function CalendarPage() {
           id={getId("previous_month_button")}
           aria-label={getText("previous_month", "Previous Month")}
           onClick={() =>
-            setCurMonth((m: number) =>
-              m === 0 ? (setCurYear((y: number) => y - 1), 11) : m - 1
-            )
+            setCurMonth((m: number) => {
+              if (m === 0) {
+                setCurYear((y: number) => y - 1);
+                return 11;
+              }
+              return m - 1;
+            })
           }
         >
           <ChevronLeft className="w-5 h-5" />
@@ -165,9 +171,13 @@ export default function CalendarPage() {
           id={getId("next_month_button")}
           aria-label={getText("next_month", "Next Month")}
           onClick={() =>
-            setCurMonth((m) =>
-              m === 11 ? (setCurYear((y) => y + 1), 0) : m + 1
-            )
+            setCurMonth((m) => {
+              if (m === 11) {
+                setCurYear((y) => y + 1);
+                return 0;
+              }
+              return m + 1;
+            })
           }
         >
           <ChevronRight className="w-5 h-5" />
@@ -203,7 +213,7 @@ export default function CalendarPage() {
                 : [];
               return (
                 <DynamicItem
-                  key={wi + "-" + di}
+                  key={d ? `day-${getDateStr(d)}` : `empty-${wi}-${di}`}
                   index={wi * 7 + di}
                   onClick={() => d && setOpenEventDate(dateStr)}
                   className={`relative border-b border-zinc-100 min-h-[86px] px-2 md:px-3 pt-2 group flex flex-col items-start ${
@@ -256,19 +266,19 @@ export default function CalendarPage() {
         <div className="bg-neutral-bg-dark border-t border-zinc-100 px-6 py-3 flex flex-wrap items-center gap-4">
           <span className="text-xs font-bold text-zinc-500 mr-3">Legend:</span>
           <span className="inline-flex items-center gap-1 text-xs">
-            <span className="w-4 h-4 rounded-xl bg-accent-forest/70 inline-block"></span>{" "}
+            <span className="w-4 h-4 rounded-xl bg-accent-forest/70 inline-block" />{" "}
             Matter/Event
           </span>
           <span className="inline-flex items-center gap-1 text-xs">
-            <span className="w-4 h-4 rounded-xl bg-accent-indigo/70 inline-block"></span>{" "}
+            <span className="w-4 h-4 rounded-xl bg-accent-indigo/70 inline-block" />{" "}
             Internal
           </span>
           <span className="inline-flex items-center gap-1 text-xs">
-            <span className="w-4 h-4 rounded-xl bg-blue-100 inline-block border border-blue-300"></span>{" "}
+            <span className="w-4 h-4 rounded-xl bg-blue-100 inline-block border border-blue-300" />{" "}
             Filing
           </span>
           <span className="inline-flex items-center gap-1 text-xs">
-            <span className="w-4 h-4 rounded-xl bg-zinc-200 inline-block border border-zinc-300"></span>{" "}
+            <span className="w-4 h-4 rounded-xl bg-zinc-200 inline-block border border-zinc-300" />{" "}
             Other
           </span>
         </div>

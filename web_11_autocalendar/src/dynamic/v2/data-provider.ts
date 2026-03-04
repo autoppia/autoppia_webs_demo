@@ -156,11 +156,11 @@ export class DynamicDataProvider {
 
   public getAvailableCalendars(): string[] {
     const calendars = new Set<string>();
-    this.events.forEach((event) => {
+    for (const event of this.events) {
       if (event.calendar) {
         calendars.add(event.calendar);
       }
-    });
+    }
     return Array.from(calendars).sort((a, b) => a.localeCompare(b));
   }
 
@@ -173,7 +173,7 @@ export class DynamicDataProvider {
   }
 
   private notifyEvents(): void {
-    this.eventSubscribers.forEach((cb) => cb(this.events));
+    for (const cb of this.eventSubscribers) cb(this.events);
   }
 
   public isDynamicModeEnabled(): boolean {

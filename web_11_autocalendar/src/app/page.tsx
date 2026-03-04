@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import type React from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Image from "next/image";
 import {
   Dialog,
@@ -14,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { CalendarEvent } from "@/library/dataset";
+import type { CalendarEvent } from "@/library/dataset";
 import { dynamicDataProvider } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
@@ -46,7 +47,19 @@ const INIT_COLORS = [
 ];
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 const MINUTES = [0, 30];
-const DEFAULT_LAYOUT_CONFIG = {
+
+type LayoutConfig = {
+  sidebar: "left" | "right" | "top" | "bottom" | "none";
+  navigation: "left" | "right" | "top" | "bottom" | "none";
+  search: "top" | "left" | "right";
+  calendar: string;
+  userProfile: string;
+  createButton: "sidebar" | "navigation" | "floating";
+  miniCalendar: "sidebar" | "navigation" | "floating";
+  myCalendars: "sidebar" | "navigation";
+};
+
+const DEFAULT_LAYOUT_CONFIG: { layout: LayoutConfig } = {
   layout: {
     sidebar: "left",
     navigation: "top",
@@ -57,7 +70,7 @@ const DEFAULT_LAYOUT_CONFIG = {
     miniCalendar: "sidebar",
     myCalendars: "sidebar",
   },
-} as const;
+};
 
 interface Event {
   id: string;
@@ -194,8 +207,8 @@ function getMonthMatrix(year: number, month: number) {
 }
 
 function weekRangeLabel(week: Date[]) {
-  const start = week[0],
-    end = week[week.length - 1];
+  const start = week[0];
+  const end = week[week.length - 1];
   if (start.getMonth() === end.getMonth())
     return `${MONTHS[start.getMonth()]} ${start.getDate()} – ${end.getDate()}`;
   return `${MONTHS[start.getMonth()]} ${start.getDate()} – ${
@@ -270,7 +283,6 @@ function expandRecurringEvents(
         nextMonth.setDate(Math.min(origDay, lastDayNextMonth));
         cur = nextMonth;
       }
-      continue;
     }
   }
 
@@ -331,7 +343,7 @@ function CalendarApp() {
       calendarGrid: dyn.v3.getVariant("calendar-grid", ID_VARIANTS_MAP, "calendar-grid"),
       calendarWeekSlot: dyn.v3.getVariant("calendar-week-slot", ID_VARIANTS_MAP, "calendar-week-slot")
     }),
-    [dyn.seed]
+    [dyn]
   );
   const dynamicClasses = useMemo(
     () => ({
@@ -351,7 +363,7 @@ function CalendarApp() {
       sectionTitle: dyn.v3.getVariant("section-title", CLASS_VARIANTS_MAP, "section-title"),
       timelineRow: dyn.v3.getVariant("timeline-row", CLASS_VARIANTS_MAP, "timeline-row")
     }),
-    [dyn.seed]
+    [dyn]
   );
   const dynamicTexts = useMemo(
     () => ({
@@ -384,7 +396,7 @@ function CalendarApp() {
       attendeeLabel: dyn.v3.getVariant("attendee_label", TEXT_VARIANTS_MAP, "Add attendee (email)"),
       attendeePlaceholder: dyn.v3.getVariant("attendee_placeholder", TEXT_VARIANTS_MAP, "name@example.com")
     }),
-    [dyn.seed]
+    [dyn]
   );
   const [viewDate, setViewDate] = useState(() => {
     const now = new Date();
@@ -414,7 +426,7 @@ function CalendarApp() {
     const unsubscribe = dynamicDataProvider.subscribeEvents((updatedEvents) => {
       // If events array is empty, it means data was cleared (seed change in progress)
       if (updatedEvents.length === 0) {
-        console.log(`[autocalendar] Events array is empty - seed change in progress, clearing events state`);
+        console.log("[autocalendar] Events array is empty - seed change in progress, clearing events state");
         setV2Events([]);
         setIsLoading(true);
         return;
@@ -431,6 +443,7 @@ function CalendarApp() {
 
   // Clear local state when seed changes (V2 data will reload via ClientBody).
   useEffect(() => {
+    if (typeof seed !== "number") return;
     setV2Events([]);
     setIsLoading(true);
     setUserEvents([]);
@@ -483,13 +496,13 @@ function CalendarApp() {
       });
       setMyCalendars(newCalendars);
     }
-  }, [uniqueCalendars]);
+  }, [uniqueCalendars, myCalendars]);
   const orderedCalendars = useMemo(() => {
     const count = myCalendars.length;
     if (count <= 1) return myCalendars;
     const order = dyn.v1.changeOrderElements("my-calendars", count);
     return order.map((idx) => myCalendars[idx]);
-  }, [dyn.seed, myCalendars]);
+  }, [dyn, myCalendars]);
   const [eventModal, setEventModal] = useState<EventModalState>({
     open: false,
     editing: null,
@@ -526,7 +539,7 @@ function CalendarApp() {
   const generationOverlay = isGenerating ? (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="flex items-center space-x-3 rounded-lg bg-white p-4 shadow-lg">
-        <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-indigo-600"></div>
+        <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-indigo-600" />
         <div className="text-sm text-gray-700">
           Loading calendar events...
         </div>
@@ -550,7 +563,7 @@ function CalendarApp() {
     // intentionally no per-keystroke logging
   }, 400);
     return () => clearTimeout(handle);
-  }, [searchQuery, hasOpenedSearch]);
+  }, [hasOpenedSearch]);
 
   function handleSearchKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
@@ -598,7 +611,7 @@ function CalendarApp() {
   );
   const orderedDaysHeader = useMemo(
     () => dyn.v1.changeOrderElements("days-header", DAYS.length).map((idx) => DAYS[idx]),
-    [dyn.seed]
+    [dyn]
   );
 
   const VIEW_OPTIONS = ["Day", "5 days", "Week", "Month"];
@@ -606,7 +619,7 @@ function CalendarApp() {
   const orderedViewOptions = useMemo(() => {
     const order = dyn.v1.changeOrderElements("view-options", VIEW_OPTIONS.length);
     return order.map((idx) => VIEW_OPTIONS[idx]);
-  }, [dyn.seed]);
+  }, [dyn]);
 
   // Determine the visible date range
   const [rangeStart, rangeEnd] = useMemo(() => {
@@ -812,7 +825,7 @@ function CalendarApp() {
   const orderedReminderOptions = useMemo(() => {
     const order = dyn.v1.changeOrderElements("reminder-options", REMINDER_OPTIONS.length);
     return order.map((idx) => REMINDER_OPTIONS[idx]);
-  }, [dyn.seed]);
+  }, [dyn]);
 
   function addReminder() {
     const minutes = eventModal.reminderToAdd;
@@ -866,7 +879,7 @@ function CalendarApp() {
       return;
     }
     // Validate date
-    if (isNaN(Date.parse(eventModal.date))) {
+    if (Number.isNaN(Date.parse(eventModal.date))) {
       alert("Please enter a valid date.");
       return;
     }
@@ -1223,18 +1236,18 @@ function CalendarApp() {
                 ))}
               </div>
               <div>
-                {miniCalMatrix.map((week, wi) =>
+                {miniCalMatrix.map((week) =>
                   addWrapDecoy(
-                    `mini-calendar-week-${wi}`,
-                    <div key={wi} className="grid grid-cols-7 mb-0.5">
-                      {week.map((d, di) => {
+                    `mini-calendar-week-${week[0]?.toISOString() ?? ""}`,
+                    <div key={week[0]?.toISOString() ?? week.map((d) => d.toISOString()).join(",")} className="grid grid-cols-7 mb-0.5">
+                      {week.map((d) => {
                         const isSel = isSameDay(d, viewDate);
                         const isTod = isToday(d);
                         const inMonth = d.getMonth() === miniCalMonth;
                         return (
                           <button
-                            key={di}
-                            id={`${getIdVariant("mini-calendar-cell")}-${wi}-${di}`}
+                            key={d.toISOString()}
+                            id={`${getIdVariant("mini-calendar-cell")}-${d.toISOString()}`}
                             onClick={() => handleMiniCalDayClick(d)}
                             className={`h-7 w-7 mx-auto flex items-center justify-center rounded-full text-base select-none border-none
                         ${
@@ -1253,7 +1266,7 @@ function CalendarApp() {
                         );
                       })}
                     </div>,
-                    `mini-calendar-week-wrap-${wi}`
+                    `mini-calendar-week-wrap-${week[0]?.toISOString() ?? ""}`
                   )
                 )}
               </div>
@@ -1284,11 +1297,10 @@ function CalendarApp() {
                   currentVariant.layout.sidebar === "top"
                     ? "flex items-center text-[15px] font-bold text-[#383e4d] mb-1 gap-1 group px-2 py-1 rounded hover:bg-gray-100"
                     : "flex items-center text-[15px] font-bold text-[#383e4d] mb-1 gap-1 group"
-                }`}
+                } ${getClassVariant("my-calendars-button-class")}`}
                 aria-expanded={myCalExpanded}
                 aria-label="Toggle my calendars"
                 id={getIdVariant("calendar-filter")}
-                className={`${getClassVariant("my-calendars-button-class")}`}
               >
                 <span>{getTextVariant("sidebar_heading", "My calendars")}</span>
                 <svg
@@ -1907,9 +1919,11 @@ function CalendarApp() {
                 ))}
               </div>
               <div>
-                {[...Array(6)].map((_, rowIdx) => (
+                {[...Array(6)].map((_, rowIdx) => {
+                  const rowStartDate = mainGridDates[rowIdx * 7];
+                  return (
                   <div
-                    key={rowIdx}
+                    key={rowStartDate?.toISOString() ?? `row-${rowIdx}`}
                     className="grid grid-cols-7 h-[90px] border-b border-[#e5e5e5]"
                   >
                     {[...Array(7)].map((_, colIdx) => {
@@ -1921,17 +1935,17 @@ function CalendarApp() {
                         (ev) => ev.date === d.toISOString().split("T")[0]
                       );
                       return (
-                        <div
-                          key={colIdx}
+                        <button
+                          type="button"
+                          key={d.toISOString()}
                           onClick={() => onMonthCellClick(d)}
-                          className={`border-r border-[#e5e5e5] relative px-1 pt-1 h-full align-top cursor-pointer ${
-                            isOut ? "bg-[#ededed]" : ""
+                          className={`border-r border-[#e5e5e5] relative px-1 pt-1 h-full align-top cursor-pointer w-full text-left border-0 ${
+                            isOut ? "bg-[#ededed]" : "bg-transparent"
                           }`}
                           style={{
                             color: isOut ? "#bdbdbd" : "#222",
                             fontSize: "17px",
                           }}
-                          role="button"
                           aria-label={`Select ${format(d, "MMMM d, yyyy")}`}
                         >
                           <div
@@ -1961,9 +1975,7 @@ function CalendarApp() {
                                   e.stopPropagation();
                                   logEvent(EVENT_TYPES.CELL_CLICKED, {
                                     source: "month-view",
-                                    date: d.getFullYear() + '-' +
-                                          String(d.getMonth() + 1).padStart(2, '0') + '-' +
-                                          String(d.getDate()).padStart(2, '0'),
+                                    date: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`,
                                     view: "Month",
                                    });
                                   openEditEventModal(ev);
@@ -1979,11 +1991,12 @@ function CalendarApp() {
                               </span>
                             )}
                           </div>
-                        </div>
+                        </button>
                       );
                     })}
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -2058,11 +2071,11 @@ function CalendarApp() {
                     className="flex-1 flex flex-col border-r border-[#e5e5e5] last:border-none relative"
                   >
                     {HOURS.map((hrIdx) => (
-                      <div
+                      <button
+                        type="button"
                         key={`cell-${dayIdx}-${hrIdx}`}
-                        className="h-14 border-b border-[#ededed] bg-white cursor-pointer"
+                        className="h-14 border-b border-[#ededed] bg-white cursor-pointer w-full border-0 text-left"
                         onClick={() => onWeekHourCellClick(d, hrIdx)}
-                        role="button"
                         aria-label={`Add event on ${format(
                           d,
                           "MMMM d, yyyy"
@@ -2086,9 +2099,7 @@ function CalendarApp() {
                               e.stopPropagation();
                               logEvent(EVENT_TYPES.CELL_CLICKED, {
                                 source: `${currentView.toLowerCase()}-view`,
-                                date: d.getFullYear() + '-' +
-                                      String(d.getMonth() + 1).padStart(2, '0') + '-' +
-                                      String(d.getDate()).padStart(2, '0'),
+                                date: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`,
                                 hour: Math.floor(ev.start),
                                 view: currentView,
                               });
@@ -2190,15 +2201,15 @@ function CalendarApp() {
             ))}
           </div>
           <div>
-            {miniCalMatrix.map((week, wi) => (
-              <div key={wi} className="grid grid-cols-7 mb-0.5">
-                {week.map((d, di) => {
+            {miniCalMatrix.map((week) => (
+              <div key={week[0]?.toISOString() ?? week.map((d) => d.toISOString()).join(",")} className="grid grid-cols-7 mb-0.5">
+                {week.map((d) => {
                   const isSel = isSameDay(d, viewDate);
                   const isTod = isToday(d);
                   const inMonth = d.getMonth() === miniCalMonth;
                   return (
                     <button
-                      key={di}
+                      key={d.toISOString()}
                       onClick={() => handleMiniCalDayClick(d)}
                       className={`h-7 w-7 mx-auto flex items-center justify-center rounded-full text-base select-none border-none
                         ${
@@ -2417,7 +2428,7 @@ function CalendarApp() {
                         value={eventModal.startTime[0]}
                         onChange={(e) =>
                           handleModalField("startTime", [
-                            parseInt(e.target.value),
+                            Number.parseInt(e.target.value),
                             eventModal.startTime[1],
                           ])
                         }
@@ -2442,7 +2453,7 @@ function CalendarApp() {
                         onChange={(e) =>
                           handleModalField("startTime", [
                             eventModal.startTime[0],
-                            parseInt(e.target.value),
+                            Number.parseInt(e.target.value),
                           ])
                         }
                         aria-label="Start time minute"
@@ -2465,7 +2476,7 @@ function CalendarApp() {
                         value={eventModal.endTime[0]}
                         onChange={(e) =>
                           handleModalField("endTime", [
-                            parseInt(e.target.value),
+                            Number.parseInt(e.target.value),
                             eventModal.endTime[1],
                           ])
                         }
@@ -2490,7 +2501,7 @@ function CalendarApp() {
                         onChange={(e) =>
                           handleModalField("endTime", [
                             eventModal.endTime[0],
-                            parseInt(e.target.value),
+                            Number.parseInt(e.target.value),
                           ])
                         }
                         aria-label="End time minute"
@@ -2648,7 +2659,7 @@ function CalendarApp() {
                       className="px-3 py-2 border rounded"
                       value={eventModal.reminderToAdd}
                       onChange={(e) =>
-                        handleModalField("reminderToAdd", parseInt(e.target.value))
+                        handleModalField("reminderToAdd", Number.parseInt(e.target.value))
                       }
                     >
                       {orderedReminderOptions.map((m) => (
@@ -2670,7 +2681,7 @@ function CalendarApp() {
                   </div>
                   <ul className="mt-2 space-y-2">
                     {eventModal.reminders.map((m, i) => (
-                      <li key={`${m}-${i}`} className="flex items-center gap-2">
+                      <li key={m} className="flex items-center gap-2">
                         <span className="text-sm text-gray-600">
                           {m >= 60 ? `${Math.round(m / 60)}h` : `${m}m`} before
                         </span>

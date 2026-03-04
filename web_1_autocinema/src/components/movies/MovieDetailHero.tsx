@@ -26,8 +26,8 @@ export function MovieDetailHero({ movie, onWatchTrailer, onWatchlist, onShare, i
       </div>
       <div className="mt-6 flex-1 space-y-6 lg:mt-0">
         <div className="flex flex-wrap items-center gap-3">
-          {movie.genres.slice(0, 3).map((genre, idx) => (
-            <span key={idx} className="rounded-full bg-secondary/20 border border-secondary/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-secondary">
+          {movie.genres.slice(0, 3).map((genre) => (
+            <span key={genre} className="rounded-full bg-secondary/20 border border-secondary/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-secondary">
               {genre}
             </span>
           ))}

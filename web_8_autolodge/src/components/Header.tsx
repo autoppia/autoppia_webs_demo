@@ -23,7 +23,7 @@ export default function Header() {
 
   const navOrder = useMemo(
     () => dyn.v1.changeOrderElements("header-nav-links", navItems.length),
-    [dyn.seed, navItems.length]
+    [dyn.v1.changeOrderElements, navItems.length]
   );
 
   return (

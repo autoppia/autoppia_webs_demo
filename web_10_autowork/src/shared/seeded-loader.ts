@@ -32,7 +32,7 @@ export interface SeededLoadOptions {
   filterValues?: string[];
 }
 
-export async function fetchSeededSelection<T = any>(options: SeededLoadOptions): Promise<T[]> {
+export async function fetchSeededSelection<T = unknown>(options: SeededLoadOptions): Promise<T[]> {
   const baseUrl = getApiBaseUrl();
   const seed = options.seedValue ?? 1;
   const limit = options.limit ?? 50;
@@ -80,14 +80,13 @@ export async function fetchSeededSelection<T = any>(options: SeededLoadOptions):
 
     // Return data even if empty array - let caller decide if empty is acceptable
     return json.data as T[];
-  } catch (error: any) {
+  } catch (error: unknown) {
     clearTimeout(timeoutId);
-    // If it's an abort (timeout), provide a clearer error message
-    if (error.name === 'AbortError' || error.message?.includes('aborted')) {
+    const err = error instanceof Error ? error : new Error(String(error));
+    if (err.name === 'AbortError' || err.message?.includes('aborted')) {
       console.error(`[seeded-loader] API request timed out after 10s for ${options.entityType} (seed=${seed})`);
       throw new Error(`API request timed out for ${options.entityType}. The backend service may be unavailable.`);
     }
-    // Re-throw other errors
-    throw error;
+    throw err;
   }
 }

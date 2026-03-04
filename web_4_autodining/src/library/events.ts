@@ -25,7 +25,7 @@ export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
 
 export function logEvent(
   eventType: EventType,
-  data: any = {},
+  data: Record<string, unknown> = {},
   extra_headers: Record<string, string> = {}
 ) {
   if (typeof window === "undefined") return;
