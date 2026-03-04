@@ -28,8 +28,8 @@ from typing import Dict, List, Set, Tuple
 
 def discover_projects_and_entities(initial_data_dir: str) -> Dict[str, Set[str]]:
     """
-    Walk initial_data/*/data and infer entity types from '<entity>_N.json' files.
-    Returns mapping: { project_key: {entity_type, ...}, ... }
+    Walk initial_data/* (flat layout) and infer entity types from '<entity>_N.json' files.
+    Skips main.json. Returns mapping: { project_key: {entity_type, ...}, ... }
     """
     projects: Dict[str, Set[str]] = {}
 
@@ -40,20 +40,14 @@ def discover_projects_and_entities(initial_data_dir: str) -> Dict[str, Set[str]]
         project_dir = os.path.join(initial_data_dir, project_key)
         if not os.path.isdir(project_dir):
             continue
-        data_dir = os.path.join(project_dir, "data")
-        if not os.path.isdir(data_dir):
-            continue
 
         entity_types: Set[str] = set()
-        for filename in os.listdir(data_dir):
-            if not filename.endswith(".json"):
+        for filename in os.listdir(project_dir):
+            if not filename.endswith(".json") or filename == "main.json":
                 continue
-            # Expect format like '<entity>_1.json' or '<entity>_20241120.json'
+            # Accept '<entity>.json', '<entity>_1.json', or '<entity>_20241120.json'
             name, _ext = os.path.splitext(filename)
-            if "_" not in name:
-                # Skip unexpected files
-                continue
-            entity = name.rsplit("_", 1)[0]
+            entity = name.rsplit("_", 1)[0] if "_" in name else name
             if entity:
                 entity_types.add(entity)
 

@@ -1,17 +1,17 @@
 {
   "clients": [
-    "./data/clients_1.json"
+    "./clients.json"
   ],
   "events": [
-    "./data/events_1.json"
+    "./events.json"
   ],
   "files": [
-    "./data/files_1.json"
+    "./files.json"
   ],
   "logs": [
-    "./data/logs_1.json"
+    "./logs.json"
   ],
   "matters": [
-    "./data/matters_1.json"
+    "./matters.json"
   ]
 }
