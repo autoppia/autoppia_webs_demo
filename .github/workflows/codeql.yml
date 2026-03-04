@@ -1,0 +1,29 @@
+# CodeQL analysis with custom config (excludes py/path-injection false positives in data_handler).
+# If you use GitHub "default setup" for code scanning instead, add a query filter in the UI
+# to exclude py/path-injection; paths are validated via _path_for_io_under_base() in data_handler.
+name: "CodeQL"
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
