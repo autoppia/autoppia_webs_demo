@@ -14,7 +14,7 @@
     "clsx": "^2.1.1",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.475.0",
-    "next": "^15.5.8",
+    "next": "^15.5.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tailwind-merge": "^3.0.1",
@@ -35,6 +35,8 @@
   },
   "overrides": {
     "glob": ">=10.5.0",
-    "js-yaml": ">=4.1.1"
+    "js-yaml": ">=4.1.1",
+    "minimatch": ">=10.2.3",
+    "@isaacs/brace-expansion": ">=5.0.1"
   }
 }
