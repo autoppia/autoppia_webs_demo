@@ -7,6 +7,7 @@ interface MoveListProps {
   annotatedMoves: AnnotatedMove[];
   activeMoveIndex: number;
   onMoveClick?: (index: number) => void;
+  embedded?: boolean;
 }
 
 const CLASSIFICATION_COLORS: Record<MoveClassification, string> = {
@@ -31,7 +32,7 @@ const CLASSIFICATION_DOT: Record<MoveClassification, string> = {
   book: "bg-purple-400",
 };
 
-export function MoveList({ annotatedMoves, activeMoveIndex, onMoveClick }: MoveListProps) {
+export function MoveList({ annotatedMoves, activeMoveIndex, onMoveClick, embedded }: MoveListProps) {
   const activeRef = useRef<HTMLButtonElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -54,9 +55,9 @@ export function MoveList({ annotatedMoves, activeMoveIndex, onMoveClick }: MoveL
   return (
     <div
       ref={containerRef}
-      className="bg-[#1c1917] border border-stone-800/80 rounded-lg max-h-[400px] overflow-y-auto no-scrollbar"
+      className={`overflow-y-auto no-scrollbar flex-1 min-h-0 ${embedded ? "" : "bg-[#1c1917] border border-stone-800/80 rounded-lg"}`}
     >
-      <div className="sticky top-0 bg-[#1c1917] border-b border-stone-800/60 px-4 py-2.5 z-10">
+      <div className={`sticky top-0 ${embedded ? "bg-[#1c1917]" : "bg-[#1c1917] border-b border-stone-800/60"} px-4 py-2.5 z-10`}>
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-zinc-300">Moves</h3>
           <span className="text-xs text-zinc-500">

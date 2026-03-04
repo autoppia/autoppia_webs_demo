@@ -25,9 +25,7 @@ import {
   ChevronLast,
   ChevronLeft,
   ChevronRight,
-  Pause,
   PenTool,
-  Play,
   RotateCcw,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -148,107 +146,106 @@ export default function AnalysisPage() {
         </h1>
       </DynamicWrapper>
 
-      <div className="flex flex-col lg:flex-row gap-4">
-        {/* Left column: Board + Controls + PGN Input */}
-        <div className="flex-1 min-w-0">
-          {/* Engine eval display */}
+      {/* Main row: EvalBar | Board | Move Panel — all same height, flush */}
+      <div className="flex flex-col lg:flex-row">
+        {/* EvalBar + Board */}
+        <div className="flex min-w-0">
           {board.showEngine && (
-            <DynamicWrapper>
-              <div className="flex items-center gap-2 mb-2 px-1">
-                <span className="text-xs text-zinc-500 font-mono">Engine:</span>
-                <span
-                  className={`text-sm font-bold font-mono ${
-                    board.currentEval.cp > 50
-                      ? "text-zinc-100"
-                      : board.currentEval.cp < -50
-                        ? "text-zinc-400"
-                        : "text-zinc-300"
-                  }`}
-                >
-                  {board.currentEval.display}
-                </span>
-                <span className="text-[10px] text-zinc-600 font-mono">
-                  depth {board.currentEval.depth}
-                </span>
-              </div>
-            </DynamicWrapper>
+            <EvalBar
+              eval={board.currentEval}
+              boardHeight={board.boardHeight}
+              flipped={board.boardOrientation === "black"}
+            />
           )}
-
-          {/* EvalBar + Board */}
-          <div className="flex gap-1.5 mb-3">
-            {board.showEngine && (
-              <EvalBar
-                eval={board.currentEval}
-                boardHeight={board.boardHeight}
-                flipped={board.boardOrientation === "black"}
-              />
-            )}
-            <div
-              ref={board.boardContainerRef}
-              className="flex-1 min-w-0 max-w-[min(100%,calc(100vh-260px))]"
-            >
-              <ChessBoard
-                fen={board.currentFen}
-                maxSize={9999}
-                interactive
-                allowDragging
-                boardOrientation={board.boardOrientation}
-                selectedSquare={board.selectedSquare}
-                highlightSquares={board.legalMoveSquares}
-                lastMove={board.lastMove}
-                onSquareClick={board.handleSquareClick}
-                onDrop={board.handleDrop}
-              />
-            </div>
-          </div>
-
-          {/* Navigation Controls */}
-          <div className="flex items-center justify-center gap-1.5">
-            <NavButton onClick={board.flipBoard} title="Flip board (F)">
-              <RotateCcw className="h-4 w-4" />
-            </NavButton>
-            <NavButton onClick={board.goFirst} title="First move (Home)">
-              <ChevronFirst className="h-5 w-5" />
-            </NavButton>
-            <NavButton onClick={board.goPrev} title="Previous (Left)">
-              <ChevronLeft className="h-5 w-5" />
-            </NavButton>
-            <NavButton onClick={board.togglePlay} highlight title="Auto-play">
-              {board.isPlaying ? (
-                <Pause className="h-5 w-5" />
-              ) : (
-                <Play className="h-5 w-5" />
-              )}
-            </NavButton>
-            <NavButton onClick={board.goNext} title="Next (Right)">
-              <ChevronRight className="h-5 w-5" />
-            </NavButton>
-            <NavButton onClick={board.goLast} title="Last move (End)">
-              <ChevronLast className="h-5 w-5" />
-            </NavButton>
-            <SeedLink
-              href={`/editor?fen=${encodeURIComponent(board.currentFen)}`}
-              className="p-2 rounded-lg transition-colors bg-[#1c1917] border border-amber-600/60 text-amber-400 hover:text-amber-300 hover:bg-amber-600/10"
-              title="Board Editor"
-            >
-              <PenTool className="h-4 w-4" />
-            </SeedLink>
-            <AnalysisToolsMenu
-              onFlipBoard={board.flipBoard}
-              showEngine={board.showEngine}
-              onToggleEngine={board.toggleEngine}
+          <div
+            ref={board.boardContainerRef}
+            className="min-w-0 max-w-[min(100%,calc(100vh-280px))]"
+          >
+            <ChessBoard
+              fen={board.currentFen}
+              maxSize={9999}
+              interactive
+              allowDragging
+              boardOrientation={board.boardOrientation}
+              selectedSquare={board.selectedSquare}
+              highlightSquares={board.legalMoveSquares}
+              lastMove={board.lastMove}
+              onSquareClick={board.handleSquareClick}
+              onDrop={board.handleDrop}
             />
           </div>
+        </div>
 
-          <div className="text-center text-xs text-zinc-500 mt-1.5 mb-4">
-            {board.moves.length > 0
-              ? board.activeMoveIndex >= 0
-                ? `Move ${board.activeMoveIndex + 1} of ${board.moves.length}`
-                : `Start position \u2014 ${board.moves.length} moves`
-              : "Play a move or load a game to begin"}
-          </div>
+        {/* Right panel: engine line + moves — same height as board */}
+        <div
+          className="w-full lg:w-[340px] flex flex-col bg-[#1c1917] lg:border-y lg:border-r border border-stone-800/80 lg:rounded-r-lg rounded-lg lg:rounded-l-none"
+          style={{ height: board.boardHeight || undefined }}
+        >
+          {/* Engine eval line */}
+          {board.showEngine && (
+            <div className="flex items-center gap-2 px-3 py-1.5 border-b border-stone-800/60 flex-shrink-0">
+              <span className="text-xs text-zinc-500 font-mono">Engine:</span>
+              <span
+                className={`text-sm font-bold font-mono ${
+                  board.currentEval.cp > 50
+                    ? "text-zinc-100"
+                    : board.currentEval.cp < -50
+                      ? "text-zinc-400"
+                      : "text-zinc-300"
+                }`}
+              >
+                {board.currentEval.display}
+              </span>
+              <span className="text-[10px] text-zinc-600 font-mono ml-auto">
+                depth {board.currentEval.depth}
+              </span>
+            </div>
+          )}
 
-          {/* PGN Input / Game Library */}
+          {/* Scrollable move list — fills all remaining space */}
+          <MoveList
+            annotatedMoves={board.annotatedMoves}
+            activeMoveIndex={board.activeMoveIndex}
+            onMoveClick={board.handleMoveClick}
+            embedded
+          />
+        </div>
+      </div>
+
+      {/* Footer bar: nav controls spanning below board+panel */}
+      <div className="flex items-center justify-end gap-1 mt-1 py-1.5">
+        <NavButton onClick={board.flipBoard} title="Flip board (F)">
+          <RotateCcw className="h-4 w-4" />
+        </NavButton>
+        <SeedLink
+          href={`/editor?fen=${encodeURIComponent(board.currentFen)}`}
+          className="p-1.5 rounded-md transition-colors text-zinc-400 hover:text-amber-300 hover:bg-white/5"
+          title="Board Editor"
+        >
+          <PenTool className="h-4 w-4" />
+        </SeedLink>
+        <NavButton onClick={board.goFirst} title="First move (Home)">
+          <ChevronFirst className="h-5 w-5" />
+        </NavButton>
+        <NavButton onClick={board.goPrev} title="Previous (Left)">
+          <ChevronLeft className="h-5 w-5" />
+        </NavButton>
+        <NavButton onClick={board.goNext} title="Next (Right)">
+          <ChevronRight className="h-5 w-5" />
+        </NavButton>
+        <NavButton onClick={board.goLast} title="Last move (End)">
+          <ChevronLast className="h-5 w-5" />
+        </NavButton>
+        <AnalysisToolsMenu
+          onFlipBoard={board.flipBoard}
+          showEngine={board.showEngine}
+          onToggleEngine={board.toggleEngine}
+        />
+      </div>
+
+      {/* Below: Opening Explorer + PGN Input */}
+      <div className="flex flex-col lg:flex-row gap-4 mt-3">
+        <div className="flex-1 min-w-0">
           <PgnInput
             onLoadPgn={handleLoadPgn}
             onLoadGame={handleLoadGame}
@@ -256,14 +253,7 @@ export default function AnalysisPage() {
             error={pgnError}
           />
         </div>
-
-        {/* Right column: Move List + Opening Explorer */}
-        <div className="w-full lg:w-80 flex flex-col gap-4">
-          <MoveList
-            annotatedMoves={board.annotatedMoves}
-            activeMoveIndex={board.activeMoveIndex}
-            onMoveClick={board.handleMoveClick}
-          />
+        <div className="w-full lg:w-[340px]">
           <OpeningExplorer
             data={board.openingData}
             onMoveClick={board.handleOpeningExplorerMoveClick}
@@ -277,21 +267,15 @@ export default function AnalysisPage() {
 function NavButton({
   onClick,
   children,
-  highlight,
   title,
 }: {
   onClick: () => void;
   children: React.ReactNode;
-  highlight?: boolean;
   title?: string;
 }) {
   return (
     <button
-      className={`p-2 rounded-lg transition-colors ${
-        highlight
-          ? "bg-amber-600 hover:bg-amber-700 text-white"
-          : "bg-[#1c1917] border border-stone-800/80 text-zinc-400 hover:text-white hover:bg-white/5"
-      }`}
+      className="p-1.5 rounded-md transition-colors text-zinc-400 hover:text-white hover:bg-white/5"
       onClick={onClick}
       title={title}
     >
