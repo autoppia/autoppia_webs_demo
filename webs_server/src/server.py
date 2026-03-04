@@ -838,7 +838,7 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
 
         try:
             if mode == "append":
-                # Append to existing {entity_type}_1.json
+                # Append to existing {entity_type}.json
                 saved_path = append_to_entity_data(request.project_key, request.entity_type, data)
                 logger.info(f"[Smart Generation] Appended {len(data)} items to {saved_path}")
             else:

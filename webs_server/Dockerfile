@@ -39,9 +39,11 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY ./src .
 COPY ./scripts/ .
 
+# Copy initial data into image (read-only; no volume needed)
+COPY initial_data /app/data
+
 # Set proper permissions
-RUN mkdir -p /app/data && \
-    chmod +x ./run_api.sh && \
+RUN chmod +x ./run_api.sh && \
     chown -R appuser:appuser /app
 
 # Switch to non-root user
