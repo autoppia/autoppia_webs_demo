@@ -1,4 +1,6 @@
-# CodeQL security and quality analysis for JavaScript/TypeScript.
+# CodeQL security and quality analysis for JavaScript/TypeScript (web_* apps).
+# Complements SonarCloud (Python/webs_server). Disable default Code scanning in repo Settings
+# if you see: "advanced configurations cannot be processed when the default setup is enabled".
 name: CodeQL
 
 on:
