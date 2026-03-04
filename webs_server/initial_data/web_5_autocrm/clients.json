@@ -1,0 +1,1982 @@
+[
+  {
+    "id": "CL-001",
+    "name": "TechCorp Industries",
+    "email": "legal@techcorp.com",
+    "matters": 3,
+    "avatar": "/media/avatars/person1.jpg",
+    "status": "Active",
+    "last": "Today"
+  },
+  {
+    "id": "CL-002",
+    "name": "Global Finance Ltd",
+    "email": "contact@globalfinance.com",
+    "matters": 2,
+    "avatar": "/media/avatars/person2.jpg",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-003",
+    "name": "Smith & Associates",
+    "email": "info@smithlaw.com",
+    "matters": 5,
+    "avatar": "/media/avatars/person3.jpg",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-004",
+    "name": "Johnson Manufacturing",
+    "email": "legal@johnsonmfg.com",
+    "matters": 1,
+    "avatar": "/media/avatars/person4.jpg",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-005",
+    "name": "Green Energy Solutions",
+    "email": "counsel@greenenergy.com",
+    "matters": 4,
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "status": "Active",
+    "last": "Today"
+  },
+  {
+    "id": "CL-006",
+    "name": "Williams Real Estate",
+    "email": "law@williamsre.com",
+    "matters": 2,
+    "avatar": "/media/avatars/person1.jpg",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-007",
+    "name": "Brown Pharmaceuticals",
+    "email": "legal@brownpharma.com",
+    "matters": 3,
+    "avatar": "/media/avatars/person2.jpg",
+    "status": "On Hold",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-008",
+    "name": "Davis Technology Group",
+    "email": "contact@davistech.com",
+    "matters": 2,
+    "avatar": "/media/avatars/person3.jpg",
+    "status": "Active",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-009",
+    "name": "Miller Construction Co",
+    "email": "legal@millerconstruction.com",
+    "matters": 1,
+    "avatar": "/media/avatars/person4.jpg",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-010",
+    "name": "Wilson Investment Fund",
+    "email": "compliance@wilsonfund.com",
+    "matters": 6,
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "status": "Active",
+    "last": "Today"
+  },
+  {
+    "id": "CL-011",
+    "name": "Moore Entertainment",
+    "email": "legal@mooreent.com",
+    "matters": 2,
+    "avatar": "/media/avatars/person1.jpg",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-012",
+    "name": "Taylor & Sons",
+    "email": "info@taylorsons.com",
+    "matters": 3,
+    "avatar": "/media/avatars/person2.jpg",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-013",
+    "name": "Anderson Logistics",
+    "email": "legal@andersonlog.com",
+    "matters": 2,
+    "avatar": "/media/avatars/person3.jpg",
+    "status": "On Hold",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-014",
+    "name": "Thomas Medical Group",
+    "email": "compliance@thomasmedical.com",
+    "matters": 4,
+    "avatar": "/media/avatars/person4.jpg",
+    "status": "Active",
+    "last": "Today"
+  },
+  {
+    "id": "CL-015",
+    "name": "Jackson Financial Services",
+    "email": "legal@jacksonfs.com",
+    "matters": 3,
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-016",
+    "name": "White Consulting",
+    "email": "contact@whiteconsulting.com",
+    "matters": 1,
+    "avatar": "/media/avatars/person1.jpg",
+    "status": "Active",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-017",
+    "name": "Harris Communications",
+    "email": "legal@harriscom.com",
+    "matters": 2,
+    "avatar": "/media/avatars/person2.jpg",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-018",
+    "name": "Martin Healthcare",
+    "email": "counsel@martinhealth.com",
+    "matters": 5,
+    "avatar": "/media/avatars/person3.jpg",
+    "status": "Active",
+    "last": "Today"
+  },
+  {
+    "id": "CL-019",
+    "name": "Thompson Retail Group",
+    "email": "legal@thompsonretail.com",
+    "matters": 2,
+    "avatar": "/media/avatars/person4.jpg",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-020",
+    "name": "Garcia Ventures",
+    "email": "info@garciaventures.com",
+    "matters": 4,
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-021",
+    "name": "Vertex Legal Services",
+    "email": "vertexlegalservices@business.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_001.jpg",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-022",
+    "name": "Stellar Group",
+    "email": "stellargroup@services.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_002.jpg",
+    "status": "On Hold",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-023",
+    "name": "Summit Enterprises",
+    "email": "summitenterprises@holdings.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_003.jpg",
+    "status": "Inactive",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-024",
+    "name": "Commercial Legal",
+    "email": "commerciallegal@business.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_004.jpg",
+    "status": "Inactive",
+    "last": "Today"
+  },
+  {
+    "id": "CL-025",
+    "name": "Tech Solutions Inc.",
+    "email": "techsolutionsinc@enterprises.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_005.jpg",
+    "status": "Archived",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-026",
+    "name": "Rachel Walker",
+    "email": "rachelwalker@lawfirm.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_006.jpg",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-027",
+    "name": "Global Ventures LLC",
+    "email": "globalventuresllc@legal.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_007.jpg",
+    "status": "On Hold",
+    "last": "2mo ago"
+  },
+  {
+    "id": "CL-028",
+    "name": "Tech Solutions Inc.",
+    "email": "techsolutionsinc@services.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_008.jpg",
+    "status": "Archived",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-029",
+    "name": "Ashley White",
+    "email": "ashleywhite@business.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_009.jpg",
+    "status": "On Hold",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-030",
+    "name": "Nexus Corporation",
+    "email": "nexuscorporation@business.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_010.jpg",
+    "status": "Inactive",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-031",
+    "name": "Nicole Miller",
+    "email": "nicolemiller@services.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_011.jpg",
+    "status": "Inactive",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-032",
+    "name": "Jessica Taylor",
+    "email": "jessicataylor@holdings.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_012.jpg",
+    "status": "On Hold",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-033",
+    "name": "Brandon Nelson",
+    "email": "brandonnelson@corp.net",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_013.jpg",
+    "status": "Inactive",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-034",
+    "name": "Silverstone Legal",
+    "email": "silverstonelegal@enterprises.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_014.jpg",
+    "status": "Archived",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-035",
+    "name": "Phoenix Advisors",
+    "email": "phoenixadvisors@services.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_015.jpg",
+    "status": "On Hold",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-036",
+    "name": "Ashley White",
+    "email": "ashleywhite@lawfirm.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_016.jpg",
+    "status": "Pending",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-037",
+    "name": "Sarah Johnson",
+    "email": "sarahjohnson@lawfirm.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_017.jpg",
+    "status": "Archived",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-038",
+    "name": "Christopher Lee",
+    "email": "christopherlee@lawfirm.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_018.jpg",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-039",
+    "name": "Ashley White",
+    "email": "ashleywhite@corp.net",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_019.jpg",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-040",
+    "name": "Meridian Law Firm",
+    "email": "meridianlawfirm@corp.net",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_020.jpg",
+    "status": "Inactive",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-041",
+    "name": "Tech Solutions Inc.",
+    "email": "techsolutionsinc@services.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_021.jpg",
+    "status": "Archived",
+    "last": "Today"
+  },
+  {
+    "id": "CL-042",
+    "name": "Silverstone Legal",
+    "email": "silverstonelegal@holdings.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_022.jpg",
+    "status": "Inactive",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-043",
+    "name": "Emily Rodriguez",
+    "email": "emilyrodriguez@holdings.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_023.jpg",
+    "status": "Active",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-044",
+    "name": "Justin Green",
+    "email": "justingreen@lawfirm.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_024.jpg",
+    "status": "Inactive",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-045",
+    "name": "Golden Gate Law",
+    "email": "goldengatelaw@lawfirm.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_025.jpg",
+    "status": "Inactive",
+    "last": "2mo ago"
+  },
+  {
+    "id": "CL-046",
+    "name": "Tech Solutions Inc.",
+    "email": "techsolutionsinc@corp.net",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_026.jpg",
+    "status": "Inactive",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-047",
+    "name": "Jessica Taylor",
+    "email": "jessicataylor@legal.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_027.jpg",
+    "status": "Pending",
+    "last": "2mo ago"
+  },
+  {
+    "id": "CL-048",
+    "name": "Tyler Carter",
+    "email": "tylercarter@services.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_028.jpg",
+    "status": "On Hold",
+    "last": "2mo ago"
+  },
+  {
+    "id": "CL-049",
+    "name": "Premier Legal Group",
+    "email": "premierlegalgroup@corp.net",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_029.jpg",
+    "status": "Inactive",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-050",
+    "name": "Phoenix Advisors",
+    "email": "phoenixadvisors@corp.net",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_030.jpg",
+    "status": "Archived",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-051",
+    "name": "Capital Holdings",
+    "email": "capitalholdings@lawfirm.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_031.jpg",
+    "status": "Inactive",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-052",
+    "name": "Commercial Legal",
+    "email": "commerciallegal@corp.net",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_032.jpg",
+    "status": "Inactive",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-053",
+    "name": "Rachel Walker",
+    "email": "rachelwalker@services.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_033.jpg",
+    "status": "On Hold",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-054",
+    "name": "Apex Consulting",
+    "email": "apexconsulting@business.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_034.jpg",
+    "status": "Active",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-055",
+    "name": "Kevin Lewis",
+    "email": "kevinlewis@business.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_035.jpg",
+    "status": "Active",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-056",
+    "name": "Premier Advisors",
+    "email": "premieradvisors@services.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_036.jpg",
+    "status": "Pending",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-057",
+    "name": "Brian Hall",
+    "email": "brianhall@enterprises.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_037.jpg",
+    "status": "Archived",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-058",
+    "name": "Phoenix Advisors",
+    "email": "phoenixadvisors@enterprises.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_038.jpg",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-059",
+    "name": "Christopher Lee",
+    "email": "christopherlee@enterprises.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_039.jpg",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-060",
+    "name": "Enterprise Solutions",
+    "email": "enterprisesolutions@enterprises.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_040.jpg",
+    "status": "On Hold",
+    "last": "2mo ago"
+  },
+  {
+    "id": "CL-061",
+    "name": "Matthew Brown",
+    "email": "matthewbrown@business.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_041.jpg",
+    "status": "Archived",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-062",
+    "name": "Premier Legal Group",
+    "email": "premierlegalgroup@legal.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_042.jpg",
+    "status": "Active",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-063",
+    "name": "Michael Chen",
+    "email": "michaelchen@services.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_043.jpg",
+    "status": "Archived",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-064",
+    "name": "Horizon Business",
+    "email": "horizonbusiness@corp.net",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_044.jpg",
+    "status": "Active",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-065",
+    "name": "Golden Gate Law",
+    "email": "goldengatelaw@corp.net",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_045.jpg",
+    "status": "On Hold",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-066",
+    "name": "Premier Advisors",
+    "email": "premieradvisors@corp.net",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_046.jpg",
+    "status": "Active",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-067",
+    "name": "Nicole Miller",
+    "email": "nicolemiller@services.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_047.jpg",
+    "status": "Inactive",
+    "last": "Today"
+  },
+  {
+    "id": "CL-068",
+    "name": "Professional Services Group",
+    "email": "professionalservicesgroup@legal.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_048.jpg",
+    "status": "Pending",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-069",
+    "name": "Meridian Law Firm",
+    "email": "meridianlawfirm@corp.net",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_049.jpg",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-070",
+    "name": "Lauren Jackson",
+    "email": "laurenjackson@corp.net",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_050.jpg",
+    "status": "Pending",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-071",
+    "name": "Capital Holdings",
+    "email": "capitalholdings@services.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_051.jpg",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-072",
+    "name": "Horizon Business",
+    "email": "horizonbusiness@holdings.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_052.jpg",
+    "status": "Archived",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-073",
+    "name": "Fortune Partners",
+    "email": "fortunepartners@services.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_053.jpg",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-074",
+    "name": "Nathan Lopez",
+    "email": "nathanlopez@corp.net",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_054.jpg",
+    "status": "Archived",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-075",
+    "name": "Justin Green",
+    "email": "justingreen@enterprises.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_055.jpg",
+    "status": "On Hold",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-076",
+    "name": "Meridian Law Firm",
+    "email": "meridianlawfirm@corp.net",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_056.jpg",
+    "status": "Inactive",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-077",
+    "name": "Brian Hall",
+    "email": "brianhall@legal.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_057.jpg",
+    "status": "Pending",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-078",
+    "name": "United Legal",
+    "email": "unitedlegal@holdings.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_058.jpg",
+    "status": "Active",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-079",
+    "name": "Amanda Davis",
+    "email": "amandadavis@holdings.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_059.jpg",
+    "status": "Pending",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-080",
+    "name": "Platinum Ventures",
+    "email": "platinumventures@corp.net",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_060.jpg",
+    "status": "On Hold",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-081",
+    "name": "United Legal",
+    "email": "unitedlegal@legal.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_061.jpg",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-082",
+    "name": "Capital Holdings",
+    "email": "capitalholdings@holdings.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_062.jpg",
+    "status": "On Hold",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-083",
+    "name": "Tyler Carter",
+    "email": "tylercarter@business.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_063.jpg",
+    "status": "Pending",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-084",
+    "name": "Nathan Lopez",
+    "email": "nathanlopez@business.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_064.jpg",
+    "status": "On Hold",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-085",
+    "name": "Success Ventures",
+    "email": "successventures@legal.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_065.jpg",
+    "status": "Archived",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-086",
+    "name": "Michelle Wright",
+    "email": "michellewright@services.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_066.jpg",
+    "status": "Inactive",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-087",
+    "name": "Andrew Moore",
+    "email": "andrewmoore@legal.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_067.jpg",
+    "status": "Active",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-088",
+    "name": "Corporate Counsel",
+    "email": "corporatecounsel@services.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_068.jpg",
+    "status": "Active",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-089",
+    "name": "Ryan Harris",
+    "email": "ryanharris@services.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_069.jpg",
+    "status": "Inactive",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-090",
+    "name": "Stephanie Young",
+    "email": "stephanieyoung@enterprises.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_070.jpg",
+    "status": "On Hold",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-091",
+    "name": "United Legal",
+    "email": "unitedlegal@enterprises.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_071.jpg",
+    "status": "Active",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-092",
+    "name": "Andrew Moore",
+    "email": "andrewmoore@enterprises.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_072.jpg",
+    "status": "Active",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-093",
+    "name": "Stephanie Young",
+    "email": "stephanieyoung@corp.net",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_073.jpg",
+    "status": "On Hold",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-094",
+    "name": "Amanda Davis",
+    "email": "amandadavis@business.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_074.jpg",
+    "status": "Inactive",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-095",
+    "name": "United Legal",
+    "email": "unitedlegal@corp.net",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_075.jpg",
+    "status": "Active",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-096",
+    "name": "Jonathan King",
+    "email": "jonathanking@corp.net",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_076.jpg",
+    "status": "Active",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-097",
+    "name": "Daniel Garcia",
+    "email": "danielgarcia@enterprises.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_077.jpg",
+    "status": "On Hold",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-098",
+    "name": "Stellar Group",
+    "email": "stellargroup@corp.net",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_078.jpg",
+    "status": "On Hold",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-099",
+    "name": "Meridian Law Firm",
+    "email": "meridianlawfirm@legal.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_079.jpg",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-100",
+    "name": "Silverstone Legal",
+    "email": "silverstonelegal@enterprises.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_080.jpg",
+    "status": "Inactive",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-101",
+    "name": "Commercial Legal",
+    "email": "commerciallegal@lawfirm.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_081.jpg",
+    "status": "Inactive",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-102",
+    "name": "Nathan Lopez",
+    "email": "nathanlopez@lawfirm.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_082.jpg",
+    "status": "Archived",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-103",
+    "name": "Innovation Labs",
+    "email": "innovationlabs@services.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_083.jpg",
+    "status": "Inactive",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-104",
+    "name": "Michelle Wright",
+    "email": "michellewright@business.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_084.jpg",
+    "status": "Inactive",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-105",
+    "name": "Brian Hall",
+    "email": "brianhall@legal.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_085.jpg",
+    "status": "Pending",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-106",
+    "name": "Stephanie Young",
+    "email": "stephanieyoung@legal.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_086.jpg",
+    "status": "Pending",
+    "last": "Today"
+  },
+  {
+    "id": "CL-107",
+    "name": "Success Ventures",
+    "email": "successventures@business.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_087.jpg",
+    "status": "Archived",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-108",
+    "name": "Innovation Labs",
+    "email": "innovationlabs@corp.net",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_088.jpg",
+    "status": "Archived",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-109",
+    "name": "Amanda Davis",
+    "email": "amandadavis@lawfirm.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_089.jpg",
+    "status": "Pending",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-110",
+    "name": "Crest Industries",
+    "email": "crestindustries@lawfirm.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_090.jpg",
+    "status": "Inactive",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-111",
+    "name": "Jonathan King",
+    "email": "jonathanking@enterprises.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_091.jpg",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-112",
+    "name": "Golden Gate Law",
+    "email": "goldengatelaw@business.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_092.jpg",
+    "status": "On Hold",
+    "last": "2mo ago"
+  },
+  {
+    "id": "CL-113",
+    "name": "Phoenix Advisors",
+    "email": "phoenixadvisors@corp.net",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_093.jpg",
+    "status": "Archived",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-114",
+    "name": "Horizon Business",
+    "email": "horizonbusiness@business.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_094.jpg",
+    "status": "Active",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-115",
+    "name": "Samantha Adams",
+    "email": "samanthaadams@lawfirm.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_095.jpg",
+    "status": "Archived",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-116",
+    "name": "Professional Services Group",
+    "email": "professionalservicesgroup@holdings.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_096.jpg",
+    "status": "Pending",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-117",
+    "name": "Robert Anderson",
+    "email": "robertanderson@lawfirm.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_097.jpg",
+    "status": "Archived",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-118",
+    "name": "Business Law Associates",
+    "email": "businesslawassociates@holdings.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_098.jpg",
+    "status": "Pending",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-119",
+    "name": "Michelle Wright",
+    "email": "michellewright@corp.net",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_099.jpg",
+    "status": "Active",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-120",
+    "name": "Golden Gate Law",
+    "email": "goldengatelaw@enterprises.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_100.jpg",
+    "status": "Active",
+    "last": "Today"
+  },
+  {
+    "id": "CL-121",
+    "name": "Diamond Consulting",
+    "email": "diamondconsulting@enterprises.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_101.jpg",
+    "status": "Inactive",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-122",
+    "name": "Brittany Hill",
+    "email": "brittanyhill@lawfirm.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_102.jpg",
+    "status": "Pending",
+    "last": "Today"
+  },
+  {
+    "id": "CL-123",
+    "name": "Michelle Wright",
+    "email": "michellewright@enterprises.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_103.jpg",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-124",
+    "name": "Jennifer Martinez",
+    "email": "jennifermartinez@corp.net",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_104.jpg",
+    "status": "On Hold",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-125",
+    "name": "Jessica Taylor",
+    "email": "jessicataylor@business.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_105.jpg",
+    "status": "On Hold",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-126",
+    "name": "Lauren Jackson",
+    "email": "laurenjackson@legal.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_106.jpg",
+    "status": "Pending",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-127",
+    "name": "Capital Holdings",
+    "email": "capitalholdings@enterprises.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_107.jpg",
+    "status": "Pending",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-128",
+    "name": "Meridian Law Firm",
+    "email": "meridianlawfirm@corp.net",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_108.jpg",
+    "status": "Pending",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-129",
+    "name": "Fortune Partners",
+    "email": "fortunepartners@corp.net",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_109.jpg",
+    "status": "Pending",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-130",
+    "name": "Crest Industries",
+    "email": "crestindustries@holdings.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_110.jpg",
+    "status": "On Hold",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-131",
+    "name": "Michael Chen",
+    "email": "michaelchen@corp.net",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_111.jpg",
+    "status": "Pending",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-132",
+    "name": "Robert Anderson",
+    "email": "robertanderson@enterprises.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_112.jpg",
+    "status": "Active",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-133",
+    "name": "Success Ventures",
+    "email": "successventures@holdings.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_113.jpg",
+    "status": "Pending",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-134",
+    "name": "Golden Gate Law",
+    "email": "goldengatelaw@services.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_114.jpg",
+    "status": "Archived",
+    "last": "Today"
+  },
+  {
+    "id": "CL-135",
+    "name": "Enterprise Solutions",
+    "email": "enterprisesolutions@services.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_115.jpg",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-136",
+    "name": "Premier Legal Group",
+    "email": "premierlegalgroup@services.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_116.jpg",
+    "status": "On Hold",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-137",
+    "name": "Innovation Labs",
+    "email": "innovationlabs@lawfirm.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_117.jpg",
+    "status": "Inactive",
+    "last": "Today"
+  },
+  {
+    "id": "CL-138",
+    "name": "Jennifer Martinez",
+    "email": "jennifermartinez@corp.net",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_118.jpg",
+    "status": "On Hold",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-139",
+    "name": "Sarah Johnson",
+    "email": "sarahjohnson@holdings.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_119.jpg",
+    "status": "Archived",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-140",
+    "name": "Fortune Partners",
+    "email": "fortunepartners@holdings.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_120.jpg",
+    "status": "Pending",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-141",
+    "name": "Success Ventures",
+    "email": "successventures@business.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_121.jpg",
+    "status": "Inactive",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-142",
+    "name": "Platinum Ventures",
+    "email": "platinumventures@corp.net",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_122.jpg",
+    "status": "Archived",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-143",
+    "name": "Global Ventures LLC",
+    "email": "globalventuresllc@legal.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_123.jpg",
+    "status": "Pending",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-144",
+    "name": "Brandon Nelson",
+    "email": "brandonnelson@corp.net",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_124.jpg",
+    "status": "Pending",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-145",
+    "name": "David Thompson",
+    "email": "davidthompson@business.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_125.jpg",
+    "status": "Inactive",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-146",
+    "name": "Titan Holdings",
+    "email": "titanholdings@business.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_126.jpg",
+    "status": "Active",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-147",
+    "name": "Samantha Adams",
+    "email": "samanthaadams@holdings.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_127.jpg",
+    "status": "Pending",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-148",
+    "name": "Premier Advisors",
+    "email": "premieradvisors@enterprises.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_128.jpg",
+    "status": "Inactive",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-149",
+    "name": "Brandon Nelson",
+    "email": "brandonnelson@corp.net",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_129.jpg",
+    "status": "On Hold",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-150",
+    "name": "Brandon Nelson",
+    "email": "brandonnelson@services.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_130.jpg",
+    "status": "Archived",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-151",
+    "name": "Tyler Carter",
+    "email": "tylercarter@services.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_131.jpg",
+    "status": "Archived",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-152",
+    "name": "United Legal",
+    "email": "unitedlegal@corp.net",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_132.jpg",
+    "status": "Pending",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-153",
+    "name": "Michael Chen",
+    "email": "michaelchen@holdings.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_133.jpg",
+    "status": "On Hold",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-154",
+    "name": "Nathan Lopez",
+    "email": "nathanlopez@lawfirm.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_134.jpg",
+    "status": "Inactive",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-155",
+    "name": "Phoenix Advisors",
+    "email": "phoenixadvisors@services.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_135.jpg",
+    "status": "Inactive",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-156",
+    "name": "Pacific Associates",
+    "email": "pacificassociates@lawfirm.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_136.jpg",
+    "status": "Archived",
+    "last": "Today"
+  },
+  {
+    "id": "CL-157",
+    "name": "Samantha Adams",
+    "email": "samanthaadams@lawfirm.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_137.jpg",
+    "status": "On Hold",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-158",
+    "name": "Tyler Carter",
+    "email": "tylercarter@lawfirm.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_138.jpg",
+    "status": "Archived",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-159",
+    "name": "Premier Legal Group",
+    "email": "premierlegalgroup@enterprises.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_139.jpg",
+    "status": "Pending",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-160",
+    "name": "Fortune Partners",
+    "email": "fortunepartners@lawfirm.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_140.jpg",
+    "status": "Inactive",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-161",
+    "name": "Megan Clark",
+    "email": "meganclark@enterprises.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_141.jpg",
+    "status": "Inactive",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-162",
+    "name": "Golden Gate Law",
+    "email": "goldengatelaw@legal.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_142.jpg",
+    "status": "Inactive",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-163",
+    "name": "Quantum Solutions",
+    "email": "quantumsolutions@legal.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_143.jpg",
+    "status": "Inactive",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-164",
+    "name": "Rachel Walker",
+    "email": "rachelwalker@holdings.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_144.jpg",
+    "status": "Pending",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-165",
+    "name": "Tyler Carter",
+    "email": "tylercarter@enterprises.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_145.jpg",
+    "status": "Active",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-166",
+    "name": "Crest Industries",
+    "email": "crestindustries@legal.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_146.jpg",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-167",
+    "name": "Apex Consulting",
+    "email": "apexconsulting@business.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_147.jpg",
+    "status": "Archived",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-168",
+    "name": "Global Ventures LLC",
+    "email": "globalventuresllc@enterprises.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_148.jpg",
+    "status": "Archived",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-169",
+    "name": "Nexus Corporation",
+    "email": "nexuscorporation@business.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_149.jpg",
+    "status": "Active",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-170",
+    "name": "United Legal",
+    "email": "unitedlegal@business.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_150.jpg",
+    "status": "Active",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-171",
+    "name": "Daniel Garcia",
+    "email": "danielgarcia@corp.net",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_151.jpg",
+    "status": "On Hold",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-172",
+    "name": "Strategic Partners",
+    "email": "strategicpartners@business.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_152.jpg",
+    "status": "Archived",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-173",
+    "name": "Jessica Taylor",
+    "email": "jessicataylor@services.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_153.jpg",
+    "status": "Inactive",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-174",
+    "name": "Vertex Legal Services",
+    "email": "vertexlegalservices@business.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_154.jpg",
+    "status": "Pending",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-175",
+    "name": "Ashley White",
+    "email": "ashleywhite@services.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_155.jpg",
+    "status": "Active",
+    "last": "Today"
+  },
+  {
+    "id": "CL-176",
+    "name": "Phoenix Advisors",
+    "email": "phoenixadvisors@lawfirm.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_156.jpg",
+    "status": "On Hold",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-177",
+    "name": "Professional Services Group",
+    "email": "professionalservicesgroup@services.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_157.jpg",
+    "status": "On Hold",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-178",
+    "name": "Jessica Taylor",
+    "email": "jessicataylor@legal.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_158.jpg",
+    "status": "Archived",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-179",
+    "name": "Strategic Partners",
+    "email": "strategicpartners@holdings.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_159.jpg",
+    "status": "On Hold",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-180",
+    "name": "Diamond Consulting",
+    "email": "diamondconsulting@holdings.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_160.jpg",
+    "status": "Active",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-181",
+    "name": "Apex Consulting",
+    "email": "apexconsulting@business.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_161.jpg",
+    "status": "On Hold",
+    "last": "2mo ago"
+  },
+  {
+    "id": "CL-182",
+    "name": "Strategic Partners",
+    "email": "strategicpartners@corp.net",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_162.jpg",
+    "status": "Inactive",
+    "last": "Today"
+  },
+  {
+    "id": "CL-183",
+    "name": "Elite Partners",
+    "email": "elitepartners@business.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_163.jpg",
+    "status": "Inactive",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-184",
+    "name": "Stephanie Young",
+    "email": "stephanieyoung@holdings.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_164.jpg",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-185",
+    "name": "Phoenix Advisors",
+    "email": "phoenixadvisors@holdings.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_165.jpg",
+    "status": "Inactive",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-186",
+    "name": "Andrew Moore",
+    "email": "andrewmoore@holdings.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_166.jpg",
+    "status": "Active",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-187",
+    "name": "Emily Rodriguez",
+    "email": "emilyrodriguez@business.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_167.jpg",
+    "status": "Active",
+    "last": "2mo ago"
+  },
+  {
+    "id": "CL-188",
+    "name": "Golden Gate Law",
+    "email": "goldengatelaw@services.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_168.jpg",
+    "status": "Active",
+    "last": "2mo ago"
+  },
+  {
+    "id": "CL-189",
+    "name": "Professional Services Group",
+    "email": "professionalservicesgroup@legal.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_169.jpg",
+    "status": "On Hold",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-190",
+    "name": "Jessica Taylor",
+    "email": "jessicataylor@corp.net",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_170.jpg",
+    "status": "Active",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-191",
+    "name": "Emily Rodriguez",
+    "email": "emilyrodriguez@legal.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_171.jpg",
+    "status": "On Hold",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-192",
+    "name": "Kevin Lewis",
+    "email": "kevinlewis@lawfirm.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_172.jpg",
+    "status": "Inactive",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-193",
+    "name": "Vertex Legal Services",
+    "email": "vertexlegalservices@services.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_173.jpg",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-194",
+    "name": "Daniel Garcia",
+    "email": "danielgarcia@enterprises.com",
+    "matters": 4,
+    "avatar": "/media/avatars/cl_174.jpg",
+    "status": "Pending",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-195",
+    "name": "Stephanie Young",
+    "email": "stephanieyoung@lawfirm.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_175.jpg",
+    "status": "Inactive",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-196",
+    "name": "Phoenix Advisors",
+    "email": "phoenixadvisors@holdings.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_176.jpg",
+    "status": "Archived",
+    "last": "2mo ago"
+  },
+  {
+    "id": "CL-197",
+    "name": "Corporate Counsel",
+    "email": "corporatecounsel@corp.net",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_177.jpg",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-198",
+    "name": "Brittany Hill",
+    "email": "brittanyhill@lawfirm.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_178.jpg",
+    "status": "Active",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-199",
+    "name": "Summit Enterprises",
+    "email": "summitenterprises@corp.net",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_179.jpg",
+    "status": "On Hold",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-200",
+    "name": "Jonathan King",
+    "email": "jonathanking@services.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_180.jpg",
+    "status": "Active",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-201",
+    "name": "Premier Legal Group",
+    "email": "premierlegalgroup@lawfirm.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_181.jpg",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-202",
+    "name": "Stephanie Young",
+    "email": "stephanieyoung@corp.net",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_182.jpg",
+    "status": "Pending",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-203",
+    "name": "Ashley White",
+    "email": "ashleywhite@services.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_183.jpg",
+    "status": "Active",
+    "last": "Today"
+  },
+  {
+    "id": "CL-204",
+    "name": "Ashley White",
+    "email": "ashleywhite@holdings.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_184.jpg",
+    "status": "Active",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-205",
+    "name": "Lauren Jackson",
+    "email": "laurenjackson@corp.net",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_185.jpg",
+    "status": "Active",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-206",
+    "name": "Fortune Partners",
+    "email": "fortunepartners@lawfirm.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_186.jpg",
+    "status": "Pending",
+    "last": "3mo ago"
+  },
+  {
+    "id": "CL-207",
+    "name": "Platinum Ventures",
+    "email": "platinumventures@holdings.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_187.jpg",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-208",
+    "name": "Michael Chen",
+    "email": "michaelchen@legal.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_188.jpg",
+    "status": "Inactive",
+    "last": "Today"
+  },
+  {
+    "id": "CL-209",
+    "name": "Golden Gate Law",
+    "email": "goldengatelaw@legal.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_189.jpg",
+    "status": "On Hold",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-210",
+    "name": "Nicole Miller",
+    "email": "nicolemiller@services.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_190.jpg",
+    "status": "Inactive",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-211",
+    "name": "United Legal",
+    "email": "unitedlegal@lawfirm.com",
+    "matters": 7,
+    "avatar": "/media/avatars/cl_191.jpg",
+    "status": "Inactive",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-212",
+    "name": "Phoenix Advisors",
+    "email": "phoenixadvisors@business.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_192.jpg",
+    "status": "Active",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-213",
+    "name": "Amanda Davis",
+    "email": "amandadavis@lawfirm.com",
+    "matters": 2,
+    "avatar": "/media/avatars/cl_193.jpg",
+    "status": "Active",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-214",
+    "name": "Hannah Mitchell",
+    "email": "hannahmitchell@legal.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_194.jpg",
+    "status": "Inactive",
+    "last": "1mo ago"
+  },
+  {
+    "id": "CL-215",
+    "name": "David Thompson",
+    "email": "davidthompson@legal.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_195.jpg",
+    "status": "On Hold",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-216",
+    "name": "Megan Clark",
+    "email": "meganclark@holdings.com",
+    "matters": 6,
+    "avatar": "/media/avatars/cl_196.jpg",
+    "status": "Pending",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-217",
+    "name": "Quantum Solutions",
+    "email": "quantumsolutions@holdings.com",
+    "matters": 8,
+    "avatar": "/media/avatars/cl_197.jpg",
+    "status": "On Hold",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-218",
+    "name": "Strategic Partners",
+    "email": "strategicpartners@business.com",
+    "matters": 3,
+    "avatar": "/media/avatars/cl_198.jpg",
+    "status": "Active",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-219",
+    "name": "Capital Holdings",
+    "email": "capitalholdings@lawfirm.com",
+    "matters": 5,
+    "avatar": "/media/avatars/cl_199.jpg",
+    "status": "Pending",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-220",
+    "name": "Innovation Labs",
+    "email": "innovationlabs@lawfirm.com",
+    "matters": 1,
+    "avatar": "/media/avatars/cl_200.jpg",
+    "status": "On Hold",
+    "last": "5d ago"
+  }
+]

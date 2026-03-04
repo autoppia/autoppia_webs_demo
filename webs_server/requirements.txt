@@ -10,7 +10,7 @@ pydantic==2.11.5
 asyncpg==0.30.0
 
 # Performance
-orjson==3.10.18
+orjson>=3.11.6
 
 # Environment Variables
 python-dotenv==1.1.0
