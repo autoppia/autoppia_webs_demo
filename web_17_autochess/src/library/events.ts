@@ -6,6 +6,16 @@ export const EVENT_TYPES = {
   VIEW_PLAYER: "VIEW_PLAYER",
   SOLVE_PUZZLE: "SOLVE_PUZZLE",
   ANALYZE_GAME: "ANALYZE_GAME",
+  LOAD_PGN: "LOAD_PGN",
+  NAVIGATE_MOVE: "NAVIGATE_MOVE",
+  EXPLORE_OPENING: "EXPLORE_OPENING",
+  FLIP_BOARD: "FLIP_BOARD",
+  MAKE_ANALYSIS_MOVE: "MAKE_ANALYSIS_MOVE",
+  TOGGLE_ENGINE: "TOGGLE_ENGINE",
+  OPEN_EDITOR: "OPEN_EDITOR",
+  LOAD_EDITOR_FEN: "LOAD_EDITOR_FEN",
+  ANALYZE_FROM_EDITOR: "ANALYZE_FROM_EDITOR",
+  ENTER_ANALYZE_MODE: "ENTER_ANALYZE_MODE",
   LOGIN: "LOGIN",
   LOGOUT: "LOGOUT",
   REGISTRATION: "REGISTRATION",
@@ -17,7 +27,7 @@ export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
 export function logEvent(
   eventType: EventType,
   data: Record<string, unknown> = {},
-  extra_headers: Record<string, string> = {}
+  extra_headers: Record<string, string> = {},
 ): Promise<void> {
   if (typeof window === "undefined") return Promise.resolve();
 
@@ -26,8 +36,10 @@ export function logEvent(
 
   const webAgentId = localStorage.getItem("web_agent_id");
   const validatorId = localStorage.getItem("validator_id");
-  const resolvedWebAgentId = webAgentId && webAgentId !== "null" ? webAgentId : "1";
-  const resolvedValidatorId = validatorId && validatorId !== "null" ? validatorId : "1";
+  const resolvedWebAgentId =
+    webAgentId && webAgentId !== "null" ? webAgentId : "1";
+  const resolvedValidatorId =
+    validatorId && validatorId !== "null" ? validatorId : "1";
 
   const eventData = {
     event_name: eventType,

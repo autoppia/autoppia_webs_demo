@@ -16,10 +16,10 @@ export function Footer() {
   return (
     <DynamicWrapper>
       <footer className="border-t border-stone-800/80 bg-[#0c0a09] mt-auto">
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-white font-semibold mb-4">
+        <div className="container mx-auto px-4 py-6 sm:py-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+            <div className="col-span-2 md:col-span-1">
+              <h3 className="text-white font-semibold mb-3 sm:mb-4">
                 <DynamicText value="AutoChess" type="text" />
               </h3>
               <p className="text-sm text-zinc-400">
