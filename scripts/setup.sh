@@ -13,6 +13,7 @@
 #   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v2,v3)
 #                                            v2 = data by seed (dataset by ?seed=X)
 #   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
+#   --no_cache=BOOL               If true, build demo web(s) and webs_server with --no-cache (default: false)
 #   --clean_all=BOOL              If true, remove ALL Docker containers/images/volumes before deploy (default: false)
 #   --parallel=N                  Max concurrent web project deployments when --demo=all (default: 3)
 #   -h, --help                    Show this help and exit
@@ -22,6 +23,7 @@
 #   ./setup.sh --enabled_dynamic_versions=v2  # v2 only (data by seed)
 #   ./setup.sh --enabled_dynamic_versions=v1,v2  # v1 + v2
 #   ./setup.sh --demo=all --parallel=4  # Deploy all demos with max 4 concurrent
+#   ./setup.sh --demo=autowork --no_cache=true  # Rebuild demo web without cache
 #------------------------------------------------------------
 set -euo pipefail
 
@@ -44,6 +46,7 @@ Options:
   --demo=NAME                   One of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autochess, all (default: all)
   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v2,v3). v2 = data by seed.
   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
+  --no_cache=BOOL               If true, build demo web(s) and webs_server with --no-cache (default: false)
   --clean_all=BOOL              If true, remove ALL Docker containers/images/volumes before deploy (default: false)
   --parallel=N                  Max concurrent web project deployments when --demo=all (default: 3)
   -h, --help                    Show this help and exit
@@ -53,6 +56,7 @@ Examples:
   ./setup.sh --enabled_dynamic_versions=v2  # v2 only (data by seed)
   ./setup.sh --enabled_dynamic_versions=v1,v2  # v1 + v2
   ./setup.sh --demo=all --parallel=4  # Deploy all demos with max 4 concurrent
+  ./setup.sh --demo=autowork --no_cache=true  # Rebuild demo web without Docker cache
 USAGE
 }
 
@@ -82,6 +86,7 @@ for ARG in "$@"; do
     --enabled_dynamic_versions=*) ENABLED_DYNAMIC_VERSIONS="${ARG#*=}" ;;
     -h|--help)           print_usage; exit 0 ;;
     --fast=*)            FAST_MODE="${ARG#*=}" ;;
+    --no_cache=*)        NO_CACHE="${ARG#*=}" ;;
     --clean_all=*)       CLEAN_ALL="${ARG#*=}" ;;
     --parallel=*)        PARALLEL_JOBS="${ARG#*=}" ;;
     *) ;;
@@ -95,6 +100,7 @@ WEBS_PORT="${WEBS_PORT:-8090}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-5437}"
 WEB_DEMO="${WEB_DEMO:-all}"
 FAST_MODE="${FAST_MODE:-false}"
+NO_CACHE="${NO_CACHE:-false}"
 CLEAN_ALL="${CLEAN_ALL:-false}"
 PARALLEL_JOBS="${PARALLEL_JOBS:-3}"
 ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-v1,v2,v3}"
@@ -155,12 +161,12 @@ else
 fi
 
 # Normalize all boolean flags AFTER version mapping (so mapped values are preserved)
-for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2 ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE CLEAN_ALL; do
+for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2 ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE NO_CACHE CLEAN_ALL; do
   eval "$var=\$(normalize_bool \"\$$var\")"
 done
 
 # Check for invalid booleans
-for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2 ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE CLEAN_ALL; do
+for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2 ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE NO_CACHE CLEAN_ALL; do
   if [ "$(eval echo \$$var)" = "__INVALID__" ]; then
     echo "❌ Invalid boolean flag: $var. Use true/false (or yes/no, 1/0)."
     exit 1
@@ -217,6 +223,7 @@ echo "      V3 (HTML structure)  →  $ENABLE_DYNAMIC_V3"
 echo "      V4 (seed HTML)       →  $ENABLE_DYNAMIC_V4"
 echo "    Enabled versions       →  ${ENABLED_DYNAMIC_VERSIONS:-<none>}"
 echo "    Fast mode              →  $FAST_MODE"
+echo "    No cache (demo build)  →  $NO_CACHE"
 echo "    Clean all Docker       →  $CLEAN_ALL"
 [ "$WEB_DEMO" = "all" ] && echo "    Parallel jobs           →  $PARALLEL_JOBS"
 echo ""
@@ -358,9 +365,9 @@ deploy_project() {
     docker compose -p "$project_name" down --volumes
   fi
 
-  # Build and start
+  # Build and start (no-cache when not fast, or when --no_cache=true)
   local cache_flag=""
-  [ "$FAST_MODE" = false ] && cache_flag="--no-cache"
+  [ "$FAST_MODE" = false ] || [ "$NO_CACHE" = true ] && cache_flag="--no-cache"
 
   (
     # Pass the web directory name (e.g., "web_1_autocinema") to get its specific commit hash
@@ -405,7 +412,7 @@ deploy_webs_server() {
   docker compose -p "$name" down --volumes || true
 
   local cache_flag=""
-  [ "$FAST_MODE" = false ] && cache_flag="--no-cache"
+  [ "$FAST_MODE" = false ] || [ "$NO_CACHE" = true ] && cache_flag="--no-cache"
 
   (
     export \
