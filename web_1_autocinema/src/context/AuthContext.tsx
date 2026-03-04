@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { findUser, type UserRecord } from "@/data/users";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { hashPassword, isStoredPasswordHash } from "@/shared/hash";
 import { readJson, writeJson } from "@/shared/storage";
 
 interface AuthUser {
@@ -128,26 +129,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = useCallback(
     async (username: string, password: string) => {
       const record = findUser(username);
-      if (record && record.password === password) {
-      const authUser: AuthUser = {
-        username: record.username,
-        allowedMovies: record.allowedMovies,
-        watchlist: [],
-      };
-        persistUser(authUser, "login");
-        return;
+      if (record) {
+        const ok = isStoredPasswordHash(record.password)
+          ? (await hashPassword(password)) === record.password
+          : record.password === password;
+        if (ok) {
+          persistUser(
+            { username: record.username, allowedMovies: record.allowedMovies, watchlist: [] },
+            "login"
+          );
+          return;
+        }
       }
 
       const customUsers = loadCustomUsers();
       const custom = matchCustomUser(customUsers, username);
-      if (custom && custom.password === password) {
-        const authUser: AuthUser = {
-          username: custom.username,
-          allowedMovies: custom.allowedMovies,
-          watchlist: [],
-        };
-        persistUser(authUser, "login");
-        return;
+      if (custom) {
+        const ok = isStoredPasswordHash(custom.password)
+          ? (await hashPassword(password)) === custom.password
+          : custom.password === password;
+        if (ok) {
+          persistUser(
+            { username: custom.username, allowedMovies: custom.allowedMovies, watchlist: [] },
+            "login"
+          );
+          return;
+        }
       }
 
       throw new Error("Invalid credentials");
@@ -178,7 +185,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const existingRecord = resolveUserRecord(safeUsername);
       if (existingRecord) {
-        if (existingRecord.password !== safePassword) {
+        const samePassword = isStoredPasswordHash(existingRecord.password)
+          ? (await hashPassword(safePassword)) === existingRecord.password
+          : existingRecord.password === safePassword;
+        if (!samePassword) {
           throw new Error("Username already registered with different credentials.");
         }
         const authUser: AuthUser = {
@@ -190,39 +200,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
+      const passwordHash = await hashPassword(safePassword);
+      const allowed = resolveOrCreateAllowedMovies(safeUsername, allowedMovies);
       const customUsers = loadCustomUsers();
       const nextCustomUsers: CustomUserRecord[] = [
         ...customUsers,
-        {
-          username: safeUsername,
-          allowedMovies: resolveOrCreateAllowedMovies(safeUsername, allowedMovies),
-          password: safePassword,
-        },
+        { username: safeUsername, allowedMovies: allowed, password: passwordHash },
       ];
 
       saveCustomUsers(nextCustomUsers);
       persistCustomUsers(nextCustomUsers);
       setCustomUsers((prev) => {
-        const hasUser = prev.some((user) => user.username.toLowerCase() === safeUsername.toLowerCase());
-        if (hasUser) {
-          return prev;
-        }
-        return [
-          ...prev,
-          {
-            username: safeUsername,
-            password: safePassword,
-            allowedMovies: nextCustomUsers[nextCustomUsers.length - 1].allowedMovies,
-          },
-        ];
+        const hasUser = prev.some((u) => u.username.toLowerCase() === safeUsername.toLowerCase());
+        if (hasUser) return prev;
+        return [...prev, { username: safeUsername, password: passwordHash, allowedMovies: allowed }];
       });
 
-      const authUser: AuthUser = {
-        username: safeUsername,
-        allowedMovies: nextCustomUsers[nextCustomUsers.length - 1].allowedMovies,
-        watchlist: [],
-      };
-      persistUser(authUser, "register");
+      persistUser(
+        { username: safeUsername, allowedMovies: allowed, watchlist: [] },
+        "register"
+      );
     },
     [persistUser, resolveUserRecord, setCustomUsers]
   );
