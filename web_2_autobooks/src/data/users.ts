@@ -4,6 +4,16 @@ export interface UserRecord {
   allowedBooks: string[];
 }
 
+/** Hash password for storage (CodeQL: avoid clear-text sensitive storage). */
+export async function hashPassword(plain: string): Promise<string> {
+  const enc = new TextEncoder();
+  const data = enc.encode(plain);
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
 const TOTAL_USERS = 256;
 const BOOK_POOL_SIZE = 256;
 
@@ -39,21 +49,22 @@ export function findUser(username: string): UserRecord | undefined {
   return undefined;
 }
 
-export function createUser(username: string, password: string): UserRecord {
-  // Check if user already exists
+export async function createUser(username: string, password: string): Promise<UserRecord> {
   if (findUser(username)) {
     throw new Error("Username already exists");
   }
 
-  // Generate a random book ID for the new user
-  const randomBookIndex = Math.floor(Math.random() * BOOK_POOL_SIZE) + 1;
+  const randomBookIndex =
+    typeof crypto !== "undefined" && crypto.getRandomValues
+      ? (crypto.getRandomValues(new Uint32Array(1))[0]! % BOOK_POOL_SIZE) + 1
+      : ((username.length + (username.charCodeAt(0) ?? 0)) % BOOK_POOL_SIZE) + 1;
+  const passwordHash = await hashPassword(password);
   const newUser: UserRecord = {
     username: username.trim(),
-    password: password,
+    password: passwordHash,
     allowedBooks: [buildBookId(randomBookIndex)],
   };
 
-  // Store in localStorage
   if (typeof window !== "undefined") {
     try {
       const storedUsers = localStorage.getItem("autobooks_custom_users");
