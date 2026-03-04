@@ -3,13 +3,15 @@
 # if you see: "advanced configurations cannot be processed when the default setup is enabled".
 name: CodeQL
 
+# Silenced: run only manually. Re-enable by uncommenting push/pull_request/schedule below.
 on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
-  schedule:
-    - cron: '0 0 * * 1'
+  workflow_dispatch:
+  # push:
+  #   branches: [main, develop]
+  # pull_request:
+  #   branches: [main, develop]
+  # schedule:
+  #   - cron: '0 0 * * 1'
 
 permissions:
   security-events: write
