@@ -1,6 +1,14 @@
 """
 File-based data storage handler for webs_server.
-Manages reading/writing JSON data files under /app/data.
+Manages reading/writing JSON data files under BASE_DATA_PATH (default /app/data).
+Data is usually read-only (baked into the image via COPY); any writes are ephemeral (lost on container restart).
+
+Path layout (flat per project):
+  {BASE_PATH}/{web_name}/
+    main.json              # Index: { "entity_type": ["./file.json", ...] }
+    {entity}.json          # Data files (e.g. movies.json, restaurants.json)
+    {entity}_{timestamp}.json   # Optional rollover files
+  All paths in main.json are relative to the project dir (e.g. "./movies.json").
 """
 
 import os
@@ -30,8 +38,8 @@ def get_main_path(web_name: str) -> str:
 
 
 def get_data_dir(web_name: str) -> str:
-    """Return path to data directory for a given web_name."""
-    return f"{BASE_PATH}/{web_name}/data"
+    """Return path to project directory for a given web_name (flat layout: data files live here)."""
+    return f"{BASE_PATH}/{web_name}"
 
 
 def _ensure_dir(path: str) -> None:
@@ -84,13 +92,13 @@ def _load_json_file_with_fallback(
             return items
         logger.warning(f"Fallback file also empty or invalid: {fallback_path}")
     else:
-        logger.warning(f"File does not exist in original/, trying fallback to {fallback_label}: {primary_path}")
+        logger.warning(f"File does not exist at primary path, trying fallback to {fallback_label}: {primary_path}")
     return []
 
 
 def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], entity_type: str) -> str:
     """
-    Save data to a single file under {BASE_PATH}/{web_name}/data/{filename}.
+    Save data to a single file under {BASE_PATH}/{web_name}/{filename} (flat layout).
     Also updates main.json to reference this file under the entity_type key.
 
     Args:
@@ -137,8 +145,8 @@ def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], ent
     else:
         main = {}
 
-    # Add file reference under entity_type
-    relative_path = f"./data/{filename}"
+    # Add file reference under entity_type (flat: paths are ./filename relative to project dir)
+    relative_path = f"./{filename}"
     if entity_type not in main:
         main[entity_type] = []
 
@@ -162,10 +170,10 @@ def load_all_data(
     Load and return all JSON objects referenced in main.json for a given web_name.
     If entity_type is provided, only load files listed under that entity key.
 
-    If V2 DB mode is disabled, loads from original/ directory directly (high quality, fewer records).
-    Otherwise, loads from data/ directory as referenced in main.json.
+    If V2 DB mode is disabled, loads only the first file per entity (original data).
+    Otherwise, loads all files referenced in main.json (flat layout: paths under project dir).
     """
-    # Check if V2 DB mode is disabled - if so, load from original/ directory
+    # When V2 disabled: load first file per entity only
     # v2_disabled is True when ENABLE_DYNAMIC_V2 is "false", "0", "no", or "off"
     v2_disabled_env_flag = os.getenv("ENABLE_DYNAMIC_V2", "false").lower() in {"false", "0", "no", "off"}
     force_seed_disabled = seed_value == 1
@@ -183,36 +191,12 @@ def load_all_data(
     )
 
     if v2_disabled:
-        # V2 disabled: load from original/ directory (high quality dataset)
-        original_dir = f"{BASE_PATH}/{web_name}/original"
-        if not os.path.exists(original_dir):
-            # Fallback to main.json if original/ doesn't exist
-            logger.warning(
-                "original directory missing, falling back to main.json",
-                extra={"original_dir": original_dir, "web_name": web_name},
-            )
-            return _load_from_main_json(web_name, entity_type)
-
-        data_dir = get_data_dir(web_name)
-        all_data: List[Dict[str, Any]] = []
-
-        if entity_type:
-            original_file = f"{original_dir}/{entity_type}_1.json"
-            fallback_file = f"{data_dir}/{entity_type}_1.json"
-            all_data = _load_json_file_with_fallback(original_file, fallback_file)
-        else:
-            for filename in sorted(os.listdir(original_dir)):
-                if not filename.endswith(".json"):
-                    continue
-                original_file = f"{original_dir}/{filename}"
-                fallback_file = f"{data_dir}/{filename}" if os.path.exists(data_dir) else None
-                items = _load_json_file_with_fallback(original_file, fallback_file)
-                all_data.extend(items)
-
-        return all_data
-    else:
-        # V2 enabled: load from main.json (which references data/ directory)
-        return _load_from_main_json(web_name, entity_type)
+        result = _load_first_file_only(web_name, entity_type)
+        logger.debug("load_all_data: branch=first_file_only", extra={"web_name": web_name, "entity_type": entity_type, "count": len(result)})
+        return result
+    result = _load_from_main_json(web_name, entity_type)
+    logger.debug("load_all_data: branch=main_json", extra={"web_name": web_name, "entity_type": entity_type, "count": len(result)})
+    return result
 
 
 def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> List[Dict[str, Any]]:
@@ -250,6 +234,49 @@ def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> Li
         abs_path = f"{BASE_PATH}/{web_name}/{normalized_rel}"
         if not os.path.exists(abs_path):
             logger.warning("Referenced data file missing", extra={"path": abs_path, "rel_path": rel_path, "web_name": web_name})
+            continue
+        items = _parse_json_file_to_items(abs_path)
+        if items is not None:
+            all_data.extend(items)
+
+    return all_data
+
+
+def _load_first_file_only(web_name: str, entity_type: Optional[str] = None) -> List[Dict[str, Any]]:
+    """
+    Load only the first file per entity from main.json (used when V2 is disabled or seed=1).
+    Paths in main.json are relative to project dir (flat layout: ./entity.json, ./entity_timestamp.json).
+    """
+    main_path = get_main_path(web_name)
+    if not os.path.exists(main_path):
+        logger.warning("main.json missing for web", extra={"web_name": web_name, "path": main_path})
+        return []
+
+    try:
+        with open(main_path, "r", encoding="utf-8") as f:
+            main = json.load(f)
+    except Exception as exc:
+        logger.error("Failed to read main.json", extra={"web_name": web_name, "path": main_path, "error": str(exc)})
+        return []
+
+    all_data: List[Dict[str, Any]] = []
+    if not isinstance(main, dict):
+        return all_data
+
+    if entity_type:
+        rel_paths = main.get(entity_type) or []
+        paths_to_load = [rel_paths[0]] if rel_paths else []
+    else:
+        paths_to_load = []
+        for value in main.values():
+            if isinstance(value, list) and value:
+                paths_to_load.append(value[0])
+
+    for rel_path in paths_to_load:
+        normalized_rel = rel_path.lstrip("./")
+        abs_path = f"{BASE_PATH}/{web_name}/{normalized_rel}"
+        if not os.path.exists(abs_path):
+            logger.warning("First file missing", extra={"path": abs_path, "web_name": web_name})
             continue
         items = _parse_json_file_to_items(abs_path)
         if items is not None:
@@ -323,7 +350,7 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
 
 def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, Any]]) -> str:
     """
-    Append data to the FIRST file for this entity (e.g., {entity_type}_1.json).
+    Append data to the FIRST file for this entity (e.g., {entity_type}.json).
     If the file doesn't exist, creates it.
 
     This is useful for appending to initial_data files.
@@ -336,11 +363,11 @@ def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, 
     Returns:
         Path to the updated file
     """
-    # Target file is always {entity_type}_1.json
+    # Target file is always {entity_type}.json
     data_dir = get_data_dir(web_name)
     _ensure_dir(data_dir)
 
-    filename = f"{entity_type}_1.json"
+    filename = f"{entity_type}.json"
     file_path = f"{data_dir}/{filename}"
 
     # Read existing data if file exists
@@ -378,7 +405,7 @@ def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, 
     else:
         main = {}
 
-    relative_path = f"./data/{filename}"
+    relative_path = f"./{filename}"
     if entity_type not in main:
         main[entity_type] = []
 
