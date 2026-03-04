@@ -81,6 +81,18 @@ def _resolve_path_under_base(base_dir: str, relative_path: str) -> Optional[str]
         return None
 
 
+def _path_for_io_under_base(path: str) -> str:
+    """
+    Return path only when it resolves under BASE_PATH (constant). Use this result for open()/exists()
+    so CodeQL path-injection sees validation against a constant base.
+    """
+    base_real = os.path.realpath(BASE_PATH)
+    path_real = os.path.realpath(path)
+    if os.path.commonpath([base_real, path_real]) != base_real:
+        raise ValueError(_MSG_PATH_OUTSIDE_BASE)
+    return path_real
+
+
 def _ensure_dir(path: str) -> None:
     """Ensure directory exists, creating it if necessary."""
     try:
@@ -109,7 +121,15 @@ def _parse_json_file_to_items(
         resolved = _resolve_path_under_base(allowed_base, rel)
         if resolved is None:
             return None
-        path_to_use = resolved
+        try:
+            path_to_use = _path_for_io_under_base(resolved)
+        except ValueError:
+            return None
+    else:
+        try:
+            path_to_use = _path_for_io_under_base(file_path)
+        except ValueError:
+            return None
     if not os.path.exists(path_to_use):
         return None
     try:
@@ -171,14 +191,15 @@ def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], ent
 
     data_dir = _resolve_path_under_base(BASE_PATH, web_name)
     if data_dir is None:
-        raise ValueError("Project path outside base")
+        raise ValueError(_MSG_PATH_OUTSIDE_BASE)
     file_path = _resolve_path_under_base(data_dir, filename)
     if file_path is None:
         raise ValueError("Resolved file path is not under project dir")
+    file_io = _path_for_io_under_base(file_path)
     _ensure_dir(data_dir)
 
     # Write data atomically
-    temp_path = f"{file_path}.tmp"
+    temp_path = f"{file_io}.tmp"
     try:
         with open(temp_path, "w", encoding="utf-8") as f:
             if HAS_FILELOCK:
@@ -191,18 +212,19 @@ def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], ent
                 fcntl.flock(f.fileno(), fcntl.LOCK_UN)
 
         # Atomic replace
-        os.replace(temp_path, file_path)
+        os.replace(temp_path, file_io)
     finally:
         if os.path.exists(temp_path):
             os.remove(temp_path)
 
     # Update main.json to reference this file
     main_path = os.path.join(data_dir, "main.json")
-    _ensure_dir(os.path.dirname(main_path))
+    main_io = _path_for_io_under_base(main_path)
+    _ensure_dir(os.path.dirname(main_io))
 
     # Read existing main.json or create new
-    if os.path.exists(main_path):
-        with open(main_path, "r", encoding="utf-8") as f:
+    if os.path.exists(main_io):
+        with open(main_io, "r", encoding="utf-8") as f:
             main = json.load(f)
     else:
         main = {}
@@ -216,10 +238,10 @@ def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], ent
         main[entity_type].append(relative_path)
 
     # Save updated main.json
-    with open(main_path, "w", encoding="utf-8") as f:
+    with open(main_io, "w", encoding="utf-8") as f:
         json.dump(main, f, indent=2, ensure_ascii=False)
 
-    return file_path
+    return file_io
 
 
 def load_all_data(
@@ -277,15 +299,19 @@ def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> Li
         logger.warning(_MSG_PATH_OUTSIDE_BASE, extra={"web_name": web_name})
         return []
     web_base = os.path.dirname(main_path)
-    if not os.path.exists(main_path):
-        logger.warning("main.json missing for web", extra={"web_name": web_name, "path": main_path})
+    try:
+        main_io = _path_for_io_under_base(main_path)
+    except ValueError:
+        return []
+    if not os.path.exists(main_io):
+        logger.warning("main.json missing for web", extra={"web_name": web_name, "path": main_io})
         return []
 
     try:
-        with open(main_path, "r", encoding="utf-8") as f:
+        with open(main_io, "r", encoding="utf-8") as f:
             main = json.load(f)
     except Exception as exc:
-        logger.error("Failed to read main.json", extra={"web_name": web_name, "path": main_path, "error": str(exc)})
+        logger.error("Failed to read main.json", extra={"web_name": web_name, "path": main_io, "error": str(exc)})
         return []
 
     all_data: List[Dict[str, Any]] = []
@@ -305,13 +331,17 @@ def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> Li
     for rel_path in rel_paths:
         normalized_rel = rel_path.lstrip("./")
         abs_path = _resolve_path_under_base(web_base, normalized_rel)
-        if abs_path is None or not os.path.exists(abs_path):
-            if abs_path is None:
-                logger.warning("Referenced path outside base", extra={"rel_path": rel_path, "web_name": web_name})
-            else:
-                logger.warning("Referenced data file missing", extra={"path": abs_path, "rel_path": rel_path, "web_name": web_name})
+        if abs_path is None:
+            logger.warning("Referenced path outside base", extra={"rel_path": rel_path, "web_name": web_name})
             continue
-        items = _parse_json_file_to_items(abs_path, allowed_base=web_base)
+        try:
+            path_io = _path_for_io_under_base(abs_path)
+        except ValueError:
+            continue
+        if not os.path.exists(path_io):
+            logger.warning("Referenced data file missing", extra={"path": path_io, "rel_path": rel_path, "web_name": web_name})
+            continue
+        items = _parse_json_file_to_items(path_io, allowed_base=web_base)
         if items is not None:
             all_data.extend(items)
 
@@ -331,15 +361,19 @@ def _load_first_file_only(web_name: str, entity_type: Optional[str] = None) -> L
         logger.warning(_MSG_PATH_OUTSIDE_BASE, extra={"web_name": web_name})
         return []
     web_base = os.path.dirname(main_path)
-    if not os.path.exists(main_path):
-        logger.warning("main.json missing for web", extra={"web_name": web_name, "path": main_path})
+    try:
+        main_io = _path_for_io_under_base(main_path)
+    except ValueError:
+        return []
+    if not os.path.exists(main_io):
+        logger.warning("main.json missing for web", extra={"web_name": web_name, "path": main_io})
         return []
 
     try:
-        with open(main_path, "r", encoding="utf-8") as f:
+        with open(main_io, "r", encoding="utf-8") as f:
             main = json.load(f)
     except Exception as exc:
-        logger.error("Failed to read main.json", extra={"web_name": web_name, "path": main_path, "error": str(exc)})
+        logger.error("Failed to read main.json", extra={"web_name": web_name, "path": main_io, "error": str(exc)})
         return []
 
     all_data: List[Dict[str, Any]] = []
@@ -358,13 +392,17 @@ def _load_first_file_only(web_name: str, entity_type: Optional[str] = None) -> L
     for rel_path in paths_to_load:
         normalized_rel = rel_path.lstrip("./")
         abs_path = _resolve_path_under_base(web_base, normalized_rel)
-        if abs_path is None or not os.path.exists(abs_path):
-            if abs_path is None:
-                logger.warning("First file path outside base", extra={"rel_path": rel_path, "web_name": web_name})
-            else:
-                logger.warning("First file missing", extra={"path": abs_path, "web_name": web_name})
+        if abs_path is None:
+            logger.warning("First file path outside base", extra={"rel_path": rel_path, "web_name": web_name})
             continue
-        items = _parse_json_file_to_items(abs_path, allowed_base=web_base)
+        try:
+            path_io = _path_for_io_under_base(abs_path)
+        except ValueError:
+            continue
+        if not os.path.exists(path_io):
+            logger.warning("First file missing", extra={"path": path_io, "web_name": web_name})
+            continue
+        items = _parse_json_file_to_items(path_io, allowed_base=web_base)
         if items is not None:
             all_data.extend(items)
 
@@ -385,12 +423,13 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
 
     main_path = _resolve_path_under_base(BASE_PATH, f"{web_name}/main.json")
     if main_path is None:
-        raise ValueError("Project path outside base")
+        raise ValueError(_MSG_PATH_OUTSIDE_BASE)
     web_base = os.path.dirname(main_path)
+    main_io = _path_for_io_under_base(main_path)
 
     # Load or create main.json
-    if os.path.exists(main_path):
-        with open(main_path, "r", encoding="utf-8") as f:
+    if os.path.exists(main_io):
+        with open(main_io, "r", encoding="utf-8") as f:
             main = json.load(f)
     else:
         main = {}
@@ -406,7 +445,14 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
     if entity_files:
         # Get the last file; resolve path safely to prevent path traversal
         last_file_rel = entity_files[-1].lstrip("./")
-        last_file_abs = _resolve_path_under_base(web_base, last_file_rel)
+        resolved_last = _resolve_path_under_base(web_base, last_file_rel)
+        if resolved_last:
+            try:
+                last_file_abs = _path_for_io_under_base(resolved_last)
+            except ValueError:
+                last_file_abs = None
+        else:
+            last_file_abs = None
 
         if last_file_abs and os.path.exists(last_file_abs):
             # Check file size
@@ -426,8 +472,9 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
         # Append to existing file; path is sanitized by _resolve_path_under_base (under web_base only)
         safe_path = _resolve_path_under_base(web_base, last_file_rel or "")
         if not safe_path:
-            raise ValueError("Resolved path is not under base")
-        with open(safe_path, "r", encoding="utf-8") as f:
+            raise ValueError(_MSG_PATH_OUTSIDE_BASE)
+        io_path = _path_for_io_under_base(safe_path)
+        with open(io_path, "r", encoding="utf-8") as f:
             existing_data = json.load(f)
 
         if isinstance(existing_data, list):
@@ -437,10 +484,10 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
             existing_data = [existing_data] + data
 
         # Write back
-        with open(safe_path, "w", encoding="utf-8") as f:
+        with open(io_path, "w", encoding="utf-8") as f:
             json.dump(existing_data, f, indent=2, ensure_ascii=False)
 
-        return safe_path
+        return io_path
 
 
 def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, Any]]) -> str:
@@ -464,44 +511,46 @@ def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, 
     # Target file is always {entity_type}.json
     data_dir = _resolve_path_under_base(BASE_PATH, web_name)
     if data_dir is None:
-        raise ValueError("Project path outside base")
+        raise ValueError(_MSG_PATH_OUTSIDE_BASE)
     _ensure_dir(data_dir)
     filename = f"{entity_type}.json"
     file_path = _resolve_path_under_base(data_dir, filename)
     if file_path is None:
         raise ValueError("Resolved file path is not under project dir")
+    file_io = _path_for_io_under_base(file_path)
 
     # Read existing data if file exists
     existing_data = []
-    if os.path.exists(file_path):
+    if os.path.exists(file_io):
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_io, "r", encoding="utf-8") as f:
                 existing_data = json.load(f)
                 if not isinstance(existing_data, list):
                     existing_data = [existing_data]
         except Exception as e:
-            print(f"Warning: Could not read existing file {file_path}: {e}")
+            print(f"Warning: Could not read existing file {file_io}: {e}")
             existing_data = []
 
     # Append new data
     combined_data = existing_data + data
 
     # Write combined data
-    temp_path = f"{file_path}.tmp"
+    temp_path = f"{file_io}.tmp"
     try:
         with open(temp_path, "w", encoding="utf-8") as f:
             json.dump(combined_data, f, indent=2, ensure_ascii=False)
-        os.replace(temp_path, file_path)
+        os.replace(temp_path, file_io)
     finally:
         if os.path.exists(temp_path):
             os.remove(temp_path)
 
     # Update main.json to reference this file (if not already)
     main_path = os.path.join(data_dir, "main.json")
-    _ensure_dir(os.path.dirname(main_path))
+    main_io = _path_for_io_under_base(main_path)
+    _ensure_dir(os.path.dirname(main_io))
 
-    if os.path.exists(main_path):
-        with open(main_path, "r", encoding="utf-8") as f:
+    if os.path.exists(main_io):
+        with open(main_io, "r", encoding="utf-8") as f:
             main = json.load(f)
     else:
         main = {}
@@ -513,8 +562,8 @@ def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, 
     if relative_path not in main[entity_type]:
         main[entity_type].append(relative_path)
 
-    with open(main_path, "w", encoding="utf-8") as f:
+    with open(main_io, "w", encoding="utf-8") as f:
         json.dump(main, f, indent=2, ensure_ascii=False)
 
-    print(f"✅ Appended {len(data)} records to {file_path} (total: {len(combined_data)})")
-    return file_path
+    print(f"✅ Appended {len(data)} records to {file_io} (total: {len(combined_data)})")
+    return file_io
