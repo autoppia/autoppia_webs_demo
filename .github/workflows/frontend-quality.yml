@@ -56,6 +56,10 @@ jobs:
         working-directory: ${{ matrix.app }}
         run: npm ci
 
+      - name: Audit dependencies
+        working-directory: ${{ matrix.app }}
+        run: npm audit --audit-level=high
+
       - name: Lint
         working-directory: ${{ matrix.app }}
         run: npm run lint

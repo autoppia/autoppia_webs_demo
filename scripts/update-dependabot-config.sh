@@ -36,7 +36,7 @@ HEADER
 
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 0
     labels:
       - "dependencies"
     commit-message:
@@ -46,7 +46,7 @@ HEADER
     directory: "/webs_server"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 0
     labels:
       - "dependencies"
     commit-message:
@@ -56,7 +56,7 @@ HEADER
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 0
     labels:
       - "dependencies"
 
@@ -64,7 +64,7 @@ HEADER
     directory: "/webs_server"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 0
     labels:
       - "dependencies"
 TAIL
