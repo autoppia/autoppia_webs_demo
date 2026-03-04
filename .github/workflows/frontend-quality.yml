@@ -47,6 +47,11 @@ jobs:
           cache: 'npm'
           cache-dependency-path: ${{ matrix.app }}/package-lock.json
 
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
       - name: Install dependencies
         working-directory: ${{ matrix.app }}
         run: npm ci
