@@ -101,7 +101,12 @@ const generateFallbackId = (): string => {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
     return crypto.randomUUID();
   }
-  return `book-${Math.random().toString(36).slice(2, 10)}`;
+  if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+    const bytes = new Uint8Array(8);
+    crypto.getRandomValues(bytes);
+    return `book-${Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("")}`;
+  }
+  return `book-ts-${Date.now().toString(36)}`;
 };
 
 const normalizeBook = (book: DatasetBook): Book => {
