@@ -1,9 +1,9 @@
-import type { Tournament, TournamentStanding, Player, Game, Puzzle } from "@/shared/types";
+import { Chess } from "chess.js";
+import type { Tournament, TournamentStanding, Player, Game, Puzzle, OpeningExplorerData, OpeningExplorerMove } from "@/shared/types";
 import { COUNTRIES, PUZZLE_THEMES, GAME_TYPES, TOURNAMENT_STATUSES, PLAYER_TITLES } from "@/shared/constants";
 import {
   OPENINGS, FIRST_NAMES, LAST_NAMES, CITIES, TOURNAMENT_NAME_PREFIXES,
-  PUZZLE_FENS, PAWN_MOVES, KNIGHT_MOVES, BISHOP_MOVES, ROOK_MOVES,
-  QUEEN_MOVES, CASTLING_MOVES,
+  PUZZLE_FENS,
 } from "./chess-data";
 import { CITY_COORDINATES } from "./city-coordinates";
 
@@ -48,16 +48,17 @@ export function generatePlayers(count: number, seed: number): Player[] {
     const firstName = pick(FIRST_NAMES, rng);
     const lastName = pick(LAST_NAMES, rng);
     const country = pick(COUNTRIES, rng);
-    const titleRoll = rng();
-    let title: Player["title"] = "";
-    if (titleRoll < 0.08) title = "GM";
-    else if (titleRoll < 0.16) title = "IM";
-    else if (titleRoll < 0.25) title = "FM";
-    else if (titleRoll < 0.30) title = "CM";
-    else if (titleRoll < 0.33) title = "WGM";
-    else if (titleRoll < 0.36) title = "WIM";
-
     const rating = randInt(1200, 2800, rng);
+
+    // Assign title based on rating (realistic thresholds)
+    let title: Player["title"] = "";
+    const titleRoll = rng();
+    if (rating >= 2500 && titleRoll < 0.85) title = "GM";
+    else if (rating >= 2400 && titleRoll < 0.75) title = "IM";
+    else if (rating >= 2300 && titleRoll < 0.65) title = "FM";
+    else if (rating >= 2200 && titleRoll < 0.50) title = "CM";
+    else if (rating >= 2300 && titleRoll < 0.30) title = "WGM";
+    else if (rating >= 2200 && titleRoll < 0.25) title = "WIM";
     const rapidRating = rating + randInt(-80, 30, rng);
     const blitzRating = rating + randInt(-120, 20, rng);
     const gamesPlayed = randInt(50, 800, rng);
@@ -235,29 +236,114 @@ export function generateStandings(tournament: Tournament, players: Player[], see
 // Game Generator
 // ============================================================================
 
-function generateMoveSequence(moveCount: number, rng: () => number): string[] {
-  const moves: string[] = [];
-  const allOpeningMoves = [...PAWN_MOVES, ...KNIGHT_MOVES, ...BISHOP_MOVES];
-  const allMiddleMoves = [...PAWN_MOVES, ...KNIGHT_MOVES, ...BISHOP_MOVES, ...ROOK_MOVES, ...QUEEN_MOVES];
+/**
+ * Score a move for weighted random selection.
+ * Higher scores = more likely to be chosen.
+ * Heuristics approximate human-like play: central pawns in the opening,
+ * piece development, castling, active middlegame play, pawn pushes in endgames.
+ */
+function scoreMove(san: string, halfMoveIndex: number): number {
+  const phase = halfMoveIndex < 20 ? "opening" : halfMoveIndex < 60 ? "middlegame" : "endgame";
 
-  for (let m = 0; m < moveCount * 2; m++) {
-    if (m < 8) {
-      // Opening phase
-      moves.push(pick(allOpeningMoves, rng));
-    } else if (m < moveCount) {
-      // Middle game
-      if (rng() < 0.05) {
-        moves.push(pick(CASTLING_MOVES, rng));
-      } else {
-        moves.push(pick(allMiddleMoves, rng));
-      }
-    } else {
-      // Endgame
-      moves.push(pick([...ROOK_MOVES, ...QUEEN_MOVES, ...PAWN_MOVES], rng));
-    }
+  const isCapture = san.includes("x");
+  const isCheck = san.includes("+");
+  if (san.includes("#")) return 1000; // always play checkmate
+
+  const isCastling = san.startsWith("O-");
+  const ch = san[0];
+  const isPawn = ch >= "a" && ch <= "h";
+  const isKnight = ch === "N";
+  const isBishop = ch === "B";
+  const isRook = ch === "R";
+  const isQueen = ch === "Q";
+  const isKing = ch === "K";
+
+  // Extract destination square
+  const clean = san.replace(/[+#=QRBN]/g, "");
+  const m = clean.match(/([a-h])([1-8])$/);
+  const file = m ? m[1] : "";
+  const rank = m ? parseInt(m[2]) : 0;
+  const isCenter = (file === "d" || file === "e") && (rank === 4 || rank === 5);
+  const isExtCenter = file >= "c" && file <= "f" && rank >= 3 && rank <= 6;
+  const isEdge = file === "a" || file === "h";
+
+  let score = 1;
+
+  if (phase === "opening") {
+    if (isCastling) score = 25;
+    else if (isPawn && isCenter) score = 15;
+    else if (isPawn && isExtCenter) score = 8;
+    else if (isKnight && isExtCenter) score = 12;
+    else if (isKnight && isEdge) score = 1;
+    else if (isKnight) score = 6;
+    else if (isBishop && isExtCenter) score = 10;
+    else if (isBishop) score = 7;
+    else if (isPawn) score = 3;
+    else if (isRook) score = 2;
+    else if (isQueen) score = 1;
+    else if (isKing) score = 0.5;
+    if (isCapture) score *= 2;
+    if (isCheck) score *= 2;
+    if (isEdge && !isCastling) score *= 0.3;
+  } else if (phase === "middlegame") {
+    if (isCastling) score = 15;
+    else if (isCapture && isCheck) score = 12;
+    else if (isCheck) score = 10;
+    else if (isCapture) score = 8;
+    else if (isKnight && isExtCenter) score = 7;
+    else if (isRook) score = 5;
+    else if (isBishop) score = 5;
+    else if (isQueen && isExtCenter) score = 5;
+    else if (isPawn && isExtCenter) score = 5;
+    else if (isKnight) score = 4;
+    else if (isQueen) score = 3;
+    else if (isPawn) score = 3;
+    else if (isKing) score = 1;
+    if (isEdge) score *= 0.6;
+  } else {
+    // Endgame: push pawns, centralize king, activate rooks
+    if (isCheck) score = 10;
+    else if (isCapture) score = 9;
+    else if (isPawn) score = 8;
+    else if (isKing && isExtCenter) score = 7;
+    else if (isRook) score = 6;
+    else if (isQueen) score = 5;
+    else if (isKing) score = 4;
+    else if (isBishop) score = 4;
+    else if (isKnight) score = 4;
   }
 
-  return moves.slice(0, moveCount * 2);
+  return Math.max(0.1, score);
+}
+
+function generateMoveSequence(moveCount: number, rng: () => number): string[] {
+  const chess = new Chess();
+  const moves: string[] = [];
+  const targetHalfMoves = moveCount * 2;
+
+  for (let m = 0; m < targetHalfMoves; m++) {
+    const legalMoves = chess.moves();
+    if (legalMoves.length === 0) break;
+
+    // Weighted random selection based on strategic heuristics
+    const weights = legalMoves.map((mv) => scoreMove(mv, m));
+    const totalWeight = weights.reduce((a, b) => a + b, 0);
+    let roll = rng() * totalWeight;
+    let chosen = legalMoves[legalMoves.length - 1];
+    for (let i = 0; i < legalMoves.length; i++) {
+      roll -= weights[i];
+      if (roll <= 0) {
+        chosen = legalMoves[i];
+        break;
+      }
+    }
+
+    chess.move(chosen);
+    moves.push(chosen);
+    if (chess.isGameOver()) break;
+  }
+
+  return moves;
 }
 
 export function generateGames(tournaments: Tournament[], players: Player[], count: number, seed: number): Game[] {
@@ -286,18 +372,35 @@ export function generateGames(tournaments: Tournament[], players: Player[], coun
     const month = randInt(1, 12, rng);
     const day = randInt(1, 28, rng);
 
+    const moves = generateMoveSequence(moveCount, rng);
+    const actualMoveCount = Math.ceil(moves.length / 2);
+
+    // Derive result from actual play when game ended decisively
+    let finalResult = result;
+    if (moves.length > 0) {
+      const endCheck = new Chess();
+      for (const m of moves) {
+        try { endCheck.move(m); } catch { break; }
+      }
+      if (endCheck.isCheckmate()) {
+        finalResult = endCheck.turn() === "w" ? "0-1" : "1-0";
+      } else if (endCheck.isStalemate() || endCheck.isDraw()) {
+        finalResult = "1/2-1/2";
+      }
+    }
+
     games.push({
       id: i + 1,
       tournamentId: tournament.id,
       round,
       whitePlayer: { id: wp.id, name: wp.name, rating: wp.rating },
       blackPlayer: { id: bp.id, name: bp.name, rating: bp.rating },
-      result,
+      result: finalResult,
       opening: opening.name,
       eco: opening.eco,
-      moves: generateMoveSequence(moveCount, rng),
+      moves,
       date: formatDate(year, month, day),
-      moveCount,
+      moveCount: actualMoveCount,
     });
   }
 
@@ -348,97 +451,116 @@ export function generatePuzzleThemeCounts(seed: number): Record<string, number> 
 // Game Position Generator (for analysis board)
 // ============================================================================
 
-function boardToFEN(board: (string | null)[][], moveIndex: number): string {
-  const rows: string[] = [];
-  for (const row of board) {
-    let fenRow = "";
-    let empty = 0;
-    for (const sq of row) {
-      if (sq === null) {
-        empty++;
-      } else {
-        if (empty > 0) { fenRow += empty; empty = 0; }
-        fenRow += sq;
-      }
-    }
-    if (empty > 0) fenRow += empty;
-    rows.push(fenRow);
-  }
-  // After white's move (even index), it's black's turn; after black's move (odd), white's turn
-  const color = moveIndex % 2 === 0 ? "b" : "w";
-  return `${rows.join("/")} ${color} - - 0 ${Math.floor(moveIndex / 2) + 1}`;
-}
-
 /**
- * Generate a sequence of board positions for visual display in the analysis page.
- * Since moves are pseudo-random algebraic notation (not real valid moves),
- * we generate plausible-looking board states by making pseudo-random piece
- * movements on the actual board array.
+ * Generate a sequence of board positions for a game's moves.
+ * Replays the game's SAN moves through chess.js to produce valid FENs.
  */
-export function generateGamePositions(gameId: number, totalMoves: number): string[] {
-  const rng = seedRandom(gameId * 7919);
+export function generateGamePositions(moves: string[], startFen?: string): string[] {
+  const chess = startFen ? new Chess(startFen) : new Chess();
   const positions: string[] = [];
 
-  const board: (string | null)[][] = [
-    ["r", "n", "b", "q", "k", "b", "n", "r"],
-    ["p", "p", "p", "p", "p", "p", "p", "p"],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    ["P", "P", "P", "P", "P", "P", "P", "P"],
-    ["R", "N", "B", "Q", "K", "B", "N", "R"],
-  ];
-
-  const isWhitePiece = (p: string) => p === p.toUpperCase();
-
-  for (let m = 0; m < totalMoves; m++) {
-    const isWhiteTurn = m % 2 === 0;
-
-    // Collect moveable pieces (current side, excluding king)
-    const candidates: [number, number][] = [];
-    for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) {
-        const p = board[r][c];
-        if (p && p.toLowerCase() !== "k" && isWhitePiece(p) === isWhiteTurn) {
-          candidates.push([r, c]);
-        }
-      }
-    }
-
-    if (candidates.length === 0) {
-      positions.push(boardToFEN(board, m));
-      continue;
-    }
-
-    // Pick a random piece
-    const [fr, fc] = candidates[Math.floor(rng() * candidates.length)];
-    const piece = board[fr][fc]!;
-
-    // Pick a valid destination (not same square, not own piece, not king)
-    let tr = -1;
-    let tc = -1;
-    for (let attempt = 0; attempt < 30; attempt++) {
-      const r = Math.floor(rng() * 8);
-      const c = Math.floor(rng() * 8);
-      if (r === fr && c === fc) continue;
-      const target = board[r][c];
-      if (target?.toLowerCase() === "k") continue;
-      if (target && isWhitePiece(target) === isWhiteTurn) continue;
-      tr = r;
-      tc = c;
+  for (const move of moves) {
+    try {
+      chess.move(move);
+      positions.push(chess.fen());
+    } catch {
+      // If a move is invalid, stop — remaining positions won't exist
       break;
     }
-
-    if (tr >= 0) {
-      board[fr][fc] = null;
-      board[tr][tc] = piece;
-    }
-
-    positions.push(boardToFEN(board, m));
   }
 
   return positions;
+}
+
+// ============================================================================
+// Opening Book Generator (for analysis board)
+// ============================================================================
+
+/** Strip halfmove and fullmove counters from FEN for position-only keying */
+export function stripMoveCounters(fen: string): string {
+  const parts = fen.split(" ");
+  return parts.slice(0, 4).join(" ");
+}
+
+/**
+ * Build an opening book from a set of games.
+ * Replays the first `maxPly` half-moves of each game through chess.js,
+ * tracking which moves were played from each position and what the game result was.
+ * Returns a Map keyed by position-only FEN.
+ */
+export function generateOpeningBook(
+  games: Game[],
+  seed: number,
+  maxPly: number = 30,
+): Map<string, OpeningExplorerData> {
+  const book = new Map<string, {
+    moves: Map<string, { games: number; whiteWins: number; draws: number; blackWins: number }>;
+    openingName?: string;
+    eco?: string;
+  }>();
+
+  for (const game of games) {
+    const chess = new Chess();
+    const movesToReplay = Math.min(game.moves.length, maxPly);
+
+    for (let i = 0; i < movesToReplay; i++) {
+      const fenKey = stripMoveCounters(chess.fen());
+
+      // Ensure entry exists
+      if (!book.has(fenKey)) {
+        book.set(fenKey, { moves: new Map() });
+      }
+      const entry = book.get(fenKey)!;
+
+      // Store opening name/eco on starting positions
+      if (i <= 4 && game.opening) {
+        entry.openingName = game.opening;
+        entry.eco = game.eco;
+      }
+
+      const san = game.moves[i];
+      if (!entry.moves.has(san)) {
+        entry.moves.set(san, { games: 0, whiteWins: 0, draws: 0, blackWins: 0 });
+      }
+      const moveStats = entry.moves.get(san)!;
+      moveStats.games++;
+      if (game.result === "1-0") moveStats.whiteWins++;
+      else if (game.result === "0-1") moveStats.blackWins++;
+      else moveStats.draws++;
+
+      try {
+        chess.move(san);
+      } catch {
+        break;
+      }
+    }
+  }
+
+  // Convert to OpeningExplorerData
+  const result = new Map<string, OpeningExplorerData>();
+  for (const [fen, entry] of book) {
+    const totalGames = Array.from(entry.moves.values()).reduce((sum, m) => sum + m.games, 0);
+    const moves: OpeningExplorerMove[] = Array.from(entry.moves.entries())
+      .map(([san, stats]) => ({
+        san,
+        games: stats.games,
+        whiteWins: stats.whiteWins,
+        draws: stats.draws,
+        blackWins: stats.blackWins,
+        percentPlayed: totalGames > 0 ? Math.round((stats.games / totalGames) * 1000) / 10 : 0,
+      }))
+      .sort((a, b) => b.games - a.games)
+      .slice(0, 8);
+
+    result.set(fen, {
+      openingName: entry.openingName,
+      eco: entry.eco,
+      totalGames,
+      moves,
+    });
+  }
+
+  return result;
 }
 
 // ============================================================================
@@ -448,7 +570,7 @@ export function generateGamePositions(gameId: number, totalMoves: number): strin
 export function generateAllData(seed: number) {
   const players = generatePlayers(200, seed);
   const tournaments = generateTournaments(50, seed);
-  const games = generateGames(tournaments, players, 500, seed);
+  const games = generateGames(tournaments, players, 100, seed);
   const puzzles = generatePuzzles(100, seed);
 
   return { players, tournaments, games, puzzles };

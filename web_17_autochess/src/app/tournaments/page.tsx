@@ -1,20 +1,47 @@
 "use client";
 
-import React, { useMemo, useState, useCallback, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { TournamentMapLoader } from "@/components/tournaments/TournamentMapLoader";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useSeed } from "@/context/SeedContext";
-import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { useEventLogger } from "@/hooks/useEventLogger";
+import { generateTournaments } from "@/data/generators";
 import { DynamicWrapper } from "@/dynamic/v1/DynamicWrapper";
 import { DynamicText } from "@/dynamic/v3/DynamicText";
-import { generateTournaments } from "@/data/generators";
-import { getCountryFlag, formatDateRange, getStatusBadgeClass, getGameTypeBadgeClass } from "@/library/formatters";
+import { useEventLogger } from "@/hooks/useEventLogger";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES } from "@/library/events";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import {
+  formatDateRange,
+  getCountryFlag,
+  getGameTypeBadgeClass,
+  getStatusBadgeClass,
+} from "@/library/formatters";
 import { COUNTRIES, GAME_TYPES, TOURNAMENT_STATUSES } from "@/shared/constants";
-import { TournamentMapLoader } from "@/components/tournaments/TournamentMapLoader";
-import { Search, X, ArrowUpDown, Calendar, MapPin, List, Trophy, Zap } from "lucide-react";
+import {
+  ArrowUpDown,
+  Calendar,
+  List,
+  MapPin,
+  Search,
+  Trophy,
+  X,
+  Zap,
+} from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 
 type SortField = "name" | "date" | "players" | "elo";
 type SortDir = "asc" | "desc";
@@ -62,26 +89,42 @@ export default function TournamentsPage() {
     if (view === "map" || view === "list") setViewMode(view);
   }, [searchParams]);
 
-  const handleSearch = useCallback((value: string) => {
-    setSearch(value);
-    if (value.length > 0) {
-      logInteraction(EVENT_TYPES.SEARCH_TOURNAMENT, { query: value, country: countryFilter, gameType: typeFilter });
-    }
-  }, [countryFilter, typeFilter, logInteraction]);
+  const handleSearch = useCallback(
+    (value: string) => {
+      setSearch(value);
+      if (value.length > 0) {
+        logInteraction(EVENT_TYPES.SEARCH_TOURNAMENT, {
+          query: value,
+          country: countryFilter,
+          gameType: typeFilter,
+        });
+      }
+    },
+    [countryFilter, typeFilter, logInteraction],
+  );
 
-  const handleFilter = useCallback((type: string, value: string) => {
-    if (type === "country") setCountryFilter(value);
-    else if (type === "gameType") setTypeFilter(value);
-    else if (type === "status") setStatusFilter(value);
+  const handleFilter = useCallback(
+    (type: string, value: string) => {
+      if (type === "country") setCountryFilter(value);
+      else if (type === "gameType") setTypeFilter(value);
+      else if (type === "status") setStatusFilter(value);
 
-    logInteraction(EVENT_TYPES.FILTER_TOURNAMENT, {
-      country: type === "country" ? value : countryFilter,
-      gameType: type === "gameType" ? value : typeFilter,
-      status: type === "status" ? value : statusFilter,
-    });
-  }, [countryFilter, typeFilter, statusFilter, logInteraction]);
+      logInteraction(EVENT_TYPES.FILTER_TOURNAMENT, {
+        country: type === "country" ? value : countryFilter,
+        gameType: type === "gameType" ? value : typeFilter,
+        status: type === "status" ? value : statusFilter,
+      });
+    },
+    [countryFilter, typeFilter, statusFilter, logInteraction],
+  );
 
-  const hasActiveFilters = search || countryFilter !== "all" || typeFilter !== "all" || statusFilter !== "all" || startDateFilter || endDateFilter;
+  const hasActiveFilters =
+    search ||
+    countryFilter !== "all" ||
+    typeFilter !== "all" ||
+    statusFilter !== "all" ||
+    startDateFilter ||
+    endDateFilter;
 
   const clearAllFilters = useCallback(() => {
     setSearch("");
@@ -93,9 +136,15 @@ export default function TournamentsPage() {
   }, []);
 
   const filtered = useMemo(() => {
-    let result = tournaments.filter((t) => {
-      if (search && !t.name.toLowerCase().includes(search.toLowerCase()) && !t.location.toLowerCase().includes(search.toLowerCase())) return false;
-      if (countryFilter !== "all" && t.countryCode !== countryFilter) return false;
+    const result = tournaments.filter((t) => {
+      if (
+        search &&
+        !t.name.toLowerCase().includes(search.toLowerCase()) &&
+        !t.location.toLowerCase().includes(search.toLowerCase())
+      )
+        return false;
+      if (countryFilter !== "all" && t.countryCode !== countryFilter)
+        return false;
       if (typeFilter !== "all" && t.gameType !== typeFilter) return false;
       if (statusFilter !== "all" && t.status !== statusFilter) return false;
       if (startDateFilter && t.endDate < startDateFilter) return false;
@@ -106,25 +155,37 @@ export default function TournamentsPage() {
     result.sort((a, b) => {
       let cmp = 0;
       if (sortField === "name") cmp = a.name.localeCompare(b.name);
-      else if (sortField === "date") cmp = a.startDate.localeCompare(b.startDate);
+      else if (sortField === "date")
+        cmp = a.startDate.localeCompare(b.startDate);
       else if (sortField === "players") cmp = a.playerCount - b.playerCount;
       else if (sortField === "elo") cmp = a.eloMax - b.eloMax;
       return sortDir === "asc" ? cmp : -cmp;
     });
 
     return result;
-  }, [tournaments, search, countryFilter, typeFilter, statusFilter, startDateFilter, endDateFilter, sortField, sortDir]);
+  }, [
+    tournaments,
+    search,
+    countryFilter,
+    typeFilter,
+    statusFilter,
+    startDateFilter,
+    endDateFilter,
+    sortField,
+    sortDir,
+  ]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
-      setSortDir((d) => d === "asc" ? "desc" : "asc");
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
     } else {
       setSortField(field);
       setSortDir("asc");
     }
   };
 
-  const getCountryName = (code: string) => COUNTRIES.find((c) => c.code === code)?.name || code;
+  const getCountryName = (code: string) =>
+    COUNTRIES.find((c) => c.code === code)?.name || code;
 
   const gameTypeIcon = (type: string) => {
     if (type === "Classical") return <Trophy className="h-3.5 w-3.5" />;
@@ -132,27 +193,32 @@ export default function TournamentsPage() {
   };
 
   return (
-    <div className="py-6">
+    <div className="py-4 sm:py-6">
       {/* Page header */}
       <DynamicWrapper>
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h1 className="text-2xl font-bold text-white">
+            <h1 className="text-xl sm:text-2xl font-bold text-white">
               <DynamicText value="Tournament Search" type="text" />
             </h1>
-            <p className="text-sm text-stone-500 mt-0.5">Find chess tournaments worldwide</p>
+            <p className="text-sm text-stone-500 mt-0.5">
+              Find chess tournaments worldwide
+            </p>
           </div>
           <div className="text-sm text-stone-400">
-            <span className="text-amber-400 font-semibold">{filtered.length}</span> result{filtered.length !== 1 ? "s" : ""}
+            <span className="text-amber-400 font-semibold">
+              {filtered.length}
+            </span>{" "}
+            result{filtered.length !== 1 ? "s" : ""}
           </div>
         </div>
       </DynamicWrapper>
 
       {/* Filter Panel */}
       <DynamicWrapper>
-        <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-4 mb-5">
+        <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-3 sm:p-4 mb-5">
           {/* Row 1: Search + Country */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-3">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-3">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-500" />
               <input
@@ -171,7 +237,10 @@ export default function TournamentsPage() {
                 </button>
               )}
             </div>
-            <Select value={countryFilter} onValueChange={(v) => handleFilter("country", v)}>
+            <Select
+              value={countryFilter}
+              onValueChange={(v) => handleFilter("country", v)}
+            >
               <SelectTrigger className="w-full sm:w-[180px] bg-white/[0.06] border-stone-700/50 text-zinc-300 h-10 text-sm">
                 <SelectValue placeholder="All Countries" />
               </SelectTrigger>
@@ -187,11 +256,13 @@ export default function TournamentsPage() {
           </div>
 
           {/* Row 2: Game type toggles + Status + Dates + Sort */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             {/* Game type toggle buttons */}
             <div className="flex rounded-lg border border-stone-700/50 overflow-hidden">
               <button
-                onClick={() => handleFilter("gameType", typeFilter === "all" ? "all" : "all")}
+                onClick={() =>
+                  handleFilter("gameType", typeFilter === "all" ? "all" : "all")
+                }
                 className={`px-3 py-1.5 text-xs font-medium transition-colors ${
                   typeFilter === "all"
                     ? "bg-amber-500/15 text-amber-300"
@@ -209,7 +280,12 @@ export default function TournamentsPage() {
                 return (
                   <button
                     key={type}
-                    onClick={() => handleFilter("gameType", typeFilter === type ? "all" : type)}
+                    onClick={() =>
+                      handleFilter(
+                        "gameType",
+                        typeFilter === type ? "all" : type,
+                      )
+                    }
                     className={`px-3 py-1.5 text-xs font-medium transition-colors flex items-center gap-1 border-l border-stone-700/50 ${
                       typeFilter === type
                         ? colors[type]
@@ -224,33 +300,38 @@ export default function TournamentsPage() {
             </div>
 
             {/* Status */}
-            <Select value={statusFilter} onValueChange={(v) => handleFilter("status", v)}>
+            <Select
+              value={statusFilter}
+              onValueChange={(v) => handleFilter("status", v)}
+            >
               <SelectTrigger className="w-[130px] bg-white/[0.06] border-stone-700/50 text-zinc-300 h-8 text-xs">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent className="bg-[#1c1917] border-stone-700/50">
                 <SelectItem value="all">All Statuses</SelectItem>
                 {TOURNAMENT_STATUSES.map((s) => (
-                  <SelectItem key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</SelectItem>
+                  <SelectItem key={s} value={s}>
+                    {s.charAt(0).toUpperCase() + s.slice(1)}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
 
             {/* Date range */}
-            <div className="flex items-center gap-1.5">
-              <Calendar className="h-3.5 w-3.5 text-stone-500 flex-shrink-0" />
+            <div className="flex items-center gap-1.5 w-full sm:w-auto">
+              <Calendar className="h-3.5 w-3.5 text-stone-500 flex-shrink-0 hidden sm:block" />
               <input
                 type="date"
                 value={startDateFilter}
                 onChange={(e) => setStartDateFilter(e.target.value)}
-                className="h-8 px-2 text-xs rounded-lg bg-white/[0.06] border border-stone-700/50 text-zinc-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 w-[130px]"
+                className="h-8 px-2 text-xs rounded-lg bg-white/[0.06] border border-stone-700/50 text-zinc-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 flex-1 sm:flex-none sm:w-[130px]"
               />
               <span className="text-stone-600 text-xs">–</span>
               <input
                 type="date"
                 value={endDateFilter}
                 onChange={(e) => setEndDateFilter(e.target.value)}
-                className="h-8 px-2 text-xs rounded-lg bg-white/[0.06] border border-stone-700/50 text-zinc-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 w-[130px]"
+                className="h-8 px-2 text-xs rounded-lg bg-white/[0.06] border border-stone-700/50 text-zinc-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 flex-1 sm:flex-none sm:w-[130px]"
               />
             </div>
 
@@ -317,19 +398,44 @@ export default function TournamentsPage() {
           {/* Active filter pills */}
           {hasActiveFilters && (
             <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-stone-800/60">
-              {search && <FilterPill label={`"${search}"`} onRemove={() => setSearch("")} />}
+              {search && (
+                <FilterPill
+                  label={`"${search}"`}
+                  onRemove={() => setSearch("")}
+                />
+              )}
               {countryFilter !== "all" && (
                 <FilterPill
                   label={`${getCountryFlag(countryFilter)} ${getCountryName(countryFilter)}`}
                   onRemove={() => setCountryFilter("all")}
                 />
               )}
-              {typeFilter !== "all" && <FilterPill label={typeFilter} onRemove={() => setTypeFilter("all")} />}
-              {statusFilter !== "all" && (
-                <FilterPill label={statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)} onRemove={() => setStatusFilter("all")} />
+              {typeFilter !== "all" && (
+                <FilterPill
+                  label={typeFilter}
+                  onRemove={() => setTypeFilter("all")}
+                />
               )}
-              {startDateFilter && <FilterPill label={`From ${startDateFilter}`} onRemove={() => setStartDateFilter("")} />}
-              {endDateFilter && <FilterPill label={`To ${endDateFilter}`} onRemove={() => setEndDateFilter("")} />}
+              {statusFilter !== "all" && (
+                <FilterPill
+                  label={
+                    statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)
+                  }
+                  onRemove={() => setStatusFilter("all")}
+                />
+              )}
+              {startDateFilter && (
+                <FilterPill
+                  label={`From ${startDateFilter}`}
+                  onRemove={() => setStartDateFilter("")}
+                />
+              )}
+              {endDateFilter && (
+                <FilterPill
+                  label={`To ${endDateFilter}`}
+                  onRemove={() => setEndDateFilter("")}
+                />
+              )}
             </div>
           )}
         </div>
@@ -338,11 +444,14 @@ export default function TournamentsPage() {
       {/* View: Map or List */}
       {filtered.length === 0 ? (
         <DynamicWrapper>
-          <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-12 text-center">
-            <Search className="h-12 w-12 text-zinc-700 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-zinc-300 mb-2">No tournaments found</h3>
+          <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-6 sm:p-12 text-center">
+            <Search className="h-10 w-10 sm:h-12 sm:w-12 text-zinc-700 mx-auto mb-4" />
+            <h3 className="text-base sm:text-lg font-medium text-zinc-300 mb-2">
+              No tournaments found
+            </h3>
             <p className="text-sm text-zinc-500 mb-4 max-w-md mx-auto">
-              No tournaments match your current filters. Try adjusting your search or removing some filters.
+              No tournaments match your current filters. Try adjusting your
+              search or removing some filters.
             </p>
             <button
               onClick={clearAllFilters}
@@ -362,32 +471,51 @@ export default function TournamentsPage() {
         </DynamicWrapper>
       ) : (
         <DynamicWrapper>
-          <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl overflow-hidden">
+          <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow className="border-stone-800/60 hover:bg-transparent">
                   <TableHead className="w-10" />
                   <TableHead>
-                    <button className="flex items-center gap-1 text-stone-400 hover:text-white transition-colors text-xs" onClick={() => handleSort("name")}>
+                    <button
+                      className="flex items-center gap-1 text-stone-400 hover:text-white transition-colors text-xs"
+                      onClick={() => handleSort("name")}
+                    >
                       Tournament
-                      {sortField === "name" && <ArrowUpDown className="h-3 w-3" />}
+                      {sortField === "name" && (
+                        <ArrowUpDown className="h-3 w-3" />
+                      )}
                     </button>
                   </TableHead>
-                  <TableHead className="text-stone-400 hidden md:table-cell text-xs">Location</TableHead>
+                  <TableHead className="text-stone-400 hidden md:table-cell text-xs">
+                    Location
+                  </TableHead>
                   <TableHead className="hidden lg:table-cell">
-                    <button className="flex items-center gap-1 text-stone-400 hover:text-white transition-colors text-xs" onClick={() => handleSort("date")}>
+                    <button
+                      className="flex items-center gap-1 text-stone-400 hover:text-white transition-colors text-xs"
+                      onClick={() => handleSort("date")}
+                    >
                       Dates
-                      {sortField === "date" && <ArrowUpDown className="h-3 w-3" />}
+                      {sortField === "date" && (
+                        <ArrowUpDown className="h-3 w-3" />
+                      )}
                     </button>
                   </TableHead>
                   <TableHead className="text-stone-400 text-xs">Type</TableHead>
                   <TableHead className="hidden md:table-cell text-right">
-                    <button className="flex items-center gap-1 text-stone-400 hover:text-white transition-colors ml-auto text-xs" onClick={() => handleSort("players")}>
+                    <button
+                      className="flex items-center gap-1 text-stone-400 hover:text-white transition-colors ml-auto text-xs"
+                      onClick={() => handleSort("players")}
+                    >
                       Players
-                      {sortField === "players" && <ArrowUpDown className="h-3 w-3" />}
+                      {sortField === "players" && (
+                        <ArrowUpDown className="h-3 w-3" />
+                      )}
                     </button>
                   </TableHead>
-                  <TableHead className="text-stone-400 text-xs">Status</TableHead>
+                  <TableHead className="text-stone-400 text-xs">
+                    Status
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -398,10 +526,12 @@ export default function TournamentsPage() {
                     onClick={() => router.push(`/tournaments/${t.id}`)}
                   >
                     <TableCell className="pr-0 text-center">
-                      <span className="text-base">{getCountryFlag(t.countryCode)}</span>
+                      <span className="text-base">
+                        {getCountryFlag(t.countryCode)}
+                      </span>
                     </TableCell>
-                    <TableCell>
-                      <span className="text-white font-medium text-sm group-hover:text-amber-400 transition-colors">
+                    <TableCell className="max-w-[150px] sm:max-w-none">
+                      <span className="text-white font-medium text-sm group-hover:text-amber-400 transition-colors line-clamp-1">
                         {t.name}
                       </span>
                     </TableCell>
@@ -412,13 +542,19 @@ export default function TournamentsPage() {
                       {formatDateRange(t.startDate, t.endDate)}
                     </TableCell>
                     <TableCell>
-                      <span className={`text-xs px-2 py-0.5 rounded border ${getGameTypeBadgeClass(t.gameType)}`}>
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded border ${getGameTypeBadgeClass(t.gameType)}`}
+                      >
                         {t.gameType}
                       </span>
                     </TableCell>
-                    <TableCell className="text-right text-stone-400 hidden md:table-cell text-sm">{t.playerCount}</TableCell>
+                    <TableCell className="text-right text-stone-400 hidden md:table-cell text-sm">
+                      {t.playerCount}
+                    </TableCell>
                     <TableCell>
-                      <span className={`text-xs px-2 py-0.5 rounded border ${getStatusBadgeClass(t.status)}`}>
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded border ${getStatusBadgeClass(t.status)}`}
+                      >
                         {t.status}
                       </span>
                     </TableCell>
@@ -433,11 +569,18 @@ export default function TournamentsPage() {
   );
 }
 
-function FilterPill({ label, onRemove }: { label: string; onRemove: () => void }) {
+function FilterPill({
+  label,
+  onRemove,
+}: { label: string; onRemove: () => void }) {
   return (
     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-[11px] font-medium rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-300">
       {label}
-      <button onClick={onRemove} className="hover:text-white transition-colors ml-0.5" aria-label={`Remove filter: ${label}`}>
+      <button
+        onClick={onRemove}
+        className="hover:text-white transition-colors ml-0.5"
+        aria-label={`Remove filter: ${label}`}
+      >
         <X className="h-3 w-3" />
       </button>
     </span>

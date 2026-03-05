@@ -26,23 +26,23 @@ export function TopPlayersTable({ players }: TopPlayersTableProps) {
 
   return (
     <DynamicWrapper>
-      <section className="my-8">
-        <div className="flex items-center justify-between mb-5">
+      <section className="my-4 sm:my-8">
+        <div className="flex items-center justify-between mb-4 sm:mb-5">
           <div>
-            <h2 className="text-xl font-bold text-white">
+            <h2 className="text-lg sm:text-xl font-bold text-white">
               <DynamicText value="Top Players" type="text" />
             </h2>
-            <p className="text-sm text-stone-500 mt-0.5">Classical rating leaderboard</p>
+            <p className="text-xs sm:text-sm text-stone-500 mt-0.5">Classical rating leaderboard</p>
           </div>
           <button
             onClick={() => router.push("/players")}
-            className="flex items-center gap-1 text-sm text-amber-400 hover:text-amber-300 transition-colors group"
+            className="flex items-center gap-1 text-sm text-amber-400 hover:text-amber-300 transition-colors group flex-shrink-0"
           >
             View all
             <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
           </button>
         </div>
-        <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl overflow-hidden">
+        <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow className="border-stone-800/60 hover:bg-transparent">

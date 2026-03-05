@@ -97,3 +97,39 @@ export interface MoveHistoryEntry {
   message: string;
   move?: string;
 }
+
+// ============================================================================
+// Analysis Board Types
+// ============================================================================
+
+export interface PositionEval {
+  cp: number;
+  display: string;
+  bestMove?: string;
+  depth: number;
+}
+
+export type MoveClassification = "brilliant" | "great" | "best" | "good" | "inaccuracy" | "mistake" | "blunder" | "book";
+
+export interface AnnotatedMove {
+  san: string;
+  fen: string;
+  eval: PositionEval;
+  classification?: MoveClassification;
+}
+
+export interface OpeningExplorerMove {
+  san: string;
+  games: number;
+  whiteWins: number;
+  draws: number;
+  blackWins: number;
+  percentPlayed: number;
+}
+
+export interface OpeningExplorerData {
+  openingName?: string;
+  eco?: string;
+  totalGames: number;
+  moves: OpeningExplorerMove[];
+}

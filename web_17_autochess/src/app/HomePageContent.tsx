@@ -23,12 +23,12 @@ interface HomePageContentProps {
 
 export default function HomePageContent({ data, seed }: HomePageContentProps) {
   return (
-    <div className="py-6 space-y-2">
+    <div className="py-4 sm:py-6 space-y-2">
       <HeroSection />
 
       {/* Quick Stats Bar */}
       <DynamicWrapper>
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-3 my-8">
+        <section className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 my-4 sm:my-8">
           <StatCard label="Tournaments" value={formatNumber(data.tournaments.length)} icon={<Trophy className="h-5 w-5" />} />
           <StatCard label="Players" value={formatNumber(data.players.length)} icon={<Users className="h-5 w-5" />} />
           <StatCard label="Games" value={formatNumber(data.games.length)} icon={<Swords className="h-5 w-5" />} />
@@ -45,12 +45,12 @@ export default function HomePageContent({ data, seed }: HomePageContentProps) {
 
 function StatCard({ label, value, icon }: { label: string; value: string; icon: React.ReactNode }) {
   return (
-    <div className="group bg-[#1c1917] border border-stone-800/80 rounded-xl p-4 flex items-center gap-3.5 hover:border-stone-700 transition-colors">
-      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/15 transition-colors flex-shrink-0">
+    <div className="group bg-[#1c1917] border border-stone-800/80 rounded-xl p-3 sm:p-4 flex items-center gap-2.5 sm:gap-3.5 hover:border-stone-700 transition-colors">
+      <div className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/15 transition-colors flex-shrink-0">
         {icon}
       </div>
       <div>
-        <div className="text-xl font-bold text-white">{value}</div>
+        <div className="text-lg sm:text-xl font-bold text-white">{value}</div>
         <div className="text-xs text-stone-500">
           <DynamicText value={label} type="text" />
         </div>

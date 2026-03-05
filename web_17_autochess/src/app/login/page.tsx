@@ -32,7 +32,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="py-12 flex justify-center">
+    <div className="py-6 sm:py-12 flex justify-center">
       <DynamicWrapper>
         <div className="w-full max-w-md">
           <div className="text-center mb-8">

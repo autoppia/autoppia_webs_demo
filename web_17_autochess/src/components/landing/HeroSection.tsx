@@ -53,7 +53,7 @@ export function HeroSection() {
 
   return (
     <DynamicWrapper>
-      <section className="relative overflow-hidden rounded-2xl border border-stone-800/80 my-8">
+      <section className="relative overflow-hidden rounded-2xl border border-stone-800/80 my-4 sm:my-8">
         {/* Gradient background with chess pattern overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#1a1412] via-[#1c1410] to-[#0c0a09]" />
         <div className="absolute inset-0 opacity-[0.03]">
@@ -71,8 +71,8 @@ export function HeroSection() {
         <div className="absolute -top-24 -right-24 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-amber-600/5 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 p-8 md:p-12">
-          <div className="flex flex-col lg:flex-row gap-10 items-start">
+        <div className="relative z-10 p-4 sm:p-8 md:p-12">
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 items-start">
             {/* Left: Title + tagline + quick actions */}
             <div className="flex-1 min-w-0">
               {/* Badge */}
@@ -81,13 +81,13 @@ export function HeroSection() {
                 Chess Tournament Platform
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
                 <DynamicText value="Master the" type="text" />{" "}
                 <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-200 bg-clip-text text-transparent">
                   <DynamicText value="Game" type="text" />
                 </span>
               </h1>
-              <p className="text-lg text-stone-400 mb-8 max-w-xl leading-relaxed">
+              <p className="text-sm sm:text-lg text-stone-400 mb-6 sm:mb-8 max-w-xl leading-relaxed">
                 <DynamicText
                   value="Explore tournaments worldwide, analyze grandmaster games, solve tactical puzzles, and track live player rankings."
                   type="text"
@@ -95,48 +95,48 @@ export function HeroSection() {
               </p>
 
               {/* Quick action cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
                 <button
-                  className="group flex items-center gap-3 p-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-stone-800/60 hover:border-amber-700/40 transition-all text-left"
+                  className="group flex flex-col sm:flex-row items-center gap-1.5 sm:gap-3 p-2.5 sm:p-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-stone-800/60 hover:border-amber-700/40 transition-all text-center sm:text-left"
                   onClick={() => router.push("/players")}
                 >
-                  <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20 transition-colors">
-                    <Users className="h-4.5 w-4.5" />
+                  <div className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20 transition-colors flex-shrink-0">
+                    <Users className="h-4 w-4" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-white">Players</div>
-                    <div className="text-xs text-stone-500">200+ ranked</div>
+                    <div className="text-xs sm:text-sm font-medium text-white">Players</div>
+                    <div className="text-[10px] sm:text-xs text-stone-500 hidden sm:block">200+ ranked</div>
                   </div>
                 </button>
                 <button
-                  className="group flex items-center gap-3 p-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-stone-800/60 hover:border-amber-700/40 transition-all text-left"
+                  className="group flex flex-col sm:flex-row items-center gap-1.5 sm:gap-3 p-2.5 sm:p-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-stone-800/60 hover:border-amber-700/40 transition-all text-center sm:text-left"
                   onClick={() => router.push("/tactics")}
                 >
-                  <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20 transition-colors">
-                    <Puzzle className="h-4.5 w-4.5" />
+                  <div className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20 transition-colors flex-shrink-0">
+                    <Puzzle className="h-4 w-4" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-white">Tactics</div>
-                    <div className="text-xs text-stone-500">100+ puzzles</div>
+                    <div className="text-xs sm:text-sm font-medium text-white">Tactics</div>
+                    <div className="text-[10px] sm:text-xs text-stone-500 hidden sm:block">100+ puzzles</div>
                   </div>
                 </button>
                 <button
-                  className="group flex items-center gap-3 p-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-stone-800/60 hover:border-amber-700/40 transition-all text-left"
+                  className="group flex flex-col sm:flex-row items-center gap-1.5 sm:gap-3 p-2.5 sm:p-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-stone-800/60 hover:border-amber-700/40 transition-all text-center sm:text-left"
                   onClick={() => router.push("/analysis")}
                 >
-                  <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20 transition-colors">
-                    <BarChart3 className="h-4.5 w-4.5" />
+                  <div className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20 transition-colors flex-shrink-0">
+                    <BarChart3 className="h-4 w-4" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-white">Analysis</div>
-                    <div className="text-xs text-stone-500">500+ games</div>
+                    <div className="text-xs sm:text-sm font-medium text-white">Analysis</div>
+                    <div className="text-[10px] sm:text-xs text-stone-500 hidden sm:block">500+ games</div>
                   </div>
                 </button>
               </div>
             </div>
 
             {/* Right: Search form card */}
-            <div className="w-full lg:w-[380px] bg-[#1c1917]/80 backdrop-blur-md border border-stone-700/60 rounded-xl p-5 space-y-4 shadow-2xl shadow-black/30">
+            <div className="w-full lg:w-[380px] bg-[#1c1917]/80 backdrop-blur-md border border-stone-700/60 rounded-xl p-4 sm:p-5 space-y-3 sm:space-y-4 shadow-2xl shadow-black/30">
               <h2 className="text-white font-semibold text-base flex items-center gap-2">
                 <Search className="h-4 w-4 text-amber-400" />
                 Find Tournaments

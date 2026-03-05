@@ -77,7 +77,7 @@ export default function RootLayout({
                 </Suspense>
                 <Header />
                 <main className="flex-1 w-full">
-                  <div className="container mx-auto px-6 max-w-[1400px]">
+                  <div className="container mx-auto px-3 sm:px-6 max-w-[1400px]">
                     {children}
                   </div>
                 </main>

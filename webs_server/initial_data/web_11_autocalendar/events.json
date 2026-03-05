@@ -1,0 +1,6700 @@
+[
+  {
+    "id": "event-1",
+    "date": "2025-12-15",
+    "start": 9,
+    "end": 10,
+    "label": "Team Standup Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Daily standup with the development team to discuss progress and blockers.",
+    "location": "Conference Room A",
+    "allDay": false,
+    "recurrence": "daily",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "sarah.chen@company.com",
+      "michael.rodriguez@company.com",
+      "emily.patel@company.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "event-2",
+    "date": "2025-12-15",
+    "start": 14,
+    "end": 15,
+    "label": "Project Review",
+    "calendar": "Work",
+    "color": "#FB8C00",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-15",
+    "attendees": [
+      "david.kim@company.com",
+      "lisa.anderson@company.com"
+    ],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://meet.google.com/abc-defg-hij"
+  },
+  {
+    "id": "event-3",
+    "date": "2025-12-15",
+    "start": 18,
+    "end": 19,
+    "label": "Yoga Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      19,
+      0
+    ],
+    "description": "Weekly yoga session for stress relief and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-4",
+    "date": "2025-12-16",
+    "start": 10,
+    "end": 12,
+    "label": "Client Presentation",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Presenting the new product features to key clients.",
+    "location": "Client Office - Downtown",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-16",
+    "attendees": [
+      "james.wilson@company.com",
+      "maria.garcia@company.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-5",
+    "date": "2025-12-16",
+    "start": 16,
+    "end": 17,
+    "label": "Doctor Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      16,
+      0
+    ],
+    "endTime": [
+      17,
+      0
+    ],
+    "description": "Annual health checkup and routine examination.",
+    "location": "Medical Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-16",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-6",
+    "date": "2025-12-17",
+    "start": 11,
+    "end": 13,
+    "label": "Lunch with Friends",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      11,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Catching up with college friends over lunch.",
+    "location": "Restaurant Downtown",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-17",
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-7",
+    "date": "2025-12-17",
+    "start": 15,
+    "end": 16,
+    "label": "Code Review Session",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      15,
+      0
+    ],
+    "endTime": [
+      16,
+      0
+    ],
+    "description": "Reviewing pull requests and discussing code quality improvements.",
+    "location": "Team Room",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "robert.lee@company.com",
+      "jennifer.brown@company.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/987654321"
+  },
+  {
+    "id": "event-8",
+    "date": "2025-12-18",
+    "start": 9,
+    "end": 10,
+    "label": "Family Breakfast",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Weekly family breakfast to spend quality time together.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-9",
+    "date": "2025-12-18",
+    "start": 13,
+    "end": 15,
+    "label": "Training Workshop",
+    "calendar": "Work",
+    "color": "#00897B",
+    "startTime": [
+      13,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Advanced React patterns and best practices workshop.",
+    "location": "Training Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-18",
+    "attendees": [
+      "william.taylor@company.com",
+      "amanda.white@company.com",
+      "chris.martinez@company.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://meet.google.com/xyz-abcde-fgh"
+  },
+  {
+    "id": "event-10",
+    "date": "2025-12-19",
+    "start": 0,
+    "end": 23,
+    "label": "Birthday Celebration",
+    "calendar": "Family",
+    "color": "#F4511E",
+    "startTime": [
+      0,
+      0
+    ],
+    "endTime": [
+      23,
+      59
+    ],
+    "description": "Celebrating family member's birthday with special activities throughout the day.",
+    "location": "Home",
+    "allDay": true,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-19",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-11",
+    "date": "2025-12-19",
+    "start": 10,
+    "end": 11,
+    "label": "Sprint Planning",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Planning next sprint goals and assigning tasks to team members.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "nicole.thompson@company.com",
+      "daniel.clark@company.com",
+      "sophia.davis@company.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/456789123"
+  },
+  {
+    "id": "event-12",
+    "date": "2025-12-20",
+    "start": 14,
+    "end": 16,
+    "label": "Gym Session",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      16,
+      0
+    ],
+    "description": "Regular gym workout session focusing on strength training.",
+    "location": "Fitness Club",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-13",
+    "date": "2025-12-20",
+    "start": 17,
+    "end": 18,
+    "label": "Movie Night",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      17,
+      0
+    ],
+    "endTime": [
+      19,
+      0
+    ],
+    "description": "Watching the latest movie release with friends.",
+    "location": "Cinema",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-20",
+    "attendees": [
+      "friend3@example.com",
+      "friend4@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-14",
+    "date": "2025-12-21",
+    "start": 9,
+    "end": 12,
+    "label": "Hackathon Event",
+    "calendar": "Work",
+    "color": "#00ACC1",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Internal hackathon to build innovative features and prototypes.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-21",
+    "attendees": [
+      "sarah.chen@company.com",
+      "michael.rodriguez@company.com",
+      "emily.patel@company.com",
+      "david.kim@company.com"
+    ],
+    "reminders": [
+      120
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-15",
+    "date": "2025-12-22",
+    "start": 13,
+    "end": 14,
+    "label": "One-on-One Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      13,
+      0
+    ],
+    "endTime": [
+      14,
+      0
+    ],
+    "description": "Monthly one-on-one with manager to discuss career development and goals.",
+    "location": "Manager's Office",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "manager@company.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-16",
+    "date": "2025-01-02",
+    "start": 18,
+    "end": 20,
+    "label": "Meditation Session",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Guided meditation session for mindfulness and relaxation.",
+    "location": "Wellness Studio",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-01-02",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-17",
+    "date": "2025-01-05",
+    "start": 16,
+    "end": 20,
+    "label": "Birthday Celebration",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      16,
+      30
+    ],
+    "endTime": [
+      20,
+      30
+    ],
+    "description": "Celebrating family member birthday with special activities.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-01-05",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-18",
+    "date": "2025-01-06",
+    "start": 19,
+    "end": 20,
+    "label": "Interview",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Technical interview with candidate for open position.",
+    "location": "HR Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-01-06",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-19",
+    "date": "2025-01-07",
+    "start": 18,
+    "end": 19,
+    "label": "Dentist Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      18,
+      30
+    ],
+    "endTime": [
+      19,
+      30
+    ],
+    "description": "Regular dental cleaning and checkup.",
+    "location": "Dental Clinic",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-01-07",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-20",
+    "date": "2025-01-10",
+    "start": 12,
+    "end": 13,
+    "label": "Doctor Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      12,
+      45
+    ],
+    "endTime": [
+      13,
+      45
+    ],
+    "description": "Annual health checkup and routine examination.",
+    "location": "Medical Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-01-10",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-21",
+    "date": "2025-01-12",
+    "start": 10,
+    "end": 11,
+    "label": "Gym Session",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      10,
+      45
+    ],
+    "endTime": [
+      11,
+      45
+    ],
+    "description": "Regular gym workout session focusing on strength training.",
+    "location": "Fitness Club",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-22",
+    "date": "2025-01-16",
+    "start": 11,
+    "end": 13,
+    "label": "All Hands Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      11,
+      45
+    ],
+    "endTime": [
+      13,
+      15
+    ],
+    "description": "Company-wide meeting to discuss company updates and announcements.",
+    "location": "Main Auditorium",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-23",
+    "date": "2025-01-16",
+    "start": 11,
+    "end": 13,
+    "label": "Project Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      11,
+      45
+    ],
+    "endTime": [
+      13,
+      45
+    ],
+    "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-01-16",
+    "attendees": [
+      "sophia.williams@company.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/xtv-fjm-mtl"
+  },
+  {
+    "id": "event-24",
+    "date": "2025-01-16",
+    "start": 13,
+    "end": 15,
+    "label": "Nutrition Consultation",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      13,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Meeting with nutritionist to discuss healthy eating habits.",
+    "location": "Wellness Clinic",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-01-16",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-25",
+    "date": "2025-01-16",
+    "start": 17,
+    "end": 20,
+    "label": "Birthday Celebration",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      17,
+      45
+    ],
+    "endTime": [
+      20,
+      45
+    ],
+    "description": "Celebrating family member birthday with special activities.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-01-16",
+    "attendees": [],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-26",
+    "date": "2025-01-22",
+    "start": 16,
+    "end": 20,
+    "label": "Weekend Trip",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      16,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Weekend getaway trip with friends.",
+    "location": "Resort",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-01-22",
+    "attendees": [
+      "nicole.garcia@gmail.com",
+      "kevin.taylor@example.com",
+      "william.anderson@example.com",
+      "kevin.kim@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-27",
+    "date": "2025-01-25",
+    "start": 12,
+    "end": 14,
+    "label": "Meditation Session",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      12,
+      45
+    ],
+    "endTime": [
+      14,
+      45
+    ],
+    "description": "Guided meditation session for mindfulness and relaxation.",
+    "location": "Wellness Studio",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-28",
+    "date": "2025-01-29",
+    "start": 0,
+    "end": 23,
+    "label": "Birthday Celebration",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      0,
+      0
+    ],
+    "endTime": [
+      23,
+      59
+    ],
+    "description": "Celebrating family member birthday with special activities.",
+    "location": "Home",
+    "allDay": true,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-01-29",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-29",
+    "date": "2025-01-31",
+    "start": 15,
+    "end": 16,
+    "label": "Meditation Session",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      15,
+      0
+    ],
+    "endTime": [
+      16,
+      0
+    ],
+    "description": "Guided meditation session for mindfulness and relaxation.",
+    "location": "Wellness Studio",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-30",
+    "date": "2025-02-01",
+    "start": 19,
+    "end": 22,
+    "label": "Lunch with Friends",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      19,
+      45
+    ],
+    "endTime": [
+      22,
+      45
+    ],
+    "description": "Catching up with college friends over lunch.",
+    "location": "Restaurant Downtown",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-02-01",
+    "attendees": [
+      "rachel.patel@company.com",
+      "robert.kim@company.com",
+      "anna.thomas@gmail.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-31",
+    "date": "2025-02-04",
+    "start": 6,
+    "end": 8,
+    "label": "Swimming",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      6,
+      45
+    ],
+    "endTime": [
+      8,
+      15
+    ],
+    "description": "Swimming session for cardiovascular health.",
+    "location": "Community Pool",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-02-04",
+    "attendees": [],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-32",
+    "date": "2025-02-05",
+    "start": 14,
+    "end": 16,
+    "label": "Family Breakfast",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      14,
+      30
+    ],
+    "endTime": [
+      16,
+      30
+    ],
+    "description": "Weekly family breakfast to spend quality time together.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-33",
+    "date": "2025-02-09",
+    "start": 10,
+    "end": 11,
+    "label": "Doctor Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      10,
+      30
+    ],
+    "endTime": [
+      11,
+      30
+    ],
+    "description": "Annual health checkup and routine examination.",
+    "location": "Medical Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-02-09",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-34",
+    "date": "2025-02-11",
+    "start": 13,
+    "end": 17,
+    "label": "Holiday Gathering",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      13,
+      30
+    ],
+    "endTime": [
+      17,
+      30
+    ],
+    "description": "Family gathering for holiday celebration.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-02-11",
+    "attendees": [],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-35",
+    "date": "2025-02-12",
+    "start": 11,
+    "end": 12,
+    "label": "Nutrition Consultation",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      11,
+      30
+    ],
+    "endTime": [
+      12,
+      30
+    ],
+    "description": "Meeting with nutritionist to discuss healthy eating habits.",
+    "location": "Wellness Clinic",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-02-12",
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-36",
+    "date": "2025-02-12",
+    "start": 16,
+    "end": 20,
+    "label": "Lunch with Friends",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      16,
+      30
+    ],
+    "endTime": [
+      20,
+      30
+    ],
+    "description": "Catching up with college friends over lunch.",
+    "location": "Restaurant Downtown",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-02-12",
+    "attendees": [
+      "kevin.martinez@gmail.com",
+      "jennifer.patel@company.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-37",
+    "date": "2025-02-15",
+    "start": 22,
+    "end": 25,
+    "label": "Hackathon Event",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      22,
+      30
+    ],
+    "endTime": [
+      25,
+      30
+    ],
+    "description": "Internal hackathon to build innovative features and prototypes.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-02-15",
+    "attendees": [
+      "olivia.taylor@gmail.com",
+      "matthew.rodriguez@company.com",
+      "kevin.kim@example.com",
+      "jennifer.jones@example.com",
+      "james.garcia@gmail.com"
+    ],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://meet.google.com/znq-uky-aok"
+  },
+  {
+    "id": "event-38",
+    "date": "2025-02-15",
+    "start": 7,
+    "end": 8,
+    "label": "Training Workshop",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      7,
+      15
+    ],
+    "endTime": [
+      8,
+      45
+    ],
+    "description": "Advanced technical workshop on modern development practices.",
+    "location": "Training Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-02-15",
+    "attendees": [
+      "william.jones@gmail.com",
+      "james.brown@example.com",
+      "sarah.jackson@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/836636726"
+  },
+  {
+    "id": "event-39",
+    "date": "2025-02-17",
+    "start": 8,
+    "end": 10,
+    "label": "Car Service",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      8,
+      15
+    ],
+    "endTime": [
+      10,
+      15
+    ],
+    "description": "Routine car maintenance and service.",
+    "location": "Auto Service Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-02-17",
+    "attendees": [],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-40",
+    "date": "2025-02-18",
+    "start": 20,
+    "end": 22,
+    "label": "Product Demo",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      20,
+      0
+    ],
+    "endTime": [
+      22,
+      0
+    ],
+    "description": "Demonstrating new product features to potential clients.",
+    "location": "Showroom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-02-18",
+    "attendees": [
+      "ryan.chen@gmail.com",
+      "jennifer.thomas@example.com",
+      "sophia.patel@company.com",
+      "daniel.white@gmail.com",
+      "michael.jones@gmail.com"
+    ],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/hel-doz-nmj"
+  },
+  {
+    "id": "event-41",
+    "date": "2025-02-23",
+    "start": 17,
+    "end": 19,
+    "label": "Meditation Session",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      17,
+      15
+    ],
+    "endTime": [
+      19,
+      15
+    ],
+    "description": "Guided meditation session for mindfulness and relaxation.",
+    "location": "Wellness Studio",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-42",
+    "date": "2025-02-25",
+    "start": 11,
+    "end": 13,
+    "label": "Concert",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      11,
+      15
+    ],
+    "endTime": [
+      13,
+      45
+    ],
+    "description": "Attending live concert with friends.",
+    "location": "Concert Hall",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-02-25",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-43",
+    "date": "2025-03-01",
+    "start": 22,
+    "end": 25,
+    "label": "Sprint Planning",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      22,
+      15
+    ],
+    "endTime": [
+      25,
+      15
+    ],
+    "description": "Planning next sprint goals and assigning tasks to team members.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "nicole.rodriguez@company.com",
+      "sarah.patel@gmail.com",
+      "rachel.clark@company.com",
+      "rachel.anderson@example.com",
+      "james.harris@example.com"
+    ],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/692582379"
+  },
+  {
+    "id": "event-44",
+    "date": "2025-03-03",
+    "start": 14,
+    "end": 18,
+    "label": "Lunch with Friends",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      18,
+      0
+    ],
+    "description": "Catching up with college friends over lunch.",
+    "location": "Restaurant Downtown",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-03",
+    "attendees": [
+      "alex.garcia@gmail.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-45",
+    "date": "2025-03-04",
+    "start": 19,
+    "end": 21,
+    "label": "Dentist Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      19,
+      30
+    ],
+    "endTime": [
+      21,
+      30
+    ],
+    "description": "Regular dental cleaning and checkup.",
+    "location": "Dental Clinic",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-04",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-46",
+    "date": "2025-03-04",
+    "start": 12,
+    "end": 15,
+    "label": "Dinner Party",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      12,
+      30
+    ],
+    "endTime": [
+      15,
+      30
+    ],
+    "description": "Dinner party at friend place.",
+    "location": "Friend House",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-04",
+    "attendees": [
+      "sophia.harris@example.com",
+      "jennifer.white@example.com",
+      "amanda.harris@company.com",
+      "anna.miller@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-47",
+    "date": "2025-03-07",
+    "start": 18,
+    "end": 21,
+    "label": "Anniversary",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      18,
+      45
+    ],
+    "endTime": [
+      21,
+      45
+    ],
+    "description": "Celebrating family anniversary.",
+    "location": "Restaurant",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-07",
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-48",
+    "date": "2025-03-10",
+    "start": 20,
+    "end": 22,
+    "label": "Bank Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      20,
+      0
+    ],
+    "endTime": [
+      22,
+      0
+    ],
+    "description": "Meeting with bank advisor for financial planning.",
+    "location": "Bank Branch",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-10",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-49",
+    "date": "2025-03-13",
+    "start": 14,
+    "end": 15,
+    "label": "Meditation Session",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      30
+    ],
+    "description": "Guided meditation session for mindfulness and relaxation.",
+    "location": "Wellness Studio",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-50",
+    "date": "2025-03-14",
+    "start": 22,
+    "end": 25,
+    "label": "Project Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      22,
+      45
+    ],
+    "endTime": [
+      25,
+      45
+    ],
+    "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-14",
+    "attendees": [
+      "daniel.jackson@company.com",
+      "david.thompson@example.com",
+      "ryan.lee@example.com",
+      "laura.martinez@example.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-51",
+    "date": "2025-03-14",
+    "start": 9,
+    "end": 10,
+    "label": "Haircut",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      9,
+      15
+    ],
+    "endTime": [
+      10,
+      15
+    ],
+    "description": "Regular haircut appointment.",
+    "location": "Salon",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-52",
+    "date": "2025-03-15",
+    "start": 8,
+    "end": 10,
+    "label": "Hackathon Event",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      8,
+      15
+    ],
+    "endTime": [
+      10,
+      45
+    ],
+    "description": "Internal hackathon to build innovative features and prototypes.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-15",
+    "attendees": [
+      "james.wilson@company.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-53",
+    "date": "2025-03-16",
+    "start": 18,
+    "end": 19,
+    "label": "Interview",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      19,
+      30
+    ],
+    "description": "Technical interview with candidate for open position.",
+    "location": "HR Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-16",
+    "attendees": [
+      "lisa.rodriguez@example.com",
+      "rachel.moore@company.com",
+      "amanda.white@company.com",
+      "jennifer.anderson@example.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/219259102"
+  },
+  {
+    "id": "event-54",
+    "date": "2025-03-18",
+    "start": 22,
+    "end": 24,
+    "label": "Design Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      22,
+      30
+    ],
+    "endTime": [
+      24,
+      30
+    ],
+    "description": "Reviewing UI/UX designs and gathering feedback from stakeholders.",
+    "location": "Design Studio",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "olivia.johnson@company.com",
+      "ryan.martin@example.com",
+      "amanda.davis@company.com",
+      "james.johnson@example.com",
+      "matthew.brown@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/962277866"
+  },
+  {
+    "id": "event-55",
+    "date": "2025-03-18",
+    "start": 17,
+    "end": 20,
+    "label": "Concert",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      17,
+      45
+    ],
+    "endTime": [
+      20,
+      45
+    ],
+    "description": "Attending live concert with friends.",
+    "location": "Concert Hall",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-18",
+    "attendees": [],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-56",
+    "date": "2025-03-21",
+    "start": 22,
+    "end": 24,
+    "label": "Design Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      22,
+      15
+    ],
+    "endTime": [
+      24,
+      15
+    ],
+    "description": "Reviewing UI/UX designs and gathering feedback from stakeholders.",
+    "location": "Design Studio",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-21",
+    "attendees": [
+      "ryan.johnson@gmail.com",
+      "kevin.wilson@gmail.com",
+      "william.miller@gmail.com",
+      "michael.chen@example.com"
+    ],
+    "reminders": [
+      1440
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/940192772"
+  },
+  {
+    "id": "event-57",
+    "date": "2025-03-21",
+    "start": 19,
+    "end": 20,
+    "label": "Pilates Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      19,
+      15
+    ],
+    "endTime": [
+      20,
+      15
+    ],
+    "description": "Pilates class for core strength and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-21",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-58",
+    "date": "2025-03-22",
+    "start": 22,
+    "end": 23,
+    "label": "Pilates Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      22,
+      15
+    ],
+    "endTime": [
+      23,
+      45
+    ],
+    "description": "Pilates class for core strength and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-22",
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-59",
+    "date": "2025-03-22",
+    "start": 9,
+    "end": 12,
+    "label": "Dinner Party",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      9,
+      45
+    ],
+    "endTime": [
+      12,
+      15
+    ],
+    "description": "Dinner party at friend place.",
+    "location": "Friend House",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-22",
+    "attendees": [
+      "ryan.rodriguez@example.com",
+      "matthew.davis@gmail.com",
+      "daniel.garcia@company.com",
+      "jennifer.thomas@company.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-60",
+    "date": "2025-03-24",
+    "start": 21,
+    "end": 23,
+    "label": "Birthday Party",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      21,
+      0
+    ],
+    "endTime": [
+      23,
+      0
+    ],
+    "description": "Celebrating friend birthday party.",
+    "location": "Event Venue",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-24",
+    "attendees": [
+      "amanda.taylor@gmail.com",
+      "michael.johnson@company.com",
+      "david.thompson@example.com"
+    ],
+    "reminders": [
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-61",
+    "date": "2025-03-25",
+    "start": 6,
+    "end": 7,
+    "label": "Yoga Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      6,
+      0
+    ],
+    "endTime": [
+      7,
+      0
+    ],
+    "description": "Weekly yoga session for stress relief and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-25",
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-62",
+    "date": "2025-03-29",
+    "start": 12,
+    "end": 14,
+    "label": "Swimming",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      12,
+      30
+    ],
+    "endTime": [
+      14,
+      0
+    ],
+    "description": "Swimming session for cardiovascular health.",
+    "location": "Community Pool",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-63",
+    "date": "2025-03-30",
+    "start": 10,
+    "end": 11,
+    "label": "All Hands Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      10,
+      15
+    ],
+    "endTime": [
+      11,
+      15
+    ],
+    "description": "Company-wide meeting to discuss company updates and announcements.",
+    "location": "Main Auditorium",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "nicole.lee@company.com",
+      "jason.rodriguez@example.com",
+      "nicole.kim@example.com",
+      "emily.jones@example.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/083652620"
+  },
+  {
+    "id": "event-64",
+    "date": "2025-03-31",
+    "start": 22,
+    "end": 24,
+    "label": "Birthday Party",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      22,
+      0
+    ],
+    "endTime": [
+      24,
+      0
+    ],
+    "description": "Celebrating friend birthday party.",
+    "location": "Event Venue",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-03-31",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-65",
+    "date": "2025-04-07",
+    "start": 19,
+    "end": 20,
+    "label": "Pilates Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      19,
+      45
+    ],
+    "endTime": [
+      20,
+      45
+    ],
+    "description": "Pilates class for core strength and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-04-07",
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-66",
+    "date": "2025-04-09",
+    "start": 8,
+    "end": 9,
+    "label": "Training Workshop",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      8,
+      30
+    ],
+    "endTime": [
+      9,
+      30
+    ],
+    "description": "Advanced technical workshop on modern development practices.",
+    "location": "Training Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-04-09",
+    "attendees": [
+      "william.jackson@company.com",
+      "matthew.miller@gmail.com",
+      "william.lee@example.com",
+      "william.wilson@example.com",
+      "jessica.patel@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-67",
+    "date": "2025-04-09",
+    "start": 22,
+    "end": 25,
+    "label": "Retrospective",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      22,
+      0
+    ],
+    "endTime": [
+      25,
+      0
+    ],
+    "description": "Sprint retrospective to discuss what went well and improvements.",
+    "location": "Team Room",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "michael.chen@company.com",
+      "sophia.jackson@company.com",
+      "sarah.garcia@gmail.com"
+    ],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/wkp-tzh-ybf"
+  },
+  {
+    "id": "event-68",
+    "date": "2025-04-09",
+    "start": 14,
+    "end": 17,
+    "label": "Product Demo",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      14,
+      45
+    ],
+    "endTime": [
+      17,
+      15
+    ],
+    "description": "Demonstrating new product features to potential clients.",
+    "location": "Showroom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-04-09",
+    "attendees": [
+      "kevin.jackson@gmail.com",
+      "michael.white@company.com",
+      "william.clark@example.com",
+      "jessica.jones@example.com",
+      "matthew.martinez@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-69",
+    "date": "2025-04-10",
+    "start": 0,
+    "end": 23,
+    "label": "Anniversary",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      0,
+      0
+    ],
+    "endTime": [
+      23,
+      59
+    ],
+    "description": "Celebrating family anniversary.",
+    "location": "Restaurant",
+    "allDay": true,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-04-10",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-70",
+    "date": "2025-04-11",
+    "start": 18,
+    "end": 20,
+    "label": "Running",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      18,
+      30
+    ],
+    "endTime": [
+      20,
+      30
+    ],
+    "description": "Morning run in the park for endurance training.",
+    "location": "Central Park",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-71",
+    "date": "2025-04-13",
+    "start": 9,
+    "end": 10,
+    "label": "Retrospective",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      30
+    ],
+    "description": "Sprint retrospective to discuss what went well and improvements.",
+    "location": "Team Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-04-13",
+    "attendees": [
+      "jessica.jackson@company.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-72",
+    "date": "2025-04-13",
+    "start": 21,
+    "end": 23,
+    "label": "Code Review Session",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      21,
+      45
+    ],
+    "endTime": [
+      23,
+      15
+    ],
+    "description": "Reviewing pull requests and discussing code quality improvements.",
+    "location": "Team Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-04-13",
+    "attendees": [
+      "olivia.jackson@gmail.com",
+      "kevin.lee@gmail.com",
+      "laura.anderson@gmail.com",
+      "michael.wilson@example.com"
+    ],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/qte-lms-ldu"
+  },
+  {
+    "id": "event-73",
+    "date": "2025-04-14",
+    "start": 20,
+    "end": 23,
+    "label": "Design Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      20,
+      30
+    ],
+    "endTime": [
+      23,
+      0
+    ],
+    "description": "Reviewing UI/UX designs and gathering feedback from stakeholders.",
+    "location": "Design Studio",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-04-14",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-74",
+    "date": "2025-04-19",
+    "start": 18,
+    "end": 20,
+    "label": "Training Workshop",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      18,
+      15
+    ],
+    "endTime": [
+      20,
+      15
+    ],
+    "description": "Advanced technical workshop on modern development practices.",
+    "location": "Training Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-04-19",
+    "attendees": [
+      "jason.patel@gmail.com",
+      "maria.johnson@example.com",
+      "kevin.davis@gmail.com",
+      "daniel.garcia@gmail.com",
+      "emily.white@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-75",
+    "date": "2025-04-20",
+    "start": 22,
+    "end": 23,
+    "label": "Haircut",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      22,
+      0
+    ],
+    "endTime": [
+      23,
+      30
+    ],
+    "description": "Regular haircut appointment.",
+    "location": "Salon",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-76",
+    "date": "2025-04-22",
+    "start": 17,
+    "end": 19,
+    "label": "Product Demo",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      17,
+      30
+    ],
+    "endTime": [
+      19,
+      0
+    ],
+    "description": "Demonstrating new product features to potential clients.",
+    "location": "Showroom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-04-22",
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-77",
+    "date": "2025-04-28",
+    "start": 6,
+    "end": 9,
+    "label": "Project Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      6,
+      45
+    ],
+    "endTime": [
+      9,
+      15
+    ],
+    "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-04-28",
+    "attendees": [],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-78",
+    "date": "2025-04-29",
+    "start": 21,
+    "end": 24,
+    "label": "Hackathon Event",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      21,
+      15
+    ],
+    "endTime": [
+      24,
+      15
+    ],
+    "description": "Internal hackathon to build innovative features and prototypes.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-04-29",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-79",
+    "date": "2025-05-03",
+    "start": 19,
+    "end": 21,
+    "label": "One-on-One Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      19,
+      30
+    ],
+    "endTime": [
+      21,
+      30
+    ],
+    "description": "Monthly one-on-one with manager to discuss career development and goals.",
+    "location": "Manager Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-05-03",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-80",
+    "date": "2025-05-08",
+    "start": 14,
+    "end": 16,
+    "label": "Interview",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      14,
+      45
+    ],
+    "endTime": [
+      16,
+      15
+    ],
+    "description": "Technical interview with candidate for open position.",
+    "location": "HR Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-05-08",
+    "attendees": [
+      "emily.williams@gmail.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/sop-zfp-mog"
+  },
+  {
+    "id": "event-81",
+    "date": "2025-05-08",
+    "start": 21,
+    "end": 23,
+    "label": "Running",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      21,
+      45
+    ],
+    "endTime": [
+      23,
+      15
+    ],
+    "description": "Morning run in the park for endurance training.",
+    "location": "Central Park",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-05-08",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-82",
+    "date": "2025-05-12",
+    "start": 21,
+    "end": 24,
+    "label": "All Hands Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      21,
+      15
+    ],
+    "endTime": [
+      24,
+      15
+    ],
+    "description": "Company-wide meeting to discuss company updates and announcements.",
+    "location": "Main Auditorium",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-83",
+    "date": "2025-05-15",
+    "start": 9,
+    "end": 12,
+    "label": "Budget Planning",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      9,
+      30
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Quarterly budget planning session with finance team.",
+    "location": "Conference Room B",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-05-15",
+    "attendees": [
+      "david.wilson@gmail.com",
+      "daniel.jackson@example.com",
+      "lisa.miller@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/530433962"
+  },
+  {
+    "id": "event-84",
+    "date": "2025-05-16",
+    "start": 17,
+    "end": 18,
+    "label": "Haircut",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      17,
+      45
+    ],
+    "endTime": [
+      18,
+      45
+    ],
+    "description": "Regular haircut appointment.",
+    "location": "Salon",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-85",
+    "date": "2025-05-16",
+    "start": 12,
+    "end": 14,
+    "label": "Doctor Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      12,
+      30
+    ],
+    "endTime": [
+      14,
+      0
+    ],
+    "description": "Annual health checkup and routine examination.",
+    "location": "Medical Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-05-16",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-86",
+    "date": "2025-05-16",
+    "start": 18,
+    "end": 19,
+    "label": "Dentist Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      18,
+      30
+    ],
+    "endTime": [
+      19,
+      30
+    ],
+    "description": "Regular dental cleaning and checkup.",
+    "location": "Dental Clinic",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-05-16",
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-87",
+    "date": "2025-05-20",
+    "start": 15,
+    "end": 18,
+    "label": "Lunch with Friends",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      15,
+      30
+    ],
+    "endTime": [
+      18,
+      0
+    ],
+    "description": "Catching up with college friends over lunch.",
+    "location": "Restaurant Downtown",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-05-20",
+    "attendees": [
+      "nicole.thomas@company.com",
+      "amanda.patel@gmail.com",
+      "william.martin@company.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-88",
+    "date": "2025-05-20",
+    "start": 18,
+    "end": 20,
+    "label": "Lunch with Friends",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      18,
+      45
+    ],
+    "endTime": [
+      20,
+      45
+    ],
+    "description": "Catching up with college friends over lunch.",
+    "location": "Restaurant Downtown",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-05-20",
+    "attendees": [
+      "chris.jackson@gmail.com",
+      "laura.moore@company.com",
+      "jessica.johnson@gmail.com",
+      "emily.taylor@company.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-89",
+    "date": "2025-05-24",
+    "start": 9,
+    "end": 11,
+    "label": "Shopping",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      9,
+      15
+    ],
+    "endTime": [
+      11,
+      15
+    ],
+    "description": "Grocery shopping and errands.",
+    "location": "Supermarket",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-05-24",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-90",
+    "date": "2025-05-26",
+    "start": 21,
+    "end": 22,
+    "label": "Pilates Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      21,
+      0
+    ],
+    "endTime": [
+      22,
+      0
+    ],
+    "description": "Pilates class for core strength and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-05-26",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-91",
+    "date": "2025-05-26",
+    "start": 8,
+    "end": 10,
+    "label": "Holiday Gathering",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      8,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Family gathering for holiday celebration.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-05-26",
+    "attendees": [],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-92",
+    "date": "2025-05-27",
+    "start": 8,
+    "end": 9,
+    "label": "All Hands Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      8,
+      15
+    ],
+    "endTime": [
+      9,
+      45
+    ],
+    "description": "Company-wide meeting to discuss company updates and announcements.",
+    "location": "Main Auditorium",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "sarah.smith@gmail.com",
+      "nicole.johnson@company.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/685388375"
+  },
+  {
+    "id": "event-93",
+    "date": "2025-05-28",
+    "start": 7,
+    "end": 9,
+    "label": "Pilates Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      7,
+      45
+    ],
+    "endTime": [
+      9,
+      45
+    ],
+    "description": "Pilates class for core strength and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-05-28",
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-94",
+    "date": "2025-06-01",
+    "start": 10,
+    "end": 11,
+    "label": "All Hands Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      10,
+      15
+    ],
+    "endTime": [
+      11,
+      45
+    ],
+    "description": "Company-wide meeting to discuss company updates and announcements.",
+    "location": "Main Auditorium",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "jessica.clark@company.com",
+      "robert.harris@gmail.com",
+      "jennifer.brown@example.com",
+      "amanda.williams@example.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/npv-emw-zji"
+  },
+  {
+    "id": "event-95",
+    "date": "2025-06-02",
+    "start": 21,
+    "end": 23,
+    "label": "Family Breakfast",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      21,
+      0
+    ],
+    "endTime": [
+      23,
+      0
+    ],
+    "description": "Weekly family breakfast to spend quality time together.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-06-02",
+    "attendees": [],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-96",
+    "date": "2025-06-03",
+    "start": 16,
+    "end": 18,
+    "label": "Coffee Meetup",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      16,
+      15
+    ],
+    "endTime": [
+      18,
+      15
+    ],
+    "description": "Casual coffee meetup to catch up.",
+    "location": "Coffee Shop",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-06-03",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-97",
+    "date": "2025-06-04",
+    "start": 22,
+    "end": 23,
+    "label": "One-on-One Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      22,
+      15
+    ],
+    "endTime": [
+      23,
+      45
+    ],
+    "description": "Monthly one-on-one with manager to discuss career development and goals.",
+    "location": "Manager Office",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-98",
+    "date": "2025-06-07",
+    "start": 17,
+    "end": 21,
+    "label": "Coffee Meetup",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      17,
+      30
+    ],
+    "endTime": [
+      21,
+      30
+    ],
+    "description": "Casual coffee meetup to catch up.",
+    "location": "Coffee Shop",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "lisa.clark@gmail.com",
+      "matthew.chen@company.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-99",
+    "date": "2025-06-10",
+    "start": 22,
+    "end": 24,
+    "label": "Coffee Meetup",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      22,
+      0
+    ],
+    "endTime": [
+      24,
+      30
+    ],
+    "description": "Casual coffee meetup to catch up.",
+    "location": "Coffee Shop",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-06-10",
+    "attendees": [
+      "laura.thompson@gmail.com",
+      "olivia.taylor@company.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-100",
+    "date": "2025-06-13",
+    "start": 15,
+    "end": 16,
+    "label": "Pilates Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      15,
+      30
+    ],
+    "endTime": [
+      16,
+      30
+    ],
+    "description": "Pilates class for core strength and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-101",
+    "date": "2025-06-14",
+    "start": 10,
+    "end": 11,
+    "label": "Retrospective",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      10,
+      15
+    ],
+    "endTime": [
+      11,
+      45
+    ],
+    "description": "Sprint retrospective to discuss what went well and improvements.",
+    "location": "Team Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-06-14",
+    "attendees": [
+      "jessica.thompson@example.com",
+      "jessica.jones@example.com",
+      "maria.harris@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/qcm-fay-sdt"
+  },
+  {
+    "id": "event-102",
+    "date": "2025-06-15",
+    "start": 10,
+    "end": 14,
+    "label": "Dinner Party",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      14,
+      0
+    ],
+    "description": "Dinner party at friend place.",
+    "location": "Friend House",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-06-15",
+    "attendees": [
+      "daniel.taylor@gmail.com",
+      "chris.kim@gmail.com",
+      "michael.davis@gmail.com",
+      "rachel.garcia@gmail.com"
+    ],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-103",
+    "date": "2025-06-16",
+    "start": 8,
+    "end": 10,
+    "label": "Dinner Party",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      8,
+      0
+    ],
+    "endTime": [
+      10,
+      30
+    ],
+    "description": "Dinner party at friend place.",
+    "location": "Friend House",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-06-16",
+    "attendees": [
+      "laura.chen@company.com",
+      "jessica.miller@gmail.com",
+      "anna.jones@example.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-104",
+    "date": "2025-06-17",
+    "start": 11,
+    "end": 13,
+    "label": "Project Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      11,
+      15
+    ],
+    "endTime": [
+      13,
+      15
+    ],
+    "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-06-17",
+    "attendees": [
+      "sophia.patel@gmail.com",
+      "maria.lee@example.com",
+      "william.thompson@example.com",
+      "maria.taylor@example.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/679045615"
+  },
+  {
+    "id": "event-105",
+    "date": "2025-06-19",
+    "start": 14,
+    "end": 17,
+    "label": "All Hands Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      14,
+      30
+    ],
+    "endTime": [
+      17,
+      30
+    ],
+    "description": "Company-wide meeting to discuss company updates and announcements.",
+    "location": "Main Auditorium",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-06-19",
+    "attendees": [
+      "david.smith@company.com"
+    ],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-106",
+    "date": "2025-06-20",
+    "start": 14,
+    "end": 16,
+    "label": "Team Standup Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      14,
+      45
+    ],
+    "endTime": [
+      16,
+      15
+    ],
+    "description": "Daily standup with the development team to discuss progress and blockers.",
+    "location": "Conference Room A",
+    "allDay": false,
+    "recurrence": "daily",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "sophia.moore@example.com",
+      "daniel.white@gmail.com",
+      "jennifer.rodriguez@gmail.com",
+      "amanda.jackson@company.com"
+    ],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-107",
+    "date": "2025-06-23",
+    "start": 7,
+    "end": 8,
+    "label": "Gym Session",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      7,
+      30
+    ],
+    "endTime": [
+      8,
+      30
+    ],
+    "description": "Regular gym workout session focusing on strength training.",
+    "location": "Fitness Club",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-06-23",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-108",
+    "date": "2025-06-29",
+    "start": 10,
+    "end": 12,
+    "label": "Code Review Session",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      12,
+      30
+    ],
+    "description": "Reviewing pull requests and discussing code quality improvements.",
+    "location": "Team Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-06-29",
+    "attendees": [
+      "daniel.martin@gmail.com"
+    ],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/xnt-tew-umv"
+  },
+  {
+    "id": "event-109",
+    "date": "2025-06-29",
+    "start": 22,
+    "end": 24,
+    "label": "Pilates Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      22,
+      0
+    ],
+    "endTime": [
+      24,
+      0
+    ],
+    "description": "Pilates class for core strength and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-06-29",
+    "attendees": [],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-110",
+    "date": "2025-06-29",
+    "start": 13,
+    "end": 14,
+    "label": "Meditation Session",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      13,
+      0
+    ],
+    "endTime": [
+      14,
+      0
+    ],
+    "description": "Guided meditation session for mindfulness and relaxation.",
+    "location": "Wellness Studio",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-111",
+    "date": "2025-07-01",
+    "start": 6,
+    "end": 8,
+    "label": "Running",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      6,
+      30
+    ],
+    "endTime": [
+      8,
+      30
+    ],
+    "description": "Morning run in the park for endurance training.",
+    "location": "Central Park",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-01",
+    "attendees": [],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-112",
+    "date": "2025-07-02",
+    "start": 12,
+    "end": 13,
+    "label": "Bank Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      12,
+      30
+    ],
+    "endTime": [
+      13,
+      30
+    ],
+    "description": "Meeting with bank advisor for financial planning.",
+    "location": "Bank Branch",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-02",
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-113",
+    "date": "2025-07-03",
+    "start": 6,
+    "end": 7,
+    "label": "Project Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      6,
+      15
+    ],
+    "endTime": [
+      7,
+      15
+    ],
+    "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-03",
+    "attendees": [
+      "anna.patel@gmail.com",
+      "sophia.jones@gmail.com",
+      "matthew.miller@company.com",
+      "william.brown@example.com"
+    ],
+    "reminders": [
+      1440
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/912421109"
+  },
+  {
+    "id": "event-114",
+    "date": "2025-07-05",
+    "start": 8,
+    "end": 11,
+    "label": "Hackathon Event",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      8,
+      30
+    ],
+    "endTime": [
+      11,
+      30
+    ],
+    "description": "Internal hackathon to build innovative features and prototypes.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-05",
+    "attendees": [
+      "anna.lee@gmail.com",
+      "ryan.williams@example.com",
+      "daniel.thomas@company.com"
+    ],
+    "reminders": [
+      1440
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-115",
+    "date": "2025-07-06",
+    "start": 17,
+    "end": 19,
+    "label": "Sprint Planning",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      17,
+      45
+    ],
+    "endTime": [
+      19,
+      45
+    ],
+    "description": "Planning next sprint goals and assigning tasks to team members.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "william.kim@gmail.com",
+      "jessica.chen@example.com",
+      "robert.martin@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/820015598"
+  },
+  {
+    "id": "event-116",
+    "date": "2025-07-06",
+    "start": 18,
+    "end": 21,
+    "label": "Team Standup Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      21,
+      0
+    ],
+    "description": "Daily standup with the development team to discuss progress and blockers.",
+    "location": "Conference Room A",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-06",
+    "attendees": [
+      "sarah.garcia@company.com",
+      "jason.brown@example.com"
+    ],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/tiw-gmw-cpt"
+  },
+  {
+    "id": "event-117",
+    "date": "2025-07-06",
+    "start": 12,
+    "end": 16,
+    "label": "Coffee Meetup",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      16,
+      0
+    ],
+    "description": "Casual coffee meetup to catch up.",
+    "location": "Coffee Shop",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-06",
+    "attendees": [
+      "nicole.lee@example.com"
+    ],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-118",
+    "date": "2025-07-07",
+    "start": 14,
+    "end": 15,
+    "label": "One-on-One Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      14,
+      45
+    ],
+    "endTime": [
+      15,
+      45
+    ],
+    "description": "Monthly one-on-one with manager to discuss career development and goals.",
+    "location": "Manager Office",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "emily.jones@example.com",
+      "william.jackson@company.com",
+      "matthew.martinez@example.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/670219610"
+  },
+  {
+    "id": "event-119",
+    "date": "2025-07-11",
+    "start": 21,
+    "end": 22,
+    "label": "Doctor Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      21,
+      15
+    ],
+    "endTime": [
+      22,
+      45
+    ],
+    "description": "Annual health checkup and routine examination.",
+    "location": "Medical Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-11",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-120",
+    "date": "2025-07-14",
+    "start": 21,
+    "end": 24,
+    "label": "Training Workshop",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      21,
+      0
+    ],
+    "endTime": [
+      24,
+      0
+    ],
+    "description": "Advanced technical workshop on modern development practices.",
+    "location": "Training Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-14",
+    "attendees": [
+      "james.jones@company.com",
+      "robert.rodriguez@gmail.com",
+      "olivia.patel@gmail.com",
+      "daniel.jones@example.com",
+      "jennifer.brown@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-121",
+    "date": "2025-07-14",
+    "start": 15,
+    "end": 19,
+    "label": "Lunch with Friends",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      15,
+      45
+    ],
+    "endTime": [
+      19,
+      45
+    ],
+    "description": "Catching up with college friends over lunch.",
+    "location": "Restaurant Downtown",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-14",
+    "attendees": [
+      "amanda.anderson@gmail.com"
+    ],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-122",
+    "date": "2025-07-16",
+    "start": 6,
+    "end": 10,
+    "label": "Dinner Party",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      6,
+      15
+    ],
+    "endTime": [
+      10,
+      15
+    ],
+    "description": "Dinner party at friend place.",
+    "location": "Friend House",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-16",
+    "attendees": [
+      "sarah.martinez@example.com",
+      "jennifer.wilson@company.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-123",
+    "date": "2025-07-17",
+    "start": 8,
+    "end": 11,
+    "label": "Training Workshop",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      8,
+      45
+    ],
+    "endTime": [
+      11,
+      45
+    ],
+    "description": "Advanced technical workshop on modern development practices.",
+    "location": "Training Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-17",
+    "attendees": [],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-124",
+    "date": "2025-07-17",
+    "start": 8,
+    "end": 9,
+    "label": "Haircut",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      8,
+      30
+    ],
+    "endTime": [
+      9,
+      30
+    ],
+    "description": "Regular haircut appointment.",
+    "location": "Salon",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-17",
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-125",
+    "date": "2025-07-22",
+    "start": 14,
+    "end": 16,
+    "label": "Swimming",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      14,
+      45
+    ],
+    "endTime": [
+      16,
+      15
+    ],
+    "description": "Swimming session for cardiovascular health.",
+    "location": "Community Pool",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-22",
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-126",
+    "date": "2025-07-22",
+    "start": 9,
+    "end": 10,
+    "label": "Bank Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      9,
+      15
+    ],
+    "endTime": [
+      10,
+      15
+    ],
+    "description": "Meeting with bank advisor for financial planning.",
+    "location": "Bank Branch",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-22",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-127",
+    "date": "2025-07-23",
+    "start": 8,
+    "end": 11,
+    "label": "Retrospective",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      8,
+      30
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Sprint retrospective to discuss what went well and improvements.",
+    "location": "Team Room",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "jason.martin@company.com",
+      "ryan.martinez@example.com",
+      "jessica.jackson@company.com",
+      "michael.davis@company.com"
+    ],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-128",
+    "date": "2025-07-26",
+    "start": 6,
+    "end": 10,
+    "label": "Birthday Party",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      6,
+      45
+    ],
+    "endTime": [
+      10,
+      45
+    ],
+    "description": "Celebrating friend birthday party.",
+    "location": "Event Venue",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-26",
+    "attendees": [],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-129",
+    "date": "2025-07-28",
+    "start": 15,
+    "end": 16,
+    "label": "Shopping",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      15,
+      30
+    ],
+    "endTime": [
+      16,
+      30
+    ],
+    "description": "Grocery shopping and errands.",
+    "location": "Supermarket",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-28",
+    "attendees": [],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-130",
+    "date": "2025-07-31",
+    "start": 15,
+    "end": 17,
+    "label": "Birthday Party",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      15,
+      0
+    ],
+    "endTime": [
+      17,
+      0
+    ],
+    "description": "Celebrating friend birthday party.",
+    "location": "Event Venue",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-07-31",
+    "attendees": [],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-131",
+    "date": "2025-08-01",
+    "start": 10,
+    "end": 11,
+    "label": "Bank Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      10,
+      15
+    ],
+    "endTime": [
+      11,
+      15
+    ],
+    "description": "Meeting with bank advisor for financial planning.",
+    "location": "Bank Branch",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-08-01",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-132",
+    "date": "2025-08-05",
+    "start": 22,
+    "end": 24,
+    "label": "Coffee Meetup",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      22,
+      0
+    ],
+    "endTime": [
+      24,
+      0
+    ],
+    "description": "Casual coffee meetup to catch up.",
+    "location": "Coffee Shop",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "robert.kim@gmail.com",
+      "anna.chen@company.com",
+      "kevin.lee@company.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-133",
+    "date": "2025-08-06",
+    "start": 13,
+    "end": 14,
+    "label": "Running",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      13,
+      15
+    ],
+    "endTime": [
+      14,
+      15
+    ],
+    "description": "Morning run in the park for endurance training.",
+    "location": "Central Park",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-134",
+    "date": "2025-08-06",
+    "start": 9,
+    "end": 13,
+    "label": "Family Breakfast",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      9,
+      15
+    ],
+    "endTime": [
+      13,
+      15
+    ],
+    "description": "Weekly family breakfast to spend quality time together.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-135",
+    "date": "2025-08-12",
+    "start": 18,
+    "end": 21,
+    "label": "Retrospective",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      18,
+      45
+    ],
+    "endTime": [
+      21,
+      45
+    ],
+    "description": "Sprint retrospective to discuss what went well and improvements.",
+    "location": "Team Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-08-12",
+    "attendees": [
+      "maria.clark@company.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/387149264"
+  },
+  {
+    "id": "event-136",
+    "date": "2025-08-13",
+    "start": 22,
+    "end": 24,
+    "label": "Project Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      22,
+      0
+    ],
+    "endTime": [
+      24,
+      30
+    ],
+    "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-08-13",
+    "attendees": [
+      "sophia.davis@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/816404732"
+  },
+  {
+    "id": "event-137",
+    "date": "2025-08-15",
+    "start": 6,
+    "end": 7,
+    "label": "Dentist Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      6,
+      15
+    ],
+    "endTime": [
+      7,
+      45
+    ],
+    "description": "Regular dental cleaning and checkup.",
+    "location": "Dental Clinic",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-08-15",
+    "attendees": [],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-138",
+    "date": "2025-08-19",
+    "start": 6,
+    "end": 8,
+    "label": "Birthday Party",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      6,
+      30
+    ],
+    "endTime": [
+      8,
+      30
+    ],
+    "description": "Celebrating friend birthday party.",
+    "location": "Event Venue",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-08-19",
+    "attendees": [
+      "laura.chen@example.com",
+      "robert.wilson@example.com",
+      "sophia.davis@example.com"
+    ],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-139",
+    "date": "2025-08-20",
+    "start": 18,
+    "end": 19,
+    "label": "Running",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      18,
+      45
+    ],
+    "endTime": [
+      19,
+      45
+    ],
+    "description": "Morning run in the park for endurance training.",
+    "location": "Central Park",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-08-20",
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-140",
+    "date": "2025-08-20",
+    "start": 6,
+    "end": 8,
+    "label": "Haircut",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      6,
+      30
+    ],
+    "endTime": [
+      8,
+      0
+    ],
+    "description": "Regular haircut appointment.",
+    "location": "Salon",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-08-20",
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-141",
+    "date": "2025-08-21",
+    "start": 12,
+    "end": 15,
+    "label": "Training Workshop",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      12,
+      45
+    ],
+    "endTime": [
+      15,
+      15
+    ],
+    "description": "Advanced technical workshop on modern development practices.",
+    "location": "Training Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-08-21",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-142",
+    "date": "2025-08-23",
+    "start": 19,
+    "end": 22,
+    "label": "Training Workshop",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      19,
+      15
+    ],
+    "endTime": [
+      22,
+      15
+    ],
+    "description": "Advanced technical workshop on modern development practices.",
+    "location": "Training Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-08-23",
+    "attendees": [
+      "maria.garcia@company.com",
+      "rachel.wilson@gmail.com",
+      "amanda.martin@example.com"
+    ],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/814014929"
+  },
+  {
+    "id": "event-143",
+    "date": "2025-08-23",
+    "start": 15,
+    "end": 16,
+    "label": "Gym Session",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      15,
+      15
+    ],
+    "endTime": [
+      16,
+      15
+    ],
+    "description": "Regular gym workout session focusing on strength training.",
+    "location": "Fitness Club",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-144",
+    "date": "2025-08-25",
+    "start": 11,
+    "end": 12,
+    "label": "Team Standup Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      11,
+      0
+    ],
+    "endTime": [
+      12,
+      30
+    ],
+    "description": "Daily standup with the development team to discuss progress and blockers.",
+    "location": "Conference Room A",
+    "allDay": false,
+    "recurrence": "daily",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "alex.patel@example.com",
+      "rachel.anderson@gmail.com",
+      "ryan.thompson@gmail.com",
+      "rachel.martinez@example.com",
+      "daniel.lee@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-145",
+    "date": "2025-08-27",
+    "start": 17,
+    "end": 18,
+    "label": "Budget Planning",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      17,
+      45
+    ],
+    "endTime": [
+      18,
+      45
+    ],
+    "description": "Quarterly budget planning session with finance team.",
+    "location": "Conference Room B",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-08-27",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-146",
+    "date": "2025-09-01",
+    "start": 18,
+    "end": 20,
+    "label": "Birthday Party",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Celebrating friend birthday party.",
+    "location": "Event Venue",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-09-01",
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-147",
+    "date": "2025-09-02",
+    "start": 7,
+    "end": 8,
+    "label": "Client Presentation",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      7,
+      15
+    ],
+    "endTime": [
+      8,
+      45
+    ],
+    "description": "Presenting the new product features to key clients.",
+    "location": "Client Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-09-02",
+    "attendees": [
+      "jason.taylor@company.com",
+      "lisa.lee@gmail.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/489287860"
+  },
+  {
+    "id": "event-148",
+    "date": "2025-09-02",
+    "start": 10,
+    "end": 14,
+    "label": "Birthday Celebration",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      14,
+      0
+    ],
+    "description": "Celebrating family member birthday with special activities.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-09-02",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-149",
+    "date": "2025-09-05",
+    "start": 21,
+    "end": 23,
+    "label": "Architecture Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      21,
+      30
+    ],
+    "endTime": [
+      23,
+      0
+    ],
+    "description": "Reviewing system architecture and technical decisions.",
+    "location": "Tech Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-09-05",
+    "attendees": [
+      "olivia.johnson@gmail.com",
+      "emily.williams@gmail.com",
+      "alex.thompson@example.com",
+      "jennifer.brown@company.com"
+    ],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-150",
+    "date": "2025-09-06",
+    "start": 15,
+    "end": 16,
+    "label": "One-on-One Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      15,
+      45
+    ],
+    "endTime": [
+      16,
+      45
+    ],
+    "description": "Monthly one-on-one with manager to discuss career development and goals.",
+    "location": "Manager Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-09-06",
+    "attendees": [
+      "lisa.harris@gmail.com"
+    ],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/152707586"
+  },
+  {
+    "id": "event-151",
+    "date": "2025-09-06",
+    "start": 10,
+    "end": 14,
+    "label": "Family Dinner",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      10,
+      30
+    ],
+    "endTime": [
+      14,
+      30
+    ],
+    "description": "Weekly family dinner gathering.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-152",
+    "date": "2025-09-18",
+    "start": 19,
+    "end": 21,
+    "label": "Family Outing",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      21,
+      0
+    ],
+    "description": "Family day out at the park or museum.",
+    "location": "Park/Museum",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-09-18",
+    "attendees": [],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-153",
+    "date": "2025-09-19",
+    "start": 20,
+    "end": 21,
+    "label": "Bank Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      20,
+      30
+    ],
+    "endTime": [
+      21,
+      30
+    ],
+    "description": "Meeting with bank advisor for financial planning.",
+    "location": "Bank Branch",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-09-19",
+    "attendees": [],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-154",
+    "date": "2025-09-20",
+    "start": 21,
+    "end": 22,
+    "label": "Haircut",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      21,
+      0
+    ],
+    "endTime": [
+      22,
+      0
+    ],
+    "description": "Regular haircut appointment.",
+    "location": "Salon",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-155",
+    "date": "2025-09-23",
+    "start": 12,
+    "end": 13,
+    "label": "Architecture Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      12,
+      30
+    ],
+    "endTime": [
+      13,
+      30
+    ],
+    "description": "Reviewing system architecture and technical decisions.",
+    "location": "Tech Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-09-23",
+    "attendees": [
+      "michael.thompson@company.com",
+      "laura.lee@gmail.com",
+      "olivia.anderson@gmail.com"
+    ],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://meet.google.com/eny-bqi-kwo"
+  },
+  {
+    "id": "event-156",
+    "date": "2025-09-23",
+    "start": 22,
+    "end": 24,
+    "label": "Dentist Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      22,
+      45
+    ],
+    "endTime": [
+      24,
+      15
+    ],
+    "description": "Regular dental cleaning and checkup.",
+    "location": "Dental Clinic",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-09-23",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-157",
+    "date": "2025-09-24",
+    "start": 13,
+    "end": 14,
+    "label": "Meditation Session",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      13,
+      15
+    ],
+    "endTime": [
+      14,
+      45
+    ],
+    "description": "Guided meditation session for mindfulness and relaxation.",
+    "location": "Wellness Studio",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-158",
+    "date": "2025-09-24",
+    "start": 16,
+    "end": 17,
+    "label": "Bank Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      16,
+      0
+    ],
+    "endTime": [
+      17,
+      0
+    ],
+    "description": "Meeting with bank advisor for financial planning.",
+    "location": "Bank Branch",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-09-24",
+    "attendees": [],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-159",
+    "date": "2025-09-25",
+    "start": 14,
+    "end": 17,
+    "label": "Client Presentation",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      14,
+      45
+    ],
+    "endTime": [
+      17,
+      45
+    ],
+    "description": "Presenting the new product features to key clients.",
+    "location": "Client Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-09-25",
+    "attendees": [
+      "james.johnson@example.com",
+      "daniel.harris@company.com",
+      "david.martinez@example.com"
+    ],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-160",
+    "date": "2025-09-26",
+    "start": 0,
+    "end": 23,
+    "label": "Holiday Gathering",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      0,
+      0
+    ],
+    "endTime": [
+      23,
+      59
+    ],
+    "description": "Family gathering for holiday celebration.",
+    "location": "Home",
+    "allDay": true,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-09-26",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-161",
+    "date": "2025-10-03",
+    "start": 17,
+    "end": 18,
+    "label": "Hackathon Event",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      17,
+      15
+    ],
+    "endTime": [
+      18,
+      15
+    ],
+    "description": "Internal hackathon to build innovative features and prototypes.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-10-03",
+    "attendees": [],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-162",
+    "date": "2025-10-04",
+    "start": 18,
+    "end": 21,
+    "label": "Coffee Meetup",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      18,
+      30
+    ],
+    "endTime": [
+      21,
+      30
+    ],
+    "description": "Casual coffee meetup to catch up.",
+    "location": "Coffee Shop",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "maria.white@gmail.com",
+      "matthew.moore@example.com"
+    ],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-163",
+    "date": "2025-10-06",
+    "start": 22,
+    "end": 24,
+    "label": "Product Demo",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      22,
+      15
+    ],
+    "endTime": [
+      24,
+      15
+    ],
+    "description": "Demonstrating new product features to potential clients.",
+    "location": "Showroom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-10-06",
+    "attendees": [
+      "laura.wilson@gmail.com"
+    ],
+    "reminders": [
+      1440
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-164",
+    "date": "2025-10-07",
+    "start": 11,
+    "end": 12,
+    "label": "Meditation Session",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      11,
+      45
+    ],
+    "endTime": [
+      12,
+      45
+    ],
+    "description": "Guided meditation session for mindfulness and relaxation.",
+    "location": "Wellness Studio",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-165",
+    "date": "2025-10-07",
+    "start": 17,
+    "end": 18,
+    "label": "Running",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      17,
+      0
+    ],
+    "endTime": [
+      18,
+      0
+    ],
+    "description": "Morning run in the park for endurance training.",
+    "location": "Central Park",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-166",
+    "date": "2025-10-07",
+    "start": 22,
+    "end": 24,
+    "label": "Family Dinner",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      22,
+      30
+    ],
+    "endTime": [
+      24,
+      30
+    ],
+    "description": "Weekly family dinner gathering.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-167",
+    "date": "2025-10-15",
+    "start": 17,
+    "end": 19,
+    "label": "Architecture Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      17,
+      30
+    ],
+    "endTime": [
+      19,
+      0
+    ],
+    "description": "Reviewing system architecture and technical decisions.",
+    "location": "Tech Room",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "robert.wilson@company.com",
+      "matthew.davis@gmail.com",
+      "sophia.chen@company.com",
+      "rachel.clark@example.com",
+      "nicole.smith@company.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-168",
+    "date": "2025-10-15",
+    "start": 9,
+    "end": 12,
+    "label": "Project Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      9,
+      30
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-10-15",
+    "attendees": [
+      "lisa.taylor@company.com"
+    ],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/jxu-mbi-nrw"
+  },
+  {
+    "id": "event-169",
+    "date": "2025-10-15",
+    "start": 16,
+    "end": 17,
+    "label": "Pilates Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      16,
+      30
+    ],
+    "endTime": [
+      17,
+      30
+    ],
+    "description": "Pilates class for core strength and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-10-15",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-170",
+    "date": "2025-10-21",
+    "start": 7,
+    "end": 9,
+    "label": "Project Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      7,
+      30
+    ],
+    "endTime": [
+      9,
+      0
+    ],
+    "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-10-21",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-171",
+    "date": "2025-10-22",
+    "start": 9,
+    "end": 11,
+    "label": "Pilates Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      9,
+      45
+    ],
+    "endTime": [
+      11,
+      45
+    ],
+    "description": "Pilates class for core strength and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-10-22",
+    "attendees": [],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-172",
+    "date": "2025-10-26",
+    "start": 11,
+    "end": 14,
+    "label": "Sprint Planning",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      11,
+      30
+    ],
+    "endTime": [
+      14,
+      0
+    ],
+    "description": "Planning next sprint goals and assigning tasks to team members.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-10-26",
+    "attendees": [
+      "ryan.jones@gmail.com",
+      "chris.davis@gmail.com",
+      "nicole.kim@gmail.com",
+      "laura.anderson@gmail.com",
+      "sarah.thomas@example.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/384457857"
+  },
+  {
+    "id": "event-173",
+    "date": "2025-10-27",
+    "start": 16,
+    "end": 18,
+    "label": "Pilates Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      16,
+      45
+    ],
+    "endTime": [
+      18,
+      15
+    ],
+    "description": "Pilates class for core strength and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-174",
+    "date": "2025-10-28",
+    "start": 21,
+    "end": 22,
+    "label": "Project Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      21,
+      15
+    ],
+    "endTime": [
+      22,
+      15
+    ],
+    "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-10-28",
+    "attendees": [
+      "anna.jackson@example.com",
+      "jason.garcia@example.com",
+      "amanda.garcia@example.com",
+      "laura.williams@example.com"
+    ],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-175",
+    "date": "2025-10-29",
+    "start": 17,
+    "end": 19,
+    "label": "Yoga Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      17,
+      45
+    ],
+    "endTime": [
+      19,
+      45
+    ],
+    "description": "Weekly yoga session for stress relief and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-176",
+    "date": "2025-10-30",
+    "start": 9,
+    "end": 11,
+    "label": "Running",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Morning run in the park for endurance training.",
+    "location": "Central Park",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-177",
+    "date": "2025-10-31",
+    "start": 17,
+    "end": 20,
+    "label": "Dinner Party",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      17,
+      30
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Dinner party at friend place.",
+    "location": "Friend House",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-10-31",
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-178",
+    "date": "2025-11-03",
+    "start": 16,
+    "end": 20,
+    "label": "Concert",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      16,
+      30
+    ],
+    "endTime": [
+      20,
+      30
+    ],
+    "description": "Attending live concert with friends.",
+    "location": "Concert Hall",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-11-03",
+    "attendees": [
+      "amanda.davis@example.com",
+      "sophia.white@company.com"
+    ],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-179",
+    "date": "2025-11-07",
+    "start": 18,
+    "end": 20,
+    "label": "Yoga Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Weekly yoga session for stress relief and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-11-07",
+    "attendees": [],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-180",
+    "date": "2025-11-10",
+    "start": 15,
+    "end": 17,
+    "label": "Car Service",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      15,
+      45
+    ],
+    "endTime": [
+      17,
+      15
+    ],
+    "description": "Routine car maintenance and service.",
+    "location": "Auto Service Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-11-10",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-181",
+    "date": "2025-11-11",
+    "start": 10,
+    "end": 14,
+    "label": "Anniversary",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      14,
+      0
+    ],
+    "description": "Celebrating family anniversary.",
+    "location": "Restaurant",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-11-11",
+    "attendees": [],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-182",
+    "date": "2025-11-13",
+    "start": 14,
+    "end": 16,
+    "label": "Pilates Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      14,
+      30
+    ],
+    "endTime": [
+      16,
+      30
+    ],
+    "description": "Pilates class for core strength and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-11-13",
+    "attendees": [],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-183",
+    "date": "2025-11-14",
+    "start": 21,
+    "end": 22,
+    "label": "Sprint Planning",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      21,
+      0
+    ],
+    "endTime": [
+      22,
+      0
+    ],
+    "description": "Planning next sprint goals and assigning tasks to team members.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "emily.thomas@gmail.com",
+      "nicole.jones@example.com",
+      "laura.thomas@gmail.com",
+      "matthew.garcia@company.com",
+      "jennifer.martinez@gmail.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/bzg-uxs-upr"
+  },
+  {
+    "id": "event-184",
+    "date": "2025-11-15",
+    "start": 22,
+    "end": 25,
+    "label": "Product Demo",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      22,
+      0
+    ],
+    "endTime": [
+      25,
+      0
+    ],
+    "description": "Demonstrating new product features to potential clients.",
+    "location": "Showroom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-11-15",
+    "attendees": [
+      "amanda.williams@company.com"
+    ],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/997290004"
+  },
+  {
+    "id": "event-185",
+    "date": "2025-11-15",
+    "start": 22,
+    "end": 24,
+    "label": "Retrospective",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      22,
+      30
+    ],
+    "endTime": [
+      24,
+      0
+    ],
+    "description": "Sprint retrospective to discuss what went well and improvements.",
+    "location": "Team Room",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "olivia.patel@company.com",
+      "nicole.taylor@gmail.com",
+      "maria.brown@company.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/nrh-rxr-jiu"
+  },
+  {
+    "id": "event-186",
+    "date": "2025-11-16",
+    "start": 8,
+    "end": 9,
+    "label": "Doctor Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      8,
+      15
+    ],
+    "endTime": [
+      9,
+      15
+    ],
+    "description": "Annual health checkup and routine examination.",
+    "location": "Medical Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-11-16",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-187",
+    "date": "2025-11-18",
+    "start": 10,
+    "end": 12,
+    "label": "One-on-One Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      10,
+      45
+    ],
+    "endTime": [
+      12,
+      15
+    ],
+    "description": "Monthly one-on-one with manager to discuss career development and goals.",
+    "location": "Manager Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-11-18",
+    "attendees": [
+      "sarah.chen@example.com"
+    ],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/ozh-viy-haa"
+  },
+  {
+    "id": "event-188",
+    "date": "2025-11-18",
+    "start": 11,
+    "end": 13,
+    "label": "One-on-One Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      11,
+      0
+    ],
+    "endTime": [
+      13,
+      30
+    ],
+    "description": "Monthly one-on-one with manager to discuss career development and goals.",
+    "location": "Manager Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-11-18",
+    "attendees": [
+      "matthew.wilson@company.com",
+      "anna.miller@example.com",
+      "james.miller@example.com",
+      "anna.williams@company.com",
+      "anna.anderson@gmail.com"
+    ],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-189",
+    "date": "2025-11-24",
+    "start": 9,
+    "end": 10,
+    "label": "Product Demo",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      30
+    ],
+    "description": "Demonstrating new product features to potential clients.",
+    "location": "Showroom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-11-24",
+    "attendees": [],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-190",
+    "date": "2025-11-24",
+    "start": 17,
+    "end": 18,
+    "label": "Budget Planning",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      17,
+      30
+    ],
+    "endTime": [
+      18,
+      30
+    ],
+    "description": "Quarterly budget planning session with finance team.",
+    "location": "Conference Room B",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-11-24",
+    "attendees": [
+      "sarah.thompson@example.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://meet.google.com/gwi-yel-csr"
+  },
+  {
+    "id": "event-191",
+    "date": "2025-11-24",
+    "start": 13,
+    "end": 15,
+    "label": "Anniversary",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      13,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Celebrating family anniversary.",
+    "location": "Restaurant",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-11-24",
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-192",
+    "date": "2025-11-25",
+    "start": 20,
+    "end": 22,
+    "label": "Shopping",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      20,
+      30
+    ],
+    "endTime": [
+      22,
+      0
+    ],
+    "description": "Grocery shopping and errands.",
+    "location": "Supermarket",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-11-25",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-193",
+    "date": "2025-11-26",
+    "start": 15,
+    "end": 16,
+    "label": "Yoga Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      15,
+      15
+    ],
+    "endTime": [
+      16,
+      15
+    ],
+    "description": "Weekly yoga session for stress relief and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-194",
+    "date": "2025-11-28",
+    "start": 8,
+    "end": 10,
+    "label": "Doctor Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      8,
+      45
+    ],
+    "endTime": [
+      10,
+      15
+    ],
+    "description": "Annual health checkup and routine examination.",
+    "location": "Medical Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-11-28",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-195",
+    "date": "2025-12-03",
+    "start": 20,
+    "end": 21,
+    "label": "Project Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      20,
+      15
+    ],
+    "endTime": [
+      21,
+      45
+    ],
+    "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
+    "location": "Virtual",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-03",
+    "attendees": [
+      "jessica.johnson@example.com",
+      "olivia.kim@gmail.com"
+    ],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/uet-zgo-cop"
+  },
+  {
+    "id": "event-196",
+    "date": "2025-12-07",
+    "start": 0,
+    "end": 23,
+    "label": "Anniversary",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      0,
+      0
+    ],
+    "endTime": [
+      23,
+      59
+    ],
+    "description": "Celebrating family anniversary.",
+    "location": "Restaurant",
+    "allDay": true,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-07",
+    "attendees": [],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-197",
+    "date": "2025-12-07",
+    "start": 11,
+    "end": 15,
+    "label": "Family Outing",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      11,
+      30
+    ],
+    "endTime": [
+      15,
+      30
+    ],
+    "description": "Family day out at the park or museum.",
+    "location": "Park/Museum",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-07",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-198",
+    "date": "2025-12-08",
+    "start": 10,
+    "end": 12,
+    "label": "Hackathon Event",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      12,
+      30
+    ],
+    "description": "Internal hackathon to build innovative features and prototypes.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-08",
+    "attendees": [
+      "sophia.johnson@example.com",
+      "michael.jackson@example.com",
+      "sophia.thomas@example.com",
+      "daniel.anderson@gmail.com"
+    ],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-199",
+    "date": "2025-12-08",
+    "start": 14,
+    "end": 16,
+    "label": "Team Standup Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      14,
+      30
+    ],
+    "endTime": [
+      16,
+      30
+    ],
+    "description": "Daily standup with the development team to discuss progress and blockers.",
+    "location": "Conference Room A",
+    "allDay": false,
+    "recurrence": "daily",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-200",
+    "date": "2025-12-08",
+    "start": 18,
+    "end": 20,
+    "label": "Pilates Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Pilates class for core strength and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-201",
+    "date": "2025-12-08",
+    "start": 11,
+    "end": 13,
+    "label": "Doctor Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      11,
+      15
+    ],
+    "endTime": [
+      13,
+      15
+    ],
+    "description": "Annual health checkup and routine examination.",
+    "location": "Medical Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-08",
+    "attendees": [],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-202",
+    "date": "2025-12-10",
+    "start": 9,
+    "end": 11,
+    "label": "One-on-One Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      11,
+      30
+    ],
+    "description": "Monthly one-on-one with manager to discuss career development and goals.",
+    "location": "Manager Office",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      15,
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-203",
+    "date": "2025-12-10",
+    "start": 12,
+    "end": 14,
+    "label": "Shopping",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      12,
+      30
+    ],
+    "endTime": [
+      14,
+      0
+    ],
+    "description": "Grocery shopping and errands.",
+    "location": "Supermarket",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-10",
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-204",
+    "date": "2025-12-11",
+    "start": 10,
+    "end": 13,
+    "label": "Client Presentation",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      10,
+      30
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Presenting the new product features to key clients.",
+    "location": "Client Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-11",
+    "attendees": [
+      "daniel.harris@example.com",
+      "michael.moore@example.com",
+      "kevin.clark@gmail.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/721058935"
+  },
+  {
+    "id": "event-205",
+    "date": "2025-12-13",
+    "start": 12,
+    "end": 14,
+    "label": "Budget Planning",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      12,
+      30
+    ],
+    "endTime": [
+      14,
+      30
+    ],
+    "description": "Quarterly budget planning session with finance team.",
+    "location": "Conference Room B",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-13",
+    "attendees": [
+      "robert.clark@company.com",
+      "kevin.thompson@company.com",
+      "sophia.brown@company.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/719975205"
+  },
+  {
+    "id": "event-206",
+    "date": "2025-12-14",
+    "start": 14,
+    "end": 16,
+    "label": "School Event",
+    "calendar": "Family",
+    "color": "#8E24AA",
+    "startTime": [
+      14,
+      15
+    ],
+    "endTime": [
+      16,
+      15
+    ],
+    "description": "Attending child school event or performance.",
+    "location": "School",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-14",
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-207",
+    "date": "2025-12-18",
+    "start": 6,
+    "end": 7,
+    "label": "Design Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      6,
+      45
+    ],
+    "endTime": [
+      7,
+      45
+    ],
+    "description": "Reviewing UI/UX designs and gathering feedback from stakeholders.",
+    "location": "Design Studio",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-18",
+    "attendees": [
+      "daniel.white@example.com"
+    ],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://meet.google.com/wtd-kwc-cxq"
+  },
+  {
+    "id": "event-208",
+    "date": "2025-12-20",
+    "start": 16,
+    "end": 18,
+    "label": "Training Workshop",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      16,
+      30
+    ],
+    "endTime": [
+      18,
+      0
+    ],
+    "description": "Advanced technical workshop on modern development practices.",
+    "location": "Training Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-20",
+    "attendees": [
+      "robert.davis@company.com"
+    ],
+    "reminders": [
+      60,
+      120
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/515178226"
+  },
+  {
+    "id": "event-209",
+    "date": "2025-12-21",
+    "start": 14,
+    "end": 16,
+    "label": "Design Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      16,
+      0
+    ],
+    "description": "Reviewing UI/UX designs and gathering feedback from stakeholders.",
+    "location": "Design Studio",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "matthew.williams@example.com"
+    ],
+    "reminders": [
+      30,
+      60
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://meet.google.com/kay-pdf-jhq"
+  },
+  {
+    "id": "event-210",
+    "date": "2025-12-21",
+    "start": 9,
+    "end": 10,
+    "label": "Yoga Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      9,
+      30
+    ],
+    "endTime": [
+      10,
+      30
+    ],
+    "description": "Weekly yoga session for stress relief and flexibility.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [],
+    "reminders": [
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-211",
+    "date": "2025-12-22",
+    "start": 8,
+    "end": 11,
+    "label": "Product Demo",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      8,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Demonstrating new product features to potential clients.",
+    "location": "Showroom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-22",
+    "attendees": [
+      "ryan.patel@example.com",
+      "matthew.harris@example.com",
+      "olivia.white@example.com",
+      "sophia.wilson@company.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://meet.google.com/plp-xzw-uwf"
+  },
+  {
+    "id": "event-212",
+    "date": "2025-12-25",
+    "start": 20,
+    "end": 24,
+    "label": "Coffee Meetup",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      20,
+      0
+    ],
+    "endTime": [
+      24,
+      0
+    ],
+    "description": "Casual coffee meetup to catch up.",
+    "location": "Coffee Shop",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "laura.williams@company.com",
+      "olivia.martinez@gmail.com"
+    ],
+    "reminders": [
+      60,
+      1440
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-213",
+    "date": "2025-12-25",
+    "start": 9,
+    "end": 12,
+    "label": "Concert",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Attending live concert with friends.",
+    "location": "Concert Hall",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-25",
+    "attendees": [
+      "jessica.martin@company.com",
+      "kevin.johnson@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-214",
+    "date": "2025-12-27",
+    "start": 22,
+    "end": 23,
+    "label": "Product Demo",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      22,
+      45
+    ],
+    "endTime": [
+      23,
+      45
+    ],
+    "description": "Demonstrating new product features to potential clients.",
+    "location": "Showroom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-27",
+    "attendees": [
+      "chris.martinez@example.com",
+      "amanda.chen@example.com",
+      "lisa.thomas@gmail.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "event-215",
+    "date": "2025-12-28",
+    "start": 18,
+    "end": 20,
+    "label": "Design Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      18,
+      15
+    ],
+    "endTime": [
+      20,
+      45
+    ],
+    "description": "Reviewing UI/UX designs and gathering feedback from stakeholders.",
+    "location": "Design Studio",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-12-28",
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  }
+]

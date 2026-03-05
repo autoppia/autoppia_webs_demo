@@ -1,17 +1,30 @@
 "use client";
 
-import React, { useMemo, useState, useCallback } from "react";
+import { PlayerCard } from "@/components/chess/PlayerCard";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useSeed } from "@/context/SeedContext";
-import { useEventLogger } from "@/hooks/useEventLogger";
+import { generatePlayers } from "@/data/generators";
 import { DynamicWrapper } from "@/dynamic/v1/DynamicWrapper";
 import { DynamicText } from "@/dynamic/v3/DynamicText";
-import { generatePlayers } from "@/data/generators";
+import { useEventLogger } from "@/hooks/useEventLogger";
 import { EVENT_TYPES } from "@/library/events";
 import { getCountryFlag } from "@/library/formatters";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PlayerCard } from "@/components/chess/PlayerCard";
 import { COUNTRIES, PLAYER_TITLES } from "@/shared/constants";
-import { Search, X, ArrowUpDown, SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  SlidersHorizontal,
+  X,
+} from "lucide-react";
+import React, { useMemo, useState, useCallback } from "react";
 
 type SortField = "rating" | "name" | "games" | "winrate";
 type SortDir = "asc" | "desc";
@@ -30,13 +43,20 @@ export default function PlayersPage() {
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [page, setPage] = useState(1);
 
-  const handleSearch = useCallback((value: string) => {
-    setSearch(value);
-    setPage(1);
-    if (value.length > 0) {
-      logInteraction(EVENT_TYPES.SEARCH_PLAYER, { query: value, country: countryFilter, title: titleFilter });
-    }
-  }, [countryFilter, titleFilter, logInteraction]);
+  const handleSearch = useCallback(
+    (value: string) => {
+      setSearch(value);
+      setPage(1);
+      if (value.length > 0) {
+        logInteraction(EVENT_TYPES.SEARCH_PLAYER, {
+          query: value,
+          country: countryFilter,
+          title: titleFilter,
+        });
+      }
+    },
+    [countryFilter, titleFilter, logInteraction],
+  );
 
   const handleFilter = useCallback((type: string, value: string) => {
     if (type === "country") setCountryFilter(value);
@@ -44,7 +64,8 @@ export default function PlayersPage() {
     setPage(1);
   }, []);
 
-  const hasActiveFilters = search || countryFilter !== "all" || titleFilter !== "all";
+  const hasActiveFilters =
+    search || countryFilter !== "all" || titleFilter !== "all";
 
   const clearAllFilters = useCallback(() => {
     setSearch("");
@@ -54,9 +75,11 @@ export default function PlayersPage() {
   }, []);
 
   const filtered = useMemo(() => {
-    let result = players.filter((p) => {
-      if (search && !p.name.toLowerCase().includes(search.toLowerCase())) return false;
-      if (countryFilter !== "all" && p.countryCode !== countryFilter) return false;
+    const result = players.filter((p) => {
+      if (search && !p.name.toLowerCase().includes(search.toLowerCase()))
+        return false;
+      if (countryFilter !== "all" && p.countryCode !== countryFilter)
+        return false;
       if (titleFilter !== "all" && p.title !== titleFilter) return false;
       return true;
     });
@@ -66,7 +89,8 @@ export default function PlayersPage() {
       if (sortField === "rating") cmp = a.rating - b.rating;
       else if (sortField === "name") cmp = a.name.localeCompare(b.name);
       else if (sortField === "games") cmp = a.gamesPlayed - b.gamesPlayed;
-      else if (sortField === "winrate") cmp = (a.wins / a.gamesPlayed) - (b.wins / b.gamesPlayed);
+      else if (sortField === "winrate")
+        cmp = a.wins / a.gamesPlayed - b.wins / b.gamesPlayed;
       return sortDir === "asc" ? cmp : -cmp;
     });
 
@@ -75,14 +99,18 @@ export default function PlayersPage() {
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
-  const paged = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const paged = filtered.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
 
-  const getCountryName = (code: string) => COUNTRIES.find((c) => c.code === code)?.name || code;
+  const getCountryName = (code: string) =>
+    COUNTRIES.find((c) => c.code === code)?.name || code;
 
   return (
-    <div className="py-6">
+    <div className="py-4 sm:py-6">
       <DynamicWrapper>
-        <h1 className="text-3xl font-bold text-white mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">
           <DynamicText value="Players" type="text" />
         </h1>
       </DynamicWrapper>
@@ -100,7 +128,10 @@ export default function PlayersPage() {
           />
           {search && (
             <button
-              onClick={() => { setSearch(""); setPage(1); }}
+              onClick={() => {
+                setSearch("");
+                setPage(1);
+              }}
               className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full text-zinc-500 hover:text-white hover:bg-white/10 transition-colors"
               aria-label="Clear search"
             >
@@ -115,7 +146,10 @@ export default function PlayersPage() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
           <div className="flex flex-wrap items-center gap-2">
             <SlidersHorizontal className="h-4 w-4 text-zinc-500 hidden sm:block" />
-            <Select value={countryFilter} onValueChange={(v) => handleFilter("country", v)}>
+            <Select
+              value={countryFilter}
+              onValueChange={(v) => handleFilter("country", v)}
+            >
               <SelectTrigger className="w-full sm:w-[160px] bg-white/10 border-white/20 text-zinc-300 h-10">
                 <SelectValue placeholder="Country" />
               </SelectTrigger>
@@ -128,14 +162,19 @@ export default function PlayersPage() {
                 ))}
               </SelectContent>
             </Select>
-            <Select value={titleFilter} onValueChange={(v) => handleFilter("title", v)}>
+            <Select
+              value={titleFilter}
+              onValueChange={(v) => handleFilter("title", v)}
+            >
               <SelectTrigger className="w-full sm:w-[140px] bg-white/10 border-white/20 text-zinc-300 h-10">
                 <SelectValue placeholder="Title" />
               </SelectTrigger>
               <SelectContent className="bg-[#1c1917] border-stone-700/50">
                 <SelectItem value="all">All Titles</SelectItem>
-                {PLAYER_TITLES.filter(t => t !== "").map((t) => (
-                  <SelectItem key={t} value={t}>{t}</SelectItem>
+                {PLAYER_TITLES.filter((t) => t !== "").map((t) => (
+                  <SelectItem key={t} value={t}>
+                    {t}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -155,7 +194,10 @@ export default function PlayersPage() {
             <select
               value={`${sortField}-${sortDir}`}
               onChange={(e) => {
-                const [f, d] = e.target.value.split("-") as [SortField, SortDir];
+                const [f, d] = e.target.value.split("-") as [
+                  SortField,
+                  SortDir,
+                ];
                 setSortField(f);
                 setSortDir(d);
                 setPage(1);
@@ -178,16 +220,31 @@ export default function PlayersPage() {
         <DynamicWrapper>
           <div className="flex flex-wrap gap-2 mb-4">
             {search && (
-              <FilterPill label={`Search: "${search}"`} onRemove={() => { setSearch(""); setPage(1); }} />
+              <FilterPill
+                label={`Search: "${search}"`}
+                onRemove={() => {
+                  setSearch("");
+                  setPage(1);
+                }}
+              />
             )}
             {countryFilter !== "all" && (
               <FilterPill
                 label={`${getCountryFlag(countryFilter)} ${getCountryName(countryFilter)}`}
-                onRemove={() => { setCountryFilter("all"); setPage(1); }}
+                onRemove={() => {
+                  setCountryFilter("all");
+                  setPage(1);
+                }}
               />
             )}
             {titleFilter !== "all" && (
-              <FilterPill label={`Title: ${titleFilter}`} onRemove={() => { setTitleFilter("all"); setPage(1); }} />
+              <FilterPill
+                label={`Title: ${titleFilter}`}
+                onRemove={() => {
+                  setTitleFilter("all");
+                  setPage(1);
+                }}
+              />
             )}
           </div>
         </DynamicWrapper>
@@ -196,10 +253,14 @@ export default function PlayersPage() {
       {/* Results count */}
       <DynamicWrapper>
         <div className="text-sm text-zinc-300 mb-3">
-          <span className="text-amber-400 font-semibold">{filtered.length}</span> player{filtered.length !== 1 ? "s" : ""} found
+          <span className="text-amber-400 font-semibold">
+            {filtered.length}
+          </span>{" "}
+          player{filtered.length !== 1 ? "s" : ""} found
           {filtered.length > PAGE_SIZE && (
             <span className="text-zinc-500 ml-2">
-              (showing {(currentPage - 1) * PAGE_SIZE + 1}-{Math.min(currentPage * PAGE_SIZE, filtered.length)})
+              (showing {(currentPage - 1) * PAGE_SIZE + 1}-
+              {Math.min(currentPage * PAGE_SIZE, filtered.length)})
             </span>
           )}
         </div>
@@ -208,11 +269,14 @@ export default function PlayersPage() {
       {/* Results or Empty State */}
       <DynamicWrapper>
         {filtered.length === 0 ? (
-          <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-12 text-center">
-            <Search className="h-12 w-12 text-zinc-700 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-zinc-300 mb-2">No players found</h3>
+          <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-6 sm:p-12 text-center">
+            <Search className="h-10 w-10 sm:h-12 sm:w-12 text-zinc-700 mx-auto mb-4" />
+            <h3 className="text-base sm:text-lg font-medium text-zinc-300 mb-2">
+              No players found
+            </h3>
             <p className="text-sm text-zinc-500 mb-4 max-w-md mx-auto">
-              No players match your current filters. Try a different name or remove some filters.
+              No players match your current filters. Try a different name or
+              remove some filters.
             </p>
             <button
               onClick={clearAllFilters}
@@ -223,12 +287,9 @@ export default function PlayersPage() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {paged.map((p) => (
-                <PlayerCard
-                  key={p.id}
-                  player={p}
-                />
+                <PlayerCard key={p.id} player={p} />
               ))}
             </div>
 
@@ -244,15 +305,22 @@ export default function PlayersPage() {
                   Prev
                 </button>
                 {Array.from({ length: totalPages }, (_, i) => i + 1)
-                  .filter((p) => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1)
+                  .filter(
+                    (p) =>
+                      p === 1 ||
+                      p === totalPages ||
+                      Math.abs(p - currentPage) <= 1,
+                  )
                   .reduce<(number | "...")[]>((acc, p, i, arr) => {
-                    if (i > 0 && p - (arr[i - 1]) > 1) acc.push("...");
+                    if (i > 0 && p - arr[i - 1] > 1) acc.push("...");
                     acc.push(p);
                     return acc;
                   }, [])
                   .map((p, i) =>
                     p === "..." ? (
-                      <span key={`dots-${i}`} className="px-2 text-zinc-600">...</span>
+                      <span key={`dots-${i}`} className="px-2 text-zinc-600">
+                        ...
+                      </span>
                     ) : (
                       <button
                         key={p}
@@ -265,7 +333,7 @@ export default function PlayersPage() {
                       >
                         {p}
                       </button>
-                    )
+                    ),
                   )}
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
@@ -284,7 +352,10 @@ export default function PlayersPage() {
   );
 }
 
-function FilterPill({ label, onRemove }: { label: string; onRemove: () => void }) {
+function FilterPill({
+  label,
+  onRemove,
+}: { label: string; onRemove: () => void }) {
   return (
     <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300">
       {label}

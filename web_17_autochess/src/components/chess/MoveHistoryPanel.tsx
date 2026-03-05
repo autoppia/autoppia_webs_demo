@@ -61,7 +61,7 @@ export function MoveHistoryPanel({ entries }: MoveHistoryPanelProps) {
       <div className="px-4 py-3 border-b border-stone-800/80">
         <h3 className="text-white font-semibold text-sm">Move History</h3>
       </div>
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-2 min-h-[200px] max-h-[480px]">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-2 sm:p-3 space-y-1.5 sm:space-y-2 min-h-[150px] max-h-[280px] xl:max-h-[480px]">
         {entries.length === 0 ? (
           <div className="text-zinc-600 text-sm text-center py-8">
             Moves will appear here

@@ -17,17 +17,17 @@ export function DailyPuzzle({ puzzle }: DailyPuzzleProps) {
 
   return (
     <DynamicWrapper>
-      <section className="my-8">
-        <div className="flex items-center justify-between mb-5">
+      <section className="my-4 sm:my-8">
+        <div className="flex items-center justify-between mb-4 sm:mb-5">
           <div>
-            <h2 className="text-xl font-bold text-white">
+            <h2 className="text-lg sm:text-xl font-bold text-white">
               <DynamicText value="Daily Puzzle" type="text" />
             </h2>
-            <p className="text-sm text-stone-500 mt-0.5">Test your tactical skills</p>
+            <p className="text-xs sm:text-sm text-stone-500 mt-0.5">Test your tactical skills</p>
           </div>
           <button
             onClick={() => router.push("/tactics")}
-            className="flex items-center gap-1 text-sm text-amber-400 hover:text-amber-300 transition-colors group"
+            className="flex items-center gap-1 text-sm text-amber-400 hover:text-amber-300 transition-colors group flex-shrink-0"
           >
             More puzzles
             <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -38,14 +38,14 @@ export function DailyPuzzle({ puzzle }: DailyPuzzleProps) {
           className="bg-[#1c1917] border border-stone-800/80 rounded-xl overflow-hidden hover:border-amber-700/50 transition-all cursor-pointer group"
           onClick={() => router.push("/tactics")}
         >
-          <div className="flex flex-col md:flex-row">
+          <div className="flex flex-col sm:flex-row">
             {/* Board */}
-            <div className="flex-shrink-0 p-4 md:p-5 flex items-center justify-center bg-stone-900/30">
-              <MiniChessBoard fen={puzzle.fen} size={200} />
+            <div className="flex-shrink-0 p-3 sm:p-4 md:p-5 flex items-center justify-center bg-stone-900/30">
+              <MiniChessBoard fen={puzzle.fen} size={180} />
             </div>
 
             {/* Info */}
-            <div className="flex-1 p-5 flex flex-col justify-between">
+            <div className="flex-1 p-3 sm:p-5 flex flex-col justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles className="h-4 w-4 text-amber-400" />
