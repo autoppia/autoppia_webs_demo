@@ -7,6 +7,10 @@ on:
   pull_request:
     branches: [main, develop]
 
+concurrency:
+  group: frontend-quality-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   discover:
     runs-on: ubuntu-latest
@@ -32,6 +36,7 @@ jobs:
     name: Lint & build (${{ matrix.app }})
     needs: discover
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -50,7 +55,7 @@ jobs:
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: latest
+          bun-version: '1.2'
 
       - name: Install dependencies
         working-directory: ${{ matrix.app }}
@@ -59,6 +64,14 @@ jobs:
       - name: Audit dependencies
         working-directory: ${{ matrix.app }}
         run: npm audit --audit-level=high
+
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: ${{ matrix.app }}/.next/cache
+          key: next-${{ matrix.app }}-${{ hashFiles(format('{0}/package-lock.json', matrix.app)) }}
+          restore-keys: |
+            next-${{ matrix.app }}-
 
       - name: Lint
         working-directory: ${{ matrix.app }}
