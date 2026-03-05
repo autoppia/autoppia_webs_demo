@@ -1,0 +1,168 @@
+{
+  "website_id": "web_16_autodiscord",
+  "use_cases": [
+    {
+      "id": "UC1",
+      "name": "Send a message in a channel",
+      "steps": [
+        "Open the app; ensure Servers view is active (Home icon selected).",
+        "Select a server from the left column.",
+        "Select a text channel (e.g. #general) in the channel list.",
+        "Type a message in the input at the bottom and submit (Enter or button)."
+      ],
+      "expected_events": ["SELECT_SERVER", "SELECT_CHANNEL", "SEND_MESSAGE"]
+    },
+    {
+      "id": "UC2",
+      "name": "Add a reaction to a message",
+      "steps": [
+        "In any channel with messages, hover a message.",
+        "Click the thumbs-up (or other reaction) control."
+      ],
+      "expected_events": ["ADD_REACTION"]
+    },
+    {
+      "id": "UC3",
+      "name": "Open DMs and send a message",
+      "steps": [
+        "Click the Direct Messages icon (message circle) in the left sidebar.",
+        "Select a user from the DM list.",
+        "Type a message and submit."
+      ],
+      "expected_events": ["VIEW_DMS", "SELECT_DM", "SEND_DM_MESSAGE"]
+    },
+    {
+      "id": "UC4",
+      "name": "Change settings (Appearance, Notifications, Account)",
+      "steps": [
+        "Click the Settings icon (gear at bottom of server column).",
+        "Change Appearance (e.g. select Light).",
+        "Toggle Notifications.",
+        "Change Display name and click Save."
+      ],
+      "expected_events": ["OPEN_SETTINGS", "SETTINGS_APPEARANCE", "SETTINGS_NOTIFICATIONS", "SETTINGS_ACCOUNT"]
+    },
+    {
+      "id": "UC5",
+      "name": "Create a server",
+      "steps": [
+        "Click the Add server button (green plus) in the left column.",
+        "Optionally enter a server name.",
+        "Click Create."
+      ],
+      "expected_events": ["CREATE_SERVER"]
+    },
+    {
+      "id": "UC6",
+      "name": "Open server settings",
+      "steps": [
+        "Select a server and ensure the channel list is visible.",
+        "Click the gear icon next to the server name in the channel sidebar header."
+      ],
+      "expected_events": ["OPEN_SERVER_SETTINGS"]
+    },
+    {
+      "id": "UC7",
+      "name": "Delete a server",
+      "steps": [
+        "Create a server (or use an existing locally created one).",
+        "Select that server and open Server settings (gear next to server name).",
+        "Click Delete server at the bottom of the modal."
+      ],
+      "expected_events": ["DELETE_SERVER"]
+    },
+    {
+      "id": "UC8",
+      "name": "Switch servers and channels",
+      "steps": [
+        "Click Home (servers view) if not already there.",
+        "Select server A from the left column.",
+        "Select a channel (e.g. #general) in the channel list.",
+        "Select server B from the left column.",
+        "Select a channel in server B."
+      ],
+      "expected_events": ["VIEW_SERVERS", "SELECT_SERVER", "SELECT_CHANNEL", "SELECT_SERVER", "SELECT_CHANNEL"]
+    },
+    {
+      "id": "UC9",
+      "name": "Return to servers from DMs",
+      "steps": [
+        "Click the Direct Messages icon.",
+        "Optionally select a user.",
+        "Click the Home icon to return to the server list."
+      ],
+      "expected_events": ["VIEW_DMS", "VIEW_SERVERS"]
+    },
+    {
+      "id": "UC10",
+      "name": "Full channel conversation (multiple messages and reactions)",
+      "steps": [
+        "Select a server and a text channel that has messages.",
+        "Send two or more messages in the input.",
+        "Hover a message and add a reaction (thumbs up).",
+        "Add a reaction to another message."
+      ],
+      "expected_events": ["SELECT_SERVER", "SELECT_CHANNEL", "SEND_MESSAGE", "SEND_MESSAGE", "ADD_REACTION", "ADD_REACTION"]
+    },
+    {
+      "id": "UC11",
+      "name": "Create server then open its settings",
+      "steps": [
+        "Click the Add server (green plus) button.",
+        "Enter a name (e.g. Test Server) and click Create.",
+        "With the new server selected, click the gear next to the server name to open Server settings."
+      ],
+      "expected_events": ["CREATE_SERVER", "SELECT_SERVER", "OPEN_SERVER_SETTINGS"]
+    },
+    {
+      "id": "UC12",
+      "name": "Open Settings and change one option",
+      "steps": [
+        "Click the Settings icon (gear at bottom of server column).",
+        "Change Appearance to Light (or Notifications toggle), then click Back to return."
+      ],
+      "expected_events": ["OPEN_SETTINGS", "SETTINGS_APPEARANCE"]
+    },
+    {
+      "id": "UC13",
+      "name": "Switch between DM conversations",
+      "steps": [
+        "Click the Direct Messages icon.",
+        "Select user A from the list.",
+        "Select user B from the list (without going back to servers)."
+      ],
+      "expected_events": ["VIEW_DMS", "SELECT_DM", "SELECT_DM"]
+    },
+    {
+      "id": "UC14",
+      "name": "Create server then delete it",
+      "steps": [
+        "Click Add server, enter a name, click Create.",
+        "With the new server selected, open Server settings (gear).",
+        "Click Delete server and confirm the server disappears."
+      ],
+      "expected_events": ["CREATE_SERVER", "OPEN_SERVER_SETTINGS", "DELETE_SERVER"]
+    },
+    {
+      "id": "UC15",
+      "name": "View empty server (no channels)",
+      "steps": [
+        "Create a server (Add server → name → Create).",
+        "Leave the new server selected (it has no channels).",
+        "Observe the main area shows 'No channels in this server'."
+      ],
+      "expected_events": ["CREATE_SERVER", "SELECT_SERVER"]
+    },
+    {
+      "id": "UC16",
+      "name": "End-to-end server lifecycle",
+      "steps": [
+        "Click Home.",
+        "Create a server named E2E Test.",
+        "Select it and open Server settings.",
+        "Delete the server."
+      ],
+      "expected_events": ["VIEW_SERVERS", "CREATE_SERVER", "SELECT_SERVER", "OPEN_SERVER_SETTINGS", "DELETE_SERVER"]
+    }
+  ]
+}
