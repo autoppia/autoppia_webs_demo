@@ -35,6 +35,7 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Reload data when seed changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: seed is the trigger to reload on URL seed change
   useEffect(() => {
     if (!mounted) return;
 

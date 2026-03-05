@@ -12,7 +12,8 @@ import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
 
-const normalizeFile = (file: any, index: number) => ({
+type FileRecord = { id?: string; name?: string; size?: string; version?: string; updated?: string; status?: string };
+const normalizeFile = (file: FileRecord, index: number) => ({
   id: file?.id ?? index,
   name: file?.name ?? `Document ${index + 1}`,
   size: file?.size ?? "—",
@@ -33,7 +34,7 @@ export default function DocumentsPage() {
   const dyn = useDynamicSystem();
   const { seed, isSeedReady } = useSeed();
   const v2Seed = seed;
-  const { data, isLoading, error } = useProjectData<any>({
+  const { data, isLoading, error } = useProjectData<FileRecord>({
     projectKey: "web_5_autocrm",
     entityType: "files",
     seedValue: isSeedReady ? v2Seed : undefined,
@@ -45,9 +46,9 @@ export default function DocumentsPage() {
   //   error,
   //   sample: (data || []).slice(0, 3),
   // });
-  const [fallbackFiles, setFallbackFiles] = useState<any[]>([]);
+  const [fallbackFiles, setFallbackFiles] = useState<FileRecord[]>([]);
   useEffect(() => {
-    initializeFiles().then((rows) => setFallbackFiles(rows));
+    initializeFiles().then((rows) => setFallbackFiles(rows as FileRecord[]));
   }, []);
 
   const normalizedApi = useMemo(() => (data || []).map((f, idx) => normalizeFile(f, idx)), [data]);
@@ -157,7 +158,7 @@ export default function DocumentsPage() {
           className="mb-10 p-8 rounded-2xl border-2 border-dashed border-zinc-200 bg-white flex flex-col items-center justify-center cursor-pointer hover:border-accent-forest hover:bg-accent-forest/5 transition gap-4 shadow-sm"
         onDragOver={(e: React.DragEvent<HTMLDivElement>) => e.preventDefault()}
         onDrop={onDrop}
-        onClick={() => fileInput.current && fileInput.current.click()}
+        onClick={() => fileInput.current?.click()}
         style={{ minHeight: 140 }}
         id={getId("upload_area")}
         aria-label={getText("upload_documents", "Upload Documents")}
@@ -283,7 +284,7 @@ export default function DocumentsPage() {
               <DynamicButton
                 eventType="DOCUMENT_DELETED"
                 index={index}
-                onClick={() => deleteFile(file.id)}
+                onClick={() => deleteFile(Number(file.id))}
                 className={dyn.v3.getVariant(
                   "button-secondary",
                   CLASS_VARIANTS_MAP,

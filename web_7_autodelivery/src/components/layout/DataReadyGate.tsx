@@ -69,7 +69,7 @@ export function DataReadyGate({ children }: DataReadyGateProps) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="text-center space-y-4 max-w-md px-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto" />
           <p className="text-lg font-semibold text-foreground">"Loading Data..."</p>
           <p className="text-sm text-muted-foreground">"Preparing your food delivery app..."</p>
         </div>

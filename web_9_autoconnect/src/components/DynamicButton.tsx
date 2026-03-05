@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState, type ButtonHTMLAttributes } from 'react';
+import type React from 'react';
+import { useEffect, useRef, useState, type ButtonHTMLAttributes } from 'react';
 import { useSeed } from '@/context/SeedContext';
 
 interface DynamicButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

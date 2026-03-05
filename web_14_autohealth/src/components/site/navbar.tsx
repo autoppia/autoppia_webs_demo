@@ -9,22 +9,22 @@ import { useMemo } from "react";
 
 export default function Navbar() {
   const dyn = useDynamicSystem();
-  const links = [
-    { href: "/appointments", title: "Appointments" },
-    { href: "/doctors", title: "Doctors" },
-    { href: "/prescriptions", title: "Prescriptions" },
-    { href: "/medical-records", title: "Medical Analysis" },
-  ];
   const orderedLinks = useMemo(() => {
+    const links = [
+      { href: "/appointments", title: "Appointments" },
+      { href: "/doctors", title: "Doctors" },
+      { href: "/prescriptions", title: "Prescriptions" },
+      { href: "/medical-records", title: "Medical Analysis" },
+    ];
     const order = dyn.v1.changeOrderElements("navbar-links", links.length);
     return order.map((idx) => links[idx]);
-  }, [dyn.seed, links]);
+  }, [dyn]);
 
-  const sectionKeys = ["logo", "nav", "cta"];
   const orderedSections = useMemo(() => {
+    const sectionKeys = ["logo", "nav", "cta"];
     const order = dyn.v1.changeOrderElements("navbar-sections", sectionKeys.length);
     return order.map((idx) => sectionKeys[idx]);
-  }, [dyn.seed]);
+  }, [dyn]);
 
   const Logo = dyn.v1.addWrapDecoy("nav-logo", (
     <SeedLink

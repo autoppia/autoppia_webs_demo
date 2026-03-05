@@ -44,7 +44,7 @@ export default function UserSearchBar() {
   const router = useSeedRouter();
 
   // Memoize dyn.v3 to avoid reference changes
-  const dynV3 = useMemo(() => dyn.v3, [dyn.seed]);
+  const dynV3 = useMemo(() => dyn.v3, [dyn.v3]);
 
   // Memoize matches to avoid recalculation
   const matches = useMemo(() => {

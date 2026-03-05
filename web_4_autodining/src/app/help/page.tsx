@@ -188,7 +188,7 @@ export default function HelpPage() {
               {helpSections.map((section, index) => (
                 dyn.v1.addWrapDecoy(`help-section-${index}`, (
                   <a
-                    key={index}
+                    key={section.link}
                     href={section.link}
                     id={dyn.v3.getVariant(`help-section-${index === 0 ? "guides" : index === 1 ? "chat" : index === 2 ? "forum" : "videos"}`, ID_VARIANTS_MAP, `help-section-${index}`)}
                     className={dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300 hover:border-[#46a758] text-center cursor-default")}
@@ -253,7 +253,7 @@ export default function HelpPage() {
               {filteredFAQs.map((faq, index) => (
                 dyn.v1.addWrapDecoy(`faq-item-${index}`, (
                   <div
-                    key={index}
+                    key={faq.question}
                     id={dyn.v3.getVariant(`faq-item-${index}`, ID_VARIANTS_MAP, `faq-item-${index}`)}
                     className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow"
                   >

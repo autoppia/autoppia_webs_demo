@@ -12,9 +12,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Minus, Plus } from "lucide-react";
-import {
-  type MenuItem,
-  type MenuItemSize,
+import type {
+  MenuItem,
+  MenuItemSize,
 } from "@/data/restaurants";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
@@ -63,7 +63,7 @@ export function AddToCartModal({
     setCheckedOptions(initialSelection?.options ?? []);
     setPreferences(initialSelection?.preferences ?? "");
     setQty(initialSelection?.quantity ?? 1);
-  }, [item, open, initialSelection]);
+  }, [item, initialSelection]);
 
   const price = React.useMemo(() => {
     let p = item.price;
@@ -164,7 +164,7 @@ export function AddToCartModal({
               <RadioGroup
                 value={size?.name || ""}
                 onValueChange={(name) =>
-                  setSize(item.sizes!.find((s) => s.name === name))
+                  setSize(item.sizes?.find((s) => s.name === name))
                 }
               >
                 {item.sizes.map((s, i) => (
@@ -182,7 +182,7 @@ export function AddToCartModal({
                       </span>
                     </div>
                     <span className="text-zinc-600 font-medium text-sm">
-                      {s.priceMod ? "+$" + s.priceMod.toFixed(2) : "Included"}
+                      {s.priceMod ? `+$${s.priceMod.toFixed(2)}` : "Included"}
                     </span>
                   </div>
                 ))}

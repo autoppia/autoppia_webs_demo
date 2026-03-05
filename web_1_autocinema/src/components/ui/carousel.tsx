@@ -138,6 +138,7 @@ const Carousel = React.forwardRef<
           ref={ref}
           onKeyDownCapture={handleKeyDown}
           className={cn("relative", className)}
+          // biome-ignore lint/a11y/useSemanticElements: carousel needs div for ref/embla compatibility
           role="region"
           aria-roledescription="carousel"
           {...props}
