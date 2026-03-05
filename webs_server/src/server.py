@@ -236,6 +236,7 @@ class ResetResponse(BaseModel):
     message: str
     web_url: str
     deleted_count: int
+    validator_id: str
 
 
 # --- Data Generation Models (generic) ---
