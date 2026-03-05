@@ -1,12 +1,16 @@
 function getApiBaseUrl(): string {
-  const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
+  const isServer = typeof window === "undefined";
+  // Server-side (SSR, RSC, API routes): use API_URL so Docker uses http://app:8090, not localhost
+  const envUrl = isServer
+    ? (process.env.API_URL || process.env.NEXT_PUBLIC_API_URL)
+    : (process.env.NEXT_PUBLIC_API_URL || process.env.API_URL);
   const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
   const envIsLocal = envUrl && (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"));
   const originIsLocal = origin && (origin.includes("localhost") || origin.includes("127.0.0.1"));
 
   let baseUrl: string;
 
-  if (envUrl && (!(envIsLocal) || originIsLocal)) {
+  if (envUrl && (!envIsLocal || originIsLocal)) {
     baseUrl = envUrl;
   } else if (origin) {
     baseUrl = `${origin}/api`;
