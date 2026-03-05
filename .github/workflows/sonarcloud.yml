@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-      - develop
-      - fix/**
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -27,7 +25,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Cache pip dependencies
         uses: actions/cache@v4

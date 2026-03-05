@@ -10,7 +10,7 @@ This module provides utilities to generate data for any project/entity by:
 import json
 import os
 from pathlib import Path
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List, Tuple
 
 # Base path for initial data (inside container: /app/data)
 BASE_DATA_PATH = Path(os.getenv("BASE_DATA_PATH", "/app/data"))
