@@ -112,7 +112,6 @@ def _parse_json_file_to_items(
     When allowed_base is set, file_path is resolved under that base; only the resolved
     path is used for I/O (prevents path traversal from tainted input).
     """
-    path_to_use = file_path
     if allowed_base is not None:
         try:
             rel = os.path.relpath(file_path, allowed_base)
