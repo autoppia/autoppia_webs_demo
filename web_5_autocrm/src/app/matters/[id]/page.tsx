@@ -32,7 +32,7 @@ type Matter = {
 const STORAGE_KEY_PREFIX = "matters";
 const CUSTOM_COOKIE_PREFIX = "custom_matters";
 
-const normalizeMatter = (matter: any, index: number): Matter => ({
+const normalizeMatter = (matter: Record<string, unknown> & { id?: string; matterId?: string; name?: string; title?: string; matter?: string; client?: string; clientName?: string; status?: string; updated?: string; updated_at?: string; lastUpdated?: string }, index: number): Matter => ({
   id: matter?.id ?? matter?.matterId ?? `MAT-${1000 + index}`,
   name: matter?.name ?? matter?.title ?? matter?.matter ?? `Matter ${index + 1}`,
   client: matter?.client ?? matter?.clientName ?? "—",
@@ -45,7 +45,7 @@ function useDetailLayoutVariant() {
   const searchParams = useSearchParams();
   const seedParam = searchParams?.get('seed');
   const seed = useMemo(() => {
-    return seedParam ? parseInt(seedParam) : 1;
+    return seedParam ? Number.parseInt(seedParam) : 1;
   }, [seedParam]);
 
   // Define different layout variants for detail page
@@ -154,7 +154,7 @@ function MatterDetailPageContent() {
         const allMatters = dynamicDataProvider.getMatters();
         console.log(`[matters/[id]/page] Searching for matter ${matterId} in ${allMatters.length} matters`);
 
-        const found = getMatterById(matterId);
+        const found = getMatterById(matterId) as Record<string, unknown> & { name?: string } | undefined;
         console.log(`[matters/[id]/page] Matter ${matterId} found:`, found ? found.name : "NOT FOUND");
 
         if (found) {
@@ -163,8 +163,9 @@ function MatterDetailPageContent() {
           logEvent(EVENT_TYPES.VIEW_MATTER_DETAILS, normalized);
         } else {
           // Log available matters for debugging
+          const mattersList = allMatters as { id?: string; name?: string }[];
           console.warn(`[matters/[id]/page] Matter ${matterId} not found. Available matters (${allMatters.length}):`,
-            allMatters.slice(0, 5).map(m => ({ id: m.id, name: m.name }))
+            mattersList.slice(0, 5).map((m: { id?: string; name?: string }) => ({ id: m.id, name: m.name }))
           );
           setCurrentMatter(null);
         }
@@ -172,10 +173,8 @@ function MatterDetailPageContent() {
         console.error("[matters/[id]/page] Failed to load matter", error);
         if (!mounted) return;
         setCurrentMatter(null);
-      } finally {
-        if (!mounted) return;
-        setIsResolving(false);
       }
+      if (mounted) setIsResolving(false);
     };
     run();
     return () => {

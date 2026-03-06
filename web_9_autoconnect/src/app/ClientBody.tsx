@@ -2,9 +2,15 @@
 
 import { useEffect } from "react";
 
+declare global {
+  interface Window {
+    setBaseWebRoot?: () => void;
+  }
+}
+
 // Provide a defensive noop for scripts that expect a global setter
-if (typeof window !== "undefined" && !(window as any).setBaseWebRoot) {
-  (window as any).setBaseWebRoot = () => {};
+if (typeof window !== "undefined" && !window.setBaseWebRoot) {
+  window.setBaseWebRoot = () => {};
 }
 
 export default function ClientBody({
@@ -18,8 +24,8 @@ export default function ClientBody({
     document.body.className = "antialiased";
 
     // Some embeds expect a global setter; provide a harmless noop to avoid runtime ReferenceError
-    if (typeof window !== "undefined" && !(window as any).setBaseWebRoot) {
-      (window as any).setBaseWebRoot = () => {};
+    if (typeof window !== "undefined" && !window.setBaseWebRoot) {
+      window.setBaseWebRoot = () => {};
     }
   }, []);
 

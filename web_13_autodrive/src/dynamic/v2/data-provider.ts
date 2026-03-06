@@ -169,7 +169,9 @@ export class DynamicDataProvider {
   }
 
   private notifySubscribers(): void {
-    this.subscribers.forEach((callback) => callback(this.trips));
+    for (const callback of this.subscribers) {
+      callback(this.trips);
+    }
   }
 
   public getTripById(id: string): Trip | undefined {
@@ -198,7 +200,9 @@ export class DynamicDataProvider {
   }
 
   private notifyPlacesSubscribers(): void {
-    this.placesSubscribers.forEach((callback) => callback(this.places));
+    for (const callback of this.placesSubscribers) {
+      callback(this.places);
+    }
   }
 
   public getPlaceById(id: string): Place | undefined {
@@ -227,7 +231,9 @@ export class DynamicDataProvider {
   }
 
   private notifyRidesSubscribers(): void {
-    this.ridesSubscribers.forEach((callback) => callback(this.rides));
+    for (const callback of this.ridesSubscribers) {
+      callback(this.rides);
+    }
   }
 
   public getRideById(id: string): Ride | undefined {

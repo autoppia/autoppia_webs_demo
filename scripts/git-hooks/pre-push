@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Run before every push: lint all web_* apps (same as CI). Install with: ./scripts/install-pre-push-hook.sh
+set -e
+root=$(git rev-parse --show-toplevel)
+"$root/scripts/lint-all-webs.sh"

@@ -1,5 +1,5 @@
 import { fetchSeededSelection } from "@/shared/seeded-loader";
-import { CalendarEvent } from "@/library/dataset";
+import type { CalendarEvent } from "@/library/dataset";
 import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 import { isV2Enabled } from "@/dynamic/shared/flags";
 

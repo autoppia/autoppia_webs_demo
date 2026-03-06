@@ -377,9 +377,11 @@ interface EmailContextValue extends EmailState {
 const EmailContext = createContext<EmailContextValue | undefined>(undefined);
 const tokenize = (str: string) => {
     const regex = /"([^"]+)"|'([^']+)'|(\S+)/g;
-    const tokens = [];
-    let match;
-    while ((match = regex.exec(str))) {
+    const tokens: string[] = [];
+    let match: RegExpExecArray | null = null;
+    while (true) {
+        match = regex.exec(str);
+        if (!match) break;
         tokens.push(
             (match[1] || match[2] || match[3]).toLowerCase()
         );
@@ -654,7 +656,7 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
         dispatch({type: "RESET_COMPOSE_DATA"});
         dispatch({type: "TOGGLE_COMPOSE", payload: false});
         dispatch({ type: "SET_EDITING_DRAFT_ID", payload: null });
-    }, [state.composeData]);
+    }, [state.composeData, state.editingDraftId]);
 
     // Computed values
     const filteredEmails = useMemo(() => {
@@ -775,28 +777,35 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
                             normalize(email.from.name).includes(fromQuery) ||
                             normalize(email.from.email).includes(fromQuery)
                         );
-                    } else if (token.startsWith("to:")) {
+                    }
+                    if (token.startsWith("to:")) {
                         const toQuery = normalize(token.replace("to:", ""));
                         return email.to.some(
                             (recipient) =>
                                 normalize(recipient.name).includes(toQuery) ||
                                 normalize(recipient.email).includes(toQuery)
                         );
-                    } else if (token.startsWith("subject:")) {
+                    }
+                    if (token.startsWith("subject:")) {
                         const subjectQuery = normalize(token.replace("subject:", ""));
                         return normalize(email.subject).includes(subjectQuery);
-                    } else if (token === "has:attachment") {
+                    }
+                    if (token === "has:attachment") {
                         return email.attachments && email.attachments.length > 0;
-                    } else if (token === "is:unread") {
+                    }
+                    if (token === "is:unread") {
                         return !email.isRead;
-                    } else if (token === "is:read") {
+                    }
+                    if (token === "is:read") {
                         return email.isRead;
-                    } else if (token === "is:starred") {
+                    }
+                    if (token === "is:starred") {
                         return email.isStarred;
-                    } else if (token === "is:important") {
+                    }
+                    if (token === "is:important") {
                         return email.isImportant;
-                    } else {
-                        // General search across multiple fields
+                    }
+                    // General search across multiple fields
                         return (
                             normalize(email.subject).includes(normalizedToken) ||
                             normalize(email.from.name).includes(normalizedToken) ||
@@ -811,7 +820,6 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
                                 normalize(label.name).includes(normalizedToken)
                             )
                         );
-                    }
                 });
             });
         }
@@ -860,7 +868,6 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
     deleteEmail,
     deleteEmails,
     moveToTrash,
-    setEditingDraftId,
     addLabelToEmails,
     removeLabelFromEmails,
     createLabel,

@@ -30,7 +30,7 @@ export function FilterBar({
   // Dynamic order for filter dropdowns (All genres and All years)
   const filterOrder = useMemo(() => {
     return dyn.v1.changeOrderElements("filter-dropdowns", 2);
-  }, [dyn.seed]);
+  }, [dyn.v1]);
 
   // Create filter elements array
   const filterElements = useMemo(() => [

@@ -35,7 +35,7 @@ export function Header() {
       return cleanPathname === "/";
     }
     // For exact matches like /login, /register, /search, etc.
-    return cleanPathname === href || cleanPathname.startsWith(href + "/");
+    return cleanPathname === href || cleanPathname.startsWith(`${href}/`);
   };
 
   return (

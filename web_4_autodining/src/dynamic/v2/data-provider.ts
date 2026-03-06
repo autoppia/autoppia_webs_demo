@@ -14,7 +14,7 @@ export class DynamicDataProvider {
   private restaurants: RestaurantGenerated[] = [];
   private ready = false;
   private readyPromise: Promise<void>;
-  private currentSeed: number = 1;
+  private currentSeed = 1;
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
@@ -221,7 +221,7 @@ export class DynamicDataProvider {
   }
 
   public isDynamicModeEnabled(): boolean {
-    return this.isEnabled;
+    return isV2Enabled();
   }
 }
 

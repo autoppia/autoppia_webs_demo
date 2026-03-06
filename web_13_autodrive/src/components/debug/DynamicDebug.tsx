@@ -13,13 +13,14 @@ export function DynamicDebug() {
     console.log("Seed:", dyn.seed);
     console.log("V1 enabled:", isV1Enabled());
     console.log("V3 enabled:", isV3Enabled());
+    const nextData = typeof window !== "undefined" ? (window as Window & { __NEXT_DATA__?: { env?: Record<string, string> } }).__NEXT_DATA__ : undefined;
     console.log(
       "NEXT_PUBLIC_ENABLE_DYNAMIC_V1:",
-      typeof window !== "undefined" ? (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 : "SSR"
+      nextData?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ?? "SSR"
     );
     console.log(
       "NEXT_PUBLIC_ENABLE_DYNAMIC_V3:",
-      typeof window !== "undefined" ? (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 : "SSR"
+      nextData?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 ?? "SSR"
     );
 
     const v1Elements = document.querySelectorAll('[data-v1="true"]');
@@ -29,7 +30,7 @@ export function DynamicDebug() {
     }
 
     const dynamicIds = Array.from(document.querySelectorAll("[id]"))
-      .filter((el) => el.id && el.id.includes("-"))
+      .filter((el) => el.id?.includes("-"))
       .slice(0, 10)
       .map((el) => ({ id: el.id, tag: el.tagName }));
     console.log("Dynamic IDs sample:", dynamicIds);

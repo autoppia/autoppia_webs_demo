@@ -17,11 +17,11 @@ export interface HotelSearchFilters {
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private hotels: Hotel[] = [];
-  private ready: boolean = false;
+  private ready = false;
   private readyPromise: Promise<void>;
   private resolveReady!: () => void;
   private hotelSubscribers: Array<(hotels: Hotel[]) => void> = [];
-  private currentSeed: number = 1;
+  private currentSeed = 1;
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
@@ -127,7 +127,7 @@ export class DynamicDataProvider {
     this.hotels = nextHotels;
     this.ready = true;
     this.resolveReady();
-    this.hotelSubscribers.forEach((cb) => cb(this.hotels));
+    for (const cb of this.hotelSubscribers) cb(this.hotels);
   }
 
   public getHotelById(id: number | string): Hotel | undefined {
@@ -180,10 +180,10 @@ export class DynamicDataProvider {
 
   public getAvailableRegions(): string[] {
     const regions = new Set<string>();
-    this.hotels.forEach((hotel) => {
+    for (const hotel of this.hotels) {
       const [, country] = hotel.location.split(",").map((p) => p.trim());
       if (country) regions.add(country);
-    });
+    }
     return Array.from(regions).sort((a, b) => a.localeCompare(b));
   }
 

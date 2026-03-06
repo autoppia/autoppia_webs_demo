@@ -31,7 +31,7 @@ type Client = {
 
 const STORAGE_KEY_PREFIX = "clients";
 
-const normalizeClient = (client: any, index: number): Client => ({
+const normalizeClient = (client: Record<string, unknown> & { id?: string; name?: string; title?: string; email?: string; matters?: number; avatar?: string; status?: string; last?: string; phone?: string }, index: number): Client => ({
   id: client?.id ?? `CL-${1000 + index}`,
   name: client?.name ?? client?.title ?? `Client ${index + 1}`,
   email: client?.email ?? `client${index + 1}@example.com`,
@@ -62,20 +62,20 @@ function ClientProfilePageContent() {
     [v2Seed]
   );
 
-  const { data } = useProjectData<any>({
+  const { data } = useProjectData<Client>({
     projectKey: "web_5_autocrm",
     entityType: "clients",
     generateCount: 60,
     version: "v1",
     seedValue: isSeedReady ? v2Seed : undefined,
   });
-  const [fallbackClients, setFallbackClients] = useState<any[]>([]);
+  const [fallbackClients, setFallbackClients] = useState<Client[]>([]);
   useEffect(() => {
     initializeClients(v2Seed ?? undefined).then(setFallbackClients);
   }, [v2Seed]);
 
   const baseClients = useMemo(() => {
-    const normalizedApi = (data || []).map((c: any, idx: number) =>
+    const normalizedApi = (data || []).map((c: Record<string, unknown> & { id?: string; name?: string; title?: string; email?: string; matters?: number; avatar?: string; status?: string; last?: string; phone?: string }, idx: number) =>
       normalizeClient(c, idx)
     );
     if (normalizedApi.length > 0) return normalizedApi;
@@ -109,13 +109,14 @@ function ClientProfilePageContent() {
         console.log(`[clients/[id]/page] Client ${clientId} found:`, found ? found.name : "NOT FOUND");
 
         if (found) {
-          const normalized = normalizeClient(found, 0);
+          const normalized = normalizeClient(found as Record<string, unknown> & { id?: string; name?: string; title?: string; email?: string; matters?: number; avatar?: string; status?: string; last?: string; phone?: string }, 0);
           setClient(normalized);
           logEvent(EVENT_TYPES.VIEW_CLIENT_DETAILS, normalized);
         } else {
           // Log available clients for debugging
+          const clientsList = allClients as { id?: string; name?: string }[];
           console.warn(`[clients/[id]/page] Client ${clientId} not found. Available clients (${allClients.length}):`,
-            allClients.slice(0, 5).map(c => ({ id: c.id, name: c.name }))
+            clientsList.slice(0, 5).map((c: { id?: string; name?: string }) => ({ id: c.id, name: c.name }))
           );
           setClient(null);
         }
@@ -123,16 +124,14 @@ function ClientProfilePageContent() {
         console.error("[clients/[id]/page] Failed to load client", error);
         if (!mounted) return;
         setClient(null);
-      } finally {
-        if (!mounted) return;
-        setIsResolving(false);
       }
+      if (mounted) setIsResolving(false);
     };
     run();
     return () => {
       mounted = false;
     };
-  }, [clientId, v2Seed, seed]);
+  }, [clientId, seed]);
 
   const matters = [
     { id: 'MAT-113', name: 'Estate Plan Review', status: 'Active' },
@@ -248,7 +247,7 @@ function ClientProfilePageContent() {
           <ul id="activity-timeline-list" className="flex flex-col gap-6">
             {activity.map((item, i) => (
               <li
-                key={i}
+                key={`${item.label}-${item.date}`}
                 id={`activity-item-${i}`}
                 data-testid={`activity-item-${i}`}
                 className="flex items-center gap-4"
@@ -406,7 +405,7 @@ function ClientProfilePageContent() {
               try {
                 const parsed = JSON.parse(cached);
                 const next = Array.isArray(parsed)
-                  ? parsed.filter((c: any) => c.id !== client.id)
+                  ? parsed.filter((c: { id?: string }) => c.id !== client.id)
                   : [];
                 window.localStorage.setItem(storageKey, JSON.stringify(next));
               } catch (error) {

@@ -10,6 +10,7 @@ import { dynamicDataProvider } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeedStructureNavigation } from "../../../../hooks/useSeedStructureNavigation";
+import type { Hotel, Amenity } from "@/types/hotel";
 
 function parseLocalDate(dateString: string | undefined) {
   if (!dateString) {
@@ -176,13 +177,13 @@ function ConfirmPageContent() {
     if (!prop) return toStartOfDay(new Date());
     const parsed = parseLocalDate(prop.datesFrom);
     return parsed ? toStartOfDay(parsed) : toStartOfDay(new Date());
-  }, [prop?.datesFrom]);
+  }, [prop]);
 
   const stayTo = useMemo(() => {
     if (!prop) return addDays(stayFrom, 1);
     const parsed = parseLocalDate(prop.datesTo);
     return parsed ? toStartOfDay(parsed) : addDays(stayFrom, 1);
-  }, [prop?.datesTo, stayFrom]);
+  }, [prop, stayFrom]);
   // Load selection from search params (or defaults)
   const urlCheckin = search.get("checkin");
   const urlCheckout = search.get("checkout");
@@ -194,7 +195,7 @@ function ConfirmPageContent() {
     if (!dateStr) return null;
     try {
       const parsed = parseISO(dateStr);
-      if (isNaN(parsed.getTime())) return null;
+      if (Number.isNaN(parsed.getTime())) return null;
       return toStartOfDay(parsed);
     } catch (e) {
       console.error(`Invalid date format for ${dateStr}:`, e);
@@ -251,7 +252,7 @@ function ConfirmPageContent() {
     if (f) search.push(`checkin=${format(f, "yyyy-MM-dd")}`);
     if (t) search.push(`checkout=${format(t, "yyyy-MM-dd")}`);
     search.push(`guests=${newVals.guests ?? guests}`);
-    router.replace(`/stay/${params.id}/confirm?` + search.join("&"));
+    router.replace(`/stay/${params.id}/confirm?${search.join("&")}`);
   }
 
   const [hostMessage, setHostMessage] = useState("");
@@ -307,6 +308,7 @@ function ConfirmPageContent() {
       dateRange.to &&
       guests &&
       params.id &&
+      prop &&
       !alreadyLogged
     ) {
       logEvent(EVENT_TYPES.RESERVE_HOTEL, {
@@ -333,7 +335,7 @@ function ConfirmPageContent() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
           <p className="text-neutral-600">Loading hotel details...</p>
         </div>
       </div>
@@ -491,7 +493,7 @@ function ConfirmPageContent() {
                         datesTo: prop.datesTo,
                         guests: prop.guests,
                         maxGuests: prop.maxGuests,
-                        amenities: prop.amenities?.map((a) => a.title),
+                        amenities: prop.amenities?.map((a: Amenity) => a.title),
                         host: prop.host,
                       },
                     });
@@ -522,7 +524,7 @@ function ConfirmPageContent() {
                         datesTo: prop.datesTo,
                         guests: prop.guests,
                         maxGuests: prop.maxGuests,
-                        amenities: prop.amenities?.map((a) => a.title),
+                        amenities: prop.amenities?.map((a: Amenity) => a.title),
                         host: prop.host,
                       },
                     });

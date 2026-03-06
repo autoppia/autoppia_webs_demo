@@ -6,39 +6,38 @@ import { useMemo } from "react";
 export default function Footer() {
   const dyn = useDynamicSystem();
 
-  const linkGroups = [
-    {
-      key: 'company',
-      title: 'Company',
-      items: [
-        { href: '#', label: 'About' },
-        { href: '#', label: 'Contact' },
-      ],
-    },
-    {
-      key: 'legal',
-      title: 'Legal',
-      items: [
-        { href: '#', label: 'Privacy' },
-        { href: '#', label: 'Terms' },
-      ],
-    },
-  ];
-
   const orderedGroups = useMemo(() => {
+    const linkGroups = [
+      {
+        key: 'company',
+        title: 'Company',
+        items: [
+          { href: '#', label: 'About' },
+          { href: '#', label: 'Contact' },
+        ],
+      },
+      {
+        key: 'legal',
+        title: 'Legal',
+        items: [
+          { href: '#', label: 'Privacy' },
+          { href: '#', label: 'Terms' },
+        ],
+      },
+    ];
     const order = dyn.v1.changeOrderElements("footer-groups", linkGroups.length);
     return order.map((idx) => linkGroups[idx]);
-  }, [dyn.seed, linkGroups]);
+  }, [dyn]);
 
-  const sections = [
-    { key: 'brand' },
-    { key: 'links' },
-    { key: 'copyright' },
-  ];
   const orderedSections = useMemo(() => {
+    const sections = [
+      { key: 'brand' },
+      { key: 'links' },
+      { key: 'copyright' },
+    ];
     const order = dyn.v1.changeOrderElements("footer-sections", sections.length);
     return order.map((idx) => sections[idx]);
-  }, [dyn.seed, sections]);
+  }, [dyn]);
 
   return (
     <footer className="border-t">

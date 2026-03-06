@@ -30,6 +30,7 @@ export default function RootLayout({
       <head>
         {/* Inyectar seed desde la URL antes de que React se monte */}
         <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: seed from URL only, not user content
           dangerouslySetInnerHTML={{
             __html: `
               (function() {

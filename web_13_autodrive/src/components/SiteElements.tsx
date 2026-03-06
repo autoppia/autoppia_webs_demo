@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
@@ -23,13 +23,12 @@ export default function SiteElements({ children }: SiteElementsProps) {
   const sections = useMemo(() => {
     const order = dyn.v1.changeOrderElements("site-sections", baseSections.length);
     return order.map((idx) => baseSections[idx]);
-  }, [dyn.seed, baseSections]);
+  }, [dyn, baseSections]);
 
   return (
     dyn.v1.addWrapDecoy(
       "site-elements",
-      <>
-      {sections.map((section) => {
+      sections.map((section) => {
         switch (section) {
           case "hero":
             return (
@@ -100,8 +99,7 @@ export default function SiteElements({ children }: SiteElementsProps) {
           default:
             return null;
         }
-      })}
-      </>
+      })
     )
   );
 }

@@ -14,8 +14,10 @@ export function DynamicDebug() {
     console.log("Seed:", dyn.seed);
     console.log("V1 enabled:", isV1Enabled());
     console.log("V3 enabled:", isV3Enabled());
-    console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V1:", (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V1);
-    console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V3:", (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V3);
+    const win = window as Window & { __NEXT_DATA__?: { env?: Record<string, unknown> } };
+    const nextData = typeof window !== "undefined" ? win.__NEXT_DATA__ : undefined;
+    console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V1:", nextData?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V1);
+    console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V3:", nextData?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V3);
 
     const v1Elements = document.querySelectorAll('[data-v1="true"]');
     console.log("V1 elements found:", v1Elements.length);

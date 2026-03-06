@@ -180,7 +180,7 @@ export default function LeftSidebar() {
             ) : (
               <>
                 <div className="flex items-center gap-2 text-gray-600">
-                  <div className="w-6 h-6 rounded-full bg-gray-300"></div>
+                  <div className="w-6 h-6 rounded-full bg-gray-300" />
                   <span>Loading...</span>
                 </div>
               </>

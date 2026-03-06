@@ -60,9 +60,9 @@ function SearchContent() {
     }
   }, [dyn.v2]);
 
-  const genres = useMemo(() => getAvailableGenres(), [seed]);
-  const years = useMemo(() => getAvailableYears(), [seed]);
-  const allMovies = useMemo(() => getMovies(), [seed]);
+  const genres = useMemo(() => getAvailableGenres(), []);
+  const years = useMemo(() => getAvailableYears(), []);
+  const allMovies = useMemo(() => getMovies(), []);
 
   // Get popular genres (top 6 by movie count)
   const popularGenres = useMemo(() => {

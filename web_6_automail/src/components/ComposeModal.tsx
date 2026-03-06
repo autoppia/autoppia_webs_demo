@@ -190,9 +190,9 @@ export function ComposeModal() {
             </div>
 
             <div className="flex flex-wrap gap-2 text-muted-foreground">
-              {[Bold, Italic, Underline, Link, List, Smile].map((Icon, idx) => (
+              {([["Bold", Bold], ["Italic", Italic], ["Underline", Underline], ["Link", Link], ["List", List], ["Smile", Smile]] as const).map(([name, Icon], idx) => (
                 dyn.v1.addWrapDecoy(`compose-toolbar-${idx}`, (
-                  <Button key={idx} variant="ghost" size="sm" className="h-8 w-8 p-0">
+                  <Button key={name} variant="ghost" size="sm" className="h-8 w-8 p-0">
                     <Icon className="h-4 w-4" />
                   </Button>
                 ))

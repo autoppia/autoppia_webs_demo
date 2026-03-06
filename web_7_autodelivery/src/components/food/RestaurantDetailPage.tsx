@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { MenuItem, MenuItemSize, type Restaurant } from "@/data/restaurants";
+import type { MenuItem, MenuItemSize, Restaurant } from "@/data/restaurants";
 import { useRestaurants } from "@/contexts/RestaurantContext";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
@@ -88,7 +88,7 @@ function ReviewsSection({
       >
         {reviews.map((r, i) => (
           <div
-            key={i}
+            key={r.author + r.date}
             className={`bg-white rounded-xl shadow p-5 flex items-start gap-4 group relative ${dyn.v3.getVariant('review-item-class', CLASS_VARIANTS_MAP, '')}`}
             id={dyn.v3.getVariant(`review-item-${i}`, ID_VARIANTS_MAP, `review-item-${i}`)}
           >
@@ -178,8 +178,7 @@ export default function RestaurantDetailPage({
     if (restaurant?.reviews) {
       setReviews(restaurant.reviews);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [restaurant?.id]);
+  }, [restaurant?.reviews]);
 
   useEffect(() => {
     if (restaurant) {
