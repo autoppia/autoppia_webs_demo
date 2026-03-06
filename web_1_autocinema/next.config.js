@@ -25,6 +25,15 @@ if (isLocalDev) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = 'false';
 }
 
+// For local development, always force NEXT_PUBLIC_ENABLE_DYNAMIC_V4 (popups) to true
+if (!process.env.ENABLE_DYNAMIC_V4) {
+  process.env.ENABLE_DYNAMIC_V4 = isLocalDev ? 'true' : 'false';
+}
+if (isLocalDev) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V4 = 'true';
+} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V4) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V4 = 'false';
+}
 
 // Handle ENABLE_DYNAMIC_V1_STRUCTURE (separate from layout control)
 if (!process.env.ENABLE_DYNAMIC_V1_STRUCTURE) {
@@ -49,6 +58,8 @@ console.log('  ENABLE_DYNAMIC_V1_STRUCTURE:', process.env.ENABLE_DYNAMIC_V1_STRU
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE);
 console.log('  ENABLE_DYNAMIC_V3:', process.env.ENABLE_DYNAMIC_V3);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V3:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3);
+console.log('  ENABLE_DYNAMIC_V4:', process.env.ENABLE_DYNAMIC_V4);
+console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V4:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V4);
 console.log('  NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
 
 /** @type {import('next').NextConfig} */
