@@ -71,6 +71,14 @@ jobs:
           pytest tests/ --cov=src --cov-report=xml --cov-report=term
         continue-on-error: true  # Continue even if tests fail
 
+      - name: Ensure coverage report exists for SonarCloud
+        working-directory: webs_server
+        run: |
+          if [ ! -f coverage.xml ]; then
+            echo "Creating minimal coverage.xml (tests may have failed)"
+            printf '%s\n' '<?xml version="1.0" ?>' '<coverage line-rate="0" branch-rate="0" lines-covered="0" lines-valid="1" branches-covered="0" branches-valid="0" version="1.9" timestamp="0">' '<sources><source>.</source></sources>' '<packages/>' '</coverage>' > coverage.xml
+          fi
+
       - name: OWASP Dependency-Check (SARIF for SonarCloud)
         uses: dependency-check/Dependency-Check_Action@main
         with:
