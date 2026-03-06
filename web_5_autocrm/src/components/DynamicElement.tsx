@@ -1,7 +1,7 @@
 // src/components/DynamicElement.tsx
 // @deprecated - Use useDynamicSystem() directly instead
 
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useDynamicSystem } from '@/dynamic/shared';
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from '@/dynamic/v3';
 

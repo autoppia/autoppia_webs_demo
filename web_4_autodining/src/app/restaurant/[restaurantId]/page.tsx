@@ -124,9 +124,9 @@ export default function RestaurantPage() {
         console.log(`[restaurant/[restaurantId]/page] Restaurant ${id} found:`, found ? found.name : "NOT FOUND");
 
         if (found) {
-          // Usar rating y stars separados
-          const rating = (found as any).rating ?? found.stars ?? 4.5;
-          const stars = (found as any).stars ?? Math.round(rating);
+          const foundWithRating = found as { rating?: number; stars?: number };
+          const rating = foundWithRating.rating ?? found.stars ?? 4.5;
+          const stars = foundWithRating.stars ?? Math.round(rating);
 
           const mapped: RestaurantView = {
             id: found.id,
@@ -160,8 +160,9 @@ export default function RestaurantPage() {
         if (!mounted) return;
         setR(null);
       } finally {
-        if (!mounted) return;
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     };
     run();
@@ -334,10 +335,10 @@ export default function RestaurantPage() {
                     className="flex items-center text-[#46a758] text-xl font-semibold"
                     id={dyn.v3.getVariant("rating-stars", ID_VARIANTS_MAP, "rating-stars")}
                   >
-                    {Array.from({ length: r?.stars ?? 5 }).map((_, i) => (
-                      <span key={i}>★</span>
+                    {Array.from({ length: r?.stars ?? 5 }, (_, i) => i).map((i) => (
+                      <span key={`star-${i}`}>★</span>
                     ))}
-                    {Array.from({ length: 5 - (r?.stars ?? 5) }).map((_, i) => (
+                    {Array.from({ length: 5 - (r?.stars ?? 5) }, (_, i) => i).map((i) => (
                       <span key={`empty-${i}`} className="text-gray-300">
                         ★
                       </span>
@@ -376,7 +377,7 @@ export default function RestaurantPage() {
             >
               {(r?.tags || []).map((tag: string, index: number) => (
                 <span
-                  key={`${tag}-${index}`}
+                  key={tag}
                   className="inline-flex items-center py-1.5 px-4 bg-gray-100 rounded-full text-gray-800 font-semibold text-sm border border-gray-200 whitespace-nowrap"
                   id={dyn.v3.getVariant(`restaurant-tag-${index}`, ID_VARIANTS_MAP, `restaurant-tag-${index}`)}
                 >
@@ -409,7 +410,7 @@ export default function RestaurantPage() {
               >
                 {r.photos.map((url: string, i: number) => (
                   <img
-                    key={i}
+                    key={url}
                     src={url}
                     alt={`${r?.name} photo ${i + 1}`}
                     className="rounded-lg object-cover aspect-square w-full h-[160px] md:h-[200px] hover:opacity-90 transition-opacity cursor-pointer shadow-md"
@@ -647,8 +648,8 @@ export default function RestaurantPage() {
                           className="flex items-center text-[#46a758] text-2xl mb-2"
                           id={dyn.v3.getVariant("reviews-stars", ID_VARIANTS_MAP, "reviews-stars")}
                         >
-                          {Array.from({ length: r?.stars ?? 5 }).map((_, i) => (
-                            <span key={i}>★</span>
+                          {Array.from({ length: r?.stars ?? 5 }, (_, i) => i).map((i) => (
+                            <span key={`star-${i}`}>★</span>
                           ))}
                         </div>
                         <div

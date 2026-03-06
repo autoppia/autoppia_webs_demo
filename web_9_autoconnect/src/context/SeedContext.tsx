@@ -43,6 +43,8 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
   const [seed, setSeedState] = useState<number>(() => getSeedFromSearchParams(searchParams));
   const [isSeedReady, setIsSeedReady] = useState<boolean>(false);
 
+  // Source of truth: URL `?seed=` (clamped 1..999). If missing/invalid => 1.
+  const seedParam = searchParams.get("seed");
   useEffect(() => {
     setSeedState(getSeedFromSearchParams(searchParams));
     setIsSeedReady(true);

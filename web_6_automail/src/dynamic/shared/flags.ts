@@ -13,7 +13,7 @@
 export function isV1Enabled(): boolean {
   // In Next.js, NEXT_PUBLIC_* variables are available on both server and client
   const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1;
-  const enabled = value === "true" || value === true;
+  const enabled = value === "true";
 
   // Debug in development
   if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
@@ -32,7 +32,7 @@ export function isV1Enabled(): boolean {
 export function isV2Enabled(): boolean {
   // In Next.js, NEXT_PUBLIC_* variables are available on both server and client
   const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2;
-  const enabled = value === "true" || value === true;
+  const enabled = value === "true";
 
   // Debug in development
   if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
@@ -51,7 +51,7 @@ export function isV2Enabled(): boolean {
 export function isV3Enabled(): boolean {
   // In Next.js, NEXT_PUBLIC_* variables are available on both server and client
   const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3;
-  const enabled = value === "true" || value === true;
+  const enabled = value === "true";
 
   // Debug in development
   if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {

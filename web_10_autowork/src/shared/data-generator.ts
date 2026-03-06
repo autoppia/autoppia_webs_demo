@@ -39,4 +39,6 @@ export interface AutoworkExpert {
   jobs: number; // completed jobs
   specialties: string[];
   bio: string;
+  desc?: string;
+  consultation?: string;
 }

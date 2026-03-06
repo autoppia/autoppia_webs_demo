@@ -38,7 +38,7 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
-      addToCart: (item, restaurantId, quantity = 1, custom) => {
+      addToCart: (item, restaurantId, quantity = 1, custom?: { selectedSize?: CartItem["selectedSize"]; selectedOptions?: string[]; preferences?: string; unitPrice?: number }) => {
         set(state => {
           const existing = state.items.find(i => i.id === item.id && i.restaurantId === restaurantId);
           const unitPrice = custom?.unitPrice ?? item.price + (custom?.selectedSize?.priceMod || 0);

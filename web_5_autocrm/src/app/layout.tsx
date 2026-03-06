@@ -2,7 +2,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import React, { Suspense } from "react";
+import type React from "react";
+import { Suspense } from "react";
 import Sidebar from "@/components/Sidebar";
 import UserNameBadge from "@/components/UserNameBadge";
 import { SeedProvider } from "@/context/SeedContext";

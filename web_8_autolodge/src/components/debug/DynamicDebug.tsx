@@ -22,7 +22,7 @@ export function DynamicDebug() {
       console.log("Sample IDs:", sampleIds);
     }
     console.log("=================================");
-  }, [dyn.seed, seed]);
+  }, [seed]);
 
   return null;
 }

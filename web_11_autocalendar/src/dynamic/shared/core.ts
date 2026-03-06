@@ -184,5 +184,5 @@ export function useDynamicSystem() {
       selectVariantIndex(seed, key, count),
 
     v4: { isEnabled: () => isV4Enabled() },
-  }), [seed]);
+  }), [seed, dynamicDataProvider]);
 }

@@ -7,7 +7,7 @@ import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private emails: Email[] = [];
-  private ready: boolean = false;
+  private ready = false;
   private readyPromise: Promise<void>;
   private resolveReady!: () => void;
   private listeners = new Set<(emails: Email[]) => void>();
@@ -130,13 +130,13 @@ export class DynamicDataProvider {
 
   private notifyListeners(): void {
     const snapshot = [...this.emails];
-    this.listeners.forEach((listener) => {
+    for (const listener of this.listeners) {
       try {
         listener(snapshot);
       } catch (err) {
         console.warn("[dynamicDataProvider] listener error", err);
       }
-    });
+    }
   }
 
   public async refreshEmailsForSeed(seedOverride?: number | null): Promise<void> {

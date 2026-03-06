@@ -2,7 +2,8 @@
 import { useCartStore } from "@/store/cart-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useState, useEffect } from "react";
+import type React from "react";
+import { useState, useEffect } from "react";
 import { useHasHydrated } from "@/hooks/use-hydrated";
 import { useRestaurants } from "@/contexts/RestaurantContext";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -36,10 +37,7 @@ function EditableTime({
     return (
       <input
         id={id ? `${id}-input` : undefined}
-        className={
-          "border-b outline-none w-auto font-mono py-0.5 px-1 bg-zinc-50 " +
-          (className || "")
-        }
+        className={`border-b outline-none w-auto font-mono py-0.5 px-1 bg-zinc-50 ${className || ""}`}
         value={tmp}
         onChange={(e) => setTmp(e.target.value)}
         onBlur={() => {
@@ -60,7 +58,7 @@ function EditableTime({
   return (
     <span
       id={id}
-      className={"cursor-pointer hover:underline " + (className || "")}
+      className={`cursor-pointer hover:underline ${className || ""}`}
       tabIndex={0}
       onClick={() => setEditing(true)}
     >

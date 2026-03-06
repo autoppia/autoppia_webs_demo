@@ -84,7 +84,7 @@ const getInitialSeed = (): number => {
   try {
     const urlParams = new URLSearchParams(window.location.search);
     const seedParam = urlParams.get('seed');
-    const rawSeed = seedParam ? parseInt(seedParam, 10) : 1;
+    const rawSeed = seedParam ? Number.parseInt(seedParam, 10) : 1;
     return rawSeed >= 1 && rawSeed <= 300 ? rawSeed : 1;
   } catch {
     return 1;
@@ -107,7 +107,7 @@ export function useSeedLayout() {
       if (typeof window === 'undefined') return;
       const urlParams = new URLSearchParams(window.location.search);
       const seedParam = urlParams.get('seed');
-      const rawSeed = seedParam ? parseInt(seedParam, 10) : 1;
+      const rawSeed = seedParam ? Number.parseInt(seedParam, 10) : 1;
       const effectiveSeed = rawSeed >= 1 && rawSeed <= 300 ? rawSeed : 1;
 
       const updateState = () => {
@@ -131,12 +131,12 @@ export function useSeedLayout() {
     const originalPushState = history.pushState;
     const originalReplaceState = history.replaceState;
 
-    history.pushState = function(...args) {
+    history.pushState = (...args) => {
       originalPushState.apply(history, args);
       updateLayout(true); // Defer to avoid React warnings
     };
 
-    history.replaceState = function(...args) {
+    history.replaceState = (...args) => {
       originalReplaceState.apply(history, args);
       updateLayout(true); // Defer to avoid React warnings
     };
@@ -149,14 +149,14 @@ export function useSeedLayout() {
   }, []);
 
   // Function to get element attributes with seed
-  const getElementAttributes = useCallback((elementType: string, index: number = 0) => {
+  const getElementAttributes = useCallback((elementType: string, index = 0) => {
     return {
       "data-element-type": elementType,
     };
   }, []);
 
   // Function to generate element ID with seed
-  const generateId = useCallback((context: string, index: number = 0) => {
+  const generateId = useCallback((context: string, index = 0) => {
     if (!isDynamicMode) {
       return `${context}-${index}`;
     }

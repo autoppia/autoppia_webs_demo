@@ -44,7 +44,8 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
   const [seed, setSeedState] = useState<number>(() => getSeedFromSearchParams(searchParams));
   const [isSeedReady, setIsSeedReady] = useState<boolean>(false);
 
-  // Keep seed in sync when URL search params change (e.g. client navigation).
+  // Source of truth: URL `?seed=` (clamped 1..999). If missing/invalid => 1.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: searchParams is the trigger to sync from URL
   useEffect(() => {
     setSeedState(getSeedFromSearchParams(searchParams));
     setIsSeedReady(true);

@@ -77,9 +77,9 @@ export function ContactSection() {
 
       {/* Contact Reasons */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {contactReasons.map((reason, index) => (
+        {contactReasons.map((reason) => (
           <div
-            key={index}
+            key={reason.text}
             className="group rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-4 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:scale-105"
           >
             <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-secondary/20 mb-3 group-hover:bg-secondary/30 transition-colors">

@@ -13,8 +13,8 @@ import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
 export function DynamicDebug() {
   const dyn = useDynamicSystem();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: debug log runs on seed; dyn.v2.isEnabled() is read but stable
   useEffect(() => {
-    // Only log if ?dynamic_debug=1 is in URL
     if (typeof window === "undefined") return;
 
     const urlParams = new URLSearchParams(window.location.search);

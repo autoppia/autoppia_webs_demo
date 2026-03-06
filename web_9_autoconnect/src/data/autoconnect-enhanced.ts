@@ -30,9 +30,8 @@ export async function initializeUsers(v2SeedValue?: number | null): Promise<User
     if (Array.isArray(users) && users.length > 0) {
       console.log(`[autoconnect] ✅ Successfully loaded ${users.length} users from server (seed=${effectiveSeed})`);
       return users;
-    } else {
-      throw new Error("Server returned empty array");
     }
+    throw new Error("Server returned empty array");
   } catch (error) {
     console.error("[autoconnect] Failed to fetch users from server:", error);
     throw error;
@@ -58,9 +57,8 @@ export async function initializePosts(v2SeedValue?: number | null): Promise<Post
     if (Array.isArray(posts) && posts.length > 0) {
       console.log(`[autoconnect] ✅ Successfully loaded ${posts.length} posts from server (seed=${effectiveSeed})`);
       return posts.map((p) => ({ ...p, comments: p.comments || [] }));
-    } else {
-      throw new Error("Server returned empty array");
     }
+    throw new Error("Server returned empty array");
   } catch (error) {
     console.error("[autoconnect] Failed to fetch posts from server:", error);
     throw error;
@@ -86,9 +84,8 @@ export async function initializeJobs(v2SeedValue?: number | null): Promise<Job[]
     if (Array.isArray(jobs) && jobs.length > 0) {
       console.log(`[autoconnect] ✅ Successfully loaded ${jobs.length} jobs from server (seed=${effectiveSeed})`);
       return jobs;
-    } else {
-      throw new Error("Server returned empty array");
     }
+    throw new Error("Server returned empty array");
   } catch (error) {
     console.error("[autoconnect] Failed to fetch jobs from server:", error);
     throw error;
@@ -114,9 +111,8 @@ export async function initializeRecommendations(v2SeedValue?: number | null): Pr
     if (Array.isArray(recommendations) && recommendations.length > 0) {
       console.log(`[autoconnect] ✅ Successfully loaded ${recommendations.length} recommendations from server (seed=${effectiveSeed})`);
       return recommendations;
-    } else {
-      throw new Error("Server returned empty array");
     }
+    throw new Error("Server returned empty array");
   } catch (error) {
     console.error("[autoconnect] Failed to fetch recommendations from server:", error);
     throw error;

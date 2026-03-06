@@ -1,5 +1,5 @@
 import "./globals.css";
-import { ReactNode, Suspense } from "react";
+import { type ReactNode, Suspense } from "react";
 import HeaderNav from "@/components/HeaderNav";
 import type { Metadata } from "next";
 import LayoutWrapper from "@/components/LayoutWrapper";

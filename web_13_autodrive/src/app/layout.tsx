@@ -38,7 +38,7 @@ export default function RootLayout({
         <script
           crossOrigin="anonymous"
           src="//unpkg.com/same-runtime/dist/index.global.js"
-        ></script>
+        />
       </head>
       <body suppressHydrationWarning className="antialiased bg-[#f5fbfc] min-h-screen">
         <SeedProvider>

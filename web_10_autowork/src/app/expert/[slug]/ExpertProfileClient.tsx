@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import BookConsultationLogger from "./BookConsultationLogger";
 import { EVENT_TYPES, logEvent } from "@/library/events";
@@ -51,14 +51,14 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
   const { getElementAttributes, getText, dyn } = useSeedLayout();
 
   // Function to find expert by slug or name
-  const findExpert = (searchSlug: string): Expert | null => {
+  const findExpert = useCallback((searchSlug: string): Expert | null => {
     console.log(`[autowork] findExpert: searching for slug="${searchSlug}"`);
 
     // First try to find by slug using dynamicDataProvider
     let found = dynamicDataProvider.getExpertBySlug(searchSlug);
 
     if (found) {
-      console.log(`[autowork] findExpert: ✅ Found by slug:`, found.name);
+      console.log("[autowork] findExpert: ✅ Found by slug:", found.name);
       return found as Expert;
     }
 
@@ -79,7 +79,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
     });
 
     if (found) {
-      console.log(`[autowork] findExpert: ✅ Found by normalized name:`, found.name);
+      console.log("[autowork] findExpert: ✅ Found by normalized name:", found.name);
       return found as Expert;
     }
 
@@ -95,17 +95,17 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
     });
 
     if (found) {
-      console.log(`[autowork] findExpert: ✅ Found by partial match:`, found.name);
+      console.log("[autowork] findExpert: ✅ Found by partial match:", found.name);
       return found as Expert;
     }
 
     // NOTE: Removed localStorage fallback to ensure we only use current seed data
     // Using localStorage could return data from a different seed, which breaks consistency
 
-    console.log(`[autowork] findExpert: ❌ Not found after all strategies`);
-    console.log(`[autowork] Available experts (first 5):`, allExperts.slice(0, 5).map(e => ({ slug: e.slug, name: e.name })));
+    console.log("[autowork] findExpert: ❌ Not found after all strategies");
+    console.log("[autowork] Available experts (first 5):", allExperts.slice(0, 5).map(e => ({ slug: e.slug, name: e.name })));
     return null;
-  };
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -183,7 +183,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
               const hireLaterList = JSON.parse(hireLaterRaw);
               if (Array.isArray(hireLaterList)) {
                 setIsHireLater(
-                  hireLaterList.some((item: any) => (item.slug || item.name) === found.slug || item.name === found.name)
+                  hireLaterList.some((item: { slug?: string; name?: string }) => (item.slug || item.name) === found.slug || item.name === found.name)
                 );
               }
             }
@@ -195,7 +195,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
             setExpert(null);
           } else {
             // If still no experts, keep checking
-            console.log(`[autowork] Still waiting for experts to load...`);
+            console.log("[autowork] Still waiting for experts to load...");
             setIsLoading(true);
             return;
           }
@@ -215,7 +215,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
 
       // If experts array is empty, it means data was cleared (seed change in progress)
       if (experts.length === 0) {
-        console.log(`[autowork] Experts array is empty - seed change in progress, clearing expert state`);
+        console.log("[autowork] Experts array is empty - seed change in progress, clearing expert state");
         setExpert(null);
         setIsLoading(true);
         return;
@@ -249,7 +249,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
       mounted = false;
       unsubscribe();
     };
-  }, [slug, dyn.v2, seed]);
+  }, [slug, findExpert]);
 
   if (isLoading || !expert) {
     return (
@@ -307,7 +307,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
             }}
             {...getElementAttributes("expert-avatar", 0)}
           />
-          <div className="absolute bottom-0 right-0 w-6 h-6 bg-green-500 rounded-full border-4 border-white"></div>
+          <div className="absolute bottom-0 right-0 w-6 h-6 bg-green-500 rounded-full border-4 border-white" />
         </div>
         <div className="flex-1 min-w-0">
           <div
@@ -371,9 +371,9 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
           <div className="flex flex-wrap items-center gap-3">
             {expert.rating && (
               <div className="flex items-center gap-1 bg-white px-3 py-1.5 rounded-full shadow-sm">
-                {[...Array(5)].map((_, i) => (
+                {([0, 1, 2, 3, 4] as const).map((i) => (
                   <svg
-                    key={i}
+                    key={`star-${i}`}
                     className={`w-4 h-4 ${
                       i < Math.floor(expert.rating || 0)
                         ? "text-yellow-400"
@@ -488,7 +488,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
             const list = raw ? JSON.parse(raw) : [];
             const parsedList = Array.isArray(list) ? list : [];
             const existingIndex = parsedList.findIndex(
-              (item: any) => (item.slug || item.name) === expert.slug
+              (item: { slug?: string; name?: string }) => (item.slug || item.name) === expert.slug
             );
 
             if (existingIndex >= 0) {
@@ -719,9 +719,9 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
           Highly recommended
         </h3>
         <div className="flex items-center gap-2 mb-3">
-          {[...Array(expert.lastReview.stars || 5)].map((_, i) => (
+          {Array.from({ length: expert.lastReview.stars || 5 }, (_, i) => `review-star-${i}`).map((key, i) => (
             <svg
-              key={i}
+              key={key}
               className="w-5 h-5 text-yellow-400"
               fill="currentColor"
               viewBox="0 0 20 20"
@@ -797,9 +797,9 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
           Recent Work
         </h3>
         <div className="space-y-4">
-          {sampleJobs.map((job, index) => (
+          {sampleJobs.map((job) => (
             <div
-              key={index}
+              key={job.title}
               className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition"
             >
               <div className="flex items-start justify-between mb-2">
@@ -899,7 +899,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
           <div className="space-y-2">
             {expert.languages.map((lang, i) => (
               <div
-                key={i}
+                key={lang}
                 className="text-gray-900 text-sm bg-gray-50 px-3 py-2 rounded-lg"
                 {...getElementAttributes("sidebar-language-item", i)}
               >
@@ -1010,7 +1010,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
           <div
             className="bg-green-500 h-2 rounded-full"
             style={{ width: "98%" }}
-          ></div>
+          />
         </div>
         <div className="text-xs text-gray-500">Based on completed jobs</div>
       </div>
@@ -1061,16 +1061,16 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
                   "reviews",
                 ].includes(section)
               )
-              .map((section, index) => (
-                <div key={`${section}-${index}`}>{renderSection(section)}</div>
+              .map((section) => (
+                <div key={section}>{renderSection(section)}</div>
               ))}
           </div>
 
           <div className="lg:col-span-1">
             {expertSections
               .filter((section) => section === "sidebar")
-              .map((section, index) => (
-                <div key={`${section}-${index}`}>{renderSection(section)}</div>
+              .map((section) => (
+                <div key={section}>{renderSection(section)}</div>
               ))}
           </div>
         </div>
