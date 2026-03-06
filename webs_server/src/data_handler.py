@@ -45,6 +45,20 @@ def get_data_dir(web_name: str) -> str:
     return f"{BASE_PATH}/{web_name}"
 
 
+def get_allowed_project_keys() -> List[str]:
+    """
+    Return project keys (directory names under BASE_PATH) that match the safe segment pattern.
+    Used so path operations use allowlisted values rather than raw user input (security/taint).
+    """
+    if not os.path.isdir(BASE_PATH):
+        return []
+    return [
+        d
+        for d in os.listdir(BASE_PATH)
+        if os.path.isdir(os.path.join(BASE_PATH, d)) and _SAFE_SEGMENT_RE.match(d)
+    ]
+
+
 # Safe path segment: alphanumeric, underscore, hyphen (e.g. web_4_autodining, restaurants)
 _SAFE_SEGMENT_RE = re.compile(r"^[a-zA-Z0-9_-]+$")
 # Safe filename: alphanumeric, underscore, hyphen, dot (e.g. logs_20250117.json)

@@ -715,23 +715,24 @@ def test_datasets_generate_smart_success(client):
     """POST /datasets/generate-smart with all deps mocked returns 200."""
     mock_data = [{"id": 1, "name": "A"}]
 
-    with patch.object(server, "build_generation_prompt_from_examples", return_value=("interface X {}", [{}])):
-        with patch.object(server, "get_project_entity_metadata", return_value={"categories": None, "requirements": ""}):
+    with patch.object(server, "get_allowed_project_keys", return_value=["web_5_autocrm"]):
+        with patch.object(server, "build_generation_prompt_from_examples", return_value=("interface X {}", [{}])):
+            with patch.object(server, "get_project_entity_metadata", return_value={"categories": None, "requirements": ""}):
 
-            async def _fake_generate(request):
-                return mock_data
+                async def _fake_generate(request):
+                    return mock_data
 
-            with patch.object(server, "generate_with_openai", side_effect=_fake_generate):
-                with patch.object(server, "append_to_entity_data", return_value="/tmp/out.json"):
-                    r = client.post(
-                        "/datasets/generate-smart",
-                        json={
-                            "project_key": "web_5_autocrm",
-                            "entity_type": "logs",
-                            "count": 1,
-                            "mode": "append",
-                        },
-                    )
+                with patch.object(server, "generate_with_openai", side_effect=_fake_generate):
+                    with patch.object(server, "append_to_entity_data", return_value="/tmp/out.json"):
+                        r = client.post(
+                            "/datasets/generate-smart",
+                            json={
+                                "project_key": "web_5_autocrm",
+                                "entity_type": "logs",
+                                "count": 1,
+                                "mode": "append",
+                            },
+                        )
     assert r.status_code == 200
     data = r.json()
     assert data["count"] == 1

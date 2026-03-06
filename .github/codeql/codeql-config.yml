@@ -1,7 +1,8 @@
 # CodeQL configuration for code scanning.
-# Paths in webs_server/src/data_handler.py are validated with _path_for_io_under_base()
-# (realpath + commonpath under BASE_PATH); CodeQL does not recognize custom sanitizers,
-# so py/path-injection is excluded to avoid false positives.
+# Excludes py/path-injection ("Uncontrolled data used in path expression"):
+# - Paths are validated with _path_for_io_under_base() and _resolve_path_under_base() under BASE_PATH.
+# - API uses get_allowed_project_keys() so path operations use allowlisted project_key, not raw request.
+# CodeQL does not recognize these sanitizers, so the query is excluded to avoid false positives.
 name: "Autoppia CodeQL config"
 query-filters:
   - exclude:
