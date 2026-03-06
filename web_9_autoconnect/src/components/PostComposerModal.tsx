@@ -11,7 +11,7 @@ interface PostComposerModalProps {
   placeholder: string;
   postButtonLabel: string;
   postButtonClassName: string;
-  textareaRef: RefObject<HTMLTextAreaElement | null>;
+  textareaRef: RefObject<HTMLTextAreaElement>;
   onClose: () => void;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   onChange: (value: string, el: HTMLTextAreaElement) => void;

@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  type Post as PostType,
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type {
+  Post as PostType,
 } from "@/library/dataset";
 import Post from "@/components/Post";
 import LeftSidebar from "@/components/LeftSidebar";
@@ -156,17 +156,17 @@ function HomeContent() {
     });
   }
 
-  function autoResizeComposer(el: HTMLTextAreaElement) {
+  const autoResizeComposer = useCallback((el: HTMLTextAreaElement) => {
     el.style.height = "auto";
     const maxHeight = Math.floor(window.innerHeight * 0.55);
     el.style.height = `${Math.min(el.scrollHeight, maxHeight)}px`;
     el.style.overflowY = el.scrollHeight > maxHeight ? "auto" : "hidden";
-  }
+  }, []);
 
   useEffect(() => {
     if (!isComposerOpen || !composerTextareaRef.current) return;
     autoResizeComposer(composerTextareaRef.current);
-  }, [isComposerOpen, newPost]);
+  }, [isComposerOpen, autoResizeComposer]);
 
   function handleLike(postId: string) {
     setPosts((ps) =>
