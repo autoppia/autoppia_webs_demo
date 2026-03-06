@@ -46,7 +46,6 @@ jobs:
           pip install pip-audit
           mkdir -p reports
           pip-audit -f json 2>/dev/null > reports/pip-audit.json || true
-        continue-on-error: true
 
       - name: Count (direct deps vulns)
         id: pip_audit
@@ -69,7 +68,6 @@ jobs:
         working-directory: webs_server
         run: |
           pytest tests/ --cov=src --cov-report=xml --cov-report=term
-        continue-on-error: true  # Continue even if tests fail
 
       - name: Ensure coverage report exists for SonarCloud
         working-directory: webs_server
@@ -86,7 +84,7 @@ jobs:
           path: "webs_server"
           format: "SARIF"
           out: "reports"
-        continue-on-error: true  # Do not fail job if dependency-check fails (e.g. network)
+#        continue-on-error: true  # Do not fail job if dependency-check fails (e.g. network)
 
       - name: Normalize SARIF report for SonarCloud
         id: sarif
