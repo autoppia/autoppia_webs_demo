@@ -6,7 +6,7 @@
     "dev": "next dev -H 0.0.0.0 -p 8012 --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "bunx tsc --noEmit && next lint",
+    "lint": "bunx biome lint --write && bunx tsc --noEmit",
     "format": "bunx biome format --write"
   },
   "dependencies": {

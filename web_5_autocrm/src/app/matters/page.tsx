@@ -25,6 +25,7 @@ import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
+import type { NormalizedClient, NormalizedMatter } from "@/data/crm-enhanced";
 import { dynamicDataProvider, getMatters, getClients } from "@/dynamic/v2";
 
 const STORAGE_KEY = "matters";
@@ -38,7 +39,8 @@ type Matter = {
   createdAt: number;
 };
 
-const normalizeMatter = (matter: any, index: number): Matter => {
+type MatterRecord = Record<string, unknown> & { id?: string; matterId?: string; name?: string; title?: string; matter?: string; client?: string; clientName?: string; status?: string; updated?: string; updated_at?: string; lastUpdated?: string; createdAt?: number; created_at?: unknown };
+const normalizeMatter = (matter: MatterRecord, index: number): Matter => {
   const rawCreated = matter?.createdAt ?? matter?.created_at;
   const createdAt =
     typeof rawCreated === "number"
@@ -105,8 +107,8 @@ function MattersListPageContent() {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
 
   // Use dynamicDataProvider to get matters - same source as detail page
-  const [matters, setMatters] = useState<any[]>([]);
-  const [clients, setClients] = useState<any[]>([]);
+  const [matters, setMatters] = useState<Matter[]>([]);
+  const [clients, setClients] = useState<{ id: string; name: string; avatar: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -128,19 +130,20 @@ function MattersListPageContent() {
         const clientsData = getClients();
 
         // Normalize matters for display - preserve original ID from provider
-        const normalizedMatters = mattersData.map((m: any, i: number) => ({
-          id: m.id || `MAT-${1000 + i}`, // Use original ID, don't override
-          name: m.name ?? m.title ?? `Matter ${i + 1}`,
+        const normalizedMatters: Matter[] = mattersData.map((m: NormalizedMatter, i: number) => ({
+          id: m.id || `MAT-${1000 + i}`,
+          name: m.name ?? `Matter ${i + 1}`,
           client: m.client ?? "—",
           status: m.status ?? "Active",
           updated: m.updated ?? "Today",
+          createdAt: Date.now() - i * 1000,
         }));
 
         // Normalize clients for avatars
-        const normalizedClients = clientsData.map((c: any) => ({
+        const normalizedClients = clientsData.map((c: NormalizedClient) => ({
           id: c.id,
-          name: c.name ?? c.title ?? "",
-          avatar: c.avatar ?? "",
+          name: c.name,
+          avatar: c.avatar,
         }));
 
         setMatters(normalizedMatters);
@@ -155,7 +158,7 @@ function MattersListPageContent() {
     };
 
     loadData();
-  }, [seed, v2Seed, isSeedReady]);
+  }, [seed, isSeedReady]);
 
   const getClientAvatar = (clientName: string): string => {
     const client = clients.find((c) => c.name === clientName);
@@ -200,7 +203,7 @@ function MattersListPageContent() {
     if (seedSnapshot === currentSeed && mattersList.length > 0) return;
 
     // Add timestamps to matters for sorting
-    const nextWithTimestamps = matters.map((m: any, idx: number) => ({
+    const nextWithTimestamps = matters.map((m: Matter, idx: number) => ({
       ...m,
       createdAt:
         typeof m.createdAt === "number"
@@ -212,7 +215,7 @@ function MattersListPageContent() {
       window.localStorage.setItem(storageKey, JSON.stringify(nextWithTimestamps));
     }
     setSeedSnapshot(currentSeed);
-  }, [matters, storageKey, v2Seed, isLoading, seedSnapshot]);
+  }, [matters, storageKey, v2Seed, isLoading, seedSnapshot, mattersList.length]);
 
   const updateMatters = (newList: Matter[]) => {
     const withTimestamps = newList.map((m, idx) => ({

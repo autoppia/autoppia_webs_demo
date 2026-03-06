@@ -8,6 +8,10 @@ import { dynamicDataProvider } from "@/dynamic/v2";
 import { writeJson } from "@/shared/storage";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import type { AutoworkJob, AutoworkHire, AutoworkExpert } from "@/shared/data-generator";
+
+/** Job type for home page (may include display fields from localStorage) */
+type HomeJob = AutoworkJob & { start?: string; timestr?: string; time?: string; activity?: string };
 
 
 const SCOPE_SIZE_OPTIONS = ["Large", "Medium", "Small"] as const;
@@ -25,7 +29,7 @@ function PostJobWizard({
 }: {
   open: boolean;
   onClose: () => void;
-  onJobCreated?: (job: any) => void;
+  onJobCreated?: (job: HomeJob) => void;
 }) {
   const { layout, getElementAttributes, getText, shuffleList, dyn } = useSeedLayout();
   const [step, setStep] = useState(1);
@@ -292,11 +296,9 @@ function PostJobWizard({
               </p>
             )}
             {currentStepKey === 'skills' && (
-              <>
-                <p className="text-base text-[#4a545b] mb-10">
-                  For the best results, add 3-5 skills.
-                </p>
-              </>
+              <p className="text-base text-[#4a545b] mb-10">
+                For the best results, add 3-5 skills.
+              </p>
             )}
             {currentStepKey === 'scope' && (
               <p className="text-base text-[#4a545b] mb-10">
@@ -468,7 +470,7 @@ function PostJobWizard({
                 <div className="flex flex-wrap gap-2 mb-4">
                   {form.skills.map((skill, i) => (
                     <span
-                      key={skill + i}
+                      key={skill}
                       className="px-3 py-1 bg-[#e6f9fb] border border-[#08b4ce88] rounded-full text-[#08b4ce] font-medium text-sm flex items-center gap-1"
                     >
                       {skill}
@@ -633,7 +635,7 @@ function PostJobWizard({
                                       ? "border-green-600 bg-[#1fc12c]"
                                       : "border-gray-200 bg-white"
                                   }`}
-                                ></span>
+                                />
                                 {option.label}
                               </span>
                             </button>
@@ -760,7 +762,7 @@ function PostJobWizard({
                     Need help?
                   </span>{" "}
                   <a
-                    href="#"
+                    href="/#description-examples"
                     className="ml-2 text-[#1fc12c] underline font-semibold"
                   >
                     See examples of effective descriptions
@@ -787,9 +789,9 @@ function PostJobWizard({
                 {/* File List */}
                 {form.attachments.length > 0 && (
                   <div className="mt-2 text-sm text-[#4a545b] space-y-1">
-                    {form.attachments.map((file, i) => (
+                    {form.attachments.map((file) => (
                       <div
-                        key={i}
+                        key={file.name + file.size}
                         className="flex justify-between items-center"
                       >
                         <span>{file.name}</span>
@@ -845,22 +847,20 @@ function PostJobWizard({
               {...getElementAttributes('submit-job-button', 0)}
               type="submit"
               onClick={() => {
-                // Create job object
-                const newJob = {
+                // Create job object (shape compatible with HomeJob for userJobs list)
+                const newJob: HomeJob = {
                   id: `job_${Date.now()}`,
                   title: form.title,
-                  status: "Pending",
+                  status: "In progress",
+                  location: "",
+                  budget: form.rateFrom && form.rateTo ? `${form.rateFrom}-${form.rateTo}` : "",
+                  requiredSkills: form.skills,
+                  postedDate: new Date().toISOString().slice(0, 10),
+                  dueDate: new Date().toISOString().slice(0, 10),
                   start: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
                   timestr: "Time logged this week:",
                   time: "0:00 hrs ($0)",
                   activity: "last active just now on Initial project setup",
-                  skills: form.skills,
-                  scope: form.scope,
-                  duration: form.duration,
-                  budgetType: form.budgetType,
-                  rateFrom: form.rateFrom,
-                  rateTo: form.rateTo,
-                  description: form.description,
                 };
 
                 // Save to localStorage
@@ -931,13 +931,13 @@ export default function Home() {
 	const pathname = usePathname();
 	const [showPostJob, setShowPostJob] = useState(false);
 	const [hasSeenInitialLoad, setHasSeenInitialLoad] = useState(false);
-	const [userJobs, setUserJobs] = useState<any[]>([]);
+	const [userJobs, setUserJobs] = useState<HomeJob[]>([]);
 	const { layout, getElementAttributes, getText, dyn } = useSeedLayout();
 
 	// Use V2 dynamic data provider – load full lists for pagination on Experts/Hires pages
-	const [jobs, setJobs] = useState<any[]>([]);
-	const [hires, setHires] = useState<any[]>([]);
-	const [experts, setExperts] = useState<any[]>([]);
+	const [jobs, setJobs] = useState<HomeJob[]>([]);
+	const [hires, setHires] = useState<AutoworkHire[]>([]);
+	const [experts, setExperts] = useState<AutoworkExpert[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	// Pagination for Experts and Hires dedicated pages (display all fetched data)
@@ -1048,8 +1048,8 @@ export default function Home() {
 	// Create section components
 	const JobsSection = () => {
 		const totalJobs = allJobs.length;
-		const completedJobs = allJobs.filter((j: any) => j.status === "Completed").length;
-		const inProgressJobs = allJobs.filter((j: any) => j.status === "In progress").length;
+		const completedJobs = allJobs.filter((j: HomeJob) => j.status === "Completed").length;
+		const inProgressJobs = allJobs.filter((j: HomeJob) => j.status === "In progress").length;
 
 		const getStatusColor = (status: string) => {
 			switch (status) {
@@ -1166,11 +1166,11 @@ export default function Home() {
 
 				{/* Jobs Cards Grid */}
 				<div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-					{allJobs.map((job: any, i: number) => {
+					{allJobs.map((job: HomeJob, i: number) => {
 						const statusColors = getStatusColor(job.status);
 						return (
 							<div
-								key={i}
+								key={job.id ?? i}
 								{...getElementAttributes('job-item', i)}
 								className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 group"
 							>
@@ -1234,7 +1234,7 @@ export default function Home() {
 		};
 
 		// Helper function to handle navigation to expert profile
-		const handleViewProfile = async (hire: any) => {
+		const handleViewProfile = async (hire: AutoworkHire) => {
 			// Wait for data to be ready
 			await dyn.v2.whenReady();
 			await new Promise(resolve => setTimeout(resolve, 100));
@@ -1251,15 +1251,15 @@ export default function Home() {
 			const matchingExpert = dynamicDataProvider.getExpertByName(matchingHire.name);
 
 			// Use expert's slug if found, otherwise generate from hire name
-			const slug = matchingExpert?.slug || (matchingHire as any).slug || generateSlug(matchingHire.name);
+			const slug = matchingExpert?.slug ?? generateSlug(matchingHire.name);
 			console.log(`[autowork] handleViewProfile: hire="${matchingHire.name}", found expert="${matchingExpert?.name || 'none'}", using slug="${slug}"`);
 			router.push(`/expert/${slug}`);
 		};
 
 		const totalHires = hires.length;
-		const availableHires = hires.filter((h: any) => h.rehire).length;
+		const availableHires = hires.filter((h: AutoworkHire) => h.rehire).length;
 		const avgRating = hires.length > 0
-			? (hires.reduce((acc: number, h: any) => acc + Number.parseFloat(h.rating || 0), 0) / hires.length).toFixed(1)
+			? (hires.reduce((acc: number, h: AutoworkHire) => acc + Number(h.rating ?? 0), 0) / hires.length).toFixed(1)
 			: "0.0";
 
 		return dyn.v1.addWrapDecoy("hires-section", (
@@ -1329,7 +1329,7 @@ export default function Home() {
 					return (
 						<>
 				<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-					{displayedHires.map((hire: any, i: number) => (
+					{displayedHires.map((hire: AutoworkHire, i: number) => (
 						dyn.v1.addWrapDecoy("rehire-expert-card", (
 							<div
 								key={hire.name}
@@ -1347,7 +1347,7 @@ export default function Home() {
                     }}
 									/>
 									{hire.rehire && (
-										<div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
+										<div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white" />
 									)}
 								</div>
 								<div className="flex-1 min-w-0">
@@ -1464,14 +1464,10 @@ export default function Home() {
 			}
 		};
 
-		const getExpertSlug = (expert: any) =>
-			(expert as any).slug ??
-			expert.name
-				.toLowerCase()
-				.replace(/\s+/g, "-")
-				.replace(/\./g, "");
+		const getExpertSlug = (expert: AutoworkExpert | undefined) =>
+			expert ? (expert.slug ?? expert.name.toLowerCase().replace(/\s+/g, "-").replace(/\./g, "")) : "";
 
-		const toggleFavorite = (expertName: string, e: React.MouseEvent, expert?: any) => {
+		const toggleFavorite = (expertName: string, e: React.MouseEvent, expert?: AutoworkExpert) => {
 			e.preventDefault();
 			e.stopPropagation();
 			const newFavorites = new Set(favorites);
@@ -1500,10 +1496,10 @@ export default function Home() {
 
 		const totalExperts = experts.length;
 		const avgRating = experts.length > 0
-			? (experts.reduce((acc: number, e: any) => acc + Number.parseFloat(e.rating || 0), 0) / experts.length).toFixed(1)
+			? (experts.reduce((acc: number, e: AutoworkExpert) => acc + Number(e.rating ?? 0), 0) / experts.length).toFixed(1)
 			: "0.0";
 
-		const handleViewExpert = (expert: any) => {
+		const handleViewExpert = (expert: AutoworkExpert) => {
 			const slug = getExpertSlug(expert);
 			router.push(`/expert/${slug}`);
 		};
@@ -1561,7 +1557,7 @@ export default function Home() {
 					return (
 						<>
 				<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-					{displayedExperts.map((expert: any, i: number) => {
+					{displayedExperts.map((expert: AutoworkExpert, i: number) => {
 						const isFavorite = favorites.has(expert.name);
 						return (
 							dyn.v1.addWrapDecoy("expert-card", (
@@ -1604,7 +1600,7 @@ export default function Home() {
 													"https://ext.same-assets.com/1836270417/1435009301.png";
 											}}
 										/>
-										<div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
+										<div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white" />
 									</div>
 									<div className="flex-1 min-w-0">
 										<div className="font-bold text-lg text-gray-900 mb-1">

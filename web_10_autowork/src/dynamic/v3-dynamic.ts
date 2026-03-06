@@ -12,6 +12,8 @@ type LayoutConfig = {
   };
   buttonPositions: {
     postJob: "left" | "right" | "center";
+    cancel: "left" | "right" | "center";
+    hire: "left" | "right" | "center";
   };
   wizardFlow: number[];
 };
@@ -31,6 +33,8 @@ export function useSeedLayout() {
     const wizardFlow = dyn.v1.changeOrderElements("layout-wizard-flow", 3);
     const buttonPositions: Array<"left" | "right" | "center"> = ["right", "left", "center"];
     const postJobPosition = buttonPositions[dyn.selectVariantIndex("layout-postjob-position", buttonPositions.length)] ?? "right";
+    const cancelPosition = buttonPositions[dyn.selectVariantIndex("layout-cancel-position", buttonPositions.length)] ?? "left";
+    const hirePosition = buttonPositions[dyn.selectVariantIndex("layout-hire-position", buttonPositions.length)] ?? "right";
 
     return {
       mainSections: mainOrder.map((idx) => baseSections[idx]),
@@ -39,6 +43,8 @@ export function useSeedLayout() {
       },
       buttonPositions: {
         postJob: postJobPosition,
+        cancel: cancelPosition,
+        hire: hirePosition,
       },
       wizardFlow,
     };

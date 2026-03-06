@@ -1,0 +1,82 @@
+# Lint and build all web_* apps (discovers them automatically).
+name: Frontend quality
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: frontend-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      apps: ${{ steps.list.outputs.apps }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: List web_* directories (with package.json)
+        id: list
+        run: |
+          apps=""
+          for d in $(find . -maxdepth 1 -type d -name 'web_*' | sed 's|^\./||' | sort); do
+            [ -f "$d/package.json" ] && apps="${apps:+$apps,}$d"
+          done
+          if [ -z "$apps" ]; then
+            echo 'apps=[]' >> "$GITHUB_OUTPUT"
+          else
+            echo "apps=[\"$(echo "$apps" | sed 's/,/","/g')\"]" >> "$GITHUB_OUTPUT"
+          fi
+
+  quality:
+    name: Lint & build (${{ matrix.app }})
+    needs: discover
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJson(needs.discover.outputs.apps) }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ${{ matrix.app }}/package-lock.json
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.2'
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.app }}
+        run: npm ci
+
+      - name: Audit dependencies
+        working-directory: ${{ matrix.app }}
+        run: npm audit --audit-level=high
+
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: ${{ matrix.app }}/.next/cache
+          key: next-${{ matrix.app }}-${{ hashFiles(format('{0}/package-lock.json', matrix.app)) }}
+          restore-keys: |
+            next-${{ matrix.app }}-
+
+      - name: Lint
+        working-directory: ${{ matrix.app }}
+        run: npm run lint
+
+      - name: Build
+        working-directory: ${{ matrix.app }}
+        run: npm run build

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect, useMemo, Suspense } from "react";
+import React, { useCallback, useState, useRef, useEffect, useMemo, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { Calendar } from "@/components/ui/calendar";
@@ -49,9 +49,9 @@ function StarRating({ count }: { count: number }) {
   const clamped = Math.max(1, Math.min(5, Math.floor(count)));
   return (
     <span className="text-lg align-middle mr-1">
-      {Array.from({ length: 5 }).map((_, i) => (
+      {Array.from({ length: 5 }, (_, i) => i).map((i) => (
         <span
-          key={i}
+          key={`star-${i}`}
           className={i < clamped ? "text-yellow-400" : "text-gray-400"}
         >
           ★
@@ -211,23 +211,23 @@ function CardScroller({
   // LAYOUT FIJO - Sin variaciones
   const childCount = React.Children.count(children);
 
-  const checkScroll = () => {
+  const checkScroll = useCallback(() => {
     if (ref.current) {
       const { scrollLeft, scrollWidth, clientWidth } = ref.current;
       // Usar un pequeño margen para evitar problemas de precisión
       setCanScrollLeft(scrollLeft > 10);
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
     }
-  };
+  }, []);
 
-  const scheduleCheck = () => {
+  const scheduleCheck = useCallback(() => {
     if (tickingRef.current) return;
     tickingRef.current = true;
     rafIdRef.current = window.requestAnimationFrame(() => {
       checkScroll();
       tickingRef.current = false;
     });
-  };
+  }, [checkScroll]);
 
   useEffect(() => {
     checkScroll();
@@ -237,7 +237,6 @@ function CardScroller({
       ro.observe(ref.current);
     }
     window.addEventListener("resize", scheduleCheck);
-    // Verificar también cuando cambian los children
     scheduleCheck();
     return () => {
       window.removeEventListener("resize", scheduleCheck);
@@ -245,7 +244,7 @@ function CardScroller({
       if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
       tickingRef.current = false;
     };
-  }, [children]); // Agregar children como dependencia para actualizar cuando cambien
+  }, [checkScroll, scheduleCheck]);
 
   const scroll = (direction: "left" | "right") => {
     if (ref.current) {
@@ -462,7 +461,7 @@ function HomePageContent() {
 
   useEffect(() => {
     // Only load if v2Seed is valid and different from last load
-    const currentV2Seed = v2Seed ?? resolvedSeeds.base;
+    const currentV2Seed = v2Seed ?? seed;
     if (currentV2Seed === null || currentV2Seed === undefined) {
       return; // Wait for valid seed
     }
@@ -487,8 +486,8 @@ function HomePageContent() {
         // Only update state if this effect hasn't been cancelled
         if (!cancelled) {
           const fresh = getRestaurants().map((r) => {
-            const rating = (r as any).rating ?? 4.5;
-            const stars = (r as any).stars ?? Math.round(rating);
+            const rating = r.rating ?? 4.5;
+            const stars = r.stars ?? Math.round(rating);
             return {
               id: r.id,
               name: r.name,
@@ -771,7 +770,7 @@ function HomePageContent() {
                 <CardScroller title={dyn.v3.getVariant("section_expensive", undefined, "Expensive")}>
                   {expensiveRestaurants.map((r) => (
                     <RestaurantCard
-                      key={r.id + "-expensive"}
+                      key={`${r.id}-expensive`}
                       r={r}
                       date={date}
                       people={people}
@@ -801,7 +800,7 @@ function HomePageContent() {
                 <CardScroller title={dyn.v3.getVariant("section_medium", undefined, "Mid ticket")}>
                   {mediumRestaurants.map((r) => (
                     <RestaurantCard
-                      key={r.id + "-medium"}
+                      key={`${r.id}-medium`}
                       r={r}
                       date={date}
                       people={people}
@@ -831,7 +830,7 @@ function HomePageContent() {
                 <CardScroller title={dyn.v3.getVariant("section_cheap", undefined, "Cheap")}>
                   {cheapRestaurants.map((r) => (
                     <RestaurantCard
-                      key={r.id + "-cheap"}
+                      key={`${r.id}-cheap`}
                       r={r}
                       date={date}
                       people={people}
@@ -857,10 +856,10 @@ function HomePageLoading() {
       <Navbar />
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="animate-pulse">
-          <div className="h-10 bg-gray-200 rounded mb-6"></div>
-          <div className="h-8 bg-gray-200 rounded mb-4"></div>
-          <div className="h-32 bg-gray-200 rounded mb-4"></div>
-          <div className="h-32 bg-gray-200 rounded mb-4"></div>
+          <div className="h-10 bg-gray-200 rounded mb-6" />
+          <div className="h-8 bg-gray-200 rounded mb-4" />
+          <div className="h-32 bg-gray-200 rounded mb-4" />
+          <div className="h-32 bg-gray-200 rounded mb-4" />
         </div>
       </div>
     </main>

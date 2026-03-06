@@ -13,7 +13,7 @@ export class DynamicDataProvider {
   private movies: Movie[] = [];
   private ready = false;
   private readyPromise: Promise<void>;
-  private currentSeed: number = 1;
+  private currentSeed = 1;
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
@@ -142,21 +142,21 @@ export class DynamicDataProvider {
 
   public getAvailableGenres(): string[] {
     const genres = new Set<string>();
-    (this.movies ?? []).forEach((movie) => {
-      movie.genres.forEach((genre) => {
+    for (const movie of this.movies ?? []) {
+      for (const genre of movie.genres) {
         if (genre) genres.add(genre);
-      });
-    });
+      }
+    }
     return Array.from(genres).sort((a, b) => a.localeCompare(b));
   }
 
   public getAvailableYears(): number[] {
     const years = new Set<number>();
-    (this.movies ?? []).forEach((movie) => {
+    for (const movie of this.movies ?? []) {
       if (movie.year) {
         years.add(movie.year);
       }
-    });
+    }
     return Array.from(years).sort((a, b) => b - a);
   }
 }

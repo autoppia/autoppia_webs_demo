@@ -175,9 +175,9 @@ export function AboutSection() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature, index) => (
+          {features.map((feature) => (
             <div
-              key={index}
+              key={feature.title}
               className="group relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm transition-all hover:border-secondary/50 hover:shadow-2xl hover:shadow-secondary/20 hover:-translate-y-2"
             >
               <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
@@ -213,9 +213,9 @@ export function AboutSection() {
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
-            {howItWorks.map((item, index) => (
+            {howItWorks.map((item) => (
               <div
-                key={index}
+                key={item.step}
                 className="relative group"
               >
                 <div className="absolute -top-4 -left-4 text-7xl font-bold text-white/5 group-hover:text-secondary/20 transition-colors">

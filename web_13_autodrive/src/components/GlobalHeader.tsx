@@ -38,7 +38,7 @@ export default function GlobalHeader({ preserveSeed = true, excludeItems = [] }:
   const orderedNavItems = useMemo(() => {
     const order = dyn.v1.changeOrderElements("global-nav-items", navItems.length);
     return order.map((idx) => navItems[idx]);
-  }, [dyn.seed, navItems]);
+  }, [dyn, navItems]);
 
   useEffect(() => {
     if (!profileOpen) return;

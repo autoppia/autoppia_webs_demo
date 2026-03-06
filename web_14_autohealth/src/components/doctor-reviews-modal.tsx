@@ -41,7 +41,7 @@ export function DoctorReviewsModal({ open, onOpenChange, doctor }: DoctorReviews
       if (!open || !doctor) return;
       setLoading(true);
       try {
-        const data = await initializeDoctorReviews({ id: doctor.id, name: doctor.name, specialty: (doctor as any).specialty });
+        const data = await initializeDoctorReviews({ id: doctor.id, name: doctor.name, specialty: doctor.specialty });
         if (mounted) setReviews(Array.isArray(data) ? data : []);
       } finally {
         if (mounted) setLoading(false);
@@ -50,8 +50,11 @@ export function DoctorReviewsModal({ open, onOpenChange, doctor }: DoctorReviews
     return () => { mounted = false; };
   }, [open, doctor]);
 
-  const baseReviews = Array.isArray(doctor?.patientReviews) ? doctor!.patientReviews : [];
-  const allReviews = doctor ? [...baseReviews, ...reviews] : [];
+  const allReviews = React.useMemo(() => {
+    if (!doctor) return [];
+    const base = Array.isArray(doctor.patientReviews) ? doctor.patientReviews : [];
+    return [...base, ...reviews];
+  }, [doctor, reviews]);
 
   const filteredAndSortedReviews = React.useMemo(() => {
     let filtered = allReviews;

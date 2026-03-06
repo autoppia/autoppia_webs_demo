@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import HireFormClient from "./HireFormClient";
 import { dynamicDataProvider } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
@@ -20,8 +20,7 @@ export default function HireFormWrapperClient({ slug }: { slug: string }) {
   const dyn = useDynamicSystem();
   const { seed } = useSeed();
 
-  // Function to find expert by slug or name
-  const findExpert = (searchSlug: string): Expert | null => {
+  const findExpert = useCallback((searchSlug: string): Expert | null => {
     // First try to find by slug using dynamicDataProvider
     let found = dynamicDataProvider.getExpertBySlug(searchSlug);
 
@@ -62,7 +61,7 @@ export default function HireFormWrapperClient({ slug }: { slug: string }) {
     } catch {}
 
     return null;
-  };
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -103,7 +102,7 @@ export default function HireFormWrapperClient({ slug }: { slug: string }) {
       mounted = false;
       unsubscribe();
     };
-  }, [slug, dyn.v2, seed]);
+  }, [slug, dyn.v2, findExpert]);
 
   if (isLoading || !expert) {
     return (

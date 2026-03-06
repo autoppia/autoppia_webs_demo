@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import type React from "react";
-import { useSeedRouter } from "@/hooks/useSeedRouter";
+import type { useSeedRouter } from "@/hooks/useSeedRouter";
 
 export default function ProfileDropdown({
   open,

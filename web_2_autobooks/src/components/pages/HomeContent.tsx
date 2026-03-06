@@ -111,7 +111,7 @@ export function HomeContent() {
     if (popularGenres.length === 0) return [];
     const order = dyn.v1.changeOrderElements("genres", popularGenres.length);
     return order.map((idx) => popularGenres[idx]);
-  }, [popularGenres, dyn.seed]);
+  }, [popularGenres, dyn.v1]);
 
   // Calculate stats
   const stats = useMemo(() => {
@@ -157,7 +157,7 @@ export function HomeContent() {
     if (features.length === 0) return [];
     const order = dyn.v1.changeOrderElements("features", features.length);
     return order.map((idx) => features[idx]);
-  }, [dyn.seed, features]);
+  }, [dyn.v1]);
 
   return (
     <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative">

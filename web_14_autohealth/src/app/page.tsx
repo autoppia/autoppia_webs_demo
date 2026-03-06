@@ -11,26 +11,26 @@ import { QuickAppointmentHero } from "@/components/quick-appointment-hero";
 
 export default function Home() {
   const dyn = useDynamicSystem();
-  const nav = [
-    { href: "/appointments", title: "Appointments", desc: "Find a slot and book online" },
-    { href: "/doctors", title: "Doctors", desc: "Browse specialists and ratings" },
-    { href: "/prescriptions", title: "Prescriptions", desc: "View your medications" },
-    { href: "/medical-records", title: "Medical Analysis", desc: "Search and review analysis" },
-  ];
   const orderedNav = useMemo(() => {
+    const nav = [
+      { href: "/appointments", title: "Appointments", desc: "Find a slot and book online" },
+      { href: "/doctors", title: "Doctors", desc: "Browse specialists and ratings" },
+      { href: "/prescriptions", title: "Prescriptions", desc: "View your medications" },
+      { href: "/medical-records", title: "Medical Analysis", desc: "Search and review analysis" },
+    ];
     const order = dyn.v1.changeOrderElements("home-nav", nav.length);
     return order.map((idx) => nav[idx]);
-  }, [dyn.seed, nav]);
+  }, [dyn]);
 
-  const heroParts = [
-    { key: 'title' },
-    { key: 'desc' },
-    { key: 'cta' },
-  ];
   const orderedHero = useMemo(() => {
+    const heroParts = [
+      { key: 'title' },
+      { key: 'desc' },
+      { key: 'cta' },
+    ];
     const order = dyn.v1.changeOrderElements("home-hero", heroParts.length);
     return order.map((idx) => heroParts[idx]);
-  }, [dyn.seed, heroParts]);
+  }, [dyn]);
 
   return (
     <>

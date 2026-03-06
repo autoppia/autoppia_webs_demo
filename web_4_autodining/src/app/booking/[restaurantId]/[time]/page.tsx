@@ -45,7 +45,7 @@ export default function Page() {
   const [fullDate, setFullDate] = useState<string | null>(null);
   const [time, setTime] = useState(reservationTimeParam || "1:00 PM");
   const [people, setPeople] = useState(
-    parseInt(reservationPeopleParam || "2", 10)
+    Number.parseInt(reservationPeopleParam || "2", 10)
   );
   const [reservationTime, setReservationTime] = useState<string | null>(null);
   const [reservationPeople, setReservationPeople] = useState<string | null>(
@@ -126,8 +126,9 @@ export default function Page() {
     return () => {
       mounted = false;
     };
-  }, [restaurantId, seed, v2Seed]);
+  }, [restaurantId, seed]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: log once when data is set; other values are from URL/state at that time
   useEffect(() => {
     const computedFullDate = reservationDateParam
       ? dayjs(reservationDateParam).format("YYYY-MM-DD")
@@ -285,14 +286,16 @@ export default function Page() {
                   onChange={(e) => {
                     const country = countries.find(
                       (c) => c.code === e.target.value
-                    )!;
-                    setSelectedCountry(country);
-                    logEvent(EVENT_TYPES.COUNTRY_SELECTED, {
-                      ...restaurantInfo,
-                      countryCode: country.code,
-                      countryName: country.name,
-                      restaurantName: data?.name ?? "",
-                    });
+                    );
+                    if (country) {
+                      setSelectedCountry(country);
+                      logEvent(EVENT_TYPES.COUNTRY_SELECTED, {
+                        ...restaurantInfo,
+                        countryCode: country.code,
+                        countryName: country.name,
+                        restaurantName: data?.name ?? "",
+                      });
+                    }
                   }}
                 >
                   {countries.map((c) => (

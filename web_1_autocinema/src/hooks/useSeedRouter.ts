@@ -11,12 +11,12 @@ export function useSeedRouter() {
   const router = useNextRouter();
   const { getNavigationUrl } = useSeed();
 
-  const push = useCallback((href: string, options?: any) => {
+  const push = useCallback((href: string, options?: { scroll?: boolean }) => {
     const urlWithSeed = getNavigationUrl(href);
     return router.push(urlWithSeed, options);
   }, [router, getNavigationUrl]);
 
-  const replace = useCallback((href: string, options?: any) => {
+  const replace = useCallback((href: string, options?: { scroll?: boolean }) => {
     const urlWithSeed = getNavigationUrl(href);
     return router.replace(urlWithSeed, options);
   }, [router, getNavigationUrl]);
