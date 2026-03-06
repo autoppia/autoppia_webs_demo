@@ -15,7 +15,7 @@ export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private restaurants: Restaurant[] = [];
   private testimonials: Testimonial[] = [];
-  private ready: boolean = false;
+  private ready = false;
   private readyPromise: Promise<void>;
   private resolveReady!: () => void;
   private restaurantSubscribers: Array<(restaurants: Restaurant[]) => void> = [];
@@ -158,11 +158,15 @@ export class DynamicDataProvider {
   }
 
   private notifyRestaurants(): void {
-    this.restaurantSubscribers.forEach((cb) => cb(this.restaurants));
+    for (const cb of this.restaurantSubscribers) {
+      cb(this.restaurants);
+    }
   }
 
   private notifyTestimonials(): void {
-    this.testimonialSubscribers.forEach((cb) => cb(this.testimonials));
+    for (const cb of this.testimonialSubscribers) {
+      cb(this.testimonials);
+    }
   }
 
   private getSeed(): number {

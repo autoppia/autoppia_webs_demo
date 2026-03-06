@@ -73,7 +73,7 @@ export default function Sidebar() {
             const isActive =
               href === "/"
                 ? pathname === href
-                : pathname === href || pathname.startsWith(href + "/");
+                : pathname === href || pathname.startsWith(`${href}/`);
 
             // For help_title, use V3 for text, ID, and class
             const isHelpLink = labelKey === "help_title";

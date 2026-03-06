@@ -115,7 +115,7 @@ export function SpotlightRow({ title, description, movies }: SpotlightRowProps) 
                     </SeedLink>
                   </div>
                 </div>
-              ), undefined, movie.id)
+              ), movie.id)
             ))}
           </div>
         </section>

@@ -39,11 +39,12 @@ export default function RestaurantsListPage() {
         r.cuisine.toLowerCase().includes(text) ||
         (Array.isArray(r.menu) && r.menu.some((m) => m.name.toLowerCase().includes(text)))) &&
       (!cuisine || r.cuisine === cuisine) &&
-      (!rating || r.rating >= parseFloat(rating))
+      (!rating || r.rating >= Number.parseFloat(rating))
     );
   });
 
   // Reset pagination on filter changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reset page when filters change
   useEffect(() => {
     setPage(1);
   }, [search, cuisine, rating]);

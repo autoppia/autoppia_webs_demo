@@ -67,13 +67,13 @@ export function WherePopover({
 
   const recentOrder = useMemo(
     () => dyn.v1.changeOrderElements("where-recent", RECENT_SEARCHES.length),
-    [dyn.seed]
+    [dyn.v1.changeOrderElements]
   );
   const orderedRecents = recentOrder.map((idx) => RECENT_SEARCHES[idx]);
 
   const regionOrder = useMemo(
     () => dyn.v1.changeOrderElements("where-regions", REGIONS.length),
-    [dyn.seed]
+    [dyn.v1.changeOrderElements]
   );
   const orderedRegions = regionOrder.map((idx) => REGIONS[idx]);
 

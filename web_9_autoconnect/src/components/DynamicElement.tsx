@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSeed } from '@/context/SeedContext';
 
 interface DynamicElementProps {
@@ -42,7 +43,7 @@ export function DynamicElement({
 
   return (
     <Component
-      ref={elementRef as any}
+      ref={elementRef as React.Ref<HTMLAnchorElement & HTMLDivElement>}
       className={`${className} dynamic-element`}
       {...attributes}
       {...props}

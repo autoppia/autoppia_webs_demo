@@ -36,6 +36,10 @@ type DatasetRestaurant = {
   stars?: number;
   price?: string;
   bookings?: number;
+  staticStars?: number;
+  staticReviews?: number;
+  staticBookings?: number;
+  staticPrices?: string;
 };
 
 // Cache for loaded restaurants
@@ -48,7 +52,7 @@ function normalizeRestaurantWithIndex(
   r: DatasetRestaurant,
   index = 0
 ): RestaurantGenerated {
-    const fallbackName = (r as any)?.namepool;
+    const fallbackName = r.namepool;
     const normalizedName =
       typeof r.name === "string" && r.name.trim().length > 0
         ? r.name.trim()
@@ -64,20 +68,20 @@ function normalizeRestaurantWithIndex(
 
     // Preservar rating y stars directamente del JSON si existen
     // Si no existen, usar valores por defecto o calcular desde campos antiguos
-    const rating = r.rating ?? (r as any)?.staticStars ?? 4.5;
+    const rating = r.rating ?? r.staticStars ?? 4.5;
     // Si stars viene del JSON, usarlo directamente; sino calcular desde rating
     const stars =
       r.stars !== undefined && r.stars !== null ? r.stars : Math.round(rating);
-    const reviews = r.reviews ?? (r as any)?.staticReviews ?? 0;
-    const bookings = r.bookings ?? (r as any)?.staticBookings ?? 0;
-    const price = r.price || (r as any)?.staticPrices || "$$";
+    const reviews = r.reviews ?? r.staticReviews ?? 0;
+    const bookings = r.bookings ?? r.staticBookings ?? 0;
+    const price = r.price || r.staticPrices || "$$";
 
     return {
       id: r.id || `gen-${index + 1}`,
       name: normalizedName,
       image: normalizedImage,
-      cuisine: r.cuisine || (r as any)?.cuisine || "International",
-      area: r.area || (r as any)?.area || "Downtown",
+      cuisine: r.cuisine || "International",
+      area: r.area || "Downtown",
       reviews,
       rating,
       stars,

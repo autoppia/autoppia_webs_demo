@@ -221,8 +221,8 @@ function JobDetailContent({ jobId }: { jobId: string }) {
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Requirements</h2>
           <ul className="space-y-2">
-            {job.requirements.map((requirement, index) => (
-              <li key={index} className="flex items-start">
+            {job.requirements.map((requirement) => (
+              <li key={requirement} className="flex items-start">
                 <span className="text-blue-600 mr-2 mt-1">•</span>
                 <span className="text-gray-700">{requirement}</span>
               </li>
@@ -236,8 +236,8 @@ function JobDetailContent({ jobId }: { jobId: string }) {
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Benefits</h2>
           <ul className="space-y-2">
-            {job.benefits.map((benefit, index) => (
-              <li key={index} className="flex items-start">
+            {job.benefits.map((benefit) => (
+              <li key={benefit} className="flex items-start">
                 <span className="text-green-600 mr-2 mt-1">✓</span>
                 <span className="text-gray-700">{benefit}</span>
               </li>

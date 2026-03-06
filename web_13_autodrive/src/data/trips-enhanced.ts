@@ -128,7 +128,7 @@ const resolveSeed = (v2SeedValue?: number | null): number => {
  */
 export async function initializeTrips(
   v2SeedValue?: number | null,
-  limit: number = 30
+  limit = 30
 ): Promise<Trip[]> {
   const effectiveSeed = resolveSeed(v2SeedValue);
 

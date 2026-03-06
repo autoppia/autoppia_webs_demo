@@ -29,9 +29,8 @@ export async function initializeJobs(v2SeedValue?: number | null): Promise<Autow
     if (Array.isArray(jobs) && jobs.length > 0) {
       console.log(`[autowork] ✅ Successfully loaded ${jobs.length} jobs from server (seed=${effectiveSeed})`);
       return jobs;
-    } else {
-      throw new Error("Server returned empty array");
     }
+    throw new Error("Server returned empty array");
   } catch (error) {
     console.error("[autowork] Failed to fetch jobs from server:", error);
     throw error;
@@ -57,9 +56,8 @@ export async function initializeHires(v2SeedValue?: number | null): Promise<Auto
     if (Array.isArray(hires) && hires.length > 0) {
       console.log(`[autowork] ✅ Successfully loaded ${hires.length} hires from server (seed=${effectiveSeed})`);
       return hires;
-    } else {
-      throw new Error("Server returned empty array");
     }
+    throw new Error("Server returned empty array");
   } catch (error) {
     console.error("[autowork] Failed to fetch hires from server:", error);
     throw error;
@@ -85,9 +83,8 @@ export async function initializeExperts(v2SeedValue?: number | null): Promise<Au
     if (Array.isArray(experts) && experts.length > 0) {
       console.log(`[autowork] ✅ Successfully loaded ${experts.length} experts from server (seed=${effectiveSeed})`);
       return experts;
-    } else {
-      throw new Error("Server returned empty array");
     }
+    throw new Error("Server returned empty array");
   } catch (error) {
     console.error("[autowork] Failed to fetch experts from server:", error);
     throw error;
@@ -114,9 +111,8 @@ export async function initializeSkills(v2SeedValue?: number | null): Promise<str
     if (Array.isArray(skills) && skills.length > 0) {
       console.log(`[autowork] ✅ Successfully loaded ${skills.length} skills from server (seed=${effectiveSeed})`);
       return skills;
-    } else {
-      throw new Error("Server returned empty array");
     }
+    throw new Error("Server returned empty array");
   } catch (error) {
     console.error("[autowork] Failed to fetch skills from server:", error);
     throw error;

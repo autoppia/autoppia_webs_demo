@@ -1,5 +1,5 @@
 import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
-import { Hotel } from "@/types/hotel";
+import type { Hotel } from "@/types/hotel";
 import { fetchSeededSelection } from "@/shared/seeded-loader";
 import { isV2Enabled } from "@/dynamic/shared/flags";
 
@@ -30,9 +30,8 @@ export async function initializeHotels(seedOverride?: number | null): Promise<Ho
       console.log("[hotels-enhanced] Loaded", serverHotels.length, "hotels from server");
       hotelsCache = serverHotels;
       return hotelsCache;
-    } else {
-      throw new Error("Server returned empty array");
     }
+    throw new Error("Server returned empty array");
   } catch (error) {
     console.error("[hotels-enhanced] Failed to fetch from server:", error);
     throw error;

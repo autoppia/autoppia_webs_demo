@@ -6,7 +6,7 @@ import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import GlobalHeader from "@/components/GlobalHeader";
 import { logEvent, EVENT_TYPES } from "@/library/event";
-import {simulatedTrips, rides, DriverType, RideType, Trip} from "@/data/trips-enhanced";
+import {simulatedTrips, rides, DriverType, RideType, type Trip} from "@/data/trips-enhanced";
 
 
 function formatDateShort(date: string, time: string) {
@@ -27,7 +27,7 @@ function TripCard({ trip, onCancel, index }: { trip: Trip; onCancel?: (tripId: s
 
   const handleTripDetailsClick = () => {
     // Check if this trip has reserved ride data (from RESERVE_RIDE event)
-    const reservedRideData = (trip as any).reserveRideData;
+    const reservedRideData = (trip as { reserveRideData?: Record<string, unknown> }).reserveRideData;
 
     if (reservedRideData) {
       // Use the actual reserved ride data from RESERVE_RIDE event
@@ -56,7 +56,7 @@ function TripCard({ trip, onCancel, index }: { trip: Trip; onCancel?: (tripId: s
         price: trip.price,
         oldPrice: oldPrice,
         seats: rideTemplate.seats,
-        eta: "5 min away · " + (trip.time || new Date().toTimeString().slice(0, 5)),
+        eta: `5 min away · ${trip.time || new Date().toTimeString().slice(0, 5)}`,
         pickup: trip.pickup,
         dropoff: trip.dropoff,
         scheduled: scheduled,
@@ -71,7 +71,7 @@ function TripCard({ trip, onCancel, index }: { trip: Trip; onCancel?: (tripId: s
           rideType: trip.ride.name,
           price: trip.price,
           totalSeats: rideTemplate.seats,
-          estimatedArrival: "5 min away · " + (trip.time || new Date().toTimeString().slice(0, 5))
+          estimatedArrival: `5 min away · ${trip.time || new Date().toTimeString().slice(0, 5)}`
         }
       });
     }
@@ -83,7 +83,7 @@ function TripCard({ trip, onCancel, index }: { trip: Trip; onCancel?: (tripId: s
   const handleCancel = () => {
     if (onCancel) {
       // Check if this trip has reserved ride data (from RESERVE_RIDE event)
-      const reservedRideData = (trip as any).reserveRideData;
+      const reservedRideData = (trip as { reserveRideData?: Record<string, unknown> }).reserveRideData;
 
       if (reservedRideData) {
         // Use the actual reserved ride data from RESERVE_RIDE event
@@ -397,17 +397,18 @@ export default function TripsDashboardPage() {
   }
 
   // On mount, load trips and cancelledIds
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional run-on-mount; readReservedTrips/readCancelledTrips are local functions
   useEffect(() => {
     setLoading(true);
     setTimeout(() => {
       const reservedTrips = readReservedTrips();
       // Merge reserved trips with simulated trips, avoiding duplicates
       const allTrips = [...simulatedTrips];
-      reservedTrips.forEach((reservedTrip) => {
+      for (const reservedTrip of reservedTrips) {
         if (!allTrips.find((t) => t.id === reservedTrip.id)) {
           allTrips.push(reservedTrip);
         }
-      });
+      }
       setTrips(allTrips);
       setCancelledIds(readCancelledTrips());
       setLoading(false);
@@ -438,6 +439,7 @@ export default function TripsDashboardPage() {
   };
 
   // Listen for navigation and localStorage changes to update cancelledIds and trips
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional run-on-mount; readReservedTrips/readCancelledTrips are local functions
   useEffect(() => {
     // Handler for storage event (cross-tab)
     function handleStorage(e: StorageEvent) {
@@ -448,11 +450,11 @@ export default function TripsDashboardPage() {
         const reservedTrips = readReservedTrips();
         setTrips((prev) => {
           const allTrips = [...simulatedTrips];
-          reservedTrips.forEach((reservedTrip: Trip) => {
+          for (const reservedTrip of reservedTrips) {
             if (!allTrips.find((t) => t.id === reservedTrip.id)) {
               allTrips.push(reservedTrip);
             }
-          });
+          }
           return allTrips;
         });
       }
@@ -463,11 +465,11 @@ export default function TripsDashboardPage() {
       const reservedTrips = readReservedTrips();
       setTrips((prev) => {
         const allTrips = [...simulatedTrips];
-        reservedTrips.forEach((reservedTrip: Trip) => {
+        for (const reservedTrip of reservedTrips) {
           if (!allTrips.find((t) => t.id === reservedTrip.id)) {
             allTrips.push(reservedTrip);
           }
-        });
+        }
         return allTrips;
       });
     }

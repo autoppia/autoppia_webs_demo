@@ -38,11 +38,11 @@ function DashboardContent() {
   // Only pass seed to API when URL seed is ready to avoid request with seed=1.
   const dataSeed = isSeedReady ? v2Seed : undefined;
 
-  const { data: clientsData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'clients', seedValue: dataSeed });
-  const { data: mattersData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'matters', seedValue: dataSeed });
-  const { data: eventsData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'events', seedValue: dataSeed });
-  const { data: filesData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'files', seedValue: dataSeed });
-  const { data: logsData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'logs', seedValue: dataSeed });
+  const { data: clientsData } = useProjectData<Record<string, unknown>>({ projectKey: 'web_5_autocrm', entityType: 'clients', seedValue: dataSeed });
+  const { data: mattersData } = useProjectData<Record<string, unknown>>({ projectKey: 'web_5_autocrm', entityType: 'matters', seedValue: dataSeed });
+  const { data: eventsData } = useProjectData<Record<string, unknown>>({ projectKey: 'web_5_autocrm', entityType: 'events', seedValue: dataSeed });
+  const { data: filesData } = useProjectData<Record<string, unknown>>({ projectKey: 'web_5_autocrm', entityType: 'files', seedValue: dataSeed });
+  const { data: logsData } = useProjectData<Record<string, unknown>>({ projectKey: 'web_5_autocrm', entityType: 'logs', seedValue: dataSeed });
 
   const [dataCounts, setDataCounts] = useState({
     matters: 0,

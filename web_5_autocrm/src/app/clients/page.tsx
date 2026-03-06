@@ -45,7 +45,7 @@ function ClientsDirectoryContent() {
   // console.log("[ClientsPage] current v2Seed", v2Seed);
 
   // Use dynamicDataProvider to get clients - same source as detail page
-  const [clients, setClients] = useState<any[]>([]);
+  const [clients, setClients] = useState<{ id: string; name: string; email: string; matters: number; avatar: string; status: string; last?: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -66,17 +66,17 @@ function ClientsDirectoryContent() {
         const clientsData = getClients();
 
         // Normalize clients for display
-        const normalized = clientsData.map((c: any, i: number) => ({
-          id: c.id ?? `CL-${1000 + i}`,
-          name: c.name ?? c.title ?? `Client ${i + 1}`,
-          email: c.email ?? `client${i + 1}@example.com`,
+        const normalized = (clientsData as Record<string, unknown>[]).map((c, i) => ({
+          id: String(c.id ?? `CL-${1000 + i}`),
+          name: String(c.name ?? c.title ?? `Client ${i + 1}`),
+          email: String(c.email ?? `client${i + 1}@example.com`),
           matters:
             typeof c.matters === "number"
               ? c.matters
               : Math.floor(Math.random() * 5) + 1,
-          avatar: c.avatar ?? "",
-          status: c.status ?? "Active",
-          last: c.last ?? "Today",
+          avatar: String(c.avatar ?? ""),
+          status: String(c.status ?? "Active"),
+          last: String(c.last ?? "Today"),
         }));
 
         setClients(normalized);
@@ -89,7 +89,7 @@ function ClientsDirectoryContent() {
     };
 
     loadClients();
-  }, [seed, v2Seed, isSeedReady]);
+  }, [seed, isSeedReady]);
   const [clientList, setClientList] = useState(clients);
 
   useEffect(() => {
@@ -338,7 +338,7 @@ function ClientsDirectoryContent() {
           <span className="">{getText("matters_title", "Matters")}</span>
           <span className="">{getText("matter_status", "Matter Status")}</span>
           <span className="">{getText("modified_date", "Modified Date")}</span>
-          <span className=""></span>
+          <span className="" />
         </div>
         <div className="flex flex-col divide-y divide-zinc-100">
           {filtered.length === 0 && (

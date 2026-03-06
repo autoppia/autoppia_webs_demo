@@ -1,11 +1,11 @@
 // src/components/DynamicButton.tsx
 // @deprecated - Use useDynamicSystem() directly instead
 
-import { ButtonHTMLAttributes } from "react";
+import type { ButtonHTMLAttributes } from "react";
 import { Button } from "@/components/ui/button";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
-import { EVENT_TYPES } from "@/library/events";
+import type { EVENT_TYPES } from "@/library/events";
 
 interface DynamicButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   eventType: keyof typeof EVENT_TYPES;

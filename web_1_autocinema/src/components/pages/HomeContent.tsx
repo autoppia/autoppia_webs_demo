@@ -66,9 +66,9 @@ export function HomeContent() {
     }
   }, [dyn.seed, dyn.v2]);
 
-  const featuredMovies = useMemo(() => getFeaturedMovies(6), [seed]);
-  const allMovies = useMemo(() => getMovies(), [seed]);
-  const genres = useMemo(() => getAvailableGenres(), [seed]);
+  const featuredMovies = useMemo(() => getFeaturedMovies(6), []);
+  const allMovies = useMemo(() => getMovies(), []);
+  const genres = useMemo(() => getAvailableGenres(), []);
 
   const handleSearchSubmit = () => {
     // Redirect to search page with query
@@ -81,10 +81,10 @@ export function HomeContent() {
   };
 
   // Get movies by different genres for spotlight sections
-  const dramaFocus = useMemo(() => getMoviesByGenre("Drama").slice(0, 5), [seed]);
-  const thrillerFocus = useMemo(() => getMoviesByGenre("Thriller").slice(0, 5), [seed]);
-  const actionFocus = useMemo(() => getMoviesByGenre("Action").slice(0, 5), [seed]);
-  const comedyFocus = useMemo(() => getMoviesByGenre("Comedy").slice(0, 5), [seed]);
+  const dramaFocus = useMemo(() => getMoviesByGenre("Drama").slice(0, 5), []);
+  const thrillerFocus = useMemo(() => getMoviesByGenre("Thriller").slice(0, 5), []);
+  const actionFocus = useMemo(() => getMoviesByGenre("Action").slice(0, 5), []);
+  const comedyFocus = useMemo(() => getMoviesByGenre("Comedy").slice(0, 5), []);
 
   // Get popular genres (top 6 by movie count)
   const popularGenres = useMemo(() => {
@@ -103,7 +103,7 @@ export function HomeContent() {
     if (popularGenres.length === 0) return [];
     const order = dyn.v1.changeOrderElements("genres", popularGenres.length);
     return order.map((idx) => popularGenres[idx]);
-  }, [popularGenres, dyn.seed]);
+  }, [popularGenres, dyn.v1]);
 
   // Calculate stats
   const stats = useMemo(() => {
@@ -149,7 +149,7 @@ export function HomeContent() {
     if (features.length === 0) return [];
     const order = dyn.v1.changeOrderElements("features", features.length);
     return order.map((idx) => features[idx]);
-  }, [dyn.seed, features]);
+  }, [dyn.v1]);
 
   return (
     <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative">
@@ -470,7 +470,7 @@ export function HomeContent() {
                           </div>
                         </div>
                       </div>
-                    ), undefined, movie.id)
+                    ), movie.id)
                     ));
                   })()}
                 </div>
@@ -565,7 +565,7 @@ export function HomeContent() {
                           {dyn.v3.getVariant(`${feature.key}_description`, dynamicV3TextVariants)}
                         </p>
                       </div>
-                    ), undefined, `feature-${displayIndex}`)
+                    ), `feature-${displayIndex}`)
                   ))}
                 </div>
               </div>

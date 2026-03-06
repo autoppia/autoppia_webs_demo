@@ -53,7 +53,7 @@ export default function LoginPage() {
     ];
     const order = dyn.v1.changeOrderElements("login-form-fields", fields.length);
     return order.map((idx) => fields[idx]);
-  }, [dyn.seed]);
+  }, [dyn.v1]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

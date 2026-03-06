@@ -1,6 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
+import type React from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
 import { getLayoutVariant, type LayoutVariant } from '@/dynamic/layout';
 import { useSeed } from '@/context/SeedContext';
 
