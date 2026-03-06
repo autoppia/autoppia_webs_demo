@@ -172,6 +172,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return [movieId];
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: resolveOrCreateAllowedMovies is stable; setCustomUsers is setState
   const register = useCallback(
     async ({ username, password, allowedMovies }: RegisterInput) => {
       const safeUsername = normalizeUsername(username);

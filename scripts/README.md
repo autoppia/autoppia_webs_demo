@@ -74,6 +74,20 @@ Parallel deploy for all demos:
 ./setup.sh --enabled_dynamic_versions=""
 ```
 
+## Lint before push
+
+To run lint in all `web_*` apps (same as CI) before pushing:
+
+```bash
+./scripts/lint-all-webs.sh
+```
+
+To run it automatically on every `git push`, install the pre-push hook once:
+
+```bash
+./scripts/install-pre-push-hook.sh
+```
+
 ## Notes
 
 - Seed comes from URL and is clamped to `1..999`.

@@ -30,7 +30,7 @@ export function useDynamicStructure() {
       dyn.v3.getVariant(key, undefined, fallback),
     getId: (key: string) =>
       dyn.v3.getVariant(key, ID_VARIANTS_MAP, key),
-    getClass: (key: string, fallback: string = "") =>
+    getClass: (key: string, fallback = "") =>
       dyn.v3.getVariant(key, undefined, fallback),
     currentVariation: dyn.seed % 10 || 10,
     seedStructure: dyn.seed,

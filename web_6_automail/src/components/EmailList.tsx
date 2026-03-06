@@ -145,7 +145,7 @@ export function EmailList() {
       clearSelection();
       logEvent(EVENT_TYPES.CLEAR_SELECTION, { source: "archive_bulk" });
     }
-    emailIds.forEach((id) => {
+    for (const id of emailIds) {
       const email = filteredEmails.find((e) => e.id === id);
       if (email) {
         logEvent(EVENT_TYPES.ARCHIVE_EMAIL, {
@@ -154,7 +154,7 @@ export function EmailList() {
           from: email.from.email,
         });
       }
-    });
+    }
   };
 
   const handleBulkMarkAsUnread = () => {

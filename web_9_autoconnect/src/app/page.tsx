@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import {
-  type Post as PostType,
+import type {
+  Post as PostType,
 } from "@/library/dataset";
 import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
@@ -215,7 +215,7 @@ function HomeContent() {
     if (posts.length === 0) return [];
     const order = dyn.v1.changeOrderElements("home-posts", posts.length);
     return order.map((idx) => posts[idx]);
-  }, [posts, dyn.seed]);
+  }, [posts, dyn.v1.changeOrderElements]);
   const visiblePosts = useMemo(
     () => shuffledPosts.filter((p) => !hiddenPostIds.has(p.id)),
     [shuffledPosts, hiddenPostIds]

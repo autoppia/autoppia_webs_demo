@@ -24,7 +24,7 @@ export interface SeededLoadOptions {
 }
 
 
-export async function fetchSeededSelection<T = any>(options: SeededLoadOptions): Promise<T[]> {
+export async function fetchSeededSelection<T = unknown>(options: SeededLoadOptions): Promise<T[]> {
   const baseUrl = getApiBaseUrl();
   const seed = options.seedValue ?? 1;
   const limit = options.limit ?? 50;

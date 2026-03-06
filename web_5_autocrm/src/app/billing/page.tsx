@@ -12,7 +12,8 @@ import { initializeLogs } from "@/data/crm-enhanced";
 import { DynamicButton } from "@/components/DynamicButton";
 import { cn } from "@/library/utils";
 
-const normalizeLog = (log: any, index: number) => ({
+type LogRecord = { id?: string; matter?: string; client?: string; date?: string; hours?: number; description?: string; status?: string };
+const normalizeLog = (log: LogRecord, index: number) => ({
   id: log?.id ?? Date.now() + index,
   matter: log?.matter ?? "—",
   client: log?.client ?? "—",
@@ -41,7 +42,7 @@ export default function BillingPage() {
   const formInputBase = "rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium";
   const { seed, isSeedReady } = useSeed();
   const v2Seed = seed;
-  const { data, isLoading, error } = useProjectData<any>({
+  const { data, isLoading, error } = useProjectData<LogRecord>({
     projectKey: "web_5_autocrm",
     entityType: "logs",
     seedValue: isSeedReady ? v2Seed : undefined,
@@ -53,9 +54,9 @@ export default function BillingPage() {
   //   error,
   //   sample: (data || []).slice(0, 3),
   // });
-  const [fallbackLogs, setFallbackLogs] = useState<any[]>([]);
+  const [fallbackLogs, setFallbackLogs] = useState<LogRecord[]>([]);
   useEffect(() => {
-    initializeLogs().then(setFallbackLogs);
+    initializeLogs().then((rows) => setFallbackLogs(rows as LogRecord[]));
   }, []);
   const normalizedApi = useMemo(() => (data || []).map((l, idx) => normalizeLog(l, idx)), [data]);
   const normalizedFallback = useMemo(() => fallbackLogs.map((l, idx) => normalizeLog(l, idx)), [fallbackLogs]);
@@ -515,6 +516,7 @@ export default function BillingPage() {
                     </div>
                     <div className="flex gap-2 justify-end">
                       <DynamicButton
+                        eventType="LOG_EDITED"
                         type="button"
                         className={dyn.v3.getVariant(
                           "button-secondary",
@@ -526,13 +528,14 @@ export default function BillingPage() {
                         {getText("cancel_button", "Cancel")}
                       </DynamicButton>
                       <DynamicButton
+                        eventType="LOG_EDITED"
                         type="button"
                         className={dyn.v3.getVariant(
                           "button-primary",
                           CLASS_VARIANTS_MAP,
                           buttonPrimaryBase
                         )}
-                        onClick={() => saveEdit(l.id)}
+                        onClick={() => saveEdit(Number(l.id))}
                       >
                         {getText("save_changes", "Save changes")}
                       </DynamicButton>
@@ -589,7 +592,7 @@ export default function BillingPage() {
                           "text-zinc-400 hover:text-accent-forest rounded-full"
                         )}
                         title={getText("edit", "Edit")}
-                        onClick={() => startEdit(l.id)}
+                        onClick={() => startEdit(Number(l.id))}
                         aria-label={`${getText("edit", "Edit")} ${l.matter}`}
                       >
                         <Pencil className="w-5 h-5" />
@@ -601,7 +604,7 @@ export default function BillingPage() {
                           "text-zinc-300 hover:text-red-500 rounded-full"
                         )}
                         title={getText("delete_button", "Delete")}
-                        onClick={() => deleteLog(l.id)}
+                        onClick={() => deleteLog(Number(l.id))}
                         aria-label={`${getText("delete_button", "Delete")} ${l.matter}`}
                       >
                         <Trash2 className="w-5 h-5" />

@@ -12,8 +12,10 @@ export function DynamicDebug() {
     console.log("Seed:", dyn.seed);
     console.log("V1 enabled:", isV1Enabled());
     console.log("V3 enabled:", isV3Enabled());
-    console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V1:", typeof window !== "undefined" ? (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 : "SSR");
-    console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V3:", typeof window !== "undefined" ? (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 : "SSR");
+    type NextDataEnv = { __NEXT_DATA__?: { env?: Record<string, unknown> } };
+    const win = typeof window !== "undefined" ? (window as unknown as NextDataEnv).__NEXT_DATA__?.env : undefined;
+    console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V1:", win?.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ?? "SSR");
+    console.log("NEXT_PUBLIC_ENABLE_DYNAMIC_V3:", win?.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 ?? "SSR");
 
     // Check elements in the DOM
     const v1Elements = document.querySelectorAll('[data-v1="true"]');

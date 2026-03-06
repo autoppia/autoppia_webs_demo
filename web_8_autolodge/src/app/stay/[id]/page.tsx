@@ -199,8 +199,8 @@ function PropertyDetailContent() {
             idNumber: typeof h.id === 'number' ? h.id : Number(h.id),
             title: h.title
           }));
-          console.log(`[autolodge] Available hotel IDs (first 10):`, allIds.slice(0, 10));
-          console.log(`[autolodge] Is search ID in list?`, allIds.some(h => {
+          console.log("[autolodge] Available hotel IDs (first 10):", allIds.slice(0, 10));
+          console.log("[autolodge] Is search ID in list?", allIds.some(h => {
             return h.idNumber === numId ||
                    h.idString === strId ||
                    String(h.idNumber) === strId ||
@@ -254,7 +254,7 @@ function PropertyDetailContent() {
             setIsCheckingHotel(false);
           } else {
             // If still no hotels, keep checking
-            console.log(`[autolodge] Still waiting for hotels to load...`);
+            console.log("[autolodge] Still waiting for hotels to load...");
             setIsCheckingHotel(true);
           }
         }
@@ -282,7 +282,7 @@ function PropertyDetailContent() {
 
           const currentHotels = dynamicDataProvider.getHotels();
           if (currentHotels.length > 0) {
-            console.log(`[autolodge] Available hotel IDs after update (first 10):`, currentHotels.slice(0, 10).map(h => ({
+            console.log("[autolodge] Available hotel IDs after update (first 10):", currentHotels.slice(0, 10).map(h => ({
               id: h.id,
               idType: typeof h.id,
               idString: String(h.id),
@@ -358,7 +358,7 @@ function PropertyDetailContent() {
     if (!prop) return toStartOfDay(new Date());
     const parsed = parseLocalDate(prop.datesFrom);
     return parsed ? toStartOfDay(parsed) : toStartOfDay(new Date());
-  }, [prop?.datesFrom]);
+  }, [prop]);
 
   const stayTo = useMemo(() => {
     if (!prop) return addDays(stayFrom, 1);
@@ -367,7 +367,7 @@ function PropertyDetailContent() {
       return toStartOfDay(parsed);
     }
     return addDays(stayFrom, 1);
-  }, [prop?.datesTo, stayFrom]);
+  }, [prop, stayFrom]);
 
   const initialRange = useMemo<DateRange | undefined>(
     () => ({
@@ -394,7 +394,7 @@ function PropertyDetailContent() {
     if (!prop) return;
     const maxGuests = prop.maxGuests ?? prop.guests ?? 1;
     setGuests(Math.min(Math.max(1, prop.guests ?? 1), maxGuests));
-  }, [prop?.guests, prop?.maxGuests]);
+  }, [prop]);
 
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -458,19 +458,7 @@ function PropertyDetailContent() {
       amenities: prop.amenities?.map((a) => a.title),
     });
     didTrack.current = true;
-  }, [
-    prop?.amenities,
-    prop?.datesFrom,
-    prop?.datesTo,
-    prop?.guests,
-    prop?.host,
-    prop?.id,
-    prop?.location,
-    prop?.price,
-    prop?.rating,
-    prop?.reviews,
-    prop?.title,
-  ]);
+  }, [prop]);
 
   useEffect(() => {
     if (!toastMessage) {
@@ -483,7 +471,7 @@ function PropertyDetailContent() {
   useEffect(() => {
     if (!wishlistReady || !prop) return;
     setIsWishlisted(isInWishlist.has(prop.id));
-  }, [isInWishlist, prop?.id, wishlistReady]);
+  }, [isInWishlist, prop, wishlistReady]);
 
   useEffect(() => {
     if (!prop) return;
@@ -504,7 +492,7 @@ function PropertyDetailContent() {
       },
     ];
     setUserReviews(seedReviews);
-  }, [prop?.id, prop?.rating]);
+  }, [prop]);
 
   const handleCalendarSelect = (range: DateRange | undefined) => {
     if (!range) {
@@ -571,7 +559,7 @@ function PropertyDetailContent() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
           <p className="text-neutral-600">Loading hotel details...</p>
         </div>
       </div>

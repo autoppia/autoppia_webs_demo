@@ -23,22 +23,12 @@ export function useProjectData<T>(params: Parameters<typeof loadData<T>>[0]) {
     console.log("[useProjectData] loading", { projectKey: params.projectKey, entityType: params.entityType, seedValue: params.seedValue ?? null })
     loadData<T>(params).then(
       data => {
-        console.log("[useProjectData] loaded data", { projectKey: params.projectKey, entityType: params.entityType, count: data.length, sample: (data as unknown as any[]).slice?.(0, 3) ?? [] })
+        console.log("[useProjectData] loaded data", { projectKey: params.projectKey, entityType: params.entityType, count: data.length, sample: (data as T[]).slice(0, 3) })
         if (!cancelled) setState({ data, isLoading: false, error: null })
       },
       err => { if (!cancelled) setState({ data: [], isLoading: false, error: err?.message || 'Failed to load data' }) },
     )
     return () => { cancelled = true }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify({
-    projectKey: params.projectKey,
-    entityType: params.entityType,
-    generateCount: params.generateCount,
-    categories: params.categories,
-    version: params.version,
-    ttlMs: params.ttlMs,
-    seedValue: params.seedValue ?? null,
-    flags: { db: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 },
-  })])
+  }, [params])
   return state
 }

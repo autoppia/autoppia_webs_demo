@@ -36,7 +36,7 @@ const resolveSeed = (v2SeedValue?: number | null): number => {
  */
 export async function initializeRides(
   v2SeedValue?: number | null,
-  limit: number = 10
+  limit = 10
 ): Promise<Ride[]> {
   const effectiveSeed = resolveSeed(v2SeedValue);
 

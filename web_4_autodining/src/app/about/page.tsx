@@ -92,9 +92,9 @@ export default function AboutPage() {
               Why Choose AutoDining?
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-              {features.map((feature, index) => (
+              {features.map((feature) => (
                 <div
-                  key={index}
+                  key={feature.title}
                   className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300"
                   onClick={() =>
                     logEvent(EVENT_TYPES.ABOUT_FEATURE_CLICK, {

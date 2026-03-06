@@ -62,6 +62,7 @@ export default function UserDropdown() {
   }, [isOpen]);
 
   // Close dropdown on route change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: pathname is the trigger to run on route change
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
@@ -102,7 +103,7 @@ export default function UserDropdown() {
           {menuItems.map((item) => {
             const Icon = item.icon;
             // Check if current pathname matches or starts with the href
-            const isActive = pathname === item.href || pathname?.startsWith(item.href + "/");
+            const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`);
             return (
               <SeedLink
                 key={item.label}

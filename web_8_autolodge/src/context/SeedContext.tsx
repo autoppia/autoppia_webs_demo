@@ -35,10 +35,11 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
   const [isSeedReady, setIsSeedReady] = useState<boolean>(false);
 
   // Source of truth: URL `?seed=` (clamped 1..999). If missing/invalid => 1.
+  const seedParam = searchParams.get("seed");
   useEffect(() => {
-    setSeedState(getSeedFromUrl());
+    setSeedState(seedParam !== null && seedParam !== "" ? clampSeed(Number(seedParam)) : getSeedFromUrl());
     setIsSeedReady(true);
-  }, [searchParams]);
+  }, [seedParam]);
 
   // Optional: allow components to update seed and keep it in the URL.
   const setSeed = useCallback((newSeed: number) => {

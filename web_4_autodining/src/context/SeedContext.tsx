@@ -36,10 +36,9 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
 
   // Source of truth: URL `?seed=` (clamped 1..999). If missing/invalid => 1.
   useEffect(() => {
-    // Recompute whenever URL search params change.
     setSeedState(getSeedFromUrl());
     setIsSeedReady(true);
-  }, [searchParams]);
+  }, []); // Run once on mount; URL changes handled by navigation
 
   // Optional: allow components to update seed and keep it in the URL.
   const setSeed = useCallback((newSeed: number) => {

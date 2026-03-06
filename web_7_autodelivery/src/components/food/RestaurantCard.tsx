@@ -54,7 +54,7 @@ export default function RestaurantCard({ id, name, image, cuisine, rating, descr
     }
   };
 
-  const cardIndex = parseInt(typeof id === 'string' ? id.replace('restaurant-', '') : '0') || 0;
+  const cardIndex = Number.parseInt(typeof id === 'string' ? id.replace('restaurant-', '') : '0') || 0;
 
   return (
     <>

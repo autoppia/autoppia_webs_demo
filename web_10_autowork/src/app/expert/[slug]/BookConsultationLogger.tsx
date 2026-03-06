@@ -24,8 +24,6 @@ export default function BookConsultationLogger({ expert }: { expert: Expert }) {
       jobs: expert.jobs,
       timestamp: Date.now(),
     });
-    // Only on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [expert]);
   return null;
 }
