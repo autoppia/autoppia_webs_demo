@@ -52,11 +52,7 @@ def get_allowed_project_keys() -> List[str]:
     """
     if not os.path.isdir(BASE_PATH):
         return []
-    return [
-        d
-        for d in os.listdir(BASE_PATH)
-        if os.path.isdir(os.path.join(BASE_PATH, d)) and _SAFE_SEGMENT_RE.match(d)
-    ]
+    return [d for d in os.listdir(BASE_PATH) if os.path.isdir(os.path.join(BASE_PATH, d)) and _SAFE_SEGMENT_RE.match(d)]
 
 
 # Safe path segment: alphanumeric, underscore, hyphen (e.g. web_4_autodining, restaurants)
@@ -105,6 +101,39 @@ def _path_for_io_under_base(path: str) -> str:
     if os.path.commonpath([base_real, path_real]) != base_real:
         raise ValueError(_MSG_PATH_OUTSIDE_BASE)
     return path_real
+
+
+def _get_validated_main_io_path(web_name: str) -> Optional[Tuple[str, str]]:
+    """
+    Validate web_name and resolve main.json path under BASE_PATH.
+    Returns (web_base, main_io) for use in exists/open, or None if invalid.
+    Used so path expressions come from this validated result (CodeQL path-injection).
+    """
+    _validate_safe_segment(web_name, "web_name")
+    main_path = _resolve_path_under_base(BASE_PATH, f"{web_name}/main.json")
+    if main_path is None:
+        return None
+    try:
+        main_io = _path_for_io_under_base(main_path)
+    except ValueError:
+        return None
+    web_base = os.path.dirname(main_path)
+    return (web_base, main_io)
+
+
+def _get_validated_path_under_base(web_base: str, rel_path: str) -> Optional[str]:
+    """
+    Resolve rel_path under web_base and return path safe for I/O, or None if outside base.
+    Used so path expressions come from this validated result (CodeQL path-injection).
+    """
+    normalized_rel = rel_path.lstrip("./")
+    abs_path = _resolve_path_under_base(web_base, normalized_rel)
+    if abs_path is None:
+        return None
+    try:
+        return _path_for_io_under_base(abs_path)
+    except ValueError:
+        return None
 
 
 def _ensure_dir(path: str) -> None:
@@ -309,16 +338,13 @@ def _read_main_json_safe(
     Resolve web_name/main.json under BASE_PATH, read it, return (web_base, main_io, main_dict).
     Returns (None, None, None) if path invalid or read error.
     When allow_missing=True, returns (web_base, main_io, {}) if file is missing; otherwise (None, None, None).
+    Path used for I/O comes from _get_validated_main_io_path (CodeQL path-injection).
     """
-    main_path = _resolve_path_under_base(BASE_PATH, f"{web_name}/main.json")
-    if main_path is None:
+    validated = _get_validated_main_io_path(web_name)
+    if validated is None:
         logger.warning(_MSG_PATH_OUTSIDE_BASE, extra={"web_name": web_name})
         return (None, None, None)
-    web_base = os.path.dirname(main_path)
-    try:
-        main_io = _path_for_io_under_base(main_path)
-    except ValueError:
-        return (None, None, None)
+    web_base, main_io = validated
     if not os.path.exists(main_io):
         if allow_missing:
             return (web_base, main_io, {})
@@ -339,17 +365,14 @@ def _collect_items_from_rel_paths(
     web_name: str,
     log_prefix: str = "Referenced",
 ) -> List[Dict[str, Any]]:
-    """Load and merge items from resolved paths under web_base; skip invalid or missing files."""
+    """Load and merge items from resolved paths under web_base; skip invalid or missing files.
+    Path used for I/O comes from _get_validated_path_under_base (CodeQL path-injection).
+    """
     all_data: List[Dict[str, Any]] = []
     for rel_path in rel_paths:
-        normalized_rel = rel_path.lstrip("./")
-        abs_path = _resolve_path_under_base(web_base, normalized_rel)
-        if abs_path is None:
+        path_io = _get_validated_path_under_base(web_base, rel_path)
+        if path_io is None:
             logger.warning(f"{log_prefix} path outside base", extra={"rel_path": rel_path, "web_name": web_name})
-            continue
-        try:
-            path_io = _path_for_io_under_base(abs_path)
-        except ValueError:
             continue
         if not os.path.exists(path_io):
             logger.warning(f"{log_prefix} data file missing", extra={"path": path_io, "rel_path": rel_path, "web_name": web_name})

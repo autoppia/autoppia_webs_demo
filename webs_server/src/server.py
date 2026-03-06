@@ -764,9 +764,7 @@ async def generate_dataset_endpoint(request: DataGenerationRequest):
             )
         project_key_for_path = next(k for k in allowed_keys if k == request.project_key)
         try:
-            saved_path = save_generated_data_file_storage(
-                data, project_key_for_path, request.entity_type
-            )
+            saved_path = save_generated_data_file_storage(data, project_key_for_path, request.entity_type)
         except Exception as e:
             logger.error(f"Failed to save data to file storage: {e}")
             # Don't fail the request if saving fails
@@ -861,9 +859,7 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
                 saved_path = append_to_entity_data(project_key_for_path, request.entity_type, data)
                 logger.info(f"[Smart Generation] Appended {len(data)} items to {saved_path}")
             else:
-                saved_path = save_generated_data_file_storage(
-                    data, project_key_for_path, request.entity_type
-                )
+                saved_path = save_generated_data_file_storage(data, project_key_for_path, request.entity_type)
                 logger.info(f"[Smart Generation] Created new file {saved_path}")
         except Exception as e:
             logger.error(f"Failed to save data to file storage: {e}")
