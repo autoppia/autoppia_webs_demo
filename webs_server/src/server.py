@@ -53,7 +53,8 @@ from generators.smart_generator import (
 from seed_resolver import resolve_seeds
 
 # --- Configuration ---
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5433/database")
+# Default is a placeholder for local dev; set DATABASE_URL in production (no hardcoded credentials).
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://localhost:5433/database")
 DB_POOL_MIN = int(os.getenv("DB_POOL_MIN", "10"))
 DB_POOL_MAX = int(os.getenv("DB_POOL_MAX", "50"))
 GZIP_MIN_SIZE = int(os.getenv("GZIP_MIN_SIZE", "1000"))
