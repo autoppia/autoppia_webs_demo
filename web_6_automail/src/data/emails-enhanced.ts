@@ -10,6 +10,7 @@ import { readJson, writeJson } from "@/shared/storage";
 import { fetchSeededSelection } from "@/shared/seeded-loader";
 import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 import { isV2Enabled } from "@/dynamic/shared/flags";
+import { sanitizeEmailList } from "@/utils/emailValidation";
 
 // Helper function to normalize email timestamps
 function normalizeEmailTimestamps(emails: Email[]): Email[] {
@@ -57,11 +58,15 @@ export async function initializeEmails(seedOverride?: number | null): Promise<Em
     });
 
     if (Array.isArray(emails) && emails.length > 0) {
-      console.log(
-        `[automail] Loaded ${emails.length} emails from dataset (seed=${effectiveSeed})`
-      );
-      dynamicEmails = normalizeEmailTimestamps(emails);
-      return dynamicEmails;
+      const sanitized = sanitizeEmailList(emails);
+      const normalized = normalizeEmailTimestamps(sanitized);
+      if (normalized.length > 0) {
+        console.log(
+          `[automail] Loaded ${normalized.length} emails from dataset (seed=${effectiveSeed})`
+        );
+        dynamicEmails = normalized;
+        return dynamicEmails;
+      }
     }
 
     console.warn(`[automail] No emails returned from backend (seed=${effectiveSeed})`);
@@ -98,9 +103,10 @@ export async function loadEmailsFromDb(seedOverride?: number | null): Promise<Em
             method: "select",
           });
     if (selected && selected.length > 0) {
-      return normalizeEmailTimestamps(selected);
+      const sanitized = sanitizeEmailList(selected);
+      return sanitized.length > 0 ? normalizeEmailTimestamps(sanitized) : [];
     }
-  } catch (e) {
+  } catch {
     console.warn("[automail] loadEmailsFromDb: Failed to load from DB:", e);
   }
 
