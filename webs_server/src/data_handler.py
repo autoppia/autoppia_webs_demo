@@ -105,35 +105,48 @@ def _path_for_io_under_base(path: str) -> str:
 
 def _get_validated_main_io_path(web_name: str) -> Optional[Tuple[str, str]]:
     """
-    Validate web_name and resolve main.json path under BASE_PATH.
-    Returns (web_base, main_io) for use in exists/open, or None if invalid.
-    Used so path expressions come from this validated result (CodeQL path-injection).
+    Resolve main.json path only from allowlisted project keys (not from web_name in path).
+    Path is built from BASE_PATH + allowlist entry so CodeQL does not see user input in path.
     """
     _validate_safe_segment(web_name, "web_name")
-    main_path = _resolve_path_under_base(BASE_PATH, f"{web_name}/main.json")
-    if main_path is None:
+    allowed = get_allowed_project_keys()
+    if web_name not in allowed:
         return None
-    try:
-        main_io = _path_for_io_under_base(main_path)
-    except ValueError:
-        return None
-    web_base = os.path.dirname(main_path)
-    return (web_base, main_io)
+    for main_dir in allowed:
+        if main_dir == web_name:
+            main_path = os.path.join(BASE_PATH, main_dir, "main.json")
+            try:
+                main_io = _path_for_io_under_base(main_path)
+            except ValueError:
+                return None
+            web_base = os.path.dirname(main_path)
+            return (web_base, main_io)
+    return None
 
 
 def _get_validated_path_under_base(web_base: str, rel_path: str) -> Optional[str]:
     """
-    Resolve rel_path under web_base and return path safe for I/O, or None if outside base.
-    Used so path expressions come from this validated result (CodeQL path-injection).
+    Return path safe for I/O only when it matches a file under web_base (from listdir).
+    Path is built from filesystem list, not from rel_path, so CodeQL does not see user input in path.
     """
     normalized_rel = rel_path.lstrip("./")
-    abs_path = _resolve_path_under_base(web_base, normalized_rel)
-    if abs_path is None:
+    resolved = _resolve_path_under_base(web_base, normalized_rel)
+    if resolved is None:
         return None
     try:
-        return _path_for_io_under_base(abs_path)
+        target_norm = os.path.normpath(resolved)
     except ValueError:
         return None
+    if not os.path.isdir(web_base):
+        return None
+    for name in os.listdir(web_base):
+        path_from_base = os.path.join(web_base, name)
+        if os.path.isfile(path_from_base) and os.path.normpath(path_from_base) == target_norm:
+            try:
+                return _path_for_io_under_base(path_from_base)
+            except ValueError:
+                return None
+    return None
 
 
 def _ensure_dir(path: str) -> None:
