@@ -18,7 +18,7 @@ function RecommendationsContent() {
   const orderedRecommendations = useMemo(() => {
     const order = dyn.v1.changeOrderElements("recommendations", recommendations.length);
     return order.map((idx) => recommendations[idx]);
-  }, [recommendations, dyn.seed]);
+  }, [recommendations, dyn.v1.changeOrderElements]);
 
   useEffect(() => {
     logEvent(EVENT_TYPES.VIEW_ALL_RECOMMENDATIONS, {

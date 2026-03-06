@@ -159,7 +159,7 @@ export default function RightSidebar() {
           <div className="text-xs font-semibold text-blue-800 mb-1">Complete your profile</div>
           <div className="text-xs text-gray-600 mb-2">Add skills to get discovered</div>
           <div className="w-full bg-gray-200 rounded-full h-1.5">
-            <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: '65%' }}></div>
+            <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: '65%' }} />
           </div>
           <div className="text-xs text-gray-500 mt-1">65% complete</div>
         </div>

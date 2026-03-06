@@ -29,7 +29,7 @@ const resolveSeed = (v2SeedValue?: number | null): number => {
  */
 export async function initializePlaces(
   v2SeedValue?: number | null,
-  limit: number = 50
+  limit = 50
 ): Promise<Place[]> {
   const effectiveSeed = resolveSeed(v2SeedValue);
 

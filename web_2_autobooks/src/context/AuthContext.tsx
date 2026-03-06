@@ -85,20 +85,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       throw new Error("Username already exists");
     }
 
-    try {
-      const newUser = createUser(username, password);
-      const authUser: AuthUser = {
-        username: newUser.username,
-        allowedBooks: newUser.allowedBooks,
-        readingList: [],
-      };
-      setCurrentUser(authUser);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
-      logEvent(EVENT_TYPES.REGISTRATION_BOOK, { username: authUser.username });
-    } catch (err) {
-      // logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: (err as Error).message });
-      throw err;
-    }
+    const newUser = createUser(username, password);
+    const authUser: AuthUser = {
+      username: newUser.username,
+      allowedBooks: newUser.allowedBooks,
+      readingList: [],
+    };
+    setCurrentUser(authUser);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
+    logEvent(EVENT_TYPES.REGISTRATION_BOOK, { username: authUser.username });
   }, []);
 
   const logout = useCallback(() => {

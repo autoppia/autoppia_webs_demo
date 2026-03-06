@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, Suspense, useMemo } from "react";
+import { type ReactNode, Suspense, useMemo } from "react";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
@@ -18,7 +18,7 @@ function DynamicLayoutContent({ children, header, main, footer }: DynamicLayoutP
   const orderedSections = useMemo(() => {
     const order = dyn.v1.changeOrderElements("layout-sections", sections.length);
     return order.map((idx) => sections[idx]);
-  }, [dyn.seed, sections]);
+  }, [dyn, sections]);
 
   return dyn.v1.addWrapDecoy(
     "layout-shell",

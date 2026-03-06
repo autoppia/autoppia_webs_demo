@@ -1,3 +1,4 @@
+import type { NormalizedClient, NormalizedMatter } from "@/data/crm-enhanced";
 import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 import { isV2Enabled } from "@/dynamic/shared/flags";
 import {
@@ -17,15 +18,15 @@ import {
 // Dynamic data provider that returns either seed data or empty arrays based on config
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
-  private ready: boolean = false;
+  private ready = false;
   private readyPromise: Promise<void>;
   private resolveReady!: () => void;
-  private clients: any[] = [];
-  private matters: any[] = [];
-  private files: any[] = [];
-  private events: any[] = [];
-  private logs: any[] = [];
-  private currentSeed: number = 1;
+  private clients: NormalizedClient[] = [];
+  private matters: NormalizedMatter[] = [];
+  private files: unknown[] = [];
+  private events: unknown[] = [];
+  private logs: unknown[] = [];
+  private currentSeed = 1;
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
@@ -41,8 +42,8 @@ export class DynamicDataProvider {
     if (!isUnique) {
       const cachedClients = readCachedClients();
       const cachedMatters = readCachedMatters();
-      this.clients = Array.isArray(cachedClients) && cachedClients.length > 0 ? cachedClients : [];
-      this.matters = Array.isArray(cachedMatters) && cachedMatters.length > 0 ? cachedMatters : [];
+      this.clients = (Array.isArray(cachedClients) && cachedClients.length > 0 ? cachedClients : []) as NormalizedClient[];
+      this.matters = (Array.isArray(cachedMatters) && cachedMatters.length > 0 ? cachedMatters : []) as NormalizedMatter[];
     }
 
     this.readyPromise = new Promise<void>((resolve) => {
@@ -212,7 +213,7 @@ export class DynamicDataProvider {
     return this.readyPromise;
   }
 
-  public getClients(): any[] {
+  public getClients(): NormalizedClient[] {
     // Trigger reload if seed changed
     if (typeof window !== "undefined") {
       this.reloadIfSeedChanged().catch((error) => {
@@ -222,23 +223,23 @@ export class DynamicDataProvider {
     return this.clients;
   }
 
-  public getMatters(): any[] {
+  public getMatters(): NormalizedMatter[] {
     return this.matters;
   }
 
-  public getFiles(): any[] {
+  public getFiles(): unknown[] {
     return this.files;
   }
 
-  public getEvents(): any[] {
+  public getEvents(): unknown[] {
     return this.events;
   }
 
-  public getLogs(): any[] {
+  public getLogs(): unknown[] {
     return this.logs;
   }
 
-  public getClientById(id: string): any | undefined {
+  public getClientById(id: string): NormalizedClient | undefined {
     if (!Array.isArray(this.clients)) {
       console.log("[autocrm] getClientById: clients array is not valid");
       return undefined;
@@ -298,7 +299,7 @@ export class DynamicDataProvider {
     return found;
   }
 
-  public getMatterById(id: string): any | undefined {
+  public getMatterById(id: string): NormalizedMatter | undefined {
     if (!Array.isArray(this.matters)) {
       console.log("[autocrm] getMatterById: matters array is not valid");
       return undefined;
@@ -358,7 +359,7 @@ export class DynamicDataProvider {
     return found;
   }
 
-  public searchClients(query: string): any[] {
+  public searchClients(query: string): NormalizedClient[] {
     const lowercaseQuery = query.toLowerCase();
     return this.clients.filter((client) =>
       client.name.toLowerCase().includes(lowercaseQuery) ||
@@ -366,7 +367,7 @@ export class DynamicDataProvider {
     );
   }
 
-  public searchMatters(query: string): any[] {
+  public searchMatters(query: string): NormalizedMatter[] {
     const lowercaseQuery = query.toLowerCase();
     return this.matters.filter((matter) =>
       matter.name.toLowerCase().includes(lowercaseQuery) ||

@@ -272,7 +272,7 @@ function HomeContent() {
     if (posts.length === 0) return [];
     const order = dyn.v1.changeOrderElements("home-posts", posts.length);
     return order.map((idx) => posts[idx]);
-  }, [posts, dyn.seed]);
+  }, [posts, dyn.v1.changeOrderElements]);
   const visiblePosts = useMemo(
     () => shuffledPosts.filter((p) => !hiddenPostIds.has(p.id)),
     [shuffledPosts, hiddenPostIds]

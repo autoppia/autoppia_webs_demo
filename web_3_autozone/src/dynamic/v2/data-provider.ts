@@ -9,7 +9,7 @@ export class DynamicDataProvider {
   private products: Product[] = [];
   private ready = false;
   private readyPromise: Promise<void>;
-  private currentSeed: number = 1;
+  private currentSeed = 1;
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
@@ -137,7 +137,7 @@ export class DynamicDataProvider {
   // Get effective seed value - returns 1 (default) when dynamic HTML is disabled
   // Validates seed is between 1-300, defaults to 1 if invalid
   public getEffectiveSeed(providedSeed = 1): number {
-    if (!this.isEnabled) {
+    if (!isV2Enabled()) {
       return 1;
     }
 

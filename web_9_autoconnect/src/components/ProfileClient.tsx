@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState, useMemo, useRef } from "react";
-import { type User, type Post } from "@/library/dataset";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
+import type { User, Post } from "@/library/dataset";
 import Avatar from "@/components/Avatar";
-import Post from "@/components/Post";
+import PostCard from "@/components/Post";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
 import { dynamicDataProvider } from "@/dynamic/v2";
@@ -22,7 +22,7 @@ function ProfileContent({ username }: { username: string }) {
   type ExperienceEntry = NonNullable<User["experience"]>[number];
   const { seed } = useSeed();
   // Default layout config (no v1 layout variations in this build)
-  const layout = { profileLayout: "full" as const };
+  const layout: { profileLayout: "full" | "sidebar" } = { profileLayout: "full" };
 
   const [userNotFound, setUserNotFound] = useState(false);
   const [isCheckingUser, setIsCheckingUser] = useState(true);
@@ -88,12 +88,12 @@ function ProfileContent({ username }: { username: string }) {
     });
 
     return found;
-  }, [username, usersState, usersStateKey]);
+  }, [username, usersState]);
 
   // Memoize currentUser to avoid reference changes
   const currentUser = useMemo(() => {
     return usersState[2] || usersState[0];
-  }, [usersState, usersStateKey]);
+  }, [usersState]);
 
   const dyn = useDynamicSystem();
 
@@ -106,7 +106,7 @@ function ProfileContent({ username }: { username: string }) {
   const dynSeed = dyn.seed;
 
   // Memoize dyn.v3 to avoid reference changes
-  const dynV3 = useMemo(() => dyn.v3, [dyn.seed]);
+  const dynV3 = useMemo(() => dyn.v3, [dyn.v3]);
 
   // Use ref to maintain stable reference to changeOrderElements
   const changeOrderElementsRef = useRef(dyn.v1.changeOrderElements);
@@ -178,7 +178,7 @@ function ProfileContent({ username }: { username: string }) {
   }, [hiddenPostIds, hiddenPosts]);
 
   // Load saved posts from localStorage
-  const getLocalPosts = (): Post[] => {
+  const getLocalPosts = useCallback((): Post[] => {
     if (typeof window === "undefined" || !isSelf || !user) return [];
     const savedPosts = localStorage.getItem(`profile_posts_${user.username}`);
     if (savedPosts) {
@@ -189,7 +189,7 @@ function ProfileContent({ username }: { username: string }) {
       }
     }
     return [];
-  };
+  }, [isSelf, user]);
 
   const [localPosts, setLocalPosts] = useState<Post[]>(getLocalPosts);
   const [postsState, setPostsState] = useState<Record<string, { likes: number; liked: boolean; comments: Post['comments'] }>>({});
@@ -259,7 +259,7 @@ function ProfileContent({ username }: { username: string }) {
       mounted = false;
       unsubscribe();
     };
-  }, [username, seed]); // V2 dataset can change by seed
+  }, [username]);
 
   // Load posts state from localStorage (likes and comments)
   useEffect(() => {
@@ -279,7 +279,7 @@ function ProfileContent({ username }: { username: string }) {
     if (isSelf && user) {
       setLocalPosts(getLocalPosts());
     }
-  }, [isSelf, user]);
+  }, [isSelf, user, getLocalPosts]);
 
   useEffect(() => {
     if (user) {
@@ -307,7 +307,7 @@ function ProfileContent({ username }: { username: string }) {
   const posts = useMemo(() => {
     if (!userUsername || !mockPosts || mockPosts.length === 0) return [];
     return mockPosts.filter((p) => p.user.username === userUsername);
-  }, [mockPosts, mockPostsKey, userUsername]);
+  }, [mockPosts, userUsername]);
 
   // Serialize localPosts for stable dependency check
   const localPostsKey = useMemo(() => {
@@ -320,7 +320,7 @@ function ProfileContent({ username }: { username: string }) {
       return isSelf && localPosts.length > 0 ? localPosts : [];
     }
     return isSelf ? [...localPosts, ...posts] : posts;
-  }, [isSelf, localPosts, localPostsKey, posts]);
+  }, [isSelf, localPosts, posts]);
 
   // Serialize allPosts for stable dependency
   const allPostsKey = useMemo(() => {
@@ -361,7 +361,7 @@ function ProfileContent({ username }: { username: string }) {
       }
       return post;
     });
-  }, [allPosts, allPostsKey, postsStateSerialized]);
+  }, [allPosts, postsStateSerialized]);
 
   // Serialize hiddenPostIds for stable dependency
   const hiddenPostIdsStr = useMemo(() => {
@@ -379,7 +379,7 @@ function ProfileContent({ username }: { username: string }) {
   const postsOrder = useMemo(() => {
     if (postsLength === 0) return [];
     return changeOrderElementsRef.current("profile-posts", postsLength);
-  }, [postsLength, dynSeed]);
+  }, [postsLength]);
 
   const visiblePosts = useMemo(() => {
     if (!postsWithState || postsWithState.length === 0) return [];
@@ -389,13 +389,13 @@ function ProfileContent({ username }: { username: string }) {
 
     const orderedPosts = postsOrder.map((idx) => postsWithState[idx]);
     return orderedPosts.filter((p) => !hiddenSet.has(p.id));
-  }, [postsWithState, postsWithStateKey, postsOrder, hiddenPostIdsStr]);
+  }, [postsWithState, postsOrder, hiddenPostIdsStr]);
 
   if (isCheckingUser) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
           <p className="text-gray-600">Loading user profile...</p>
         </div>
       </div>
@@ -838,7 +838,7 @@ function ProfileContent({ username }: { username: string }) {
         <div className="flex flex-col gap-6">
           {experience.map((exp, i) => (
             <div
-              key={i}
+              key={`${exp.company}-${exp.title}-${i}`}
               className="flex flex-col sm:flex-row gap-4 pb-6 last:pb-0 border-b last:border-b-0 border-gray-200"
             >
               <div className="flex-shrink-0">
@@ -1005,7 +1005,7 @@ function ProfileContent({ username }: { username: string }) {
           </div>
         ) : (
           visiblePosts.map((post) => (
-            <Post
+            <PostCard
               key={post.id}
               post={post}
               currentUsername={currentUser.username}

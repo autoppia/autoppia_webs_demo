@@ -171,7 +171,7 @@ export class DynamicDataProvider {
     if (this.posts.length > 0) {
       console.log("[autoconnect/data-provider] Re-normalizing posts with updated users...");
       this.posts = this.posts.map((p) => {
-        if (p.user && p.user.username && this.users.length > 0) {
+        if (p.user?.username && this.users.length > 0) {
           const postUsername = String(p.user.username || "").trim().toLowerCase();
 
           // Strategy 1: Exact match (case-insensitive)
@@ -228,7 +228,7 @@ export class DynamicDataProvider {
       let normalizedUser = p.user;
 
       // Try to find the user by username to ensure we use the correct user object
-      if (p.user && p.user.username && this.users.length > 0) {
+      if (p.user?.username && this.users.length > 0) {
         const postUsername = String(p.user.username || "").trim().toLowerCase();
 
         // Strategy 1: Exact match (case-insensitive)
@@ -260,11 +260,11 @@ export class DynamicDataProvider {
           // Only log warning if we have users loaded (to avoid spam during initialization)
           if (this.users.length > 0) {
             console.warn(`[autoconnect/data-provider] Could not find matching user for post.user.username: "${p.user.username}"`);
-            console.warn(`[autoconnect/data-provider] Available usernames (first 10):`,
+            console.warn("[autoconnect/data-provider] Available usernames (first 10):",
               this.users.slice(0, 10).map(u => u.username).join(', '));
           }
         }
-      } else if (p.user && p.user.username && this.users.length === 0) {
+      } else if (p.user?.username && this.users.length === 0) {
         // Users not loaded yet, will be normalized in getPosts()
         console.log(`[autoconnect/data-provider] Post has user "${p.user.username}" but users array is empty - will normalize later`);
       }
@@ -332,7 +332,7 @@ export class DynamicDataProvider {
     });
 
     if (found) {
-      console.log(`[autoconnect] getUserByUsername: ✅ Found via exact match`);
+      console.log("[autoconnect] getUserByUsername: ✅ Found via exact match");
       return found;
     }
 
@@ -343,7 +343,7 @@ export class DynamicDataProvider {
     });
 
     if (found) {
-      console.log(`[autoconnect] getUserByUsername: ✅ Found via partial match`);
+      console.log("[autoconnect] getUserByUsername: ✅ Found via partial match");
       return found;
     }
 
@@ -358,7 +358,7 @@ export class DynamicDataProvider {
         });
 
         if (found) {
-          console.log(`[autoconnect] getUserByUsername: ✅ Found via URL decoded match`);
+          console.log("[autoconnect] getUserByUsername: ✅ Found via URL decoded match");
           return found;
         }
       }
@@ -379,15 +379,15 @@ export class DynamicDataProvider {
       });
 
       if (found) {
-        console.log(`[autoconnect] getUserByUsername: ✅ Found via dot-removed match`);
+        console.log("[autoconnect] getUserByUsername: ✅ Found via dot-removed match");
         return found;
       }
     }
 
     // Log for debugging if not found
     if (!found && this.users.length > 0) {
-      console.log(`[autoconnect] getUserByUsername: ❌ User not found after all strategies`);
-      console.log(`[autoconnect] Searched for:`, {
+      console.log("[autoconnect] getUserByUsername: ❌ User not found after all strategies");
+      console.log("[autoconnect] Searched for:", {
         original: username,
         normalized: searchUsername,
         withoutDots: searchUsername.replace(/\./g, "")
@@ -421,10 +421,10 @@ export class DynamicDataProvider {
         searchWithoutDots.includes(u.usernameWithoutDots)
       );
       if (closeMatches.length > 0) {
-        console.log(`[autoconnect] ⚠️ Close matches found (without dots):`, closeMatches);
-        console.log(`[autoconnect] ⚠️ This suggests the dot-removal strategy should have worked!`);
+        console.log("[autoconnect] ⚠️ Close matches found (without dots):", closeMatches);
+        console.log("[autoconnect] ⚠️ This suggests the dot-removal strategy should have worked!");
       } else {
-        console.log(`[autoconnect] No close matches found even after removing dots`);
+        console.log("[autoconnect] No close matches found even after removing dots");
       }
     }
 
@@ -449,7 +449,7 @@ export class DynamicDataProvider {
       let normalizedUser = post.user;
 
       // Try to find the user by username to ensure we use the correct user object
-      if (post.user && post.user.username && this.users.length > 0) {
+      if (post.user?.username && this.users.length > 0) {
         const postUsername = String(post.user.username || "").trim().toLowerCase();
 
         // Strategy 1: Exact match (case-insensitive)
@@ -480,10 +480,10 @@ export class DynamicDataProvider {
         } else {
           // Log warning with more context
           console.warn(`[autoconnect/data-provider] Could not find matching user for post.user.username: "${post.user.username}"`);
-          console.warn(`[autoconnect/data-provider] Available usernames (first 10):`,
+          console.warn("[autoconnect/data-provider] Available usernames (first 10):",
             this.users.slice(0, 10).map(u => u.username).join(', '));
         }
-      } else if (post.user && post.user.username && this.users.length === 0) {
+      } else if (post.user?.username && this.users.length === 0) {
         console.warn(`[autoconnect/data-provider] Post has user "${post.user.username}" but users array is empty`);
       }
 
@@ -529,7 +529,7 @@ export class DynamicDataProvider {
       (job) =>
         job.title.toLowerCase().includes(normalized) ||
         job.company.toLowerCase().includes(normalized) ||
-        (job.location && job.location.toLowerCase().includes(normalized))
+        (job.location?.toLowerCase().includes(normalized))
     );
   }
 
@@ -570,19 +570,19 @@ export class DynamicDataProvider {
   }
 
   private notifyUsers(): void {
-    this.userSubscribers.forEach((cb) => cb(this.users));
+    for (const cb of this.userSubscribers) cb(this.users);
   }
 
   private notifyPosts(): void {
-    this.postSubscribers.forEach((cb) => cb(this.posts));
+    for (const cb of this.postSubscribers) cb(this.posts);
   }
 
   private notifyJobs(): void {
-    this.jobSubscribers.forEach((cb) => cb(this.jobs));
+    for (const cb of this.jobSubscribers) cb(this.jobs);
   }
 
   private notifyRecommendations(): void {
-    this.recommendationSubscribers.forEach((cb) => cb(this.recommendations));
+    for (const cb of this.recommendationSubscribers) cb(this.recommendations);
   }
 
   public isDynamicModeEnabled(): boolean {

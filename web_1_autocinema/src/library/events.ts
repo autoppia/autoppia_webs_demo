@@ -21,7 +21,7 @@ export const EVENT_TYPES = {
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
 
-export function logEvent(eventType: EventType, data: any = {}, extra_headers: Record<string, string> = {}) {
+export function logEvent(eventType: EventType, data: object = {}, extra_headers: Record<string, string> = {}) {
   if (typeof window === "undefined") return;
 
   let user = localStorage.getItem("user");

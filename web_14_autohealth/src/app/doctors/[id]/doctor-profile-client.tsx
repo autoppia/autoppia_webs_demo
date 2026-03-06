@@ -32,10 +32,10 @@ const ACTION_KEYS = ["contact", "reviews"] as const;
 type ActionKey = (typeof ACTION_KEYS)[number];
 
 function Stars({ value }: { value: number }) {
-  const stars = Array.from({ length: 5 }).map((_, i) => {
+  const stars = ([0, 1, 2, 3, 4] as const).map((i) => {
     const active = value >= i + 1 - 1e-6 || value > i && value < i + 1;
     return (
-      <Star key={i} className={`h-4 w-4 ${active ? "fill-yellow-400 text-yellow-500" : "text-muted-foreground"}`} />
+      <Star key={`star-${i}`} className={`h-4 w-4 ${active ? "fill-yellow-400 text-yellow-500" : "text-muted-foreground"}`} />
     );
   });
   return <div className="flex items-center gap-1">{stars}</div>;
@@ -279,8 +279,8 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
-                  {(doctor.procedures || []).map((procedure, index) => (
-                    <li key={index} className="flex items-center gap-2">
+                  {(doctor.procedures || []).map((procedure) => (
+                    <li key={procedure} className="flex items-center gap-2">
                       <span className="text-blue-500">🔬</span>
                       <span className="text-sm">{procedure}</span>
                     </li>
@@ -302,8 +302,8 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
-                  {(doctor.education || []).map((edu, index) => (
-                    <li key={index} className="flex items-start gap-3">
+                  {(doctor.education || []).map((edu) => (
+                    <li key={edu} className="flex items-start gap-3">
                       <span className="text-blue-500 mt-1">🎓</span>
                       <span className="text-sm">{edu}</span>
                     </li>
@@ -321,8 +321,8 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
-                  {(doctor.certifications || []).map((cert, index) => (
-                    <li key={index} className="flex items-start gap-3">
+                  {(doctor.certifications || []).map((cert) => (
+                    <li key={cert} className="flex items-start gap-3">
                       <span className="text-green-500 mt-1">✅</span>
                       <span className="text-sm">{cert}</span>
                     </li>

@@ -18,6 +18,21 @@ interface UserProfile {
   email?: string;
 }
 
+interface Job {
+  title?: string;
+  status?: string;
+  start?: string;
+  activity?: string;
+}
+
+interface Expert {
+  name: string;
+  slug?: string;
+  country?: string;
+  role?: string;
+  avatar?: string;
+}
+
 export default function ProfileClient({ username }: { username: string }) {
   // Mock user profile data
   const user: UserProfile = {
@@ -35,9 +50,9 @@ export default function ProfileClient({ username }: { username: string }) {
   const { getElementAttributes, getText } = useSeedLayout();
 
   // Use V2 dynamic data provider
-  const [jobs, setJobs] = useState<any[]>([]);
-  const [hires, setHires] = useState<any[]>([]);
-  const [experts, setExperts] = useState<any[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [hires, setHires] = useState<unknown[]>([]);
+  const [experts, setExperts] = useState<Expert[]>([]);
 
   // Subscribe to data changes
   useEffect(() => {
@@ -64,7 +79,7 @@ export default function ProfileClient({ username }: { username: string }) {
     };
   }, [dyn.v2]);
 
-  const [userJobs, setUserJobs] = useState<any[]>([]);
+  const [userJobs, setUserJobs] = useState<Job[]>([]);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [aboutText, setAboutText] = useState("");
   const [isEditingAbout, setIsEditingAbout] = useState(false);
@@ -129,7 +144,7 @@ export default function ProfileClient({ username }: { username: string }) {
     } catch (err) {
       console.error("Failed to load profile data:", err);
     }
-  }, [username]);
+  }, [username, user.about, user.location, user.title, user.email, user.name]);
 
   // Log view profile event (commented out - event type not defined in autowork)
   // useEffect(() => {
@@ -142,7 +157,7 @@ export default function ProfileClient({ username }: { username: string }) {
 
   // Get favorite experts
   const favoriteExperts = useMemo(() => {
-    return experts.filter((expert: any) => favorites.has(expert.name));
+    return experts.filter((expert) => favorites.has(expert.name));
   }, [experts, favorites]);
 
   // Combine user jobs with fetched jobs
@@ -153,8 +168,8 @@ export default function ProfileClient({ username }: { username: string }) {
   // Get stats
   const stats = useMemo(() => {
     const totalJobs = allJobs.length;
-    const completedJobs = allJobs.filter((j: any) => j.status === "Completed").length;
-    const inProgressJobs = allJobs.filter((j: any) => j.status === "In progress").length;
+    const completedJobs = allJobs.filter((j) => j.status === "Completed").length;
+    const inProgressJobs = allJobs.filter((j) => j.status === "In progress").length;
     const totalHires = hires.length;
     const favoriteCount = favorites.size;
 
@@ -177,15 +192,15 @@ export default function ProfileClient({ username }: { username: string }) {
     setIsEditingAbout(false);
   };
 
-  const handleViewExpert = (expert: any) => {
-    const slug = (expert as any).slug ?? expert.name
+  const handleViewExpert = (expert: Expert) => {
+    const slug = expert.slug ?? expert.name
       .toLowerCase()
       .replace(/\s+/g, "-")
       .replace(/\./g, "");
     router.push(`/expert/${slug}`);
   };
 
-  const handleViewJob = (job: any) => {
+  const handleViewJob = (_job: Job) => {
     router.push("/jobs");
   };
 
@@ -237,7 +252,7 @@ export default function ProfileClient({ username }: { username: string }) {
               alt={user.name}
               className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
             />
-            <div className="absolute bottom-0 right-0 w-6 h-6 bg-green-500 rounded-full border-4 border-white"></div>
+            <div className="absolute bottom-0 right-0 w-6 h-6 bg-green-500 rounded-full border-4 border-white" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-4">
@@ -434,9 +449,9 @@ export default function ProfileClient({ username }: { username: string }) {
             </button>
           </div>
           <div className="space-y-4">
-            {allJobs.slice(0, 5).map((job: any, i: number) => (
+            {allJobs.slice(0, 5).map((job) => (
               <div
-                key={i}
+                key={`${job.title ?? ""}-${job.start ?? ""}-${job.activity ?? ""}`}
                 onClick={() => handleViewJob(job)}
                 className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
               >
@@ -484,7 +499,7 @@ export default function ProfileClient({ username }: { username: string }) {
             )}
           </div>
           <div className="space-y-3">
-            {favoriteExperts.slice(0, 5).map((expert: any) => {
+            {favoriteExperts.slice(0, 5).map((expert) => {
               const isFavorite = favorites.has(expert.name);
               return (
                 <div
