@@ -56,7 +56,7 @@ export async function fetchWithRetry(
         (retryStatuses.length === 0 || retryStatuses.includes(response.status));
 
       if (!response.ok && shouldRetry) {
-        const backoffMs = baseDelayMs * Math.pow(2, attempt);
+        const backoffMs = baseDelayMs * 2 ** attempt;
         await delay(backoffMs);
         continue;
       }
@@ -70,7 +70,7 @@ export async function fetchWithRetry(
         attempt < maxRetries - 1 && (isAbort || (err as { status?: number }).status !== undefined);
 
       if (shouldRetry) {
-        const backoffMs = baseDelayMs * Math.pow(2, attempt);
+        const backoffMs = baseDelayMs * 2 ** attempt;
         await delay(backoffMs);
         continue;
       }
