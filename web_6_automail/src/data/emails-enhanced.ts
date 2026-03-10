@@ -106,8 +106,8 @@ export async function loadEmailsFromDb(seedOverride?: number | null): Promise<Em
       const sanitized = sanitizeEmailList(selected);
       return sanitized.length > 0 ? normalizeEmailTimestamps(sanitized) : [];
     }
-  } catch {
-    console.warn("[automail] loadEmailsFromDb: Failed to load from DB:", e);
+  } catch (error) {
+    console.warn("[automail] loadEmailsFromDb: Failed to load from DB:", error);
   }
 
   return [];
