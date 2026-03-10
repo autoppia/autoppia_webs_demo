@@ -98,10 +98,19 @@ const buildPosterPath = (imagePath?: string): string => {
 };
 
 const generateFallbackId = (): string => {
-  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
-    return crypto.randomUUID();
+  const webCrypto =
+    typeof globalThis !== "undefined" && "crypto" in globalThis
+      ? (globalThis as unknown as { crypto: Crypto }).crypto
+      : undefined;
+  if (webCrypto?.randomUUID) {
+    return webCrypto.randomUUID();
   }
-  return `book-${Math.random().toString(36).slice(2, 10)}`;
+  if (webCrypto?.getRandomValues) {
+    const bytes = new Uint8Array(8);
+    webCrypto.getRandomValues(bytes);
+    return `book-${Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("")}`;
+  }
+  return `book-ts-${Date.now().toString(36)}`;
 };
 
 const normalizeBook = (book: DatasetBook): Book => {

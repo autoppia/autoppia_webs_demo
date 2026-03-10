@@ -10,6 +10,34 @@ import { fetchSeededSelection } from "@/shared/seeded-loader";
 import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 import { isV2Enabled } from "@/dynamic/shared/flags";
 
+/** Allow only relative /images/ path with no traversal or protocol (CodeQL URL sanitization). */
+function isSafeLocalImagePath(path: string): boolean {
+  return (
+    typeof path === "string" &&
+    path.startsWith("/images/") &&
+    !path.includes("..") &&
+    !path.includes("://")
+  );
+}
+
+/** Allow only HTTPS/HTTP URLs from images.unsplash.com or source.unsplash.com (CodeQL URL sanitization). */
+function isSafeUnsplashUrl(url: string): boolean {
+  try {
+    const u = new URL(url);
+    const host = u.hostname.toLowerCase();
+    return (
+      (u.protocol === "https:" || u.protocol === "http:") &&
+      (host === "images.unsplash.com" || host === "source.unsplash.com")
+    );
+  } catch {
+    return false;
+  }
+}
+
+function isAllowedImageUrl(image: string): boolean {
+  return isSafeLocalImagePath(image) || isSafeUnsplashUrl(image);
+}
+
 // Helper function to normalize restaurant images
 function normalizeRestaurantImages(restaurants: Restaurant[]): Restaurant[] {
   if (!Array.isArray(restaurants)) {
@@ -26,8 +54,8 @@ function normalizeRestaurantImages(restaurants: Restaurant[]): Restaurant[] {
     // Safely get restaurant image - ensure it's a string
     let image: string = typeof restaurant.image === 'string' ? restaurant.image : String(restaurant.image || '');
 
-    // Ensure restaurant image is valid
-    if (!image || (!image.startsWith("/images/") && !image.includes("unsplash.com"))) {
+    // Ensure restaurant image is valid (strict URL check for CodeQL)
+    if (!image || !isAllowedImageUrl(image)) {
       // Default fallback image based on cuisine - safely get cuisine as string
       const cuisineFallback: Record<string, string> = {
         Italian: "/images/pizza-palace.jpg",
@@ -49,7 +77,7 @@ function normalizeRestaurantImages(restaurants: Restaurant[]): Restaurant[] {
           }
           // Safely get menu item image - ensure name and image are strings before using string methods
           let menuItemImage: string = typeof item.image === 'string' ? item.image : String(item.image || '');
-          if (!menuItemImage || (!menuItemImage.startsWith("/images/") && !menuItemImage.includes("unsplash.com"))) {
+          if (!menuItemImage || !isAllowedImageUrl(menuItemImage)) {
             try {
               const itemName = typeof item.name === 'string' ? item.name : String(item.name || 'menu-item');
               // Ensure itemName is actually a string and has toLowerCase method
