@@ -8,7 +8,12 @@ import random
 from typing import List, Dict, Any, Optional
 
 
-def seeded_select(data_pool: List[Dict[str, Any]], seed: int, count: int, allow_duplicates: bool = False) -> List[Dict[str, Any]]:
+def seeded_select(
+    data_pool: List[Dict[str, Any]],
+    seed: int,
+    count: int,
+    allow_duplicates: bool = False,
+) -> List[Dict[str, Any]]:
     """
     Select data from pool using a seed for reproducibility.
 
@@ -69,7 +74,13 @@ def seeded_shuffle(data_pool: List[Dict[str, Any]], seed: int, limit: Optional[i
     return shuffled
 
 
-def seeded_filter_and_select(data_pool: List[Dict[str, Any]], seed: int, count: int, filter_key: Optional[str] = None, filter_values: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+def seeded_filter_and_select(
+    data_pool: List[Dict[str, Any]],
+    seed: int,
+    count: int,
+    filter_key: Optional[str] = None,
+    filter_values: Optional[List[str]] = None,
+) -> List[Dict[str, Any]]:
     """
     Filter data by criteria, then select using seed.
 
@@ -215,7 +226,13 @@ if __name__ == "__main__":
 
     # Test 4: Filter and select
     print("Test 4: Filter and select")
-    filtered = seeded_filter_and_select(test_pool, seed=42, count=3, filter_key="category", filter_values=["Kitchen", "Home"])
+    filtered = seeded_filter_and_select(
+        test_pool,
+        seed=42,
+        count=3,
+        filter_key="category",
+        filter_values=["Kitchen", "Home"],
+    )
     print(f"Kitchen/Home only: {[item['name'] for item in filtered]}\n")
 
     # Test 5: Proportional distribution

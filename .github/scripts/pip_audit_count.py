@@ -4,6 +4,7 @@ Count vulnerabilities from pip-audit JSON for direct dependencies only.
 Reads requirements.txt (direct deps) and reports/pip-audit.json; prints total
 vuln count for packages that appear in requirements.txt (PEP 503 normalized).
 """
+
 import json
 import re
 import sys

@@ -262,7 +262,12 @@ def load_all_data(
 
     # When V2 disabled: load first file per entity only
     # v2_disabled is True when ENABLE_DYNAMIC_V2 is "false", "0", "no", or "off"
-    v2_disabled_env_flag = os.getenv("ENABLE_DYNAMIC_V2", "false").lower() in {"false", "0", "no", "off"}
+    v2_disabled_env_flag = os.getenv("ENABLE_DYNAMIC_V2", "false").lower() in {
+        "false",
+        "0",
+        "no",
+        "off",
+    }
     force_seed_disabled = seed_value == 1
     v2_disabled = v2_disabled_env_flag or force_seed_disabled
 
@@ -279,10 +284,20 @@ def load_all_data(
 
     if v2_disabled:
         result = _load_first_file_only(web_name, entity_type)
-        logger.debug("load_all_data: branch=first_file_only", extra={"web_name": web_name, "entity_type": entity_type, "count": len(result)})
+        logger.debug(
+            "load_all_data: branch=first_file_only",
+            extra={
+                "web_name": web_name,
+                "entity_type": entity_type,
+                "count": len(result),
+            },
+        )
         return result
     result = _load_from_main_json(web_name, entity_type)
-    logger.debug("load_all_data: branch=main_json", extra={"web_name": web_name, "entity_type": entity_type, "count": len(result)})
+    logger.debug(
+        "load_all_data: branch=main_json",
+        extra={"web_name": web_name, "entity_type": entity_type, "count": len(result)},
+    )
     return result
 
 
@@ -310,7 +325,10 @@ def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> Li
         with open(main_io, "r", encoding="utf-8") as f:
             main = json.load(f)
     except Exception as exc:
-        logger.error("Failed to read main.json", extra={"web_name": web_name, "path": main_io, "error": str(exc)})
+        logger.error(
+            "Failed to read main.json",
+            extra={"web_name": web_name, "path": main_io, "error": str(exc)},
+        )
         return []
 
     all_data: List[Dict[str, Any]] = []
@@ -331,14 +349,20 @@ def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> Li
         normalized_rel = rel_path.lstrip("./")
         abs_path = _resolve_path_under_base(web_base, normalized_rel)
         if abs_path is None:
-            logger.warning("Referenced path outside base", extra={"rel_path": rel_path, "web_name": web_name})
+            logger.warning(
+                "Referenced path outside base",
+                extra={"rel_path": rel_path, "web_name": web_name},
+            )
             continue
         try:
             path_io = _path_for_io_under_base(abs_path)
         except ValueError:
             continue
         if not os.path.exists(path_io):
-            logger.warning("Referenced data file missing", extra={"path": path_io, "rel_path": rel_path, "web_name": web_name})
+            logger.warning(
+                "Referenced data file missing",
+                extra={"path": path_io, "rel_path": rel_path, "web_name": web_name},
+            )
             continue
         items = _parse_json_file_to_items(path_io, allowed_base=web_base)
         if items is not None:
@@ -372,7 +396,10 @@ def _load_first_file_only(web_name: str, entity_type: Optional[str] = None) -> L
         with open(main_io, "r", encoding="utf-8") as f:
             main = json.load(f)
     except Exception as exc:
-        logger.error("Failed to read main.json", extra={"web_name": web_name, "path": main_io, "error": str(exc)})
+        logger.error(
+            "Failed to read main.json",
+            extra={"web_name": web_name, "path": main_io, "error": str(exc)},
+        )
         return []
 
     all_data: List[Dict[str, Any]] = []
@@ -392,7 +419,10 @@ def _load_first_file_only(web_name: str, entity_type: Optional[str] = None) -> L
         normalized_rel = rel_path.lstrip("./")
         abs_path = _resolve_path_under_base(web_base, normalized_rel)
         if abs_path is None:
-            logger.warning("First file path outside base", extra={"rel_path": rel_path, "web_name": web_name})
+            logger.warning(
+                "First file path outside base",
+                extra={"rel_path": rel_path, "web_name": web_name},
+            )
             continue
         try:
             path_io = _path_for_io_under_base(abs_path)
