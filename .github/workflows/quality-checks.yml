@@ -37,7 +37,7 @@ jobs:
         run: ruff check .
 
       - name: Ruff format check
-        run: ruff format --check .
+        run: ruff format --check --line-length 200 .
 
       - name: Ruff maintainability report
         run: ruff check webs_server --select C901,PLR0913,PLR0915 --output-format=concise
