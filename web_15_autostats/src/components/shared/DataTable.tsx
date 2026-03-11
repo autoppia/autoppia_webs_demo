@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { ChevronUp, ChevronDown } from 'lucide-react';
-import { DynamicText } from '@/dynamic/v3/DynamicText';
 import { useDynamicSystem } from '@/dynamic/shared';
 
 export interface Column<T> {
@@ -89,7 +88,7 @@ export function DataTable<T extends Record<string, unknown>>({
                       onClick={() => handleSort(column.key)}
                       className="h-auto p-0 hover:bg-transparent hover:text-zinc-100"
                     >
-                      <DynamicText value={column.header} type="text" />
+                      {column.header}
                       {sortKey === column.key && (
                         <span className="ml-2">
                           {sortDirection === 'asc' ? (
@@ -101,7 +100,7 @@ export function DataTable<T extends Record<string, unknown>>({
                       )}
                     </Button>
                   ) : (
-                    <DynamicText value={column.header} type="text" />
+                    column.header
                   )}
                 </TableHead>
               ))}
@@ -114,7 +113,7 @@ export function DataTable<T extends Record<string, unknown>>({
                   colSpan={columns.length}
                   className="h-24 text-center text-zinc-500"
                 >
-                  <DynamicText value="No data available" type="text" />
+                  {dyn.v3.getVariant('no_data_available', undefined, 'No data available')}
                 </TableCell>
               </TableRow>
             ) : (
@@ -134,10 +133,7 @@ export function DataTable<T extends Record<string, unknown>>({
                       {column.render ? (
                         column.render(item)
                       ) : (
-                        <DynamicText
-                          value={item[column.key]}
-                          type="text"
-                        />
+                        String(item[column.key] ?? '')
                       )}
                     </TableCell>
                   ))}

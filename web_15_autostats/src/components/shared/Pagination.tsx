@@ -4,7 +4,6 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { useDynamicSystem } from '@/dynamic/shared';
-import { DynamicText } from '@/dynamic/v3/DynamicText';
 
 interface PaginationProps {
   currentPage: number;
@@ -66,7 +65,7 @@ export function Pagination({
               onClick={() => onPageChange(1)}
               className="bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
             >
-              <DynamicText value="1" type="number" />
+              1
             </Button>
             {startPage > 2 && (
               <span className="text-zinc-500">...</span>
@@ -85,7 +84,7 @@ export function Pagination({
                 : 'bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100'
             }
           >
-            <DynamicText value={page.toString()} type="number" />
+            {page.toString()}
           </Button>
         ))}
 
@@ -99,7 +98,7 @@ export function Pagination({
               onClick={() => onPageChange(totalPages)}
               className="bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
             >
-              <DynamicText value={totalPages.toString()} type="number" />
+              {totalPages.toString()}
             </Button>
           </>
         )}
@@ -125,10 +124,7 @@ export function Pagination({
       </div>
 
       <div className="mt-2 text-center text-sm text-zinc-500">
-        <DynamicText
-          value={`Page ${currentPage} of ${totalPages}`}
-          type="text"
-        />
+        {dyn.v3.getVariant('pagination_page_of', undefined, `Page ${currentPage} of ${totalPages}`)}
       </div>
         </>
       ))}

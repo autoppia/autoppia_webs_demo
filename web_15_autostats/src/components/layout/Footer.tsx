@@ -3,7 +3,6 @@
 import React from 'react';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { useDynamicSystem } from '@/dynamic/shared';
-import { DynamicText } from '@/dynamic/v3/DynamicText';
 
 export function Footer() {
   const router = useSeedRouter();
@@ -22,19 +21,16 @@ export function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <h3 className="text-white font-semibold mb-4">
-                <DynamicText value="AutoStats" type="text" />
+                {dyn.v3.getVariant('app_name', undefined, 'AutoStats')}
               </h3>
               <p className="text-sm text-zinc-400">
-                <DynamicText
-                  value="Blockchain explorer and analytics platform for the Bittensor network"
-                  type="text"
-                />
+                {dyn.v3.getVariant('footer_tagline', undefined, 'Blockchain explorer and analytics platform for the Bittensor network')}
               </p>
             </div>
 
             <div>
               <h4 className="text-white font-semibold mb-4">
-                <DynamicText value="Explorer" type="text" />
+                {dyn.v3.getVariant('nav_explorer', undefined, 'Explorer')}
               </h4>
               <ul className="space-y-2">
                 <FooterLink href="/subnets" label="Subnets" onClick={handleLinkClick('/subnets')} />
@@ -46,7 +42,7 @@ export function Footer() {
 
             <div>
               <h4 className="text-white font-semibold mb-4">
-                <DynamicText value="Resources" type="text" />
+                {dyn.v3.getVariant('nav_resources', undefined, 'Resources')}
               </h4>
               <ul className="space-y-2">
                 <FooterLink href="/api-docs" label="API Documentation" onClick={handleLinkClick('/api-docs')} />
@@ -56,24 +52,21 @@ export function Footer() {
 
             <div>
               <h4 className="text-white font-semibold mb-4">
-                <DynamicText value="Network" type="text" />
+                {dyn.v3.getVariant('nav_network', undefined, 'Network')}
               </h4>
               <div className="space-y-2 text-sm text-zinc-400">
                 <div>
-                  <DynamicText value="Status: Online" type="text" />
+                  {dyn.v3.getVariant('status_online', undefined, 'Status: Online')}
                 </div>
                 <div>
-                  <DynamicText value="Block Time: ~12s" type="text" />
+                  {dyn.v3.getVariant('block_time', undefined, 'Block Time: ~12s')}
                 </div>
               </div>
             </div>
           </div>
 
           <div className="mt-8 pt-8 border-t border-zinc-800 text-center text-sm text-zinc-500">
-            <DynamicText
-              value="© 2024 AutoStats. All rights reserved."
-              type="text"
-            />
+            {dyn.v3.getVariant('footer_copyright', undefined, '© 2024 AutoStats. All rights reserved.')}
           </div>
         </div>
       </footer>
@@ -98,7 +91,7 @@ function FooterLink({
         onClick={onClick}
         className="text-sm text-zinc-400 hover:text-white transition-colors"
       >
-        <DynamicText value={label} type="text" />
+        {label}
       </a>
     </li>
   );

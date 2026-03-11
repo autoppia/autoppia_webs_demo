@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { DynamicText } from '@/dynamic/v3/DynamicText';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
+import { useDynamicSystem } from '@/dynamic/shared';
 
 interface FooterLink {
   label: string;
@@ -59,6 +59,7 @@ const defaultLinkGroups: FooterLinkGroup[] = [
 
 export function Footer({ linkGroups = defaultLinkGroups }: FooterProps) {
   const router = useSeedRouter();
+  const dyn = useDynamicSystem();
 
   const handleLinkClick = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
@@ -75,7 +76,7 @@ export function Footer({ linkGroups = defaultLinkGroups }: FooterProps) {
           {linkGroups.map((group, groupIndex) => (
             <div key={groupIndex}>
               <h3 className="text-white font-semibold mb-4">
-                <DynamicText value={group.title} type="text" />
+                {group.title}
               </h3>
               <ul className="space-y-2">
                 {group.links.map((link, linkIndex) => (
@@ -85,7 +86,7 @@ export function Footer({ linkGroups = defaultLinkGroups }: FooterProps) {
                       onClick={(e) => handleLinkClick(e, link.href)}
                       className="text-zinc-400 hover:text-white transition-colors text-sm"
                     >
-                      <DynamicText value={link.label} type="text" />
+                      {link.label}
                     </a>
                   </li>
                 ))}
@@ -97,7 +98,7 @@ export function Footer({ linkGroups = defaultLinkGroups }: FooterProps) {
         <div className="mt-12 pt-8 border-t border-zinc-800">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-zinc-400 text-sm">
-              <DynamicText value="© 2024 AutoStats. All rights reserved." type="text" />
+              {dyn.v3.getVariant('footer_copyright', undefined, '© 2024 AutoStats. All rights reserved.')}
             </div>
             <div className="flex items-center gap-6">
               <a
@@ -105,14 +106,14 @@ export function Footer({ linkGroups = defaultLinkGroups }: FooterProps) {
                 onClick={(e) => e.preventDefault()}
                 className="text-zinc-400 hover:text-white transition-colors text-sm"
               >
-                <DynamicText value="Privacy Policy" type="text" />
+                {dyn.v3.getVariant('privacy_policy', undefined, 'Privacy Policy')}
               </a>
               <a
                 href="#"
                 onClick={(e) => e.preventDefault()}
                 className="text-zinc-400 hover:text-white transition-colors text-sm"
               >
-                <DynamicText value="Terms of Service" type="text" />
+                {dyn.v3.getVariant('terms_of_service', undefined, 'Terms of Service')}
               </a>
             </div>
           </div>

@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useDynamicSystem } from '@/dynamic/shared';
-import { DynamicText } from '@/dynamic/v3/DynamicText';
 import { SubnetWithTrend } from '@/shared/types';
 import { formatNumber } from '@/library/formatters';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
@@ -47,32 +46,32 @@ export function SubnetsTable({ subnets, maxRows = 5 }: SubnetsTableProps) {
               <tr>
                 <th className="px-6 py-3 text-left">
                   <span className="text-sm font-medium text-zinc-300">
-                    <DynamicText value="Name" type="text" />
+                    {dyn.v3.getVariant('table_name', undefined, 'Name')}
                   </span>
                 </th>
                 <th className="px-6 py-3 text-left">
                   <span className="text-sm font-medium text-zinc-300">
-                    <DynamicText value="Price" type="text" />
+                    {dyn.v3.getVariant('table_price', undefined, 'Price')}
                   </span>
                 </th>
                 <th className="px-6 py-3 text-left">
                   <span className="text-sm font-medium text-zinc-300">
-                    <DynamicText value="Market Cap" type="text" />
+                    {dyn.v3.getVariant('table_market_cap', undefined, 'Market Cap')}
                   </span>
                 </th>
                 <th className="px-6 py-3 text-left">
                   <span className="text-sm font-medium text-zinc-300">
-                    <DynamicText value="24h Volume" type="text" />
+                    {dyn.v3.getVariant('table_24h_volume', undefined, '24h Volume')}
                   </span>
                 </th>
                 <th className="px-6 py-3 text-left">
                   <span className="text-sm font-medium text-zinc-300">
-                    <DynamicText value="24h Change" type="text" />
+                    {dyn.v3.getVariant('table_24h_change', undefined, '24h Change')}
                   </span>
                 </th>
                 <th className="px-6 py-3 text-left">
                   <span className="text-sm font-medium text-zinc-300">
-                    <DynamicText value="7d Trend" type="text" />
+                    {dyn.v3.getVariant('table_7d_trend', undefined, '7d Trend')}
                   </span>
                 </th>
               </tr>
@@ -93,36 +92,33 @@ export function SubnetsTable({ subnets, maxRows = 5 }: SubnetsTableProps) {
                       <div className="flex items-center gap-3">
                         {/* Subnet icon placeholder */}
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white text-xs font-bold">
-                          <DynamicText value={subnet.id.toString()} type="number" />
+                          {subnet.id.toString()}
                         </div>
                         <div>
                           <div className="text-white font-medium">
-                            <DynamicText value={subnet.name} type="text" />
+                            {subnet.name}
                           </div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-zinc-300">
-                        <DynamicText value={`$${formatNumber(subnet.price, 2)}`} type="number" />
+                        {`$${formatNumber(subnet.price, 2)}`}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-zinc-300">
-                        <DynamicText value={formatLargeNumber(subnet.marketCap)} type="number" />
+                        {formatLargeNumber(subnet.marketCap)}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-zinc-300">
-                        <DynamicText value={formatLargeNumber(subnet.volume24h)} type="number" />
+                        {formatLargeNumber(subnet.volume24h)}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <span className={changeColor}>
-                        <DynamicText
-                          value={`${subnet.priceChange24h > 0 ? '+' : ''}${formatNumber(subnet.priceChange24h, 2)}%`}
-                          type="number"
-                        />
+                        {`${subnet.priceChange24h > 0 ? '+' : ''}${formatNumber(subnet.priceChange24h, 2)}%`}
                       </span>
                     </td>
                     <td className="px-6 py-4">

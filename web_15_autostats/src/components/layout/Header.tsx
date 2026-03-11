@@ -3,7 +3,6 @@
 import React, { useMemo, useState } from 'react';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { useDynamicSystem } from '@/dynamic/shared';
-import { DynamicText } from '@/dynamic/v3/DynamicText';
 import { Search } from 'lucide-react';
 import { WalletButton } from '@/components/wallet/WalletButton';
 import { GlobalSearchModal } from '@/components/search/GlobalSearchModal';
@@ -40,7 +39,7 @@ export function Header() {
             onClick={handleLogoClick}
             className="rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 px-4 py-2 text-lg font-semibold text-white shadow-lg shadow-blue-500/20 transition-all duration-200 hover:shadow-blue-500/40"
           >
-            <DynamicText value="AutoStats" type="text" />
+            {dyn.v3.getVariant('app_name', undefined, 'AutoStats')}
           </a>
 
           <div className="flex items-center gap-4">
@@ -93,7 +92,7 @@ function NavLink({ href, label }: { href: string; label: string }) {
       onClick={handleClick}
       className="text-sm font-medium text-zinc-400 hover:text-white transition-colors"
     >
-      <DynamicText value={label} type="text" />
+      {label}
     </a>
   );
 }
