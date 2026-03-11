@@ -59,7 +59,7 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   // Initialize seed from localStorage on mount (client-side only)
   useEffect(() => {
     if (isInitialized) return;
-    
+
     // Try localStorage only on client-side
     if (typeof window !== "undefined") {
       try {
@@ -108,14 +108,14 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   const getNavigationUrl = useCallback((path: string): string => {
     if (!path) return path;
     if (path.startsWith("http")) return path;
-    
+
     // If path already has query params
     const [base, queryString] = path.split("?");
     const params = new URLSearchParams(queryString || "");
-    
+
     // Always preserve seed
     params.set("seed", seed.toString());
-    
+
     const query = params.toString();
     return query ? `${base}?${query}` : base;
   }, [seed]);

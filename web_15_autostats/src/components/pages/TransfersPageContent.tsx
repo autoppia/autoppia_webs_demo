@@ -42,6 +42,12 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(25);
 
+  const ROWS_OPTIONS = [10, 25, 50, 100] as const;
+  const orderedRowsOptions = useMemo(() => {
+    const order = dyn.v1.changeOrderElements('transfers-rows-options', ROWS_OPTIONS.length);
+    return order.map((i) => ROWS_OPTIONS[i]);
+  }, [dyn.v1]);
+
   // Local text variants
   const dynamicV3TextVariants: Record<string, string[]> = {
     page_title: ['Transfers', 'TAO Transfers', 'Token Transfers', 'Transfer Activity', 'Transfer History'],
@@ -268,18 +274,20 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
               </h1>
               <p className="text-zinc-400 text-lg">{v('page_description')}</p>
             </div>
-            <button
-              onClick={() => setSendPanelOpen(!sendPanelOpen)}
-              className={cn(
-                'flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all flex-shrink-0',
-                sendPanelOpen
-                  ? 'bg-zinc-800 border border-zinc-700 text-zinc-300 hover:bg-zinc-700'
-                  : 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/20 hover:from-blue-700 hover:to-cyan-700'
-              )}
-            >
-              <Send className="h-4 w-4" />
-              {sendPanelOpen ? 'Hide' : 'Send Transfer'}
-            </button>
+            {dyn.v1.addWrapDecoy('transfers-send-transfer-button', (
+              <button
+                onClick={() => setSendPanelOpen(!sendPanelOpen)}
+                className={cn(
+                  'flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all flex-shrink-0',
+                  sendPanelOpen
+                    ? 'bg-zinc-800 border border-zinc-700 text-zinc-300 hover:bg-zinc-700'
+                    : 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/20 hover:from-blue-700 hover:to-cyan-700'
+                )}
+              >
+                <Send className="h-4 w-4" />
+                {sendPanelOpen ? 'Hide' : 'Send Transfer'}
+              </button>
+            ))}
           </div>
         ))}
 
@@ -392,20 +400,22 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
             ))}
 
             {/* Rows per page selector - pushed to right */}
-            <div className="flex items-center gap-1 h-9 rounded-lg border border-zinc-800 bg-zinc-800 px-1 ml-auto">
-              {[10, 25, 50, 100].map((n) => (
-                <button
-                  key={n}
-                  onClick={() => { setRowsPerPage(n); setCurrentPage(1); }}
-                  className={cn(
-                    'px-2 py-1 rounded-md text-xs font-semibold transition-all',
-                    rowsPerPage === n ? 'bg-blue-500 text-white' : 'text-zinc-400 hover:text-white hover:bg-zinc-700'
-                  )}
-                >
-                  {n}
-                </button>
-              ))}
-            </div>
+            {dyn.v1.addWrapDecoy('transfers-rows-per-page', (
+              <div className="flex items-center gap-1 h-9 rounded-lg border border-zinc-800 bg-zinc-800 px-1 ml-auto">
+                {orderedRowsOptions.map((n) => (
+                  <button
+                    key={n}
+                    onClick={() => { setRowsPerPage(n); setCurrentPage(1); }}
+                    className={cn(
+                      'px-2 py-1 rounded-md text-xs font-semibold transition-all',
+                      rowsPerPage === n ? 'bg-blue-500 text-white' : 'text-zinc-400 hover:text-white hover:bg-zinc-700'
+                    )}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+            ))}
           </div>
         ))}
 

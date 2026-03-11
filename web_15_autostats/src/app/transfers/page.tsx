@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSeed } from '@/context/SeedContext';
-import { generateSeededTransfers } from '@/data/generators';
+import { dynamicDataProvider } from '@/dynamic/v2';
 import { TransfersPageContent } from '@/components/pages/TransfersPageContent';
 import type { TransferWithExtrinsicId } from '@/shared/types';
 
@@ -13,8 +13,20 @@ export default function TransfersPage() {
 
   useEffect(() => {
     setMounted(true);
-    const transfers = generateSeededTransfers(200, seed);
-    setAllTransfers(transfers);
+    let cancelled = false;
+    dynamicDataProvider.whenReady().then(() => {
+      if (cancelled) return;
+      return dynamicDataProvider.reload(seed);
+    }).then(() => {
+      if (cancelled) return;
+      const raw = dynamicDataProvider.getTransfers();
+      const withExtrinsicId: TransferWithExtrinsicId[] = raw.map((t, i) => ({
+        ...t,
+        extrinsicId: `${t.blockNumber}-${i % 5}`,
+      }));
+      setAllTransfers(withExtrinsicId);
+    });
+    return () => { cancelled = true; };
   }, [seed]);
 
   if (!mounted || allTransfers.length === 0) {

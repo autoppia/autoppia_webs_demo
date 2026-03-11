@@ -30,7 +30,7 @@ export function SubnetsPriceChart({ subnets }: SubnetsPriceChartProps) {
     for (let i = days - 1; i >= 0; i--) {
       const date = new Date(now - i * 24 * 60 * 60 * 1000);
       const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
-      
+
       // Calculate total price for this day (simulate historical data)
       const totalPrice = subnets.reduce((sum, subnet) => {
         // Simulate price variation based on trend data

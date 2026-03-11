@@ -8,15 +8,15 @@ export function seedRandom(seed: string): () => number {
     hash = ((hash << 5) - hash) + char;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   let state = Math.abs(hash);
-  
+
   return () => {
     // LCG parameters (from Numerical Recipes)
     const a = 1664525;
     const c = 1013904223;
     const m = 2 ** 32;
-    
+
     state = (a * state + c) % m;
     return state / m;
   };

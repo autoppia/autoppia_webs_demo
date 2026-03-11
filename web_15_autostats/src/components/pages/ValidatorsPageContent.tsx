@@ -31,6 +31,12 @@ export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(25);
 
+  const ROWS_OPTIONS = [10, 25, 50, 100] as const;
+  const orderedRowsOptions = useMemo(() => {
+    const order = dyn.v1.changeOrderElements('validators-rows-options', ROWS_OPTIONS.length);
+    return order.map((i) => ROWS_OPTIONS[i]);
+  }, [dyn.v1]);
+
   // Local text variants
   const dynamicV3TextVariants: Record<string, string[]> = {
     page_title: ['Validators', 'Network Validators', 'Validator Overview', 'Validators Dashboard', 'Active Validators'],
@@ -319,22 +325,24 @@ export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps
             ))}
             <div className="flex items-center gap-2">
               <span className="text-xs text-zinc-500">Show</span>
-              <div className="flex items-center gap-1 bg-zinc-900 border border-zinc-800 rounded-lg p-1">
-                {[10, 25, 50, 100].map((n) => (
-                  <button
-                    key={n}
-                    onClick={() => { setRowsPerPage(n); setCurrentPage(1); }}
-                    className={cn(
-                      'px-2.5 py-1.5 rounded-md text-xs font-semibold transition-all',
-                      rowsPerPage === n
-                        ? 'bg-blue-500 text-white'
-                        : 'text-zinc-400 hover:text-white hover:bg-zinc-700'
-                    )}
-                  >
-                    {n}
-                  </button>
-                ))}
-              </div>
+              {dyn.v1.addWrapDecoy('validators-rows-per-page', (
+                <div className="flex items-center gap-1 bg-zinc-900 border border-zinc-800 rounded-lg p-1">
+                  {orderedRowsOptions.map((n) => (
+                    <button
+                      key={n}
+                      onClick={() => { setRowsPerPage(n); setCurrentPage(1); }}
+                      className={cn(
+                        'px-2.5 py-1.5 rounded-md text-xs font-semibold transition-all',
+                        rowsPerPage === n
+                          ? 'bg-blue-500 text-white'
+                          : 'text-zinc-400 hover:text-white hover:bg-zinc-700'
+                      )}
+                    >
+                      {n}
+                    </button>
+                  ))}
+                </div>
+              ))}
             </div>
           </div>
         ))}

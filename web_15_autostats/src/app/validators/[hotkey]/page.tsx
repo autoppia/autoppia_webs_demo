@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSeed } from '@/context/SeedContext';
+import { dynamicDataProvider } from '@/dynamic/v2';
 import { ValidatorDetailPageContent } from '@/components/pages/ValidatorDetailPageContent';
-import { generateValidatorsWithTrends, generateTransactionsWithMethods } from '@/data/generators';
+import { addTrendsToValidators, addMethodsToTransfers } from '@/data/derive-trends';
 import type { ValidatorWithTrend, TransactionWithMethod } from '@/shared/types';
 import { useParams } from 'next/navigation';
 
@@ -19,15 +20,25 @@ export default function ValidatorDetailPage() {
 
   useEffect(() => {
     setMounted(true);
-    const validators = generateValidatorsWithTrends(100, seed);
-    const found = validators.find(v => v.hotkey === hotkey);
-
-    if (found) {
-      setValidator(found);
-      setTransactions(generateTransactionsWithMethods(50, found.rank));
-    } else {
-      setNotFound(true);
-    }
+    let cancelled = false;
+    dynamicDataProvider.whenReady().then(() => {
+      if (cancelled) return;
+      return dynamicDataProvider.reload(seed);
+    }).then(() => {
+      if (cancelled) return;
+      const rawValidators = dynamicDataProvider.getValidators();
+      const withTrends = addTrendsToValidators(rawValidators, seed);
+      const found = withTrends.find((v) => v.hotkey === hotkey);
+      if (found) {
+        setValidator(found);
+        const rawTransfers = dynamicDataProvider.getTransfers();
+        const withMethods = addMethodsToTransfers(rawTransfers.slice(0, 50), seed + found.rank);
+        setTransactions(withMethods);
+      } else {
+        setNotFound(true);
+      }
+    });
+    return () => { cancelled = true; };
   }, [seed, hotkey]);
 
   if (!mounted) {

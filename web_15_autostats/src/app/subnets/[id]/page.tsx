@@ -1,15 +1,55 @@
-import { SubnetDetailPageContent } from '@/components/pages/SubnetDetailPageContent';
-import { generateSubnetsWithTrends, generateTransactionsWithMethods } from '@/data/generators';
+'use client';
 
-export default async function SubnetDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const subnetId = Number.parseInt(id);
-  
-  // Generate subnet data
-  const subnets = generateSubnetsWithTrends(50, 12345);
-  const subnet = subnets.find(s => s.id === subnetId);
-  
-  if (!subnet) {
+import React, { useEffect, useState } from 'react';
+import { useSeed } from '@/context/SeedContext';
+import { SubnetDetailPageContent } from '@/components/pages/SubnetDetailPageContent';
+import { dynamicDataProvider } from '@/dynamic/v2';
+import { addTrendsToSubnets, addMethodsToTransfers } from '@/data/derive-trends';
+import type { SubnetWithTrend, TransactionWithMethod } from '@/shared/types';
+import { useParams } from 'next/navigation';
+
+export default function SubnetDetailPage() {
+  const { seed } = useSeed();
+  const params = useParams();
+  const id = params.id as string;
+  const subnetId = Number.parseInt(id, 10);
+
+  const [mounted, setMounted] = useState(false);
+  const [subnet, setSubnet] = useState<SubnetWithTrend | null>(null);
+  const [transactions, setTransactions] = useState<TransactionWithMethod[]>([]);
+  const [notFound, setNotFound] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    let cancelled = false;
+    dynamicDataProvider.whenReady().then(() => {
+      if (cancelled) return;
+      return dynamicDataProvider.reload(seed);
+    }).then(() => {
+      if (cancelled) return;
+      const rawSubnets = dynamicDataProvider.getSubnets();
+      const withTrends = addTrendsToSubnets(rawSubnets, seed);
+      const found = withTrends.find((s) => s.id === subnetId);
+      if (found) {
+        setSubnet(found);
+        const rawTransfers = dynamicDataProvider.getTransfers();
+        setTransactions(addMethodsToTransfers(rawTransfers.slice(0, 50), seed + subnetId));
+      } else {
+        setNotFound(true);
+      }
+    });
+    return () => { cancelled = true; };
+  }, [seed, subnetId]);
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <div className="text-zinc-400">Loading subnet...</div>
+      </div>
+    );
+  }
+
+  if (notFound || !subnet) {
     return (
       <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
         <div className="text-center">
@@ -19,9 +59,6 @@ export default async function SubnetDetailPage({ params }: { params: Promise<{ i
       </div>
     );
   }
-  
-  // Generate transactions for this subnet
-  const transactions = generateTransactionsWithMethods(50, subnetId);
-  
+
   return <SubnetDetailPageContent subnet={subnet} transactions={transactions} />;
 }

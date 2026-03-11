@@ -33,6 +33,12 @@ export function BlocksPageContent({ blocks }: BlocksPageContentProps) {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [copiedHash, setCopiedHash] = useState<string | null>(null);
 
+  const ROWS_OPTIONS = [10, 25, 50, 100] as const;
+  const orderedRowsOptions = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("blocks-rows-options", ROWS_OPTIONS.length);
+    return order.map((i) => ROWS_OPTIONS[i]);
+  }, [dyn.v1]);
+
   // V3 text variants
   const dynamicV3TextVariants: Record<string, string[]> = {
     search_placeholder: [
@@ -181,26 +187,28 @@ export function BlocksPageContent({ blocks }: BlocksPageContentProps) {
         "blocks-controls",
         <div className="flex items-center justify-between mb-5 gap-4 flex-wrap">
           {/* Search */}
-          <div className="relative w-80">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setCurrentPage(1);
-              }}
-              placeholder={dyn.v3.getVariant(
-                "search_placeholder",
-                dynamicV3TextVariants,
-              )}
-              id={dyn.v3.getVariant("blocks-search-input", ID_VARIANTS_MAP)}
-              className={cn(
-                "w-full pl-9 pr-3 py-2.5 bg-[#111] border border-zinc-800 rounded-lg text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors",
-                dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP),
-              )}
-            />
-          </div>
+          {dyn.v1.addWrapDecoy("blocks-search", (
+            <div className="relative w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setCurrentPage(1);
+                }}
+                placeholder={dyn.v3.getVariant(
+                  "search_placeholder",
+                  dynamicV3TextVariants,
+                )}
+                id={dyn.v3.getVariant("blocks-search-input", ID_VARIANTS_MAP)}
+                className={cn(
+                  "w-full pl-9 pr-3 py-2.5 bg-[#111] border border-zinc-800 rounded-lg text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors",
+                  dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP),
+                )}
+              />
+            </div>
+          ))}
 
           <div className="flex items-center gap-5">
             {/* Auto Refresh indicator */}
@@ -210,26 +218,28 @@ export function BlocksPageContent({ blocks }: BlocksPageContentProps) {
             </div>
 
             {/* Rows selector */}
-            <div className="flex items-center gap-1.5 text-sm text-zinc-400">
-              <span className="mr-1">Rows</span>
-              {[10, 25, 50, 100].map((n) => (
-                <button
-                  key={n}
-                  onClick={() => {
-                    setRowsPerPage(n);
-                    setCurrentPage(1);
-                  }}
-                  className={cn(
-                    "min-w-[36px] px-2 py-1 rounded text-sm tabular-nums transition-colors",
-                    rowsPerPage === n
-                      ? "border border-teal-500 text-white"
-                      : "text-zinc-500 hover:text-white",
-                  )}
-                >
-                  {n}
-                </button>
-              ))}
-            </div>
+            {dyn.v1.addWrapDecoy("blocks-rows-per-page", (
+              <div className="flex items-center gap-1.5 text-sm text-zinc-400">
+                <span className="mr-1">Rows</span>
+                {orderedRowsOptions.map((n) => (
+                  <button
+                    key={n}
+                    onClick={() => {
+                      setRowsPerPage(n);
+                      setCurrentPage(1);
+                    }}
+                    className={cn(
+                      "min-w-[36px] px-2 py-1 rounded text-sm tabular-nums transition-colors",
+                      rowsPerPage === n
+                        ? "border border-teal-500 text-white"
+                        : "text-zinc-500 hover:text-white",
+                    )}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+            ))}
           </div>
         </div>,
       )}

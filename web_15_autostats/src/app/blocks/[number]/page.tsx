@@ -2,7 +2,8 @@
 
 import { BlockDetailPageContent } from "@/components/pages/BlockDetailPageContent";
 import { useSeed } from "@/context/SeedContext";
-import { generateBlocksWithDetails } from "@/data/generators";
+import { dynamicDataProvider } from "@/dynamic/v2";
+import { blockToBlockWithDetails } from "@/data/derive-trends";
 import type { BlockWithDetails } from "@/shared/types";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -20,14 +21,21 @@ export default function BlockDetailPage() {
     setMounted(true);
     setNotFound(false);
     setBlock(null);
-    const blocks = generateBlocksWithDetails(200, seed);
-    const found = blocks.find((b) => b.number === blockNumber);
-
-    if (found) {
-      setBlock(found);
-    } else {
-      setNotFound(true);
-    }
+    let cancelled = false;
+    dynamicDataProvider.whenReady().then(() => {
+      if (cancelled) return;
+      return dynamicDataProvider.reload(seed);
+    }).then(() => {
+      if (cancelled) return;
+      const raw = dynamicDataProvider.getBlocks();
+      const blocks = raw.map(blockToBlockWithDetails);
+      const found = blocks.find((b) => b.number === blockNumber);
+      if (found) setBlock(found);
+      else setNotFound(true);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [seed, blockNumber]);
 
   if (!mounted) {

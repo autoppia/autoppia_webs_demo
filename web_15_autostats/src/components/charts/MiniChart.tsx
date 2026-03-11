@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { DynamicWrapper } from '@/dynamic/v1/DynamicWrapper';
+import { useDynamicSystem } from '@/dynamic/shared';
 
 interface MiniChartProps {
   data: number[];
@@ -18,39 +18,44 @@ export function MiniChart({
   color,
   trend = 'neutral',
 }: MiniChartProps) {
+  const dyn = useDynamicSystem();
   // Determine color based on trend if not explicitly provided
   const lineColor = color || getTrendColor(trend);
 
   // Handle edge cases
   if (!data || data.length === 0) {
     return (
-      <DynamicWrapper>
-        <svg width={width} height={height} className="inline-block">
-          <line
-            x1={0}
-            y1={height / 2}
-            x2={width}
-            y2={height / 2}
-            stroke="#71717a"
-            strokeWidth={1}
-          />
-        </svg>
-      </DynamicWrapper>
+      <>
+        {dyn.v1.addWrapDecoy('minichart-empty', (
+          <svg width={width} height={height} className="inline-block">
+            <line
+              x1={0}
+              y1={height / 2}
+              x2={width}
+              y2={height / 2}
+              stroke="#71717a"
+              strokeWidth={1}
+            />
+          </svg>
+        ))}
+      </>
     );
   }
 
   if (data.length === 1) {
     return (
-      <DynamicWrapper>
-        <svg width={width} height={height} className="inline-block">
-          <circle
-            cx={width / 2}
-            cy={height / 2}
-            r={2}
-            fill={lineColor}
-          />
-        </svg>
-      </DynamicWrapper>
+      <>
+        {dyn.v1.addWrapDecoy('minichart-single', (
+          <svg width={width} height={height} className="inline-block">
+            <circle
+              cx={width / 2}
+              cy={height / 2}
+              r={2}
+              fill={lineColor}
+            />
+          </svg>
+        ))}
+      </>
     );
   }
 
@@ -58,18 +63,20 @@ export function MiniChart({
   const path = generateSparklinePath(data, width, height);
 
   return (
-    <DynamicWrapper>
-      <svg width={width} height={height} className="inline-block">
-        <path
-          d={path}
-          fill="none"
-          stroke={lineColor}
-          strokeWidth={1.5}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </DynamicWrapper>
+    <>
+      {dyn.v1.addWrapDecoy('minichart-sparkline', (
+        <svg width={width} height={height} className="inline-block">
+          <path
+            d={path}
+            fill="none"
+            stroke={lineColor}
+            strokeWidth={1.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      ))}
+    </>
   );
 }
 

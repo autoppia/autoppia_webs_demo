@@ -3,12 +3,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSeed } from '@/context/SeedContext';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
-import {
-  generateSubnetsWithTrends,
-  generateValidatorsWithTrends,
-  generateBlocksWithDetails,
-  generateAccountsWithDetails,
-} from '@/data/generators';
+import { dynamicDataProvider } from '@/dynamic/v2';
+import { addTrendsToSubnets, addTrendsToValidators, addMethodsToTransfers } from '@/data/derive-trends';
+import { blockToBlockWithDetails, accountToAccountWithDetails } from '@/data/derive-trends';
 import { Input } from '@/components/ui/input';
 import { Network, Shield, Blocks, Wallet, Search, X } from 'lucide-react';
 import type { SubnetWithTrend, ValidatorWithTrend, BlockWithDetails, AccountWithDetails } from '@/shared/types';
@@ -77,15 +74,27 @@ export function GlobalSearchModal({ open, onClose }: GlobalSearchModalProps) {
     accounts: AccountWithDetails[];
   } | null>(null);
 
-  // Generate same seeded data as list pages when modal opens so search matches what user sees
+  // Load from V2 provider when modal opens
   useEffect(() => {
     if (!open || seed == null) return;
-    setSeededData({
-      subnets: generateSubnetsWithTrends(32, seed),
-      validators: generateValidatorsWithTrends(100, seed),
-      blocks: generateBlocksWithDetails(200, seed),
-      accounts: generateAccountsWithDetails(200, seed),
+    let cancelled = false;
+    dynamicDataProvider.whenReady().then(() => {
+      if (cancelled) return;
+      return dynamicDataProvider.reload(seed);
+    }).then(() => {
+      if (cancelled) return;
+      const rawSubnets = dynamicDataProvider.getSubnets();
+      const rawValidators = dynamicDataProvider.getValidators();
+      const rawBlocks = dynamicDataProvider.getBlocks();
+      const rawAccounts = dynamicDataProvider.getAccounts();
+      setSeededData({
+        subnets: addTrendsToSubnets(rawSubnets, seed),
+        validators: addTrendsToValidators(rawValidators, seed),
+        blocks: rawBlocks.map(blockToBlockWithDetails),
+        accounts: rawAccounts.map((a, i) => accountToAccountWithDetails(a, i)),
+      });
     });
+    return () => { cancelled = true; };
   }, [open, seed]);
 
   const trimmedQuery = query.trim();

@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { DynamicText } from '@/dynamic/v3/DynamicText';
-import { DynamicWrapper } from '@/dynamic/v1/DynamicWrapper';
+import { useDynamicSystem } from '@/dynamic/shared';
 
 export interface Column<T> {
   key: string;
@@ -69,9 +69,12 @@ export function DataTable<T extends Record<string, unknown>>({
     }
   };
 
+  const dyn = useDynamicSystem();
+
   return (
-    <DynamicWrapper className={className}>
-      <div className="rounded-md border border-zinc-800 bg-zinc-950">
+    <div className={className}>
+      {dyn.v1.addWrapDecoy('data-table', (
+        <div className="rounded-md border border-zinc-800 bg-zinc-950">
         <Table>
           <TableHeader>
             <TableRow className="border-zinc-800 hover:bg-zinc-900">
@@ -144,6 +147,7 @@ export function DataTable<T extends Record<string, unknown>>({
           </TableBody>
         </Table>
       </div>
-    </DynamicWrapper>
+      ))}
+    </div>
   );
 }

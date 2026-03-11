@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { DynamicWrapper } from '@/dynamic/v1/DynamicWrapper';
+import { useDynamicSystem } from '@/dynamic/shared';
 import { DynamicText } from '@/dynamic/v3/DynamicText';
 import { ValidatorWithTrend } from '@/shared/types';
 import { formatTAO, formatNumber } from '@/library/formatters';
@@ -15,6 +15,7 @@ interface ValidatorsTableProps {
 
 export function ValidatorsTable({ validators, maxRows = 5 }: ValidatorsTableProps) {
   const router = useSeedRouter();
+  const dyn = useDynamicSystem();
 
   // Limit the number of rows displayed
   const displayedValidators = validators.slice(0, maxRows);
@@ -30,8 +31,9 @@ export function ValidatorsTable({ validators, maxRows = 5 }: ValidatorsTableProp
   };
 
   return (
-    <DynamicWrapper>
-      <div className="rounded-lg border border-zinc-800 bg-zinc-900 overflow-hidden">
+    <>
+      {dyn.v1.addWrapDecoy('landing-validators-table', (
+        <div className="rounded-lg border border-zinc-800 bg-zinc-900 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-zinc-800/50">
@@ -88,9 +90,9 @@ export function ValidatorsTable({ validators, maxRows = 5 }: ValidatorsTableProp
                         </div>
                         <div>
                           <div className="text-blue-400 font-mono text-sm">
-                            <DynamicText 
-                              value={formatAddress(validator.hotkey)} 
-                              type="address" 
+                            <DynamicText
+                              value={formatAddress(validator.hotkey)}
+                              type="address"
                             />
                           </div>
                         </div>
@@ -103,17 +105,17 @@ export function ValidatorsTable({ validators, maxRows = 5 }: ValidatorsTableProp
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-green-400">
-                        <DynamicText 
-                          value={`${formatNumber(validator.returnPercentage, 2)}%`} 
-                          type="number" 
+                        <DynamicText
+                          value={`${formatNumber(validator.returnPercentage, 2)}%`}
+                          type="number"
                         />
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-zinc-300">
-                        <DynamicText 
-                          value={validator.nominatorCount.toString()} 
-                          type="number" 
+                        <DynamicText
+                          value={validator.nominatorCount.toString()}
+                          type="number"
                         />
                       </span>
                     </td>
@@ -132,6 +134,7 @@ export function ValidatorsTable({ validators, maxRows = 5 }: ValidatorsTableProp
           </table>
         </div>
       </div>
-    </DynamicWrapper>
+      ))}
+    </>
   );
 }

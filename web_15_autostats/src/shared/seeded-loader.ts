@@ -23,9 +23,9 @@ export interface SeededLoadOptions {
   filterValues?: string[];
 }
 
+/** When true, fetchSeededSelection calls the server. For web_15_autostats we always load from server (V2 off = seed 1). */
 export function isDbLoadModeEnabled(): boolean {
-  const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE || process.env.ENABLE_DYNAMIC_V2_DB_MODE || "").toString().toLowerCase();
-  return raw === "true";
+  return true;
 }
 
 export function getSeedValueFromEnv(defaultSeed = 1): number {
@@ -81,5 +81,3 @@ export async function fetchPoolInfo(projectKey: string, entityType: string): Pro
     return null;
   }
 }
-
-

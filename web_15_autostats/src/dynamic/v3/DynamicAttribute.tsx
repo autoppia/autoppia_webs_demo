@@ -14,11 +14,11 @@ interface DynamicAttributeProps {
 export function DynamicAttribute({ children, className, baseId }: DynamicAttributeProps) {
   const { seed } = useSeed();
   const rng = seedRandom(seed + (baseId || '') + (className || ''));
-  
+
   const attributes = generateDataAttributes(rng);
-  
+
   return (
-    <div 
+    <div
       className={className}
       {...attributes}
     >

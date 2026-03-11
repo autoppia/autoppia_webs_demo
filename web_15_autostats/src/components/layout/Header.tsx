@@ -1,15 +1,24 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
-import { DynamicWrapper } from '@/dynamic/v1/DynamicWrapper';
+import { useDynamicSystem } from '@/dynamic/shared';
 import { DynamicText } from '@/dynamic/v3/DynamicText';
 import { Search } from 'lucide-react';
 import { WalletButton } from '@/components/wallet/WalletButton';
 import { GlobalSearchModal } from '@/components/search/GlobalSearchModal';
 
+const NAV_LINKS = [
+  { href: '/subnets', label: 'Subnets' },
+  { href: '/validators', label: 'Validators' },
+  { href: '/blocks', label: 'Blocks' },
+  { href: '/transfers', label: 'Transfers' },
+  { href: '/accounts', label: 'Accounts' },
+] as const;
+
 export function Header() {
   const router = useSeedRouter();
+  const dyn = useDynamicSystem();
   const [searchOpen, setSearchOpen] = useState(false);
 
   const handleLogoClick = (e: React.MouseEvent) => {
@@ -17,8 +26,13 @@ export function Header() {
     router.push('/');
   };
 
+  const orderedNavLinks = useMemo(() => {
+    const order = dyn.v1.changeOrderElements('header-nav-links', NAV_LINKS.length);
+    return order.map((i) => NAV_LINKS[i]);
+  }, [dyn.v1]);
+
   return (
-    <DynamicWrapper>
+    <>
       <header className="fixed top-0 z-50 w-full border-b border-white/10 bg-transparent backdrop-blur-xl">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <a
@@ -30,32 +44,38 @@ export function Header() {
           </a>
 
           <div className="flex items-center gap-4">
-            <nav className="hidden md:flex items-center gap-4 lg:gap-6">
-              <NavLink href="/subnets" label="Subnets" />
-              <NavLink href="/validators" label="Validators" />
-              <NavLink href="/blocks" label="Blocks" />
-              <NavLink href="/transfers" label="Transfers" />
-              <NavLink href="/accounts" label="Accounts" />
-            </nav>
+            {dyn.v1.addWrapDecoy('header-nav', (
+              <nav className="hidden md:flex items-center gap-4 lg:gap-6">
+                {orderedNavLinks.map(({ href, label }) =>
+                  dyn.v1.addWrapDecoy(`header-nav-link-${label}`, (
+                    <NavLink key={href} href={href} label={label} />
+                  ))
+                )}
+              </nav>
+            ))}
 
-            <WalletButton />
+            {dyn.v1.addWrapDecoy('header-connect-button', (
+              <WalletButton />
+            ))}
 
-            <button
-              type="button"
-              onClick={() => setSearchOpen(true)}
-              className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/10 transition-colors border border-white/10"
-              aria-label="Open search"
-            >
-              <Search className="h-4 w-4" />
-              <span className="hidden sm:inline">Search</span>
-            </button>
+            {dyn.v1.addWrapDecoy('header-search-button', (
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/10 transition-colors border border-white/10"
+                aria-label="Open search"
+              >
+                <Search className="h-4 w-4" />
+                <span className="hidden sm:inline">Search</span>
+              </button>
+            ))}
           </div>
         </div>
       </header>
       <GlobalSearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
       {/* Spacer to prevent content from going under fixed header */}
       <div className="h-16" />
-    </DynamicWrapper>
+    </>
   );
 }
 

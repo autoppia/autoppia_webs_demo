@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSeed } from '@/context/SeedContext';
 import { AccountDetailPageContent } from '@/components/pages/AccountDetailPageContent';
-import { generateAccountsWithDetails } from '@/data/generators';
+import { dynamicDataProvider } from '@/dynamic/v2';
+import { accountToAccountWithDetails } from '@/data/derive-trends';
 import type { AccountWithDetails } from '@/shared/types';
 import { useParams } from 'next/navigation';
 
@@ -20,14 +21,19 @@ export default function AccountDetailPage() {
     setMounted(true);
     setNotFound(false);
     setAccount(null);
-    const accounts = generateAccountsWithDetails(200, seed);
-    const found = accounts.find(a => a.address === address);
-
-    if (found) {
-      setAccount(found);
-    } else {
-      setNotFound(true);
-    }
+    let cancelled = false;
+    dynamicDataProvider.whenReady().then(() => {
+      if (cancelled) return;
+      return dynamicDataProvider.reload(seed);
+    }).then(() => {
+      if (cancelled) return;
+      const raw = dynamicDataProvider.getAccounts();
+      const accounts = raw.map((a, i) => accountToAccountWithDetails(a, i));
+      const found = accounts.find((a) => a.address === address);
+      if (found) setAccount(found);
+      else setNotFound(true);
+    });
+    return () => { cancelled = true; };
   }, [seed, address]);
 
   if (!mounted) {

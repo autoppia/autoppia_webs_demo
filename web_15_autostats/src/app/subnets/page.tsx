@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSeed } from '@/context/SeedContext';
-import { generateSubnetsWithTrends } from '@/data/generators';
+import { dynamicDataProvider } from '@/dynamic/v2';
+import { addTrendsToSubnets } from '@/data/derive-trends';
 import { SubnetsPageContent } from '@/components/pages/SubnetsPageContent';
 import type { SubnetWithTrend } from '@/shared/types';
 
@@ -13,9 +14,16 @@ export default function SubnetsPage() {
 
   useEffect(() => {
     setMounted(true);
-    // Generate all subnets (32 subnets like Bittensor network)
-    const subnets = generateSubnetsWithTrends(32, seed);
-    setAllSubnets(subnets);
+    let cancelled = false;
+    dynamicDataProvider.whenReady().then(() => {
+      if (cancelled) return;
+      dynamicDataProvider.reload(seed).then(() => {
+        if (cancelled) return;
+        const raw = dynamicDataProvider.getSubnets();
+        setAllSubnets(addTrendsToSubnets(raw, seed));
+      });
+    });
+    return () => { cancelled = true; };
   }, [seed]);
 
   if (!mounted || allSubnets.length === 0) {

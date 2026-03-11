@@ -8,7 +8,7 @@ import { logEvent } from '@/library/logger';
 export function useEventLogger() {
   const pathname = usePathname();
   const { seed } = useSeed();
-  
+
   useEffect(() => {
     logEvent({
       type: 'page_view',
@@ -17,7 +17,7 @@ export function useEventLogger() {
       timestamp: Date.now(),
     });
   }, [pathname, seed]);
-  
+
   const logInteraction = (action: string, metadata?: Record<string, any>) => {
     logEvent({
       type: 'interaction',
@@ -30,6 +30,6 @@ export function useEventLogger() {
       },
     });
   };
-  
+
   return { logInteraction };
 }

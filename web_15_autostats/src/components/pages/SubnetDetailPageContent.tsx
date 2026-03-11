@@ -6,6 +6,7 @@ import { formatNumber } from '@/library/formatters';
 import { cn } from '@/utils/cn';
 import { ArrowLeft } from 'lucide-react';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
+import { useDynamicSystem } from '@/dynamic/shared';
 import { generateCandleHistory } from '@/data/generators';
 import { CandlestickChart } from '@/components/charts/CandlestickChart';
 import { logEvent, EVENT_TYPES } from '@/library/events';
@@ -21,14 +22,15 @@ type OrderType = 'buy' | 'sell';
 
 export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPageContentProps) {
   const router = useSeedRouter();
-  
+  const dyn = useDynamicSystem();
+
   const [candleSize, setCandleSize] = useState<CandleSize>('1h');
   const [orderType, setOrderType] = useState<OrderType>('buy');
   const [orderAmount, setOrderAmount] = useState('');
   const [orderPrice, setOrderPrice] = useState('');
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmSide, setConfirmSide] = useState<'buy' | 'sell' | null>(null);
-  
+
   // Log VIEW_SUBNET when subnet detail is viewed (dataset per use case)
   useEffect(() => {
     logEvent(EVENT_TYPES.VIEW_SUBNET, {
@@ -48,7 +50,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
   const candleData = useMemo(() => {
     return generateCandleHistory(candleSize, subnet.id);
   }, [candleSize, subnet.id]);
-  
+
   // Helper function to format large numbers with K, M, B
   const formatLargeNumber = (value: number): string => {
     if (value >= 1000000000) {
@@ -62,11 +64,11 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
     }
     return formatNumber(value, 2);
   };
-  
+
   const handleBack = () => {
     router.push('/subnets');
   };
-  
+
   const handlePlaceOrder = (side: 'buy' | 'sell') => {
     const amountTAU = Number.parseFloat(orderAmount) || 0;
     const amountAlpha = Number.parseFloat(orderPrice) || 0;
@@ -100,7 +102,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
     setConfirmSide(side);
     setConfirmOpen(true);
   };
-  
+
   return (
     <div className="min-h-screen bg-zinc-950 py-8">
       <div className="px-6 max-w-[1400px] mx-auto space-y-6">
@@ -112,14 +114,14 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
           <ArrowLeft className="w-5 h-5" />
           <span>Back to Subnets</span>
         </button>
-        
+
         {/* Subnet Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             <div className={cn(
               'w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg',
-              subnet.id === 0 
-                ? 'bg-gradient-to-br from-green-500 to-green-600' 
+              subnet.id === 0
+                ? 'bg-gradient-to-br from-green-500 to-green-600'
                 : 'bg-gradient-to-br from-blue-500 to-cyan-500'
             )}>
               T
@@ -149,7 +151,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
             <div className="text-2xl font-bold text-zinc-400">#{subnet.id + 1}</div>
           </div>
         </div>
-        
+
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6">
           {/* Left Sidebar - Statistics */}
@@ -162,7 +164,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              
+
               <div className="flex items-center justify-between gap-6">
                 {/* Left side - Price info */}
                 <div className="flex-1">
@@ -190,7 +192,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                     ${formatNumber(subnet.price * 450, 5)}
                   </div>
                 </div>
-                
+
                 {/* Right side - Mini chart */}
                 <div className="w-28 h-8 flex items-center">
                   <svg viewBox="0 0 100 40" className="w-full h-full" preserveAspectRatio="none">
@@ -199,13 +201,13 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                       const minVal = Math.min(...subnet.trendData);
                       const maxVal = Math.max(...subnet.trendData);
                       const range = maxVal - minVal || 1; // Avoid division by zero
-                      
+
                       const points = subnet.trendData.map((val, i) => {
                         const x = (i / (subnet.trendData.length - 1)) * 100;
                         const y = 40 - ((val - minVal) / range) * 40;
                         return `${x},${y}`;
                       }).join(' ');
-                      
+
                       return (
                         <polyline
                           points={points}
@@ -220,13 +222,13 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                 </div>
               </div>
             </div>
-            
+
             {/* Financial Data Section */}
             <div className="space-y-2">
               <h3 className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider px-2">
                 Financial Data
               </h3>
-              
+
               {/* Market Cap / 24H */}
               <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
                 <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
@@ -250,7 +252,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </div>
                 </div>
               </div>
-              
+
               {/* Volume / 24H */}
               <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
                 <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
@@ -274,7 +276,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </div>
                 </div>
               </div>
-              
+
               {/* Three column stats */}
               <div className="grid grid-cols-3 gap-2">
                 {/* FDV */}
@@ -289,7 +291,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                     ${formatLargeNumber(subnet.marketCap * 450 * 1.2)}
                   </div>
                 </div>
-                
+
                 {/* Volume/MC */}
                 <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
                   <div className="flex items-center gap-1 text-[10px] text-zinc-400 mb-1">
@@ -299,7 +301,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                     {formatNumber((subnet.volume24h / subnet.marketCap) * 100, 2)}%
                   </div>
                 </div>
-                
+
                 {/* Max Supply */}
                 <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
                   <div className="flex items-center gap-1 text-[10px] text-zinc-400 mb-1">
@@ -315,7 +317,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                 </div>
               </div>
             </div>
-            
+
             {/* Token Statistics */}
             <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-4 space-y-2">
               {/* Total Issued */}
@@ -335,7 +337,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </span>
                 </div>
               </div>
-              
+
               {/* Total Burned */}
               <div className="flex items-center justify-between py-2 border-b border-zinc-800/50">
                 <div className="flex items-center gap-1 text-xs text-zinc-400">
@@ -353,7 +355,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </span>
                 </div>
               </div>
-              
+
               {/* Circulating Supply */}
               <div className="flex items-center justify-between py-2 border-b border-zinc-800/50">
                 <div className="flex items-center gap-1 text-xs text-zinc-400">
@@ -372,7 +374,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   <span className="text-xs font-semibold text-cyan-400">18.45%</span>
                 </div>
               </div>
-              
+
               {/* Alpha Staked */}
               <div className="flex items-center justify-between py-2 border-b border-zinc-800/50">
                 <div className="flex items-center gap-1 text-xs text-zinc-400">
@@ -390,7 +392,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </span>
                 </div>
               </div>
-              
+
               {/* Alpha in Pool */}
               <div className="flex items-center justify-between py-2 border-b border-zinc-800/50">
                 <div className="flex items-center gap-1 text-xs text-zinc-400">
@@ -411,7 +413,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </span>
                 </div>
               </div>
-              
+
               {/* TAO in Pool */}
               <div className="flex items-center justify-between py-2 border-b border-zinc-800/50">
                 <div className="flex items-center gap-1 text-xs text-zinc-400">
@@ -429,7 +431,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </span>
                 </div>
               </div>
-              
+
               {/* Pool Distribution Bar */}
               <div className="pt-1">
                 <div className="flex items-center justify-between text-[10px] text-zinc-400 mb-1.5">
@@ -442,7 +444,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                 </div>
               </div>
             </div>
-            
+
             {/* Trading Statistics */}
             <div className="rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3 space-y-2">
               {/* Buys vs Sells */}
@@ -460,7 +462,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                 <div className="absolute left-0 top-0 h-full bg-green-500" style={{ width: '52.5%' }}></div>
                 <div className="absolute right-0 top-0 h-full bg-red-500" style={{ width: '47.5%' }}></div>
               </div>
-              
+
               {/* Buy Vol vs Sell Vol */}
               <div className="flex items-center justify-between pt-1">
                 <div>
@@ -476,7 +478,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                 <div className="absolute left-0 top-0 h-full bg-green-500" style={{ width: '42.3%' }}></div>
                 <div className="absolute right-0 top-0 h-full bg-red-500" style={{ width: '57.7%' }}></div>
               </div>
-              
+
               {/* Buyers vs Sellers */}
               <div className="flex items-center justify-between pt-1">
                 <div>
@@ -493,13 +495,13 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                 <div className="absolute right-0 top-0 h-full bg-red-500" style={{ width: '56.9%' }}></div>
               </div>
             </div>
-            
+
             {/* Subnet Data */}
             <div className="space-y-2">
               <h3 className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider px-2">
                 Subnet Data
               </h3>
-              
+
               <div className="grid grid-cols-2 gap-2">
                 {/* Emissions */}
                 <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
@@ -511,7 +513,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </div>
                   <div className="text-xl font-bold text-white">1.12%</div>
                 </div>
-                
+
                 {/* Root Proportion */}
                 <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
                   <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
@@ -522,7 +524,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </div>
                   <div className="text-xl font-bold text-white">18.47%</div>
                 </div>
-                
+
                 {/* Emissions / Day */}
                 <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
                   <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
@@ -533,7 +535,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </div>
                   <div className="text-xl font-bold text-white">τ80.47</div>
                 </div>
-                
+
                 {/* Owner / Day */}
                 <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
                   <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
@@ -544,7 +546,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </div>
                   <div className="text-xl font-bold text-white">τ14.48</div>
                 </div>
-                
+
                 {/* Miner / Day */}
                 <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
                   <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
@@ -555,7 +557,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </div>
                   <div className="text-xl font-bold text-white">τ32.99</div>
                 </div>
-                
+
                 {/* Validator / Day */}
                 <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
                   <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
@@ -566,7 +568,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </div>
                   <div className="text-xl font-bold text-white">τ32.99</div>
                 </div>
-                
+
                 {/* Incentive Burn */}
                 <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
                   <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
@@ -577,7 +579,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </div>
                   <div className="text-xl font-bold text-white">88.93%</div>
                 </div>
-                
+
                 {/* Recycled / Day */}
                 <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
                   <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
@@ -588,7 +590,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </div>
                   <div className="text-xl font-bold text-white">τ0.00</div>
                 </div>
-                
+
                 {/* Reg Cost */}
                 <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
                   <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
@@ -599,7 +601,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </div>
                   <div className="text-xl font-bold text-white">τ0.00</div>
                 </div>
-                
+
                 {/* UIDs */}
                 <div className="rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-3">
                   <div className="flex items-center gap-1 text-xs text-zinc-400 mb-1">
@@ -613,14 +615,14 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
               </div>
             </div>
           </div>
-          
+
           {/* Right Content */}
           <div className="space-y-6 min-w-0">
             {/* Price Chart */}
             <div className="rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-white">Price Chart</h2>
-                
+
                 {/* Candle Size Selector */}
                 <div className="flex items-center gap-2 bg-zinc-800/50 rounded-lg p-1">
                   {(['1h', '4h', '1d'] as CandleSize[]).map((size) => (
@@ -639,13 +641,13 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   ))}
                 </div>
               </div>
-              
+
               {/* Chart */}
               <div className="rounded-xl overflow-hidden border border-zinc-800">
                 <CandlestickChart key={candleSize} data={candleData} height={400} />
               </div>
             </div>
-            
+
             {/* Place Order Section */}
             <div className="rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 p-6">
               {/* Header with wallet status and tabs */}
@@ -654,7 +656,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   <div className="w-2 h-2 rounded-full bg-red-500"></div>
                   <span>Connect wallet</span>
                 </button>
-                
+
                 <div className="flex items-center gap-4">
                   <button className="px-4 py-2 text-sm text-zinc-400 hover:text-white transition-colors">
                     Limit
@@ -670,119 +672,123 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   </button>
                 </div>
               </div>
-              
+
               {/* Buy and Sell Forms Side by Side */}
               <div className="grid grid-cols-2 gap-4">
                 {/* Buy Form */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                {dyn.v1.addWrapDecoy('subnet-buy-form', (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                        </svg>
+                      </div>
+                      <span className="text-lg font-bold text-white">Buy</span>
+                    </div>
+
+                    <div className="relative">
+                      <input
+                        type="number"
+                        value={orderAmount}
+                        onChange={(e) => setOrderAmount(e.target.value)}
+                        placeholder="0.0000"
+                        className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-zinc-500">τ</span>
+                    </div>
+
+                    <div className="relative">
+                      <input
+                        type="number"
+                        value={orderPrice}
+                        onChange={(e) => setOrderPrice(e.target.value)}
+                        placeholder="0.0000"
+                        className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-zinc-500">α</span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs text-zinc-500 pt-1">
+                      <span>Price Impact 0%</span>
+                      <div className="flex items-center gap-2">
+                        <button className="text-zinc-400 hover:text-white">Max</button>
+                        <span>Available τ 0</span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => openConfirmModal('buy')}
+                      className="w-full py-3 bg-green-500 hover:bg-green-600 rounded-lg font-semibold text-white transition-colors flex items-center justify-center gap-2 mt-2"
+                    >
+                      <span>Buy</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>
-                    </div>
-                    <span className="text-lg font-bold text-white">Buy</span>
+                    </button>
                   </div>
-                  
-                  <div className="relative">
-                    <input
-                      type="number"
-                      value={orderAmount}
-                      onChange={(e) => setOrderAmount(e.target.value)}
-                      placeholder="0.0000"
-                      className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    />
-                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-zinc-500">τ</span>
-                  </div>
-                  
-                  <div className="relative">
-                    <input
-                      type="number"
-                      value={orderPrice}
-                      onChange={(e) => setOrderPrice(e.target.value)}
-                      placeholder="0.0000"
-                      className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    />
-                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-zinc-500">α</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between text-xs text-zinc-500 pt-1">
-                    <span>Price Impact 0%</span>
-                    <div className="flex items-center gap-2">
-                      <button className="text-zinc-400 hover:text-white">Max</button>
-                      <span>Available τ 0</span>
-                    </div>
-                  </div>
-                  
-                  <button
-                    type="button"
-                    onClick={() => openConfirmModal('buy')}
-                    className="w-full py-3 bg-green-500 hover:bg-green-600 rounded-lg font-semibold text-white transition-colors flex items-center justify-center gap-2 mt-2"
-                  >
-                    <span>Buy</span>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </button>
-                </div>
-                
+                ))}
+
                 {/* Sell Form */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center">
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                {dyn.v1.addWrapDecoy('subnet-sell-form', (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center">
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                        </svg>
+                      </div>
+                      <span className="text-lg font-bold text-white">Sell</span>
+                    </div>
+
+                    <div className="relative">
+                      <input
+                        type="number"
+                        placeholder="0.0000"
+                        className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-zinc-500">τ</span>
+                    </div>
+
+                    <div className="relative">
+                      <input
+                        type="number"
+                        placeholder="0.0000"
+                        className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-zinc-500">α</span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs text-zinc-500 pt-1">
+                      <span>Price Impact 0%</span>
+                      <div className="flex items-center gap-2">
+                        <button className="text-zinc-400 hover:text-white">Max</button>
+                        <span>Delegated α 0</span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => openConfirmModal('sell')}
+                      className="w-full py-3 bg-red-500 hover:bg-red-600 rounded-lg font-semibold text-white transition-colors flex items-center justify-center gap-2 mt-2"
+                    >
+                      <span>Sell</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>
-                    </div>
-                    <span className="text-lg font-bold text-white">Sell</span>
+                    </button>
                   </div>
-                  
-                  <div className="relative">
-                    <input
-                      type="number"
-                      placeholder="0.0000"
-                      className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    />
-                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-zinc-500">τ</span>
-                  </div>
-                  
-                  <div className="relative">
-                    <input
-                      type="number"
-                      placeholder="0.0000"
-                      className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    />
-                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-zinc-500">α</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between text-xs text-zinc-500 pt-1">
-                    <span>Price Impact 0%</span>
-                    <div className="flex items-center gap-2">
-                      <button className="text-zinc-400 hover:text-white">Max</button>
-                      <span>Delegated α 0</span>
-                    </div>
-                  </div>
-                  
-                  <button
-                    type="button"
-                    onClick={() => openConfirmModal('sell')}
-                    className="w-full py-3 bg-red-500 hover:bg-red-600 rounded-lg font-semibold text-white transition-colors flex items-center justify-center gap-2 mt-2"
-                  >
-                    <span>Sell</span>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </button>
-                </div>
+                ))}
               </div>
             </div>
-            
+
             {/* Transaction History */}
             <div className="rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-900/50 overflow-hidden w-full">
               <div className="p-6 border-b border-zinc-800">
                 <h2 className="text-xl font-bold text-white">Transaction History</h2>
               </div>
-              
+
               <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-800/50">
                 <table className="w-full min-w-[900px]">
                   <thead className="bg-zinc-800/50">
@@ -819,22 +825,22 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   <tbody className="divide-y divide-zinc-800">
                     {transactions.slice(0, 10).map((tx, index) => {
                       const action = tx.blockNumber % 2 === 0 ? 'buy' : 'sell';
-                      const badgeColor = action === 'buy' 
-                        ? 'bg-green-900/30 text-green-400' 
+                      const badgeColor = action === 'buy'
+                        ? 'bg-green-900/30 text-green-400'
                         : 'bg-red-900/30 text-red-400';
-                      
+
                       const alphaAmount = (tx.amount * (0.5 + Math.random() * 2)).toFixed(2);
                       const taoAmount = tx.amount.toFixed(2);
                       const alphaPriceInTao = (Number.parseFloat(taoAmount) / Number.parseFloat(alphaAmount)).toFixed(4);
                       const slippage = (Math.random() * 2).toFixed(2);
                       const feeAmount = (tx.fee * (action === 'buy' ? 1 : 2)).toFixed(4);
                       const feeUnit = action === 'buy' ? 'τ' : 'α';
-                      
+
                       // Format time as "12 secs", "1 min", etc.
                       const formatTimeAgo = (timestamp: Date): string => {
                         const now = new Date();
                         const diffInSeconds = Math.floor((now.getTime() - timestamp.getTime()) / 1000);
-                        
+
                         if (diffInSeconds < 60) {
                           return `${diffInSeconds} secs`;
                         } else if (diffInSeconds < 3600) {
@@ -848,13 +854,13 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                           return `${days} ${days === 1 ? 'day' : 'days'}`;
                         }
                       };
-                      
+
                       // Format address with 8+6 pattern
                       const formatAddress = (address: string): string => {
                         if (address.length <= 14) return address;
                         return `${address.substring(0, 8)}...${address.substring(address.length - 6)}`;
                       };
-                      
+
                       return (
                         <tr key={tx.hash} className="hover:bg-zinc-800/50 cursor-pointer transition-colors">
                           <td className="px-4 py-4 whitespace-nowrap">

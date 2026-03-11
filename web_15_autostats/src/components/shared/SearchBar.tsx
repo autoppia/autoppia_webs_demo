@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, X } from 'lucide-react';
-import { DynamicWrapper } from '@/dynamic/v1/DynamicWrapper';
+import { useDynamicSystem } from '@/dynamic/shared';
 
 interface SearchBarProps {
   placeholder?: string;
@@ -20,6 +20,7 @@ export function SearchBar({
   defaultValue = '',
 }: SearchBarProps) {
   const [query, setQuery] = useState(defaultValue);
+  const dyn = useDynamicSystem();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,8 +33,9 @@ export function SearchBar({
   };
 
   return (
-    <DynamicWrapper className={className}>
-      <form onSubmit={handleSubmit} className="flex gap-2">
+    <div className={className}>
+      {dyn.v1.addWrapDecoy('search-bar', (
+        <form onSubmit={handleSubmit} className="flex gap-2">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
           <Input
@@ -60,6 +62,7 @@ export function SearchBar({
           Search
         </Button>
       </form>
-    </DynamicWrapper>
+      ))}
+    </div>
   );
 }

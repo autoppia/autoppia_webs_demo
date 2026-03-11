@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { DynamicWrapper } from '@/dynamic/v1/DynamicWrapper';
+import { useDynamicSystem } from '@/dynamic/shared';
 import { DynamicText } from '@/dynamic/v3/DynamicText';
 import { SubnetWithTrend } from '@/shared/types';
 import { formatNumber } from '@/library/formatters';
@@ -14,6 +14,7 @@ interface SubnetsTableProps {
 
 export function SubnetsTable({ subnets, maxRows = 5 }: SubnetsTableProps) {
   const router = useSeedRouter();
+  const dyn = useDynamicSystem();
 
   // Limit the number of rows displayed
   const displayedSubnets = subnets.slice(0, maxRows);
@@ -37,8 +38,9 @@ export function SubnetsTable({ subnets, maxRows = 5 }: SubnetsTableProps) {
   };
 
   return (
-    <DynamicWrapper>
-      <div className="rounded-lg border border-zinc-800 bg-zinc-900 overflow-hidden">
+    <>
+      {dyn.v1.addWrapDecoy('landing-subnets-table', (
+        <div className="rounded-lg border border-zinc-800 bg-zinc-900 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-zinc-800/50">
@@ -117,9 +119,9 @@ export function SubnetsTable({ subnets, maxRows = 5 }: SubnetsTableProps) {
                     </td>
                     <td className="px-6 py-4">
                       <span className={changeColor}>
-                        <DynamicText 
-                          value={`${subnet.priceChange24h > 0 ? '+' : ''}${formatNumber(subnet.priceChange24h, 2)}%`} 
-                          type="number" 
+                        <DynamicText
+                          value={`${subnet.priceChange24h > 0 ? '+' : ''}${formatNumber(subnet.priceChange24h, 2)}%`}
+                          type="number"
                         />
                       </span>
                     </td>
@@ -138,6 +140,7 @@ export function SubnetsTable({ subnets, maxRows = 5 }: SubnetsTableProps) {
           </table>
         </div>
       </div>
-    </DynamicWrapper>
+      ))}
+    </>
   );
 }

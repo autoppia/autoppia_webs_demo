@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { DynamicWrapper } from '@/dynamic/v1/DynamicWrapper';
+import { useDynamicSystem } from '@/dynamic/shared';
 import { DynamicText } from '@/dynamic/v3/DynamicText';
 import type { TransactionWithMethod } from '@/shared/types';
 import { formatTAO, formatTimestamp } from '@/library/formatters';
@@ -14,6 +14,7 @@ interface TransactionsTableProps {
 
 export function TransactionsTable({ transactions, maxRows = 10 }: TransactionsTableProps) {
   const router = useSeedRouter();
+  const dyn = useDynamicSystem();
 
   // Limit the number of rows displayed
   const displayedTransactions = transactions.slice(0, maxRows);
@@ -32,7 +33,7 @@ export function TransactionsTable({ transactions, maxRows = 10 }: TransactionsTa
   const formatTimeAgo = (timestamp: Date): string => {
     const now = new Date();
     const diffInSeconds = Math.floor((now.getTime() - timestamp.getTime()) / 1000);
-    
+
     if (diffInSeconds < 60) {
       return `${diffInSeconds} secs`;
     }
@@ -75,14 +76,15 @@ export function TransactionsTable({ transactions, maxRows = 10 }: TransactionsTa
 
   // Get badge color based on action
   const getActionBadgeColor = (action: string): string => {
-    return action === 'buy' 
-      ? 'bg-green-900/30 text-green-400' 
+    return action === 'buy'
+      ? 'bg-green-900/30 text-green-400'
       : 'bg-red-900/30 text-red-400';
   };
 
   return (
-    <DynamicWrapper>
-      <div className="rounded-lg border border-zinc-800 bg-zinc-900 overflow-hidden">
+    <>
+      {dyn.v1.addWrapDecoy('landing-transactions-table', (
+        <div className="rounded-lg border border-zinc-800 bg-zinc-900 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1400px]">
             <thead className="bg-zinc-800/50">
@@ -161,9 +163,9 @@ export function TransactionsTable({ transactions, maxRows = 10 }: TransactionsTa
                   >
                     <td className="px-4 py-4 whitespace-nowrap">
                       <span className="text-zinc-300 text-sm">
-                        <DynamicText 
-                          value={formatTimeAgo(transaction.timestamp)} 
-                          type="text" 
+                        <DynamicText
+                          value={formatTimeAgo(transaction.timestamp)}
+                          type="text"
                         />
                       </span>
                     </td>
@@ -179,9 +181,9 @@ export function TransactionsTable({ transactions, maxRows = 10 }: TransactionsTa
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
                       <span className="text-zinc-400 font-mono text-sm">
-                        <DynamicText 
-                          value={formatAddress(transaction.to)} 
-                          type="address" 
+                        <DynamicText
+                          value={formatAddress(transaction.to)}
+                          type="address"
                         />
                       </span>
                     </td>
@@ -212,9 +214,9 @@ export function TransactionsTable({ transactions, maxRows = 10 }: TransactionsTa
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
                       <span className="text-zinc-400 font-mono text-sm">
-                        <DynamicText 
-                          value={formatAddress(transaction.from)} 
-                          type="address" 
+                        <DynamicText
+                          value={formatAddress(transaction.from)}
+                          type="address"
                         />
                       </span>
                     </td>
@@ -225,6 +227,7 @@ export function TransactionsTable({ transactions, maxRows = 10 }: TransactionsTa
           </table>
         </div>
       </div>
-    </DynamicWrapper>
+      ))}
+    </>
   );
 }

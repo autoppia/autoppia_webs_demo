@@ -6,9 +6,9 @@ import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from '@/dynamic/v3';
 import type { SubnetWithTrend } from '@/shared/types';
 import { formatNumber } from '@/library/formatters';
 import { cn } from '@/utils/cn';
-import { 
-  TrendingUp, 
-  TrendingDown, 
+import {
+  TrendingUp,
+  TrendingDown,
   Search,
   ArrowUpDown
 } from 'lucide-react';
@@ -26,7 +26,7 @@ type DisplayMode = 'tao' | 'usd';
 export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
   const dyn = useDynamicSystem();
   const router = useSeedRouter();
-  
+
   const [searchQuery, setSearchQuery] = useState('');
   const [sortField, setSortField] = useState<SortField>('marketCap');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
@@ -51,19 +51,19 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
   const stats = useMemo(() => {
     const rootSubnet = subnets.find(s => s.id === 0);
     const alphaSubnets = subnets.filter(s => s.id !== 0);
-    
+
     const rootPrice = rootSubnet ? rootSubnet.price : 1.0; // Root is always 1 TAO
     const alphaPrice = alphaSubnets.reduce((sum, s) => sum + s.price, 0);
     const totalPrice = rootPrice + alphaPrice;
-    
+
     const rootStake = rootSubnet ? rootSubnet.marketCap : 0;
     const alphaStake = alphaSubnets.reduce((sum, s) => sum + s.marketCap, 0);
     const totalStake = rootStake + alphaStake;
-    
+
     const rootVolume = rootSubnet ? rootSubnet.volume24h : 0;
     const alphaVolume = alphaSubnets.reduce((sum, s) => sum + s.volume24h, 0);
     const totalVolume = rootVolume + alphaVolume;
-    
+
     return {
       // Subnets Value
       rootPrice,
@@ -71,14 +71,14 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
       totalPrice,
       rootPricePercent: totalPrice > 0 ? (rootPrice / totalPrice) * 100 : 0,
       alphaPricePercent: totalPrice > 0 ? (alphaPrice / totalPrice) * 100 : 0,
-      
+
       // Stake Split
       rootStake,
       alphaStake,
       totalStake,
       rootStakePercent: totalStake > 0 ? (rootStake / totalStake) * 100 : 0,
       alphaStakePercent: totalStake > 0 ? (alphaStake / totalStake) * 100 : 0,
-      
+
       // Volume
       rootVolume,
       alphaVolume,
@@ -133,7 +133,7 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
     if (displayMode === 'usd') {
       value = value * 450; // Assume 1 TAO = $450
     }
-    
+
     if (value >= 1000000000) {
       return `${formatNumber(value / 1000000000, 2)}B`;
     }
@@ -159,7 +159,7 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
         {/* Header */}
         {dyn.v1.addWrapDecoy('subnets-header', (
           <div className="mb-8">
-            <h1 
+            <h1
               id={dyn.v3.getVariant('subnets-page-title', ID_VARIANTS_MAP)}
               className={cn(
                 'text-4xl font-bold text-white mb-2',
@@ -215,7 +215,7 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                 // Root is always green, Alpha is always red
                 const rootColor = 'green';
                 const alphaColor = 'red';
-                
+
                 return dyn.v1.addWrapDecoy(card.key, (
                   <div
                     key={`${card.key}-${index}`}
@@ -227,7 +227,7 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                   >
                     {/* Subtle gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
-                    
+
                     {/* Card Content */}
                     <div className="relative z-10">
                       {/* Card Header */}
@@ -284,8 +284,8 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                           <div
                             className={cn(
                               'absolute left-0 top-0 h-full transition-all duration-700 ease-out',
-                              rootColor === 'green' 
-                                ? 'bg-gradient-to-r from-green-600 to-green-500' 
+                              rootColor === 'green'
+                                ? 'bg-gradient-to-r from-green-600 to-green-500'
                                 : 'bg-gradient-to-r from-red-600 to-red-500'
                             )}
                             style={{ width: `${card.rootPercent}%` }}
@@ -294,8 +294,8 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                           <div
                             className={cn(
                               'absolute right-0 top-0 h-full transition-all duration-700 ease-out',
-                              alphaColor === 'green' 
-                                ? 'bg-gradient-to-l from-green-600 to-green-500' 
+                              alphaColor === 'green'
+                                ? 'bg-gradient-to-l from-green-600 to-green-500'
                                 : 'bg-gradient-to-l from-red-600 to-red-500'
                             )}
                             style={{ width: `${card.alphaPercent}%` }}
@@ -348,8 +348,8 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                   onClick={() => setDisplayMode('tao')}
                   className={cn(
                     'px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200',
-                    displayMode === 'tao' 
-                      ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' 
+                    displayMode === 'tao'
+                      ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
                       : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
                   )}
                 >
@@ -359,8 +359,8 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                   onClick={() => setDisplayMode('usd')}
                   className={cn(
                     'px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200',
-                    displayMode === 'usd' 
-                      ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' 
+                    displayMode === 'usd'
+                      ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
                       : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
                   )}
                 >
@@ -386,63 +386,63 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                     #
                     {sortField === 'id' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
-                  <div 
+                  <div
                     onClick={() => handleSort('name')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center gap-1"
                   >
                     Subnet
                     {sortField === 'name' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
-                  <div 
+                  <div
                     onClick={() => handleSort('emission')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
                   >
                     Emission
                     {sortField === 'emission' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
-                  <div 
+                  <div
                     onClick={() => handleSort('price')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
                   >
                     Price
                     {sortField === 'price' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
-                  <div 
+                  <div
                     onClick={() => handleSort('priceChange1h')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
                   >
                     1H
                     {sortField === 'priceChange1h' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
-                  <div 
+                  <div
                     onClick={() => handleSort('priceChange24h')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
                   >
                     24H
                     {sortField === 'priceChange24h' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
-                  <div 
+                  <div
                     onClick={() => handleSort('priceChange1w')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
                   >
                     1W
                     {sortField === 'priceChange1w' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
-                  <div 
+                  <div
                     onClick={() => handleSort('priceChange1m')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
                   >
                     1M
                     {sortField === 'priceChange1m' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
-                  <div 
+                  <div
                     onClick={() => handleSort('marketCap')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
                   >
                     Cap
                     {sortField === 'marketCap' && <ArrowUpDown className="w-3 h-3" />}
                   </div>
-                  <div 
+                  <div
                     onClick={() => handleSort('volume24h')}
                     className="cursor-pointer hover:text-white transition-colors flex items-center justify-end gap-1"
                   >
@@ -475,8 +475,8 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                         <div className="flex items-center gap-3 min-w-0">
                           <div className={cn(
                             'w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold shadow-lg transition-transform duration-200 group-hover:scale-110 flex-shrink-0',
-                            subnet.id === 0 
-                              ? 'bg-gradient-to-br from-green-500 to-green-600' 
+                            subnet.id === 0
+                              ? 'bg-gradient-to-br from-green-500 to-green-600'
                               : 'bg-gradient-to-br from-blue-500 to-cyan-500'
                           )}>
                             {subnet.id}

@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSeed } from '@/context/SeedContext';
-import { generateAccountsWithDetails } from '@/data/generators';
+import { dynamicDataProvider } from '@/dynamic/v2';
+import { accountToAccountWithDetails } from '@/data/derive-trends';
 import { AccountsPageContent } from '@/components/pages/AccountsPageContent';
 import type { AccountWithDetails } from '@/shared/types';
 
@@ -13,8 +14,18 @@ export default function AccountsPage() {
 
   useEffect(() => {
     setMounted(true);
-    const accounts = generateAccountsWithDetails(200, seed);
-    setAllAccounts(accounts);
+    let cancelled = false;
+    dynamicDataProvider.whenReady().then(() => {
+      if (cancelled) return;
+      dynamicDataProvider.reload(seed).then(() => {
+        if (cancelled) return;
+        const raw = dynamicDataProvider.getAccounts();
+        setAllAccounts(raw.map((a, i) => accountToAccountWithDetails(a, i)));
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [seed]);
 
   if (!mounted || allAccounts.length === 0) {
