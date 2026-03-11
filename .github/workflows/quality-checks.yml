@@ -1,0 +1,94 @@
+name: Quality checks
+
+on:
+  push:
+    branches: [main, master, 'fix/**']
+  pull_request:
+    branches: [main, master, 'fix/**']
+
+jobs:
+  lint-and-audit:
+    name: Lint & dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('webs_server/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r webs_server/requirements.txt
+          pip install "ruff==0.10.0" pip-audit radon
+
+      - name: Ruff check
+        run: ruff check .
+
+      - name: Ruff format check
+        run: ruff format --check .
+
+      - name: Ruff maintainability report
+        run: ruff check webs_server --select C901,PLR0913,PLR0915 --output-format=concise
+        continue-on-error: true
+
+      - name: Radon cyclomatic complexity
+        run: |
+          echo "=== Cyclomatic complexity (webs_server) ==="
+          radon cc webs_server -a -s --total-average
+
+      - name: Radon maintainability index
+        run: |
+          echo "=== Maintainability index (webs_server) ==="
+          radon mi webs_server -s
+
+      - name: Radon complexity gate (src only, fail on F)
+        continue-on-error: true
+        run: |
+          bad=$(radon cc webs_server/src -n F --no-assert 2>/dev/null | grep -c . || true)
+          if [ "${bad:-0}" -gt 0 ]; then
+            echo "::error::webs_server/src/ has cyclomatic complexity F (41+). Run 'radon cc webs_server/src -n F' locally to list."
+            radon cc webs_server/src -n F --no-assert
+            exit 1
+          fi
+
+      - name: Radon maintainability gate (src only, fail on D/E)
+        run: |
+          bad=$(radon mi webs_server/src -n D 2>/dev/null | grep -c . || true)
+          if [ "${bad:-0}" -gt 0 ]; then
+            echo "::error::webs_server/src/ has maintainability index D or E (threshold: min C). Run 'radon mi webs_server/src -n D' locally to list."
+            radon mi webs_server/src -n D
+            exit 1
+          fi
+
+      - name: Dependency audit
+        run: pip-audit
+
+  pre-commit:
+    name: Pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Run pre-commit
+        run: pre-commit run --all-files
