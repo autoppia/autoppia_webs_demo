@@ -113,7 +113,6 @@ function AppointmentsPageContent() {
 
   useEffect(() => {
     let mounted = true;
-    let unsubscribe: (() => void) | null = null;
 
     const loadAppointments = async () => {
       try {

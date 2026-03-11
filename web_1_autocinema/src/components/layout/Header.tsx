@@ -32,7 +32,7 @@ export function Header() {
       return cleanPathname === "/";
     }
     // For exact matches like /login, /register, /search, etc.
-    return cleanPathname === href || cleanPathname.startsWith(href + "/");
+    return cleanPathname === href || cleanPathname.startsWith(`${href}/`);
   };
 
   return (
@@ -61,7 +61,7 @@ export function Header() {
                   active && "font-semibold text-secondary"
                 )}
               >
-                {dyn.v3.getVariant(link.textKey!, undefined, link.label)}
+                {dyn.v3.getVariant(link.textKey ?? link.label, undefined, link.label)}
               </SeedLink>
             );
           })}

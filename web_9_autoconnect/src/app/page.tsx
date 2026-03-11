@@ -1,14 +1,14 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
-import {
-  type Post as PostType,
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type {
+  Post as PostType,
 } from "@/library/dataset";
-import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
+import FeedComposerBar from "@/components/FeedComposerBar";
+import PostComposerModal from "@/components/PostComposerModal";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useSeed } from "@/context/SeedContext";
 import { dynamicDataProvider } from "@/dynamic/v2";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import {
@@ -25,7 +25,6 @@ import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
 
 function HomeContent() {
-  const { seed } = useSeed();
   const dyn = useDynamicSystem();
 
   const homeTextVariants: Record<string, string[]> = {
@@ -61,6 +60,8 @@ function HomeContent() {
   const [hiddenPostIds, setHiddenPostIds] = useState<Set<string>>(new Set());
   const [hiddenPosts, setHiddenPosts] = useState<PostType[]>([]);
   const [newPost, setNewPost] = useState("");
+  const [isComposerOpen, setIsComposerOpen] = useState(false);
+  const composerTextareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   // Subscribe to posts updates to refresh when data changes (e.g., seed change)
   useEffect(() => {
@@ -146,6 +147,7 @@ function HomeContent() {
 
     setPosts([newPostData, ...posts]);
     setNewPost("");
+    setIsComposerOpen(false);
 
     logEvent(EVENT_TYPES.POST_STATUS, {
       userName: currentUser.name,
@@ -153,6 +155,18 @@ function HomeContent() {
       postId: newPostData.id,
     });
   }
+
+  const autoResizeComposer = useCallback((el: HTMLTextAreaElement) => {
+    el.style.height = "auto";
+    const maxHeight = Math.floor(window.innerHeight * 0.55);
+    el.style.height = `${Math.min(el.scrollHeight, maxHeight)}px`;
+    el.style.overflowY = el.scrollHeight > maxHeight ? "auto" : "hidden";
+  }, []);
+
+  useEffect(() => {
+    if (!isComposerOpen || !composerTextareaRef.current) return;
+    autoResizeComposer(composerTextareaRef.current);
+  }, [isComposerOpen, autoResizeComposer]);
 
   function handleLike(postId: string) {
     setPosts((ps) =>
@@ -211,11 +225,54 @@ function HomeContent() {
     });
   }
 
+  function handleDeletePost(postId: string) {
+    const target = posts.find((p) => p.id === postId);
+    if (!target || target.user.username !== currentUser.username) return;
+
+    setPosts((ps) => ps.filter((p) => p.id !== postId));
+    setSavedPosts((prev) => prev.filter((p) => p.id !== postId));
+    setHiddenPostIds((prev) => {
+      const next = new Set(prev);
+      next.delete(postId);
+      return next;
+    });
+    setHiddenPosts((prev) => prev.filter((p) => p.id !== postId));
+
+    logEvent(EVENT_TYPES.DELETE_POST, {
+      postId,
+      author: currentUser.username,
+      content: target.content,
+      source: "home",
+    });
+  }
+
+  function handleDeleteComment(postId: string, commentId: string) {
+    const targetPost = posts.find((p) => p.id === postId);
+    const targetComment = targetPost?.comments.find((c) => c.id === commentId);
+    if (!targetComment || targetComment.user.username !== currentUser.username) return;
+
+    setPosts((ps) =>
+      ps.map((p) =>
+        p.id === postId
+          ? { ...p, comments: p.comments.filter((c) => c.id !== commentId) }
+          : p
+      )
+    );
+
+    logEvent(EVENT_TYPES.DELETE_COMMENT, {
+      postId,
+      commentId,
+      author: currentUser.username,
+      commentText: targetComment.text,
+      source: "home_comment",
+    });
+  }
+
   const shuffledPosts = useMemo(() => {
     if (posts.length === 0) return [];
     const order = dyn.v1.changeOrderElements("home-posts", posts.length);
     return order.map((idx) => posts[idx]);
-  }, [posts, dyn.seed]);
+  }, [posts, dyn.v1.changeOrderElements]);
   const visiblePosts = useMemo(
     () => shuffledPosts.filter((p) => !hiddenPostIds.has(p.id)),
     [shuffledPosts, hiddenPostIds]
@@ -262,8 +319,11 @@ function HomeContent() {
               <Post
                 key={post.id}
                 post={post}
+                currentUsername={currentUser.username}
                 onLike={handleLike}
                 onAddComment={handleAddComment}
+                onDelete={handleDeletePost}
+                onDeleteComment={handleDeleteComment}
                 onSave={(p) =>
                   setSavedPosts((prev) => {
                     const deduped = prev.filter((x) => x.id !== p.id);
@@ -307,57 +367,22 @@ function HomeContent() {
     return null;
   };
 
-  const renderTopSidebars = () => (
-    <div className="w-full flex flex-col lg:flex-row lg:gap-4 mb-4">
-      <div className="w-full lg:w-[280px]">
-        <LeftSidebar />
-      </div>
-      <div className="w-full lg:w-[280px] lg:ml-auto">
-        <RightSidebar />
-      </div>
-    </div>
+  const feedComposerInputClass = cn(
+    dyn.v3.getVariant("post_input", homeClassVariants, ""),
+    dyn.v3.getVariant("post_input", CLASS_VARIANTS_MAP, ""),
+    "text-left text-gray-500 min-h-[44px] w-full"
   );
-
-  const renderBottomSidebars = () => (
-    <div className="w-full flex flex-col lg:flex-row lg:gap-4 mt-4">
-      <div className="w-full lg:w-[300px]">
-        <LeftSidebar />
-      </div>
-      <div className="w-full lg:w-[300px] lg:ml-auto">
-        <RightSidebar />
-      </div>
-    </div>
+  const feedComposerButtonClass = cn(
+    dyn.v3.getVariant("post_button_class", homeClassVariants, ""),
+    dyn.v3.getVariant("post_button_class", CLASS_VARIANTS_MAP, ""),
+    "h-10 w-10 rounded-full inline-flex items-center justify-center p-0"
   );
-
-  const renderPostBox = () => (
-    <form
-      onSubmit={handleSubmitPost}
-      className="bg-white rounded-lg shadow p-4 flex gap-3 items-center mb-6"
-    >
-      <Avatar src={currentUser.avatar} alt={currentUser.name} size={44} />
-      <input
-        type="text"
-        className={cn(
-          dyn.v3.getVariant("post_input", homeClassVariants, ""),
-          dyn.v3.getVariant("post_input", CLASS_VARIANTS_MAP, "")
-        )}
-        value={newPost}
-        onChange={(e) => setNewPost(e.target.value)}
-        placeholder={dyn.v3.getVariant("post_placeholder", homeTextVariants, "Share something...")}
-        maxLength={300}
-      />
-      <button
-        type="submit"
-        className={cn(
-          dyn.v3.getVariant("post_button_class", homeClassVariants, ""),
-          dyn.v3.getVariant("post_button_class", CLASS_VARIANTS_MAP, "")
-        )}
-        disabled={!newPost.trim()}
-      >
-        {dyn.v3.getVariant("post_button", homeTextVariants, "Post")}
-      </button>
-    </form>
+  const modalPostButtonClass = cn(
+    dyn.v3.getVariant("post_button_class", homeClassVariants, ""),
+    dyn.v3.getVariant("post_button_class", CLASS_VARIANTS_MAP, "")
   );
+  const postPlaceholderText = dyn.v3.getVariant("post_placeholder", homeTextVariants, "Share something...");
+  const postButtonLabel = dyn.v3.getVariant("post_button", homeTextVariants, "Post");
 
   const getMainLayoutClasses = () => 'w-full flex gap-4 justify-center min-h-screen';
 
@@ -365,7 +390,15 @@ function HomeContent() {
     const main = (
       <main className="w-full max-w-[950px] mx-auto flex-1 px-6">
         <section>
-          {renderPostBox()}
+          <FeedComposerBar
+            avatarSrc={currentUser.avatar}
+            avatarAlt={currentUser.name}
+            placeholder={postPlaceholderText}
+            postAriaLabel={postButtonLabel}
+            inputClassName={feedComposerInputClass}
+            buttonClassName={feedComposerButtonClass}
+            onOpenComposer={() => setIsComposerOpen(true)}
+          />
           {renderPostsBlock()}
         </section>
       </main>
@@ -385,6 +418,22 @@ function HomeContent() {
   return (
     <div className={`${getMainLayoutClasses()} ${wrapperPadding}`}>
       {renderMainContent()}
+      <PostComposerModal
+        isOpen={isComposerOpen}
+        avatarSrc={currentUser.avatar}
+        avatarAlt={currentUser.name}
+        value={newPost}
+        placeholder={postPlaceholderText}
+        postButtonLabel={postButtonLabel}
+        postButtonClassName={modalPostButtonClass}
+        textareaRef={composerTextareaRef}
+        onClose={() => setIsComposerOpen(false)}
+        onSubmit={handleSubmitPost}
+        onChange={(value, el) => {
+          setNewPost(value);
+          autoResizeComposer(el);
+        }}
+      />
     </div>
   );
 }

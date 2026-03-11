@@ -220,7 +220,7 @@ export class DynamicDataProvider {
         hire.name.toLowerCase().includes(normalized) ||
         hire.role.toLowerCase().includes(normalized) ||
         hire.country.toLowerCase().includes(normalized) ||
-        (hire.skills && hire.skills.some((skill) => skill.toLowerCase().includes(normalized)))
+        (hire.skills?.some((skill) => skill.toLowerCase().includes(normalized)))
     );
   }
 
@@ -338,19 +338,19 @@ export class DynamicDataProvider {
   }
 
   private notifyJobs(): void {
-    this.jobSubscribers.forEach((cb) => cb(this.jobs));
+    for (const cb of this.jobSubscribers) cb(this.jobs);
   }
 
   private notifyHires(): void {
-    this.hireSubscribers.forEach((cb) => cb(this.hires));
+    for (const cb of this.hireSubscribers) cb(this.hires);
   }
 
   private notifyExperts(): void {
-    this.expertSubscribers.forEach((cb) => cb(this.experts));
+    for (const cb of this.expertSubscribers) cb(this.experts);
   }
 
   private notifySkills(): void {
-    this.skillSubscribers.forEach((cb) => cb(this.skills));
+    for (const cb of this.skillSubscribers) cb(this.skills);
   }
 
   public isDynamicModeEnabled(): boolean {

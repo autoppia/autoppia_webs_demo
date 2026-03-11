@@ -17,54 +17,57 @@ const CACHE_KEYS = {
 };
 
 // Dynamic data arrays (populated by initialize* from DB only)
-let dynamicClients: any[] = [];
-let dynamicMatters: any[] = [];
-let dynamicFiles: any[] = [];
-let dynamicEvents: any[] = [];
-let dynamicLogs: any[] = [];
+let dynamicClients: unknown[] = [];
+let dynamicMatters: unknown[] = [];
+let dynamicFiles: unknown[] = [];
+let dynamicEvents: unknown[] = [];
+let dynamicLogs: unknown[] = [];
 
 // Cache functions
-export function readCachedClients(): any[] | null {
-  return readJson<any[]>(CACHE_KEYS.clients, null);
+export function readCachedClients(): unknown[] | null {
+  return readJson<unknown[]>(CACHE_KEYS.clients, null);
 }
 
-export function writeCachedClients(clientsToCache: any[]): void {
+export function writeCachedClients(clientsToCache: unknown[]): void {
   writeJson(CACHE_KEYS.clients, clientsToCache);
 }
 
-export function readCachedMatters(): any[] | null {
-  return readJson<any[]>(CACHE_KEYS.matters, null);
+export function readCachedMatters(): unknown[] | null {
+  return readJson<unknown[]>(CACHE_KEYS.matters, null);
 }
 
-export function writeCachedMatters(mattersToCache: any[]): void {
+export function writeCachedMatters(mattersToCache: unknown[]): void {
   writeJson(CACHE_KEYS.matters, mattersToCache);
 }
+
+export type NormalizedClient = { id: string; name: string; email: string; matters: number; avatar: string; status: string; last: string };
+export type NormalizedMatter = { id: string; name: string; client: string; status: string; updated: string };
 
 /**
  * Normalize client data to ensure consistent structure
  */
-function normalizeClient(client: any, index: number): any {
+function normalizeClient(client: Record<string, unknown>, index: number): NormalizedClient {
   return {
-    id: client.id || `CL-${1000 + index}`,
-    name: client.name || `Client ${index + 1}`,
-    email: client.email || `client${index + 1}@example.com`,
+    id: (client.id as string) || `CL-${1000 + index}`,
+    name: (client.name as string) || `Client ${index + 1}`,
+    email: (client.email as string) || `client${index + 1}@example.com`,
     matters: typeof client.matters === 'number' ? client.matters : (Math.floor(Math.random() * 5) + 1),
-    avatar: client.avatar || "",
-    status: client.status || 'Active',
-    last: client.last || 'Today',
+    avatar: (client.avatar as string) || "",
+    status: (client.status as string) || 'Active',
+    last: (client.last as string) || 'Today',
   };
 }
 
 /**
  * Normalize matter data to ensure consistent structure
  */
-function normalizeMatter(matter: any, index: number): any {
+function normalizeMatter(matter: Record<string, unknown>, index: number): NormalizedMatter {
   return {
-    id: matter.id || `MAT-${Math.floor(Math.random() * 9000 + 1000)}`,
-    name: matter.name || matter.title || 'Untitled Matter',
-    client: matter.client || '—',
-    status: matter.status || 'Active',
-    updated: matter.updated || 'Today',
+    id: (matter.id as string) || `MAT-${Math.floor(Math.random() * 9000 + 1000)}`,
+    name: (matter.name as string) || (matter.title as string) || 'Untitled Matter',
+    client: (matter.client as string) || '—',
+    status: (matter.status as string) || 'Active',
+    updated: (matter.updated as string) || 'Today',
   };
 }
 
@@ -78,10 +81,10 @@ const resolveSeed = (seedValue?: number | null): number => {
 /**
  * Initialize clients with V2 system (DB mode only)
  */
-export async function initializeClients(seedOverride?: number | null): Promise<any[]> {
+export async function initializeClients(seedOverride?: number | null): Promise<NormalizedClient[]> {
   const effectiveSeed = resolveSeed(seedOverride);
   try {
-    const clients = await fetchSeededSelection<any>({
+    const clients = await fetchSeededSelection<Record<string, unknown>>({
       projectKey: "web_5_autocrm",
       entityType: "clients",
       seedValue: effectiveSeed,
@@ -94,8 +97,9 @@ export async function initializeClients(seedOverride?: number | null): Promise<a
       console.log(
         `[autocrm] Loaded ${clients.length} clients from dataset (seed=${effectiveSeed})`
       );
-      dynamicClients = clients.map((c, i) => normalizeClient(c, i));
-      return dynamicClients;
+      const result = clients.map((c: Record<string, unknown>, i: number) => normalizeClient(c, i));
+      dynamicClients = result as unknown[];
+      return result;
     }
 
     console.warn(`[autocrm] No clients returned from backend (seed=${effectiveSeed})`);
@@ -103,17 +107,17 @@ export async function initializeClients(seedOverride?: number | null): Promise<a
     console.warn("[autocrm] Backend unavailable:", error);
   }
   dynamicClients = [];
-  return dynamicClients;
+  return dynamicClients as NormalizedClient[];
 }
 
 /**
  * Initialize matters with V2 system (DB mode only)
  */
-export async function initializeMatters(seedOverride?: number | null): Promise<any[]> {
+export async function initializeMatters(seedOverride?: number | null): Promise<NormalizedMatter[]> {
   const effectiveSeed = resolveSeed(seedOverride);
 
   try {
-    const matters = await fetchSeededSelection<any>({
+    const matters = await fetchSeededSelection<Record<string, unknown>>({
       projectKey: "web_5_autocrm",
       entityType: "matters",
       seedValue: effectiveSeed,
@@ -126,28 +130,28 @@ export async function initializeMatters(seedOverride?: number | null): Promise<a
       console.log(
         `[autocrm] Loaded ${matters.length} matters from dataset (seed=${effectiveSeed})`
       );
-      dynamicMatters = matters.map((m, i) => normalizeMatter(m, i));
-      return dynamicMatters;
+      const result = matters.map((m: Record<string, unknown>, i: number) => normalizeMatter(m, i));
+      dynamicMatters = result as unknown[];
+      return result;
     }
 
-      console.warn(`[autocrm] No matters returned from backend (seed=${effectiveSeed})`);
-    } catch (error) {
-      console.warn("[autocrm] Backend unavailable:", error);
-    }
-
+    console.warn(`[autocrm] No matters returned from backend (seed=${effectiveSeed})`);
+  } catch (error) {
+    console.warn("[autocrm] Backend unavailable:", error);
+  }
 
   dynamicMatters = [];
-  return dynamicMatters;
+  return dynamicMatters as NormalizedMatter[];
 }
 
 /**
  * Initialize files with V2 system (DB mode only)
  */
-export async function initializeFiles(seedOverride?: number | null): Promise<any[]> {
+export async function initializeFiles(seedOverride?: number | null): Promise<unknown[]> {
   const effectiveSeed = resolveSeed(seedOverride);
 
   try {
-    const files = await fetchSeededSelection<any>({
+    const files = await fetchSeededSelection<Record<string, unknown>>({
       projectKey: "web_5_autocrm",
       entityType: "files",
       seedValue: effectiveSeed,
@@ -173,11 +177,11 @@ export async function initializeFiles(seedOverride?: number | null): Promise<any
 /**
  * Initialize events with V2 system (DB mode only)
  */
-export async function initializeEvents(seedOverride?: number | null): Promise<any[]> {
+export async function initializeEvents(seedOverride?: number | null): Promise<unknown[]> {
   const effectiveSeed = resolveSeed(seedOverride);
 
   try {
-    const events = await fetchSeededSelection<any>({
+    const events = await fetchSeededSelection<Record<string, unknown>>({
       projectKey: "web_5_autocrm",
       entityType: "events",
       seedValue: effectiveSeed,
@@ -203,11 +207,11 @@ export async function initializeEvents(seedOverride?: number | null): Promise<an
 /**
  * Initialize logs with V2 system (DB mode only)
  */
-export async function initializeLogs(seedOverride?: number | null): Promise<any[]> {
+export async function initializeLogs(seedOverride?: number | null): Promise<unknown[]> {
   const effectiveSeed = resolveSeed(seedOverride);
 
   try {
-    const logs = await fetchSeededSelection<any>({
+    const logs = await fetchSeededSelection<Record<string, unknown>>({
       projectKey: "web_5_autocrm",
       entityType: "logs",
       seedValue: effectiveSeed,
@@ -231,11 +235,11 @@ export async function initializeLogs(seedOverride?: number | null): Promise<any[
 }
 
 // Runtime-only DB fetch for when DB mode is enabled
-export async function loadClientsFromDb(seedOverride?: number): Promise<any[]> {
+export async function loadClientsFromDb(seedOverride?: number): Promise<NormalizedClient[]> {
   try {
     const seed = resolveSeed(seedOverride);
     const limit = 50;
-    const selected = await fetchSeededSelection<any>({
+    const selected = await fetchSeededSelection<Record<string, unknown>>({
       projectKey: "web_5_autocrm",
       entityType: "clients",
       seedValue: seed,
@@ -254,11 +258,11 @@ export async function loadClientsFromDb(seedOverride?: number): Promise<any[]> {
   return [];
 }
 
-export async function loadMattersFromDb(seedOverride?: number): Promise<any[]> {
+export async function loadMattersFromDb(seedOverride?: number): Promise<NormalizedMatter[]> {
   try {
     const seed = resolveSeed(seedOverride);
     const limit = 50;
-    const selected = await fetchSeededSelection<any>({
+    const selected = await fetchSeededSelection<Record<string, unknown>>({
       projectKey: "web_5_autocrm",
       entityType: "matters",
       seedValue: seed,

@@ -9,110 +9,7 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 import asyncpg
 from loguru import logger
-from seeded_selector import (
-    seeded_select,
-    seeded_shuffle,
-    seeded_filter_and_select,
-    seeded_distribution,
-)
-
-
-async def save_master_pool(
-    pool: asyncpg.Pool,
-    project_key: str,
-    entity_type: str,
-    data_pool: List[Dict[str, Any]],
-    metadata: Optional[Dict[str, Any]] = None,
-) -> int:
-    """
-    Save or update master data pool for a project/entity.
-    Only ONE pool exists per project/entity combination.
-
-    Returns the ID of the saved/updated record
-    """
-    if metadata is None:
-        metadata = {}
-
-    metadata.update(
-        {
-            "pool_size": len(data_pool),
-            "updated_at": datetime.now().isoformat(),
-            "version": "1.0",
-        }
-    )
-
-    # Deduplicate incoming data by id or title to ensure unique items
-    def _dedupe_items(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        seen_keys = set()
-        unique_items: List[Dict[str, Any]] = []
-        for item in items:
-            # Prefer id; fallback to (title, category) composite; else index-based key
-            key = None
-            if isinstance(item, dict):
-                if item.get("id"):
-                    key = ("id", str(item.get("id")))
-                elif item.get("title"):
-                    key = (
-                        "title+category",
-                        f"{item.get('title')}::{item.get('category', '')}",
-                    )
-            if key is None:
-                key = ("index", str(len(unique_items)))
-            if key in seen_keys:
-                continue
-            seen_keys.add(key)
-            unique_items.append(item)
-        return unique_items
-
-    # Upsert query (insert or update if exists)
-    query = """
-        INSERT INTO master_datasets (project_key, entity_type, data_pool, pool_size, metadata, updated_at)
-        VALUES ($1, $2, $3, $4, $5, NOW())
-        ON CONFLICT (project_key, entity_type)
-        DO UPDATE SET
-            data_pool = EXCLUDED.data_pool,
-            pool_size = EXCLUDED.pool_size,
-            metadata = EXCLUDED.metadata,
-            updated_at = NOW()
-        RETURNING id
-    """
-
-    try:
-        async with pool.acquire() as conn:
-            # If a pool already exists, merge with new data and dedupe
-            existing = await conn.fetchrow(
-                "SELECT data_pool FROM master_datasets WHERE project_key = $1 AND entity_type = $2",
-                project_key,
-                entity_type,
-            )
-            merged_pool: List[Dict[str, Any]]
-            if existing and existing.get("data_pool"):
-                try:
-                    existing_items = orjson.loads(existing["data_pool"]) if isinstance(existing["data_pool"], str) else existing["data_pool"]
-                except Exception:
-                    existing_items = []
-                merged_pool = _dedupe_items((existing_items or []) + (data_pool or []))
-            else:
-                merged_pool = _dedupe_items(data_pool or [])
-
-            # Convert merged, deduped data to JSONB
-            data_json = orjson.dumps(merged_pool).decode("utf-8")
-            metadata_json = orjson.dumps(metadata).decode("utf-8")
-
-            record_id = await conn.fetchval(
-                query,
-                project_key,
-                entity_type,
-                data_json,
-                len(merged_pool),
-                metadata_json,
-            )
-
-            logger.info(f"Saved master pool: project={project_key}, entity={entity_type}, size={len(merged_pool)}, id={record_id}")
-            return record_id
-    except Exception as e:
-        logger.error(f"Failed to save master pool: {e}")
-        raise
+from seeded_selector import seeded_select, seeded_shuffle, seeded_filter_and_select, seeded_distribution
 
 
 async def get_master_pool(pool: asyncpg.Pool, project_key: str, entity_type: str) -> Optional[List[Dict[str, Any]]]:
@@ -178,14 +75,7 @@ async def select_from_pool(
     master_pool = await get_master_pool(pool, project_key, entity_type)
 
     if not master_pool:
-        return {
-            "metadata": {
-                "error": "No master pool found",
-                "project_key": project_key,
-                "entity_type": entity_type,
-            },
-            "data": [],
-        }
+        return {"metadata": {"error": "No master pool found", "project_key": project_key, "entity_type": entity_type}, "data": []}
 
     # Select based on method
     if method == "shuffle":
@@ -222,14 +112,7 @@ async def select_from_pool(
     return result
 
 
-async def log_seed_usage(
-    pool: asyncpg.Pool,
-    project_key: str,
-    entity_type: str,
-    seed_value: int,
-    requested_count: int,
-    selection_method: str,
-) -> None:
+async def log_seed_usage(pool: asyncpg.Pool, project_key: str, entity_type: str, seed_value: int, requested_count: int, selection_method: str) -> None:
     """
     Log seed usage for analytics (optional).
     """
@@ -240,14 +123,7 @@ async def log_seed_usage(
 
     try:
         async with pool.acquire() as conn:
-            await conn.execute(
-                query,
-                project_key,
-                entity_type,
-                seed_value,
-                requested_count,
-                selection_method,
-            )
+            await conn.execute(query, project_key, entity_type, seed_value, requested_count, selection_method)
     except Exception as e:
         # Don't fail if logging fails
         logger.warning(f"Failed to log seed usage: {e}")
@@ -310,15 +186,7 @@ async def list_available_pools(pool: asyncpg.Pool, project_key: Optional[str] = 
         async with pool.acquire() as conn:
             rows = await conn.fetch(query, *params)
 
-            result = [
-                {
-                    "project_key": row["project_key"],
-                    "entity_type": row["entity_type"],
-                    "pool_size": row["pool_size"],
-                    "updated_at": row["updated_at"].isoformat(),
-                }
-                for row in rows
-            ]
+            result = [{"project_key": row["project_key"], "entity_type": row["entity_type"], "pool_size": row["pool_size"], "updated_at": row["updated_at"].isoformat()} for row in rows]
 
             return result
 

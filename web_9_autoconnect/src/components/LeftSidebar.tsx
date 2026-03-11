@@ -5,7 +5,7 @@ import UserSearchBar from "./UserSearchBar";
 import { useSeed } from "@/context/SeedContext";
 import { dynamicDataProvider } from "@/dynamic/v2";
 import type { User } from "@/library/dataset";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
@@ -109,7 +109,7 @@ export default function LeftSidebar() {
         </div>
       )}
 
-      <Link
+      <SeedLink
         href="/saved"
         className={cn(
           "mt-3 inline-flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:text-blue-600",
@@ -121,8 +121,8 @@ export default function LeftSidebar() {
       >
         <span className="text-yellow-500">&#9734;</span>
         <span>{dyn.v3.getVariant("saved_items", localTextVariants, "Saved items")}</span>
-      </Link>
-      <Link
+      </SeedLink>
+      <SeedLink
         href="/hidden"
         className={cn(
           "mt-2 inline-flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:text-blue-600",
@@ -134,7 +134,7 @@ export default function LeftSidebar() {
       >
         <span className="text-gray-500">👁‍🗨</span>
         <span>{dyn.v3.getVariant("hidden_posts", localTextVariants, "Hidden posts")}</span>
-      </Link>
+      </SeedLink>
 
       {/* Curioso: Estadísticas divertidas */}
       {dyn.v1.addWrapDecoy(
@@ -180,7 +180,7 @@ export default function LeftSidebar() {
             ) : (
               <>
                 <div className="flex items-center gap-2 text-gray-600">
-                  <div className="w-6 h-6 rounded-full bg-gray-300"></div>
+                  <div className="w-6 h-6 rounded-full bg-gray-300" />
                   <span>Loading...</span>
                 </div>
               </>

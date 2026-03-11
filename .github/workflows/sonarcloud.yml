@@ -26,7 +26,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Cache pip dependencies
         uses: actions/cache@v4
@@ -47,7 +47,6 @@ jobs:
           pip install pip-audit
           mkdir -p reports
           pip-audit -f json 2>/dev/null > reports/pip-audit.json || true
-        continue-on-error: true
 
       - name: Count (direct deps vulns)
         id: pip_audit
@@ -70,16 +69,23 @@ jobs:
         working-directory: webs_server
         run: |
           pytest tests/ --cov=src --cov-report=xml --cov-report=term
-        continue-on-error: true  # Continue even if tests fail
+
+      - name: Ensure coverage report exists for SonarCloud
+        working-directory: webs_server
+        run: |
+          if [ ! -f coverage.xml ]; then
+            echo "Creating minimal coverage.xml (tests may have failed)"
+            printf '%s\n' '<?xml version="1.0" ?>' '<coverage line-rate="0" branch-rate="0" lines-covered="0" lines-valid="1" branches-covered="0" branches-valid="0" version="1.9" timestamp="0">' '<sources><source>.</source></sources>' '<packages/>' '</coverage>' > coverage.xml
+          fi
 
       - name: OWASP Dependency-Check (SARIF for SonarCloud)
-        uses: dependency-check/Dependency-Check_Action@main
+        uses: dependency-check/Dependency-Check_Action@75ba02d6183445fe0761d26e836bde58b1560600  # v1.1.0
         with:
           project: "autoppia_webs_demo"
           path: "webs_server"
           format: "SARIF"
           out: "reports"
-        continue-on-error: true  # Do not fail job if dependency-check fails (e.g. network)
+#        continue-on-error: true  # Do not fail job if dependency-check fails (e.g. network)
 
       - name: Normalize SARIF report for SonarCloud
         id: sarif
@@ -110,7 +116,7 @@ jobs:
           retention-days: 5
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarcloud-github-action@ffc3010689be73b8e5ae0c57ce35968afd7909e8  # v5.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

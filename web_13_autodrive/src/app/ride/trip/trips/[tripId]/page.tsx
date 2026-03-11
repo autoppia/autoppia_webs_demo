@@ -38,7 +38,7 @@ export default function TripDetailsPage() {
     if (typeof window !== "undefined") {
       try {
         const reservedTrips = JSON.parse(localStorage.getItem("reservedTrips") || "[]");
-        const reservedTrip = reservedTrips.find((t: any) => t.id === tripId);
+        const reservedTrip = reservedTrips.find((t: { id?: string }) => t.id === tripId);
         if (reservedTrip) {
           return reservedTrip;
         }
@@ -56,7 +56,7 @@ export default function TripDetailsPage() {
     console.log("Logging CANCEL_RESERVATION", { tripId });
 
     // Check if this trip has reserved ride data (from RESERVE_RIDE event)
-    const reservedRideData = (activeTrip as any).reserveRideData;
+    const reservedRideData = (activeTrip as { reserveRideData?: Record<string, unknown> }).reserveRideData;
 
     if (reservedRideData) {
       // Use the actual reserved ride data from RESERVE_RIDE event
@@ -97,7 +97,7 @@ export default function TripDetailsPage() {
     console.log("Logging TRIP_DETAILS", { tripId });
 
     // Check if this trip has reserved ride data (from RESERVE_RIDE event)
-    const reservedRideData = (activeTrip as any).reserveRideData;
+    const reservedRideData = (activeTrip as { reserveRideData?: Record<string, unknown> }).reserveRideData;
 
     if (reservedRideData) {
       // Use the actual reserved ride data from RESERVE_RIDE event
@@ -126,7 +126,7 @@ export default function TripDetailsPage() {
         price: activeTrip.price,
         oldPrice: oldPrice,
         seats: rideTemplate.seats,
-        eta: "5 min away · " + (activeTrip.time || new Date().toTimeString().slice(0, 5)),
+        eta: `5 min away · ${activeTrip.time || new Date().toTimeString().slice(0, 5)}`,
         pickup: activeTrip.pickup,
         dropoff: activeTrip.dropoff,
         scheduled: scheduled,
@@ -141,7 +141,7 @@ export default function TripDetailsPage() {
           rideType: activeTrip.ride.name,
           price: activeTrip.price,
           totalSeats: rideTemplate.seats,
-          estimatedArrival: "5 min away · " + (activeTrip.time || new Date().toTimeString().slice(0, 5))
+          estimatedArrival: `5 min away · ${activeTrip.time || new Date().toTimeString().slice(0, 5)}`
         }
       });
     }
@@ -219,9 +219,9 @@ export default function TripDetailsPage() {
               </div>
               <div className="flex gap-4 mt-6">
                 <div className="flex flex-col items-center pr-2 pt-1">
-                  <span className="w-3 h-3 rounded-full bg-[#2095d2] block"></span>
-                  <span className="w-0.5 h-7 bg-[#2095d2] block mt-0.5"></span>
-                  <span className="w-3 h-3 rounded-sm bg-[#2095d2] block"></span>
+                  <span className="w-3 h-3 rounded-full bg-[#2095d2] block" />
+                  <span className="w-0.5 h-7 bg-[#2095d2] block mt-0.5" />
+                  <span className="w-3 h-3 rounded-sm bg-[#2095d2] block" />
                 </div>
                 <div className="flex-1">
                   <div className="mb-5">

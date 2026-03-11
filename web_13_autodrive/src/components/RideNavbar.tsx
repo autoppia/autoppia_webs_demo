@@ -26,10 +26,9 @@ export default function RideNavbar({ activeTab }: RideNavbarProps) {
         <ul className="hidden md:flex space-x-6">
           <li>
             <button
-              className={dyn.v3.getVariant("navbar-ride-button-class", CLASS_VARIANTS_MAP, "transition font-bold border-b-2 " +
-                (activeTab === "ride"
+              className={dyn.v3.getVariant("navbar-ride-button-class", CLASS_VARIANTS_MAP, `transition font-bold border-b-2 ${activeTab === "ride"
                   ? "border-[#2095d2] text-[#2095d2]"
-                  : "border-transparent text-black hover:text-[#2095d2]"))}
+                  : "border-transparent text-black hover:text-[#2095d2]"}`)}
               onClick={() => router.push("/ride/trip")}
             >
               {dyn.v3.getVariant("navbar-ride-button-text", TEXT_VARIANTS_MAP, "Ride")}

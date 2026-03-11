@@ -56,7 +56,7 @@ export async function createUser(username: string, password: string): Promise<Us
 
   const randomBookIndex =
     typeof crypto !== "undefined" && crypto.getRandomValues
-      ? (crypto.getRandomValues(new Uint32Array(1))[0]! % BOOK_POOL_SIZE) + 1
+      ? ((crypto.getRandomValues(new Uint32Array(1))[0] ?? 0) % BOOK_POOL_SIZE) + 1
       : ((username.length + (username.charCodeAt(0) ?? 0)) % BOOK_POOL_SIZE) + 1;
   const passwordHash = await hashPassword(password);
   const newUser: UserRecord = {

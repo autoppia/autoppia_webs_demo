@@ -7,10 +7,23 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
+interface Expert {
+  name: string;
+  slug?: string;
+  role?: string;
+  country?: string;
+  avatar?: string;
+  rate?: string;
+  rating?: number;
+  jobs?: number;
+  desc?: string;
+  consultation?: string;
+}
+
 export default function FavoritesPage() {
   const router = useSeedRouter();
   const dyn = useDynamicSystem();
-  const [experts, setExperts] = useState<any[]>([]);
+  const [experts, setExperts] = useState<Expert[]>([]);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
   // Subscribe to experts data
@@ -51,7 +64,7 @@ export default function FavoritesPage() {
     }
   };
 
-  const toggleFavorite = (expertName: string, e: React.MouseEvent, expert?: any) => {
+  const toggleFavorite = (expertName: string, e: React.MouseEvent, expert?: Expert) => {
     e.preventDefault();
     e.stopPropagation();
     const slug =
@@ -80,8 +93,8 @@ export default function FavoritesPage() {
     saveFavorites(newFavorites);
   };
 
-  const handleViewExpert = (expert: any) => {
-    const slug = (expert as any).slug ?? expert.name
+  const handleViewExpert = (expert: Expert) => {
+    const slug = expert.slug ?? expert.name
       .toLowerCase()
       .replace(/\s+/g, "-")
       .replace(/\./g, "");
@@ -90,7 +103,7 @@ export default function FavoritesPage() {
 
   // Filter experts to show only favorites
   const favoriteExperts = useMemo(() => {
-    return experts.filter((expert: any) => favorites.has(expert.name));
+    return experts.filter((expert) => favorites.has(expert.name));
   }, [experts, favorites]);
 
   if (favoriteExperts.length === 0) {
@@ -146,7 +159,7 @@ export default function FavoritesPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {favoriteExperts.map((expert: any, i: number) => {
+        {favoriteExperts.map((expert, i) => {
           const isFavorite = favorites.has(expert.name);
           return (
             <div
@@ -188,7 +201,7 @@ export default function FavoritesPage() {
                       "https://ext.same-assets.com/1836270417/1435009301.png";
                   }}
                 />
-                  <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
+                  <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="font-bold text-lg text-gray-900 mb-1">

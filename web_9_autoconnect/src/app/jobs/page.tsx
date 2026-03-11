@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import JobCard from "@/components/JobCard";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
@@ -55,14 +55,14 @@ function JobsContent() {
       .map((job) => job.location)
       .filter((location) => location);
     return Array.from(new Set(locations)).sort();
-  }, []);
+  }, [mockJobs]);
 
   const uniqueExperiences = useMemo(() => {
     const experiences = mockJobs
       .map((job) => job.experience)
       .filter((experience) => experience);
     return Array.from(new Set(experiences)).sort();
-  }, []);
+  }, [mockJobs]);
 
   const salaryRanges = [
     { value: "", label: "Any Salary" },
@@ -74,7 +74,7 @@ function JobsContent() {
     { value: "150000+", label: "$150,000+" },
   ];
 
-  const filterJobsBy = (currentFilters: Filters) => {
+  const filterJobsBy = useCallback((currentFilters: Filters) => {
     return mockJobs.filter((job) => {
       if (
         currentFilters.search &&
@@ -103,8 +103,8 @@ function JobsContent() {
         const salaryMatch = jobSalary.match(/(\d+)/g);
 
         if (salaryMatch && salaryMatch.length >= 2) {
-          const minSalary = parseInt(salaryMatch[0]);
-          const maxSalary = parseInt(salaryMatch[1]);
+          const minSalary = Number.parseInt(salaryMatch[0]);
+          const maxSalary = Number.parseInt(salaryMatch[1]);
 
           switch (salaryRange) {
             case "0-50000":
@@ -133,17 +133,17 @@ function JobsContent() {
 
       return true;
     });
-  };
+  }, [mockJobs]);
 
   // Filter jobs based on all criteria
   const filteredJobs = useMemo(
     () => filterJobsBy(filters),
-    [filters, mockJobs]
+    [filters, filterJobsBy]
   );
   const orderedJobs = useMemo(() => {
     const order = dyn.v1.changeOrderElements("jobs-list", filteredJobs.length);
     return order.map((idx) => filteredJobs[idx]);
-  }, [filteredJobs, dyn.seed]);
+  }, [filteredJobs, dyn.v1.changeOrderElements]);
 
   function triggerSearchEvent() {
     const query = filters.search.trim();
@@ -186,12 +186,15 @@ function JobsContent() {
     });
   }
 
-  const filtersWithoutSearch = {
-    experience: filters.experience,
-    salary: filters.salary,
-    location: filters.location,
-    remote: filters.remote,
-  };
+  const filtersWithoutSearch = useMemo(
+    () => ({
+      experience: filters.experience,
+      salary: filters.salary,
+      location: filters.location,
+      remote: filters.remote,
+    }),
+    [filters.experience, filters.salary, filters.location, filters.remote]
+  );
 
   const hasActiveFilters = Object.values(filtersWithoutSearch).some(
     (value) => value !== "" && value !== false
@@ -204,10 +207,7 @@ function JobsContent() {
       resultCount: filteredJobs.length,
     });
   }, [
-    filtersWithoutSearch.experience,
-    filtersWithoutSearch.salary,
-    filtersWithoutSearch.location,
-    filtersWithoutSearch.remote,
+    filtersWithoutSearch,
     filteredJobs.length,
     hasActiveFilters,
   ]);

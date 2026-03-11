@@ -13,7 +13,7 @@ export class DynamicDataProvider {
   private books: Book[] = [];
   private ready = false;
   private readyPromise: Promise<void>;
-  private currentSeed: number = 1;
+  private currentSeed = 1;
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
@@ -164,9 +164,9 @@ export class DynamicDataProvider {
     const current = this.getBookById(bookId);
     const pool = this.books.filter((book) => book.id !== bookId);
 
-    if (current && current.genres && current.genres.length > 0) {
+    if (current?.genres && current.genres.length > 0) {
       const primaryGenre = current.genres[0];
-      const sameGenre = pool.filter((book) => book.genres && book.genres.includes(primaryGenre));
+      const sameGenre = pool.filter((book) => book.genres?.includes(primaryGenre));
       if (sameGenre.length >= limit) {
         return sameGenre.slice(0, limit);
       }
@@ -186,9 +186,9 @@ export class DynamicDataProvider {
         book.title.toLowerCase().includes(normalizedQuery) ||
         book.synopsis.toLowerCase().includes(normalizedQuery) ||
         book.director.toLowerCase().includes(normalizedQuery) ||
-        (book.cast && book.cast.some((actor) => actor.toLowerCase().includes(normalizedQuery)));
+        (book.cast?.some((actor) => actor.toLowerCase().includes(normalizedQuery)));
 
-      const matchesGenre = !filters?.genre || (book.genres && book.genres.includes(filters.genre));
+      const matchesGenre = !filters?.genre || (book.genres?.includes(filters.genre));
       const matchesYear = !filters?.year || book.year === filters.year;
 
       return matchesQuery && matchesGenre && matchesYear;
@@ -199,7 +199,7 @@ export class DynamicDataProvider {
     if (!Array.isArray(this.books)) {
       return [];
     }
-    return this.books.filter((book) => book.genres && book.genres.includes(genre));
+    return this.books.filter((book) => book.genres?.includes(genre));
   }
 
   public getAvailableGenres(): string[] {
@@ -231,7 +231,7 @@ export class DynamicDataProvider {
   }
 
   public isDynamicModeEnabled(): boolean {
-    return this.isEnabled;
+    return isV2Enabled();
   }
 }
 

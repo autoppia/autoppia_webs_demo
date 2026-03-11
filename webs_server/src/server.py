@@ -39,6 +39,7 @@ from data_handler import (
     load_all_data,
     append_or_rollover_entity_data,
     append_to_entity_data,
+    get_allowed_project_keys,
 )
 from seeded_selector import (
     seeded_select,
@@ -53,11 +54,13 @@ from generators.smart_generator import (
 from seed_resolver import resolve_seeds
 
 # --- Configuration ---
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5433/database")
+# Default is a placeholder for local dev; set DATABASE_URL in production (no hardcoded credentials).
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://localhost:5433/database")
 DB_POOL_MIN = int(os.getenv("DB_POOL_MIN", "10"))
 DB_POOL_MAX = int(os.getenv("DB_POOL_MAX", "50"))
 GZIP_MIN_SIZE = int(os.getenv("GZIP_MIN_SIZE", "1000"))
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+# HTTP intentional: local/Docker health checks and internal URLs (Sonar S5332 excluded in sonar-project.properties)
 WEBS_HEALTH_BASE_URL = os.getenv("WEBS_HEALTH_BASE_URL", "http://localhost")
 WEBS_HEALTH_BASE_PORT = int(os.getenv("WEBS_HEALTH_BASE_PORT", "8000"))
 WEBS_HEALTH_COUNT = int(os.getenv("WEBS_HEALTH_COUNT", "14"))
@@ -258,6 +261,7 @@ class ResetResponse(BaseModel):
     message: str
     web_url: str
     deleted_count: int
+    validator_id: str
 
 
 # --- Data Generation Models (generic) ---
@@ -356,7 +360,7 @@ app = FastAPI(
     redoc_url=None,
 )
 
-# Add CORS middleware to allow requests from Next.js local development
+# Add CORS middleware to allow requests from Next.js local development (HTTP for local/Docker only)
 LOCALHOST_PORTS = [f"http://localhost:{port}" for port in range(8000, 8021)] + ["http://localhost:8090"]
 # Allow 0.0.0.0 hosts used by some dev setups (e.g., npm run dev --hostname 0.0.0.0 --port 3001)
 ZERO_HOST_PORTS = [f"http://0.0.0.0:{port}" for port in range(8000, 8021)] + [
@@ -763,11 +767,18 @@ async def generate_dataset_endpoint(request: DataGenerationRequest):
     logger.debug("=" * 60 + f"DATA: {data}" + "=" * 60)
 
     # Always save to file storage (files-only mode)
+    # Resolve project_key from allowlist so path is built from trusted data (not raw request)
     saved_path = None
     if request.project_key and request.entity_type:
+        allowed_keys = get_allowed_project_keys()
+        if request.project_key not in allowed_keys:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid project_key: must be an existing project under data path (got {request.project_key!r})",
+            )
+        project_key_for_path = next(k for k in allowed_keys if k == request.project_key)
         try:
-            # Use new file-storage saver under /app/data (persistent volume)
-            saved_path = save_generated_data_file_storage(data, request.project_key, request.entity_type)
+            saved_path = save_generated_data_file_storage(data, project_key_for_path, request.entity_type)
         except Exception as e:
             logger.error(f"Failed to save data to file storage: {e}")
             # Don't fail the request if saving fails
@@ -846,18 +857,23 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
 
         logger.info(f"[Smart Generation] Generated {len(data)} items for {request.project_key}/{request.entity_type} in {elapsed:.2f}s")
 
-        # Save to file storage based on mode
+        # Save to file storage based on mode (use allowlisted project_key for path operations)
         saved_path = None
         mode = request.mode.lower()
+        allowed_keys = get_allowed_project_keys()
+        if request.project_key not in allowed_keys:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid project_key: must be an existing project under data path (got {request.project_key!r})",
+            )
+        project_key_for_path = next(k for k in allowed_keys if k == request.project_key)
 
         try:
             if mode == "append":
-                # Append to existing {entity_type}.json
-                saved_path = append_to_entity_data(request.project_key, request.entity_type, data)
+                saved_path = append_to_entity_data(project_key_for_path, request.entity_type, data)
                 logger.info(f"[Smart Generation] Appended {len(data)} items to {saved_path}")
             else:
-                # Replace mode: create new file with timestamp
-                saved_path = save_generated_data_file_storage(data, request.project_key, request.entity_type)
+                saved_path = save_generated_data_file_storage(data, project_key_for_path, request.entity_type)
                 logger.info(f"[Smart Generation] Created new file {saved_path}")
         except Exception as e:
             logger.error(f"Failed to save data to file storage: {e}")
