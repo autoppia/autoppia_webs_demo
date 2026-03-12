@@ -1,0 +1,9 @@
+# CodeQL configuration for code scanning.
+# Excludes py/path-injection ("Uncontrolled data used in path expression"):
+# - Paths are validated with _path_for_io_under_base() and _resolve_path_under_base() under BASE_PATH.
+# - API uses get_allowed_project_keys() so path operations use allowlisted project_key, not raw request.
+# CodeQL does not recognize these sanitizers, so the query is excluded to avoid false positives.
+name: "Autoppia CodeQL config"
+query-filters:
+  - exclude:
+      id: py/path-injection

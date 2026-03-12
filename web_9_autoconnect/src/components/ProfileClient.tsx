@@ -27,9 +27,6 @@ function ProfileContent({ username }: { username: string }) {
   const [userNotFound, setUserNotFound] = useState(false);
   const [isCheckingUser, setIsCheckingUser] = useState(true);
 
-  // Get data from dynamic provider
-  const users = dynamicDataProvider.getUsers();
-
   // Subscribe to posts to get stable reference
   const [mockPosts, setMockPosts] = useState<Post[]>(() => dynamicDataProvider.getPosts());
 
@@ -225,13 +222,9 @@ function ProfileContent({ username }: { username: string }) {
       }
 
       if (foundUser) {
-        console.log(`[autoconnect] ✅ User "${username}" found:`, foundUser.name);
         setUserNotFound(false);
         setIsCheckingUser(false);
       } else {
-        const allUsers = dynamicDataProvider.getUsers();
-        console.log(`[autoconnect] ❌ User "${username}" not found. Available users (${allUsers.length}):`,
-          allUsers.slice(0, 10).map(u => ({ username: u.username, name: u.name })));
         setUserNotFound(true);
         setIsCheckingUser(false);
       }
@@ -244,7 +237,6 @@ function ProfileContent({ username }: { username: string }) {
       if (!mounted) return;
 
       const normalizedUsername = String(username || "").trim().toLowerCase();
-      console.log(`[autoconnect] Users updated (${users.length} users), re-checking user ${username}...`);
       setTimeout(() => {
         if (!mounted) return;
         let foundUser: { name: string } | undefined;
@@ -254,11 +246,9 @@ function ProfileContent({ username }: { username: string }) {
           foundUser = dynamicDataProvider.getUserByUsername(username);
         }
         if (foundUser) {
-          console.log(`[autoconnect] ✅ User "${username}" found after update:`, foundUser.name);
           setUserNotFound(false);
           setIsCheckingUser(false);
         } else if (users.length > 0) {
-          console.log(`[autoconnect] ❌ User "${username}" still not found after update`);
           setUserNotFound(true);
           setIsCheckingUser(false);
         }
@@ -300,7 +290,6 @@ function ProfileContent({ username }: { username: string }) {
         source: "post_header_avatar",
       };
 
-      console.log("📣 VIEW_USER_PROFILE event:", payload);
       logEvent(EVENT_TYPES.VIEW_USER_PROFILE, payload);
     }
   }, [user]);
@@ -1019,6 +1008,7 @@ function ProfileContent({ username }: { username: string }) {
             <PostCard
               key={post.id}
               post={post}
+              currentUsername={currentUser.username}
               onLike={handleLike}
               onAddComment={handleAddComment}
               onSave={handleSavePost}

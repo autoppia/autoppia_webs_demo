@@ -60,6 +60,7 @@ celerybeat-schedule
 celerybeat.pid
 *.sage.py
 .env*
+!.env.example
 .venv
 env/
 venv/
