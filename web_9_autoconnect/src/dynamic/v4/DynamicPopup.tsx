@@ -55,7 +55,7 @@ function getPlacementClasses(placement: string): string {
 }
 
 export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
-  const overlayRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDialogElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
