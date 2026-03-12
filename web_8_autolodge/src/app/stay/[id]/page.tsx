@@ -613,7 +613,19 @@ function PropertyDetailContent() {
                 const value = event.target.value;
                 setReceiverEmail(value);
 
-                const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+                // Simple email check without regex to avoid ReDoS (S5852)
+                const hasNoWhitespace = !value.includes(" ") && !value.includes("\t") && !value.includes("\n") && !value.includes("\r");
+                const isValidEmail =
+                  value !== "" &&
+                  hasNoWhitespace &&
+                  (() => {
+                    const at = value.indexOf("@");
+                    if (at <= 0 || at === value.length - 1) return false;
+                    const domain = value.slice(at + 1);
+                    if (domain.includes("@")) return false; // exactly one @
+                    const dot = domain.indexOf(".");
+                    return dot > 0 && dot < domain.length - 1;
+                  })();
                 setEmailError(
                   isValidEmail || value === ""
                     ? ""
