@@ -350,10 +350,11 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                     'px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200',
                     displayMode === 'tao'
                       ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
-                      : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                      : 'text-zinc-400 hover:text-white hover:bg-zinc-800',
+                    dyn.v3.getVariant('rows-per-page-btn', CLASS_VARIANTS_MAP)
                   )}
                 >
-                  TAO
+                  {dyn.v3.getVariant('display_tao', undefined, 'TAO')}
                 </button>
                 <button
                   onClick={() => setDisplayMode('usd')}
@@ -361,10 +362,11 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                     'px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200',
                     displayMode === 'usd'
                       ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
-                      : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                      : 'text-zinc-400 hover:text-white hover:bg-zinc-800',
+                    dyn.v3.getVariant('rows-per-page-btn', CLASS_VARIANTS_MAP)
                   )}
                 >
-                  USD
+                  {dyn.v3.getVariant('display_usd', undefined, 'USD')}
                 </button>
               </div>
             ))}

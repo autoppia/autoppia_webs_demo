@@ -2,12 +2,16 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { useWallet } from "@/context/WalletContext";
+import { useDynamicSystem } from "@/dynamic/shared";
+import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { WalletModal } from "./WalletModal";
 import { Wallet, ChevronDown, Copy, LogOut, Check } from "lucide-react";
 import { formatAddress, formatNumber } from "@/library/formatters";
+import { cn } from "@/utils/cn";
 
 export function WalletButton() {
   const { connected, address, walletName, balance, disconnect } = useWallet();
+  const dyn = useDynamicSystem();
   const [modalOpen, setModalOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -41,10 +45,13 @@ export function WalletButton() {
       <>
         <button
           onClick={() => setModalOpen(true)}
-          className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 px-3 py-2 text-sm font-medium text-white hover:from-blue-700 hover:to-cyan-700 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40"
+          className={cn(
+            "flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 px-3 py-2 text-sm font-medium text-white hover:from-blue-700 hover:to-cyan-700 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40",
+            dyn.v3.getVariant('button-primary', CLASS_VARIANTS_MAP)
+          )}
         >
           <Wallet className="h-4 w-4" />
-          <span className="hidden sm:inline">Connect</span>
+          <span className="hidden sm:inline">{dyn.v3.getVariant('connect_wallet', undefined, 'Connect')}</span>
         </button>
         <WalletModal open={modalOpen} onClose={() => setModalOpen(false)} />
       </>

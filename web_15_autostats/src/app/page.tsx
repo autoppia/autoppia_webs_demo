@@ -87,7 +87,7 @@ export default function LandingPage() {
           <QuickActionCard
             title="Explore the Bittensor Network"
             description="Discover active subnets, track their performance, and analyze network activity across the Bittensor ecosystem."
-            buttonText="Explore Subnets"
+            buttonText={dyn.v3.getVariant('explore_subnets', undefined, 'Explore Subnets')}
             buttonHref="/subnets"
             icon={<Rocket className="w-12 h-12" />}
           />

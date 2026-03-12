@@ -130,5 +130,41 @@
     "menu-action",
     "link-item",
     "nav-element"
+  ],
+  "search-button": [
+    "search-trigger",
+    "search-btn",
+    "query-button",
+    "search-trigger",
+    "filter-trigger",
+    "lookup-btn",
+    "search-trigger",
+    "query-trigger",
+    "search-btn",
+    "search-control"
+  ],
+  "rows-per-page-btn": [
+    "rows-btn",
+    "page-size-btn",
+    "rows-option",
+    "rows-btn",
+    "pager-option",
+    "size-btn",
+    "rows-btn",
+    "rows-option",
+    "page-size-option",
+    "rows-control"
+  ],
+  "dropdown-trigger": [
+    "dropdown-trigger",
+    "select-trigger",
+    "filter-trigger",
+    "dropdown-btn",
+    "select-btn",
+    "filter-dropdown",
+    "dropdown-trigger",
+    "trigger-dropdown",
+    "dropdown-control",
+    "filter-control"
   ]
 }

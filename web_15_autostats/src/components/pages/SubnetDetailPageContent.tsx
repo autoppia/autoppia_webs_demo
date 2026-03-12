@@ -7,6 +7,7 @@ import { cn } from '@/utils/cn';
 import { ArrowLeft } from 'lucide-react';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { useDynamicSystem } from '@/dynamic/shared';
+import { CLASS_VARIANTS_MAP } from '@/dynamic/v3';
 import { generateCandleHistory } from '@/data/generators';
 import { CandlestickChart } from '@/components/charts/CandlestickChart';
 import { logEvent, EVENT_TYPES } from '@/library/events';
@@ -684,7 +685,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
                         </svg>
                       </div>
-                      <span className="text-lg font-bold text-white">Buy</span>
+                      <span className="text-lg font-bold text-white">{dyn.v3.getVariant('buy_label', undefined, 'Buy')}</span>
                     </div>
 
                     <div className="relative">
@@ -692,8 +693,11 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                         type="number"
                         value={orderAmount}
                         onChange={(e) => setOrderAmount(e.target.value)}
-                        placeholder="0.0000"
-                        className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        placeholder={dyn.v3.getVariant('order_amount_placeholder', undefined, '0.0000')}
+                        className={cn(
+                          "w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
+                          dyn.v3.getVariant('input-text', CLASS_VARIANTS_MAP)
+                        )}
                       />
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-zinc-500">τ</span>
                     </div>
@@ -703,8 +707,11 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                         type="number"
                         value={orderPrice}
                         onChange={(e) => setOrderPrice(e.target.value)}
-                        placeholder="0.0000"
-                        className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        placeholder={dyn.v3.getVariant('order_amount_placeholder', undefined, '0.0000')}
+                        className={cn(
+                          "w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
+                          dyn.v3.getVariant('input-text', CLASS_VARIANTS_MAP)
+                        )}
                       />
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-zinc-500">α</span>
                     </div>
@@ -720,9 +727,12 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                     <button
                       type="button"
                       onClick={() => openConfirmModal('buy')}
-                      className="w-full py-3 bg-green-500 hover:bg-green-600 rounded-lg font-semibold text-white transition-colors flex items-center justify-center gap-2 mt-2"
+                      className={cn(
+                        "w-full py-3 bg-green-500 hover:bg-green-600 rounded-lg font-semibold text-white transition-colors flex items-center justify-center gap-2 mt-2",
+                        dyn.v3.getVariant('button-primary', CLASS_VARIANTS_MAP)
+                      )}
                     >
-                      <span>Buy</span>
+                      <span>{dyn.v3.getVariant('buy_label', undefined, 'Buy')}</span>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>
@@ -739,14 +749,17 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                         </svg>
                       </div>
-                      <span className="text-lg font-bold text-white">Sell</span>
+                      <span className="text-lg font-bold text-white">{dyn.v3.getVariant('sell_label', undefined, 'Sell')}</span>
                     </div>
 
                     <div className="relative">
                       <input
                         type="number"
-                        placeholder="0.0000"
-                        className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        placeholder={dyn.v3.getVariant('order_amount_placeholder', undefined, '0.0000')}
+                        className={cn(
+                          "w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
+                          dyn.v3.getVariant('input-text', CLASS_VARIANTS_MAP)
+                        )}
                       />
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-zinc-500">τ</span>
                     </div>
@@ -754,8 +767,11 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                     <div className="relative">
                       <input
                         type="number"
-                        placeholder="0.0000"
-                        className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        placeholder={dyn.v3.getVariant('order_amount_placeholder', undefined, '0.0000')}
+                        className={cn(
+                          "w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
+                          dyn.v3.getVariant('input-text', CLASS_VARIANTS_MAP)
+                        )}
                       />
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-zinc-500">α</span>
                     </div>
@@ -771,9 +787,12 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                     <button
                       type="button"
                       onClick={() => openConfirmModal('sell')}
-                      className="w-full py-3 bg-red-500 hover:bg-red-600 rounded-lg font-semibold text-white transition-colors flex items-center justify-center gap-2 mt-2"
+                      className={cn(
+                        "w-full py-3 bg-red-500 hover:bg-red-600 rounded-lg font-semibold text-white transition-colors flex items-center justify-center gap-2 mt-2",
+                        dyn.v3.getVariant('button-primary', CLASS_VARIANTS_MAP)
+                      )}
                     >
-                      <span>Sell</span>
+                      <span>{dyn.v3.getVariant('sell_label', undefined, 'Sell')}</span>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>

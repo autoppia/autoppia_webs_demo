@@ -39,16 +39,8 @@ export function BlocksPageContent({ blocks }: BlocksPageContentProps) {
     return order.map((i) => ROWS_OPTIONS[i]);
   }, [dyn.v1]);
 
-  // V3 text variants
-  const dynamicV3TextVariants: Record<string, string[]> = {
-    search_placeholder: [
-      "Search by Height, Hash",
-      "Search by Height, Hash",
-      "Search by Height, Hash",
-      "Search by Height, Hash",
-      "Search by Height, Hash",
-    ],
-  };
+  // V3 text variants - use global blocks_search_placeholder
+  const blocksSearchPlaceholder = dyn.v3.getVariant('blocks_search_placeholder', undefined, 'Search by Height, Hash');
 
   const latestBlockNumber = blocks[0]?.number ?? 0;
 
@@ -197,10 +189,7 @@ export function BlocksPageContent({ blocks }: BlocksPageContentProps) {
                   setSearchQuery(e.target.value);
                   setCurrentPage(1);
                 }}
-                placeholder={dyn.v3.getVariant(
-                  "search_placeholder",
-                  dynamicV3TextVariants,
-                )}
+                placeholder={blocksSearchPlaceholder}
                 id={dyn.v3.getVariant("blocks-search-input", ID_VARIANTS_MAP)}
                 className={cn(
                   "w-full pl-9 pr-3 py-2.5 bg-[#111] border border-zinc-800 rounded-lg text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors",
@@ -233,6 +222,7 @@ export function BlocksPageContent({ blocks }: BlocksPageContentProps) {
                       rowsPerPage === n
                         ? "border border-teal-500 text-white"
                         : "text-zinc-500 hover:text-white",
+                      dyn.v3.getVariant("rows-per-page-btn", CLASS_VARIANTS_MAP)
                     )}
                   >
                     {n}
@@ -437,7 +427,7 @@ export function BlocksPageContent({ blocks }: BlocksPageContentProps) {
                       : "text-zinc-400 hover:text-white",
                   )}
                 >
-                  Previous
+                  {dyn.v3.getVariant("pagination_previous", undefined, "Previous")}
                 </button>
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   let page: number;
@@ -477,7 +467,7 @@ export function BlocksPageContent({ blocks }: BlocksPageContentProps) {
                       : "text-zinc-400 hover:text-white",
                   )}
                 >
-                  Next
+                  {dyn.v3.getVariant("pagination_next", undefined, "Next")}
                 </button>
               </div>
             </div>

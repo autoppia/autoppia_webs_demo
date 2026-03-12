@@ -20,12 +20,12 @@ type SortField = 'extrinsicId' | 'from' | 'to' | 'amount' | 'timestamp';
 type SortDirection = 'asc' | 'desc';
 type AmountFilter = 'all' | 'gt500k' | 'gt100k' | 'gt10k' | 'lt10k';
 
-const AMOUNT_FILTER_OPTIONS: { value: AmountFilter; label: string }[] = [
-  { value: 'all', label: 'All Amount' },
-  { value: 'gt500k', label: '> 500K τ' },
-  { value: 'gt100k', label: '> 100K τ' },
-  { value: 'gt10k', label: '> 10K τ' },
-  { value: 'lt10k', label: '< 10K τ' },
+const AMOUNT_FILTER_OPTIONS: { value: AmountFilter; labelKey: string }[] = [
+  { value: 'all', labelKey: 'filter_all_amount' },
+  { value: 'gt500k', labelKey: 'filter_gt500k' },
+  { value: 'gt100k', labelKey: 'filter_gt100k' },
+  { value: 'gt10k', labelKey: 'filter_gt10k' },
+  { value: 'lt10k', labelKey: 'filter_lt10k' },
 ];
 
 export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
@@ -281,11 +281,12 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
                   'flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all flex-shrink-0',
                   sendPanelOpen
                     ? 'bg-zinc-800 border border-zinc-700 text-zinc-300 hover:bg-zinc-700'
-                    : 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/20 hover:from-blue-700 hover:to-cyan-700'
+                    : 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/20 hover:from-blue-700 hover:to-cyan-700',
+                  dyn.v3.getVariant('button-primary', CLASS_VARIANTS_MAP)
                 )}
               >
                 <Send className="h-4 w-4" />
-                {sendPanelOpen ? 'Hide' : 'Send Transfer'}
+                {sendPanelOpen ? dyn.v3.getVariant('hide', undefined, 'Hide') : dyn.v3.getVariant('send_transfer', undefined, 'Send Transfer')}
               </button>
             ))}
           </div>
@@ -353,9 +354,18 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
               <div className="relative">
                 <button
                   onClick={() => setAmountDropdownOpen(!amountDropdownOpen)}
-                  className="flex h-9 w-36 items-center justify-between rounded-lg border border-zinc-800 bg-zinc-800 px-3 py-2 text-sm text-white hover:bg-zinc-700 transition-colors"
+                  className={cn(
+                    "flex h-9 w-36 items-center justify-between rounded-lg border border-zinc-800 bg-zinc-800 px-3 py-2 text-sm text-white hover:bg-zinc-700 transition-colors",
+                    dyn.v3.getVariant('dropdown-trigger', CLASS_VARIANTS_MAP)
+                  )}
                 >
-                  <span className="truncate">{AMOUNT_FILTER_OPTIONS.find(o => o.value === amountFilter)?.label}</span>
+                  <span className="truncate">
+                    {dyn.v3.getVariant(
+                      AMOUNT_FILTER_OPTIONS.find(o => o.value === amountFilter)?.labelKey ?? 'filter_all_amount',
+                      undefined,
+                      'All Amount'
+                    )}
+                  </span>
                   <ChevronDown className="h-4 w-4 opacity-50 flex-shrink-0" />
                 </button>
                 {amountDropdownOpen && (
@@ -373,7 +383,7 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
                               : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white'
                           )}
                         >
-                          {option.label}
+                          {dyn.v3.getVariant(option.labelKey, undefined, option.value === 'all' ? 'All Amount' : option.labelKey)}
                         </button>
                       ))}
                     </div>
@@ -408,7 +418,8 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
                     onClick={() => { setRowsPerPage(n); setCurrentPage(1); }}
                     className={cn(
                       'px-2 py-1 rounded-md text-xs font-semibold transition-all',
-                      rowsPerPage === n ? 'bg-blue-500 text-white' : 'text-zinc-400 hover:text-white hover:bg-zinc-700'
+                      rowsPerPage === n ? 'bg-blue-500 text-white' : 'text-zinc-400 hover:text-white hover:bg-zinc-700',
+                      dyn.v3.getVariant('rows-per-page-btn', CLASS_VARIANTS_MAP)
                     )}
                   >
                     {n}
@@ -507,7 +518,7 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
                     disabled={currentPage === 1}
                     className={pagBtnCls(currentPage === 1)}
                   >
-                    <ChevronLeft className="w-4 h-4" /> Previous
+                    <ChevronLeft className="w-4 h-4" /> {dyn.v3.getVariant('pagination_previous', undefined, 'Previous')}
                   </button>
                   <div className="flex items-center gap-1">
                     {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -535,7 +546,7 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
                     disabled={currentPage === totalPages}
                     className={pagBtnCls(currentPage === totalPages)}
                   >
-                    Next <ChevronRight className="w-4 h-4" />
+                    {dyn.v3.getVariant('pagination_next', undefined, 'Next')} <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>

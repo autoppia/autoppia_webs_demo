@@ -3,16 +3,18 @@
 import React, { useMemo, useState } from 'react';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { useDynamicSystem } from '@/dynamic/shared';
+import { CLASS_VARIANTS_MAP } from '@/dynamic/v3';
 import { Search } from 'lucide-react';
 import { WalletButton } from '@/components/wallet/WalletButton';
 import { GlobalSearchModal } from '@/components/search/GlobalSearchModal';
+import { cn } from '@/utils/cn';
 
 const NAV_LINKS = [
-  { href: '/subnets', label: 'Subnets' },
-  { href: '/validators', label: 'Validators' },
-  { href: '/blocks', label: 'Blocks' },
-  { href: '/transfers', label: 'Transfers' },
-  { href: '/accounts', label: 'Accounts' },
+  { href: '/subnets', labelKey: 'nav_subnets' as const },
+  { href: '/validators', labelKey: 'nav_validators' as const },
+  { href: '/blocks', labelKey: 'nav_blocks' as const },
+  { href: '/transfers', labelKey: 'nav_transfers' as const },
+  { href: '/accounts', labelKey: 'nav_accounts' as const },
 ] as const;
 
 export function Header() {
@@ -45,9 +47,9 @@ export function Header() {
           <div className="flex items-center gap-4">
             {dyn.v1.addWrapDecoy('header-nav', (
               <nav className="hidden md:flex items-center gap-4 lg:gap-6">
-                {orderedNavLinks.map(({ href, label }) =>
-                  dyn.v1.addWrapDecoy(`header-nav-link-${label}`, (
-                    <NavLink key={href} href={href} label={label} />
+                {orderedNavLinks.map(({ href, labelKey }) =>
+                  dyn.v1.addWrapDecoy(`header-nav-link-${labelKey}`, (
+                    <NavLink key={href} href={href} labelKey={labelKey} dyn={dyn} />
                   ))
                 )}
               </nav>
@@ -61,11 +63,14 @@ export function Header() {
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/10 transition-colors border border-white/10"
+                className={cn(
+                  "flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/10 transition-colors border border-white/10",
+                  dyn.v3.getVariant('search-button', CLASS_VARIANTS_MAP)
+                )}
                 aria-label="Open search"
               >
                 <Search className="h-4 w-4" />
-                <span className="hidden sm:inline">Search</span>
+                <span className="hidden sm:inline">{dyn.v3.getVariant('search_button', undefined, 'Search')}</span>
               </button>
             ))}
           </div>
@@ -78,7 +83,7 @@ export function Header() {
   );
 }
 
-function NavLink({ href, label }: { href: string; label: string }) {
+function NavLink({ href, labelKey, dyn }: { href: string; labelKey: (typeof NAV_LINKS)[number]['labelKey']; dyn: ReturnType<typeof useDynamicSystem> }) {
   const router = useSeedRouter();
 
   const handleClick = (e: React.MouseEvent) => {
@@ -90,9 +95,12 @@ function NavLink({ href, label }: { href: string; label: string }) {
     <a
       href={href}
       onClick={handleClick}
-      className="text-sm font-medium text-zinc-400 hover:text-white transition-colors"
+      className={cn(
+        "text-sm font-medium text-zinc-400 hover:text-white transition-colors",
+        dyn.v3.getVariant('nav-link', CLASS_VARIANTS_MAP)
+      )}
     >
-      {label}
+      {dyn.v3.getVariant(labelKey, undefined, labelKey)}
     </a>
   );
 }

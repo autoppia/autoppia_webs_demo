@@ -491,7 +491,8 @@ export function AccountsPageContent({ accounts }: AccountsPageContentProps) {
                         "px-2.5 py-1.5 rounded-md text-xs font-semibold transition-all",
                         rowsPerPage === n
                           ? "bg-blue-500 text-white"
-                          : "text-zinc-400 hover:text-white hover:bg-zinc-700"
+                          : "text-zinc-400 hover:text-white hover:bg-zinc-700",
+                        dyn.v3.getVariant("rows-per-page-btn", CLASS_VARIANTS_MAP)
                       )}
                     >
                       {n}
@@ -760,7 +761,7 @@ export function AccountsPageContent({ accounts }: AccountsPageContentProps) {
                     )}
                   >
                     <ChevronLeft className="w-4 h-4" />
-                    Previous
+                    {dyn.v3.getVariant("pagination_previous", undefined, "Previous")}
                   </button>
                   <div className="flex items-center gap-1">
                     {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -800,7 +801,7 @@ export function AccountsPageContent({ accounts }: AccountsPageContentProps) {
                         : "text-zinc-400 hover:text-white hover:bg-zinc-800"
                     )}
                   >
-                    Next
+                    {dyn.v3.getVariant("pagination_next", undefined, "Next")}
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
