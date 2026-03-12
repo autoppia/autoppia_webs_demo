@@ -29,6 +29,7 @@ export const EVENT_TYPES = {
   EDIT_EXPERIENCE: "EDIT_EXPERIENCE",
   ADD_EXPERIENCE: "ADD_EXPERIENCE",
   DELETE_POST: "DELETE_POST",
+  DELETE_COMMENT: "DELETE_COMMENT",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
