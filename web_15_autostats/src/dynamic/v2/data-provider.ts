@@ -70,13 +70,13 @@ function getSeed(): number {
   const s = params.get("seed");
   if (s) {
     const n = Number.parseInt(s, 10);
-    if (!Number.isNaN(n)) return Math.max(1, Math.min(999999, n));
+    if (!Number.isNaN(n)) return Math.max(1, Math.min(999, n));
   }
   try {
     const saved = localStorage.getItem("autostats_seed");
     if (saved) {
       const n = Number.parseInt(saved, 10);
-      if (!Number.isNaN(n)) return Math.max(1, Math.min(999999, n));
+      if (!Number.isNaN(n)) return Math.max(1, Math.min(999, n));
     }
   } catch {
     // ignore
