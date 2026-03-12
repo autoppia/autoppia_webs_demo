@@ -276,6 +276,7 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
             </div>
             {dyn.v1.addWrapDecoy('transfers-send-transfer-button', (
               <button
+                id={dyn.v3.getVariant('send-transfer-toggle-btn', ID_VARIANTS_MAP)}
                 onClick={() => setSendPanelOpen(!sendPanelOpen)}
                 className={cn(
                   'flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all flex-shrink-0',

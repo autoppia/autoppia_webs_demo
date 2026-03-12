@@ -7,7 +7,7 @@ import { cn } from '@/utils/cn';
 import { ArrowLeft } from 'lucide-react';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { useDynamicSystem } from '@/dynamic/shared';
-import { CLASS_VARIANTS_MAP } from '@/dynamic/v3';
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from '@/dynamic/v3';
 import { generateCandleHistory } from '@/data/generators';
 import { CandlestickChart } from '@/components/charts/CandlestickChart';
 import { logEvent, EVENT_TYPES } from '@/library/events';
@@ -109,6 +109,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
       <div className="px-6 max-w-[1400px] mx-auto space-y-6">
         {/* Back Button */}
         <button
+          id={dyn.v3.getVariant('subnet-detail-back-btn', ID_VARIANTS_MAP)}
           onClick={handleBack}
           className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors"
         >
@@ -725,6 +726,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                     </div>
 
                     <button
+                      id={dyn.v3.getVariant('order-buy-submit-btn', ID_VARIANTS_MAP)}
                       type="button"
                       onClick={() => openConfirmModal('buy')}
                       className={cn(
@@ -785,6 +787,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                     </div>
 
                     <button
+                      id={dyn.v3.getVariant('order-sell-submit-btn', ID_VARIANTS_MAP)}
                       type="button"
                       onClick={() => openConfirmModal('sell')}
                       className={cn(
@@ -964,6 +967,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
             </p>
             <div className="flex gap-3 justify-end">
               <button
+                id={dyn.v3.getVariant('confirm-order-cancel-btn', ID_VARIANTS_MAP)}
                 type="button"
                 onClick={() => { setConfirmOpen(false); setConfirmSide(null); }}
                 className="px-4 py-2 rounded-lg bg-zinc-700 text-zinc-200 hover:bg-zinc-600 transition-colors"
@@ -971,6 +975,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                 Cancel
               </button>
               <button
+                id={dyn.v3.getVariant('confirm-order-confirm-btn', ID_VARIANTS_MAP)}
                 type="button"
                 onClick={() => handlePlaceOrder(confirmSide)}
                 className={cn(

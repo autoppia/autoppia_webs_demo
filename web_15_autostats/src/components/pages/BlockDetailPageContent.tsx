@@ -315,6 +315,7 @@ export function BlockDetailPageContent({ block }: BlockDetailPageContentProps) {
         "block-detail-nav",
         <div className="flex items-center justify-between mb-6">
           <button
+            id={dyn.v3.getVariant("block-detail-back-btn", ID_VARIANTS_MAP)}
             onClick={handleBack}
             className="flex items-center gap-1.5 text-sm text-zinc-400 hover:text-white transition-colors"
           >
@@ -433,6 +434,7 @@ export function BlockDetailPageContent({ block }: BlockDetailPageContentProps) {
           {/* Tab bar */}
           <div className="flex border-b border-zinc-800">
             <button
+              id={dyn.v3.getVariant("block-extrinsics-tab", ID_VARIANTS_MAP)}
               onClick={() => setActiveTab("extrinsics")}
               className={cn(
                 "px-5 py-3 text-sm font-medium transition-colors relative",
@@ -450,6 +452,7 @@ export function BlockDetailPageContent({ block }: BlockDetailPageContentProps) {
               )}
             </button>
             <button
+              id={dyn.v3.getVariant("block-events-tab", ID_VARIANTS_MAP)}
               onClick={() => setActiveTab("events")}
               className={cn(
                 "px-5 py-3 text-sm font-medium transition-colors relative",

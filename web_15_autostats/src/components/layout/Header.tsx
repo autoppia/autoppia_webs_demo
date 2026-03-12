@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { useDynamicSystem } from '@/dynamic/shared';
-import { CLASS_VARIANTS_MAP } from '@/dynamic/v3';
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from '@/dynamic/v3';
 import { Search } from 'lucide-react';
 import { WalletButton } from '@/components/wallet/WalletButton';
 import { GlobalSearchModal } from '@/components/search/GlobalSearchModal';
@@ -37,6 +37,7 @@ export function Header() {
       <header className="fixed top-0 z-50 w-full border-b border-white/10 bg-transparent backdrop-blur-xl">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <a
+            id={dyn.v3.getVariant('header-logo-link', ID_VARIANTS_MAP)}
             href="/"
             onClick={handleLogoClick}
             className="rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 px-4 py-2 text-lg font-semibold text-white shadow-lg shadow-blue-500/20 transition-all duration-200 hover:shadow-blue-500/40"
@@ -61,6 +62,7 @@ export function Header() {
 
             {dyn.v1.addWrapDecoy('header-search-button', (
               <button
+                id={dyn.v3.getVariant('header-search-btn', ID_VARIANTS_MAP)}
                 type="button"
                 onClick={() => setSearchOpen(true)}
                 className={cn(

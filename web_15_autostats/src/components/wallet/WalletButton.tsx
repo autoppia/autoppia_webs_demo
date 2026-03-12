@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useWallet } from "@/context/WalletContext";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
 import { WalletModal } from "./WalletModal";
 import { Wallet, ChevronDown, Copy, LogOut, Check } from "lucide-react";
 import { formatAddress, formatNumber } from "@/library/formatters";
@@ -44,6 +44,7 @@ export function WalletButton() {
     return (
       <>
         <button
+          id={dyn.v3.getVariant('connect-wallet-btn', ID_VARIANTS_MAP)}
           onClick={() => setModalOpen(true)}
           className={cn(
             "flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 px-3 py-2 text-sm font-medium text-white hover:from-blue-700 hover:to-cyan-700 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40",
