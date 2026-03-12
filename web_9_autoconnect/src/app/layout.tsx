@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import LoadingFallback from "@/components/LoadingFallback";
 import { SeedProvider } from "@/context/SeedContext";
+import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
 import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <body className="bg-gray-100 text-gray-900" suppressHydrationWarning>
         <SeedProvider>
+          <V4PopupLayer>
           <Suspense fallback={<LoadingFallback />}>
             <LayoutWrapper>
               <HeaderNav />
@@ -26,6 +28,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <DynamicDebug />
             </LayoutWrapper>
           </Suspense>
+          </V4PopupLayer>
         </SeedProvider>
       </body>
     </html>

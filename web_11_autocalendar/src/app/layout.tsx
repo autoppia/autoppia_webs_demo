@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import { SeedProvider } from "@/context/SeedContext";
+import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
 import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
 const geistSans = Geist({
@@ -37,8 +38,10 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning className="antialiased">
         <SeedProvider>
+          <V4PopupLayer>
           <ClientBody>{children}</ClientBody>
           <DynamicDebug />
+          </V4PopupLayer>
         </SeedProvider>
       </body>
     </html>
