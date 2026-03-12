@@ -43,11 +43,12 @@ function generateTrendData(
 }
 
 const SUBNET_NAMES = [
-  "Root", "Text Prompting", "Image Generation", "Data Scraping", "Compute", "Storage",
+  "Text Prompting", "Image Generation", "Data Scraping", "Compute", "Storage",
   "Prediction Markets", "Audio Generation", "Video Generation", "Translation", "Code Generation",
   "Social Media", "Gaming", "DeFi", "NFT Marketplace", "Identity", "Governance",
-  "Search", "Inference", "Fine Tuning", "Map Reduce", "Cortex", "NAS", "Multi-Modal",
-  "BitAgent", "Chunking", "Pharma", "Vision", "Dippy", "Sturdy", "Wombo", "MyShell",
+  "Text Prompting 2", "Image Generation 2", "Data Scraping 2", "Compute 2", "Storage 2",
+  "Prediction Markets 2", "Audio Generation 2", "Video Generation 2", "Translation 2", "Code Generation 2",
+  "Social Media 2", "Gaming 2", "DeFi 2", "NFT Marketplace 2", "Identity 2", "Governance 2",
   "Federated Learning", "Edge Inference", "Reinforcement Learning", "Multimodal Fusion", "Knowledge Graph", "Semantic Search", "Recommendation Engine", "Anomaly Detection",
   "Time Series", "Speech Synthesis", "Document AI", "Code Completion", "Question Answering", "Summarization", "Sentiment Analysis", "Named Entity",
   "Object Detection", "Segmentation", "Pose Estimation", "OCR", "Handwriting", "Face Recognition", "Action Recognition", "3D Reconstruction",
@@ -57,8 +58,26 @@ const SUBNET_NAMES = [
   "Content Moderation", "Fact Checking", "Disinformation", "Bias Detection", "Explainability", "Adversarial Robustness", "Privacy Preserving", "Federated Analytics",
   "Energy Forecasting", "Grid Optimization", "Climate Modeling", "Carbon Tracking", "Renewable", "Demand Response", "Battery", "Smart Meter",
   "Legal NLP", "Contract Analysis", "Patent Search", "Regulatory",
+  // Subnets 100–199 (aligned with server subnets.json)
+  "Model Serving", "Transfer Learning", "Few-Shot Learning", "Neural Architecture", "RAG Pipeline", "Multimodal Embedding",
+  "Diffusion Models", "Agent Orchestration", "Tool Use", "Contrastive Learning", "Self-Supervised", "Causal Inference",
+  "Uncertainty Quantification", "Data Labeling", "Feature Store", "Model Registry", "Experiment Tracking", "Real-Time Inference",
+  "Batch Inference", "Model Compression", "Quantization", "Pruning", "Distillation", "Zero-Knowledge",
+  "Homomorphic", "Secure Aggregation", "Watermarking", "Provenance", "Threat Detection", "Precision Agriculture",
+  "Geospatial", "Satellite", "Remote Sensing", "Logistics", "Inventory", "Retail Demand",
+  "Customer Churn", "Personalization", "Search Ranking", "Ad Targeting", "Creative Assist", "Music Generation",
+  "Art Generation", "Synthetic Data", "Data Marketplace", "Human-in-the-Loop", "Continual Learning", "Streaming ML",
+  "Edge Training", "Distributed Training", "Hyperparameter Tuning", "AutoML", "Neural Search", "Graph Neural",
+  "Sequence Model", "Survival Analysis", "Causal Discovery", "Fairness", "Recourse", "Deepfake Detection",
+  "Citation Checking", "Scientific Discovery", "Materials Science", "Molecular Design", "Clinical Trial", "Triage",
+  "Wearables", "Behavioral", "Engagement", "Moderation Pipeline", "Safety Classifier", "Red Teaming",
+  "Alignment", "Reward Model", "Preference Learning", "Document Understanding", "Table Extraction", "Form Processing",
+  "Entity Resolution", "Knowledge Extraction", "Dialogue System", "Virtual Assistant", "Intent Recognition", "Slot Filling",
+  "Multi-Turn", "Voice Cloning", "Sound Event", "Acoustic Scene", "Noise Suppression", "Speech Enhancement",
+  "Video Understanding", "Action Localization", "Temporal Segmentation", "Motion Prediction", "Scene Graph", "Visual QA",
+  "Image Captioning", "Referring Expression", "Visual Reasoning", "Embodied AI",
 ];
-const SUBNET_COUNT = 100;
+const SUBNET_COUNT = 200;
 
 function generateSubnetPerformance(
   rng: () => number,
