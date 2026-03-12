@@ -73,7 +73,7 @@ Follow these steps to install and run the application using Docker Compose:
     ```bash
     pip install -r requirements.txt
     ```
-5.  Ensure your PostgreSQL database is running and the `DATABASE_URL` environment variable is set correctly in your shell or a `.env` file read by your environment.
+5.  Ensure your PostgreSQL database is running and the `DATABASE_URL` environment variable is set correctly in your shell or a `.env` file. Copy `webs_server/.env.example` to `webs_server/.env` and set values as needed; never commit `.env` or put real secrets in it.
 6.  Run the FastAPI application with Uvicorn:
     ```bash
     uvicorn server:app --reload --host 0.0.0.0 --port 8000 # Or your desired port

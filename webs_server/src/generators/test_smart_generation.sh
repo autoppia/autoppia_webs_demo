@@ -37,7 +37,7 @@ curl -X POST "$API_URL/datasets/generate-smart" \
     "mode": "append"
   }' \
   -w "\n\nHTTP Status: %{http_code}\n" \
-  2>/dev/null | jq '{message, count, saved_path}' 2>/dev/null || echo "❌ Error en test 1"
+  2>/dev/null | jq '{message, count, saved_path}' 2>/dev/null || echo "❌ Error en test 1" >&2
 
 echo ""
 echo "─────────────────────────────────────────────────────────────────────"
@@ -55,7 +55,7 @@ curl -X POST "$API_URL/datasets/generate-smart" \
     "mode": "replace"
   }' \
   -w "\n\nHTTP Status: %{http_code}\n" \
-  2>/dev/null | jq '{message, count, saved_path}' 2>/dev/null || echo "❌ Error en test 2"
+  2>/dev/null | jq '{message, count, saved_path}' 2>/dev/null || echo "❌ Error en test 2" >&2
 
 echo ""
 echo "─────────────────────────────────────────────────────────────────────"
@@ -72,7 +72,7 @@ curl -X POST "$API_URL/datasets/generate-smart" \
     "count": 15
   }' \
   -w "\n\nHTTP Status: %{http_code}\n" \
-  2>/dev/null | jq '{message, count, saved_path}' 2>/dev/null || echo "❌ Error en test 3"
+  2>/dev/null | jq '{message, count, saved_path}' 2>/dev/null || echo "❌ Error en test 3" >&2
 
 echo ""
 echo "─────────────────────────────────────────────────────────────────────"

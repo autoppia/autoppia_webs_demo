@@ -3,16 +3,38 @@ import {fetchSeededSelection} from "@/shared/seeded-loader";
 import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 import { isV2Enabled } from "@/dynamic/shared/flags";
 
+/** Allow only relative /images/ path with no traversal or protocol (CodeQL URL sanitization). */
+function isSafeLocalImagePath(path: string): boolean {
+  return (
+    typeof path === "string" &&
+    path.startsWith("/images/") &&
+    !path.includes("..") &&
+    !path.includes("://")
+  );
+}
+
+/** Allow only HTTPS/HTTP URLs from images.unsplash.com or source.unsplash.com (CodeQL URL sanitization). */
+function isSafeUnsplashUrl(url: string): boolean {
+  try {
+    const u = new URL(url);
+    const host = u.hostname.toLowerCase();
+    return (
+      (u.protocol === "https:" || u.protocol === "http:") &&
+      (host === "images.unsplash.com" || host === "source.unsplash.com")
+    );
+  } catch {
+    return false;
+  }
+}
+
 const normalizeImageUrl = (image?: string, category?: string): string => {
-  const DEFAULT = "/images/homepage_categories/coffee_machine.jpg";
   if (!image) return getCategoryFallback(category);
 
-  if (image.startsWith("/images/")) {
+  if (isSafeLocalImagePath(image)) {
     return image;
   }
 
-  const lower = image.toLowerCase();
-  if (lower.includes("images.unsplash.com") || lower.includes("source.unsplash.com")) {
+  if (isSafeUnsplashUrl(image)) {
     const sep = image.includes("?") ? "&" : "?";
     return `${image}${sep}w=150&h=150&fit=crop&crop=entropy&auto=format&q=60`;
   }
