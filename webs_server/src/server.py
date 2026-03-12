@@ -1,9 +1,8 @@
 import asyncio
 import os
-import re
 from contextlib import asynccontextmanager
-from datetime import datetime
-from typing import List, Dict, Any, Optional
+from datetime import datetime, timezone
+from typing import Annotated, List, Dict, Any, Optional
 from urllib.parse import urlparse
 
 import asyncpg
@@ -40,6 +39,7 @@ from data_handler import (
     load_all_data,
     append_or_rollover_entity_data,
     append_to_entity_data,
+    get_allowed_project_keys,
 )
 from seeded_selector import (
     seeded_select,
@@ -54,14 +54,22 @@ from generators.smart_generator import (
 from seed_resolver import resolve_seeds
 
 # --- Configuration ---
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5433/database")
+# Default is a placeholder for local dev; set DATABASE_URL in production (no hardcoded credentials).
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://localhost:5433/database")
 DB_POOL_MIN = int(os.getenv("DB_POOL_MIN", "10"))
 DB_POOL_MAX = int(os.getenv("DB_POOL_MAX", "50"))
 GZIP_MIN_SIZE = int(os.getenv("GZIP_MIN_SIZE", "1000"))
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+# HTTP intentional: local/Docker health checks and internal URLs (Sonar S5332 excluded in sonar-project.properties)
 WEBS_HEALTH_BASE_URL = os.getenv("WEBS_HEALTH_BASE_URL", "http://localhost")
 WEBS_HEALTH_BASE_PORT = int(os.getenv("WEBS_HEALTH_BASE_PORT", "8000"))
 WEBS_HEALTH_COUNT = int(os.getenv("WEBS_HEALTH_COUNT", "14"))
+
+# Sonar: shared message literals (avoid duplication)
+MSG_DATABASE_UNAVAILABLE = "Database service temporarily unavailable."
+MSG_INVALID_WEB_URL = "Invalid web_url provided after trimming."
+DESC_PROJECT_KEY = "Project key"
+DESC_ENTITY_TYPE = "Entity type"
 
 
 def _use_docker_network_for_webs() -> bool:
@@ -138,19 +146,32 @@ def extract_json_from_content(content: str) -> str:
     if content.startswith("[") and content.endswith("]"):
         return content
 
-    # Try to extract from markdown code blocks
-    # Match ```json ... ``` or ``` ... ``` (non-greedy, multiline)
-    markdown_pattern = r"```(?:json)?\s*\n?(.*?)\n?```"
-    matches = list(re.finditer(markdown_pattern, content, re.DOTALL))
-    if matches:
-        # Try each match, return the first one that looks like a JSON array
-        for match in matches:
-            extracted = match.group(1).strip()
+    # Try to extract from markdown code blocks (```json ... ``` or ``` ... ```)
+    # Use string search instead of regex to avoid ReDoS (S5852).
+    block_start = "```"
+    start = 0
+    code_blocks: List[str] = []
+    while True:
+        open_idx = content.find(block_start, start)
+        if open_idx == -1:
+            break
+        pos = open_idx + len(block_start)
+        while pos < len(content) and content[pos] in " \t\n\r":
+            pos += 1
+        if pos + 4 <= len(content) and content[pos : pos + 4].lower() == "json":
+            pos += 4
+        while pos < len(content) and content[pos] in " \t\n\r":
+            pos += 1
+        close_idx = content.find(block_start, pos)
+        if close_idx == -1:
+            break
+        code_blocks.append(content[pos:close_idx].strip())
+        start = close_idx + len(block_start)
+    if code_blocks:
+        for extracted in code_blocks:
             if extracted.startswith("[") and extracted.endswith("]"):
                 return extracted
-        # If none start with [, return the last match (most likely to be the data)
-        if matches:
-            return matches[-1].group(1).strip()
+        return code_blocks[-1]
 
     # Try to find JSON array by finding first [ and last ]
     # This handles cases where there's text before/after the JSON
@@ -337,7 +358,7 @@ app = FastAPI(
     redoc_url=None,
 )
 
-# Add CORS middleware to allow requests from Next.js local development
+# Add CORS middleware to allow requests from Next.js local development (HTTP for local/Docker only)
 LOCALHOST_PORTS = [f"http://localhost:{port}" for port in range(8000, 8021)] + ["http://localhost:8090"]
 # Allow 0.0.0.0 hosts used by some dev setups (e.g., npm run dev --hostname 0.0.0.0 --port 3001)
 ZERO_HOST_PORTS = [f"http://0.0.0.0:{port}" for port in range(8000, 8021)] + ["http://0.0.0.0:8090", "http://0.0.0.0:3000", "http://0.0.0.0:3001"]
@@ -348,6 +369,8 @@ INTERNAL_PORTS = [
 # Allow any autoppia.com subdomain (production & staging frontends share one API)
 AUTOPPIA_ORIGIN_REGEX = r"https?://([a-zA-Z0-9-]+\\.)*autoppia\\.com"
 
+# Add GZip first so CORS runs last (closest to app) in the middleware chain
+app.add_middleware(GZipMiddleware, minimum_size=GZIP_MIN_SIZE)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=INTERNAL_PORTS + LOCALHOST_PORTS + ZERO_HOST_PORTS + ["http://127.0.0.1:3000"],
@@ -356,8 +379,6 @@ app.add_middleware(
     allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
     allow_headers=["*"],  # Allow all headers
 )
-
-app.add_middleware(GZipMiddleware, minimum_size=GZIP_MIN_SIZE)
 
 
 # --- Root Endpoint ---
@@ -404,7 +425,7 @@ async def save_event_endpoint(event: EventInput, request: Request):
         logger.error("Database pool not available for saving event.")
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Database service temporarily unavailable.",
+            detail=MSG_DATABASE_UNAVAILABLE,
         )
     try:
         # Leer valores de headers PRIMERO (tienen prioridad sobre body)
@@ -428,7 +449,7 @@ async def save_event_endpoint(event: EventInput, request: Request):
         if not trimmed_url:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid web_url provided after trimming.",
+                detail=MSG_INVALID_WEB_URL,
             )
 
         result = await app.state.pool.fetchrow(
@@ -474,17 +495,15 @@ async def save_event_endpoint(event: EventInput, request: Request):
     summary="Get events for a web agent and URL",
 )
 async def get_events_endpoint(
-    web_url: str = Query(..., description="The specific web URL to filter events for."),
-    web_agent_id: str = Query(
-        default="UNKNOWN_AGENT",
-        max_length=255,
-        description="The specific web agent ID to filter events for.",
-    ),
-    validator_id: str = Query(
-        default="UNKNOWN_VALIDATOR",
-        max_length=255,
-        description="The specific validator ID to filter events for.",
-    ),
+    web_url: Annotated[str, Query(description="The specific web URL to filter events for.")],
+    web_agent_id: Annotated[
+        str,
+        Query(max_length=255, description="The specific web agent ID to filter events for."),
+    ] = "UNKNOWN_AGENT",
+    validator_id: Annotated[
+        str,
+        Query(max_length=255, description="The specific validator ID to filter events for."),
+    ] = "UNKNOWN_VALIDATOR",
 ):
     """
     Retrieves events, utilizing prepared statements.
@@ -494,7 +513,7 @@ async def get_events_endpoint(
         logger.error("Database pool not available for fetching events.")
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Database service temporarily unavailable.",
+            detail=MSG_DATABASE_UNAVAILABLE,
         )
 
     # --- Apply trimming to the query parameter before using it in the WHERE clause ---
@@ -502,7 +521,7 @@ async def get_events_endpoint(
     if not trimmed_url:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid web_url provided after trimming.",
+            detail=MSG_INVALID_WEB_URL,
         )
 
     try:
@@ -548,13 +567,15 @@ async def get_events_endpoint(
     summary="Delete all events for a web URL",
 )
 async def reset_events_endpoint(
-    web_url: str = Query(..., description="The web URL for which all events should be deleted."),
-    web_agent_id: str = Query(
-        default="UNKNOWN_AGENT",
-        max_length=255,
-        description="The specific web agent ID.",
-    ),
-    validator_id: str = Query(..., description="The validator ID associated with the events."),
+    web_url: Annotated[str, Query(description="The web URL for which all events should be deleted.")],
+    web_agent_id: Annotated[
+        str,
+        Query(max_length=255, description="The specific web agent ID."),
+    ] = "UNKNOWN_AGENT",
+    validator_id: Annotated[
+        str,
+        Query(max_length=255, description="The validator ID associated with the events."),
+    ] = "UNKNOWN_VALIDATOR",
 ):
     """
     Deletes all events for a given web_url, web_agent_id, and validator_id using a prepared statement.
@@ -564,7 +585,7 @@ async def reset_events_endpoint(
         logger.error("Database pool not available for resetting events.")
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Database service temporarily unavailable.",
+            detail=MSG_DATABASE_UNAVAILABLE,
         )
 
     # --- Apply trimming to the query parameter before using it in the WHERE clause ---
@@ -572,7 +593,7 @@ async def reset_events_endpoint(
     if not trimmed_url:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid web_url provided after trimming.",
+            detail=MSG_INVALID_WEB_URL,
         )
 
     try:
@@ -656,7 +677,6 @@ Output strictly a JSON array only.
                 {"role": "user", "content": prompt},
             ],
             temperature=0.5,
-            # max_tokens=6000,
         )
         content = resp.choices[0].message.content.strip()
 
@@ -735,11 +755,18 @@ async def generate_dataset_endpoint(request: DataGenerationRequest):
     logger.debug("=" * 60 + f"DATA: {data}" + "=" * 60)
 
     # Always save to file storage (files-only mode)
+    # Resolve project_key from allowlist so path is built from trusted data (not raw request)
     saved_path = None
     if request.project_key and request.entity_type:
+        allowed_keys = get_allowed_project_keys()
+        if request.project_key not in allowed_keys:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid project_key: must be an existing project under data path (got {request.project_key!r})",
+            )
+        project_key_for_path = next(k for k in allowed_keys if k == request.project_key)
         try:
-            # Use new file-storage saver under /app/data (persistent volume)
-            saved_path = save_generated_data_file_storage(data, request.project_key, request.entity_type)
+            saved_path = save_generated_data_file_storage(data, project_key_for_path, request.entity_type)
         except Exception as e:
             logger.error(f"Failed to save data to file storage: {e}")
             # Don't fail the request if saving fails
@@ -795,7 +822,7 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
 
     try:
         # Build prompt from existing examples
-        interface_definition, examples = build_generation_prompt_from_examples(request.project_key, request.entity_type, count=request.count)
+        interface_definition, examples = build_generation_prompt_from_examples(request.project_key, request.entity_type)
 
         # Get metadata for this project/entity
         metadata = get_project_entity_metadata(request.project_key, request.entity_type)
@@ -818,18 +845,23 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
 
         logger.info(f"[Smart Generation] Generated {len(data)} items for {request.project_key}/{request.entity_type} in {elapsed:.2f}s")
 
-        # Save to file storage based on mode
+        # Save to file storage based on mode (use allowlisted project_key for path operations)
         saved_path = None
         mode = request.mode.lower()
+        allowed_keys = get_allowed_project_keys()
+        if request.project_key not in allowed_keys:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid project_key: must be an existing project under data path (got {request.project_key!r})",
+            )
+        project_key_for_path = next(k for k in allowed_keys if k == request.project_key)
 
         try:
             if mode == "append":
-                # Append to existing {entity_type}.json
-                saved_path = append_to_entity_data(request.project_key, request.entity_type, data)
+                saved_path = append_to_entity_data(project_key_for_path, request.entity_type, data)
                 logger.info(f"[Smart Generation] Appended {len(data)} items to {saved_path}")
             else:
-                # Replace mode: create new file with timestamp
-                saved_path = save_generated_data_file_storage(data, request.project_key, request.entity_type)
+                saved_path = save_generated_data_file_storage(data, project_key_for_path, request.entity_type)
                 logger.info(f"[Smart Generation] Created new file {saved_path}")
         except Exception as e:
             logger.error(f"Failed to save data to file storage: {e}")
@@ -911,8 +943,8 @@ def _build_load_metadata(
 
 # --- Data Loading Models ---
 class DatasetLoadRequest(BaseModel):
-    project_key: str = Field(..., description="Project key")
-    entity_type: str = Field(..., description="Entity type")
+    project_key: str = Field(..., description=DESC_PROJECT_KEY)
+    entity_type: str = Field(..., description=DESC_ENTITY_TYPE)
     seed_value: int = Field(..., description="Seed value to load")
     limit: int = Field(default=50, ge=1, le=500, description="Maximum number of items to return")
 
@@ -931,16 +963,16 @@ class DatasetLoadResponse(BaseModel):
     summary="Load dataset using seeded selection",
 )
 async def load_dataset_endpoint(
-    project_key: str = Query(..., description="Project key"),
-    entity_type: str = Query(..., description="Entity type"),
-    seed_value: int = Query(..., description="Seed value for deterministic selection"),
-    limit: int = Query(default=50, ge=1, le=500, description="Maximum items to return"),
-    method: str = Query(
-        default="select",
-        description="Selection method: select, shuffle, filter, distribute",
-    ),
-    filter_key: Optional[str] = Query(None, description="Key to filter on (for filter method)"),
-    filter_values: Optional[str] = Query(None, description="Comma-separated values to filter (for filter method)"),
+    project_key: Annotated[str, Query(description=DESC_PROJECT_KEY)],
+    entity_type: Annotated[str, Query(description=DESC_ENTITY_TYPE)],
+    seed_value: Annotated[int, Query(description="Seed value for deterministic selection")],
+    limit: Annotated[int, Query(ge=1, le=500, description="Maximum items to return")] = 50,
+    method: Annotated[
+        str,
+        Query(description="Selection method: select, shuffle, filter, distribute"),
+    ] = "select",
+    filter_key: Annotated[Optional[str], Query(description="Key to filter on (for filter method)")] = None,
+    filter_values: Annotated[Optional[str], Query(description="Comma-separated values to filter (for filter method)")] = None,
 ):
     """
     Load data from the project directory (flat layout). Original data lives in the first file
@@ -999,7 +1031,9 @@ async def load_dataset_endpoint(
 
 # --- List Pools Endpoint ---
 @app.get("/datasets/pools", summary="List available master pools")
-async def list_pools_endpoint(project_key: Optional[str] = Query(None, description="Optional project key filter")):
+async def list_pools_endpoint(
+    project_key: Annotated[Optional[str], Query(description="Optional project key filter")] = None,
+):
     """
     List all available master data pools.
     Each pool can be queried with any seed value for reproducible selection.
@@ -1028,8 +1062,8 @@ async def list_pools_endpoint(project_key: Optional[str] = Query(None, descripti
 # --- Get Pool Info Endpoint ---
 @app.get("/datasets/pool/info", summary="Get master pool information")
 async def get_pool_info_endpoint(
-    project_key: str = Query(..., description="Project key"),
-    entity_type: str = Query(..., description="Entity type"),
+    project_key: Annotated[str, Query(description=DESC_PROJECT_KEY)],
+    entity_type: Annotated[str, Query(description=DESC_ENTITY_TYPE)],
 ):
     """
     Get information about a master pool without loading all data.
@@ -1086,7 +1120,7 @@ async def health_check_endpoint():
 
     db_pool_operational = False
     debug_message = "Database pool not initialized or available."
-    timestamp = datetime.utcnow()
+    timestamp = datetime.now(timezone.utc)
 
     if hasattr(app.state, "pool") and app.state.pool is not None:
         try:
@@ -1253,7 +1287,7 @@ async def health_webs_endpoint():
         total_count=total_count,
         overall_status=overall_status,
         base_url=base_url,
-        timestamp=datetime.utcnow(),
+        timestamp=datetime.now(timezone.utc),
     )
 
 
@@ -1344,10 +1378,10 @@ async def resolve_seeds_endpoint(request: SeedResolveRequest):
     summary="Resolve base seed into v1/v2/v3 seeds (GET version)",
 )
 async def resolve_seeds_get(
-    seed: int = Query(..., ge=1, le=999, description="Base seed value (1-999)"),
-    v1_enabled: bool = Query(default=False, description="Enable v1"),
-    v2_enabled: bool = Query(default=False, description="Enable v2"),
-    v3_enabled: bool = Query(default=False, description="Enable v3"),
+    seed: Annotated[int, Query(ge=1, le=999, description="Base seed value (1-999)")],
+    v1_enabled: Annotated[bool, Query(description="Enable v1")] = False,
+    v2_enabled: Annotated[bool, Query(description="Enable v2")] = False,
+    v3_enabled: Annotated[bool, Query(description="Enable v3")] = False,
 ):
     """
     GET version of seed resolution (for easier browser testing).

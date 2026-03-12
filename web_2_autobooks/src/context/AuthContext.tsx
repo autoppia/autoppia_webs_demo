@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { findUser, createUser, type UserRecord } from "@/data/users";
+import { findUser, createUser, hashPassword, type UserRecord } from "@/data/users";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 interface AuthUser {
@@ -53,10 +53,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = useCallback(async (username: string, password: string) => {
     const record = findUser(username);
-    if (!record || record.password !== password) {
-      // logEvent(EVENT_TYPES.LOGIN_FAILURE, { username });
-      throw new Error("Invalid credentials");
-    }
+    if (!record) throw new Error("Invalid credentials");
+    const isStoredHash = /^[a-f0-9]{64}$/i.test(record.password);
+    const passwordOk = isStoredHash
+      ? (await hashPassword(password)) === record.password
+      : password === record.password;
+    if (!passwordOk) throw new Error("Invalid credentials");
     const authUser: AuthUser = {
       username: record.username,
       allowedBooks: record.allowedBooks,
@@ -85,7 +87,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       throw new Error("Username already exists");
     }
 
-    const newUser = createUser(username, password);
+    const newUser = await createUser(username, password);
     const authUser: AuthUser = {
       username: newUser.username,
       allowedBooks: newUser.allowedBooks,
