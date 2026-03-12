@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSeed } from '@/context/SeedContext';
-import { generateValidatorsWithTrends } from '@/data/generators';
+import { dynamicDataProvider } from '@/dynamic/v2';
+import { addTrendsToValidators } from '@/data/derive-trends';
 import { ValidatorsPageContent } from '@/components/pages/ValidatorsPageContent';
 import type { ValidatorWithTrend } from '@/shared/types';
 
@@ -13,8 +14,16 @@ export default function ValidatorsPage() {
 
   useEffect(() => {
     setMounted(true);
-    const validators = generateValidatorsWithTrends(100, seed);
-    setAllValidators(validators);
+    let cancelled = false;
+    dynamicDataProvider.whenReady().then(() => {
+      if (cancelled) return;
+      dynamicDataProvider.reload(seed).then(() => {
+        if (cancelled) return;
+        const raw = dynamicDataProvider.getValidators();
+        setAllValidators(addTrendsToValidators(raw, seed));
+      });
+    });
+    return () => { cancelled = true; };
   }, [seed]);
 
   if (!mounted || allValidators.length === 0) {

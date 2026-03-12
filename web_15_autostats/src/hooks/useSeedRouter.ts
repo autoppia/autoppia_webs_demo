@@ -8,19 +8,19 @@ export function useSeedRouter() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { seed } = useSeed();
-  
+
   const push = (href: string) => {
     const url = new URL(href, window.location.origin);
     url.searchParams.set('seed', seed);
     router.push(url.pathname + url.search);
   };
-  
+
   const replace = (href: string) => {
     const url = new URL(href, window.location.origin);
     url.searchParams.set('seed', seed);
     router.replace(url.pathname + url.search);
   };
-  
+
   return {
     push,
     replace,

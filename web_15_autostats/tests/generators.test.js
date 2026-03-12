@@ -53,7 +53,7 @@ function seedRandom(seed) {
 // Generate price history (copied from implementation)
 function generatePriceHistory(timeRange, seed) {
   const now = Date.now();
-  
+
   const intervals = {
     '24h': { count: 24, interval: 3600000 },
     '7d': { count: 168, interval: 3600000 },
@@ -61,24 +61,24 @@ function generatePriceHistory(timeRange, seed) {
     '1y': { count: 365, interval: 86400000 },
     'all': { count: 730, interval: 86400000 },
   };
-  
+
   const { count, interval } = intervals[timeRange];
   const rng = seedRandom(seed);
-  
+
   let basePrice = 450;
   const data = [];
-  
+
   for (let i = count - 1; i >= 0; i--) {
     const timestamp = new Date(now - i * interval);
     const volatility = rng() * 20 - 10;
     basePrice = Math.max(100, basePrice + volatility);
-    
+
     data.push({
       timestamp,
       price: basePrice,
     });
   }
-  
+
   return data;
 }
 
@@ -145,9 +145,9 @@ test('Same seed produces identical results', () => {
   const seed = 42;
   const data1 = generatePriceHistory('24h', seed);
   const data2 = generatePriceHistory('24h', seed);
-  
+
   assertEqual(data1.length, data2.length, 'Should have same length');
-  
+
   for (let i = 0; i < data1.length; i++) {
     assertEqual(
       data1[i].price,
@@ -161,14 +161,14 @@ test('Same seed produces identical results', () => {
 test('Different seeds produce different results', () => {
   const data1 = generatePriceHistory('24h', 42);
   const data2 = generatePriceHistory('24h', 100);
-  
+
   let differences = 0;
   for (let i = 0; i < data1.length; i++) {
     if (data1[i].price !== data2[i].price) {
       differences++;
     }
   }
-  
+
   assert(differences > 0, 'Different seeds should produce different prices');
 });
 
@@ -176,7 +176,7 @@ test('Different seeds produce different results', () => {
 test('Seeded random generator is deterministic', () => {
   const rng1 = seedRandom(12345);
   const rng2 = seedRandom(12345);
-  
+
   for (let i = 0; i < 10; i++) {
     const val1 = rng1();
     const val2 = rng2();
@@ -187,7 +187,7 @@ test('Seeded random generator is deterministic', () => {
 // Test 8: Seeded random generator produces values in [0, 1) range
 test('Seeded random generator produces values in [0, 1) range', () => {
   const rng = seedRandom(12345);
-  
+
   for (let i = 0; i < 100; i++) {
     const val = rng();
     assert(val >= 0 && val < 1, `Random value should be in [0, 1), got ${val}`);
@@ -197,7 +197,7 @@ test('Seeded random generator produces values in [0, 1) range', () => {
 // Test 9: Price volatility is reasonable
 test('Price changes are within expected volatility range', () => {
   const data = generatePriceHistory('24h', 12345);
-  
+
   for (let i = 1; i < data.length; i++) {
     const change = Math.abs(data[i].price - data[i - 1].price);
     // Maximum change should be around 10 (volatility range is ±10)
@@ -209,7 +209,7 @@ test('Price changes are within expected volatility range', () => {
 // Test 10: All time ranges work correctly
 test('All time ranges are supported', () => {
   const timeRanges = ['24h', '7d', '30d', '1y', 'all'];
-  
+
   timeRanges.forEach(range => {
     const data = generatePriceHistory(range, 12345);
     assert(data.length > 0, `Time range ${range} should produce data`);
@@ -220,7 +220,7 @@ test('All time ranges are supported', () => {
 // Generate volume data (copied from implementation)
 function generateVolumeData(priceData, seed) {
   const rng = seedRandom(seed + 1000);
-  
+
   return priceData.map(point => ({
     timestamp: point.timestamp,
     volume: Math.floor(rng() * 5000000) + 1000000,
@@ -241,7 +241,7 @@ test('Returns same number of data points as price data', () => {
 test('Each volume data point has timestamp and volume fields', () => {
   const priceData = generatePriceHistory('24h', 12345);
   const volumeData = generateVolumeData(priceData, 12345);
-  
+
   volumeData.forEach((point, index) => {
     assert(point.timestamp instanceof Date, `Point ${index} should have Date timestamp`);
     assert(typeof point.volume === 'number', `Point ${index} should have number volume`);
@@ -253,7 +253,7 @@ test('Each volume data point has timestamp and volume fields', () => {
 test('Timestamps match price data timestamps', () => {
   const priceData = generatePriceHistory('24h', 12345);
   const volumeData = generateVolumeData(priceData, 12345);
-  
+
   for (let i = 0; i < priceData.length; i++) {
     assertEqual(
       volumeData[i].timestamp.getTime(),
@@ -267,7 +267,7 @@ test('Timestamps match price data timestamps', () => {
 test('Volume values are within expected range (1M to 6M)', () => {
   const priceData = generatePriceHistory('24h', 12345);
   const volumeData = generateVolumeData(priceData, 12345);
-  
+
   volumeData.forEach((point, index) => {
     assert(
       point.volume >= 1000000 && point.volume < 6000000,
@@ -281,9 +281,9 @@ test('Same seed produces identical volume data', () => {
   const priceData = generatePriceHistory('24h', 42);
   const volumeData1 = generateVolumeData(priceData, 42);
   const volumeData2 = generateVolumeData(priceData, 42);
-  
+
   assertEqual(volumeData1.length, volumeData2.length, 'Should have same length');
-  
+
   for (let i = 0; i < volumeData1.length; i++) {
     assertEqual(
       volumeData1[i].volume,
@@ -298,31 +298,31 @@ test('Different seeds produce different volume data', () => {
   const priceData = generatePriceHistory('24h', 42);
   const volumeData1 = generateVolumeData(priceData, 42);
   const volumeData2 = generateVolumeData(priceData, 100);
-  
+
   let differences = 0;
   for (let i = 0; i < volumeData1.length; i++) {
     if (volumeData1[i].volume !== volumeData2[i].volume) {
       differences++;
     }
   }
-  
+
   assert(differences > 0, 'Different seeds should produce different volumes');
 });
 
 // Test 17: Works with different time ranges
 test('Works with all time ranges', () => {
   const timeRanges = ['24h', '7d', '30d', '1y', 'all'];
-  
+
   timeRanges.forEach(range => {
     const priceData = generatePriceHistory(range, 12345);
     const volumeData = generateVolumeData(priceData, 12345);
-    
+
     assertEqual(
       volumeData.length,
       priceData.length,
       `Volume data for ${range} should match price data length`
     );
-    
+
     assert(volumeData.length > 0, `Time range ${range} should produce volume data`);
   });
 });
@@ -331,10 +331,10 @@ test('Works with all time ranges', () => {
 test('Volume data uses different seed offset from price data', () => {
   const priceData = generatePriceHistory('24h', 12345);
   const volumeData = generateVolumeData(priceData, 12345);
-  
+
   // Generate price data with seed + 1000 to verify they're different
   const priceDataWithOffset = generatePriceHistory('24h', 12345 + 1000);
-  
+
   // Volume data should not correlate with price data in a predictable way
   // This is a basic check that we're using different random sequences
   assert(volumeData.length > 0, 'Volume data should be generated');
@@ -345,7 +345,7 @@ test('Volume data uses different seed offset from price data', () => {
 test('Empty price data produces empty volume data', () => {
   const emptyPriceData = [];
   const volumeData = generateVolumeData(emptyPriceData, 12345);
-  
+
   assertEqual(volumeData.length, 0, 'Should return empty array for empty price data');
 });
 
@@ -353,7 +353,7 @@ test('Empty price data produces empty volume data', () => {
 test('Volume data maintains timestamp order', () => {
   const priceData = generatePriceHistory('24h', 12345);
   const volumeData = generateVolumeData(priceData, 12345);
-  
+
   for (let i = 1; i < volumeData.length; i++) {
     assert(
       volumeData[i].timestamp.getTime() > volumeData[i - 1].timestamp.getTime(),
@@ -366,21 +366,21 @@ test('Volume data maintains timestamp order', () => {
 function generateTrendData(length, seed, trend = 'neutral') {
   const rng = seedRandom(seed);
   const data = [];
-  
+
   let value = 50;
-  
+
   const trendBias = {
     up: 0.6,
     down: -0.6,
     neutral: 0,
   }[trend];
-  
+
   for (let i = 0; i < length; i++) {
     const change = (rng() - 0.5) * 10 + trendBias;
     value = Math.max(0, Math.min(100, value + change));
     data.push(value);
   }
-  
+
   return data;
 }
 
@@ -391,10 +391,10 @@ console.log('='.repeat(60));
 test('Returns correct number of data points', () => {
   const data = generateTrendData(10, 12345);
   assertEqual(data.length, 10, 'Should return 10 data points');
-  
+
   const data2 = generateTrendData(30, 12345);
   assertEqual(data2.length, 30, 'Should return 30 data points');
-  
+
   const data3 = generateTrendData(7, 12345);
   assertEqual(data3.length, 7, 'Should return 7 data points');
 });
@@ -402,7 +402,7 @@ test('Returns correct number of data points', () => {
 // Test 22: All values are numbers
 test('All values are numbers', () => {
   const data = generateTrendData(20, 12345);
-  
+
   data.forEach((value, index) => {
     assert(typeof value === 'number', `Value at index ${index} should be a number`);
     assert(!isNaN(value), `Value at index ${index} should not be NaN`);
@@ -412,7 +412,7 @@ test('All values are numbers', () => {
 // Test 23: Values are within [0, 100] range
 test('Values are within [0, 100] range', () => {
   const data = generateTrendData(50, 12345);
-  
+
   data.forEach((value, index) => {
     assert(
       value >= 0 && value <= 100,
@@ -426,9 +426,9 @@ test('Same seed produces identical trend data', () => {
   const seed = 42;
   const data1 = generateTrendData(20, seed, 'neutral');
   const data2 = generateTrendData(20, seed, 'neutral');
-  
+
   assertEqual(data1.length, data2.length, 'Should have same length');
-  
+
   for (let i = 0; i < data1.length; i++) {
     assertEqual(
       data1[i],
@@ -442,26 +442,26 @@ test('Same seed produces identical trend data', () => {
 test('Different seeds produce different trend data', () => {
   const data1 = generateTrendData(20, 42);
   const data2 = generateTrendData(20, 100);
-  
+
   let differences = 0;
   for (let i = 0; i < data1.length; i++) {
     if (data1[i] !== data2[i]) {
       differences++;
     }
   }
-  
+
   assert(differences > 0, 'Different seeds should produce different values');
 });
 
 // Test 26: Upward trend produces generally increasing values
 test('Upward trend produces generally increasing values', () => {
   const data = generateTrendData(30, 12345, 'up');
-  
+
   // Check that the last value is generally higher than the first
   // (allowing for some volatility)
   const firstQuarter = data.slice(0, 7).reduce((a, b) => a + b, 0) / 7;
   const lastQuarter = data.slice(-7).reduce((a, b) => a + b, 0) / 7;
-  
+
   assert(
     lastQuarter > firstQuarter,
     `Upward trend should have higher values at end (first: ${firstQuarter}, last: ${lastQuarter})`
@@ -471,11 +471,11 @@ test('Upward trend produces generally increasing values', () => {
 // Test 27: Downward trend produces generally decreasing values
 test('Downward trend produces generally decreasing values', () => {
   const data = generateTrendData(30, 12345, 'down');
-  
+
   // Check that the last value is generally lower than the first
   const firstQuarter = data.slice(0, 7).reduce((a, b) => a + b, 0) / 7;
   const lastQuarter = data.slice(-7).reduce((a, b) => a + b, 0) / 7;
-  
+
   assert(
     lastQuarter < firstQuarter,
     `Downward trend should have lower values at end (first: ${firstQuarter}, last: ${lastQuarter})`
@@ -485,10 +485,10 @@ test('Downward trend produces generally decreasing values', () => {
 // Test 28: Neutral trend produces relatively stable values
 test('Neutral trend produces relatively stable values', () => {
   const data = generateTrendData(30, 12345, 'neutral');
-  
+
   // Check that the average doesn't drift too far from starting value
   const average = data.reduce((a, b) => a + b, 0) / data.length;
-  
+
   // Average should be relatively close to starting value (50)
   // Allow for some drift due to volatility
   assert(
@@ -500,7 +500,7 @@ test('Neutral trend produces relatively stable values', () => {
 // Test 29: All trend types work correctly
 test('All trend types are supported', () => {
   const trends = ['up', 'down', 'neutral'];
-  
+
   trends.forEach(trend => {
     const data = generateTrendData(20, 12345, trend);
     assert(data.length === 20, `Trend ${trend} should produce data`);
@@ -512,9 +512,9 @@ test('All trend types are supported', () => {
 test('Default trend is neutral when not specified', () => {
   const data1 = generateTrendData(20, 12345);
   const data2 = generateTrendData(20, 12345, 'neutral');
-  
+
   assertEqual(data1.length, data2.length, 'Should have same length');
-  
+
   for (let i = 0; i < data1.length; i++) {
     assertEqual(
       data1[i],
@@ -542,7 +542,7 @@ test('Single data point works correctly', () => {
 test('Large length works correctly', () => {
   const data = generateTrendData(1000, 12345);
   assertEqual(data.length, 1000, 'Should return 1000 data points');
-  
+
   // All values should still be in range
   data.forEach((value, index) => {
     assert(
@@ -555,14 +555,14 @@ test('Large length works correctly', () => {
 // Test 34: Values have appropriate volatility
 test('Values have appropriate volatility', () => {
   const data = generateTrendData(50, 12345, 'neutral');
-  
+
   // Calculate average absolute change between consecutive points
   let totalChange = 0;
   for (let i = 1; i < data.length; i++) {
     totalChange += Math.abs(data[i] - data[i - 1]);
   }
   const avgChange = totalChange / (data.length - 1);
-  
+
   // Average change should be reasonable (not too small, not too large)
   // Expected range is roughly 0-5 based on volatility of ±5 + bias
   assert(
@@ -574,11 +574,11 @@ test('Values have appropriate volatility', () => {
 // Test 35: Trend data works with different lengths for mini-charts
 test('Works with typical mini-chart lengths (7, 14, 30)', () => {
   const lengths = [7, 14, 30];
-  
+
   lengths.forEach(length => {
     const data = generateTrendData(length, 12345, 'up');
     assertEqual(data.length, length, `Should return ${length} data points`);
-    
+
     // Verify all values are valid
     data.forEach(value => {
       assert(value >= 0 && value <= 100, 'All values should be in range');
@@ -592,15 +592,15 @@ test('Same seed with different trends produces different data', () => {
   const upData = generateTrendData(20, seed, 'up');
   const downData = generateTrendData(20, seed, 'down');
   const neutralData = generateTrendData(20, seed, 'neutral');
-  
+
   // Calculate averages to verify trends are different
   const upAvg = upData.reduce((a, b) => a + b, 0) / upData.length;
   const downAvg = downData.reduce((a, b) => a + b, 0) / downData.length;
   const neutralAvg = neutralData.reduce((a, b) => a + b, 0) / neutralData.length;
-  
+
   // Up trend should have higher average than down trend
   assert(upAvg > downAvg, 'Up trend should have higher average than down trend');
-  
+
   // Neutral should be somewhere in between (though not guaranteed)
   // At least verify they're all different
   assert(
@@ -612,11 +612,11 @@ test('Same seed with different trends produces different data', () => {
 // Test 37: Realistic volatility for mini-charts
 test('Volatility is appropriate for mini-chart visualization', () => {
   const data = generateTrendData(7, 12345, 'neutral');
-  
+
   // Check that we have some variation (not all same values)
   const uniqueValues = new Set(data);
   assert(uniqueValues.size > 1, 'Should have variation in values');
-  
+
   // Check that changes aren't too extreme
   for (let i = 1; i < data.length; i++) {
     const change = Math.abs(data[i] - data[i - 1]);
@@ -660,7 +660,7 @@ const SUBNET_NAMES = [
 
 function generateSubnets(count) {
   const subnets = [];
-  
+
   for (let i = 0; i < count; i++) {
     subnets.push({
       id: i,
@@ -674,26 +674,26 @@ function generateSubnets(count) {
       difficulty: Math.random() * 1000000,
     });
   }
-  
+
   return subnets;
 }
 
 // Generate subnets with trends (copied from implementation)
 function generateSubnetsWithTrends(count, seed) {
   const subnets = generateSubnets(count);
-  
+
   return subnets.map((subnet) => {
     const trendSeed = seed + subnet.id;
     const rng = seedRandom(trendSeed);
-    
+
     const price = rng() * 100 + 10;
     const marketCap = rng() * 10000000 + 1000000;
     const volume24h = rng() * 1000000 + 100000;
     const priceChange24h = (rng() - 0.5) * 20;
-    
+
     const trend = priceChange24h > 2 ? 'up' : priceChange24h < -2 ? 'down' : 'neutral';
     const trendData = generateTrendData(7, trendSeed, trend);
-    
+
     return {
       ...subnet,
       price,
@@ -712,7 +712,7 @@ console.log('='.repeat(60));
 test('Returns correct number of subnets', () => {
   const subnets = generateSubnetsWithTrends(5, 12345);
   assertEqual(subnets.length, 5, 'Should return 5 subnets');
-  
+
   const subnets2 = generateSubnetsWithTrends(10, 12345);
   assertEqual(subnets2.length, 10, 'Should return 10 subnets');
 });
@@ -720,7 +720,7 @@ test('Returns correct number of subnets', () => {
 // Test 39: Each subnet has all required base fields
 test('Each subnet has all required base fields', () => {
   const subnets = generateSubnetsWithTrends(5, 12345);
-  
+
   subnets.forEach((subnet, index) => {
     assert(typeof subnet.id === 'number', `Subnet ${index} should have id`);
     assert(typeof subnet.name === 'string', `Subnet ${index} should have name`);
@@ -737,7 +737,7 @@ test('Each subnet has all required base fields', () => {
 // Test 40: Each subnet has all required trend fields
 test('Each subnet has all required trend fields', () => {
   const subnets = generateSubnetsWithTrends(5, 12345);
-  
+
   subnets.forEach((subnet, index) => {
     assert(typeof subnet.price === 'number', `Subnet ${index} should have price`);
     assert(typeof subnet.marketCap === 'number', `Subnet ${index} should have marketCap`);
@@ -750,7 +750,7 @@ test('Each subnet has all required trend fields', () => {
 // Test 41: Price values are within expected range ($10 to $110)
 test('Price values are within expected range ($10 to $110)', () => {
   const subnets = generateSubnetsWithTrends(10, 12345);
-  
+
   subnets.forEach((subnet, index) => {
     assert(
       subnet.price >= 10 && subnet.price < 110,
@@ -762,7 +762,7 @@ test('Price values are within expected range ($10 to $110)', () => {
 // Test 42: Market cap values are within expected range ($1M to $11M)
 test('Market cap values are within expected range ($1M to $11M)', () => {
   const subnets = generateSubnetsWithTrends(10, 12345);
-  
+
   subnets.forEach((subnet, index) => {
     assert(
       subnet.marketCap >= 1000000 && subnet.marketCap < 11000000,
@@ -774,7 +774,7 @@ test('Market cap values are within expected range ($1M to $11M)', () => {
 // Test 43: Volume values are within expected range ($100K to $1.1M)
 test('Volume values are within expected range ($100K to $1.1M)', () => {
   const subnets = generateSubnetsWithTrends(10, 12345);
-  
+
   subnets.forEach((subnet, index) => {
     assert(
       subnet.volume24h >= 100000 && subnet.volume24h < 1100000,
@@ -786,7 +786,7 @@ test('Volume values are within expected range ($100K to $1.1M)', () => {
 // Test 44: Price change values are within expected range (-10% to +10%)
 test('Price change values are within expected range (-10% to +10%)', () => {
   const subnets = generateSubnetsWithTrends(10, 12345);
-  
+
   subnets.forEach((subnet, index) => {
     assert(
       subnet.priceChange24h >= -10 && subnet.priceChange24h <= 10,
@@ -798,7 +798,7 @@ test('Price change values are within expected range (-10% to +10%)', () => {
 // Test 45: Trend data has correct length (7 data points)
 test('Trend data has correct length (7 data points)', () => {
   const subnets = generateSubnetsWithTrends(5, 12345);
-  
+
   subnets.forEach((subnet, index) => {
     assertEqual(
       subnet.trendData.length,
@@ -811,7 +811,7 @@ test('Trend data has correct length (7 data points)', () => {
 // Test 46: Trend data values are within [0, 100] range
 test('Trend data values are within [0, 100] range', () => {
   const subnets = generateSubnetsWithTrends(5, 12345);
-  
+
   subnets.forEach((subnet, subnetIndex) => {
     subnet.trendData.forEach((value, dataIndex) => {
       assert(
@@ -827,15 +827,15 @@ test('Same seed produces identical subnet data', () => {
   const seed = 42;
   const subnets1 = generateSubnetsWithTrends(5, seed);
   const subnets2 = generateSubnetsWithTrends(5, seed);
-  
+
   assertEqual(subnets1.length, subnets2.length, 'Should have same length');
-  
+
   for (let i = 0; i < subnets1.length; i++) {
     assertEqual(subnets1[i].price, subnets2[i].price, `Subnet ${i} price should be identical`);
     assertEqual(subnets1[i].marketCap, subnets2[i].marketCap, `Subnet ${i} market cap should be identical`);
     assertEqual(subnets1[i].volume24h, subnets2[i].volume24h, `Subnet ${i} volume should be identical`);
     assertEqual(subnets1[i].priceChange24h, subnets2[i].priceChange24h, `Subnet ${i} price change should be identical`);
-    
+
     // Check trend data
     for (let j = 0; j < subnets1[i].trendData.length; j++) {
       assertEqual(
@@ -851,35 +851,35 @@ test('Same seed produces identical subnet data', () => {
 test('Different seeds produce different subnet data', () => {
   const subnets1 = generateSubnetsWithTrends(5, 42);
   const subnets2 = generateSubnetsWithTrends(5, 100);
-  
+
   let differences = 0;
   for (let i = 0; i < subnets1.length; i++) {
     if (subnets1[i].price !== subnets2[i].price) differences++;
     if (subnets1[i].marketCap !== subnets2[i].marketCap) differences++;
     if (subnets1[i].volume24h !== subnets2[i].volume24h) differences++;
   }
-  
+
   assert(differences > 0, 'Different seeds should produce different values');
 });
 
 // Test 49: Each subnet has unique ID
 test('Each subnet has unique ID', () => {
   const subnets = generateSubnetsWithTrends(10, 12345);
-  
+
   const ids = subnets.map(s => s.id);
   const uniqueIds = new Set(ids);
-  
+
   assertEqual(uniqueIds.size, subnets.length, 'All subnet IDs should be unique');
 });
 
 // Test 50: Trend direction matches price change
 test('Trend direction generally matches price change', () => {
   const subnets = generateSubnetsWithTrends(20, 12345);
-  
+
   subnets.forEach((subnet, index) => {
     const firstHalf = subnet.trendData.slice(0, 3).reduce((a, b) => a + b, 0) / 3;
     const secondHalf = subnet.trendData.slice(-3).reduce((a, b) => a + b, 0) / 3;
-    
+
     if (subnet.priceChange24h > 2) {
       // Upward trend: second half should generally be higher
       // (allowing for some volatility)
@@ -900,11 +900,11 @@ test('Trend direction generally matches price change', () => {
 // Test 51: Works with different subnet counts
 test('Works with different subnet counts', () => {
   const counts = [1, 5, 10, 20];
-  
+
   counts.forEach(count => {
     const subnets = generateSubnetsWithTrends(count, 12345);
     assertEqual(subnets.length, count, `Should return ${count} subnets`);
-    
+
     // Verify all have required fields
     subnets.forEach(subnet => {
       assert(typeof subnet.price === 'number', 'Should have price');
@@ -916,18 +916,18 @@ test('Works with different subnet counts', () => {
 // Test 52: Each subnet uses unique seed based on ID
 test('Each subnet uses unique seed based on ID', () => {
   const subnets = generateSubnetsWithTrends(5, 12345);
-  
+
   // Verify that subnets have different values (not all identical)
   const prices = subnets.map(s => s.price);
   const uniquePrices = new Set(prices);
-  
+
   assert(uniquePrices.size > 1, 'Subnets should have different prices');
 });
 
 // Test 53: Subnet names are preserved from base generator
 test('Subnet names are preserved from base generator', () => {
   const subnets = generateSubnetsWithTrends(5, 12345);
-  
+
   subnets.forEach((subnet, index) => {
     assert(subnet.name.length > 0, `Subnet ${index} should have a name`);
     assert(subnet.id === index, `Subnet ${index} should have correct ID`);
@@ -937,13 +937,13 @@ test('Subnet names are preserved from base generator', () => {
 // Test 54: All numeric values are valid numbers
 test('All numeric values are valid numbers (not NaN or Infinity)', () => {
   const subnets = generateSubnetsWithTrends(5, 12345);
-  
+
   subnets.forEach((subnet, index) => {
     assert(!isNaN(subnet.price), `Subnet ${index} price should not be NaN`);
     assert(!isNaN(subnet.marketCap), `Subnet ${index} market cap should not be NaN`);
     assert(!isNaN(subnet.volume24h), `Subnet ${index} volume should not be NaN`);
     assert(!isNaN(subnet.priceChange24h), `Subnet ${index} price change should not be NaN`);
-    
+
     assert(isFinite(subnet.price), `Subnet ${index} price should be finite`);
     assert(isFinite(subnet.marketCap), `Subnet ${index} market cap should be finite`);
     assert(isFinite(subnet.volume24h), `Subnet ${index} volume should be finite`);
@@ -961,7 +961,7 @@ test('Zero count produces empty array', () => {
 test('Single subnet works correctly', () => {
   const subnets = generateSubnetsWithTrends(1, 12345);
   assertEqual(subnets.length, 1, 'Should return single subnet');
-  
+
   const subnet = subnets[0];
   assert(typeof subnet.price === 'number', 'Should have price');
   assert(typeof subnet.marketCap === 'number', 'Should have market cap');
@@ -974,7 +974,7 @@ test('Single subnet works correctly', () => {
 test('Large count works correctly', () => {
   const subnets = generateSubnetsWithTrends(50, 12345);
   assertEqual(subnets.length, 50, 'Should return 50 subnets');
-  
+
   // Verify all have valid data
   subnets.forEach((subnet, index) => {
     assert(subnet.price >= 10 && subnet.price < 110, `Subnet ${index} should have valid price`);

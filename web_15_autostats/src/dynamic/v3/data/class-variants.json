@@ -1,4 +1,76 @@
 {
+  "search-input": [
+    "search-input",
+    "query-box",
+    "filter-input",
+    "search-field",
+    "lookup-input",
+    "type-to-search",
+    "search-box",
+    "query-input",
+    "filter-field",
+    "search-control"
+  ],
+  "stats-card": [
+    "stats-card",
+    "stat-card",
+    "metric-card",
+    "stats-tile",
+    "stat-tile",
+    "metric-tile",
+    "stats-panel",
+    "stat-panel",
+    "stats-box",
+    "metric-block"
+  ],
+  "page-title": [
+    "page-title",
+    "page-heading",
+    "section-title",
+    "main-title",
+    "page-header",
+    "section-heading",
+    "hero-title",
+    "page-headline",
+    "section-header",
+    "main-heading"
+  ],
+  "detail-title": [
+    "detail-title",
+    "detail-heading",
+    "detail-header",
+    "info-title",
+    "detail-label",
+    "info-heading",
+    "detail-caption",
+    "info-header",
+    "detail-name",
+    "info-label"
+  ],
+  "chart-container": [
+    "chart-container",
+    "chart-wrapper",
+    "chart-box",
+    "graph-container",
+    "chart-area",
+    "graph-wrapper",
+    "chart-block",
+    "graph-box",
+    "chart-panel",
+    "graph-panel"
+  ],
+  "chart-title": [
+    "chart-title",
+    "chart-heading",
+    "chart-header",
+    "graph-title",
+    "chart-label",
+    "chart-name",
+    "chart-caption",
+    "graph-heading",
+    "chart-h2",
+    "chart-headline"
+  ],
   "button-primary": [
     "btn-primary",
     "button-main",
@@ -35,29 +107,17 @@
     "content-box",
     "content-panel"
   ],
-  "card-image": [
-    "card-img",
-    "tile-image",
-    "panel-img",
-    "box-image",
-    "item-photo",
-    "card-photo",
-    "visual-content",
-    "media-img",
-    "content-image",
-    "item-visual"
-  ],
-  "card-title": [
-    "card-title",
-    "tile-heading",
-    "panel-title",
-    "box-heading",
-    "item-title",
-    "content-heading",
-    "card-header",
-    "item-name",
-    "content-title",
-    "heading-main"
+  "input-text": [
+    "input-field",
+    "text-input",
+    "form-input",
+    "field-text",
+    "input-box",
+    "text-field",
+    "form-field",
+    "input-control",
+    "text-control",
+    "field-control"
   ],
   "nav-link": [
     "nav-link",
@@ -71,101 +131,40 @@
     "link-item",
     "nav-element"
   ],
-  "input-text": [
-    "input-field",
-    "text-input",
-    "form-input",
-    "field-text",
-    "input-box",
-    "text-field",
-    "form-field",
-    "input-control",
-    "text-control",
-    "field-control"
+  "search-button": [
+    "search-trigger",
+    "search-btn",
+    "query-button",
+    "search-trigger",
+    "filter-trigger",
+    "lookup-btn",
+    "search-trigger",
+    "query-trigger",
+    "search-btn",
+    "search-control"
   ],
-  "textarea-text": [
-    "textarea-field",
-    "text-area",
-    "form-textarea",
-    "area-text",
-    "textarea-box",
-    "text-area-field",
-    "form-area",
-    "textarea-control",
-    "area-control",
-    "field-area"
+  "rows-per-page-btn": [
+    "rows-btn",
+    "page-size-btn",
+    "rows-option",
+    "rows-btn",
+    "pager-option",
+    "size-btn",
+    "rows-btn",
+    "rows-option",
+    "page-size-option",
+    "rows-control"
   ],
-  "select-dropdown": [
-    "select-field",
-    "dropdown-select",
-    "form-select",
-    "select-control",
-    "dropdown-field",
-    "select-box",
-    "form-dropdown",
-    "select-input",
+  "dropdown-trigger": [
+    "dropdown-trigger",
+    "select-trigger",
+    "filter-trigger",
+    "dropdown-btn",
+    "select-btn",
+    "filter-dropdown",
+    "dropdown-trigger",
+    "trigger-dropdown",
     "dropdown-control",
-    "field-select"
-  ],
-  "grid-container": [
-    "grid",
-    "grid-layout",
-    "grid-wrapper",
-    "layout-grid",
-    "grid-container",
-    "flex-grid",
-    "grid-system",
-    "layout-container",
-    "container-grid",
-    "grid-box"
-  ],
-  "badge": [
-    "badge",
-    "tag",
-    "label",
-    "pill",
-    "chip",
-    "indicator",
-    "status-badge",
-    "tag-label",
-    "label-badge",
-    "indicator-tag"
-  ],
-  "icon": [
-    "icon",
-    "svg-icon",
-    "icon-graphic",
-    "symbol",
-    "glyph",
-    "icon-img",
-    "graphic-icon",
-    "icon-element",
-    "visual-icon",
-    "icon-symbol"
-  ],
-  "rating": [
-    "rating",
-    "stars",
-    "rating-display",
-    "star-rating",
-    "review-rating",
-    "rating-stars",
-    "star-display",
-    "rating-indicator",
-    "stars-display",
-    "review-stars"
-  ],
-  "time-slot-button": [
-    "time-btn",
-    "slot-btn",
-    "time-option",
-    "slot-option",
-    "time-select-btn",
-    "slot-select-btn",
-    "time-choice",
-    "slot-choice",
-    "time-picker-btn",
-    "slot-picker-btn"
+    "filter-control"
   ]
 }
-

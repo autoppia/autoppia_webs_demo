@@ -89,6 +89,12 @@ export function AccountsPageContent({ accounts }: AccountsPageContentProps) {
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [typeFilter, setTypeFilter] = useState<AccountTypeFilter>("all");
 
+  const ROWS_OPTIONS = [10, 25, 50, 100] as const;
+  const orderedRowsOptions = useMemo(() => {
+    const order = dyn.v1.changeOrderElements("accounts-rows-options", ROWS_OPTIONS.length);
+    return order.map((i) => ROWS_OPTIONS[i]);
+  }, [dyn.v1]);
+
   // Local text variants
   const dynamicV3TextVariants: Record<string, string[]> = {
     page_title: ["Accounts", "Network Accounts", "Account Overview", "Accounts Dashboard", "Active Accounts"],
@@ -470,28 +476,31 @@ export function AccountsPageContent({ accounts }: AccountsPageContentProps) {
             </div>
 
             {/* Rows per page */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-zinc-500">Show</span>
-              <div className="flex items-center gap-1 bg-zinc-900 border border-zinc-800 rounded-lg p-1">
-                {[10, 25, 50, 100].map((n) => (
-                  <button
-                    key={n}
-                    onClick={() => {
-                      setRowsPerPage(n);
-                      setCurrentPage(1);
-                    }}
-                    className={cn(
-                      "px-2.5 py-1.5 rounded-md text-xs font-semibold transition-all",
-                      rowsPerPage === n
-                        ? "bg-blue-500 text-white"
-                        : "text-zinc-400 hover:text-white hover:bg-zinc-700"
-                    )}
-                  >
-                    {n}
-                  </button>
-                ))}
+            {dyn.v1.addWrapDecoy("accounts-rows-per-page", (
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-zinc-500">Show</span>
+                <div className="flex items-center gap-1 bg-zinc-900 border border-zinc-800 rounded-lg p-1">
+                  {orderedRowsOptions.map((n) => (
+                    <button
+                      key={n}
+                      onClick={() => {
+                        setRowsPerPage(n);
+                        setCurrentPage(1);
+                      }}
+                      className={cn(
+                        "px-2.5 py-1.5 rounded-md text-xs font-semibold transition-all",
+                        rowsPerPage === n
+                          ? "bg-blue-500 text-white"
+                          : "text-zinc-400 hover:text-white hover:bg-zinc-700",
+                        dyn.v3.getVariant("rows-per-page-btn", CLASS_VARIANTS_MAP)
+                      )}
+                    >
+                      {n}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         ))}
 
@@ -752,7 +761,7 @@ export function AccountsPageContent({ accounts }: AccountsPageContentProps) {
                     )}
                   >
                     <ChevronLeft className="w-4 h-4" />
-                    Previous
+                    {dyn.v3.getVariant("pagination_previous", undefined, "Previous")}
                   </button>
                   <div className="flex items-center gap-1">
                     {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -792,7 +801,7 @@ export function AccountsPageContent({ accounts }: AccountsPageContentProps) {
                         : "text-zinc-400 hover:text-white hover:bg-zinc-800"
                     )}
                   >
-                    Next
+                    {dyn.v3.getVariant("pagination_next", undefined, "Next")}
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>

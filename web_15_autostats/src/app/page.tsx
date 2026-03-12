@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useEventLogger } from '@/hooks/useEventLogger';
-import { DynamicWrapper } from '@/dynamic/v1/DynamicWrapper';
+import { useDynamicSystem } from '@/dynamic/shared';
 import { useSeed } from '@/context/SeedContext';
 import { PriceChart } from '@/components/charts/PriceChart';
 import { QuickActionCard } from '@/components/landing/QuickActionCard';
@@ -10,22 +10,18 @@ import { SubnetsTable } from '@/components/landing/SubnetsTable';
 import { ValidatorsTable } from '@/components/landing/ValidatorsTable';
 import { TransactionsTable } from '@/components/landing/TransactionsTable';
 import type { PriceDataPoint, VolumeDataPoint, SubnetWithTrend, ValidatorWithTrend, TransactionWithMethod } from '@/shared/types';
-import {
-  generatePriceHistory,
-  generateVolumeData,
-  generateSubnetsWithTrends,
-  generateValidatorsWithTrends,
-  generateTransactionsWithMethods,
-} from '@/data/generators';
+import { generatePriceHistory, generateVolumeData } from '@/data/generators';
+import { dynamicDataProvider } from '@/dynamic/v2';
+import { addTrendsToSubnets, addTrendsToValidators, addMethodsToTransfers } from '@/data/derive-trends';
 import { Rocket } from 'lucide-react';
 import { FavoriteSubnetsSection } from '@/components/landing/FavoriteSubnetsSection';
 
 export default function LandingPage() {
   const { logInteraction } = useEventLogger();
+  const dyn = useDynamicSystem();
   const { seed } = useSeed();
   const [mounted, setMounted] = useState(false);
 
-  // Only generate data on client side to avoid hydration mismatch
   const [data, setData] = useState<{
     priceData: PriceDataPoint[];
     volumeData: VolumeDataPoint[];
@@ -42,61 +38,61 @@ export default function LandingPage() {
 
   useEffect(() => {
     setMounted(true);
-    // Generate data using seed for consistency - always use 'all' timeRange
+    let cancelled = false;
     const priceData = generatePriceHistory('all', seed);
     const volumeData = generateVolumeData(priceData, seed);
-    const subnets = generateSubnetsWithTrends(32, seed);
-    const validators = generateValidatorsWithTrends(5, seed);
-    const transactions = generateTransactionsWithMethods(10, seed);
-    
-    setData({
-      priceData,
-      volumeData,
-      subnets,
-      validators,
-      transactions,
+    dynamicDataProvider.whenReady().then(() => {
+      if (cancelled) return;
+      return dynamicDataProvider.reload(seed);
+    }).then(() => {
+      if (cancelled) return;
+      const rawSubnets = dynamicDataProvider.getSubnets();
+      const rawValidators = dynamicDataProvider.getValidators();
+      const rawTransfers = dynamicDataProvider.getTransfers();
+      setData({
+        priceData,
+        volumeData,
+        subnets: addTrendsToSubnets(rawSubnets, seed),
+        validators: addTrendsToValidators(rawValidators, seed).slice(0, 5),
+        transactions: addMethodsToTransfers(rawTransfers, seed).slice(0, 10),
+      });
     });
+    return () => { cancelled = true; };
   }, [seed]);
 
-  // Log page view on mount
   useEffect(() => {
     logInteraction('page_view', { page: 'landing' });
   }, [logInteraction]);
 
-  // Show loading state until mounted
   if (!mounted || data.priceData.length === 0) {
     return (
-      <DynamicWrapper>
-        <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-          <div className="text-zinc-400">Loading...</div>
-        </div>
-      </DynamicWrapper>
+      <>
+        {dyn.v1.addWrapDecoy('landing-loading', (
+          <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+            <div className="text-zinc-400">Loading...</div>
+          </div>
+        ))}
+      </>
     );
   }
 
   return (
-    <DynamicWrapper>
-      <div className="min-h-screen bg-zinc-950 py-8">
-        {/* Hero Section with Price Chart */}
+    <>
+      {dyn.v1.addWrapDecoy('landing-content', (
+        <div className="min-h-screen bg-zinc-950 py-8">
         <section className="mb-8">
           <PriceChart data={data.priceData} />
         </section>
-
-        {/* Quick Action Card */}
         <section className="mb-8">
           <QuickActionCard
             title="Explore the Bittensor Network"
             description="Discover active subnets, track their performance, and analyze network activity across the Bittensor ecosystem."
-            buttonText="Explore Subnets"
+            buttonText={dyn.v3.getVariant('explore_subnets', undefined, 'Explore Subnets')}
             buttonHref="/subnets"
             icon={<Rocket className="w-12 h-12" />}
           />
         </section>
-
-        {/* Favorite Subnets */}
         <FavoriteSubnetsSection subnets={data.subnets} />
-
-        {/* Subnets Overview */}
         <section className="mb-8">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-white mb-2">Top Subnets</h2>
@@ -106,8 +102,6 @@ export default function LandingPage() {
           </div>
           <SubnetsTable subnets={data.subnets.slice(0, 5)} maxRows={5} />
         </section>
-
-        {/* Validators Overview */}
         <section className="mb-8">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-white mb-2">Top Validators</h2>
@@ -117,8 +111,6 @@ export default function LandingPage() {
           </div>
           <ValidatorsTable validators={data.validators} maxRows={5} />
         </section>
-
-        {/* Recent Transactions */}
         <section className="mb-8">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-white mb-2">Recent Transactions</h2>
@@ -129,6 +121,7 @@ export default function LandingPage() {
           <TransactionsTable transactions={data.transactions} maxRows={10} />
         </section>
       </div>
-    </DynamicWrapper>
+      ))}
+    </>
   );
 }

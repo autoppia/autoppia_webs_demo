@@ -25,9 +25,9 @@ const SeedContext = createContext<SeedContextType>({
 
 const DEFAULT_SEED = 8;
 
-// Clamp seed to valid range
+// Clamp seed to valid range (1–999 to match IWA get_seed_from_url)
 function clampSeed(seed: number): number {
-  return Math.max(1, Math.min(999999, Math.floor(seed)));
+  return Math.max(1, Math.min(999, Math.floor(seed)));
 }
 
 // Internal component that handles URL params
@@ -59,7 +59,7 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   // Initialize seed from localStorage on mount (client-side only)
   useEffect(() => {
     if (isInitialized) return;
-    
+
     // Try localStorage only on client-side
     if (typeof window !== "undefined") {
       try {
@@ -108,14 +108,14 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   const getNavigationUrl = useCallback((path: string): string => {
     if (!path) return path;
     if (path.startsWith("http")) return path;
-    
+
     // If path already has query params
     const [base, queryString] = path.split("?");
     const params = new URLSearchParams(queryString || "");
-    
+
     // Always preserve seed
     params.set("seed", seed.toString());
-    
+
     const query = params.toString();
     return query ? `${base}?${query}` : base;
   }, [seed]);

@@ -2,7 +2,8 @@
 
 import { BlocksPageContent } from "@/components/pages/BlocksPageContent";
 import { useSeed } from "@/context/SeedContext";
-import { generateBlocksWithDetails } from "@/data/generators";
+import { dynamicDataProvider } from "@/dynamic/v2";
+import { blockToBlockWithDetails } from "@/data/derive-trends";
 import type { BlockWithDetails } from "@/shared/types";
 import React, { useEffect, useState } from "react";
 
@@ -13,8 +14,18 @@ export default function BlocksPage() {
 
   useEffect(() => {
     setMounted(true);
-    const blocks = generateBlocksWithDetails(200, seed);
-    setAllBlocks(blocks);
+    let cancelled = false;
+    dynamicDataProvider.whenReady().then(() => {
+      if (cancelled) return;
+      dynamicDataProvider.reload(seed).then(() => {
+        if (cancelled) return;
+        const raw = dynamicDataProvider.getBlocks();
+        setAllBlocks(raw.map(blockToBlockWithDetails));
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [seed]);
 
   if (!mounted || allBlocks.length === 0) {
