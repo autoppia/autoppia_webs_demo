@@ -54,7 +54,7 @@ function jitter([min, max]: [number, number], seed: number, key: string): number
 }
 
 const noop = () => {};
-const RE_SHOW_DELAY_MS: [number, number] = [3000, 8000];
+const RE_SHOW_DELAY_MS: [number, number] = [10000, 20000];
 
 export function useDynamicPopup(pageKey: string): UseDynamicPopupResult {
   const { seed } = useSeed();
