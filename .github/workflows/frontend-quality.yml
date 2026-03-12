@@ -3,9 +3,9 @@ name: Frontend quality
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, v4-centralized]
   pull_request:
-    branches: [main, develop]
+    branches: [main, develop, v4-centralized]
 
 concurrency:
   group: frontend-quality-${{ github.ref }}
