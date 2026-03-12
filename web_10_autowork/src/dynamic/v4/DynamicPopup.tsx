@@ -77,11 +77,10 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
   const isCenter = !FIXED_PLACEMENTS.includes(variant.placement as (typeof FIXED_PLACEMENTS)[number]);
   const placementStyle = isCenter ? undefined : getPlacementStyle(variant.placement);
   const content = (
-    <div
+    <dialog
       className={`fixed inset-0 bg-black/95 backdrop-blur-md ${isCenter ? "flex items-center justify-center p-4" : ""}`}
       style={{ zIndex: POPUP_LAYER_Z, pointerEvents: "auto" }}
       data-v4="true"
-      role="dialog"
       aria-modal="true"
       aria-label={variant.title}
       onKeyDown={(e) => {
@@ -91,6 +90,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
       onClick={(e) => {
         if (e.target === e.currentTarget) e.preventDefault();
       }}
+      open
     >
       <div
         ref={dialogRef}
@@ -109,7 +109,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
       </div>
-    </div>
+    </dialog>
   );
   if (typeof document === "undefined") return null;
   return createPortal(content, document.body);
