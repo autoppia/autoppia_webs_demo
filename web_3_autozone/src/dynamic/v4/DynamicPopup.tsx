@@ -79,7 +79,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
   const placementStyle = isCenter ? undefined : getPlacementStyle(variant.placement);
   const content = (
     <dialog
-      className={`fixed inset-0 backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
+      className={`fixed inset-0 m-0 h-screen w-screen max-h-none max-w-none overflow-visible border-0 p-0 text-inherit backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
       style={{
         zIndex: POPUP_LAYER_Z,
         backgroundColor: "rgba(0,0,0,0.88)",
@@ -100,7 +100,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`w-full max-w-md rounded-xl border-2 border-amber-400/90 bg-neutral-900 text-white shadow-2xl shadow-black/50 px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
+        className={`w-full min-w-[min(20rem,calc(100vw-2rem))] max-w-md rounded-xl border-2 border-amber-400/90 bg-neutral-900 text-white shadow-2xl shadow-black/50 px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
         style={{
           ...placementStyle,
           position: (placementStyle?.position as React.CSSProperties["position"]) ?? "relative",
