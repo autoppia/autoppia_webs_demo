@@ -119,7 +119,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
   const placementStyle = isCenter ? undefined : getPlacementStyle(variant.placement);
   const content = (
     <dialog
-      className={`fixed inset-0 bg-background/90 backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
+      className={`fixed inset-0 m-0 h-screen w-screen max-h-none max-w-none overflow-visible border-0 p-0 text-inherit bg-background/90 backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
       style={{ pointerEvents: "auto", zIndex: 2147483647 }}
       data-v4="true"
       aria-modal="true"
@@ -133,7 +133,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
       }}
       open
     >
-      <div ref={dialogRef} tabIndex={-1} className={`relative w-full max-w-md rounded-xl border border-border bg-card text-card-foreground shadow-lg px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`} style={placementStyle} data-popup-id={variant.popupId}>
+      <div ref={dialogRef} tabIndex={-1} className={`relative w-full min-w-[min(20rem,calc(100vw-2rem))] max-w-md rounded-xl border border-border bg-card text-card-foreground shadow-lg px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`} style={placementStyle} data-popup-id={variant.popupId}>
         <div className="absolute left-0 right-0 top-0 h-1 rounded-t-xl bg-gradient-to-r from-primary to-accent" />
         <h2 className="pr-8 text-xl font-semibold leading-tight text-card-foreground sm:text-2xl">{variant.title}</h2>
         {variant.body && <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:mt-4 sm:text-base">{variant.body}</p>}
