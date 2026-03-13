@@ -55,11 +55,36 @@ function getPlacementClasses(placement: string): string {
 }
 
 export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
+  const overlayRef = useRef<HTMLDialogElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     dialogRef.current?.focus();
+  }, []);
+
+  // Block scroll on body while popup is open
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  // Capture-phase: block all pointer/click outside the overlay so page and nav cannot be used
+  useEffect(() => {
+    const block = (e: MouseEvent | PointerEvent) => {
+      const el = overlayRef.current;
+      if (el && !el.contains(e.target as Node)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    document.addEventListener("click", block, true);
+    document.addEventListener("pointerdown", block, true);
+    return () => {
+      document.removeEventListener("click", block, true);
+      document.removeEventListener("pointerdown", block, true);
+    };
   }, []);
 
   useEffect(() => {
@@ -79,7 +104,8 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
   const placementStyle = isCenter ? undefined : getPlacementStyle(variant.placement);
   const content = (
     <dialog
-      className={`fixed inset-0 bg-black/95 backdrop-blur-md ${isCenter ? "flex items.center justify-center p-4" : ""}`}
+      ref={overlayRef}
+      className={`fixed inset-0 m-0 h-screen w-screen max-h-none max-w-none overflow-visible border-0 p-0 text-inherit bg-black/95 backdrop-blur-md ${isCenter ? "flex items-center justify-center p-4" : ""}`}
       style={{ zIndex: POPUP_LAYER_Z, pointerEvents: "auto" }}
       data-v4="true"
       aria-modal="true"
@@ -99,7 +125,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`relative w-full max-w-md rounded-xl border-2 border-gray-200 bg-white text-gray-900 shadow-2xl px-6 py-6 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
+        className={`relative w-full min-w-[min(20rem,calc(100vw-2rem))] max-w-md rounded-xl border-2 border-gray-200 bg-white text-gray-900 shadow-2xl px-6 py-6 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
         style={placementStyle}
         data-popup-id={variant.popupId}
         onClick={(e) => e.stopPropagation()}
