@@ -4,8 +4,7 @@
  * Loads validators, subnets, blocks, accounts, transfers from server.
  */
 
-export {
-  dynamicDataProvider,
-  isDynamicModeEnabled,
-} from "./data-provider";
+import { dynamicDataProvider, isDynamicModeEnabled } from "./data-provider";
+
+export { dynamicDataProvider, isDynamicModeEnabled };
 export const whenReady = () => dynamicDataProvider.whenReady();

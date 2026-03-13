@@ -49,7 +49,9 @@ export function DataTable<T extends Record<string, unknown>>({
 
       if (aVal === bVal) return 0;
 
-      const comparison = aVal < bVal ? -1 : 1;
+      const aStr = String(aVal ?? '');
+      const bStr = String(bVal ?? '');
+      const comparison = aStr < bStr ? -1 : 1;
       return sortDirection === 'asc' ? comparison : -comparison;
     });
   }, [data, sortKey, sortDirection]);

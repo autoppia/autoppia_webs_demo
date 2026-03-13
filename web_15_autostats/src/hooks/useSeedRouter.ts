@@ -11,13 +11,13 @@ export function useSeedRouter() {
 
   const push = (href: string) => {
     const url = new URL(href, window.location.origin);
-    url.searchParams.set('seed', seed);
+    url.searchParams.set('seed', String(seed));
     router.push(url.pathname + url.search);
   };
 
   const replace = (href: string) => {
     const url = new URL(href, window.location.origin);
-    url.searchParams.set('seed', seed);
+    url.searchParams.set('seed', String(seed));
     router.replace(url.pathname + url.search);
   };
 

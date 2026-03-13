@@ -211,8 +211,8 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
 
               return orderedCards.map((card, index) => {
                 // Root is always green, Alpha is always red
-                const rootColor = 'green';
-                const alphaColor = 'red';
+                const rootColor = 'green' as 'red' | 'green';
+                const alphaColor = 'red' as 'red' | 'green';
 
                 return dyn.v1.addWrapDecoy(card.key, (
                   <div

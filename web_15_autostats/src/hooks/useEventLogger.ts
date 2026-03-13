@@ -13,7 +13,7 @@ export function useEventLogger() {
     logEvent({
       type: 'page_view',
       route: pathname,
-      seed,
+      seed: String(seed),
       timestamp: Date.now(),
     });
   }, [pathname, seed]);
@@ -22,7 +22,7 @@ export function useEventLogger() {
     logEvent({
       type: 'interaction',
       route: pathname,
-      seed,
+      seed: String(seed),
       timestamp: Date.now(),
       metadata: {
         action,
