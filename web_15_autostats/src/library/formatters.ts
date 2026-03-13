@@ -1,6 +1,6 @@
 // Data formatting utilities
 
-export function formatNumber(value: number, decimals: number = 2): string {
+export function formatNumber(value: number, decimals = 2): string {
   return value.toLocaleString('en-US', {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
@@ -15,14 +15,14 @@ export function formatPercentage(value: number): string {
   return `${formatNumber(value, 2)}%`;
 }
 
-export function formatAddress(address: string, shortLength: number = 8): string {
+export function formatAddress(address: string, shortLength = 8): string {
   if (address.length <= shortLength * 2) {
     return address;
   }
   return `${address.substring(0, shortLength)}...${address.substring(address.length - shortLength)}`;
 }
 
-export function formatHash(hash: string, shortLength: number = 10): string {
+export function formatHash(hash: string, shortLength = 10): string {
   if (hash.length <= shortLength + 6) {
     return hash;
   }

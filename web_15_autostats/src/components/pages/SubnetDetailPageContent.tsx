@@ -313,7 +313,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                     </svg>
                   </div>
                   <div className="text-base font-bold text-white flex items-center gap-1">
-                    <span className="w-2.5 h-2.5 rounded-full bg-white"></span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-white" />
                     21.00M
                   </div>
                 </div>
@@ -441,8 +441,8 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                   <span>Alpha in Pool 98.89%</span>
                 </div>
                 <div className="relative h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-                  <div className="absolute left-0 top-0 h-full bg-gradient-to-r from-cyan-500 to-cyan-400" style={{ width: '1.11%' }}></div>
-                  <div className="absolute right-0 top-0 h-full bg-gradient-to-l from-red-500 to-red-400" style={{ width: '98.89%' }}></div>
+                  <div className="absolute left-0 top-0 h-full bg-gradient-to-r from-cyan-500 to-cyan-400" style={{ width: '1.11%' }} />
+                  <div className="absolute right-0 top-0 h-full bg-gradient-to-l from-red-500 to-red-400" style={{ width: '98.89%' }} />
                 </div>
               </div>
             </div>
@@ -461,8 +461,8 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                 </div>
               </div>
               <div className="relative h-1 bg-zinc-800 rounded-full overflow-hidden">
-                <div className="absolute left-0 top-0 h-full bg-green-500" style={{ width: '52.5%' }}></div>
-                <div className="absolute right-0 top-0 h-full bg-red-500" style={{ width: '47.5%' }}></div>
+                <div className="absolute left-0 top-0 h-full bg-green-500" style={{ width: '52.5%' }} />
+                <div className="absolute right-0 top-0 h-full bg-red-500" style={{ width: '47.5%' }} />
               </div>
 
               {/* Buy Vol vs Sell Vol */}
@@ -477,8 +477,8 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                 </div>
               </div>
               <div className="relative h-1 bg-zinc-800 rounded-full overflow-hidden">
-                <div className="absolute left-0 top-0 h-full bg-green-500" style={{ width: '42.3%' }}></div>
-                <div className="absolute right-0 top-0 h-full bg-red-500" style={{ width: '57.7%' }}></div>
+                <div className="absolute left-0 top-0 h-full bg-green-500" style={{ width: '42.3%' }} />
+                <div className="absolute right-0 top-0 h-full bg-red-500" style={{ width: '57.7%' }} />
               </div>
 
               {/* Buyers vs Sellers */}
@@ -493,8 +493,8 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
                 </div>
               </div>
               <div className="relative h-1 bg-zinc-800 rounded-full overflow-hidden">
-                <div className="absolute left-0 top-0 h-full bg-green-500" style={{ width: '43.1%' }}></div>
-                <div className="absolute right-0 top-0 h-full bg-red-500" style={{ width: '56.9%' }}></div>
+                <div className="absolute left-0 top-0 h-full bg-green-500" style={{ width: '43.1%' }} />
+                <div className="absolute right-0 top-0 h-full bg-red-500" style={{ width: '56.9%' }} />
               </div>
             </div>
 
@@ -655,7 +655,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
               {/* Header with wallet status and tabs */}
               <div className="flex items-center justify-between mb-6">
                 <button className="flex items-center gap-2 px-4 py-2 bg-zinc-800 rounded-lg text-sm text-zinc-400 hover:text-white transition-colors">
-                  <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                  <div className="w-2 h-2 rounded-full bg-red-500" />
                   <span>Connect wallet</span>
                 </button>
 
@@ -865,16 +865,15 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
 
                         if (diffInSeconds < 60) {
                           return `${diffInSeconds} secs`;
-                        } else if (diffInSeconds < 3600) {
+                        }if (diffInSeconds < 3600) {
                           const mins = Math.floor(diffInSeconds / 60);
                           return `${mins} ${mins === 1 ? 'min' : 'mins'}`;
-                        } else if (diffInSeconds < 86400) {
+                        }if (diffInSeconds < 86400) {
                           const hours = Math.floor(diffInSeconds / 3600);
                           return `${hours} ${hours === 1 ? 'hour' : 'hours'}`;
-                        } else {
+                        }
                           const days = Math.floor(diffInSeconds / 86400);
                           return `${days} ${days === 1 ? 'day' : 'days'}`;
-                        }
                       };
 
                       // Format address with 8+6 pattern
@@ -943,9 +942,9 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
 
       {/* Confirm order modal */}
       {confirmOpen && confirmSide && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-          role="dialog"
+        <dialog
+          open
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm border-none bg-transparent backdrop:bg-black/60"
           aria-modal="true"
           aria-labelledby="confirm-order-title"
           onClick={() => { setConfirmOpen(false); setConfirmSide(null); }}
@@ -987,7 +986,7 @@ export function SubnetDetailPageContent({ subnet, transactions }: SubnetDetailPa
               </button>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
     </div>
   );

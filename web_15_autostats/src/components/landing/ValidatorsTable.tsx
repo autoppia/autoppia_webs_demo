@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useDynamicSystem } from '@/dynamic/shared';
-import { ValidatorWithTrend } from '@/shared/types';
+import type { ValidatorWithTrend } from '@/shared/types';
 import { formatTAO, formatNumber } from '@/library/formatters';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { MiniChart } from '@/components/charts/MiniChart';

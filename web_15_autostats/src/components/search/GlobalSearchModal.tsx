@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import type React from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSeed } from '@/context/SeedContext';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { dynamicDataProvider } from '@/dynamic/v2';

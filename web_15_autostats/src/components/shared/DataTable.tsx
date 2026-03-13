@@ -119,7 +119,7 @@ export function DataTable<T extends Record<string, unknown>>({
             ) : (
               sortedData.map((item, index) => (
                 <TableRow
-                  key={index}
+                  key={columns[0] ? String(item[columns[0].key] ?? index) : index}
                   onClick={() => onRowClick?.(item)}
                   className={`border-zinc-800 ${
                     onRowClick ? 'cursor-pointer hover:bg-zinc-900' : ''

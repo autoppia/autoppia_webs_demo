@@ -18,7 +18,7 @@ export function useEventLogger() {
     });
   }, [pathname, seed]);
 
-  const logInteraction = (action: string, metadata?: Record<string, any>) => {
+  const logInteraction = (action: string, metadata?: Record<string, unknown>) => {
     logEvent({
       type: 'interaction',
       route: pathname,

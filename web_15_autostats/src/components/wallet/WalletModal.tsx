@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import type React from "react";
+import { useEffect, useState } from "react";
 import { useWallet } from "@/context/WalletContext";
 import { X, Loader2 } from "lucide-react";
 

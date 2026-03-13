@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import type React from 'react';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { useDynamicSystem } from '@/dynamic/shared';
 
@@ -73,14 +73,14 @@ export function Footer({ linkGroups = defaultLinkGroups }: FooterProps) {
     <footer className="w-full border-t border-zinc-800 bg-zinc-950 mt-16">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {linkGroups.map((group, groupIndex) => (
-            <div key={groupIndex}>
+          {linkGroups.map((group) => (
+            <div key={group.title}>
               <h3 className="text-white font-semibold mb-4">
                 {group.title}
               </h3>
               <ul className="space-y-2">
-                {group.links.map((link, linkIndex) => (
-                  <li key={linkIndex}>
+                {group.links.map((link) => (
+                  <li key={`${link.href}-${link.label}`}>
                     <a
                       href={link.href}
                       onClick={(e) => handleLinkClick(e, link.href)}
@@ -101,20 +101,18 @@ export function Footer({ linkGroups = defaultLinkGroups }: FooterProps) {
               {dyn.v3.getVariant('footer_copyright', undefined, '© 2024 AutoStats. All rights reserved.')}
             </div>
             <div className="flex items-center gap-6">
-              <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
-                className="text-zinc-400 hover:text-white transition-colors text-sm"
+              <button
+                type="button"
+                className="text-zinc-400 hover:text-white transition-colors text-sm bg-transparent border-none cursor-pointer p-0 font-inherit text-inherit"
               >
                 {dyn.v3.getVariant('privacy_policy', undefined, 'Privacy Policy')}
-              </a>
-              <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
-                className="text-zinc-400 hover:text-white transition-colors text-sm"
+              </button>
+              <button
+                type="button"
+                className="text-zinc-400 hover:text-white transition-colors text-sm bg-transparent border-none cursor-pointer p-0 font-inherit text-inherit"
               >
                 {dyn.v3.getVariant('terms_of_service', undefined, 'Terms of Service')}
-              </a>
+              </button>
             </div>
           </div>
         </div>

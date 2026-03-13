@@ -28,6 +28,8 @@ const AMOUNT_FILTER_OPTIONS: { value: AmountFilter; labelKey: string }[] = [
   { value: 'lt10k', labelKey: 'filter_lt10k' },
 ];
 
+const ROWS_OPTIONS = [10, 25, 50, 100] as const;
+
 export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
   const dyn = useDynamicSystem();
   const { seed } = useSeed();
@@ -42,7 +44,6 @@ export function TransfersPageContent({ transfers }: TransfersPageContentProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(25);
 
-  const ROWS_OPTIONS = [10, 25, 50, 100] as const;
   const orderedRowsOptions = useMemo(() => {
     const order = dyn.v1.changeOrderElements('transfers-rows-options', ROWS_OPTIONS.length);
     return order.map((i) => ROWS_OPTIONS[i]);

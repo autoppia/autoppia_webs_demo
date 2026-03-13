@@ -172,7 +172,8 @@ export function addMethodsToTransfers(
   const rng = seedRandom(seed);
   return transfers.map((t) => {
     const idx = Math.floor(rng() * METHODS.length);
-    const { name, section } = METHODS[idx]!;
+    const method = METHODS[idx] ?? METHODS[0];
+    const { name, section } = method;
     return { ...t, method: name, section };
   });
 }
@@ -192,7 +193,7 @@ export function blockToBlockWithDetails(b: Block): BlockWithDetails {
     sizeKB: 2 + extrinsics.length * 2,
     epoch: Math.floor(b.number / 360),
     specVersion: 377,
-    extrinsicsRoot: "0x" + "0".repeat(64),
+    extrinsicsRoot: `0x${"0".repeat(64)}`,
     extrinsicBreakdown: breakdown,
     timeSinceLastBlock: 12,
   };

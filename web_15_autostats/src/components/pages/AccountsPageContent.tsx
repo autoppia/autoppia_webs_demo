@@ -27,6 +27,8 @@ type SortField =
 type SortDirection = "asc" | "desc";
 type AccountTypeFilter = "all" | "validator" | "nominator" | "miner" | "regular";
 
+const ROWS_OPTIONS = [10, 25, 50, 100] as const;
+
 // SVG Ring Chart component for stats cards
 function RingChart({
   percent,
@@ -89,7 +91,6 @@ export function AccountsPageContent({ accounts }: AccountsPageContentProps) {
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [typeFilter, setTypeFilter] = useState<AccountTypeFilter>("all");
 
-  const ROWS_OPTIONS = [10, 25, 50, 100] as const;
   const orderedRowsOptions = useMemo(() => {
     const order = dyn.v1.changeOrderElements("accounts-rows-options", ROWS_OPTIONS.length);
     return order.map((i) => ROWS_OPTIONS[i]);

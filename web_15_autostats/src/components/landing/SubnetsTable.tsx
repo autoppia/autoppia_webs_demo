@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useDynamicSystem } from '@/dynamic/shared';
-import { SubnetWithTrend } from '@/shared/types';
+import type { SubnetWithTrend } from '@/shared/types';
 import { formatNumber } from '@/library/formatters';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { MiniChart } from '@/components/charts/MiniChart';

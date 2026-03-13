@@ -5,7 +5,7 @@ interface LogEvent {
   route: string;
   seed: string;
   timestamp: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export async function logEvent(event: LogEvent): Promise<void> {

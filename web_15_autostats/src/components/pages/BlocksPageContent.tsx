@@ -22,6 +22,8 @@ type SortField =
   | "timestamp";
 type SortDirection = "asc" | "desc";
 
+const ROWS_OPTIONS = [10, 25, 50, 100] as const;
+
 export function BlocksPageContent({ blocks }: BlocksPageContentProps) {
   const dyn = useDynamicSystem();
   const router = useSeedRouter();
@@ -33,7 +35,6 @@ export function BlocksPageContent({ blocks }: BlocksPageContentProps) {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [copiedHash, setCopiedHash] = useState<string | null>(null);
 
-  const ROWS_OPTIONS = [10, 25, 50, 100] as const;
   const orderedRowsOptions = useMemo(() => {
     const order = dyn.v1.changeOrderElements("blocks-rows-options", ROWS_OPTIONS.length);
     return order.map((i) => ROWS_OPTIONS[i]);

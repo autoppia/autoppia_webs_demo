@@ -37,6 +37,7 @@ export interface EventLayoutVariation {
 // Centralized seed-based variation system for confusing scraper agents
 // 3 completely different layouts that repeat: Layout A (1,4,7,10), Layout B (2,5,8), Layout C (3,6,9)
 // Focus on structural layout changes while keeping all elements visible
+// biome-ignore lint/complexity/noStaticOnlyClass: static namespace for seed/event variations
 export class SeedVariationManager {
   private static variations: SeedVariations = {
     // Restaurant card variations - 3 completely different structural layouts
@@ -1124,21 +1125,21 @@ export class SeedVariationManager {
 
   // Method to register an event
   static registerEvent(eventType: string) {
-    this.activeEvents.add(eventType);
+    SeedVariationManager.activeEvents.add(eventType);
     // Auto-remove event after 5 seconds
     setTimeout(() => {
-      this.activeEvents.delete(eventType);
+      SeedVariationManager.activeEvents.delete(eventType);
     }, 5000);
   }
 
   // Method to clear all events
   static clearEvents() {
-    this.activeEvents.clear();
+    SeedVariationManager.activeEvents.clear();
   }
 
   // Method to get active events
   static getActiveEvents(): string[] {
-    return Array.from(this.activeEvents);
+    return Array.from(SeedVariationManager.activeEvents);
   }
 
   static getVariation(
@@ -1149,24 +1150,21 @@ export class SeedVariationManager {
     // First check if there's an event-based variation
     if (
       eventType &&
-      this.eventVariations[eventType] &&
-      this.eventVariations[eventType][type]
+      SeedVariationManager.eventVariations[eventType] &&
+      SeedVariationManager.eventVariations[eventType][type]
     ) {
-      return this.eventVariations[eventType][type];
+      return SeedVariationManager.eventVariations[eventType][type];
     }
 
     // Check if any active events should override the layout
-    for (const activeEvent of this.activeEvents) {
-      if (
-        this.eventVariations[activeEvent] &&
-        this.eventVariations[activeEvent][type]
-      ) {
-        return this.eventVariations[activeEvent][type];
+    for (const activeEvent of SeedVariationManager.activeEvents) {
+      if (SeedVariationManager.eventVariations[activeEvent]?.[type]) {
+        return SeedVariationManager.eventVariations[activeEvent][type];
       }
     }
 
     // Fall back to seed-based variation
-    const variations = this.variations[type];
+    const variations = SeedVariationManager.variations[type];
     if (!variations) {
       return {};
     }
@@ -1183,7 +1181,7 @@ export class SeedVariationManager {
     seed: number,
     eventType?: string
   ): string {
-    const variation = this.getVariation(type, seed, eventType);
+    const variation = SeedVariationManager.getVariation(type, seed, eventType);
     return variation.xpath || `//*[@data-testid="${variation.dataTestId}"]`;
   }
 
@@ -1192,7 +1190,7 @@ export class SeedVariationManager {
     seed: number,
     eventType?: string
   ): string {
-    const variation = this.getVariation(type, seed, eventType);
+    const variation = SeedVariationManager.getVariation(type, seed, eventType);
     return variation.className || "";
   }
 
@@ -1201,7 +1199,7 @@ export class SeedVariationManager {
     seed: number,
     eventType?: string
   ): string {
-    const variation = this.getVariation(type, seed, eventType);
+    const variation = SeedVariationManager.getVariation(type, seed, eventType);
     return variation.dataTestId || `${type}-${seed}`;
   }
 
@@ -1210,7 +1208,7 @@ export class SeedVariationManager {
     seed: number,
     eventType?: string
   ): React.CSSProperties {
-    const variation = this.getVariation(type, seed, eventType);
+    const variation = SeedVariationManager.getVariation(type, seed, eventType);
     return variation.style || {};
   }
 
@@ -1219,7 +1217,7 @@ export class SeedVariationManager {
     seed: number,
     eventType?: string
   ): string {
-    const variation = this.getVariation(type, seed, eventType);
+    const variation = SeedVariationManager.getVariation(type, seed, eventType);
     return variation.layoutType || "flex";
   }
 
@@ -1228,7 +1226,7 @@ export class SeedVariationManager {
     seed: number,
     eventType?: string
   ): string {
-    const variation = this.getVariation(type, seed, eventType);
+    const variation = SeedVariationManager.getVariation(type, seed, eventType);
     return variation.position || "relative";
   }
 }

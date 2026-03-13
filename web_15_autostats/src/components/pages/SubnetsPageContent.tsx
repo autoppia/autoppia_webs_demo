@@ -130,20 +130,18 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
   };
 
   const formatLargeNumber = (value: number): string => {
-    if (displayMode === 'usd') {
-      value = value * 450; // Assume 1 TAO = $450
-    }
+    const scaled = displayMode === 'usd' ? value * 450 : value; // Assume 1 TAO = $450
 
-    if (value >= 1000000000) {
-      return `${formatNumber(value / 1000000000, 2)}B`;
+    if (scaled >= 1000000000) {
+      return `${formatNumber(scaled / 1000000000, 2)}B`;
     }
-    if (value >= 1000000) {
-      return `${formatNumber(value / 1000000, 2)}M`;
+    if (scaled >= 1000000) {
+      return `${formatNumber(scaled / 1000000, 2)}M`;
     }
-    if (value >= 1000) {
-      return `${formatNumber(value / 1000, 2)}K`;
+    if (scaled >= 1000) {
+      return `${formatNumber(scaled / 1000, 2)}K`;
     }
-    return formatNumber(value, 2);
+    return formatNumber(scaled, 2);
   };
 
   const formatPrice = (value: number): string => {
@@ -250,7 +248,7 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                             <div className={cn(
                               'w-2.5 h-2.5 rounded-full',
                               rootColor === 'green' ? 'bg-green-500' : 'bg-red-500'
-                            )}></div>
+                            )} />
                             <span className="text-zinc-400">
                               {dyn.v3.getVariant('root_label', dynamicV3TextVariants)}
                             </span>
@@ -274,7 +272,7 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                             <div className={cn(
                               'w-2.5 h-2.5 rounded-full',
                               alphaColor === 'green' ? 'bg-green-500' : 'bg-red-500'
-                            )}></div>
+                            )} />
                           </div>
                         </div>
 
@@ -583,10 +581,10 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
               {filteredAndSortedSubnets.length > 0 && (
                 <div className="grid gap-3 px-6 py-5 bg-zinc-800/30 border-t-2 border-zinc-700 items-center" style={{ gridTemplateColumns: '40px 50px 200px 110px 110px 90px 90px 90px 90px 120px 120px 110px', minWidth: '1230px' }}>
                     {/* Star */}
-                    <div></div>
+                    <div />
 
                     {/* # */}
-                    <div></div>
+                    <div />
 
                     {/* Subnet Name */}
                     <div className="flex items-center">
@@ -614,16 +612,16 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                     </div>
 
                     {/* 1H - empty */}
-                    <div></div>
+                    <div />
 
                     {/* 24H - empty */}
-                    <div></div>
+                    <div />
 
                     {/* 1W - empty */}
-                    <div></div>
+                    <div />
 
                     {/* 1M - empty */}
-                    <div></div>
+                    <div />
 
                     {/* Total Market Cap */}
                     <div className="text-right">
@@ -644,7 +642,7 @@ export function SubnetsPageContent({ subnets }: SubnetsPageContentProps) {
                     </div>
 
                     {/* 7d Trend - empty */}
-                    <div></div>
+                    <div />
                 </div>
               )}
 

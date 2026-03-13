@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import type React from "react";
 import { usePathname } from "next/navigation";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Home, Network, Shield, Blocks, ArrowLeftRight } from "lucide-react";

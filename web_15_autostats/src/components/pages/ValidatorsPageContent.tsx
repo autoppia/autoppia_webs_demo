@@ -21,6 +21,8 @@ interface ValidatorsPageContentProps {
 type SortField = 'rank' | 'hotkey' | 'dominance' | 'nominatorCount' | 'nominatorChange24h' | 'activeSubnets' | 'totalWeight' | 'weightChange24h' | 'rootStake' | 'alphaStake' | 'commission';
 type SortDirection = 'asc' | 'desc';
 
+const ROWS_OPTIONS = [10, 25, 50, 100] as const;
+
 export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps) {
   const dyn = useDynamicSystem();
   const router = useSeedRouter();
@@ -31,7 +33,6 @@ export function ValidatorsPageContent({ validators }: ValidatorsPageContentProps
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(25);
 
-  const ROWS_OPTIONS = [10, 25, 50, 100] as const;
   const orderedRowsOptions = useMemo(() => {
     const order = dyn.v1.changeOrderElements('validators-rows-options', ROWS_OPTIONS.length);
     return order.map((i) => ROWS_OPTIONS[i]);
