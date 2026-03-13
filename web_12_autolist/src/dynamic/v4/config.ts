@@ -12,9 +12,9 @@ export interface PopupDef {
   texts: Record<string, string[]>;
 }
 
-/** Placements that stay visible on screen (center and bottom area; avoid top/middle that can be off-screen or behind nav). */
+/** Placements that stay visible on screen (avoid the fixed left sidebar covering bottom-left popups). */
 const ALL_PLACEMENTS: PopupPlacement[] = [
-  "center", "bottom-right", "bottom-left", "banner",
+  "center", "bottom-right", "banner",
 ];
 
 export const POPUPS: PopupDef[] = [
