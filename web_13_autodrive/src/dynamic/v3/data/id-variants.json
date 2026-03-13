@@ -2159,5 +2159,47 @@
     "trip-details-btn",
     "trips-view-details-btn",
     "trip-view-details-btn"
+  ],
+  "available-trips-section": [
+    "available-trips-section",
+    "browse-trips-section",
+    "trip-offers-section",
+    "trip-listings-section",
+    "available-trips-container"
+  ],
+  "available-trip-card": [
+    "available-trip-card",
+    "trip-offer-card",
+    "browse-trip-card",
+    "trip-listing-card",
+    "available-trip-item"
+  ],
+  "available-trip-book-button": [
+    "available-trip-book-button",
+    "trip-book-btn",
+    "book-trip-button",
+    "trip-reserve-button",
+    "available-trip-book-btn"
+  ],
+  "trip-filter-bar": [
+    "trip-filter-bar",
+    "trips-filter-section",
+    "trip-filters",
+    "filter-bar",
+    "trips-filter-bar"
+  ],
+  "review-section": [
+    "review-section",
+    "trip-reviews-section",
+    "reviews-container",
+    "trip-feedback-section",
+    "rider-reviews-section"
+  ],
+  "review-form": [
+    "review-form",
+    "trip-review-form",
+    "submit-review-form",
+    "feedback-form",
+    "rider-review-form"
   ]
 }
