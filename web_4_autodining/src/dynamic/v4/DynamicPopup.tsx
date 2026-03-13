@@ -78,15 +78,14 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
   const isCenter = !FIXED_PLACEMENTS.includes(variant.placement as (typeof FIXED_PLACEMENTS)[number]);
   const placementStyle = isCenter ? undefined : getPlacementStyle(variant.placement);
   const content = (
-    <div
-      className={`fixed inset-0 backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
+    <dialog
+      className={`fixed inset-0 m-0 h-screen w-screen max-h-none max-w-none overflow-visible border-0 p-0 text-inherit backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
       style={{
         zIndex: POPUP_LAYER_Z,
         backgroundColor: "rgba(0,0,0,0.80)",
         isolation: "isolate",
       }}
       data-v4="true"
-      role="dialog"
       aria-modal="true"
       aria-label={variant.title}
       onKeyDown={(e) => {
@@ -96,11 +95,12 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
       onClick={(e) => {
         if (e.target === e.currentTarget) e.preventDefault();
       }}
+      open
     >
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`w-full max-w-md rounded-xl border-2 border-[#46a758] bg-white text-slate-900 shadow-2xl shadow-black/40 px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
+        className={`w-full min-w-[min(20rem,calc(100vw-2rem))] max-w-md rounded-xl border-2 border-[#46a758] bg-white text-slate-900 shadow-2xl shadow-black/40 px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
         style={{
           ...placementStyle,
           position: (placementStyle?.position as React.CSSProperties["position"]) ?? "relative",
@@ -130,7 +130,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
           </svg>
         </button>
       </div>
-    </div>
+    </dialog>
   );
   if (typeof document === "undefined") return null;
   return createPortal(content, document.body);

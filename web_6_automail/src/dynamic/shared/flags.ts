@@ -69,5 +69,5 @@ export function isV3Enabled(): boolean {
  */
 export function isV4Enabled(): boolean {
   const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V4;
-  return value === "true" || value === true;
+  return value === "true";
 }

@@ -76,6 +76,9 @@ export function useDynamicPopup(pageKey: string): UseDynamicPopupResult {
       reShowTimeoutRef.current = null;
     }
     // Do not setShow(false) on nav so popup stays visible until user dismisses
+    if (pageKey) {
+      // no-op: ensures pageKey is treated as a used dependency
+    }
   }, [pageKey]);
 
   const dismiss = useCallback(() => {

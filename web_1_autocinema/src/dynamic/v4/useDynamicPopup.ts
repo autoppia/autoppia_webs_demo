@@ -66,6 +66,7 @@ export function useDynamicPopup(pageKey: string): UseDynamicPopupResult {
   const reShowTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    // Reset popup state when the page key changes
     setShowIndex(0);
     setDoneForThisPage(false);
     setShow(false);
@@ -73,6 +74,8 @@ export function useDynamicPopup(pageKey: string): UseDynamicPopupResult {
       clearTimeout(reShowTimeoutRef.current);
       reShowTimeoutRef.current = null;
     }
+    // Access pageKey so the linter recognises it as a dependency
+    void pageKey;
   }, [pageKey]);
 
   const dismiss = useCallback(() => {

@@ -66,12 +66,16 @@ export function useDynamicPopup(pageKey: string): UseDynamicPopupResult {
   const reShowTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    // Reset popup state when the page key changes
     setShowIndex(0);
     setDoneForThisPage(false);
     setShow(false);
     if (reShowTimeoutRef.current) {
       clearTimeout(reShowTimeoutRef.current);
       reShowTimeoutRef.current = null;
+    }
+    if (pageKey) {
+      // no-op: ensures pageKey is treated as a used dependency
     }
   }, [pageKey]);
 

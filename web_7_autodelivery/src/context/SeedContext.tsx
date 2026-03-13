@@ -44,7 +44,6 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
   const [isSeedReady, setIsSeedReady] = useState<boolean>(false);
 
   // Source of truth: URL `?seed=` (clamped 1..999). If missing/invalid => 1.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: re-run when URL changes so seed stays in sync
   useEffect(() => {
     setSeedState(getSeedFromSearchParams(searchParams));
     setIsSeedReady(true);

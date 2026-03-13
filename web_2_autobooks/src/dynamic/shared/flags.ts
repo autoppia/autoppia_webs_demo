@@ -72,8 +72,8 @@ export function isV3Enabled(): boolean {
  */
 export function isV4Enabled(): boolean {
   const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V4;
-  if (value === "true" || value === true) return true;
-  if (value === "false" || value === false) return false;
+  if (value === "true") return true;
+  if (value === "false") return false;
   // In dev, enable V4 by default so popups work without setting env
   if (typeof process !== "undefined" && process.env.NODE_ENV === "development") return true;
   return false;

@@ -87,11 +87,10 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
   const isCenter = !FIXED_PLACEMENTS.includes(variant.placement as (typeof FIXED_PLACEMENTS)[number]);
   const placementStyle = isCenter ? undefined : getPlacementStyle(variant.placement);
   const content = (
-    <div
-      className={`fixed inset-0 bg-background/90 backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
+    <dialog
+      className={`fixed inset-0 m-0 h-screen w-screen max-h-none max-w-none overflow-visible border-0 p-0 text-inherit m-0 h-screen w-screen max-h-none max-w-none overflow-visible border-0 bg-background/90 p-0 text-inherit backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
       style={{ zIndex: POPUP_LAYER_Z }}
       data-v4="true"
-      role="dialog"
       aria-modal="true"
       aria-label={variant.title}
       onKeyDown={(e) => {
@@ -105,6 +104,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
         // Capture all clicks on overlay so nothing underneath receives them
         if (e.target === e.currentTarget) e.preventDefault();
       }}
+      open
     >
       <div
         ref={dialogRef}
@@ -151,7 +151,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
           </svg>
         </button>
       </div>
-    </div>
+    </dialog>
   );
 
   if (typeof document === "undefined") return null;

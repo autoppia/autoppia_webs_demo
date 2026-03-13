@@ -55,11 +55,36 @@ function getPlacementClasses(placement: string): string {
 }
 
 export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
+  const overlayRef = useRef<HTMLDialogElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     dialogRef.current?.focus();
+  }, []);
+
+  // Block scroll on body while popup is open
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  // Capture-phase: block all pointer/click outside the overlay so page and nav cannot be used
+  useEffect(() => {
+    const block = (e: MouseEvent | PointerEvent) => {
+      const el = overlayRef.current;
+      if (el && !el.contains(e.target as Node)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    document.addEventListener("click", block, true);
+    document.addEventListener("pointerdown", block, true);
+    return () => {
+      document.removeEventListener("click", block, true);
+      document.removeEventListener("pointerdown", block, true);
+    };
   }, []);
 
   useEffect(() => {
@@ -78,11 +103,11 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
   const isCenter = !FIXED_PLACEMENTS.includes(variant.placement as (typeof FIXED_PLACEMENTS)[number]);
   const placementStyle = isCenter ? undefined : getPlacementStyle(variant.placement);
   const content = (
-    <div
-      className={`fixed inset-0 bg-black/95 backdrop-blur-md ${isCenter ? "flex items-center justify-center p-4" : ""}`}
+    <dialog
+      ref={overlayRef}
+      className={`fixed inset-0 m-0 h-screen w-screen max-h-none max-w-none overflow-visible border-0 p-0 text-inherit bg-black/95 backdrop-blur-md ${isCenter ? "flex items-center justify-center p-4" : ""}`}
       style={{ zIndex: POPUP_LAYER_Z, pointerEvents: "auto" }}
       data-v4="true"
-      role="dialog"
       aria-modal="true"
       aria-label={variant.title}
       onKeyDown={(e) => {
@@ -95,11 +120,12 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
         if (e.target === e.currentTarget) return;
       }}
       onPointerDown={(e) => e.stopPropagation()}
+      open
     >
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`relative w-full max-w-md rounded-xl border-2 border-gray-200 bg-white text-gray-900 shadow-2xl px-6 py-6 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
+        className={`relative w-full min-w-[min(20rem,calc(100vw-2rem))] max-w-md rounded-xl border-2 border-gray-200 bg-white text-gray-900 shadow-2xl px-6 py-6 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
         style={placementStyle}
         data-popup-id={variant.popupId}
         onClick={(e) => e.stopPropagation()}
@@ -114,7 +140,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
       </div>
-    </div>
+    </dialog>
   );
   if (typeof document === "undefined") return null;
   return createPortal(content, document.body);
