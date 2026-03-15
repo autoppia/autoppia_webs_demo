@@ -64,6 +64,7 @@ USAGE
 DEMOS_DIR="$(dirname "$SCRIPT_DIR")"
 EXTERNAL_NET="apps_net"
 WEBS_PROJECTS="web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive web_14_autohealth"
+CURRENT_PROJECT_PREFIXES="webs_server movies_ books_ autozone_ autodining_ autocrm_ automail_ autodelivery_ autolodge_ autoconnect_ autowork_ autocalendar_ autolist_ autodrive_ autohealth_"
 
 echo "📂 Script directory: $SCRIPT_DIR"
 echo "📂 Demos root:      $DEMOS_DIR"
@@ -255,26 +256,25 @@ setup_docker() {
       docker network prune -f || true
     else
       echo "[INFO] Cleaning up only demo containers/volumes..."
-      local project_prefixes="webs_server movies_ books_ autozone_ autodining_ autocrm_ automail_ autodelivery_ autolodge_ autoconnect_ autowork_ autocalendar_ autolist_ autodrive_ autohealth_"
-
       # Remove demo containers by compose project label
       docker ps -a --format '{{.ID}}\t{{.Label "com.docker.compose.project"}}' | while IFS=$'\t' read -r id proj; do
-        for prefix in $project_prefixes; do
-          if [[ "$proj" == "$prefix"* ]]; then
-            docker rm -f "$id" >/dev/null 2>&1 || true
-            break
-          fi
-        done
+        if is_demo_project "$proj"; then
+          docker rm -f "$id" >/dev/null 2>&1 || true
+        fi
       done
 
       # Remove demo volumes by compose project label
       docker volume ls --format '{{.Name}}\t{{.Label "com.docker.compose.project"}}' | while IFS=$'\t' read -r vol proj; do
-        for prefix in $project_prefixes; do
-          if [[ "$proj" == "$prefix"* ]]; then
-            docker volume rm "$vol" >/dev/null 2>&1 || true
-            break
-          fi
-        done
+        if is_demo_project "$proj"; then
+          docker volume rm "$vol" >/dev/null 2>&1 || true
+        fi
+      done
+
+      # Remove demo networks left behind by both current and legacy compose projects.
+      docker network ls --format '{{.ID}}\t{{.Label "com.docker.compose.project"}}' | while IFS=$'\t' read -r network_id proj; do
+        if is_demo_project "$proj"; then
+          docker network rm "$network_id" >/dev/null 2>&1 || true
+        fi
       done
     fi
 
@@ -282,6 +282,22 @@ setup_docker() {
       docker network create "$EXTERNAL_NET"
     fi
   fi
+}
+
+is_demo_project() {
+  local proj="${1:-}"
+
+  if [[ -z "$proj" ]]; then
+    return 1
+  fi
+
+  for prefix in $CURRENT_PROJECT_PREFIXES; do
+    if [[ "$proj" == "$prefix"* ]]; then
+      return 0
+    fi
+  done
+
+  [[ "$proj" =~ ^web_[0-9]+_ ]]
 }
 
 # Get Git commit hash for automatic versioning
