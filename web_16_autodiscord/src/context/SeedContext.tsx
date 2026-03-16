@@ -16,12 +16,14 @@ const DEFAULT_SEED = 1;
 interface SeedContextType {
   seed: number;
   setSeed: (seed: number) => void;
+  getNavigationUrl: (path: string) => string;
   isSeedReady: boolean;
 }
 
 const SeedContext = createContext<SeedContextType>({
   seed: DEFAULT_SEED,
   setSeed: () => {},
+  getNavigationUrl: (path: string) => path,
   isSeedReady: false,
 });
 
@@ -57,8 +59,33 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const getNavigationUrl = useCallback(
+    (path: string): string => {
+      if (!path) return path;
+      if (path.startsWith("http")) return path;
+      const currentParams =
+        typeof window !== "undefined"
+          ? new URLSearchParams(window.location.search)
+          : new URLSearchParams();
+      const [base, qs] = path.split("?");
+      const params = new URLSearchParams(qs || "");
+      params.set("seed", seed.toString());
+      const enableDynamic = currentParams.get("enable_dynamic");
+      if (enableDynamic) params.set("enable_dynamic", enableDynamic);
+      if (base === "" || base === "/") {
+        const server = currentParams.get("server");
+        const channel = currentParams.get("channel");
+        if (server) params.set("server", server);
+        if (channel) params.set("channel", channel);
+      }
+      const query = params.toString();
+      return query ? `${base}?${query}` : base;
+    },
+    [seed],
+  );
+
   return (
-    <SeedContext.Provider value={{ seed, setSeed, isSeedReady }}>
+    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, isSeedReady }}>
       {children}
     </SeedContext.Provider>
   );

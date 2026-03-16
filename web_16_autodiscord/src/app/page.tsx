@@ -9,18 +9,16 @@ import { DMSidebar } from "@/components/DMSidebar";
 import { EmptyState } from "@/components/EmptyState";
 import { ErrorState } from "@/components/ErrorState";
 import { HomeDashboard } from "@/components/HomeDashboard";
-import { LoadingSkeleton } from "@/components/LoadingSkeleton";
 import { MemberSidebar } from "@/components/MemberSidebar";
 import { ServerList } from "@/components/ServerList";
 import { ServerSettingsModal } from "@/components/ServerSettingsModal";
 import { VoiceChannelPanel } from "@/components/VoiceChannelPanel";
 import { CURRENT_USER } from "@/constants/mock";
 import { useDynamicSystem } from "@/dynamic";
+import { getDiscordData, dynamicDataProvider } from "@/dynamic/v2";
 import { ID_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeed } from "@/context/SeedContext";
-import { useDiscordData } from "@/hooks/useDiscordData";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { clampSeed } from "@/shared/seed-resolver";
 import type {
   Channel,
   Member,
@@ -47,21 +45,17 @@ function normalizeChannelParam(raw: string | null): string | null {
   return idx >= 0 ? raw.slice(0, idx) : raw;
 }
 
-function extractSeedFromMalformedChannel(raw: string | null): string | null {
-  if (!raw) return null;
-  const match = raw.match(/[?&]seed=(\d+)/);
-  return match?.[1] ?? null;
-}
-
 export default function DiscordPage() {
   const searchParams = useSearchParams();
   const dyn = useDynamicSystem();
   const { seed } = useSeed();
-  const effectiveSeed = useMemo(
-    () => (dyn.v2.isEnabled() ? clampSeed(seed ?? 1) : 1),
-    [dyn, seed]
-  );
-  const { data, loading, error, reload } = useDiscordData(effectiveSeed);
+  const data = getDiscordData();
+  const [retryCount, setRetryCount] = useState(0);
+
+  const handleRetry = useCallback(async () => {
+    await dynamicDataProvider.reload();
+    setRetryCount((c) => c + 1);
+  }, []);
 
   const serverParam = searchParams.get("server");
   const rawChannelParam = searchParams.get("channel");
@@ -220,20 +214,14 @@ export default function DiscordPage() {
     (serverId: string | null, channelId: string | null) => {
       if (typeof window === "undefined") return;
       const url = new URL(window.location.href);
-      let seedParam = url.searchParams.get("seed");
-      if (!seedParam) {
-        seedParam = extractSeedFromMalformedChannel(
-          url.searchParams.get("channel"),
-        );
-      }
       if (serverId) url.searchParams.set("server", serverId);
       else url.searchParams.delete("server");
       if (channelId) url.searchParams.set("channel", channelId);
       else url.searchParams.delete("channel");
-      if (seedParam) url.searchParams.set("seed", seedParam);
+      url.searchParams.set("seed", String(seed));
       window.history.replaceState({}, "", url.pathname + url.search);
     },
-    [],
+    [seed],
   );
 
   useEffect(() => {
@@ -520,13 +508,12 @@ export default function DiscordPage() {
     );
   }, [selectedServerId, channelsForServer, selectedChannelId]);
 
-  if (loading) return <LoadingSkeleton />;
-  if (error) return <ErrorState message={error} onRetry={reload} />;
   if (!data) {
     return (
-      <div className="min-h-screen bg-discord-darkest flex items-center justify-center">
-        <span className="text-gray-400">No data</span>
-      </div>
+      <ErrorState
+        message="Failed to load data"
+        onRetry={handleRetry}
+      />
     );
   }
 

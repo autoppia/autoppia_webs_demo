@@ -1,9 +1,10 @@
-/**
- * V2 - Data loading (status only for Discord)
- *
- * Discord uses useDiscordData(seed) for data; when V2 is disabled
- * the page should pass seed=1 so data is stable. This module exports
- * the V2 enablement flag.
- */
-
+export {
+  dynamicDataProvider,
+  getDiscordData,
+  getServers,
+  getChannels,
+  getMessages,
+  getMembers,
+  whenReady,
+} from "./data-provider";
 export { isV2Enabled } from "../shared/flags";

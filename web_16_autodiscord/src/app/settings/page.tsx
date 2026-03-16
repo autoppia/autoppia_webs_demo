@@ -2,22 +2,19 @@
 
 import { useDynamicSystem } from "@/dynamic";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { useSeed } from "@/context/SeedContext";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 type Theme = "dark" | "light";
 
 export default function SettingsPage() {
   const dyn = useDynamicSystem();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const currentSearch = useMemo(
-    () => (searchParams.toString() ? `?${searchParams.toString()}` : ""),
-    [searchParams]
-  );
+  const router = useSeedRouter();
+  const { getNavigationUrl } = useSeed();
 
   const [theme, setTheme] = useState<Theme>("dark");
   const [notifications, setNotifications] = useState(true);
@@ -45,14 +42,14 @@ export default function SettingsPage() {
   const handleAccountSave = () => {
     logEvent(EVENT_TYPES.SETTINGS_ACCOUNT, { name: displayName });
     setSaving(true);
-    router.push("/" + currentSearch);
+    router.push(getNavigationUrl("/"));
   };
 
   return (
     <div className="min-h-screen bg-discord-darkest">
       <header className="h-14 px-4 border-b border-black/20 flex items-center gap-4">
         <Link
-          href={"/" + currentSearch}
+          href={getNavigationUrl("/")}
           className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10"
           aria-label="Back"
           data-testid={dyn.v3.getVariant("settings-back", ID_VARIANTS_MAP, "settings-back")}

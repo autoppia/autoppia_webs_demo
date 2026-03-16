@@ -1,5 +1,3 @@
-const PROJECT_KEY = "web_16_autodiscord";
-
 function getApiBaseUrl(): string {
   const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
   const origin =
@@ -75,17 +73,4 @@ export async function fetchSeededSelection<T = unknown>(
     throw new Error("Seeded selection failed: response data is not an array");
   }
   return data as T[];
-}
-
-export async function fetchDiscordEntities<T>(
-  entityType: string,
-  seedValue: number,
-  limit: number,
-): Promise<T[]> {
-  return fetchSeededSelection<T>({
-    projectKey: PROJECT_KEY,
-    entityType,
-    seedValue,
-    limit,
-  });
 }

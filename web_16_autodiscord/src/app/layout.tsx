@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import "./globals.css";
 import { SeedProvider } from "@/context/SeedContext";
+import { DataReadyGate } from "@/components/layout/DataReadyGate";
 
 const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem("autodiscord-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);else document.documentElement.setAttribute("data-theme","dark")}catch(e){document.documentElement.setAttribute("data-theme","dark")}})()`;
 
@@ -28,7 +29,9 @@ export default function RootLayout({
             </div>
           }
         >
-          <SeedProvider>{children}</SeedProvider>
+          <SeedProvider>
+            <DataReadyGate>{children}</DataReadyGate>
+          </SeedProvider>
         </Suspense>
       </body>
     </html>
