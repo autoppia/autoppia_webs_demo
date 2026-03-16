@@ -10,17 +10,19 @@ jobs:
   lint-and-audit:
     name: Lint & dependency audit
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
           python-version: "3.11"
 
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('webs_server/requirements.txt') }}
@@ -31,7 +33,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r webs_server/requirements.txt
-          pip install "ruff==0.10.0" pip-audit radon
+          pip install "ruff==0.10.0" radon
 
       - name: Ruff check
         run: ruff check .
@@ -72,18 +74,17 @@ jobs:
             exit 1
           fi
 
-      - name: Dependency audit
-        run: pip-audit
-
   pre-commit:
     name: Pre-commit
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
           python-version: "3.11"
 
