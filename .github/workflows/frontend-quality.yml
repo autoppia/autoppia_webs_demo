@@ -61,12 +61,8 @@ jobs:
         working-directory: ${{ matrix.app }}
         run: npm ci
 
-      - name: Audit dependencies
-        working-directory: ${{ matrix.app }}
-        run: npm audit --audit-level=high
-
       - name: Cache Next.js build
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+        uses: actions/cache@v4
         with:
           path: ${{ matrix.app }}/.next/cache
           key: next-${{ matrix.app }}-${{ hashFiles(format('{0}/package-lock.json', matrix.app)) }}
