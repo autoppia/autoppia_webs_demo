@@ -1,0 +1,43 @@
+{
+  "nav_servers": ["Servers", "Guilds", "Server list", "Guild list", "Servers", "My servers", "My guilds", "Server list", "Guilds", "Servers"],
+  "nav_dms": ["DMs", "Direct messages", "Messages", "Direct chats", "DMs", "Private messages", "Direct", "Messages", "DM list", "Private"],
+  "create_server": ["Create server", "New server", "Add server", "Create guild", "New guild", "Add guild", "Create server", "New server", "Add server", "Create guild"],
+  "no_servers": ["No servers", "No guilds", "No servers yet", "No guilds yet", "Add a server", "Add a guild", "Create your first server", "Create your first guild", "No servers", "No guilds"],
+  "create_server_first": ["Create server", "Create a server", "New server", "Add server", "Create guild", "New guild", "Create server", "Add server", "Create guild", "New server"],
+  "select_channel": ["Select a channel", "Choose a channel", "Pick a channel", "Select channel", "No channel selected", "Choose channel", "Pick channel", "Select a channel", "Channel selection", "Select channel"],
+  "no_channels": ["No channels in this server", "No channels", "No channels yet", "Add a channel", "Create a channel", "No channels in this server", "No channels", "Create channel", "Add channel", "No channels"],
+  "create_channel": ["Create channel", "New channel", "Add channel", "Create Channel", "New Channel", "Add Channel", "Create channel", "New channel", "Add channel", "Create Channel"],
+  "voice_channel_join": ["Join", "Join voice", "Connect", "Join channel", "Enter", "Join voice channel", "Connect to voice", "Join", "Enter voice", "Connect"],
+  "dm_empty_state": ["Select a conversation or switch to Servers.", "Choose a DM or go to Servers.", "Pick a conversation or view Servers.", "Select conversation or Servers.", "No conversation selected.", "Choose a chat or Servers.", "Select a conversation or Servers.", "Pick a DM or Servers.", "No DM selected.", "Select conversation or Servers."],
+  "message_placeholder": ["Message #channel", "Type a message...", "Message...", "Type here...", "Send a message...", "Write a message...", "Message #channel", "Type message...", "Compose message...", "Send message..."],
+  "go_home": ["Home", "Dashboard", "Main", "Home", "Overview", "Home", "Main view", "Dashboard", "Home", "Overview"],
+
+  "settings_title": ["Settings", "Preferences", "App Settings", "User Settings", "Configuration", "Account Settings", "Profile & Settings", "Control Panel", "Options", "Setup"],
+  "settings_appearance": ["Appearance", "Theme & Appearance", "Look & Feel", "Display", "Visual Settings", "Style", "Appearance Options", "Theme Settings", "Display Options", "Visuals"],
+  "settings_theme_dark": ["Dark", "Dark theme", "Night mode", "Dark mode", "Midnight", "Dark appearance", "Dark display", "Night theme", "Dark style", "Dark palette"],
+  "settings_theme_light": ["Light", "Light theme", "Day mode", "Light mode", "Bright", "Light appearance", "Light display", "Day theme", "Light style", "Light palette"],
+  "settings_notifications": ["Notifications", "Alerts", "Notification Settings", "Message alerts", "App notifications", "Notify me", "Alert preferences", "Notification panel", "Notification options", "Alert settings"],
+  "settings_notifications_label": ["Enable notifications", "Turn on notifications", "Allow notifications", "Receive alerts", "Get notifications", "Enable alerts", "Notify about activity", "Turn notifications on", "Allow alerts", "Get app notifications"],
+  "settings_account": ["Account", "Account Settings", "User Account", "Profile & Account", "My account", "Account details", "Profile", "Account profile", "User settings", "Profile settings"],
+  "settings_display_name_label": ["Display name", "Name shown", "Visible name", "Profile name", "Shown as", "Public name", "Screen name", "Name to display", "Nickname", "Display label"],
+  "settings_saving": ["Saving…", "Saving", "Please wait…", "Updating…", "Applying changes…", "Saving your settings…", "One moment…", "Saving changes…", "Working…", "Processing…"],
+  "settings_save": ["Save", "Apply", "Update", "Confirm", "Save changes", "Done", "OK", "Submit", "Save settings", "Finish"],
+
+  "create_server_modal_title": ["Create Server", "New Server", "Add Server", "Create a Server", "Start a Server", "Create Guild", "New Guild", "Add Guild", "Create New Server", "Server Setup"],
+  "create_server_name_label": ["Server name", "Name your server", "Server title", "Server label", "Server display name", "Name", "Server handle", "Server nickname", "Server identifier", "Server alias"],
+  "create_server_name_placeholder": ["My Server", "Awesome Server", "Friends Hangout", "Gaming Hub", "Study Group", "Work Space", "Community Server", "Chill Zone", "Project Server", "New Server"],
+  "create_server_cancel": ["Cancel", "Dismiss", "Close", "Never mind", "Back", "Go back", "Abort", "Cancel action", "Cancel create", "Cancel server"],
+  "create_server_submit": ["Create", "Create server", "Add", "Continue", "Confirm", "Finish", "Start", "Go", "Create now", "Launch"],
+
+  "create_channel_modal_title": ["Create channel", "New channel", "Add channel", "Create a channel", "Start channel", "Open channel", "Channel setup", "New text channel", "New voice channel", "Add new channel"],
+  "create_channel_name_label": ["Channel name", "Name your channel", "Channel title", "Channel label", "Channel display name", "Name", "Channel handle", "Channel nickname", "Channel identifier", "Channel alias"],
+  "create_channel_name_placeholder_text": ["general", "chat", "lobby", "hangout", "discussion", "text-channel", "main", "general-chat", "talk", "community"],
+  "create_channel_name_placeholder_voice": ["Voice", "Voice chat", "Lounge", "Call", "Talk", "Voice room", "Voice channel", "Meeting", "Hangout voice", "Chat voice"],
+  "create_channel_type_label": ["Type", "Channel type", "Choose type", "Select type", "Channel kind", "Mode", "Channel mode", "Category", "Channel category", "Format"],
+  "create_channel_type_text_label": ["Text", "Text channel", "Messages", "Chat", "Text chat", "Text-only", "Text room", "Message channel", "Text area", "Writing"],
+  "create_channel_type_voice_label": ["Voice", "Voice channel", "Audio", "Call", "Voice chat", "Voice room", "Audio room", "Voice talk", "Live voice", "Voice area"],
+  "create_channel_cancel": ["Cancel", "Dismiss", "Close", "Never mind", "Back", "Go back", "Abort", "Cancel action", "Cancel channel", "Cancel create"],
+  "create_channel_submit": ["Create", "Create channel", "Add", "Continue", "Confirm", "Finish", "Start", "Go", "Create now", "Launch"],
+
+  "dm_message_placeholder": ["Message user", "Send a message", "Type a DM...", "Write a message...", "Send a direct message...", "Message here...", "Type something...", "Say hi...", "Reply here...", "Start chatting..."]
+}

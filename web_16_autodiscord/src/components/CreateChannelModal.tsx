@@ -1,5 +1,7 @@
 "use client";
 
+import { useDynamicSystem } from "@/dynamic";
+import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import type { Channel } from "@/types/discord";
 import { X } from "lucide-react";
@@ -22,6 +24,7 @@ export function CreateChannelModal({
 }: CreateChannelModalProps) {
   const [name, setName] = useState("");
   const [channelType, setChannelType] = useState<"text" | "voice">("text");
+  const dyn = useDynamicSystem();
 
   if (!open) return null;
 
@@ -54,7 +57,7 @@ export function CreateChannelModal({
             id="create-channel-title"
             className="text-lg font-semibold text-white"
           >
-            Create channel — {serverName}
+            {dyn.v3.getVariant("create_channel_modal_title", undefined, `Create channel — ${serverName}`)}
           </h2>
           <button
             type="button"
@@ -69,20 +72,26 @@ export function CreateChannelModal({
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
           <label className="block">
             <span className="block text-sm text-gray-400 mb-1">
-              Channel name
+              {dyn.v3.getVariant("create_channel_name_label", undefined, "Channel name")}
             </span>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder={channelType === "text" ? "general" : "Voice"}
-              className="w-full rounded-md bg-discord-input px-4 py-2.5 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-discord-accent"
+              placeholder={
+                channelType === "text"
+                  ? dyn.v3.getVariant("create_channel_name_placeholder_text", undefined, "general")
+                  : dyn.v3.getVariant("create_channel_name_placeholder_voice", undefined, "Voice")
+              }
+              className={`w-full rounded-md bg-discord-input px-4 py-2.5 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-discord-accent ${dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "")}`}
               maxLength={100}
               data-testid="create-channel-name"
             />
           </label>
           <div>
-            <span className="block text-sm text-gray-400 mb-2">Type</span>
+            <span className="block text-sm text-gray-400 mb-2">
+              {dyn.v3.getVariant("create_channel_type_label", undefined, "Type")}
+            </span>
             <div className="flex gap-4">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -91,10 +100,12 @@ export function CreateChannelModal({
                   value="text"
                   checked={channelType === "text"}
                   onChange={() => setChannelType("text")}
-                  className="rounded border-gray-500 text-discord-accent focus:ring-discord-accent"
+                  className={`rounded border-gray-500 text-discord-accent focus:ring-discord-accent ${dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "")}`}
                   data-testid="create-channel-type-text"
                 />
-                <span className="text-gray-200">Text</span>
+                <span className="text-gray-200">
+                  {dyn.v3.getVariant("create_channel_type_text_label", undefined, "Text")}
+                </span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -103,10 +114,12 @@ export function CreateChannelModal({
                   value="voice"
                   checked={channelType === "voice"}
                   onChange={() => setChannelType("voice")}
-                  className="rounded border-gray-500 text-discord-accent focus:ring-discord-accent"
+                  className={`rounded border-gray-500 text-discord-accent focus:ring-discord-accent ${dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "")}`}
                   data-testid="create-channel-type-voice"
                 />
-                <span className="text-gray-200">Voice</span>
+                <span className="text-gray-200">
+                  {dyn.v3.getVariant("create_channel_type_voice_label", undefined, "Voice")}
+                </span>
               </label>
             </div>
           </div>
@@ -114,17 +127,17 @@ export function CreateChannelModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-md text-gray-300 hover:bg-white/10"
+              className={`px-4 py-2 rounded-md text-gray-300 hover:bg-white/10 ${dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "")}`}
               data-testid="create-channel-cancel"
             >
-              Cancel
+              {dyn.v3.getVariant("create_channel_cancel", undefined, "Cancel")}
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-md bg-discord-accent text-white hover:bg-discord-accent/90"
+              className={`px-4 py-2 rounded-md bg-discord-accent text-white hover:bg-discord-accent/90 ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`}
               data-testid="create-channel-submit"
             >
-              Create
+              {dyn.v3.getVariant("create_channel_submit", undefined, "Create")}
             </button>
           </div>
         </form>

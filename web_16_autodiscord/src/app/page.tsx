@@ -15,6 +15,8 @@ import { ServerList } from "@/components/ServerList";
 import { ServerSettingsModal } from "@/components/ServerSettingsModal";
 import { VoiceChannelPanel } from "@/components/VoiceChannelPanel";
 import { CURRENT_USER } from "@/constants/mock";
+import { useDynamicSystem } from "@/dynamic";
+import { ID_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeed } from "@/context/SeedContext";
 import { useDiscordData } from "@/hooks/useDiscordData";
 import { EVENT_TYPES, logEvent } from "@/library/events";
@@ -53,8 +55,12 @@ function extractSeedFromMalformedChannel(raw: string | null): string | null {
 
 export default function DiscordPage() {
   const searchParams = useSearchParams();
+  const dyn = useDynamicSystem();
   const { seed } = useSeed();
-  const effectiveSeed = useMemo(() => clampSeed(seed ?? 1), [seed]);
+  const effectiveSeed = useMemo(
+    () => (dyn.v2.isEnabled() ? clampSeed(seed ?? 1) : 1),
+    [dyn, seed]
+  );
   const { data, loading, error, reload } = useDiscordData(effectiveSeed);
 
   const serverParam = searchParams.get("server");
@@ -528,16 +534,16 @@ export default function DiscordPage() {
     return (
       <div className="min-h-screen bg-discord-darkest flex flex-col items-center justify-center gap-4 p-8">
         <EmptyState
-          title="No servers"
+          title={dyn.v3.getVariant("no_servers", undefined, "No servers")}
           description="Create a server to get started. (Demo: data is mocked.)"
         />
         <button
           type="button"
           onClick={() => setCreateServerModalOpen(true)}
           className="px-4 py-2 rounded-md bg-discord-accent text-white hover:bg-discord-accent/90"
-          data-testid="create-server-first"
+          data-testid={dyn.v3.getVariant("create-server-first", undefined, "create-server-first")}
         >
-          Create server
+          {dyn.v3.getVariant("create_server_first", undefined, "Create server")}
         </button>
         <CreateServerModal
           open={createServerModalOpen}
@@ -549,7 +555,7 @@ export default function DiscordPage() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden" data-testid="discord-page">
+    <div className="flex h-screen overflow-hidden" data-testid={dyn.v3.getVariant("discord-page", undefined, "discord-page")}>
       <ServerList
         servers={allServers}
         selectedId={selectedServerId}
@@ -597,7 +603,7 @@ export default function DiscordPage() {
                       type="button"
                       onClick={() => handleSelectChannel(selectedChannel.id)}
                       className="mt-2 px-4 py-2 rounded-md bg-discord-accent text-white hover:bg-discord-accent/90"
-                      data-testid="voice-channel-join"
+                      data-testid={dyn.v3.getVariant("voice-channel-join", ID_VARIANTS_MAP, "voice-channel-join")}
                     >
                       Join
                     </button>
@@ -615,7 +621,7 @@ export default function DiscordPage() {
               ) : (
                 <div
                   className="flex-1 flex flex-col items-center justify-center bg-discord-channel text-gray-500 p-8 text-center"
-                  data-testid="empty-channel-state"
+                  data-testid={dyn.v3.getVariant("empty-channel-state", ID_VARIANTS_MAP, "empty-channel-state")}
                 >
                   <p className="font-medium">
                     {selectedServer
@@ -649,7 +655,7 @@ export default function DiscordPage() {
           ) : (
             <div
               className="flex-1 flex items-center justify-center bg-discord-channel text-gray-500"
-              data-testid="dm-empty-state"
+              data-testid={dyn.v3.getVariant("dm-empty-state", ID_VARIANTS_MAP, "dm-empty-state")}
             >
               Select a conversation or switch to Servers.
             </div>

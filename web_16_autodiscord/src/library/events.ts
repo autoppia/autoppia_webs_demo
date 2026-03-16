@@ -59,6 +59,8 @@ export function logEvent(
     data: eventData,
   };
 
+  console.log("[AutoDiscord] Event:", eventType, eventData);
+
   fetch("/api/log-event", {
     method: "POST",
     headers: {

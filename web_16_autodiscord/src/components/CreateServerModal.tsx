@@ -1,5 +1,7 @@
 "use client";
 
+import { useDynamicSystem } from "@/dynamic";
+import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { X } from "lucide-react";
 import { useState } from "react";
@@ -16,6 +18,7 @@ export function CreateServerModal({
   onCreateServer,
 }: CreateServerModalProps) {
   const [name, setName] = useState("");
+  const dyn = useDynamicSystem();
 
   if (!open) return null;
 
@@ -41,7 +44,7 @@ export function CreateServerModal({
             id="create-server-title"
             className="text-lg font-semibold text-white"
           >
-            Create Server
+            {dyn.v3.getVariant("create_server_modal_title", undefined, "Create Server")}
           </h2>
           <button
             type="button"
@@ -56,14 +59,14 @@ export function CreateServerModal({
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
           <label className="block">
             <span className="block text-sm text-gray-400 mb-1">
-              Server name
+              {dyn.v3.getVariant("create_server_name_label", undefined, "Server name")}
             </span>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="My Server"
-              className="w-full rounded-md bg-discord-input px-4 py-2.5 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-discord-accent"
+              placeholder={dyn.v3.getVariant("create_server_name_placeholder", undefined, "My Server")}
+              className={`w-full rounded-md bg-discord-input px-4 py-2.5 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-discord-accent ${dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "")}`}
               maxLength={100}
               data-testid="create-server-name"
             />
@@ -72,17 +75,17 @@ export function CreateServerModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-md text-gray-300 hover:bg-white/10"
+              className={`px-4 py-2 rounded-md text-gray-300 hover:bg-white/10 ${dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "")}`}
               data-testid="create-server-cancel"
             >
-              Cancel
+              {dyn.v3.getVariant("create_server_cancel", undefined, "Cancel")}
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-md bg-discord-accent text-white hover:bg-discord-accent/90"
+              className={`px-4 py-2 rounded-md bg-discord-accent text-white hover:bg-discord-accent/90 ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`}
               data-testid="create-server-submit"
             >
-              Create
+              {dyn.v3.getVariant("create_server_submit", undefined, "Create")}
             </button>
           </div>
         </form>
