@@ -32,7 +32,7 @@ export class DynamicDataProvider {
   private getSeed(): number {
     if (!isV2Enabled()) return 1;
     if (typeof window === "undefined") return 1;
-    return clampSeed(getSeedFromUrl(window.location.search ?? ""));
+    return clampSeed(getSeedFromUrl());
   }
 
   private async loadData(): Promise<void> {

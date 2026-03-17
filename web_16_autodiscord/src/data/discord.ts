@@ -11,9 +11,9 @@ export interface DiscordData {
 }
 
 const LIMITS = {
-  servers: 20,
+  servers: 50,
   channels: 50,
-  messages: 100,
+  messages: 50,
   members: 50,
 } as const;
 
@@ -24,7 +24,7 @@ const resolveSeed = (seedValue?: number | null): number => {
   if (!isV2Enabled()) return 1;
   if (typeof window === "undefined") return clampSeed(1);
   if (seedValue != null) return clampSeed(seedValue);
-  return getSeedFromUrl(window.location.search ?? "");
+  return getSeedFromUrl();
 };
 
 /**

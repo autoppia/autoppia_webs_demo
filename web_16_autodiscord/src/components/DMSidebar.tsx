@@ -27,12 +27,14 @@ export function DMSidebar({
     onSelectUser(userId);
   };
 
-  return dyn.v1.addWrapDecoy("dm-sidebar", (
-    <aside
-      className="w-60 flex-shrink-0 bg-discord-sidebar flex flex-col overflow-hidden"
-      aria-label="Direct messages"
-      data-testid={dyn.v3.getVariant("dm-sidebar", ID_VARIANTS_MAP, "dm-sidebar")}
-    >
+  return (
+    <div className="w-60 flex-shrink-0 flex flex-col min-h-0">
+      {dyn.v1.addWrapDecoy("dm-sidebar", (
+        <aside
+          className="flex-1 min-h-0 w-60 bg-discord-sidebar flex flex-col overflow-hidden"
+          aria-label="Direct messages"
+          data-testid={dyn.v3.getVariant("dm-sidebar", ID_VARIANTS_MAP, "dm-sidebar")}
+        >
       {dyn.v1.addWrapDecoy("dm-header", (
         <div className="h-12 px-4 flex items-center border-b border-black/20 shadow">
           <span className="font-semibold text-white">Direct Messages</span>
@@ -70,6 +72,8 @@ export function DMSidebar({
           )}
         </div>
       ))}
-    </aside>
-  ));
+        </aside>
+      ))}
+    </div>
+  );
 }

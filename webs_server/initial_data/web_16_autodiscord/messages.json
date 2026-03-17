@@ -3,7 +3,7 @@
     "id": "msg1",
     "channelId": "c1",
     "authorUsername": "alex.dev",
-    "content": "Hey everyone, welcome to the server! 👋",
+    "content": "Hey everyone, welcome to the server! \ud83d\udc4b",
     "timestamp": "2025-02-16T10:00:00.000Z"
   },
   {
@@ -24,7 +24,7 @@
     "id": "msg4",
     "channelId": "c1",
     "authorUsername": "alex.dev",
-    "content": "I can help — drop the error in dev-help and tag me.",
+    "content": "I can help \u2014 drop the error in dev-help and tag me.",
     "timestamp": "2025-02-16T11:02:00.000Z"
   },
   {
@@ -45,7 +45,7 @@
     "id": "msg7",
     "channelId": "c3",
     "authorUsername": "sam.coder",
-    "content": "Getting 401 on login — using JWT. Any ideas?",
+    "content": "Getting 401 on login \u2014 using JWT. Any ideas?",
     "timestamp": "2025-02-16T14:00:00.000Z"
   },
   {
@@ -72,1331 +72,1331 @@
   {
     "id": "msg11",
     "channelId": "c11",
-    "authorUsername": "user11",
-    "content": "Sample message 11 from user11 in c11",
+    "authorUsername": "jesse.sport",
+    "content": "Has anyone tried that yet?",
     "timestamp": "2025-02-16T09:55:00Z"
   },
   {
     "id": "msg12",
     "channelId": "c12",
-    "authorUsername": "user12",
-    "content": "Sample message 12 from user12 in c12",
+    "authorUsername": "cameron.fit",
+    "content": "Good point.",
     "timestamp": "2025-02-16T10:00:00Z"
   },
   {
     "id": "msg13",
     "channelId": "c13",
-    "authorUsername": "user13",
-    "content": "Sample message 13 from user13 in c13",
+    "authorUsername": "jamie.cooks",
+    "content": "Let me know if you need anything.",
     "timestamp": "2025-02-16T10:05:00Z"
   },
   {
     "id": "msg14",
     "channelId": "c14",
-    "authorUsername": "user14",
-    "content": "Sample message 14 from user14 in c14",
+    "authorUsername": "parker.travel",
+    "content": "Need a new audiobook for my commute",
     "timestamp": "2025-02-16T10:10:00Z"
   },
   {
     "id": "msg15",
     "channelId": "c15",
-    "authorUsername": "user15",
-    "content": "Sample message 15 from user15 in c15",
+    "authorUsername": "avery.books",
+    "content": "In the voice channel, join when you can",
     "timestamp": "2025-02-16T10:15:00Z"
   },
   {
     "id": "msg16",
     "channelId": "c16",
-    "authorUsername": "user16",
-    "content": "Sample message 16 from user16 in c16",
+    "authorUsername": "sydney.memes",
+    "content": "Same here.",
     "timestamp": "2025-02-16T10:20:00Z"
   },
   {
     "id": "msg17",
     "channelId": "c17",
-    "authorUsername": "user17",
-    "content": "Sample message 17 from user17 in c17",
+    "authorUsername": "finley.speed",
+    "content": "I'll check it out.",
     "timestamp": "2025-02-16T10:25:00Z"
   },
   {
     "id": "msg18",
     "channelId": "c18",
-    "authorUsername": "user18",
-    "content": "Sample message 18 from user18 in c18",
+    "authorUsername": "reign.val",
+    "content": "Anyone have a good salmon recipe?",
     "timestamp": "2025-02-16T10:30:00Z"
   },
   {
     "id": "msg19",
     "channelId": "c19",
-    "authorUsername": "user19",
-    "content": "Sample message 19 from user19 in c19",
+    "authorUsername": "blake.minecraft",
+    "content": "Anyone around?",
     "timestamp": "2025-02-16T10:35:00Z"
   },
   {
     "id": "msg20",
     "channelId": "c20",
-    "authorUsername": "user20",
-    "content": "Sample message 20 from user20 in c20",
+    "authorUsername": "harper.lol",
+    "content": "In the voice channel, join when you can",
     "timestamp": "2025-02-16T10:40:00Z"
   },
   {
     "id": "msg21",
     "channelId": "c21",
-    "authorUsername": "user21",
-    "content": "Sample message 21 from user21 in c21",
+    "authorUsername": "emery.dnd",
+    "content": "Has anyone tried that yet?",
     "timestamp": "2025-02-16T10:45:00Z"
   },
   {
     "id": "msg22",
     "channelId": "c22",
-    "authorUsername": "user22",
-    "content": "Sample message 22 from user22 in c22",
+    "authorUsername": "rowan.tabletop",
+    "content": "Anyone want to queue?",
     "timestamp": "2025-02-16T10:50:00Z"
   },
   {
     "id": "msg23",
     "channelId": "c23",
-    "authorUsername": "user23",
-    "content": "Sample message 23 from user23 in c23",
+    "authorUsername": "sawyer.chess",
+    "content": "I'm in, send invite",
     "timestamp": "2025-02-16T10:55:00Z"
   },
   {
     "id": "msg24",
     "channelId": "c24",
-    "authorUsername": "user24",
-    "content": "Sample message 24 from user24 in c24",
+    "authorUsername": "ellis.puzzle",
+    "content": "Still looking?",
     "timestamp": "2025-02-16T11:00:00Z"
   },
   {
     "id": "msg25",
     "channelId": "c25",
-    "authorUsername": "user25",
-    "content": "Sample message 25 from user25 in c25",
+    "authorUsername": "hayden.startup",
+    "content": "Who's in vc?",
     "timestamp": "2025-02-16T11:05:00Z"
   },
   {
     "id": "msg26",
     "channelId": "c26",
-    "authorUsername": "user26",
-    "content": "Sample message 26 from user26 in c26",
+    "authorUsername": "kendall.ux",
+    "content": "Looking for one more for the raid",
     "timestamp": "2025-02-16T11:10:00Z"
   },
   {
     "id": "msg27",
     "channelId": "c27",
-    "authorUsername": "user27",
-    "content": "Sample message 27 from user27 in c27",
+    "authorUsername": "taylor.ui",
+    "content": "Still looking?",
     "timestamp": "2025-02-16T11:15:00Z"
   },
   {
     "id": "msg28",
     "channelId": "c28",
-    "authorUsername": "user28",
-    "content": "Sample message 28 from user28 in c28",
+    "authorUsername": "marley.figma",
+    "content": "Still looking?",
     "timestamp": "2025-02-16T11:20:00Z"
   },
   {
     "id": "msg29",
     "channelId": "c29",
-    "authorUsername": "user29",
-    "content": "Sample message 29 from user29 in c29",
+    "authorUsername": "remy.blender",
+    "content": "Down for a few games",
     "timestamp": "2025-02-16T11:25:00Z"
   },
   {
     "id": "msg30",
     "channelId": "c30",
-    "authorUsername": "user30",
-    "content": "Sample message 30 from user30 in c30",
+    "authorUsername": "sage.modeling",
+    "content": "Who's in vc?",
     "timestamp": "2025-02-16T11:30:00Z"
   },
   {
     "id": "msg31",
     "channelId": "c31",
-    "authorUsername": "user31",
-    "content": "Sample message 31 from user31 in c31",
+    "authorUsername": "river.digital",
+    "content": "Not sure if it's done yet",
     "timestamp": "2025-02-16T11:35:00Z"
   },
   {
     "id": "msg32",
     "channelId": "c32",
-    "authorUsername": "user32",
-    "content": "Sample message 32 from user32 in c32",
+    "authorUsername": "shiloh.concept",
+    "content": "Finished this piece yesterday",
     "timestamp": "2025-02-16T11:40:00Z"
   },
   {
     "id": "msg33",
     "channelId": "c33",
-    "authorUsername": "user33",
-    "content": "Sample message 33 from user33 in c33",
+    "authorUsername": "arden.illustration",
+    "content": "Inspired by the stuff you all post",
     "timestamp": "2025-02-16T11:45:00Z"
   },
   {
     "id": "msg34",
     "channelId": "c34",
-    "authorUsername": "user34",
-    "content": "Sample message 34 from user34 in c34",
+    "authorUsername": "dakota.podcast",
+    "content": "Took way longer than expected",
     "timestamp": "2025-02-16T11:50:00Z"
   },
   {
     "id": "msg35",
     "channelId": "c35",
-    "authorUsername": "user35",
-    "content": "Sample message 35 from user35 in c35",
+    "authorUsername": "reagan.lofi",
+    "content": "Be there in a sec",
     "timestamp": "2025-02-16T11:55:00Z"
   },
   {
     "id": "msg36",
     "channelId": "c36",
-    "authorUsername": "user36",
-    "content": "Sample message 36 from user36 in c36",
+    "authorUsername": "payton.jazz",
+    "content": "Before and after in the thread",
     "timestamp": "2025-02-16T12:00:00Z"
   },
   {
     "id": "msg37",
     "channelId": "c37",
-    "authorUsername": "user37",
-    "content": "Sample message 37 from user37 in c37",
+    "authorUsername": "dylan.metal",
+    "content": "Inspired by the stuff you all post",
     "timestamp": "2025-02-16T12:05:00Z"
   },
   {
     "id": "msg38",
     "channelId": "c38",
-    "authorUsername": "user38",
-    "content": "Sample message 38 from user38 in c38",
+    "authorUsername": "devon.kpop",
+    "content": "Took way longer than expected",
     "timestamp": "2025-02-16T12:10:00Z"
   },
   {
     "id": "msg39",
     "channelId": "c39",
-    "authorUsername": "user39",
-    "content": "Sample message 39 from user39 in c39",
+    "authorUsername": "morgan.hiphop",
+    "content": "What DAW do you all use?",
     "timestamp": "2025-02-16T12:15:00Z"
   },
   {
     "id": "msg40",
     "channelId": "c40",
-    "authorUsername": "user40",
-    "content": "Sample message 40 from user40 in c40",
+    "authorUsername": "alex.clinical",
+    "content": "In the voice channel, join when you can",
     "timestamp": "2025-02-16T12:20:00Z"
   },
   {
     "id": "msg41",
     "channelId": "c41",
-    "authorUsername": "user41",
-    "content": "Sample message 41 from user41 in c41",
+    "authorUsername": "jordan.synth",
+    "content": "The low end on this is so muddy",
     "timestamp": "2025-02-16T12:25:00Z"
   },
   {
     "id": "msg42",
     "channelId": "c42",
-    "authorUsername": "user42",
-    "content": "Sample message 42 from user42 in c42",
+    "authorUsername": "sam.indie",
+    "content": "Finally finished the drop",
     "timestamp": "2025-02-16T12:30:00Z"
   },
   {
     "id": "msg43",
     "channelId": "c43",
-    "authorUsername": "user43",
-    "content": "Sample message 43 from user43 in c43",
+    "authorUsername": "casey.songs",
+    "content": "What do you use for mastering?",
     "timestamp": "2025-02-16T12:35:00Z"
   },
   {
     "id": "msg44",
     "channelId": "c44",
-    "authorUsername": "user44",
-    "content": "Sample message 44 from user44 in c44",
+    "authorUsername": "riley.beats",
+    "content": "Just got a new plugin, game changer",
     "timestamp": "2025-02-16T12:40:00Z"
   },
   {
     "id": "msg45",
     "channelId": "c45",
-    "authorUsername": "user45",
-    "content": "Sample message 45 from user45 in c45",
+    "authorUsername": "quinn.scoring",
+    "content": "In the voice channel, join when you can",
     "timestamp": "2025-02-16T12:45:00Z"
   },
   {
     "id": "msg46",
     "channelId": "c46",
-    "authorUsername": "user46",
-    "content": "Sample message 46 from user46 in c46",
+    "authorUsername": "skyler.sound",
+    "content": "Finally finished the drop",
     "timestamp": "2025-02-16T12:50:00Z"
   },
   {
     "id": "msg47",
     "channelId": "c47",
-    "authorUsername": "user47",
-    "content": "Sample message 47 from user47 in c47",
+    "authorUsername": "reese.voiceact",
+    "content": "Just got a new plugin, game changer",
     "timestamp": "2025-02-16T12:55:00Z"
   },
   {
     "id": "msg48",
     "channelId": "c48",
-    "authorUsername": "user48",
-    "content": "Sample message 48 from user48 in c48",
+    "authorUsername": "drew.stream",
+    "content": "Just got a new plugin, game changer",
     "timestamp": "2025-02-16T13:00:00Z"
   },
   {
     "id": "msg49",
     "channelId": "c49",
-    "authorUsername": "user49",
-    "content": "Sample message 49 from user49 in c49",
+    "authorUsername": "jesse.content",
+    "content": "What do you use for mastering?",
     "timestamp": "2025-02-16T13:05:00Z"
   },
   {
     "id": "msg50",
     "channelId": "c50",
-    "authorUsername": "user50",
-    "content": "Sample message 50 from user50 in c50",
+    "authorUsername": "cameron.vtube",
+    "content": "Someone share screen?",
     "timestamp": "2025-02-16T13:10:00Z"
   },
   {
     "id": "msg51",
     "channelId": "c51",
-    "authorUsername": "user51",
-    "content": "Sample message 51 from user51 in c51",
+    "authorUsername": "jamie.cosplay",
+    "content": "What DAW do you all use?",
     "timestamp": "2025-02-16T13:15:00Z"
   },
   {
     "id": "msg52",
     "channelId": "c52",
-    "authorUsername": "user52",
-    "content": "Sample message 52 from user52 in c52",
+    "authorUsername": "parker.comics",
+    "content": "Sounds good to me.",
     "timestamp": "2025-02-16T13:20:00Z"
   },
   {
     "id": "msg53",
     "channelId": "c53",
-    "authorUsername": "user53",
-    "content": "Sample message 53 from user53 in c53",
+    "authorUsername": "avery.scifi",
+    "content": "Same here.",
     "timestamp": "2025-02-16T13:25:00Z"
   },
   {
     "id": "msg54",
     "channelId": "c54",
-    "authorUsername": "user54",
-    "content": "Sample message 54 from user54 in c54",
+    "authorUsername": "sydney.fantasy",
+    "content": "This is great.",
     "timestamp": "2025-02-16T13:30:00Z"
   },
   {
     "id": "msg55",
     "channelId": "c55",
-    "authorUsername": "user55",
-    "content": "Sample message 55 from user55 in c55",
+    "authorUsername": "finley.horror",
+    "content": "Someone share screen?",
     "timestamp": "2025-02-16T13:35:00Z"
   },
   {
     "id": "msg56",
     "channelId": "c56",
-    "authorUsername": "user56",
-    "content": "Sample message 56 from user56 in c56",
+    "authorUsername": "reign.truecrime",
+    "content": "Hey everyone, what's up?",
     "timestamp": "2025-02-16T13:40:00Z"
   },
   {
     "id": "msg57",
     "channelId": "c57",
-    "authorUsername": "user57",
-    "content": "Sample message 57 from user57 in c57",
+    "authorUsername": "blake.history",
+    "content": "Same here.",
     "timestamp": "2025-02-16T13:45:00Z"
   },
   {
     "id": "msg58",
     "channelId": "c58",
-    "authorUsername": "user58",
-    "content": "Sample message 58 from user58 in c58",
+    "authorUsername": "harper.science",
+    "content": "I'll check it out.",
     "timestamp": "2025-02-16T13:50:00Z"
   },
   {
     "id": "msg59",
     "channelId": "c59",
-    "authorUsername": "user59",
-    "content": "Sample message 59 from user59 in c59",
+    "authorUsername": "emery.math",
+    "content": "Has anyone tried that yet?",
     "timestamp": "2025-02-16T13:55:00Z"
   },
   {
     "id": "msg60",
     "channelId": "c60",
-    "authorUsername": "user60",
-    "content": "Sample message 60 from user60 in c60",
+    "authorUsername": "rowan.language",
+    "content": "Can't talk rn but I'm listening",
     "timestamp": "2025-02-16T14:00:00Z"
   },
   {
     "id": "msg61",
     "channelId": "c61",
-    "authorUsername": "user61",
-    "content": "Sample message 61 from user61 in c61",
+    "authorUsername": "sawyer.study",
+    "content": "Has anyone tried that yet?",
     "timestamp": "2025-02-16T14:05:00Z"
   },
   {
     "id": "msg62",
     "channelId": "c62",
-    "authorUsername": "user62",
-    "content": "Sample message 62 from user62 in c62",
+    "authorUsername": "ellis.productivity",
+    "content": "Thanks for the help earlier!",
     "timestamp": "2025-02-16T14:10:00Z"
   },
   {
     "id": "msg63",
     "channelId": "c63",
-    "authorUsername": "user63",
-    "content": "Sample message 63 from user63 in c63",
+    "authorUsername": "hayden.remote",
+    "content": "Thanks for the help earlier!",
     "timestamp": "2025-02-16T14:15:00Z"
   },
   {
     "id": "msg64",
     "channelId": "c64",
-    "authorUsername": "user64",
-    "content": "Sample message 64 from user64 in c64",
+    "authorUsername": "kendall.freelance",
+    "content": "Let me know if you need anything.",
     "timestamp": "2025-02-16T14:20:00Z"
   },
   {
     "id": "msg65",
     "channelId": "c65",
-    "authorUsername": "user65",
-    "content": "Sample message 65 from user65 in c65",
+    "authorUsername": "taylor.nocode",
+    "content": "Can't talk rn but I'm listening",
     "timestamp": "2025-02-16T14:25:00Z"
   },
   {
     "id": "msg66",
     "channelId": "c66",
-    "authorUsername": "user66",
-    "content": "Sample message 66 from user66 in c66",
+    "authorUsername": "marley.devops",
+    "content": "Has anyone tried that yet?",
     "timestamp": "2025-02-16T14:30:00Z"
   },
   {
     "id": "msg67",
     "channelId": "c67",
-    "authorUsername": "user67",
-    "content": "Sample message 67 from user67 in c67",
+    "authorUsername": "remy.cloud",
+    "content": "Let me know if you need anything.",
     "timestamp": "2025-02-16T14:35:00Z"
   },
   {
     "id": "msg68",
     "channelId": "c68",
-    "authorUsername": "user68",
-    "content": "Sample message 68 from user68 in c68",
+    "authorUsername": "sage.data",
+    "content": "Same here.",
     "timestamp": "2025-02-16T14:40:00Z"
   },
   {
     "id": "msg69",
     "channelId": "c69",
-    "authorUsername": "user69",
-    "content": "Sample message 69 from user69 in c69",
+    "authorUsername": "river.ml",
+    "content": "I'll check it out.",
     "timestamp": "2025-02-16T14:45:00Z"
   },
   {
     "id": "msg70",
     "channelId": "c70",
-    "authorUsername": "user70",
-    "content": "Sample message 70 from user70 in c70",
+    "authorUsername": "shiloh.ai",
+    "content": "Can't talk rn but I'm listening",
     "timestamp": "2025-02-16T14:50:00Z"
   },
   {
     "id": "msg71",
     "channelId": "c71",
-    "authorUsername": "user71",
-    "content": "Sample message 71 from user71 in c71",
+    "authorUsername": "arden.opensource",
+    "content": "Hey everyone, what's up?",
     "timestamp": "2025-02-16T14:55:00Z"
   },
   {
     "id": "msg72",
     "channelId": "c72",
-    "authorUsername": "user72",
-    "content": "Sample message 72 from user72 in c72",
+    "authorUsername": "dakota.linux",
+    "content": "I'll check it out.",
     "timestamp": "2025-02-16T15:00:00Z"
   },
   {
     "id": "msg73",
     "channelId": "c73",
-    "authorUsername": "user73",
-    "content": "Sample message 73 from user73 in c73",
+    "authorUsername": "reagan.mac",
+    "content": "Same here.",
     "timestamp": "2025-02-16T15:05:00Z"
   },
   {
     "id": "msg74",
     "channelId": "c74",
-    "authorUsername": "user74",
-    "content": "Sample message 74 from user74 in c74",
+    "authorUsername": "payton.retro",
+    "content": "Has anyone tried that yet?",
     "timestamp": "2025-02-16T15:10:00Z"
   },
   {
     "id": "msg75",
     "channelId": "c75",
-    "authorUsername": "user75",
-    "content": "Sample message 75 from user75 in c75",
+    "authorUsername": "dylan.arcade",
+    "content": "In the voice channel, join when you can",
     "timestamp": "2025-02-16T15:15:00Z"
   },
   {
     "id": "msg76",
     "channelId": "c76",
-    "authorUsername": "user76",
-    "content": "Sample message 76 from user76 in c76",
+    "authorUsername": "devon.fighting",
+    "content": "Same here.",
     "timestamp": "2025-02-16T15:20:00Z"
   },
   {
     "id": "msg77",
     "channelId": "c77",
-    "authorUsername": "user77",
-    "content": "Sample message 77 from user77 in c77",
+    "authorUsername": "morgan.racing",
+    "content": "Same here.",
     "timestamp": "2025-02-16T15:25:00Z"
   },
   {
     "id": "msg78",
     "channelId": "c78",
-    "authorUsername": "user78",
-    "content": "Sample message 78 from user78 in c78",
+    "authorUsername": "alex.fps",
+    "content": "Anyone around?",
     "timestamp": "2025-02-16T15:30:00Z"
   },
   {
     "id": "msg79",
     "channelId": "c79",
-    "authorUsername": "user79",
-    "content": "Sample message 79 from user79 in c79",
+    "authorUsername": "jordan.rpg",
+    "content": "We need a healer",
     "timestamp": "2025-02-16T15:35:00Z"
   },
   {
     "id": "msg80",
     "channelId": "c80",
-    "authorUsername": "user80",
-    "content": "Sample message 80 from user80 in c80",
+    "authorUsername": "sam.mmo",
+    "content": "Someone share screen?",
     "timestamp": "2025-02-16T15:40:00Z"
   },
   {
     "id": "msg81",
     "channelId": "c81",
-    "authorUsername": "user81",
-    "content": "Sample message 81 from user81 in c81",
+    "authorUsername": "casey.mobile",
+    "content": "Still looking?",
     "timestamp": "2025-02-16T15:45:00Z"
   },
   {
     "id": "msg82",
     "channelId": "c82",
-    "authorUsername": "user82",
-    "content": "Sample message 82 from user82 in c82",
+    "authorUsername": "riley.board",
+    "content": "I'm in, send invite",
     "timestamp": "2025-02-16T15:50:00Z"
   },
   {
     "id": "msg83",
     "channelId": "c83",
-    "authorUsername": "user83",
-    "content": "Sample message 83 from user83 in c83",
+    "authorUsername": "quinn.cards",
+    "content": "Down for a few games",
     "timestamp": "2025-02-16T15:55:00Z"
   },
   {
     "id": "msg84",
     "channelId": "c84",
-    "authorUsername": "user84",
-    "content": "Sample message 84 from user84 in c84",
+    "authorUsername": "skyler.trivia",
+    "content": "Anyone want to queue?",
     "timestamp": "2025-02-16T16:00:00Z"
   },
   {
     "id": "msg85",
     "channelId": "c85",
-    "authorUsername": "user85",
-    "content": "Sample message 85 from user85 in c85",
+    "authorUsername": "reese.karaoke",
+    "content": "Can't talk rn but I'm listening",
     "timestamp": "2025-02-16T16:05:00Z"
   },
   {
     "id": "msg86",
     "channelId": "c86",
-    "authorUsername": "user86",
-    "content": "Sample message 86 from user86 in c86",
+    "authorUsername": "drew.comedy",
+    "content": "Who's on?",
     "timestamp": "2025-02-16T16:10:00Z"
   },
   {
     "id": "msg87",
     "channelId": "c87",
-    "authorUsername": "user87",
-    "content": "Sample message 87 from user87 in c87",
+    "authorUsername": "jesse.sketch",
+    "content": "Let's run it",
     "timestamp": "2025-02-16T16:15:00Z"
   },
   {
     "id": "msg88",
     "channelId": "c88",
-    "authorUsername": "user88",
-    "content": "Sample message 88 from user88 in c88",
+    "authorUsername": "cameron.improv",
+    "content": "Looking for one more for the raid",
     "timestamp": "2025-02-16T16:20:00Z"
   },
   {
     "id": "msg89",
     "channelId": "c89",
-    "authorUsername": "user89",
-    "content": "Sample message 89 from user89 in c89",
+    "authorUsername": "jamie.theatre",
+    "content": "Same here.",
     "timestamp": "2025-02-16T16:25:00Z"
   },
   {
     "id": "msg90",
     "channelId": "c90",
-    "authorUsername": "user90",
-    "content": "Sample message 90 from user90 in c90",
+    "authorUsername": "parker.dance",
+    "content": "Can't talk rn but I'm listening",
     "timestamp": "2025-02-16T16:30:00Z"
   },
   {
     "id": "msg91",
     "channelId": "c91",
-    "authorUsername": "user91",
-    "content": "Sample message 91 from user91 in c91",
+    "authorUsername": "avery.yoga",
+    "content": "Let me know if you need anything.",
     "timestamp": "2025-02-16T16:35:00Z"
   },
   {
     "id": "msg92",
     "channelId": "c92",
-    "authorUsername": "user92",
-    "content": "Sample message 92 from user92 in c92",
+    "authorUsername": "sydney.run",
+    "content": "Let me know if you need anything.",
     "timestamp": "2025-02-16T16:40:00Z"
   },
   {
     "id": "msg93",
     "channelId": "c93",
-    "authorUsername": "user93",
-    "content": "Sample message 93 from user93 in c93",
+    "authorUsername": "finley.cycle",
+    "content": "Hey everyone, what's up?",
     "timestamp": "2025-02-16T16:45:00Z"
   },
   {
     "id": "msg94",
     "channelId": "c94",
-    "authorUsername": "user94",
-    "content": "Sample message 94 from user94 in c94",
+    "authorUsername": "reign.hike",
+    "content": "Hey everyone, what's up?",
     "timestamp": "2025-02-16T16:50:00Z"
   },
   {
     "id": "msg95",
     "channelId": "c95",
-    "authorUsername": "user95",
-    "content": "Sample message 95 from user95 in c95",
+    "authorUsername": "blake.skate",
+    "content": "Someone share screen?",
     "timestamp": "2025-02-16T16:55:00Z"
   },
   {
     "id": "msg96",
     "channelId": "c96",
-    "authorUsername": "user96",
-    "content": "Sample message 96 from user96 in c96",
+    "authorUsername": "harper.surf",
+    "content": "Sounds good to me.",
     "timestamp": "2025-02-16T17:00:00Z"
   },
   {
     "id": "msg97",
     "channelId": "c97",
-    "authorUsername": "user97",
-    "content": "Sample message 97 from user97 in c97",
+    "authorUsername": "emery.snow",
+    "content": "Has anyone tried that yet?",
     "timestamp": "2025-02-16T17:05:00Z"
   },
   {
     "id": "msg98",
     "channelId": "c98",
-    "authorUsername": "user98",
-    "content": "Sample message 98 from user98 in c98",
+    "authorUsername": "rowan.martial",
+    "content": "This is great.",
     "timestamp": "2025-02-16T17:10:00Z"
   },
   {
     "id": "msg99",
     "channelId": "c99",
-    "authorUsername": "user99",
-    "content": "Sample message 99 from user99 in c99",
+    "authorUsername": "sawyer.esports",
+    "content": "Good point.",
     "timestamp": "2025-02-16T17:15:00Z"
   },
   {
     "id": "msg100",
     "channelId": "c100",
-    "authorUsername": "user100",
-    "content": "Sample message 100 from user100 in c100",
+    "authorUsername": "ellis.coach",
+    "content": "Can't talk rn but I'm listening",
     "timestamp": "2025-02-16T17:20:00Z"
   },
   {
     "id": "msg101",
     "channelId": "c101",
-    "authorUsername": "user101",
-    "content": "Sample message 101 from user101 in c101",
+    "authorUsername": "hayden.fantasyfb",
+    "content": "Thanks for the help earlier!",
     "timestamp": "2025-02-16T17:25:00Z"
   },
   {
     "id": "msg102",
     "channelId": "c102",
-    "authorUsername": "user102",
-    "content": "Sample message 102 from user102 in c102",
+    "authorUsername": "kendall.soccer",
+    "content": "This is great.",
     "timestamp": "2025-02-16T17:30:00Z"
   },
   {
     "id": "msg103",
     "channelId": "c103",
-    "authorUsername": "user103",
-    "content": "Sample message 103 from user103 in c103",
+    "authorUsername": "taylor.hoops",
+    "content": "Good point.",
     "timestamp": "2025-02-16T17:35:00Z"
   },
   {
     "id": "msg104",
     "channelId": "c104",
-    "authorUsername": "user104",
-    "content": "Sample message 104 from user104 in c104",
+    "authorUsername": "marley.pets",
+    "content": "Anyone want to queue?",
     "timestamp": "2025-02-16T17:40:00Z"
   },
   {
     "id": "msg105",
     "channelId": "c105",
-    "authorUsername": "user105",
-    "content": "Sample message 105 from user105 in c105",
+    "authorUsername": "remy.cats",
+    "content": "Someone share screen?",
     "timestamp": "2025-02-16T17:45:00Z"
   },
   {
     "id": "msg106",
     "channelId": "c106",
-    "authorUsername": "user106",
-    "content": "Sample message 106 from user106 in c106",
+    "authorUsername": "sage.dogs",
+    "content": "Good point.",
     "timestamp": "2025-02-16T17:50:00Z"
   },
   {
     "id": "msg107",
     "channelId": "c107",
-    "authorUsername": "user107",
-    "content": "Sample message 107 from user107 in c107",
+    "authorUsername": "river.plants",
+    "content": "Has anyone tried that yet?",
     "timestamp": "2025-02-16T17:55:00Z"
   },
   {
     "id": "msg108",
     "channelId": "c108",
-    "authorUsername": "user108",
-    "content": "Sample message 108 from user108 in c108",
+    "authorUsername": "shiloh.garden",
+    "content": "This is great.",
     "timestamp": "2025-02-16T18:00:00Z"
   },
   {
     "id": "msg109",
     "channelId": "c109",
-    "authorUsername": "user109",
-    "content": "Sample message 109 from user109 in c109",
+    "authorUsername": "arden.cars",
+    "content": "Finally got the shot I wanted",
     "timestamp": "2025-02-16T18:05:00Z"
   },
   {
     "id": "msg110",
     "channelId": "c110",
-    "authorUsername": "user110",
-    "content": "Sample message 110 from user110 in c110",
+    "authorUsername": "dakota.moto",
+    "content": "Who's in vc?",
     "timestamp": "2025-02-16T18:10:00Z"
   },
   {
     "id": "msg111",
     "channelId": "c111",
-    "authorUsername": "user111",
-    "content": "Sample message 111 from user111 in c111",
+    "authorUsername": "reagan.aviation",
+    "content": "Thought you'd appreciate this",
     "timestamp": "2025-02-16T18:15:00Z"
   },
   {
     "id": "msg112",
     "channelId": "c112",
-    "authorUsername": "user112",
-    "content": "Sample message 112 from user112 in c112",
+    "authorUsername": "payton.space",
+    "content": "From the hike this weekend",
     "timestamp": "2025-02-16T18:20:00Z"
   },
   {
     "id": "msg113",
     "channelId": "c113",
-    "authorUsername": "user113",
-    "content": "Sample message 113 from user113 in c113",
+    "authorUsername": "dylan.astro",
+    "content": "Thought you'd appreciate this",
     "timestamp": "2025-02-16T18:25:00Z"
   },
   {
     "id": "msg114",
     "channelId": "c114",
-    "authorUsername": "user114",
-    "content": "Sample message 114 from user114 in c114",
+    "authorUsername": "devon.nature",
+    "content": "Project update: almost done",
     "timestamp": "2025-02-16T18:30:00Z"
   },
   {
     "id": "msg115",
     "channelId": "c115",
-    "authorUsername": "user115",
-    "content": "Sample message 115 from user115 in c115",
+    "authorUsername": "morgan.wildlife",
+    "content": "Someone share screen?",
     "timestamp": "2025-02-16T18:35:00Z"
   },
   {
     "id": "msg116",
     "channelId": "c116",
-    "authorUsername": "user116",
-    "content": "Sample message 116 from user116 in c116",
+    "authorUsername": "alex.urban",
+    "content": "Finally fixed the idle issue",
     "timestamp": "2025-02-16T18:40:00Z"
   },
   {
     "id": "msg117",
     "channelId": "c117",
-    "authorUsername": "user117",
-    "content": "Sample message 117 from user117 in c117",
+    "authorUsername": "jordan.arch",
+    "content": "New lens came in",
     "timestamp": "2025-02-16T18:45:00Z"
   },
   {
     "id": "msg118",
     "channelId": "c118",
-    "authorUsername": "user118",
-    "content": "Sample message 118 from user118 in c118",
+    "authorUsername": "sam.interior",
+    "content": "Thought you'd appreciate this",
     "timestamp": "2025-02-16T18:50:00Z"
   },
   {
     "id": "msg119",
     "channelId": "c119",
-    "authorUsername": "user119",
-    "content": "Sample message 119 from user119 in c119",
+    "authorUsername": "casey.fashion",
+    "content": "Same here.",
     "timestamp": "2025-02-16T18:55:00Z"
   },
   {
     "id": "msg120",
     "channelId": "c120",
-    "authorUsername": "user120",
-    "content": "Sample message 120 from user120 in c120",
+    "authorUsername": "riley.sneakers",
+    "content": "Who's in vc?",
     "timestamp": "2025-02-16T19:00:00Z"
   },
   {
     "id": "msg121",
     "channelId": "c121",
-    "authorUsername": "user121",
-    "content": "Sample message 121 from user121 in c121",
+    "authorUsername": "quinn.vintage",
+    "content": "Phone shot, not bad?",
     "timestamp": "2025-02-16T19:05:00Z"
   },
   {
     "id": "msg122",
     "channelId": "c122",
-    "authorUsername": "user122",
-    "content": "Sample message 122 from user122 in c122",
+    "authorUsername": "skyler.diy",
+    "content": "Inspired by the stuff you all post",
     "timestamp": "2025-02-16T19:10:00Z"
   },
   {
     "id": "msg123",
     "channelId": "c123",
-    "authorUsername": "user123",
-    "content": "Sample message 123 from user123 in c123",
+    "authorUsername": "reese.wood",
+    "content": "Took way longer than expected",
     "timestamp": "2025-02-16T19:15:00Z"
   },
   {
     "id": "msg124",
     "channelId": "c124",
-    "authorUsername": "user124",
-    "content": "Sample message 124 from user124 in c124",
+    "authorUsername": "drew.pottery",
+    "content": "Tried something new with the lighting",
     "timestamp": "2025-02-16T19:20:00Z"
   },
   {
     "id": "msg125",
     "channelId": "c125",
-    "authorUsername": "user125",
-    "content": "Sample message 125 from user125 in c125",
+    "authorUsername": "jesse.jewelry",
+    "content": "Can't talk rn but I'm listening",
     "timestamp": "2025-02-16T19:25:00Z"
   },
   {
     "id": "msg126",
     "channelId": "c126",
-    "authorUsername": "user126",
-    "content": "Sample message 126 from user126 in c126",
+    "authorUsername": "cameron.knit",
+    "content": "Not sure if it's done yet",
     "timestamp": "2025-02-16T19:30:00Z"
   },
   {
     "id": "msg127",
     "channelId": "c127",
-    "authorUsername": "user127",
-    "content": "Sample message 127 from user127 in c127",
+    "authorUsername": "jamie.calligraphy",
+    "content": "Thoughts on the composition?",
     "timestamp": "2025-02-16T19:35:00Z"
   },
   {
     "id": "msg128",
     "channelId": "c128",
-    "authorUsername": "user128",
-    "content": "Sample message 128 from user128 in c128",
+    "authorUsername": "parker.type",
+    "content": "Not sure if it's done yet",
     "timestamp": "2025-02-16T19:40:00Z"
   },
   {
     "id": "msg129",
     "channelId": "c129",
-    "authorUsername": "user129",
-    "content": "Sample message 129 from user129 in c129",
+    "authorUsername": "avery.lettering",
+    "content": "Before and after in the thread",
     "timestamp": "2025-02-16T19:45:00Z"
   },
   {
     "id": "msg130",
     "channelId": "c130",
-    "authorUsername": "user130",
-    "content": "Sample message 130 from user130 in c130",
+    "authorUsername": "sydney.street",
+    "content": "Who's in vc?",
     "timestamp": "2025-02-16T19:50:00Z"
   },
   {
     "id": "msg131",
     "channelId": "c131",
-    "authorUsername": "user131",
-    "content": "Sample message 131 from user131 in c131",
+    "authorUsername": "finley.tattoo",
+    "content": "Tried something new with the lighting",
     "timestamp": "2025-02-16T19:55:00Z"
   },
   {
     "id": "msg132",
     "channelId": "c132",
-    "authorUsername": "user132",
-    "content": "Sample message 132 from user132 in c132",
+    "authorUsername": "reign.wellness",
+    "content": "Finished this piece yesterday",
     "timestamp": "2025-02-16T20:00:00Z"
   },
   {
     "id": "msg133",
     "channelId": "c133",
-    "authorUsername": "user133",
-    "content": "Sample message 133 from user133 in c133",
+    "authorUsername": "blake.mental",
+    "content": "Before and after in the thread",
     "timestamp": "2025-02-16T20:05:00Z"
   },
   {
     "id": "msg134",
     "channelId": "c134",
-    "authorUsername": "user134",
-    "content": "Sample message 134 from user134 in c134",
+    "authorUsername": "harper.meditate",
+    "content": "First time trying this style",
     "timestamp": "2025-02-16T20:10:00Z"
   },
   {
     "id": "msg135",
     "channelId": "c135",
-    "authorUsername": "user135",
-    "content": "Sample message 135 from user135 in c135",
+    "authorUsername": "emery.philosophy",
+    "content": "In the voice channel, join when you can",
     "timestamp": "2025-02-16T20:15:00Z"
   },
   {
     "id": "msg136",
     "channelId": "c136",
-    "authorUsername": "user136",
-    "content": "Sample message 136 from user136 in c136",
+    "authorUsername": "rowan.debate",
+    "content": "Detail shot in the next message",
     "timestamp": "2025-02-16T20:20:00Z"
   },
   {
     "id": "msg137",
     "channelId": "c137",
-    "authorUsername": "user137",
-    "content": "Sample message 137 from user137 in c137",
+    "authorUsername": "sawyer.news",
+    "content": "Let me know if you need anything.",
     "timestamp": "2025-02-16T20:25:00Z"
   },
   {
     "id": "msg138",
     "channelId": "c138",
-    "authorUsername": "user138",
-    "content": "Sample message 138 from user138 in c138",
+    "authorUsername": "ellis.events",
+    "content": "I'll check it out.",
     "timestamp": "2025-02-16T20:30:00Z"
   },
   {
     "id": "msg139",
     "channelId": "c139",
-    "authorUsername": "user139",
-    "content": "Sample message 139 from user139 in c139",
+    "authorUsername": "hayden.foodie",
+    "content": "This is great.",
     "timestamp": "2025-02-16T20:35:00Z"
   },
   {
     "id": "msg140",
     "channelId": "c140",
-    "authorUsername": "user140",
-    "content": "Sample message 140 from user140 in c140",
+    "authorUsername": "kendall.coffee",
+    "content": "Who's in vc?",
     "timestamp": "2025-02-16T20:40:00Z"
   },
   {
     "id": "msg141",
     "channelId": "c141",
-    "authorUsername": "user141",
-    "content": "Sample message 141 from user141 in c141",
+    "authorUsername": "taylor.tea",
+    "content": "I'll check it out.",
     "timestamp": "2025-02-16T20:45:00Z"
   },
   {
     "id": "msg142",
     "channelId": "c142",
-    "authorUsername": "user142",
-    "content": "Sample message 142 from user142 in c142",
+    "authorUsername": "marley.wine",
+    "content": "Let me know if you need anything.",
     "timestamp": "2025-02-16T20:50:00Z"
   },
   {
     "id": "msg143",
     "channelId": "c143",
-    "authorUsername": "user143",
-    "content": "Sample message 143 from user143 in c143",
+    "authorUsername": "remy.beer",
+    "content": "Hey everyone, what's up?",
     "timestamp": "2025-02-16T20:55:00Z"
   },
   {
     "id": "msg144",
     "channelId": "c144",
-    "authorUsername": "user144",
-    "content": "Sample message 144 from user144 in c144",
+    "authorUsername": "sage.baking",
+    "content": "Finally nailed the sourdough",
     "timestamp": "2025-02-16T21:00:00Z"
   },
   {
     "id": "msg145",
     "channelId": "c145",
-    "authorUsername": "user145",
-    "content": "Sample message 145 from user145 in c145",
+    "authorUsername": "river.vegan",
+    "content": "Be there in a sec",
     "timestamp": "2025-02-16T21:05:00Z"
   },
   {
     "id": "msg146",
     "channelId": "c146",
-    "authorUsername": "user146",
-    "content": "Sample message 146 from user146 in c146",
+    "authorUsername": "shiloh.bbq",
+    "content": "Finally nailed the sourdough",
     "timestamp": "2025-02-16T21:10:00Z"
   },
   {
     "id": "msg147",
     "channelId": "c147",
-    "authorUsername": "user147",
-    "content": "Sample message 147 from user147 in c147",
+    "authorUsername": "arden.recipes",
+    "content": "This sauce is so easy and so good",
     "timestamp": "2025-02-16T21:15:00Z"
   },
   {
     "id": "msg148",
     "channelId": "c148",
-    "authorUsername": "user148",
-    "content": "Sample message 148 from user148 in c148",
+    "authorUsername": "dakota.mealprep",
+    "content": "This sauce is so easy and so good",
     "timestamp": "2025-02-16T21:20:00Z"
   },
   {
     "id": "msg149",
     "channelId": "c149",
-    "authorUsername": "user149",
-    "content": "Sample message 149 from user149 in c149",
+    "authorUsername": "reagan.budgeteat",
+    "content": "This sauce is so easy and so good",
     "timestamp": "2025-02-16T21:25:00Z"
   },
   {
     "id": "msg150",
     "channelId": "c150",
-    "authorUsername": "user150",
-    "content": "Sample message 150 from user150 in c150",
+    "authorUsername": "payton.pitch",
+    "content": "In the voice channel, join when you can",
     "timestamp": "2025-02-16T21:30:00Z"
   },
   {
     "id": "msg151",
     "channelId": "c151",
-    "authorUsername": "user151",
-    "content": "Sample message 151 from user151 in c151",
+    "authorUsername": "dylan.hustle",
+    "content": "What do you put in your stir fry?",
     "timestamp": "2025-02-16T21:35:00Z"
   },
   {
     "id": "msg152",
     "channelId": "c152",
-    "authorUsername": "user152",
-    "content": "Sample message 152 from user152 in c152",
+    "authorUsername": "devon.fire",
+    "content": "What do you put in your stir fry?",
     "timestamp": "2025-02-16T21:40:00Z"
   },
   {
     "id": "msg153",
     "channelId": "c153",
-    "authorUsername": "user153",
-    "content": "Sample message 153 from user153 in c153",
+    "authorUsername": "morgan.minimal",
+    "content": "Subbed coconut milk and it worked great",
     "timestamp": "2025-02-16T21:45:00Z"
   },
   {
     "id": "msg154",
     "channelId": "c154",
-    "authorUsername": "user154",
-    "content": "Sample message 154 from user154 in c154",
+    "authorUsername": "alex.sustainable",
+    "content": "Anyone have a good salmon recipe?",
     "timestamp": "2025-02-16T21:50:00Z"
   },
   {
     "id": "msg155",
     "channelId": "c155",
-    "authorUsername": "user155",
-    "content": "Sample message 155 from user155 in c155",
+    "authorUsername": "jordan.eco",
+    "content": "Be there in a sec",
     "timestamp": "2025-02-16T21:55:00Z"
   },
   {
     "id": "msg156",
     "channelId": "c156",
-    "authorUsername": "user156",
-    "content": "Sample message 156 from user156 in c156",
+    "authorUsername": "sam.mentor",
+    "content": "Hey everyone, what's up?",
     "timestamp": "2025-02-16T22:00:00Z"
   },
   {
     "id": "msg157",
     "channelId": "c157",
-    "authorUsername": "user157",
-    "content": "Sample message 157 from user157 in c157",
+    "authorUsername": "casey.career",
+    "content": "Hey everyone, what's up?",
     "timestamp": "2025-02-16T22:05:00Z"
   },
   {
     "id": "msg158",
     "channelId": "c158",
-    "authorUsername": "user158",
-    "content": "Sample message 158 from user158 in c158",
+    "authorUsername": "riley.resume",
+    "content": "Sounds good to me.",
     "timestamp": "2025-02-16T22:10:00Z"
   },
   {
     "id": "msg159",
     "channelId": "c159",
-    "authorUsername": "user159",
-    "content": "Sample message 159 from user159 in c159",
+    "authorUsername": "quinn.interview",
+    "content": "Same here.",
     "timestamp": "2025-02-16T22:15:00Z"
   },
   {
     "id": "msg160",
     "channelId": "c160",
-    "authorUsername": "user160",
-    "content": "Sample message 160 from user160 in c160",
+    "authorUsername": "skyler.remotejob",
+    "content": "In the voice channel, join when you can",
     "timestamp": "2025-02-16T22:20:00Z"
   },
   {
     "id": "msg161",
     "channelId": "c161",
-    "authorUsername": "user161",
-    "content": "Sample message 161 from user161 in c161",
+    "authorUsername": "reese.gigs",
+    "content": "Sounds good to me.",
     "timestamp": "2025-02-16T22:25:00Z"
   },
   {
     "id": "msg162",
     "channelId": "c162",
-    "authorUsername": "user162",
-    "content": "Sample message 162 from user162 in c162",
+    "authorUsername": "drew.notion",
+    "content": "That sound never gets old",
     "timestamp": "2025-02-16T22:30:00Z"
   },
   {
     "id": "msg163",
     "channelId": "c163",
-    "authorUsername": "user163",
-    "content": "Sample message 163 from user163 in c163",
+    "authorUsername": "jesse.automate",
+    "content": "Thanks for the help earlier!",
     "timestamp": "2025-02-16T22:35:00Z"
   },
   {
     "id": "msg164",
     "channelId": "c164",
-    "authorUsername": "user164",
-    "content": "Sample message 164 from user164 in c164",
+    "authorUsername": "cameron.apis",
+    "content": "Good point.",
     "timestamp": "2025-02-16T22:40:00Z"
   },
   {
     "id": "msg165",
     "channelId": "c165",
-    "authorUsername": "user165",
-    "content": "Sample message 165 from user165 in c165",
+    "authorUsername": "jamie.web3",
+    "content": "Someone share screen?",
     "timestamp": "2025-02-16T22:45:00Z"
   },
   {
     "id": "msg166",
     "channelId": "c166",
-    "authorUsername": "user166",
-    "content": "Sample message 166 from user166 in c166",
+    "authorUsername": "parker.nft",
+    "content": "Has anyone tried that yet?",
     "timestamp": "2025-02-16T22:50:00Z"
   },
   {
     "id": "msg167",
     "channelId": "c167",
-    "authorUsername": "user167",
-    "content": "Sample message 167 from user167 in c167",
+    "authorUsername": "avery.defi",
+    "content": "Good point.",
     "timestamp": "2025-02-16T22:55:00Z"
   },
   {
     "id": "msg168",
     "channelId": "c168",
-    "authorUsername": "user168",
-    "content": "Sample message 168 from user168 in c168",
+    "authorUsername": "sydney.crypto",
+    "content": "I'll check it out.",
     "timestamp": "2025-02-16T23:00:00Z"
   },
   {
     "id": "msg169",
     "channelId": "c169",
-    "authorUsername": "user169",
-    "content": "Sample message 169 from user169 in c169",
+    "authorUsername": "finley.stocks",
+    "content": "Hey everyone, what's up?",
     "timestamp": "2025-02-16T23:05:00Z"
   },
   {
     "id": "msg170",
     "channelId": "c170",
-    "authorUsername": "user170",
-    "content": "Sample message 170 from user170 in c170",
+    "authorUsername": "reign.realestate",
+    "content": "Who's in vc?",
     "timestamp": "2025-02-16T23:10:00Z"
   },
   {
     "id": "msg171",
     "channelId": "c171",
-    "authorUsername": "user171",
-    "content": "Sample message 171 from user171 in c171",
+    "authorUsername": "blake.finance",
+    "content": "Good point.",
     "timestamp": "2025-02-16T23:15:00Z"
   },
   {
     "id": "msg172",
     "channelId": "c172",
-    "authorUsername": "user172",
-    "content": "Sample message 172 from user172 in c172",
+    "authorUsername": "harper.budget",
+    "content": "Let me know if you need anything.",
     "timestamp": "2025-02-16T23:20:00Z"
   },
   {
     "id": "msg173",
     "channelId": "c173",
-    "authorUsername": "user173",
-    "content": "Sample message 173 from user173 in c173",
+    "authorUsername": "emery.deals",
+    "content": "Good point.",
     "timestamp": "2025-02-16T23:25:00Z"
   },
   {
     "id": "msg174",
     "channelId": "c174",
-    "authorUsername": "user174",
-    "content": "Sample message 174 from user174 in c174",
+    "authorUsername": "rowan.shopify",
+    "content": "Anyone around?",
     "timestamp": "2025-02-16T23:30:00Z"
   },
   {
     "id": "msg175",
     "channelId": "c175",
-    "authorUsername": "user175",
-    "content": "Sample message 175 from user175 in c175",
+    "authorUsername": "sawyer.affiliate",
+    "content": "Can't talk rn but I'm listening",
     "timestamp": "2025-02-16T23:35:00Z"
   },
   {
     "id": "msg176",
     "channelId": "c176",
-    "authorUsername": "user176",
-    "content": "Sample message 176 from user176 in c176",
+    "authorUsername": "ellis.seo",
+    "content": "Anyone around?",
     "timestamp": "2025-02-16T23:40:00Z"
   },
   {
     "id": "msg177",
     "channelId": "c177",
-    "authorUsername": "user177",
-    "content": "Sample message 177 from user177 in c177",
+    "authorUsername": "hayden.marketing",
+    "content": "Thanks for the help earlier!",
     "timestamp": "2025-02-16T23:45:00Z"
   },
   {
     "id": "msg178",
     "channelId": "c178",
-    "authorUsername": "user178",
-    "content": "Sample message 178 from user178 in c178",
+    "authorUsername": "kendall.copy",
+    "content": "Thanks for the help earlier!",
     "timestamp": "2025-02-16T23:50:00Z"
   },
   {
     "id": "msg179",
     "channelId": "c179",
-    "authorUsername": "user179",
-    "content": "Sample message 179 from user179 in c179",
+    "authorUsername": "taylor.social",
+    "content": "This is great.",
     "timestamp": "2025-02-16T23:55:00Z"
   },
   {
     "id": "msg180",
     "channelId": "c180",
-    "authorUsername": "user180",
-    "content": "Sample message 180 from user180 in c180",
+    "authorUsername": "marley.influencer",
+    "content": "Who's in vc?",
     "timestamp": "2025-02-17T00:00:00Z"
   },
   {
     "id": "msg181",
     "channelId": "c181",
-    "authorUsername": "user181",
-    "content": "Sample message 181 from user181 in c181",
+    "authorUsername": "remy.youtube",
+    "content": "This is great.",
     "timestamp": "2025-02-17T00:05:00Z"
   },
   {
     "id": "msg182",
     "channelId": "c182",
-    "authorUsername": "user182",
-    "content": "Sample message 182 from user182 in c182",
+    "authorUsername": "sage.tiktok",
+    "content": "Hey everyone, what's up?",
     "timestamp": "2025-02-17T00:10:00Z"
   },
   {
     "id": "msg183",
     "channelId": "c183",
-    "authorUsername": "user183",
-    "content": "Sample message 183 from user183 in c183",
+    "authorUsername": "river.bots",
+    "content": "Thanks for the help earlier!",
     "timestamp": "2025-02-17T00:15:00Z"
   },
   {
     "id": "msg184",
     "channelId": "c184",
-    "authorUsername": "user184",
-    "content": "Sample message 184 from user184 in c184",
+    "authorUsername": "shiloh.mods",
+    "content": "This is great.",
     "timestamp": "2025-02-17T00:20:00Z"
   },
   {
     "id": "msg185",
     "channelId": "c185",
-    "authorUsername": "user185",
-    "content": "Sample message 185 from user185 in c185",
+    "authorUsername": "arden.serversetup",
+    "content": "Can't talk rn but I'm listening",
     "timestamp": "2025-02-17T00:25:00Z"
   },
   {
     "id": "msg186",
     "channelId": "c186",
-    "authorUsername": "user186",
-    "content": "Sample message 186 from user186 in c186",
+    "authorUsername": "dakota.network",
+    "content": "Let me know if you need anything.",
     "timestamp": "2025-02-17T00:30:00Z"
   },
   {
     "id": "msg187",
     "channelId": "c187",
-    "authorUsername": "user187",
-    "content": "Sample message 187 from user187 in c187",
+    "authorUsername": "reagan.hangout",
+    "content": "Hey everyone, what's up?",
     "timestamp": "2025-02-17T00:35:00Z"
   },
   {
     "id": "msg188",
     "channelId": "c188",
-    "authorUsername": "user188",
-    "content": "Sample message 188 from user188 in c188",
+    "authorUsername": "payton.chill",
+    "content": "Hey everyone, what's up?",
     "timestamp": "2025-02-17T00:40:00Z"
   },
   {
     "id": "msg189",
     "channelId": "c189",
-    "authorUsername": "user189",
-    "content": "Sample message 189 from user189 in c189",
+    "authorUsername": "dylan.latenight",
+    "content": "Let me know if you need anything.",
     "timestamp": "2025-02-17T00:45:00Z"
   },
   {
     "id": "msg190",
     "channelId": "c190",
-    "authorUsername": "user190",
-    "content": "Sample message 190 from user190 in c190",
+    "authorUsername": "devon.morning",
+    "content": "Who's in vc?",
     "timestamp": "2025-02-17T00:50:00Z"
   },
   {
     "id": "msg191",
     "channelId": "c191",
-    "authorUsername": "user191",
-    "content": "Sample message 191 from user191 in c191",
+    "authorUsername": "morgan.weekend",
+    "content": "Let me know if you need anything.",
     "timestamp": "2025-02-17T00:55:00Z"
   },
   {
     "id": "msg192",
     "channelId": "c192",
-    "authorUsername": "user192",
-    "content": "Sample message 192 from user192 in c192",
+    "authorUsername": "alex.nightowl",
+    "content": "Let me know if you need anything.",
     "timestamp": "2025-02-17T01:00:00Z"
   },
   {
     "id": "msg193",
     "channelId": "c193",
-    "authorUsername": "user193",
-    "content": "Sample message 193 from user193 in c193",
+    "authorUsername": "jordan.earlybird",
+    "content": "Has anyone tried that yet?",
     "timestamp": "2025-02-17T01:05:00Z"
   },
   {
     "id": "msg194",
     "channelId": "c194",
-    "authorUsername": "user194",
-    "content": "Sample message 194 from user194 in c194",
+    "authorUsername": "sam.gaming2",
+    "content": "Thanks for the help earlier!",
     "timestamp": "2025-02-17T01:10:00Z"
   },
   {
     "id": "msg195",
     "channelId": "c195",
-    "authorUsername": "user195",
-    "content": "Sample message 195 from user195 in c195",
+    "authorUsername": "casey.cafe",
+    "content": "In the voice channel, join when you can",
     "timestamp": "2025-02-17T01:15:00Z"
   },
   {
     "id": "msg196",
     "channelId": "c196",
-    "authorUsername": "user196",
-    "content": "Sample message 196 from user196 in c196",
+    "authorUsername": "riley.coderev",
+    "content": "Hey everyone, what's up?",
     "timestamp": "2025-02-17T01:20:00Z"
   },
   {
     "id": "msg197",
     "channelId": "c197",
-    "authorUsername": "user197",
-    "content": "Sample message 197 from user197 in c197",
+    "authorUsername": "quinn.pair",
+    "content": "Has anyone tried that yet?",
     "timestamp": "2025-02-17T01:25:00Z"
   },
   {
     "id": "msg198",
     "channelId": "c198",
-    "authorUsername": "user198",
-    "content": "Sample message 198 from user198 in c198",
+    "authorUsername": "skyler.tech",
+    "content": "I'll check it out.",
     "timestamp": "2025-02-17T01:30:00Z"
   },
   {
     "id": "msg199",
     "channelId": "c199",
-    "authorUsername": "user199",
-    "content": "Sample message 199 from user199 in c199",
+    "authorUsername": "reese.hardware",
+    "content": "Let me know if you need anything.",
     "timestamp": "2025-02-17T01:35:00Z"
   },
   {
     "id": "msg200",
     "channelId": "c200",
-    "authorUsername": "user200",
-    "content": "Sample message 200 from user200 in c200",
+    "authorUsername": "drew.retrotech",
+    "content": "Be there in a sec",
     "timestamp": "2025-02-17T01:40:00Z"
   }
 ]

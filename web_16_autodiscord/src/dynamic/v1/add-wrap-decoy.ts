@@ -56,7 +56,9 @@ export function applyV1Wrapper(
     componentKey.includes("stats-card") ||
     componentKey.includes("server-list") ||
     componentKey.includes("channel-list") ||
-    componentKey.includes("member-list");
+    componentKey.includes("member-list") ||
+    componentKey.includes("dm-list") ||
+    componentKey.includes("dm-sidebar");
   const WrapperElement = useDivWrapper ? "div" : "span";
 
   const core = shouldWrap
@@ -66,15 +68,19 @@ export function applyV1Wrapper(
           "data-dyn-wrap": componentKey,
           "data-v1": "true",
           "data-wrapper-variant": wrapperVariant,
-          // For scrollable flex children (server-list / channel-list / member-list),
-          // preserve flex growth and min-h-0 so layout doesn't collapse.
+          // For scrollable flex children (server-list / channel-list / member-list / dm-list / dm-sidebar),
+          // preserve flex growth and min-h-0 so layout doesn't collapse. Use flex flex-col
+          // so the inner scroll container (flex-1 overflow-y-auto min-h-0) gets a bounded
+          // height and can scroll; without it the inner never constrains and list stays static.
           // For footer-style forms (e.g. chat-message-form), use w-full only so the
           // wrapper doesn't take full height and compress the scrollable area above.
           className: useDivWrapper
             ? (componentKey.includes("server-list") ||
                componentKey.includes("channel-list") ||
-               componentKey.includes("member-list"))
-              ? "w-full flex-1 min-h-0"
+               componentKey.includes("member-list") ||
+               componentKey.includes("dm-list") ||
+               componentKey.includes("dm-sidebar"))
+              ? "w-full flex-1 min-h-0 flex flex-col"
               : componentKey.includes("chat-message-form")
                 ? "w-full"
                 : "w-full h-full"
