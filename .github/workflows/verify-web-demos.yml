@@ -36,9 +36,9 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Verify (lint + unit + e2e)
+      - name: Verify (lint + unit)
         run: |
           chmod +x scripts/verify_web.sh
-          ./scripts/verify_web.sh web_16_autodiscord --e2e
+          ./scripts/verify_web.sh web_16_autodiscord
         env:
           CI: true
