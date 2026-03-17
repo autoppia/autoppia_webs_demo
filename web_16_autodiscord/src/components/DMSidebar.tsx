@@ -17,6 +17,7 @@ export function DMSidebar({
   onSelectUser,
 }: DMSidebarProps) {
   const dyn = useDynamicSystem();
+  const dmOrder = dyn.v1.changeOrderElements("dm-list", Math.max(peers.length, 1));
 
   const handleSelect = (userId: string) => {
     const peer = peers.find((p) => p.id === userId);
@@ -47,7 +48,9 @@ export function DMSidebar({
               No conversations. (Demo: add friends from servers.)
             </p>
           ) : (
-            peers.map((m) => {
+            dmOrder.map((idx) => {
+              const m = peers[idx];
+              if (!m) return null;
               const isSelected = selectedUserId === m.id;
               return dyn.v1.addWrapDecoy(`dm-peer-${m.id}`, (
                 <button
