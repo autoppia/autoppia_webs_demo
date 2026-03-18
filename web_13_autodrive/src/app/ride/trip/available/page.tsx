@@ -261,31 +261,41 @@ export default function AvailableTripsPage() {
 
   useEffect(() => {
     setLoading(true);
+    let cancelled = false;
 
     const dataProvider = DynamicDataProvider.getInstance();
 
-    async function loadTrips() {
-      try {
-        await dataProvider.whenReady();
-        dataProvider.reloadIfSeedChanged(seed);
-        await dataProvider.whenReady();
+    // Race: try server data with a timeout, fall back to simulatedTrips
+    const timeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000));
 
-        const serverTrips = dataProvider.getTrips();
-        setTrips(serverTrips.length > 0 ? serverTrips : simulatedTrips);
-      } catch (error) {
-        console.error("[AvailableTripsPage] Failed to load trips:", error);
-      } finally {
-        setLoading(false);
-      }
+    async function loadFromProvider(): Promise<Trip[]> {
+      await dataProvider.whenReady();
+      dataProvider.reloadIfSeedChanged(seed);
+      await dataProvider.whenReady();
+      return dataProvider.getTrips();
     }
 
-    loadTrips();
+    Promise.race([loadFromProvider(), timeout])
+      .then((result) => {
+        if (cancelled) return;
+        const serverTrips = Array.isArray(result) ? result : [];
+        setTrips(serverTrips.length > 0 ? serverTrips : simulatedTrips);
+      })
+      .catch(() => {
+        if (!cancelled) setTrips(simulatedTrips);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
 
     const unsubscribe = dataProvider.subscribeTrips((newTrips) => {
-      setTrips(newTrips.length > 0 ? newTrips : simulatedTrips);
+      if (!cancelled && newTrips.length > 0) {
+        setTrips(newTrips);
+      }
     });
 
     return () => {
+      cancelled = true;
       unsubscribe();
     };
   }, [seed]);
