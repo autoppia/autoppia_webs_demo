@@ -158,6 +158,26 @@ export default function DiscordPage() {
     });
   }, [data]);
 
+  /** One message per DM peer from channel messages, matched by authorUsername === username */
+  const initialDmMessagesByUserId = useMemo((): Record<string, DMMessage[]> => {
+    if (!data?.messages?.length || !dmPeers.length) return {};
+    const map: Record<string, DMMessage[]> = {};
+    for (const peer of dmPeers) {
+      const msg = data.messages.find((m) => m.authorUsername === peer.username);
+      if (msg) {
+        map[peer.id] = [
+          {
+            id: msg.id,
+            fromUserId: peer.id,
+            content: msg.content,
+            timestamp: msg.timestamp,
+          },
+        ];
+      }
+    }
+    return map;
+  }, [data?.messages, dmPeers]);
+
   const selectedDMPeer = useMemo(
     () =>
       selectedUserId
@@ -166,10 +186,16 @@ export default function DiscordPage() {
     [dmPeers, selectedUserId],
   );
 
-  const dmMessagesForPeer = useMemo(
-    () => (selectedUserId ? (dmMessages[selectedUserId] ?? []) : []),
-    [dmMessages, selectedUserId],
-  );
+  const dmMessagesForPeer = useMemo(() => {
+    if (!selectedUserId) return [];
+    const initial = initialDmMessagesByUserId[selectedUserId] ?? [];
+    const fromState = dmMessages[selectedUserId] ?? [];
+    const merged = [...initial, ...fromState].sort(
+      (a, b) =>
+        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+    );
+    return merged;
+  }, [selectedUserId, initialDmMessagesByUserId, dmMessages]);
 
   const voiceChannelsWithPresence = useMemo(() => {
     const allChannels = allChannelsForLookup.filter((c) => c.type === "voice");
