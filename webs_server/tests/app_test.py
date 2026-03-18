@@ -34,8 +34,21 @@ def generate_web_url() -> str:
 
 def generate_event_data() -> Dict[str, Any]:
     """Generates diverse event data."""
-    event_type = random.choice(["click", "page_view", "form_submission", "search", "add_to_cart", "purchase", "video_play"])
-    data: Dict[str, Any] = {"event_type": event_type, "timestamp": asyncio.get_event_loop().time()}
+    event_type = random.choice(
+        [
+            "click",
+            "page_view",
+            "form_submission",
+            "search",
+            "add_to_cart",
+            "purchase",
+            "video_play",
+        ]
+    )
+    data: Dict[str, Any] = {
+        "event_type": event_type,
+        "timestamp": asyncio.get_event_loop().time(),
+    }
 
     if event_type == "click":
         data["element_id"] = f"btn-{generate_random_string(5)}"
@@ -61,8 +74,17 @@ def generate_event_data() -> Dict[str, Any]:
     elif event_type == "purchase":
         data["order_id"] = str(uuid.uuid4())
         data["total_amount"] = round(random.uniform(50.0, 2000.0), 2)
-        data["items"] = [{"product_id": generate_random_string(8).upper(), "quantity": random.randint(1, 3)} for _ in range(random.randint(1, 4))]
-        data["customer_details"] = {"loyalty_member": random.choice([True, False]), "segment": f"seg-{random.randint(1, 5)}"}
+        data["items"] = [
+            {
+                "product_id": generate_random_string(8).upper(),
+                "quantity": random.randint(1, 3),
+            }
+            for _ in range(random.randint(1, 4))
+        ]
+        data["customer_details"] = {
+            "loyalty_member": random.choice([True, False]),
+            "segment": f"seg-{random.randint(1, 5)}",
+        }
     elif event_type == "video_play":
         data["video_id"] = f"vid_{generate_random_string(10)}"
         data["duration_watched_seconds"] = random.randint(1, 600)

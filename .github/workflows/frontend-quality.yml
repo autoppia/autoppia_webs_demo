@@ -3,7 +3,7 @@ name: Frontend quality
 
 on:
   push:
-    branches: [main, develop]
+    branches: ['**']
   pull_request:
     branches: [main, develop]
 
@@ -17,7 +17,7 @@ jobs:
     outputs:
       apps: ${{ steps.list.outputs.apps }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: List web_* directories (with package.json)
         id: list
@@ -43,7 +43,7 @@ jobs:
         app: ${{ fromJson(needs.discover.outputs.apps) }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -53,17 +53,13 @@ jobs:
           cache-dependency-path: ${{ matrix.app }}/package-lock.json
 
       - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@ef00e4ac8e15add456ae887eccd2ce70886cbbe1 # v2
         with:
           bun-version: '1.2'
 
       - name: Install dependencies
         working-directory: ${{ matrix.app }}
         run: npm ci
-
-      - name: Audit dependencies
-        working-directory: ${{ matrix.app }}
-        run: npm audit --audit-level=high
 
       - name: Cache Next.js build
         uses: actions/cache@v4

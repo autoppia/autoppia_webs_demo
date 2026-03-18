@@ -133,7 +133,18 @@ def get_project_entity_metadata(project_key: str, entity_type: str) -> Dict[str,
         "web_1_autocinema": {
             "movies": {
                 "description": "Movie catalog entries",
-                "categories": ["Action", "Adventure", "Animation", "Comedy", "Documentary", "Drama", "Fantasy", "Romance", "Sci-Fi", "Thriller"],
+                "categories": [
+                    "Action",
+                    "Adventure",
+                    "Animation",
+                    "Comedy",
+                    "Documentary",
+                    "Drama",
+                    "Fantasy",
+                    "Romance",
+                    "Sci-Fi",
+                    "Thriller",
+                ],
                 "requirements": "Include realistic movie titles, descriptions, years (1900-2025), durations (60-180 minutes), ratings (0-5), directors, cast arrays, trailer URLs, image paths, genres arrays, and category field.",
             }
         },
@@ -165,31 +176,59 @@ def get_project_entity_metadata(project_key: str, entity_type: str) -> Dict[str,
                 "categories": ["Billable", "Billed", "Non-billable"],
                 "requirements": "Include realistic legal matters, client names, hours (0.5-8h), dates, and descriptions.",
             },
-            "clients": {"description": "Legal clients", "categories": ["Active", "Inactive", "Pending"], "requirements": "Include realistic company names, emails, and matter counts."},
+            "clients": {
+                "description": "Legal clients",
+                "categories": ["Active", "Inactive", "Pending"],
+                "requirements": "Include realistic company names, emails, and matter counts.",
+            },
             "matters": {
                 "description": "Legal matters/cases",
                 "categories": ["Litigation", "Corporate", "IP", "Real Estate"],
                 "requirements": "Include realistic case titles, client assignments, and status.",
             },
-            "events": {"description": "Calendar events", "categories": ["Meeting", "Court Date", "Deadline", "Call"], "requirements": "Include realistic event types, dates, and descriptions."},
-            "files": {"description": "Legal documents", "categories": ["Contract", "Brief", "Motion", "Evidence"], "requirements": "Include realistic file names, types, and sizes."},
+            "events": {
+                "description": "Calendar events",
+                "categories": ["Meeting", "Court Date", "Deadline", "Call"],
+                "requirements": "Include realistic event types, dates, and descriptions.",
+            },
+            "files": {
+                "description": "Legal documents",
+                "categories": ["Contract", "Brief", "Motion", "Evidence"],
+                "requirements": "Include realistic file names, types, and sizes.",
+            },
         },
         "web_4_autodining": {
             "restaurants": {
                 "description": "Restaurants",
-                "categories": ["Italian", "Mexican", "Asian", "American", "Mediterranean"],
+                "categories": [
+                    "Italian",
+                    "Mexican",
+                    "Asian",
+                    "American",
+                    "Mediterranean",
+                ],
                 "requirements": "Include realistic restaurant names, cuisines, areas, ratings, and prices.",
             }
         },
         "web_3_autozone": {
             "products": {
                 "description": "E-commerce products across kitchen, electronics, home, fitness, and technology",
-                "categories": ["Kitchen", "Electronics", "Home", "Fitness", "Technology"],
+                "categories": [
+                    "Kitchen",
+                    "Electronics",
+                    "Home",
+                    "Fitness",
+                    "Technology",
+                ],
                 "requirements": "Return objects with id, title, $price string, description, category, rating (1-5), brand, boolean inStock, and image paths that can be local (/images/...) or Unsplash URLs.",
             }
         },
         "web_6_automail": {
-            "emails": {"description": "Email messages", "categories": ["inbox", "sent", "draft", "trash"], "requirements": "Include realistic senders, subjects, previews, dates, and priorities."}
+            "emails": {
+                "description": "Email messages",
+                "categories": ["inbox", "sent", "draft", "trash"],
+                "requirements": "Include realistic senders, subjects, previews, dates, and priorities.",
+            }
         },
         "web_7_autodelivery": {
             "restaurants": {
@@ -266,13 +305,29 @@ def get_project_entity_metadata(project_key: str, entity_type: str) -> Dict[str,
         "web_8_autolodge": {
             "hotels": {
                 "description": "Hotel and accommodation listings",
-                "categories": ["Lake Tahoe", "Goa", "Zermatt", "Bali", "Tokyo", "Paris", "New York", "Barcelona"],
+                "categories": [
+                    "Lake Tahoe",
+                    "Goa",
+                    "Zermatt",
+                    "Bali",
+                    "Tokyo",
+                    "Paris",
+                    "New York",
+                    "Barcelona",
+                ],
                 "requirements": "Include realistic hotel titles, locations, ratings, reviews, guest capacity, bedrooms, beds, baths, dates, prices, host info (name, since years, avatar), and amenities array with icon, title, and desc.",
             }
         },
     }
 
     project_meta = metadata_map.get(project_key, {})
-    entity_meta = project_meta.get(entity_type, {"description": f"{entity_type} for {project_key}", "categories": [], "requirements": "Generate realistic, diverse data."})
+    entity_meta = project_meta.get(
+        entity_type,
+        {
+            "description": f"{entity_type} for {project_key}",
+            "categories": [],
+            "requirements": "Generate realistic, diverse data.",
+        },
+    )
 
     return entity_meta
