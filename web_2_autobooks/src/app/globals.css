@@ -221,12 +221,12 @@
   }
 }
 
-/* Hide Next.js error overlay and dev indicators completely */
+/* Hide Next.js error overlay and dev indicators completely (exclude V4 popup via data-v4) */
 #__next-build-watcher,
 .nextjs-toast-errors,
 [data-nextjs-toast],
 [data-nextjs-dialog],
-div[role="dialog"],
+div[role="dialog"]:not([data-v4="true"]),
 div[class*="nextjs"],
 div[id*="__next"],
 button[aria-label*="Issue"],

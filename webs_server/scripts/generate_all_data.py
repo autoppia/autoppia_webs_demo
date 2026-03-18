@@ -170,7 +170,11 @@ def main(argv: List[str]) -> int:
                 "mode": args.mode,
             }
             total_requests += 1
-            print(f"   → Generating {args.count} for entity '{entity_type}' ... ", end="", flush=True)
+            print(
+                f"   → Generating {args.count} for entity '{entity_type}' ... ",
+                end="",
+                flush=True,
+            )
             status, body = post_json(f"{base_url}/datasets/generate-smart", payload, timeout=1000.0)
 
             if status == 200:

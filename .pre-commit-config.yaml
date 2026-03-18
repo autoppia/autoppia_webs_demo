@@ -5,6 +5,7 @@ repos:
       - id: check-added-large-files
       - id: trailing-whitespace
       - id: end-of-file-fixer
+        exclude: ^\.vscode/
       - id: mixed-line-ending
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
