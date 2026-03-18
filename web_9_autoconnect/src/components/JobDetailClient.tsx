@@ -6,7 +6,8 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { dynamicDataProvider } from "@/dynamic/v2";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import {
-  loadAppliedJobs,
+  APPLICATION_STATUS_LABELS,
+  loadNormalizedAppliedJobs,
   persistAppliedJobs,
   type StoredAppliedJob,
 } from "@/library/localState";
@@ -19,15 +20,22 @@ function JobDetailContent({ jobId }: { jobId: string }) {
   const [appliedJobs, setAppliedJobs] = useState<
     Record<string, StoredAppliedJob>
   >({});
+  const [isAppliedJobsHydrated, setIsAppliedJobsHydrated] = useState(false);
   const isApplied = useMemo(() => Boolean(appliedJobs[jobId]), [appliedJobs, jobId]);
+  const currentStatusLabel = useMemo(() => {
+    const currentStatus = appliedJobs[jobId]?.status ?? "applied";
+    return APPLICATION_STATUS_LABELS[currentStatus];
+  }, [appliedJobs, jobId]);
 
   useEffect(() => {
-    setAppliedJobs(loadAppliedJobs());
+    setAppliedJobs(loadNormalizedAppliedJobs());
+    setIsAppliedJobsHydrated(true);
   }, []);
 
   useEffect(() => {
+    if (!isAppliedJobsHydrated) return;
     persistAppliedJobs(appliedJobs);
-  }, [appliedJobs]);
+  }, [appliedJobs, isAppliedJobsHydrated]);
 
   useEffect(() => {
     if (job) {
@@ -39,7 +47,6 @@ function JobDetailContent({ jobId }: { jobId: string }) {
         timestamp: new Date().toISOString(),
       };
 
-      console.log("📣 VIEW_JOB event:", payload);
       logEvent(EVENT_TYPES.VIEW_JOB, payload);
     }
   }, [job]);
@@ -61,6 +68,7 @@ function JobDetailContent({ jobId }: { jobId: string }) {
 
   const handleApply = () => {
     if (!job || isApplied) return;
+    const now = new Date().toISOString();
 
     logEvent(EVENT_TYPES.APPLY_FOR_JOB, {
       jobId: job.id,
@@ -71,7 +79,12 @@ function JobDetailContent({ jobId }: { jobId: string }) {
 
     setAppliedJobs((prev) => ({
       ...prev,
-      [job.id]: { job, appliedAt: new Date().toISOString() },
+      [job.id]: {
+        job,
+        appliedAt: now,
+        status: "applied",
+        statusUpdatedAt: now,
+      },
     }));
   };
 
@@ -189,16 +202,26 @@ function JobDetailContent({ jobId }: { jobId: string }) {
                   onClick={handleApply}
                   disabled={isApplied}
                 >
-                  {isApplied ? dyn.v3.getVariant("jobs_apply_done", TEXT_VARIANTS_MAP, "Applied") : dyn.v3.getVariant("apply_now_button_text", TEXT_VARIANTS_MAP, "Apply Now")}
+                  {isApplied
+                    ? currentStatusLabel
+                    : dyn.v3.getVariant("apply_now_button_text", TEXT_VARIANTS_MAP, "Apply Now")}
                 </button>
                 ), "apply-now-button-wrap")}
                 {isApplied && (
-                  <button
-                    onClick={handleCancel}
-                    className="text-sm text-red-600 hover:underline"
-                  >
-                    Cancel application
-                  </button>
+                  <>
+                    <SeedLink
+                      href="/applications/pipeline"
+                      className="text-sm text-blue-700 hover:underline"
+                    >
+                      Track application
+                    </SeedLink>
+                    <button
+                      onClick={handleCancel}
+                      className="text-sm text-red-600 hover:underline"
+                    >
+                      Cancel application
+                    </button>
+                  </>
                 )}
               </div>
             </div>

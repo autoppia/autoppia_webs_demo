@@ -5,25 +5,29 @@ import { DataReadyGate } from "@/components/DataReadyGate";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import type { Job } from "@/library/dataset";
 import {
-  loadAppliedJobs,
+  APPLICATION_STATUS_LABELS,
+  loadNormalizedAppliedJobs,
   persistAppliedJobs,
   type StoredAppliedJob,
 } from "@/library/localState";
 
 function AppliedJobsContent() {
   const [applied, setApplied] = useState<Record<string, StoredAppliedJob>>({});
+  const [isAppliedJobsHydrated, setIsAppliedJobsHydrated] = useState(false);
 
   useEffect(() => {
-    const loaded = loadAppliedJobs();
+    const loaded = loadNormalizedAppliedJobs();
     setApplied(loaded);
+    setIsAppliedJobsHydrated(true);
     logEvent(EVENT_TYPES.VIEW_APPLIED_JOBS, {
       count: Object.keys(loaded).length,
     });
   }, []);
 
   useEffect(() => {
+    if (!isAppliedJobsHydrated) return;
     persistAppliedJobs(applied);
-  }, [applied]);
+  }, [applied, isAppliedJobsHydrated]);
 
   const appliedList = useMemo(
     () =>
@@ -59,12 +63,20 @@ function AppliedJobsContent() {
             Track the roles you have already applied to.
           </p>
         </div>
-        <SeedLink
-          href="/jobs"
-          className="text-blue-700 hover:text-blue-800 font-semibold"
-        >
-          ← Back to Jobs
-        </SeedLink>
+        <div className="flex items-center gap-4">
+          <SeedLink
+            href="/applications/pipeline"
+            className="text-sm text-gray-700 hover:text-gray-900 hover:underline font-semibold"
+          >
+            Track application
+          </SeedLink>
+          <SeedLink
+            href="/jobs"
+            className="text-blue-700 hover:text-blue-800 font-semibold"
+          >
+            ← Back to Jobs
+          </SeedLink>
+        </div>
       </div>
 
       {appliedList.length === 0 ? (
@@ -78,7 +90,7 @@ function AppliedJobsContent() {
         </div>
       ) : (
         <div className="space-y-4">
-          {appliedList.map(({ job, appliedAt }) => (
+          {appliedList.map(({ job, appliedAt, status }) => (
             <div
               key={job.id}
               className="bg-white rounded-lg shadow p-4 border border-gray-100 flex flex-col gap-2"
@@ -91,8 +103,13 @@ function AppliedJobsContent() {
                   <div className="text-sm text-gray-700">{job.company}</div>
                   <div className="text-xs text-gray-500">{job.location}</div>
                 </div>
-                <div className="text-xs text-gray-500">
-                  Applied {new Date(appliedAt).toLocaleDateString()}
+                <div className="text-right">
+                  <div className="text-xs text-gray-500 mb-1">
+                    Applied {new Date(appliedAt).toLocaleDateString()}
+                  </div>
+                  <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
+                    {APPLICATION_STATUS_LABELS[status ?? "applied"]}
+                  </span>
                 </div>
               </div>
               <div className="flex items-center gap-3">

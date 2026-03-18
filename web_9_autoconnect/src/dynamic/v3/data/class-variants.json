@@ -598,5 +598,45 @@
     "save-link",
     "save-experience-link",
     "save-element"
+  ],
+  "applications_pipeline_section_class": [
+    "applications-pipeline-section",
+    "pipeline-section-shell",
+    "applications-tracker-shell",
+    "pipeline-tracker-shell",
+    "job-applications-shell",
+    "application-stage-shell"
+  ],
+  "applications_pipeline_step_active_class": [
+    "pipeline-step-active",
+    "stage-step-active",
+    "application-step-active",
+    "status-step-active",
+    "tracker-step-active",
+    "progress-step-active"
+  ],
+  "applications_pipeline_step_idle_class": [
+    "pipeline-step-idle",
+    "stage-step-idle",
+    "application-step-idle",
+    "status-step-idle",
+    "tracker-step-idle",
+    "progress-step-idle"
+  ],
+  "applications_pipeline_filters_card_class": [
+    "applications-pipeline-filters",
+    "pipeline-filters-shell",
+    "application-filters-shell",
+    "tracker-filters-shell",
+    "stage-filters-shell",
+    "pipeline-query-shell"
+  ],
+  "applications_pipeline_results_card_class": [
+    "applications-pipeline-results",
+    "pipeline-results-shell",
+    "application-results-shell",
+    "tracker-results-shell",
+    "stage-results-shell",
+    "pipeline-list-shell"
   ]
 }
