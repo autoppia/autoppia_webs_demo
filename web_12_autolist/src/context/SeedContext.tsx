@@ -3,7 +3,7 @@
 import type React from "react";
 import { createContext, useCallback, useContext, useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { clampSeed, getSeedFromSearchParams, getSeedFromUrl } from "@/shared/seed-resolver";
 
 interface SeedContextType {
   seed: number;
@@ -14,10 +14,19 @@ interface SeedContextType {
 
 const DEFAULT_SEED = 1;
 
+function defaultGetNavigationUrl(path: string): string {
+  if (!path || path.startsWith("http")) return path;
+  const [base, qs] = path.split("?");
+  const params = new URLSearchParams(qs || "");
+  params.set("seed", String(DEFAULT_SEED));
+  const query = params.toString();
+  return query ? `${base}?${query}` : base;
+}
+
 const SeedContext = createContext<SeedContextType>({
   seed: DEFAULT_SEED,
   setSeed: () => {},
-  getNavigationUrl: (path: string) => path,
+  getNavigationUrl: defaultGetNavigationUrl,
   isSeedReady: false,
 });
 
@@ -31,12 +40,11 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
 
 function SeedProviderInner({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
-  const [seed, setSeedState] = useState<number>(DEFAULT_SEED);
+  const [seed, setSeedState] = useState<number>(() => getSeedFromSearchParams(searchParams));
   const [isSeedReady, setIsSeedReady] = useState<boolean>(false);
 
-  // Source of truth: URL `?seed=` (clamped 1..999). If missing/invalid => 1.
   useEffect(() => {
-    setSeedState(getSeedFromUrl());
+    setSeedState(getSeedFromSearchParams(searchParams));
     setIsSeedReady(true);
   }, [searchParams]);
 

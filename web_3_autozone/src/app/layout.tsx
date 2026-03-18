@@ -9,6 +9,7 @@ import "./globals.css";
 import { BodyWrapper } from "@/layout/BodyWrapper";
 import { DataReadyGate } from "@/layout/DataReadyGate";
 import { SeedRedirect } from "@/components/layout/SeedRedirect";
+import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
 import { DynamicDebug } from "@/components/debug/DynamicDebug";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
@@ -37,11 +38,13 @@ export default function RootLayout({
               <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
                 <Header />
               </Suspense>
-              <DataReadyGate>
-                <BodyWrapper>
-                  {children}
-                </BodyWrapper>
-              </DataReadyGate>
+              <V4PopupLayer>
+                <DataReadyGate>
+                  <BodyWrapper>
+                    {children}
+                  </BodyWrapper>
+                </DataReadyGate>
+              </V4PopupLayer>
               <DynamicDebug />
               <Footer />
             </CartProvider>
