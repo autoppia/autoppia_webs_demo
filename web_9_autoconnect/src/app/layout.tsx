@@ -1,6 +1,7 @@
 import "./globals.css";
 import { type ReactNode, Suspense } from "react";
 import HeaderNav from "@/components/HeaderNav";
+import BottomNav from "@/components/BottomNav";
 import type { Metadata } from "next";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import LoadingFallback from "@/components/LoadingFallback";
@@ -22,7 +23,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <Suspense fallback={<LoadingFallback />}>
             <LayoutWrapper>
               <HeaderNav />
-              <main className="w-full mx-auto mt-6 px-5 md:px-24">{children}</main>
+              <main className="w-full mx-auto mt-6 px-5 pb-20 md:px-24 md:pb-0">
+                {children}
+              </main>
+              <div className="md:hidden">
+                <BottomNav />
+              </div>
               <DynamicDebug />
             </LayoutWrapper>
           </Suspense>

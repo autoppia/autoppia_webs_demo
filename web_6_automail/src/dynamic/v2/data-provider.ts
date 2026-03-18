@@ -15,12 +15,19 @@ export class DynamicDataProvider {
   private loadingPromise: Promise<void> | null = null;
 
   private constructor() {
-    // hydrate from cache if available to keep content stable across reloads
-    const cached = readCachedEmails();
-    this.emails = Array.isArray(cached) && cached.length > 0 ? cached : emails;
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
     });
+
+    if (typeof window === "undefined") {
+      this.ready = true;
+      this.resolveReady();
+      return;
+    }
+
+    // hydrate from cache if available to keep content stable across reloads
+    const cached = readCachedEmails();
+    this.emails = Array.isArray(cached) && cached.length > 0 ? cached : emails;
 
     // Initialize emails with data generation if enabled
     this.initializeEmails();

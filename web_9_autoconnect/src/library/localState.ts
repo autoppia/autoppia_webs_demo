@@ -4,10 +4,20 @@ const SAVED_POSTS_KEY = "web9_saved_posts";
 const HIDDEN_POSTS_KEY = "web9_hidden_posts";
 const APPLIED_JOBS_KEY = "web9_applied_jobs";
 const HIDDEN_POSTS_DATA_KEY = "web9_hidden_posts_data";
+const NOTIFICATION_READ_STATE_KEY = "web9_notification_read_state";
+
+export const NOTIFICATIONS_STATE_EVENT = "web9:notifications-state-change";
 
 export interface StoredAppliedJob {
   job: Job;
   appliedAt: string;
+}
+
+export type NotificationReadState = Record<string, boolean>;
+
+function emitNotificationsStateChange(): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent(NOTIFICATIONS_STATE_EVENT));
 }
 
 export function loadSavedPosts(): Post[] {
@@ -84,4 +94,27 @@ export function persistAppliedJobs(
 ): void {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(APPLIED_JOBS_KEY, JSON.stringify(applied));
+}
+
+export function loadNotificationReadState(): NotificationReadState {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.localStorage.getItem(NOTIFICATION_READ_STATE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+export function persistNotificationReadState(
+  readState: NotificationReadState
+): void {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(
+    NOTIFICATION_READ_STATE_KEY,
+    JSON.stringify(readState)
+  );
+  emitNotificationsStateChange();
 }
