@@ -28,6 +28,12 @@ export class DynamicDataProvider {
       this.resolveReady = resolve;
     });
 
+    if (typeof window === "undefined") {
+      this.ready = true;
+      this.resolveReady();
+      return;
+    }
+
     // Initialize restaurants
     this.initializeRestaurants();
 

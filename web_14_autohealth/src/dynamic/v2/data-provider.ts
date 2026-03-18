@@ -34,6 +34,13 @@ export class DynamicDataProvider {
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
     });
+
+    if (typeof window === "undefined") {
+      this.ready = true;
+      this.resolveReady();
+      return;
+    }
+
     this.initialize();
   }
 

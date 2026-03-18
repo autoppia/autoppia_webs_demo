@@ -74,7 +74,11 @@ DESC_ENTITY_TYPE = "Entity type"
 
 def _use_docker_network_for_webs() -> bool:
     """True when webserver should reach web containers via Docker network hostnames."""
-    return os.getenv("WEBS_HEALTH_USE_DOCKER_NETWORK", "false").lower() in ("true", "1", "yes")
+    return os.getenv("WEBS_HEALTH_USE_DOCKER_NETWORK", "false").lower() in (
+        "true",
+        "1",
+        "yes",
+    )
 
 
 # Docker compose project names when --demo=all (scripts/setup.sh). Index i -> (prefix, port).
@@ -359,7 +363,11 @@ app = FastAPI(
 # Add CORS middleware to allow requests from Next.js local development (HTTP for local/Docker only)
 LOCALHOST_PORTS = [f"http://localhost:{port}" for port in range(8000, 8021)] + ["http://localhost:8090"]
 # Allow 0.0.0.0 hosts used by some dev setups (e.g., npm run dev --hostname 0.0.0.0 --port 3001)
-ZERO_HOST_PORTS = [f"http://0.0.0.0:{port}" for port in range(8000, 8021)] + ["http://0.0.0.0:8090", "http://0.0.0.0:3000", "http://0.0.0.0:3001"]
+ZERO_HOST_PORTS = [f"http://0.0.0.0:{port}" for port in range(8000, 8021)] + [
+    "http://0.0.0.0:8090",
+    "http://0.0.0.0:3000",
+    "http://0.0.0.0:3001",
+]
 INTERNAL_PORTS = [
     "http://app:8002",
     "http://app:8003",
@@ -496,11 +504,17 @@ async def get_events_endpoint(
     web_url: Annotated[str, Query(description="The specific web URL to filter events for.")],
     web_agent_id: Annotated[
         str,
-        Query(max_length=255, description="The specific web agent ID to filter events for."),
+        Query(
+            max_length=255,
+            description="The specific web agent ID to filter events for.",
+        ),
     ] = "UNKNOWN_AGENT",
     validator_id: Annotated[
         str,
-        Query(max_length=255, description="The specific validator ID to filter events for."),
+        Query(
+            max_length=255,
+            description="The specific validator ID to filter events for.",
+        ),
     ] = "UNKNOWN_VALIDATOR",
 ):
     """
@@ -890,7 +904,12 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
 # --- Data Loading Helpers ---
 def _is_v2_enabled() -> bool:
     """True when ENABLE_DYNAMIC_V2 is set to an enabled value."""
-    return os.getenv("ENABLE_DYNAMIC_V2", "false").lower() not in {"false", "0", "no", "off"}
+    return os.getenv("ENABLE_DYNAMIC_V2", "false").lower() not in {
+        "false",
+        "0",
+        "no",
+        "off",
+    }
 
 
 def _apply_seeded_selection(
@@ -970,7 +989,10 @@ async def load_dataset_endpoint(
         Query(description="Selection method: select, shuffle, filter, distribute"),
     ] = "select",
     filter_key: Annotated[Optional[str], Query(description="Key to filter on (for filter method)")] = None,
-    filter_values: Annotated[Optional[str], Query(description="Comma-separated values to filter (for filter method)")] = None,
+    filter_values: Annotated[
+        Optional[str],
+        Query(description="Comma-separated values to filter (for filter method)"),
+    ] = None,
 ):
     """
     Load data from the project directory (flat layout). Original data lives in the first file
@@ -999,7 +1021,16 @@ async def load_dataset_endpoint(
             logger.info("v2 disabled or seed=1; returning original data (respecting limit), seed ignored when v2 disabled.")
             data = file_data_pool[:limit]
             effective_seed = 1 if not v2_enabled else seed_value
-            metadata = _build_load_metadata(project_key, entity_type, effective_seed, limit, "full", filter_key, None, total_available)
+            metadata = _build_load_metadata(
+                project_key,
+                entity_type,
+                effective_seed,
+                limit,
+                "full",
+                filter_key,
+                None,
+                total_available,
+            )
             return DatasetLoadResponse(
                 message=f"Original data only (v2 disabled or seed=1); returning {len(data)} items (limit={limit}, pool={total_available})",
                 metadata=metadata,
@@ -1009,7 +1040,16 @@ async def load_dataset_endpoint(
 
         filter_list = [v.strip() for v in filter_values.split(",")] if filter_values else None
         selected = _apply_seeded_selection(file_data_pool, seed_value, limit, method, filter_key, filter_values)
-        metadata = _build_load_metadata(project_key, entity_type, seed_value, limit, (method or "select").lower(), filter_key, filter_list, total_available)
+        metadata = _build_load_metadata(
+            project_key,
+            entity_type,
+            seed_value,
+            limit,
+            (method or "select").lower(),
+            filter_key,
+            filter_list,
+            total_available,
+        )
         return DatasetLoadResponse(
             message=f"Successfully selected {len(selected)} items from file storage using seed={seed_value}",
             metadata=metadata,
