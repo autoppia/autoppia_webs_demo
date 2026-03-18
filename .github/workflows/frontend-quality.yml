@@ -5,7 +5,7 @@ on:
   push:
     branches: ['**']
   pull_request:
-    branches: [main, develop]
+    branches: [main, develop, v4-centralized, fix/v-4check]
 
 concurrency:
   group: frontend-quality-${{ github.ref }}
@@ -14,6 +14,8 @@ concurrency:
 jobs:
   discover:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       apps: ${{ steps.list.outputs.apps }}
     steps:
@@ -36,6 +38,8 @@ jobs:
     name: Lint & build (${{ matrix.app }})
     needs: discover
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     timeout-minutes: 20
     strategy:
       fail-fast: false
