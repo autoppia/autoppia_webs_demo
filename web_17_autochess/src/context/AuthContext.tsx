@@ -1,6 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import type React from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { readJson, writeJson, isBrowser } from "@/shared/storage";
 import { findUser } from "@/data/users";
 import { logEvent, EVENT_TYPES } from "@/library/events";

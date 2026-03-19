@@ -262,7 +262,7 @@ function scoreMove(san: string, halfMoveIndex: number): number {
   const clean = san.replace(/[+#=QRBN]/g, "");
   const m = clean.match(/([a-h])([1-8])$/);
   const file = m ? m[1] : "";
-  const rank = m ? parseInt(m[2]) : 0;
+  const rank = m ? Number.parseInt(m[2]) : 0;
   const isCenter = (file === "d" || file === "e") && (rank === 4 || rank === 5);
   const isExtCenter = file >= "c" && file <= "f" && rank >= 3 && rank <= 6;
   const isEdge = file === "a" || file === "h";
@@ -491,7 +491,7 @@ export function stripMoveCounters(fen: string): string {
 export function generateOpeningBook(
   games: Game[],
   seed: number,
-  maxPly: number = 30,
+  maxPly = 30,
 ): Map<string, OpeningExplorerData> {
   const book = new Map<string, {
     moves: Map<string, { games: number; whiteWins: number; draws: number; blackWins: number }>;
@@ -507,10 +507,11 @@ export function generateOpeningBook(
       const fenKey = stripMoveCounters(chess.fen());
 
       // Ensure entry exists
-      if (!book.has(fenKey)) {
-        book.set(fenKey, { moves: new Map() });
+      let entry = book.get(fenKey);
+      if (!entry) {
+        entry = { moves: new Map() };
+        book.set(fenKey, entry);
       }
-      const entry = book.get(fenKey)!;
 
       // Store opening name/eco on starting positions
       if (i <= 4 && game.opening) {
@@ -519,10 +520,11 @@ export function generateOpeningBook(
       }
 
       const san = game.moves[i];
-      if (!entry.moves.has(san)) {
-        entry.moves.set(san, { games: 0, whiteWins: 0, draws: 0, blackWins: 0 });
+      let moveStats = entry.moves.get(san);
+      if (!moveStats) {
+        moveStats = { games: 0, whiteWins: 0, draws: 0, blackWins: 0 };
+        entry.moves.set(san, moveStats);
       }
-      const moveStats = entry.moves.get(san)!;
       moveStats.games++;
       if (game.result === "1-0") moveStats.whiteWins++;
       else if (game.result === "0-1") moveStats.blackWins++;

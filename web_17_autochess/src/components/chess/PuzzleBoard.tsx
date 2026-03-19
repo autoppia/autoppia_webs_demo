@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import type React from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 import type { Puzzle } from "@/shared/types";
@@ -122,14 +123,13 @@ export function PuzzleBoard({ puzzle, onSolve, onMoveAttempt, onMoveProgress, sh
           playOpponentResponse(nextMoveIdx);
         }
         return true;
-      } else {
-        // Wrong move — undo it
-        chessRef.current.undo();
-        setIncorrectSquare(to);
-        setTimeout(() => setIncorrectSquare(null), 800);
-        onMoveAttempt?.({ type: "incorrect", message: `Incorrect: ${moveResult.san}. Try again.`, move: moveResult.san });
-        return false;
       }
+      // Wrong move — undo it
+      chessRef.current.undo();
+      setIncorrectSquare(to);
+      setTimeout(() => setIncorrectSquare(null), 800);
+      onMoveAttempt?.({ type: "incorrect", message: `Incorrect: ${moveResult.san}. Try again.`, move: moveResult.san });
+      return false;
     } catch {
       setIncorrectSquare(to);
       setTimeout(() => setIncorrectSquare(null), 800);

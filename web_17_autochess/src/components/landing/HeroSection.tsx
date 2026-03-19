@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useEventLogger } from "@/hooks/useEventLogger";
 import { DynamicWrapper } from "@/dynamic/v1/DynamicWrapper";
@@ -60,7 +61,7 @@ export function HeroSection() {
           <div className="grid grid-cols-8 grid-rows-8 h-full w-full">
             {Array.from({ length: 64 }).map((_, i) => (
               <div
-                key={i}
+                key={`square-${Math.floor(i / 8)}-${i % 8}`}
                 className={`${(Math.floor(i / 8) + (i % 8)) % 2 === 0 ? "bg-white" : ""}`}
               />
             ))}

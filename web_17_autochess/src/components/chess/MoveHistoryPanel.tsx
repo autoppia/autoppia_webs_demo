@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import type React from "react";
+import { useRef, useEffect } from "react";
 import type { MoveHistoryEntry } from "@/shared/types";
 import { CheckCircle, XCircle, Info, Trophy, Lightbulb, ArrowRight } from "lucide-react";
 
@@ -50,6 +51,7 @@ const ENTRY_STYLES: Record<MoveHistoryEntry["type"], { bg: string; border: strin
 export function MoveHistoryPanel({ entries }: MoveHistoryPanelProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: scroll to bottom when entries change (ref not a dep)
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -71,7 +73,7 @@ export function MoveHistoryPanel({ entries }: MoveHistoryPanelProps) {
             const style = ENTRY_STYLES[entry.type];
             return (
               <div
-                key={i}
+                key={`${entry.type}-${entry.message}-${entry.move ?? ""}-${i}`}
                 className={`flex items-start gap-2.5 px-3 py-2 rounded-lg border ${style.bg} ${style.border}`}
               >
                 {style.icon}

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import type React from 'react';
 import { useSeed } from '@/context/SeedContext';
 import { seedRandom } from '@/dynamic/utils/seedRandom';
 import { generateRandomString, selectRandom } from '@/dynamic/utils/variations';

@@ -2,7 +2,7 @@
 
 import { generateGamePositions, stripMoveCounters } from "@/data/generators";
 import { evaluateGameMoves, evaluatePosition } from "@/library/engine";
-import { EVENT_TYPES } from "@/library/events";
+import { EVENT_TYPES, type EventType } from "@/library/events";
 import type {
   AnnotatedMove,
   OpeningExplorerData,
@@ -17,7 +17,7 @@ export interface UseAnalysisBoardParams {
   seed: number;
   openingBook: Map<string, OpeningExplorerData>;
   initialFen?: string;
-  logInteraction: (eventType: string, data?: Record<string, unknown>) => void;
+  logInteraction: (eventType: EventType, data?: Record<string, unknown>) => void;
 }
 
 export interface UseAnalysisBoardReturn {
@@ -40,7 +40,7 @@ export interface UseAnalysisBoardReturn {
   openingData: OpeningExplorerData | null;
 
   // Board measurement
-  boardContainerRef: React.RefObject<HTMLDivElement | null>;
+  boardContainerRef: React.RefObject<HTMLDivElement>;
   boardHeight: number;
 
   // Handlers

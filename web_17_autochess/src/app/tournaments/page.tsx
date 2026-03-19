@@ -74,13 +74,16 @@ export default function TournamentsPage() {
     if (country) setCountryFilter(country);
     if (gameType) {
       const types = gameType.split(",");
+      type GameType = (typeof GAME_TYPES)[number];
+      const isGameType = (s: string): s is GameType =>
+        (GAME_TYPES as readonly string[]).includes(s);
       // Single type: use the existing single-select filter
-      if (types.length === 1 && GAME_TYPES.includes(types[0])) {
+      if (types.length === 1 && isGameType(types[0])) {
         setTypeFilter(types[0]);
       }
       // Multiple types: pick the first valid one (single-select filter)
       else if (types.length > 1) {
-        const firstValid = types.find((t) => GAME_TYPES.includes(t));
+        const firstValid = types.find(isGameType);
         if (firstValid) setTypeFilter(firstValid);
       }
     }

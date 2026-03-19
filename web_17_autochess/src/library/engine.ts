@@ -100,7 +100,7 @@ function mirrorIndex(idx: number): number {
  * Evaluate a chess position. Returns centipawns from white's perspective.
  * Uses material counting + piece-square tables + seed-based noise for realism.
  */
-export function evaluatePosition(fen: string, seed: number = 1): PositionEval {
+export function evaluatePosition(fen: string, seed = 1): PositionEval {
   const chess = new Chess(fen);
   const board = chess.board();
   let score = 0;
@@ -187,7 +187,7 @@ export function classifyMove(cpBefore: number, cpAfter: number, isWhiteMove: boo
  */
 const DEFAULT_START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-export function evaluateGameMoves(moves: string[], seed: number = 1, startFen?: string): AnnotatedMove[] {
+export function evaluateGameMoves(moves: string[], seed = 1, startFen?: string): AnnotatedMove[] {
   if (moves.length === 0) return [];
 
   const isStandardStart = !startFen || startFen === DEFAULT_START_FEN;

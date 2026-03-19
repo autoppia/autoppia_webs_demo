@@ -4,6 +4,8 @@
  * Stub for web_17_autochess — V2 DB mode is not used.
  */
 
+import { dynamicDataProvider } from "./data-provider";
+
 export { dynamicDataProvider, isDynamicModeEnabled } from "./data-provider";
 export type { ChessDataRecord } from "./data-provider";
 

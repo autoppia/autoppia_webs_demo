@@ -71,12 +71,12 @@ export default function PlayerDetailPage() {
   const stats = useMemo(() => {
     if (!player || playerGames.length === 0) return null;
 
-    let whiteGames = 0,
-      whiteWins = 0,
-      whiteDraws = 0;
-    let blackGames = 0,
-      blackWins = 0,
-      blackDraws = 0;
+    let whiteGames = 0;
+    let whiteWins = 0;
+    let whiteDraws = 0;
+    let blackGames = 0;
+    let blackWins = 0;
+    let blackDraws = 0;
     const openingStats: Record<
       string,
       { games: number; wins: number; draws: number; losses: number }

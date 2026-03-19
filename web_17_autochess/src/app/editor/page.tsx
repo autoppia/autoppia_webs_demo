@@ -217,7 +217,7 @@ export default function EditorPage() {
         // Invalid FEN — ignore
       }
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   // Data generation for analysis mode
   const games = useMemo(() => {

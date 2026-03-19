@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import type React from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { DynamicWrapper } from "@/dynamic/v1/DynamicWrapper";
 import { DynamicText } from "@/dynamic/v3/DynamicText";

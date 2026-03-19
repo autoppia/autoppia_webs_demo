@@ -36,6 +36,7 @@ export function MoveList({ annotatedMoves, activeMoveIndex, onMoveClick, embedde
   const activeRef = useRef<HTMLButtonElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: scroll when active move changes (refs are not deps)
   useEffect(() => {
     if (activeRef.current && containerRef.current) {
       activeRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });

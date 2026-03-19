@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { DynamicWrapper } from "@/dynamic/v1/DynamicWrapper";

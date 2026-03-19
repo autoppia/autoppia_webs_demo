@@ -73,7 +73,7 @@ export default function AnalysisPage() {
         // Invalid FEN — ignore
       }
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchParams, board]);
 
   // Load game from URL param on mount
   useEffect(() => {
@@ -91,7 +91,7 @@ export default function AnalysisPage() {
         });
       }
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchParams, games, board, logInteraction]);
 
   // --- Page-specific handlers ---
 

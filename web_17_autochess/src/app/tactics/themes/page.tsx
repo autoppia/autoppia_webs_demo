@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useMemo } from "react";
+import type React from "react";
+import { useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
 import { useAuth } from "@/context/AuthContext";
 import { useSeedRouter } from "@/hooks/useSeedRouter";

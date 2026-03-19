@@ -318,7 +318,7 @@ export default function PlayersPage() {
                   }, [])
                   .map((p, i) =>
                     p === "..." ? (
-                      <span key={`dots-${i}`} className="px-2 text-zinc-600">
+                      <span key={`ellipsis-${i}-${String(p)}`} className="px-2 text-zinc-600">
                         ...
                       </span>
                     ) : (
