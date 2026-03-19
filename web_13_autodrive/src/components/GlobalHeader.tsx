@@ -22,6 +22,7 @@ export default function GlobalHeader({ preserveSeed = true, excludeItems = [] }:
     nav_about: ["About", "About us", "Company", "Why AutoDriver", "Story"],
     nav_help: ["Help", "Support", "Assistance", "Guide", "Help Center"],
     nav_contact: ["Contact", "Contact us", "Reach out", "Talk to us", "Get in touch"],
+    nav_available: ["Available Trips", "Browse Trips", "Find a Trip", "Trip Offers", "Explore Trips"],
     nav_trips: ["My trips", "Trips", "History", "Your rides", "Bookings"],
     brand: ["AutoDriver", "RideSmart", "DriveNow", "UrbanDrive", "TripWave"],
     profile_name: ["Emma Reyes", "E. Reyes", "Emma R.", "E. R.", "Driver Emma"],
@@ -29,6 +30,7 @@ export default function GlobalHeader({ preserveSeed = true, excludeItems = [] }:
 
   const navItems = useMemo(() => ([
     { key: "ride", href: "/ride/trip", textKey: "nav_ride", label: "Ride" },
+    { key: "available", href: "/ride/trip/available", textKey: "nav_available", label: "Available Trips" },
     { key: "about", href: "/about", textKey: "nav_about", label: "About" },
     { key: "help", href: "/help", textKey: "nav_help", label: "Help" },
     { key: "contact", href: "/contact", textKey: "nav_contact", label: "Contact" },

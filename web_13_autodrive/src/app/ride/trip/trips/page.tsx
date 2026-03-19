@@ -554,6 +554,12 @@ export default function TripsDashboardPage() {
               >
                 {getText('trips-aside-cta', 'Request a ride')}
               </button>
+              <button
+                className="bg-white text-[#2095d2] border-2 border-[#2095d2] rounded-md px-5 py-3 w-full font-bold text-base shadow hover:bg-[#e6f6fc] transition mt-3"
+                onClick={() => router.push("/ride/trip/available")}
+              >
+                {getText('trips-aside-browse', 'Browse Available Trips')}
+              </button>
             </div>
           </aside>
         </div>
