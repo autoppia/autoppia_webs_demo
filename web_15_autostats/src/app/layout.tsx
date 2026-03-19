@@ -12,6 +12,7 @@ import { DynamicDebug } from "@/components/debug/DynamicDebug";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { BottomNav } from "@/components/layout/BottomNav";
+import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,14 +47,16 @@ export default function RootLayout({
                   <Suspense fallback={null}>
                     <SeedRedirect />
                   </Suspense>
-                  <Header />
-                  <main className="flex-1 w-full pb-16 md:pb-0">
-                    <div className="container mx-auto px-6 max-w-[1400px]">
-                      {children}
-                    </div>
-                  </main>
-                  <Footer />
-                  <BottomNav />
+                  <V4PopupLayer>
+                    <Header />
+                    <main className="flex-1 w-full pb-16 md:pb-0">
+                      <div className="container mx-auto px-6 max-w-[1400px]">
+                        {children}
+                      </div>
+                    </main>
+                    <Footer />
+                    <BottomNav />
+                  </V4PopupLayer>
                   <DynamicDebug />
                 </FavoritesProvider>
               </WalletProvider>
