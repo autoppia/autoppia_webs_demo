@@ -12,7 +12,7 @@ import { useSeed } from "@/context/SeedContext";
 import { applyV1Wrapper } from "../v1/add-wrap-decoy";
 import { generateDynamicOrder } from "../v1/change-order-elements";
 import { getVariant } from "../v3/utils/variant-selector";
-import { isV1Enabled, isV2Enabled, isV3Enabled } from "./flags";
+import { isV1Enabled, isV2Enabled, isV3Enabled, isV4Enabled } from "./flags";
 import type { ReactNode } from "react";
 
 // ============================================================================
@@ -116,6 +116,10 @@ export function useDynamicSystem() {
           if (!isV3Enabled()) effectiveSeed = 1;
           return getVariant(effectiveSeed, key, variants, fallback);
         },
+      },
+
+      v4: {
+        isEnabled: () => isV4Enabled(),
       },
 
       selectVariantIndex: (key: string, count: number) =>

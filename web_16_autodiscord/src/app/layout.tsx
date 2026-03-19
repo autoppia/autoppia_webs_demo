@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import { SeedProvider } from "@/context/SeedContext";
 import { DataReadyGate } from "@/components/layout/DataReadyGate";
+import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
 
 const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem("autodiscord-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);else document.documentElement.setAttribute("data-theme","dark")}catch(e){document.documentElement.setAttribute("data-theme","dark")}})()`;
 
@@ -30,7 +31,9 @@ export default function RootLayout({
           }
         >
           <SeedProvider>
-            <DataReadyGate>{children}</DataReadyGate>
+            <V4PopupLayer>
+              <DataReadyGate>{children}</DataReadyGate>
+            </V4PopupLayer>
           </SeedProvider>
         </Suspense>
       </body>
