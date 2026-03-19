@@ -490,5 +490,53 @@
     "all-jobs-view-link",
     "jobs-view-link",
     "view-jobs-link"
+  ],
+  "applications_pipeline_section": [
+    "applications-pipeline-section",
+    "pipeline-section",
+    "job-applications-section",
+    "application-stage-section",
+    "applications-tracker-section",
+    "pipeline-tracker-section"
+  ],
+  "applications_pipeline_stepper": [
+    "applications-pipeline-stepper",
+    "pipeline-stepper",
+    "application-stage-stepper",
+    "status-stepper",
+    "application-progress-stepper",
+    "job-stage-stepper"
+  ],
+  "applications_pipeline_filters_card": [
+    "applications-pipeline-filters",
+    "pipeline-filters-card",
+    "application-filters-panel",
+    "pipeline-query-filters",
+    "application-search-filters",
+    "tracker-filters-card"
+  ],
+  "applications_pipeline_search_input": [
+    "applications-pipeline-search-input",
+    "pipeline-search-input",
+    "application-search-input",
+    "pipeline-query-input",
+    "application-filter-input",
+    "stage-search-input"
+  ],
+  "applications_pipeline_results_card": [
+    "applications-pipeline-results",
+    "pipeline-results-card",
+    "application-results-panel",
+    "pipeline-list-card",
+    "application-tracker-results",
+    "stage-results-card"
+  ],
+  "applications_pipeline_results_list": [
+    "applications-pipeline-results-list",
+    "pipeline-results-list",
+    "application-results-list",
+    "pipeline-tracker-list",
+    "application-stage-list",
+    "job-application-results-list"
   ]
 }

@@ -1,17 +1,16 @@
 "use client";
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, type ChangeEvent } from "react";
 import JobCard from "@/components/JobCard";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSeed } from "@/context/SeedContext";
 import { dynamicDataProvider } from "@/dynamic/v2";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import type { Job } from "@/library/dataset";
 import {
-  loadAppliedJobs,
+  loadNormalizedAppliedJobs,
   persistAppliedJobs,
   type StoredAppliedJob,
 } from "@/library/localState";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
@@ -24,8 +23,6 @@ interface Filters {
 }
 
 function JobsContent() {
-  const { seed } = useSeed();
-  const layoutSeed = seed;
   const dyn = useDynamicSystem();
   const [filters, setFilters] = useState<Filters>({
     search: "",
@@ -37,14 +34,17 @@ function JobsContent() {
   const [appliedJobs, setAppliedJobs] = useState<
     Record<string, StoredAppliedJob>
   >({});
+  const [isAppliedJobsHydrated, setIsAppliedJobsHydrated] = useState(false);
 
   useEffect(() => {
-    setAppliedJobs(loadAppliedJobs());
+    setAppliedJobs(loadNormalizedAppliedJobs());
+    setIsAppliedJobsHydrated(true);
   }, []);
 
   useEffect(() => {
+    if (!isAppliedJobsHydrated) return;
     persistAppliedJobs(appliedJobs);
-  }, [appliedJobs]);
+  }, [appliedJobs, isAppliedJobsHydrated]);
 
   // Get jobs from dynamic provider
   const mockJobs = dynamicDataProvider.getJobs();
@@ -140,27 +140,35 @@ function JobsContent() {
     () => filterJobsBy(filters),
     [filters, filterJobsBy]
   );
+  const visibleJobs = useMemo(
+    () => filteredJobs.filter((job) => !appliedJobs[job.id]),
+    [filteredJobs, appliedJobs]
+  );
   const orderedJobs = useMemo(() => {
-    const order = dyn.v1.changeOrderElements("jobs-list", filteredJobs.length);
-    return order.map((idx) => filteredJobs[idx]);
-  }, [filteredJobs, dyn.v1.changeOrderElements]);
+    const order = dyn.v1.changeOrderElements("jobs-list", visibleJobs.length);
+    return order
+      .map((idx) => visibleJobs[idx])
+      .filter((job): job is Job => Boolean(job));
+  }, [visibleJobs, dyn.v1.changeOrderElements]);
 
   function triggerSearchEvent() {
     const query = filters.search.trim();
     logEvent(EVENT_TYPES.SEARCH_JOBS, {
       query,
       filters,
-      resultCount: filteredJobs.length,
+      resultCount: visibleJobs.length,
     });
   }
-  function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleSearchInput(e: ChangeEvent<HTMLInputElement>) {
     const val = e.target.value;
     const nextFilters = { ...filters, search: val };
     setFilters(nextFilters);
 
     const trimmed = val.trim();
     if (trimmed.length > 0) {
-      const nextResults = filterJobsBy(nextFilters);
+      const nextResults = filterJobsBy(nextFilters).filter(
+        (job) => !appliedJobs[job.id]
+      );
       logEvent(EVENT_TYPES.SEARCH_JOBS, {
         query: trimmed,
         filters: nextFilters,
@@ -204,25 +212,30 @@ function JobsContent() {
     if (!hasActiveFilters) return;
     logEvent(EVENT_TYPES.FILTER_JOBS, {
       filters: filtersWithoutSearch,
-      resultCount: filteredJobs.length,
+      resultCount: visibleJobs.length,
     });
   }, [
     filtersWithoutSearch,
-    filteredJobs.length,
+    visibleJobs.length,
     hasActiveFilters,
   ]);
 
   const handleApplyJob = (job: Job) => {
     setAppliedJobs((prev) => {
       if (prev[job.id]) return prev;
+      const now = new Date().toISOString();
       return {
         ...prev,
-        [job.id]: { job, appliedAt: new Date().toISOString() },
+        [job.id]: {
+          job,
+          appliedAt: now,
+          status: "applied",
+          statusUpdatedAt: now,
+        },
       };
     });
   };
 
-  const shuffledJobs = orderedJobs;
   const jobCardsClasses = "grid grid-cols-1 md:grid-cols-2 gap-4";
   const filtersClasses = "";
 
@@ -232,13 +245,13 @@ function JobsContent() {
         <h1 className="font-bold text-2xl">
           {dyn.v3.getVariant("jobs_title", TEXT_VARIANTS_MAP, "Job Search")}
         </h1>
-        <Link
-          href="/jobs/applied"
+        <SeedLink
+          href="/applications/pipeline"
           id={dyn.v3.getVariant("view_all_jobs_link", ID_VARIANTS_MAP, "view-all-jobs-link")}
           className={`text-sm text-blue-700 hover:underline font-semibold ${dyn.v3.getVariant("view_applied_jobs_link", CLASS_VARIANTS_MAP, "")}`}
         >
           View applied jobs ({Object.keys(appliedJobs).length})
-        </Link>
+        </SeedLink>
       </div>
 
       {/* Search Bar */}
@@ -370,7 +383,7 @@ function JobsContent() {
       {/* Results Count */}
       <div className="mb-4">
         <p className="text-gray-600">
-          Showing {filteredJobs.length} of {mockJobs.length} jobs
+          Showing {visibleJobs.length} of {mockJobs.length} jobs
         </p>
       </div>
 
@@ -379,7 +392,7 @@ function JobsContent() {
         className={jobCardsClasses}
         id={dyn.v3.getVariant("jobs_list_container", ID_VARIANTS_MAP, "jobs_list_container")}
       >
-        {shuffledJobs.length === 0 ? (
+        {orderedJobs.length === 0 ? (
           <div className="text-center py-8">
             <div className="text-gray-500 italic mb-2">No jobs found.</div>
             <p className="text-sm text-gray-400">
@@ -387,7 +400,7 @@ function JobsContent() {
             </p>
           </div>
         ) : (
-          shuffledJobs.map((job) => (
+          orderedJobs.map((job) => (
             <JobCard
               key={job.id}
               job={job}

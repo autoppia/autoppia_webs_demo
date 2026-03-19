@@ -288,5 +288,10 @@
   "profile_comment_placeholder": ["Share something...", "What's on your mind?", "Write an update..."],
   "profile_post_button_text": ["Post", "Share", "Publish"],
   "cancel_text": ["Cancel", "Close", "Discard"],
-  "save_experience_text": ["Save experience", "Save", "Save changes"]
+  "save_experience_text": ["Save experience", "Save", "Save changes"],
+  "applications_pipeline_title": ["My Job Applications", "Application Pipeline", "Application Tracker"],
+  "applications_pipeline_subtitle": ["Track your application progress across each stage.", "Monitor each application by hiring stage.", "Follow your applications through every step."],
+  "applications_pipeline_showing_records": ["Showing {count} records", "{count} records shown", "{count} visible applications"],
+  "applications_pipeline_search_placeholder": ["Search by title, company, or location", "Search applications by role or company", "Find applications by title or location"],
+  "applications_pipeline_reset_filters": ["Reset filters", "Clear filters", "Reset search"]
 }
