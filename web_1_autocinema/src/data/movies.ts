@@ -92,7 +92,7 @@ const normalizeMovie = (movie: DatasetMovie): Movie => {
   const synopsis = movie.description?.trim() || movie.desc?.trim() || "No synopsis available.";
   const year = Math.round(coerceNumber(movie.year, new Date().getFullYear()));
   const duration = Math.round(coerceNumber(movie.duration, 90));
-  const rating = Math.min(5, Math.max(0, Number(coerceNumber(movie.rating, 4).toFixed(1))));
+  const rating = Math.min(10, Math.max(0, Number(coerceNumber(movie.rating, 0).toFixed(1))));
   const genres = normalizeGenres(movie.genres);
   const category = movie.category?.trim() || genres[0] || "Drama";
 

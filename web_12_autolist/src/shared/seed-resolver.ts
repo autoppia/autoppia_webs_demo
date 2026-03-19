@@ -11,15 +11,25 @@ export function clampSeed(seed: number): number {
   return seed;
 }
 
+/** Use for SSR + client so server and client get the same seed (avoids hydration mismatch). */
+export function getSeedFromSearchParams(params: URLSearchParams | { get(name: string): string | null }): number {
+  try {
+    const raw = params.get("seed");
+    if (!raw) return SEED_RANGE.defaultValue;
+    const parsed = Number.parseInt(raw, 10);
+    if (!Number.isFinite(parsed)) return SEED_RANGE.defaultValue;
+    return clampSeed(parsed);
+  } catch {
+    // ignore
+  }
+  return SEED_RANGE.defaultValue;
+}
+
 export function getSeedFromUrl(): number {
   if (typeof window === "undefined") return SEED_RANGE.defaultValue;
   try {
     const params = new URLSearchParams(window.location.search);
-    const raw = params.get("seed");
-    if (raw) {
-      const parsed = Number.parseInt(raw, 10);
-      if (Number.isFinite(parsed)) return clampSeed(parsed);
-    }
+    return getSeedFromSearchParams(params);
   } catch {
     // ignore
   }
