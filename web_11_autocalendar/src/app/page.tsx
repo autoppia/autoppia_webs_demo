@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogFooter,
   DialogTitle,
+  DialogDescription,
   DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -484,19 +485,42 @@ function CalendarApp() {
     );
   }, [events]);
 
-  const [myCalendars, setMyCalendars] = useState<Calendar[]>([]);
+  const [myCalendars, setMyCalendars] = useState<Calendar[]>(() =>
+    uniqueCalendars.map(([name, color]) => ({
+      name,
+      enabled: true,
+      color,
+    }))
+  );
 
   // Update calendars when events change
   useEffect(() => {
-    if (uniqueCalendars.length > 0) {
-      const calendarMap = new Map(myCalendars.map(c => [c.name, c]));
-      const newCalendars = uniqueCalendars.map(([name, color]) => {
+    if (uniqueCalendars.length === 0) return;
+
+    setMyCalendars((prev) => {
+      const calendarMap = new Map(prev.map((c) => [c.name, c]));
+      const next = uniqueCalendars.map(([name, color]) => {
         const existing = calendarMap.get(name);
         return existing || { name, enabled: true, color };
       });
-      setMyCalendars(newCalendars);
-    }
-  }, [uniqueCalendars, myCalendars]);
+
+      const isSameLength = prev.length === next.length;
+      const isSameContent =
+        isSameLength &&
+        prev.every(
+          (cal, idx) =>
+            cal.name === next[idx].name &&
+            cal.enabled === next[idx].enabled &&
+            cal.color === next[idx].color
+        );
+
+      if (isSameContent) {
+        return prev;
+      }
+
+      return next;
+    });
+  }, [uniqueCalendars]);
   const orderedCalendars = useMemo(() => {
     const count = myCalendars.length;
     if (count <= 1) return myCalendars;
@@ -2238,11 +2262,18 @@ function CalendarApp() {
         {addWrapDecoy(
           "add-calendar-modal",
           (
-            <DialogContent className={`max-w-md ${getClassVariant("modal")}`} id={getIdVariant("add-calendar-modal")}>
+            <DialogContent
+              className={`max-w-md ${getClassVariant("modal")}`}
+              id={getIdVariant("add-calendar-modal")}
+              aria-describedby={getIdVariant("add-calendar-modal-description")}
+            >
               <DialogHeader>
                 <DialogTitle className="text-[#1b1a1a] font-normal text-xl mb-2">
                   {getTextVariant("add_calendar_title", "Create new calendar")}
                 </DialogTitle>
+                <DialogDescription id={getIdVariant("add-calendar-modal-description")}>
+                  {getTextVariant("add_calendar_description", "Set up a new calendar with a name, description, and color.")}
+                </DialogDescription>
               </DialogHeader>
               {addWrapDecoy(
                 "add-calendar-form",
@@ -2320,12 +2351,19 @@ function CalendarApp() {
         {addWrapDecoy(
           "event-modal",
           (
-            <DialogContent className={`max-w-xl ${getClassVariant("modal")}`} id={getIdVariant("event-modal")}>
+            <DialogContent
+              className={`max-w-xl ${getClassVariant("modal")}`}
+              id={getIdVariant("event-modal")}
+              aria-describedby={getIdVariant("event-modal-description")}
+            >
               <form onSubmit={handleModalSave} className="space-y-5" id={`${getIdVariant("event-modal")}-form`}>
                 <DialogHeader>
                   <DialogTitle id={getIdVariant("event-modal-title")}>
                     {eventModal.editing ? getLocalText("modal_heading", "Edit event") : getLocalText("modal_heading", "Add event")}
                   </DialogTitle>
+                  <DialogDescription id={getIdVariant("event-modal-description")}>
+                    {getTextVariant("event_modal_description", "Fill in the event details, attendees, and options, then save to add it to your calendar.")}
+                  </DialogDescription>
                 </DialogHeader>
 
             {/* Stepper */}
