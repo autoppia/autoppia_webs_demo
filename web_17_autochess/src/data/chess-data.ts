@@ -151,4 +151,3 @@ export const PUZZLE_FENS: { fen: string; solution: string[]; theme: string; toMo
   { fen: "r1bqk2r/pppp1ppp/2n5/2b1p3/2B1P1n1/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5", solution: ["d4", "exd4", "Nd5"], theme: "Interference", toMove: "white" },
   { fen: "rnbq1rk1/pp2ppbp/2pp1np1/8/2PPP3/2N2NP1/PP3PBP/R1BQK2R w KQ - 0 7", solution: ["d5", "Na5", "Bd2"], theme: "Interference", toMove: "white" },
 ];
-

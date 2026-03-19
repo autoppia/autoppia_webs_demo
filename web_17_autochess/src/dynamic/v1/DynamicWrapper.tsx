@@ -14,25 +14,25 @@ interface DynamicWrapperProps {
 export function DynamicWrapper({ children, className, id }: DynamicWrapperProps) {
   const { seed } = useSeed();
   const [mounted, setMounted] = useState(false);
-  
+
   useEffect(() => {
     setMounted(true);
   }, []);
-  
+
   // Only apply dynamic wrapping after client-side mount to avoid hydration mismatch
   if (!mounted) {
     return <div className={className}>{children}</div>;
   }
-  
+
   // Use seed + className/id hash for consistent wrapping
   const combinedSeed = seed + (className || '').length + (id || '').length;
   const rng = seedRandom(combinedSeed.toString());
-  
+
   const wrapperCount = Math.floor(rng() * 3) + 1;
   const includeDecoy = rng() > 0.5;
-  
+
   let content = children;
-  
+
   // Wrap content in random number of divs
   for (let i = 0; i < wrapperCount; i++) {
     content = (
@@ -41,7 +41,7 @@ export function DynamicWrapper({ children, className, id }: DynamicWrapperProps)
       </div>
     );
   }
-  
+
   // Add decoy elements
   if (includeDecoy) {
     content = (
@@ -53,14 +53,14 @@ export function DynamicWrapper({ children, className, id }: DynamicWrapperProps)
       </>
     );
   }
-  
+
   return <div className={className}>{content}</div>;
 }
 
 function generateDecoyContent(rng: () => number): React.ReactNode {
   const decoyTypes = ['text', 'number', 'address', 'hash'];
   const type = decoyTypes[Math.floor(rng() * decoyTypes.length)];
-  
+
   switch (type) {
     case 'text':
       return `Decoy text ${generateRandomString(rng, 12)}`;

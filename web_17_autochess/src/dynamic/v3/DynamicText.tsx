@@ -14,13 +14,13 @@ interface DynamicTextProps {
 export function DynamicText({ value, type = 'text', className }: DynamicTextProps) {
   const { seed } = useSeed();
   const [mounted, setMounted] = useState(false);
-  
+
   useEffect(() => {
     setMounted(true);
   }, []);
-  
+
   const displayValue = formatValue(value, type);
-  
+
   // Only apply dynamic attributes after client-side mount to avoid hydration mismatch
   if (!mounted) {
     return (
@@ -29,14 +29,14 @@ export function DynamicText({ value, type = 'text', className }: DynamicTextProp
       </span>
     );
   }
-  
+
   // Use seed + value hash for consistent attributes
   const combinedSeed = seed + value.toString().length;
   const rng = seedRandom(combinedSeed.toString());
   const attributes = generateDataAttributes(rng);
-  
+
   return (
-    <span 
+    <span
       className={className}
       {...attributes}
     >
@@ -48,8 +48,8 @@ export function DynamicText({ value, type = 'text', className }: DynamicTextProp
 function formatValue(value: string | number, type: string): string {
   switch (type) {
     case 'number':
-      return typeof value === 'number' 
-        ? value.toLocaleString() 
+      return typeof value === 'number'
+        ? value.toLocaleString()
         : value;
     case 'address':
       return typeof value === 'string' && value.length > 16

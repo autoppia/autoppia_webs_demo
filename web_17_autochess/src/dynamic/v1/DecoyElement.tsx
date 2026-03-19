@@ -13,21 +13,21 @@ interface DecoyElementProps {
 export function DecoyElement({ type = 'mixed', count = 1 }: DecoyElementProps) {
   const { seed } = useSeed();
   const rng = seedRandom(seed + type);
-  
+
   const decoys: React.ReactNode[] = [];
-  
+
   for (let i = 0; i < count; i++) {
-    const decoyType = type === 'mixed' 
+    const decoyType = type === 'mixed'
       ? selectRandom(rng, ['text', 'number', 'address', 'hash'])
       : type;
-    
+
     decoys.push(
       <span key={i} className="hidden" aria-hidden="true">
         {generateDecoyByType(decoyType, rng)}
       </span>
     );
   }
-  
+
   return <>{decoys}</>;
 }
 
