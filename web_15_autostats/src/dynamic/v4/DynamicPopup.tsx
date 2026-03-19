@@ -37,7 +37,7 @@ function getPlacementStyle(placement: string): React.CSSProperties {
   }
 }
 
-/** Tailwind placement classes for max-width only when not using inline position. */
+/** Tailwind placement classes for width; center needs explicit width so it doesn't collapse in flex. */
 function getPlacementClasses(placement: string): string {
   switch (placement) {
     case "bottom-right":
@@ -46,12 +46,13 @@ function getPlacementClasses(placement: string): string {
     case "top-left":
     case "middle-right":
     case "middle-left":
-      return "w-full max-w-md sm:max-w-lg";
+      return "w-full max-w-md sm:max-w-lg min-w-80 flex-shrink-0";
     case "banner":
     case "top-banner":
-      return "w-full max-w-xl";
+      return "w-full max-w-xl min-w-80 flex-shrink-0";
     default:
-      return "";
+      /* center: ensure width so modal doesn't render as a narrow strip */
+      return "w-full max-w-md sm:max-w-lg min-w-80 flex-shrink-0";
   }
 }
 
@@ -88,8 +89,14 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
   const placementStyle = isCenter ? undefined : getPlacementStyle(variant.placement);
   const content = (
     <dialog
-      className={`fixed inset-0 m-0 h-screen w-screen max-h-none max-w-none overflow-visible border-0 p-0 text-inherit m-0 h-screen w-screen max-h-none max-w-none overflow-visible border-0 bg-background/90 p-0 text-inherit backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
-      style={{ zIndex: POPUP_LAYER_Z }}
+      className={`fixed inset-0 m-0 border-0 p-0 text-inherit overflow-visible bg-background/90 backdrop-blur-sm ${isCenter ? "flex items-center justify-center p-4" : ""}`}
+      style={{
+        zIndex: POPUP_LAYER_Z,
+        width: "100vw",
+        height: "100vh",
+        maxWidth: "none",
+        maxHeight: "none",
+      }}
       data-v4="true"
       aria-modal="true"
       aria-label={variant.title}
@@ -109,15 +116,30 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`
-          relative w-full max-w-md rounded-xl border border-border bg-card text-card-foreground shadow-lg px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8
-          ${getPlacementClasses(variant.placement)}
-        `}
-        style={placementStyle}
+        className={`relative rounded-xl border border-border bg-card text-card-foreground shadow-lg px-6 py-6 sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
+        style={{
+          ...placementStyle,
+          ...(isCenter
+            ? { width: "min(100%, 28rem)", minWidth: "20rem", maxWidth: "28rem" }
+            : {}),
+        }}
         data-popup-id={variant.popupId}
       >
         {/* Theme accent bar */}
         <div className="absolute left-0 right-0 top-0 h-1 rounded-t-xl bg-gradient-to-r from-primary to-accent" />
+
+        {/* Close button - top-right corner, above content */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-4 top-4 z-10 rounded-md p-1.5 text-muted-foreground transition hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-card"
+          style={{ position: "absolute", top: "1rem", right: "1rem" }}
+          aria-label="Close"
+        >
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
 
         <h2 className="pr-8 text-xl font-semibold leading-tight text-card-foreground sm:text-2xl">
           {variant.title}
@@ -138,18 +160,6 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
             {variant.cta}
           </button>
         </div>
-
-        {/* Close button - theme muted */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute right-4 top-4 rounded-md p-1.5 text-muted-foreground transition hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-card"
-          aria-label="Close"
-        >
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
       </div>
     </dialog>
   );

@@ -61,12 +61,6 @@ RUN BASE_VERSION=$(node -p "require('./package.json').version") && \
     echo "WEB_VERSION=$WEB_VERSION" >> .env.local && \
     echo "✅ Auto-version: $WEB_VERSION"
 
-# Debug: Print the environment variables
-RUN echo "🔍 Build-time ENABLE_DYNAMIC_V1: $ENABLE_DYNAMIC_V1"
-RUN echo "🔍 Build-time NEXT_PUBLIC_ENABLE_DYNAMIC_V1: $NEXT_PUBLIC_ENABLE_DYNAMIC_V1"
-RUN echo "🔍 Build-time ENABLE_DYNAMIC_V2_DB_MODE: $ENABLE_DYNAMIC_V2_DB_MODE"
-RUN echo "🔍 Build-time NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE: $NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE"
-
 RUN npm run build
 
 # Stage 2: Create the lean production image
