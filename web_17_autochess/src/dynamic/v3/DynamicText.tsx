@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSeed } from '@/context/SeedContext';
+import { isV3Enabled } from '@/dynamic/shared/flags';
 import { seedRandom } from '@/dynamic/utils/seedRandom';
 import { generateDataAttributes } from '@/dynamic/utils/variations';
 
@@ -13,13 +14,23 @@ interface DynamicTextProps {
 
 export function DynamicText({ value, type = 'text', className }: DynamicTextProps) {
   const { seed } = useSeed();
-  const [mounted, setMounted] = useState(false);
+  const dynamicEnabled = isV3Enabled();
+  const [mounted, setMounted] = useState(!dynamicEnabled);
 
   useEffect(() => {
+    if (!dynamicEnabled) return;
     setMounted(true);
-  }, []);
+  }, [dynamicEnabled]);
 
   const displayValue = formatValue(value, type);
+
+  if (!dynamicEnabled) {
+    return (
+      <span className={className}>
+        {displayValue}
+      </span>
+    );
+  }
 
   // Only apply dynamic attributes after client-side mount to avoid hydration mismatch
   if (!mounted) {
