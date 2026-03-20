@@ -1,37 +1,34 @@
 "use client";
 
-import { AnalysisToolsMenu } from "@/components/chess/AnalysisToolsMenu";
-import { ChessBoard } from "@/components/chess/ChessBoard";
-import { EvalBar } from "@/components/chess/EvalBar";
-import { MoveList } from "@/components/chess/MoveList";
-import { OpeningExplorer } from "@/components/chess/OpeningExplorer";
-import { PgnInput } from "@/components/chess/PgnInput";
-import { SeedLink } from "@/components/ui/SeedLink";
+import type React from "react";
+import dynamic from "next/dynamic";
+import { useMemo, useState, useCallback, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { useSeed } from "@/context/SeedContext";
-import {
-  generateGames,
-  generateOpeningBook,
-  generatePlayers,
-  generateTournaments,
-} from "@/data/generators";
+import { useEventLogger } from "@/hooks/useEventLogger";
 import { DynamicWrapper } from "@/dynamic/v1/DynamicWrapper";
 import { DynamicText } from "@/dynamic/v3/DynamicText";
-import { useAnalysisBoard } from "@/hooks/useAnalysisBoard";
-import { useEventLogger } from "@/hooks/useEventLogger";
+import { generateGames, generateTournaments, generatePlayers, generateGamePositions } from "@/data/generators";
 import { EVENT_TYPES } from "@/library/events";
-import { Chess } from "chess.js";
-import {
-  ChevronFirst,
-  ChevronLast,
-  ChevronLeft,
-  ChevronRight,
-  PenTool,
-  RotateCcw,
-} from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import type React from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { formatDate } from "@/library/formatters";
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
+import type { Game } from "@/shared/types";
 
+const ChessBoard = dynamic(
+  () => import("@/components/chess/ChessBoard").then((mod) => mod.ChessBoard),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        style={{ width: "100%", maxWidth: 520, aspectRatio: "1/1" }}
+        className="bg-[#1c1917] rounded-lg"
+      />
+    ),
+  },
+);
+
+// Starting position FEN
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 export default function AnalysisPage() {
@@ -39,94 +36,50 @@ export default function AnalysisPage() {
   const searchParams = useSearchParams();
   const { logInteraction } = useEventLogger();
 
-  // Data generation
-  const games = useMemo(() => {
-    const t = generateTournaments(50, seed);
-    const p = generatePlayers(200, seed);
-    return generateGames(t, p, 100, seed);
-  }, [seed]);
-  const openingBook = useMemo(
-    () => generateOpeningBook(games, seed),
-    [games, seed],
-  );
+  const tournaments = useMemo(() => generateTournaments(50, seed), [seed]);
+  const players = useMemo(() => generatePlayers(50, seed), [seed]);
+  const games = useMemo(() => generateGames(tournaments, players, 50, seed), [tournaments, players, seed]);
 
-  // Page-specific state
-  const [pgnError, setPgnError] = useState<string | null>(null);
+  const preselectedGameId = searchParams.get("game");
+  const initialGameIndex = preselectedGameId
+    ? Math.max(0, games.findIndex((g) => g.id === Number(preselectedGameId)))
+    : 0;
 
-  // Use the shared analysis board hook
-  const board = useAnalysisBoard({
-    seed,
-    openingBook,
-    logInteraction,
-  });
+  const [selectedGameIndex, setSelectedGameIndex] = useState(initialGameIndex);
+  const [activeMoveIndex, setActiveMoveIndex] = useState(-1);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  // Load custom FEN from URL param
+  const game = games[selectedGameIndex];
+
+  // Generate board positions for current game
+  const positions = useMemo(() => {
+    if (!game) return [];
+    return generateGamePositions(game.moves);
+  }, [game]);
+
+  const currentFEN = activeMoveIndex >= 0 && activeMoveIndex < positions.length
+    ? positions[activeMoveIndex]
+    : START_FEN;
+
+  const handleGameSelect = useCallback((value: string) => {
+    const idx = Number(value);
+    setSelectedGameIndex(idx);
+    setActiveMoveIndex(-1);
+    setIsPlaying(false);
+
+    const g = games[idx];
+    logInteraction(EVENT_TYPES.ANALYZE_GAME, {
+      game_id: g.id,
+      white: g.whitePlayer.name,
+      black: g.blackPlayer.name,
+      result: g.result,
+      opening: g.opening,
+    });
+  }, [games, logInteraction]);
+
+  // Log initial game
   useEffect(() => {
-    const fenParam = searchParams.get("fen");
-    if (fenParam) {
-      try {
-        new Chess(fenParam);
-        board.setStartFen(fenParam);
-        board.setMoves([]);
-        board.setActiveMoveIndex(-1);
-      } catch {
-        // Invalid FEN — ignore
-      }
-    }
-  }, [searchParams, board]);
-
-  // Load game from URL param on mount
-  useEffect(() => {
-    const gameId = searchParams.get("game");
-    if (gameId) {
-      const idx = games.findIndex((g) => g.id === Number(gameId));
-      if (idx >= 0) {
-        board.setMoves(games[idx].moves);
-        board.setActiveMoveIndex(-1);
-        logInteraction(EVENT_TYPES.ANALYZE_GAME, {
-          game_id: games[idx].id,
-          white: games[idx].whitePlayer.name,
-          black: games[idx].blackPlayer.name,
-          result: games[idx].result,
-        });
-      }
-    }
-  }, [searchParams, games, board, logInteraction]);
-
-  // --- Page-specific handlers ---
-
-  const handleLoadPgn = useCallback(
-    (pgn: string) => {
-      const chess = new Chess();
-      try {
-        chess.loadPgn(pgn);
-        const history = chess.history();
-        if (history.length === 0) {
-          setPgnError("No moves found in PGN");
-          return;
-        }
-        board.setMoves(history);
-        board.setActiveMoveIndex(-1);
-        board.setIsPlaying(false);
-        setPgnError(null);
-        board.setStartFen(START_FEN);
-        logInteraction(EVENT_TYPES.LOAD_PGN, { move_count: history.length });
-      } catch {
-        setPgnError("Invalid PGN format");
-      }
-    },
-    [logInteraction, board],
-  );
-
-  const handleLoadGame = useCallback(
-    (index: number) => {
-      const game = games[index];
-      if (!game) return;
-      board.setMoves(game.moves);
-      board.setActiveMoveIndex(-1);
-      board.setIsPlaying(false);
-      setPgnError(null);
-      board.setStartFen(START_FEN);
+    if (game) {
       logInteraction(EVENT_TYPES.ANALYZE_GAME, {
         game_id: game.id,
         white: game.whitePlayer.name,
@@ -134,129 +87,108 @@ export default function AnalysisPage() {
         result: game.result,
         opening: game.opening,
       });
-    },
-    [games, logInteraction, board],
-  );
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-play
+  useEffect(() => {
+    if (!isPlaying || !game) return;
+    const timer = setInterval(() => {
+      setActiveMoveIndex((prev) => {
+        if (prev >= game.moves.length - 1) {
+          setIsPlaying(false);
+          return prev;
+        }
+        return prev + 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [isPlaying, game]);
+
+  const goFirst = () => { setActiveMoveIndex(-1); setIsPlaying(false); };
+  const goPrev = () => { setActiveMoveIndex((p) => Math.max(-1, p - 1)); setIsPlaying(false); };
+  const goNext = () => { setActiveMoveIndex((p) => Math.min((game?.moves.length || 1) - 1, p + 1)); setIsPlaying(false); };
+  const goLast = () => { setActiveMoveIndex((game?.moves.length || 1) - 1); setIsPlaying(false); };
+  const togglePlay = () => setIsPlaying((p) => !p);
+
+  if (!game) return null;
 
   return (
-    <div className="py-4 sm:py-6">
+    <div className="py-6">
       <DynamicWrapper>
-        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">
-          <DynamicText value="Analysis Board" type="text" />
+        <h1 className="text-3xl font-bold text-white mb-6">
+          <DynamicText value="Game Analysis" type="text" />
         </h1>
       </DynamicWrapper>
 
-      {/* Main row: EvalBar | Board | Move Panel — all same height, flush */}
-      <div className="flex flex-col lg:flex-row">
-        {/* EvalBar + Board */}
-        <div className="flex min-w-0">
-          {board.showEngine && (
-            <EvalBar
-              eval={board.currentEval}
-              boardHeight={board.boardHeight}
-              flipped={board.boardOrientation === "black"}
-            />
-          )}
-          <div
-            ref={board.boardContainerRef}
-            className="min-w-0 max-w-[min(100%,calc(100vh-280px))]"
-          >
-            <ChessBoard
-              fen={board.currentFen}
-              maxSize={9999}
-              interactive
-              allowDragging
-              boardOrientation={board.boardOrientation}
-              selectedSquare={board.selectedSquare}
-              highlightSquares={board.legalMoveSquares}
-              lastMove={board.lastMove}
-              onSquareClick={board.handleSquareClick}
-              onDrop={board.handleDrop}
-            />
-          </div>
-        </div>
-
-        {/* Right panel: engine line + moves — same height as board */}
-        <div
-          className="w-full lg:w-[340px] flex flex-col bg-[#1c1917] lg:border-y lg:border-r border border-stone-800/80 lg:rounded-r-lg rounded-lg lg:rounded-l-none"
-          style={{ height: board.boardHeight || undefined }}
-        >
-          {/* Engine eval line */}
-          {board.showEngine && (
-            <div className="flex items-center gap-2 px-3 py-1.5 border-b border-stone-800/60 flex-shrink-0">
-              <span className="text-xs text-zinc-500 font-mono">Engine:</span>
-              <span
-                className={`text-sm font-bold font-mono ${
-                  board.currentEval.cp > 50
-                    ? "text-zinc-100"
-                    : board.currentEval.cp < -50
-                      ? "text-zinc-400"
-                      : "text-zinc-300"
-                }`}
-              >
-                {board.currentEval.display}
-              </span>
-              <span className="text-[10px] text-zinc-600 font-mono ml-auto">
-                depth {board.currentEval.depth}
-              </span>
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Board + Controls */}
+        <div className="flex-1">
+          <DynamicWrapper>
+            {/* Game selector */}
+            <div className="mb-4">
+              <Select value={String(selectedGameIndex)} onValueChange={handleGameSelect}>
+                <SelectTrigger className="bg-[#1c1917] border-stone-800/80 text-zinc-300">
+                  <SelectValue placeholder="Select a game" />
+                </SelectTrigger>
+                <SelectContent className="bg-[#1c1917] border-stone-800/80 max-h-[300px]">
+                  {games.slice(0, 50).map((g, idx) => (
+                    <SelectItem key={g.id} value={String(idx)}>
+                      {g.whitePlayer.name} vs {g.blackPlayer.name} ({g.result})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-          )}
 
-          {/* Scrollable move list — fills all remaining space */}
-          <MoveList
-            annotatedMoves={board.annotatedMoves}
-            activeMoveIndex={board.activeMoveIndex}
-            onMoveClick={board.handleMoveClick}
-            embedded
-          />
+            {/* Game metadata */}
+            <div className="bg-[#1c1917] border border-stone-800/80 rounded-xl p-4 mb-4">
+              <div className="flex items-center justify-between text-sm">
+                <div>
+                  <span className="text-white font-semibold">{game.whitePlayer.name}</span>
+                  <span className="text-zinc-400 ml-1">({game.whitePlayer.rating})</span>
+                </div>
+                <span className="text-amber-400 font-bold text-lg">{game.result}</span>
+                <div className="text-right">
+                  <span className="text-white font-semibold">{game.blackPlayer.name}</span>
+                  <span className="text-zinc-400 ml-1">({game.blackPlayer.rating})</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-center gap-4 text-xs text-zinc-500 mt-2">
+                <span>{game.opening} ({game.eco})</span>
+                <span>{formatDate(game.date)}</span>
+                <span>{game.moveCount} moves</span>
+              </div>
+            </div>
+
+            {/* Board */}
+            <div className="flex justify-center mb-4">
+              <ChessBoard fen={currentFEN} maxSize={520} />
+            </div>
+
+            {/* Navigation Controls */}
+            <div className="flex items-center justify-center gap-2">
+              <NavButton onClick={goFirst}><ChevronFirst className="h-5 w-5" /></NavButton>
+              <NavButton onClick={goPrev}><ChevronLeft className="h-5 w-5" /></NavButton>
+              <NavButton onClick={togglePlay} highlight>
+                {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+              </NavButton>
+              <NavButton onClick={goNext}><ChevronRight className="h-5 w-5" /></NavButton>
+              <NavButton onClick={goLast}><ChevronLast className="h-5 w-5" /></NavButton>
+            </div>
+
+            <div className="text-center text-xs text-zinc-500 mt-2">
+              Move {activeMoveIndex + 1} of {game.moves.length}
+            </div>
+          </DynamicWrapper>
         </div>
-      </div>
 
-      {/* Footer bar: nav controls spanning below board+panel */}
-      <div className="flex items-center justify-end gap-1 mt-1 py-1.5">
-        <NavButton onClick={board.flipBoard} title="Flip board (F)">
-          <RotateCcw className="h-4 w-4" />
-        </NavButton>
-        <SeedLink
-          href={`/editor?fen=${encodeURIComponent(board.currentFen)}`}
-          className="p-1.5 rounded-md transition-colors text-zinc-400 hover:text-amber-300 hover:bg-white/5"
-          title="Board Editor"
-        >
-          <PenTool className="h-4 w-4" />
-        </SeedLink>
-        <NavButton onClick={board.goFirst} title="First move (Home)">
-          <ChevronFirst className="h-5 w-5" />
-        </NavButton>
-        <NavButton onClick={board.goPrev} title="Previous (Left)">
-          <ChevronLeft className="h-5 w-5" />
-        </NavButton>
-        <NavButton onClick={board.goNext} title="Next (Right)">
-          <ChevronRight className="h-5 w-5" />
-        </NavButton>
-        <NavButton onClick={board.goLast} title="Last move (End)">
-          <ChevronLast className="h-5 w-5" />
-        </NavButton>
-        <AnalysisToolsMenu
-          onFlipBoard={board.flipBoard}
-          showEngine={board.showEngine}
-          onToggleEngine={board.toggleEngine}
-        />
-      </div>
-
-      {/* Below: Opening Explorer + PGN Input */}
-      <div className="flex flex-col lg:flex-row gap-4 mt-3">
-        <div className="flex-1 min-w-0">
-          <PgnInput
-            onLoadPgn={handleLoadPgn}
-            onLoadGame={handleLoadGame}
-            games={games}
-            error={pgnError}
-          />
-        </div>
-        <div className="w-full lg:w-[340px]">
-          <OpeningExplorer
-            data={board.openingData}
-            onMoveClick={board.handleOpeningExplorerMoveClick}
+        {/* Move List Sidebar */}
+        <div className="w-full lg:w-72">
+          <SimpleMoveList
+            moves={game.moves}
+            activeMoveIndex={activeMoveIndex}
+            onMoveClick={setActiveMoveIndex}
           />
         </div>
       </div>
@@ -264,22 +196,89 @@ export default function AnalysisPage() {
   );
 }
 
-function NavButton({
-  onClick,
-  children,
-  title,
-}: {
-  onClick: () => void;
-  children: React.ReactNode;
-  title?: string;
-}) {
+function NavButton({ onClick, children, highlight }: { onClick: () => void; children: React.ReactNode; highlight?: boolean }) {
   return (
     <button
-      className="p-1.5 rounded-md transition-colors text-zinc-400 hover:text-white hover:bg-white/5"
+      className={`p-2 rounded-lg transition-colors ${
+        highlight
+          ? "bg-amber-600 hover:bg-amber-700 text-white"
+          : "bg-[#1c1917] border border-stone-800/80 text-zinc-400 hover:text-white hover:bg-white/5"
+      }`}
       onClick={onClick}
-      title={title}
     >
       {children}
     </button>
+  );
+}
+
+function SimpleMoveList({ moves, activeMoveIndex, onMoveClick }: { moves: string[]; activeMoveIndex: number; onMoveClick?: (index: number) => void }) {
+  const activeRef = useRef<HTMLButtonElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (activeRef.current && containerRef.current) {
+      activeRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [activeMoveIndex]);
+
+  const movePairs: { number: number; white: string; black?: string }[] = [];
+  for (let i = 0; i < moves.length; i += 2) {
+    movePairs.push({
+      number: Math.floor(i / 2) + 1,
+      white: moves[i],
+      black: moves[i + 1],
+    });
+  }
+
+  return (
+    <div
+      ref={containerRef}
+      className="bg-[#1c1917] border border-stone-800/80 rounded-lg max-h-[400px] overflow-y-auto no-scrollbar"
+    >
+      <div className="sticky top-0 bg-[#1c1917] border-b border-stone-800/60 px-4 py-2.5 z-10">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-zinc-300">Moves</h3>
+          <span className="text-xs text-zinc-500">
+            {activeMoveIndex >= 0 ? activeMoveIndex + 1 : 0} / {moves.length}
+          </span>
+        </div>
+      </div>
+      <div className="p-4 space-y-1">
+        {movePairs.map((pair) => {
+          const whiteIdx = (pair.number - 1) * 2;
+          const blackIdx = whiteIdx + 1;
+
+          return (
+            <div key={pair.number} className="flex items-center gap-2 text-sm font-mono">
+              <span className="text-zinc-500 w-8 text-right flex-shrink-0">{pair.number}.</span>
+              <button
+                ref={activeMoveIndex === whiteIdx ? activeRef : undefined}
+                className={`px-2 py-0.5 rounded transition-colors ${
+                  activeMoveIndex === whiteIdx
+                    ? "bg-amber-600/30 text-amber-300 ring-1 ring-amber-500/40"
+                    : "text-zinc-300 hover:bg-white/5"
+                }`}
+                onClick={() => onMoveClick?.(whiteIdx)}
+              >
+                {pair.white}
+              </button>
+              {pair.black && (
+                <button
+                  ref={activeMoveIndex === blackIdx ? activeRef : undefined}
+                  className={`px-2 py-0.5 rounded transition-colors ${
+                    activeMoveIndex === blackIdx
+                      ? "bg-amber-600/30 text-amber-300 ring-1 ring-amber-500/40"
+                      : "text-zinc-300 hover:bg-white/5"
+                  }`}
+                  onClick={() => onMoveClick?.(blackIdx)}
+                >
+                  {pair.black}
+                </button>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

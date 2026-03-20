@@ -3,6 +3,7 @@
 import type React from 'react';
 import { useState, useEffect } from 'react';
 import { useSeed } from '@/context/SeedContext';
+import { isV1Enabled } from '@/dynamic/shared/flags';
 import { seedRandom } from '@/dynamic/utils/seedRandom';
 import { generateRandomString } from '@/dynamic/utils/variations';
 
@@ -14,11 +15,17 @@ interface DynamicWrapperProps {
 
 export function DynamicWrapper({ children, className, id }: DynamicWrapperProps) {
   const { seed } = useSeed();
-  const [mounted, setMounted] = useState(false);
+  const dynamicEnabled = isV1Enabled();
+  const [mounted, setMounted] = useState(!dynamicEnabled);
 
   useEffect(() => {
+    if (!dynamicEnabled) return;
     setMounted(true);
-  }, []);
+  }, [dynamicEnabled]);
+
+  if (!dynamicEnabled) {
+    return <div className={className}>{children}</div>;
+  }
 
   // Only apply dynamic wrapping after client-side mount to avoid hydration mismatch
   if (!mounted) {

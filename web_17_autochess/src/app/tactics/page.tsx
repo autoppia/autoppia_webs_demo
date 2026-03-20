@@ -1,7 +1,6 @@
 "use client";
 
 import { MoveHistoryPanel } from "@/components/chess/MoveHistoryPanel";
-import { PuzzleBoard } from "@/components/chess/PuzzleBoard";
 import { useAuth } from "@/context/AuthContext";
 import { useSeed } from "@/context/SeedContext";
 import { generatePuzzles } from "@/data/generators";
@@ -13,8 +12,22 @@ import { calculateEloChange } from "@/library/elo";
 import { EVENT_TYPES } from "@/library/events";
 import type { MoveHistoryEntry } from "@/shared/types";
 import { CheckCircle, ChevronRight } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import React, { useMemo, useState, useCallback, useEffect } from "react";
+
+const PuzzleBoard = dynamic(
+  () => import("@/components/chess/PuzzleBoard").then((mod) => mod.PuzzleBoard),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        style={{ width: "100%", maxWidth: 560, aspectRatio: "1/1" }}
+        className="bg-[#1c1917] rounded-lg mx-auto"
+      />
+    ),
+  },
+);
 
 export default function TacticsPage() {
   const { seed } = useSeed();

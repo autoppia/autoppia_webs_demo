@@ -29,12 +29,12 @@ import React, { useMemo, useState, useCallback } from "react";
 type SortField = "rating" | "name" | "games" | "winrate";
 type SortDir = "asc" | "desc";
 
-const PAGE_SIZE = 24;
+const PAGE_SIZE = 12;
 
 export default function PlayersPage() {
   const { seed } = useSeed();
   const { logInteraction } = useEventLogger();
-  const players = useMemo(() => generatePlayers(200, seed), [seed]);
+  const players = useMemo(() => generatePlayers(50, seed), [seed]);
 
   const [search, setSearch] = useState("");
   const [countryFilter, setCountryFilter] = useState("all");

@@ -1,12 +1,25 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { DynamicWrapper } from "@/dynamic/v1/DynamicWrapper";
 import { DynamicText } from "@/dynamic/v3/DynamicText";
-import { MiniChessBoard } from "@/components/chess/ChessBoard";
 import { ArrowRight, Sparkles } from "lucide-react";
 import type { Puzzle } from "@/shared/types";
+
+const MiniChessBoard = dynamic(
+  () => import("@/components/chess/ChessBoard").then((mod) => mod.MiniChessBoard),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        style={{ width: 180, maxWidth: "100%", aspectRatio: "1/1" }}
+        className="bg-[#1c1917] rounded-md"
+      />
+    ),
+  },
+);
 
 interface DailyPuzzleProps {
   puzzle: Puzzle;

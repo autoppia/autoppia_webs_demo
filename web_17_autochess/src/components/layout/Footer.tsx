@@ -61,7 +61,7 @@ export function Footer() {
                   <DynamicText value="Status: Online" type="text" />
                 </div>
                 <div>
-                  <DynamicText value="200+ Players" type="text" />
+                  <DynamicText value="50+ Players" type="text" />
                 </div>
                 <div>
                   <DynamicText value="50+ Tournaments" type="text" />

@@ -9,19 +9,26 @@ import { TopPlayersTable } from "@/components/landing/TopPlayersTable";
 import { DailyPuzzle } from "@/components/landing/DailyPuzzle";
 import { formatNumber } from "@/library/formatters";
 import { Trophy, Users, Swords, Puzzle } from "lucide-react";
-import type { Player, Tournament, Game, Puzzle as PuzzleType } from "@/shared/types";
+import type { Player, Tournament, Puzzle as PuzzleType } from "@/shared/types";
 
 interface HomePageContentProps {
-  data: {
-    players: Player[];
-    tournaments: Tournament[];
-    games: Game[];
-    puzzles: PuzzleType[];
+  featuredPlayers: Player[];
+  featuredTournaments: Tournament[];
+  dailyPuzzle: PuzzleType;
+  stats: {
+    players: number;
+    tournaments: number;
+    puzzles: number;
+    games: number;
   };
-  seed: number;
 }
 
-export default function HomePageContent({ data, seed }: HomePageContentProps) {
+export default function HomePageContent({
+  featuredPlayers,
+  featuredTournaments,
+  dailyPuzzle,
+  stats,
+}: HomePageContentProps) {
   return (
     <div className="py-4 sm:py-6 space-y-2">
       <HeroSection />
@@ -29,16 +36,16 @@ export default function HomePageContent({ data, seed }: HomePageContentProps) {
       {/* Quick Stats Bar */}
       <DynamicWrapper>
         <section className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 my-4 sm:my-8">
-          <StatCard label="Tournaments" value={formatNumber(data.tournaments.length)} icon={<Trophy className="h-5 w-5" />} />
-          <StatCard label="Players" value={formatNumber(data.players.length)} icon={<Users className="h-5 w-5" />} />
-          <StatCard label="Games" value={formatNumber(data.games.length)} icon={<Swords className="h-5 w-5" />} />
-          <StatCard label="Puzzles" value={formatNumber(data.puzzles.length)} icon={<Puzzle className="h-5 w-5" />} />
+          <StatCard label="Tournaments" value={formatNumber(stats.tournaments)} icon={<Trophy className="h-5 w-5" />} />
+          <StatCard label="Players" value={formatNumber(stats.players)} icon={<Users className="h-5 w-5" />} />
+          <StatCard label="Games" value={formatNumber(stats.games)} icon={<Swords className="h-5 w-5" />} />
+          <StatCard label="Puzzles" value={formatNumber(stats.puzzles)} icon={<Puzzle className="h-5 w-5" />} />
         </section>
       </DynamicWrapper>
 
-      <FeaturedTournaments tournaments={data.tournaments} />
-      <TopPlayersTable players={data.players} />
-      <DailyPuzzle puzzle={data.puzzles[seed % data.puzzles.length]} />
+      <FeaturedTournaments tournaments={featuredTournaments} />
+      <TopPlayersTable players={featuredPlayers} />
+      <DailyPuzzle puzzle={dailyPuzzle} />
     </div>
   );
 }
