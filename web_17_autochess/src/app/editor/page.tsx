@@ -1,6 +1,5 @@
 "use client";
 
-import { ChessBoard } from "@/components/chess/ChessBoard";
 import { EvalBar } from "@/components/chess/EvalBar";
 import { MoveList } from "@/components/chess/MoveList";
 import { OpeningExplorer } from "@/components/chess/OpeningExplorer";
@@ -28,11 +27,24 @@ import {
   RotateCcw,
   Trash2,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const ChessBoard = dynamic(
+  () => import("@/components/chess/ChessBoard").then((mod) => mod.ChessBoard),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        style={{ width: "100%", maxWidth: 560, aspectRatio: "1/1" }}
+        className="bg-[#1c1917] rounded-lg"
+      />
+    ),
+  },
+);
 
 const FILES = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const RANKS = ["8", "7", "6", "5", "4", "3", "2", "1"];
@@ -222,8 +234,8 @@ export default function EditorPage() {
   // Data generation for analysis mode
   const games = useMemo(() => {
     const t = generateTournaments(50, seed);
-    const p = generatePlayers(200, seed);
-    return generateGames(t, p, 100, seed);
+    const p = generatePlayers(50, seed);
+    return generateGames(t, p, 50, seed);
   }, [seed]);
   const openingBook = useMemo(
     () => generateOpeningBook(games, seed),

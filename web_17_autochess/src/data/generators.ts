@@ -316,7 +316,15 @@ function scoreMove(san: string, halfMoveIndex: number): number {
   return Math.max(0.1, score);
 }
 
-function generateMoveSequence(moveCount: number, rng: () => number): string[] {
+interface MoveSequenceResult {
+  moves: string[];
+  isCheckmate: boolean;
+  isStalemate: boolean;
+  isDraw: boolean;
+  turn: "w" | "b";
+}
+
+function generateMoveSequence(moveCount: number, rng: () => number): MoveSequenceResult {
   const chess = new Chess();
   const moves: string[] = [];
   const targetHalfMoves = moveCount * 2;
@@ -343,7 +351,13 @@ function generateMoveSequence(moveCount: number, rng: () => number): string[] {
     if (chess.isGameOver()) break;
   }
 
-  return moves;
+  return {
+    moves,
+    isCheckmate: chess.isCheckmate(),
+    isStalemate: chess.isStalemate(),
+    isDraw: chess.isDraw(),
+    turn: chess.turn(),
+  };
 }
 
 export function generateGames(tournaments: Tournament[], players: Player[], count: number, seed: number): Game[] {
@@ -372,21 +386,15 @@ export function generateGames(tournaments: Tournament[], players: Player[], coun
     const month = randInt(1, 12, rng);
     const day = randInt(1, 28, rng);
 
-    const moves = generateMoveSequence(moveCount, rng);
-    const actualMoveCount = Math.ceil(moves.length / 2);
+    const seq = generateMoveSequence(moveCount, rng);
+    const actualMoveCount = Math.ceil(seq.moves.length / 2);
 
     // Derive result from actual play when game ended decisively
     let finalResult = result;
-    if (moves.length > 0) {
-      const endCheck = new Chess();
-      for (const m of moves) {
-        try { endCheck.move(m); } catch { break; }
-      }
-      if (endCheck.isCheckmate()) {
-        finalResult = endCheck.turn() === "w" ? "0-1" : "1-0";
-      } else if (endCheck.isStalemate() || endCheck.isDraw()) {
-        finalResult = "1/2-1/2";
-      }
+    if (seq.isCheckmate) {
+      finalResult = seq.turn === "w" ? "0-1" : "1-0";
+    } else if (seq.isStalemate || seq.isDraw) {
+      finalResult = "1/2-1/2";
     }
 
     games.push({
@@ -398,7 +406,7 @@ export function generateGames(tournaments: Tournament[], players: Player[], coun
       result: finalResult,
       opening: opening.name,
       eco: opening.eco,
-      moves,
+      moves: seq.moves,
       date: formatDate(year, month, day),
       moveCount: actualMoveCount,
     });
@@ -570,9 +578,9 @@ export function generateOpeningBook(
 // ============================================================================
 
 export function generateAllData(seed: number) {
-  const players = generatePlayers(200, seed);
+  const players = generatePlayers(50, seed);
   const tournaments = generateTournaments(50, seed);
-  const games = generateGames(tournaments, players, 100, seed);
+  const games = generateGames(tournaments, players, 50, seed);
   const puzzles = generatePuzzles(100, seed);
 
   return { players, tournaments, games, puzzles };

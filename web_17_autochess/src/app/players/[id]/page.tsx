@@ -26,20 +26,20 @@ import {
   getCountryFlag,
 } from "@/library/formatters";
 import { Calendar, Swords, TrendingUp, Trophy } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import type React from "react";
 import { useEffect, useMemo } from "react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+
+const PlayerRatingChart = dynamic(
+  () => import("./PlayerRatingChart").then((mod) => mod.PlayerRatingChart),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[260px] rounded-lg bg-stone-950/40 animate-pulse" />
+    ),
+  },
+);
 
 export default function PlayerDetailPage() {
   const params = useParams();
@@ -48,10 +48,10 @@ export default function PlayerDetailPage() {
   const { logInteraction } = useEventLogger();
   const playerId = Number(params.id);
 
-  const players = useMemo(() => generatePlayers(200, seed), [seed]);
+  const players = useMemo(() => generatePlayers(50, seed), [seed]);
   const allGames = useMemo(() => {
     const t = generateTournaments(50, seed);
-    return generateGames(t, players, 100, seed);
+    return generateGames(t, players, 50, seed);
   }, [seed, players]);
   const player = useMemo(
     () => players.find((p) => p.id === playerId),
@@ -318,54 +318,7 @@ export default function PlayerDetailPage() {
               <h2 className="text-lg font-bold text-white mb-4">
                 Rating History
               </h2>
-              <ResponsiveContainer width="100%" height={260}>
-                <AreaChart data={player.ratingHistory}>
-                  <defs>
-                    <linearGradient id="ratingGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#292524" />
-                  <XAxis
-                    dataKey="date"
-                    stroke="#666"
-                    tick={{ fill: "#888", fontSize: 11 }}
-                    tickFormatter={(v) => {
-                      const d = new Date(v);
-                      return `${d.getMonth() + 1}/${d.getFullYear().toString().slice(2)}`;
-                    }}
-                  />
-                  <YAxis
-                    stroke="#666"
-                    tick={{ fill: "#888", fontSize: 11 }}
-                    domain={["dataMin - 50", "dataMax + 50"]}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#1c1917",
-                      border: "1px solid #44403c",
-                      borderRadius: 8,
-                      fontSize: 12,
-                    }}
-                    labelStyle={{ color: "#888" }}
-                    itemStyle={{ color: "#f59e0b" }}
-                    formatter={(value: number) => [
-                      formatRating(value),
-                      "Rating",
-                    ]}
-                    labelFormatter={(label) => formatDate(label)}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="rating"
-                    stroke="#f59e0b"
-                    strokeWidth={2}
-                    fill="url(#ratingGrad)"
-                    dot={false}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
+              <PlayerRatingChart ratingHistory={player.ratingHistory} />
             </div>
           </DynamicWrapper>
 

@@ -51,7 +51,7 @@ export default function TournamentDetailPage() {
   const tournamentId = Number(params.id);
 
   const tournaments = useMemo(() => generateTournaments(50, seed), [seed]);
-  const players = useMemo(() => generatePlayers(200, seed), [seed]);
+  const players = useMemo(() => generatePlayers(50, seed), [seed]);
   const tournament = useMemo(
     () => tournaments.find((t) => t.id === tournamentId),
     [tournaments, tournamentId],
@@ -61,7 +61,7 @@ export default function TournamentDetailPage() {
     [tournament, players, seed],
   );
   const allGames = useMemo(
-    () => generateGames(tournaments, players, 100, seed),
+    () => generateGames(tournaments, players, 50, seed),
     [tournaments, players, seed],
   );
   const tournamentGames = useMemo(

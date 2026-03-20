@@ -106,7 +106,7 @@ export function HeroSection() {
                   </div>
                   <div>
                     <div className="text-xs sm:text-sm font-medium text-white">Players</div>
-                    <div className="text-[10px] sm:text-xs text-stone-500 hidden sm:block">200+ ranked</div>
+                    <div className="text-[10px] sm:text-xs text-stone-500 hidden sm:block">50+ ranked</div>
                   </div>
                 </button>
                 <button
