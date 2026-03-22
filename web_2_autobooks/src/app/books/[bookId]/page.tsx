@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { BookDetailHero } from "@/components/books/BookDetailHero";
 import { BookMeta } from "@/components/books/BookMeta";
@@ -22,6 +22,7 @@ import {
 import { buildBookDetailPayload } from "@/library/bookEventPayload";
 import { useCart } from "@/context/CartContext";
 import { useDynamicSystem } from "@/dynamic/shared";
+import { ShareBookDialog } from "@/components/books/ShareBookDialog";
 
 const AVATARS = [
   "/media/gallery/people/person1.jpg",
@@ -60,6 +61,9 @@ export default function BookDetailPage() {
   );
   const [message, setMessage] = useState<string | null>(null);
   const [readingListMessage, setReadingListMessage] = useState<string | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
+  const commentsRef = useRef<CommentEntry[]>([]);
+  commentsRef.current = comments;
 
   if (!book) {
     return (
@@ -195,20 +199,41 @@ export default function BookDetailPage() {
     setTimeout(() => setMessage(null), 2500);
   };
 
-  const handleShare = () => {
+  const handleShareOpen = () => {
+    setShareOpen(true);
+  };
+
+  const handleShareComplete = ({
+    recipientName,
+    recipientEmail,
+  }: {
+    recipientName: string;
+    recipientEmail: string;
+  }) => {
     const payload = buildBookDetailPayload(book);
-    logEvent(EVENT_TYPES.SHARE_BOOK, payload);
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href).catch(() => {});
+    logEvent(EVENT_TYPES.SHARE_BOOK, {
+      ...payload,
+      recipient_name: recipientName,
+      recipient_email: recipientEmail,
+    });
+    if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(window.location.href).catch(() => {
+        /* clipboard may be denied; share still logged */
+      });
     }
+    setShareOpen(false);
+    setMessage(`Shared “${book.title}” with ${recipientName}. Link copied when the browser allows it.`);
+    setTimeout(() => setMessage(null), 4500);
   };
 
   const handleCommentSubmit = ({
     author,
     message,
+    ownerUsername,
   }: {
     author: string;
     message: string;
+    ownerUsername: string | null;
   }) => {
     const entry: CommentEntry = {
       id: `${book.id}-comment-${Date.now()}`,
@@ -217,6 +242,7 @@ export default function BookDetailPage() {
       mood: "Reader note",
       avatar: AVATARS[(comments.length + 1) % AVATARS.length],
       createdAt: new Date().toLocaleString(),
+      ownerUsername: ownerUsername ?? null,
     };
     setComments((prev) => [entry, ...prev]);
     logEvent(EVENT_TYPES.ADD_COMMENT_BOOK, {
@@ -224,6 +250,38 @@ export default function BookDetailPage() {
       content: message,
       book: { name: book.title },
     });
+  };
+
+  const handleUpdateComment = (commentId: string, nextMessage: string) => {
+    const target = commentsRef.current.find((c) => c.id === commentId);
+    if (!target) {
+      return;
+    }
+    const previous = target.message;
+    logEvent(EVENT_TYPES.EDIT_COMMENT_BOOK, {
+      name: target.author,
+      content: nextMessage,
+      previous_content: previous,
+      book: { name: book.title },
+      comment_id: commentId,
+    });
+    setComments((prev) =>
+      prev.map((c) => (c.id === commentId ? { ...c, message: nextMessage } : c))
+    );
+  };
+
+  const handleDeleteComment = (commentId: string) => {
+    const target = commentsRef.current.find((c) => c.id === commentId);
+    if (!target) {
+      return;
+    }
+    logEvent(EVENT_TYPES.DELETE_COMMENT_BOOK, {
+      name: target.author,
+      content: target.message,
+      book: { name: book.title },
+      comment_id: commentId,
+    });
+    setComments((prev) => prev.filter((c) => c.id !== commentId));
   };
 
   const dyn = useDynamicSystem();
@@ -261,7 +319,7 @@ export default function BookDetailPage() {
               book={book}
               onReadBook={handleWatchTrailer}
               onReadingList={handleWatchlist}
-              onShare={handleShare}
+              onShare={handleShareOpen}
               onAddToCart={handleAddToCart}
               isInReadingList={isInReadingList}
             />
@@ -289,7 +347,19 @@ export default function BookDetailPage() {
               </section>
             )}
             <RelatedBooks books={relatedBooks} />
-            <CommentsPanel comments={comments} onSubmit={handleCommentSubmit} />
+            <CommentsPanel
+              comments={comments}
+              currentUsername={currentUser?.username ?? null}
+              onSubmit={handleCommentSubmit}
+              onUpdateComment={handleUpdateComment}
+              onDeleteComment={handleDeleteComment}
+            />
+            <ShareBookDialog
+              open={shareOpen}
+              onOpenChange={setShareOpen}
+              bookTitle={book.title}
+              onCompleteShare={handleShareComplete}
+            />
           </main>
         ))}
       </div>
