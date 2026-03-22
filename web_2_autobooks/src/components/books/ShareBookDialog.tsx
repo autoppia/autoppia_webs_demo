@@ -1,7 +1,7 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +24,7 @@ export function ShareBookDialog({
   onCompleteShare,
 }: ShareBookDialogProps) {
   const dyn = useDynamicSystem();
+  const nameInputRef = useRef<HTMLInputElement>(null);
   const [recipientName, setRecipientName] = useState("");
   const [recipientEmail, setRecipientEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +34,12 @@ export function ShareBookDialog({
       setRecipientName("");
       setRecipientEmail("");
       setError(null);
+      return;
     }
+    const id = requestAnimationFrame(() => {
+      nameInputRef.current?.focus();
+    });
+    return () => cancelAnimationFrame(id);
   }, [open]);
 
   const handleSubmit = (event: FormEvent) => {
@@ -56,7 +62,6 @@ export function ShareBookDialog({
             "fixed left-1/2 top-1/2 z-[101] w-[min(100%,28rem)] -translate-x-1/2 -translate-y-1/2 rounded-3xl border border-white/10 bg-gradient-to-br from-[#141926] to-[#0a0d14] p-6 text-white shadow-2xl focus:outline-none",
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
           )}
-          onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <div className="mb-4 flex items-start justify-between gap-4">
             <div>
@@ -88,6 +93,7 @@ export function ShareBookDialog({
                 {dyn.v3.getVariant("share_recipient_name_label", TEXT_VARIANTS_MAP, "Recipient name")}
               </span>
               <Input
+                ref={nameInputRef}
                 id={dyn.v3.getVariant("share-recipient-name-input", ID_VARIANTS_MAP, "share-recipient-name-input")}
                 value={recipientName}
                 onChange={(e) => setRecipientName(e.target.value)}
