@@ -235,16 +235,18 @@ export default function BookDetailPage() {
     message: string;
     ownerUsername: string | null;
   }) => {
-    const entry: CommentEntry = {
-      id: `${book.id}-comment-${Date.now()}`,
-      author,
-      message,
-      mood: "Reader note",
-      avatar: AVATARS[(comments.length + 1) % AVATARS.length],
-      createdAt: new Date().toLocaleString(),
-      ownerUsername: ownerUsername ?? null,
-    };
-    setComments((prev) => [entry, ...prev]);
+    setComments((prev) => {
+      const entry: CommentEntry = {
+        id: `${book.id}-comment-${Date.now()}`,
+        author,
+        message,
+        mood: "Reader note",
+        avatar: AVATARS[(prev.length + 1) % AVATARS.length],
+        createdAt: new Date().toLocaleString(),
+        ownerUsername: ownerUsername ?? null,
+      };
+      return [entry, ...prev];
+    });
     logEvent(EVENT_TYPES.ADD_COMMENT_BOOK, {
       name: author,
       content: message,
