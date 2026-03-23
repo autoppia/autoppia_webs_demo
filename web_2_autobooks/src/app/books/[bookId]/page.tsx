@@ -187,6 +187,18 @@ export default function BookDetailPage() {
   }, [book, addToCart]);
 
   const handleShareOpen = useCallback(() => {
+    if (typeof document !== "undefined") {
+      const v4Dialog = document.querySelector<HTMLDialogElement>('dialog[data-v4="true"]');
+      if (v4Dialog?.hasAttribute("open")) {
+        const closeButton = v4Dialog.querySelector<HTMLButtonElement>('button[aria-label="Close"]');
+        if (closeButton) {
+          closeButton.click();
+        } else {
+          v4Dialog.removeAttribute("open");
+          v4Dialog.style.display = "none";
+        }
+      }
+    }
     setShareOpen(true);
   }, []);
 
