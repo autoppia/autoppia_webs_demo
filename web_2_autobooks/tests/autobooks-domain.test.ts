@@ -13,6 +13,7 @@ import {
   AUTHOR_PROFILES,
   booksForAuthor,
   directorMatchesAuthor,
+  filterAuthorsByQuery,
   getAuthorById,
   normalizeDirectorLabel,
 } from "../src/data/authors";
@@ -107,6 +108,20 @@ describe("authors", () => {
     expect(directorMatchesAuthor("Gabriel García Márquez", author)).toBe(true);
     expect(directorMatchesAuthor("Gabriel Garcia Marquez", author)).toBe(true);
     expect(directorMatchesAuthor("Someone Else", author)).toBe(false);
+  });
+
+  test("filterAuthorsByQuery returns all for empty query", () => {
+    const all = filterAuthorsByQuery(AUTHOR_PROFILES, "");
+    expect(all.length).toBe(AUTHOR_PROFILES.length);
+  });
+
+  test("filterAuthorsByQuery matches display name substring", () => {
+    const found = filterAuthorsByQuery(AUTHOR_PROFILES, "homer");
+    expect(found.some((a) => a.id === "homer")).toBe(true);
+  });
+
+  test("filterAuthorsByQuery returns empty when nothing matches", () => {
+    expect(filterAuthorsByQuery(AUTHOR_PROFILES, "zzzz-no-match")).toEqual([]);
   });
 
   test("booksForAuthor filters by director field", () => {

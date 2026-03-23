@@ -153,3 +153,22 @@ export function getAuthorById(id: string): AuthorProfile | undefined {
 export function listAuthors(): AuthorProfile[] {
   return [...AUTHOR_PROFILES];
 }
+
+export function filterAuthorsByQuery(authors: AuthorProfile[], rawQuery: string): AuthorProfile[] {
+  const q = rawQuery.trim().toLowerCase().normalize("NFC");
+  if (!q) {
+    return [...authors];
+  }
+  return authors.filter((author) => {
+    const haystack = [
+      author.displayName,
+      author.biography,
+      author.id,
+      ...author.directorAliases,
+    ]
+      .join(" ")
+      .toLowerCase()
+      .normalize("NFC");
+    return haystack.includes(q);
+  });
+}

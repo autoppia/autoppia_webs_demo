@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MessageSquare, User, Send, Pencil, Trash2 } from "lucide-react";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
+import { SeedLink } from "@/components/ui/SeedLink";
 
 export interface CommentEntry {
   id: string;
@@ -44,6 +45,12 @@ export function CommentsPanel({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draftEdit, setDraftEdit] = useState("");
   const dyn = useDynamicSystem();
+
+  useEffect(() => {
+    if (currentUsername) {
+      setAuthor((prev) => (prev.trim() ? prev : currentUsername));
+    }
+  }, [currentUsername]);
 
   const startEdit = (comment: CommentEntry) => {
     setEditingId(comment.id);
@@ -175,9 +182,9 @@ export function CommentsPanel({
           className="lg:w-96"
           onSubmit={(event) => {
             event.preventDefault();
-            if (!message.trim()) return;
+            if (!currentUsername || !message.trim()) return;
             onSubmit({
-              author,
+              author: author.trim() || currentUsername,
               message,
               ownerUsername: currentUsername,
             });
@@ -190,17 +197,27 @@ export function CommentsPanel({
               Add a Note
             </h3>
             <p className="text-sm text-white/60 mb-6">
-              Share your thoughts about this book. Comments are stored only in memory for demo purposes.
+              Share your thoughts about this book. Notes you add are kept for this browser session until you close the tab.
             </p>
             {!currentUsername ? (
-              <p className="mb-4 rounded-xl border border-amber-400/20 bg-amber-400/10 px-3 py-2 text-xs text-amber-100">
-                {dyn.v3.getVariant(
-                  "comment_login_hint",
-                  TEXT_VARIANTS_MAP,
-                  "Sign in to edit or delete notes you post under your account."
-                )}
-              </p>
+              <div className="mb-4 space-y-3 rounded-xl border border-amber-400/25 bg-amber-400/10 px-4 py-3 text-sm text-amber-50">
+                <p>
+                  {dyn.v3.getVariant(
+                    "comment_login_required",
+                    TEXT_VARIANTS_MAP,
+                    "Sign in to post reader notes. You can still browse existing notes below."
+                  )}
+                </p>
+                <SeedLink
+                  href="/login"
+                  preserveSeed
+                  className="inline-flex rounded-full border border-amber-300/40 bg-amber-400/15 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-amber-100 hover:bg-amber-400/25"
+                >
+                  {dyn.v3.getVariant("comment_go_login", TEXT_VARIANTS_MAP, "Go to sign in")}
+                </SeedLink>
+              </div>
             ) : null}
+            <fieldset disabled={!currentUsername} className="min-w-0 space-y-0 border-0 p-0 m-0 disabled:opacity-50">
             <label className="block mb-4">
               <div className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                 <User className="h-4 w-4 text-secondary" />
@@ -244,6 +261,7 @@ export function CommentsPanel({
               <Send className="h-5 w-5 mr-2" />
               {dyn.v3.getVariant("share_feedback", TEXT_VARIANTS_MAP, "Share Feedback")}
             </Button>
+            </fieldset>
           </div>
         </form>
       </div>

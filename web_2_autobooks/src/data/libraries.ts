@@ -25,7 +25,7 @@ export const FAMOUS_LIBRARIES: FamousLibrary[] = [
       "Extensive rare book and manuscript holdings",
     ],
     website: "https://www.loc.gov",
-    imageSrc: "/media/gallery/people/person1.jpg",
+    imageSrc: "/media/gallery/9780140268867.webp",
   },
   {
     id: "british-library",
@@ -41,7 +41,7 @@ export const FAMOUS_LIBRARIES: FamousLibrary[] = [
       "St Pancras flagship building",
     ],
     website: "https://www.bl.uk",
-    imageSrc: "/media/gallery/people/person2.jpg",
+    imageSrc: "/media/gallery/9780140275360.webp",
   },
   {
     id: "new-york-public-library",
@@ -57,7 +57,7 @@ export const FAMOUS_LIBRARIES: FamousLibrary[] = [
       "Free programs and exhibitions for the public",
     ],
     website: "https://www.nypl.org",
-    imageSrc: "/media/gallery/people/person3.jpg",
+    imageSrc: "/media/gallery/9780486272788.webp",
   },
   {
     id: "bibliotheque-nationale-de-france",
@@ -73,7 +73,7 @@ export const FAMOUS_LIBRARIES: FamousLibrary[] = [
       "Legal deposit archive for French publishing",
     ],
     website: "https://www.bnf.fr",
-    imageSrc: "/media/gallery/people/person4.jpg",
+    imageSrc: "/media/gallery/9780486275574.webp",
   },
   {
     id: "trinity-college-old-library",
@@ -89,7 +89,7 @@ export const FAMOUS_LIBRARIES: FamousLibrary[] = [
       "Brian Boru harp on exhibit",
     ],
     website: "https://www.tcd.ie/library/",
-    imageSrc: "/media/gallery/people/person1.jpg",
+    imageSrc: "/media/gallery/9780486278025.webp",
   },
   {
     id: "vatican-apostolic-library",
@@ -105,7 +105,7 @@ export const FAMOUS_LIBRARIES: FamousLibrary[] = [
       "Scholarly access to theological and classical texts",
     ],
     website: "https://www.vaticanlibrary.va",
-    imageSrc: "/media/gallery/people/person2.jpg",
+    imageSrc: "/media/gallery/9780140422344.webp",
   },
   {
     id: "austrian-national-library",
@@ -121,7 +121,7 @@ export const FAMOUS_LIBRARIES: FamousLibrary[] = [
       "Extensive music archives",
     ],
     website: "https://www.onb.ac.at",
-    imageSrc: "/media/gallery/people/person3.jpg",
+    imageSrc: "/media/gallery/9780140424393.webp",
   },
   {
     id: "national-library-of-china",
@@ -137,7 +137,7 @@ export const FAMOUS_LIBRARIES: FamousLibrary[] = [
       "Major research services for scholars",
     ],
     website: "https://www.nlc.cn",
-    imageSrc: "/media/gallery/people/person4.jpg",
+    imageSrc: "/media/gallery/9780141439822.webp",
   },
 ];
 

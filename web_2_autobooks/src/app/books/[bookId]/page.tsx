@@ -23,6 +23,10 @@ import { buildBookDetailPayload } from "@/library/bookEventPayload";
 import { useCart } from "@/context/CartContext";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ShareBookDialog } from "@/components/books/ShareBookDialog";
+import {
+  loadBookCommentsFromSession,
+  saveBookCommentsToSession,
+} from "@/library/bookCommentsSession";
 
 const AVATARS = [
   "/media/gallery/people/person1.jpg",
@@ -64,13 +68,26 @@ export default function BookDetailPage() {
   const commentsRef = useRef<CommentEntry[]>([]);
   commentsRef.current = comments;
 
+  const skipNextCommentsSave = useRef(false);
+
   useEffect(() => {
     if (!book) {
       setComments([]);
       return;
     }
-    setComments(createMockComments(book));
-  }, [book]);
+    skipNextCommentsSave.current = true;
+    const stored = loadBookCommentsFromSession(book.id);
+    setComments(stored !== null ? stored : createMockComments(book));
+  }, [book?.id]);
+
+  useEffect(() => {
+    if (!book) return;
+    if (skipNextCommentsSave.current) {
+      skipNextCommentsSave.current = false;
+      return;
+    }
+    saveBookCommentsToSession(book.id, comments);
+  }, [book, comments]);
 
   const relatedBooks = useMemo(() => (book ? getRelatedBooks(book.id, 4) : []), [book]);
 
@@ -239,7 +256,7 @@ export default function BookDetailPage() {
       message: string;
       ownerUsername: string | null;
     }) => {
-      if (!book) return;
+      if (!book || !currentUser) return;
       setComments((prev) => {
         const entry: CommentEntry = {
           id: `${book.id}-comment-${Date.now()}`,
@@ -258,7 +275,7 @@ export default function BookDetailPage() {
         book: { name: book.title },
       });
     },
-    [book]
+    [book, currentUser]
   );
 
   const handleUpdateComment = useCallback(

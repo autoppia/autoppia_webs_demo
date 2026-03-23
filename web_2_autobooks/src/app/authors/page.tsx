@@ -1,21 +1,24 @@
 "use client";
 
-import { Suspense, useMemo } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { Users } from "lucide-react";
 import { getBooks } from "@/dynamic/v2";
-import { listAuthors, booksForAuthor } from "@/data/authors";
+import { filterAuthorsByQuery, listAuthors, booksForAuthor } from "@/data/authors";
 import { SeedLink } from "@/components/ui/SeedLink";
+import { Input } from "@/components/ui/input";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 function AuthorsContent() {
   const dyn = useDynamicSystem();
   const books = useMemo(() => getBooks(), []);
+  const [authorQuery, setAuthorQuery] = useState("");
   const rows = useMemo(() => {
-    return listAuthors().map((author) => ({
+    const filtered = filterAuthorsByQuery(listAuthors(), authorQuery);
+    return filtered.map((author) => ({
       author,
       count: booksForAuthor(books, author).length,
     }));
-  }, [books]);
+  }, [books, authorQuery]);
 
   return (
     <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative min-h-screen">
@@ -53,6 +56,29 @@ function AuthorsContent() {
             {dyn.v3.getVariant("authors_back_home", TEXT_VARIANTS_MAP, "Back to home")}
           </SeedLink>
         </div>
+
+        <div className="mb-8 max-w-xl">
+          <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-white/50">
+            {dyn.v3.getVariant("authors_search_label", TEXT_VARIANTS_MAP, "Search authors")}
+          </label>
+          <Input
+            id={dyn.v3.getVariant("search-input", ID_VARIANTS_MAP, "search-input")}
+            value={authorQuery}
+            onChange={(e) => setAuthorQuery(e.target.value)}
+            placeholder={dyn.v3.getVariant(
+              "authors_search_placeholder",
+              TEXT_VARIANTS_MAP,
+              "Filter by name, bio, or id…"
+            )}
+            className="h-11 border-white/20 bg-white/10 text-white placeholder:text-white/40 focus-visible:ring-secondary"
+          />
+        </div>
+
+        {rows.length === 0 ? (
+          <p className="rounded-2xl border border-white/10 bg-white/5 px-6 py-8 text-center text-white/65">
+            {dyn.v3.getVariant("authors_no_match", TEXT_VARIANTS_MAP, "No authors match your search.")}
+          </p>
+        ) : null}
 
         <div className="grid gap-4 sm:grid-cols-2">
           {rows.map(({ author, count }) => (

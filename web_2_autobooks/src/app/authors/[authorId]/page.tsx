@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useMemo } from "react";
+import { Suspense, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import { Award, BookOpen } from "lucide-react";
 import { getBooks } from "@/dynamic/v2";
@@ -8,6 +8,7 @@ import { getAuthorById, booksForAuthor } from "@/data/authors";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { logEvent, EVENT_TYPES } from "@/library/events";
 
 function AuthorDetailContent() {
   const params = useParams<{ authorId: string }>();
@@ -19,6 +20,14 @@ function AuthorDetailContent() {
     if (!author) return [];
     return booksForAuthor(books, author);
   }, [author, books]);
+
+  useEffect(() => {
+    if (!author) return;
+    logEvent(EVENT_TYPES.VIEW_AUTHOR, {
+      author_id: author.id,
+      author_name: author.displayName,
+    });
+  }, [author]);
 
   if (!author) {
     return (
