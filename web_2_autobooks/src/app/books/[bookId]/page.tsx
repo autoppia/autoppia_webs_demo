@@ -78,7 +78,7 @@ export default function BookDetailPage() {
     skipNextCommentsSave.current = true;
     const stored = loadBookCommentsFromSession(book.id);
     setComments(stored !== null ? stored : createMockComments(book));
-  }, [book?.id]);
+  }, [book]);
 
   useEffect(() => {
     if (!book) return;
