@@ -1,0 +1,10 @@
+[run]
+source = src
+omit =
+    src/__init__.py
+    src/generators/__init__.py
+    scripts/*
+
+[report]
+fail_under = 90
+show_missing = True

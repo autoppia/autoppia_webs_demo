@@ -1,3 +1,4 @@
+# Unit/integration coverage tests for seed_resolver utilities.
 """
 Unit tests for seed_resolver: env bool, clamp, derive_seed, resolve_seeds.
 """

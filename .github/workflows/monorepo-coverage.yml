@@ -1,0 +1,182 @@
+name: Monorepo Test Coverage
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+concurrency:
+  group: monorepo-coverage-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  discover_frontends:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      apps: ${{ steps.list.outputs.apps }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: List web_* directories (with package.json)
+        id: list
+        run: |
+          apps=""
+          for d in $(find . -maxdepth 1 -type d -name 'web_*' | sed 's|^\./||' | sort); do
+            [ -f "$d/package.json" ] && apps="${apps:+$apps,}$d"
+          done
+          if [ -z "$apps" ]; then
+            echo 'apps=[]' >> "$GITHUB_OUTPUT"
+          else
+            echo "apps=[\"$(echo "$apps" | sed 's/,/","/g')\"]" >> "$GITHUB_OUTPUT"
+          fi
+
+  frontend_coverage:
+    name: Frontend test coverage (${{ matrix.app }})
+    needs: discover_frontends
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJson(needs.discover_frontends.outputs.apps) }}
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ${{ matrix.app }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.app }}
+        run: npm ci
+
+      - name: Run tests with coverage (if test script exists)
+        id: runtests
+        working-directory: ${{ matrix.app }}
+        run: |
+          if npm run | grep -q " test"; then
+            echo "didRun=true" >> "$GITHUB_OUTPUT"
+            npm test -- --coverage --watch=false
+          else
+            echo "didRun=false" >> "$GITHUB_OUTPUT"
+            echo "No test script defined in ${{ matrix.app }}/package.json, skipping tests."
+          fi
+
+      - name: Check coverage output exists
+        id: covcheck
+        if: steps.runtests.outputs.didRun == 'true'
+        working-directory: ${{ matrix.app }}
+        run: |
+          if [ -f "coverage/coverage-final.json" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fail if coverage-final.json is missing
+        if: steps.runtests.outputs.didRun == 'true' && steps.covcheck.outputs.exists != 'true'
+        working-directory: ${{ matrix.app }}
+        run: |
+          echo "coverage/coverage-final.json not found in ${{ matrix.app }} after running tests."
+          exit 1
+
+      - name: Prepare coverage file for upload
+        if: steps.covcheck.outputs.exists == 'true'
+        run: |
+          mkdir -p coverage
+          cp "${{ matrix.app }}/coverage/coverage-final.json" "coverage/coverage-final.json"
+
+      - name: Upload coverage-final.json artifact
+        if: steps.covcheck.outputs.exists == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.app }}
+          path: coverage/coverage-final.json
+
+  backend_coverage:
+    name: Backend test coverage (webs_server)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: "3.11"
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('webs_server/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r webs_server/requirements.txt
+          pip install pytest pytest-cov coverage
+
+      - name: Run pytest with coverage
+        working-directory: webs_server
+        run: |
+          pytest --cov=src --cov-report=xml --cov-report=term-missing --cov-config=.coveragerc
+          coverage report
+
+      - name: Fail if coverage.xml is missing
+        working-directory: webs_server
+        run: |
+          if [ ! -f "coverage.xml" ]; then
+            echo "coverage.xml not found after running pytest coverage."
+            exit 1
+          fi
+
+      - name: Prepare coverage.xml for upload
+        run: |
+          cp "webs_server/coverage.xml" "coverage.xml"
+
+      - name: Upload coverage.xml artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: webs_server
+          path: coverage.xml
+
+  coverage_summary:
+    name: Monorepo total coverage summary
+    needs: [frontend_coverage, backend_coverage]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Download coverage artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: .coverage-artifacts
+
+      - name: Print monorepo coverage summary
+        run: node scripts/monorepo-coverage-summary.mjs --coverageBaseDir .coverage-artifacts --enforce 1 --failOnMissing 0

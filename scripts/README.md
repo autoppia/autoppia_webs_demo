@@ -88,6 +88,51 @@ To run it automatically on every `git push`, install the pre-push hook once:
 ./scripts/install-pre-push-hook.sh
 ```
 
+
+## Monorepo coverage
+
+There is no root `package.json`; each `web_*` app has its own Jest setup. To **generate coverage for every project and then print one monorepo table**, use:
+
+```bash
+./scripts/coverage-all.sh
+```
+
+This script, in order:
+
+1. Runs `npm test -- --coverage --watch=false` in each `web_*` directory that defines a `test` script (skips apps without tests).
+2. Runs `python3 -m pytest` with `--cov` in `webs_server` so `coverage.xml` is written at the repo root of that package (as in CI).
+3. Runs `node scripts/monorepo-coverage-summary.mjs --coverageBaseDir .` to aggregate results.
+
+**Prerequisites:** install dependencies per app (e.g. `npm ci` in each `web_*` you care about) and install Python test tooling for the backend (`pytest`, `pytest-cov`, `coverage`), matching what the GitHub workflow installs.
+
+To apply the **same thresholds as CI** when printing the summary (optional):
+
+```bash
+COVERAGE_ENFORCE=1 ./scripts/coverage-all.sh
+```
+
+### Summary only (coverage already generated)
+
+`monorepo-coverage-summary.mjs` reads existing reports and prints a compact per-app table plus **TOTAL**. It expects, per project:
+
+- Frontends: `coverage/coverage-final.json` (Jest) under each `web_*` (or a flat `coverage-final.json` next to the app name when using downloaded CI artifacts).
+- Backend: `coverage.xml` (coverage.py) under `webs_server/`.
+
+From the repository root, after tests have produced those files:
+
+```bash
+node scripts/monorepo-coverage-summary.mjs --coverageBaseDir .
+```
+
+### CI / enforcement (artifacts from the workflow)
+
+After `actions/download-artifact` has populated `.coverage-artifacts`:
+
+```bash
+node scripts/monorepo-coverage-summary.mjs --coverageBaseDir .coverage-artifacts --enforce 1 --failOnMissing 0
+```
+
+
 ## Notes
 
 - Seed comes from URL and is clamped to `1..999`.

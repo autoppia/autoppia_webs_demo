@@ -1,3 +1,4 @@
+# Unit/integration coverage tests for smart_generator utilities.
 """
 Unit tests for smart_generator: load_example_data, infer_typescript_interface,
 build_generation_prompt_from_examples, get_project_entity_metadata.

@@ -1,3 +1,4 @@
+# Unit/integration coverage tests for seeded_selector (deterministic selection + variants).
 """
 Unit tests for seeded_selector: deterministic selection, shuffle, filter, distribution.
 """
