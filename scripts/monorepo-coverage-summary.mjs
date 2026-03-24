@@ -25,7 +25,7 @@ function pct(covered, total) {
 }
 
 function formatPct(v) {
-  if (v === null || v === undefined || Number.isNaN(v)) return "n/a";
+  if (v === null || Number.isNaN(v)) return "n/a";
   return `${v.toFixed(2)}%`;
 }
 
