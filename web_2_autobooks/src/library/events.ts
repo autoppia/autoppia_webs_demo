@@ -19,11 +19,15 @@ export const EVENT_TYPES = {
   // Optional UI-only events (not used by backend validators)
   OPEN_PREVIEW: "OPEN_PREVIEW",
   SHARE_BOOK: "SHARE_BOOK",
+  EDIT_COMMENT_BOOK: "EDIT_COMMENT_BOOK",
+  DELETE_COMMENT_BOOK: "DELETE_COMMENT_BOOK",
   ADD_TO_READING_LIST: "ADD_TO_READING_LIST",
   REMOVE_FROM_READING_LIST: "REMOVE_FROM_READING_LIST",
   VIEW_CART_BOOK: "VIEW_CART_BOOK",
   ADD_TO_CART_BOOK: "ADD_TO_CART_BOOK",
   REMOVE_FROM_CART_BOOK: "REMOVE_FROM_CART_BOOK",
+  /** Author profile viewed (UI / validator hook) */
+  VIEW_AUTHOR: "view_author",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { BookDetailHero } from "@/components/books/BookDetailHero";
 import { BookMeta } from "@/components/books/BookMeta";
@@ -22,6 +22,11 @@ import {
 import { buildBookDetailPayload } from "@/library/bookEventPayload";
 import { useCart } from "@/context/CartContext";
 import { useDynamicSystem } from "@/dynamic/shared";
+import { ShareBookDialog } from "@/components/books/ShareBookDialog";
+import {
+  loadBookCommentsFromSession,
+  saveBookCommentsToSession,
+} from "@/library/bookCommentsSession";
 
 const AVATARS = [
   "/media/gallery/people/person1.jpg",
@@ -55,18 +60,270 @@ export default function BookDetailPage() {
   const { currentUser, addToReadingList, removeFromReadingList } = useAuth();
   const { addToCart } = useCart();
 
-  const [comments, setComments] = useState(() =>
-    book ? createMockComments(book) : []
-  );
+  const [comments, setComments] = useState<CommentEntry[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [readingListMessage, setReadingListMessage] = useState<string | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
+
+  const commentsRef = useRef<CommentEntry[]>([]);
+  commentsRef.current = comments;
+
+  const skipNextCommentsSave = useRef(false);
+
+  useEffect(() => {
+    if (!book) {
+      setComments([]);
+      return;
+    }
+    skipNextCommentsSave.current = true;
+    const stored = loadBookCommentsFromSession(book.id);
+    setComments(stored !== null ? stored : createMockComments(book));
+  }, [book]);
+
+  useEffect(() => {
+    if (!book) return;
+    if (skipNextCommentsSave.current) {
+      skipNextCommentsSave.current = false;
+      return;
+    }
+    saveBookCommentsToSession(book.id, comments);
+  }, [book, comments]);
+
+  const relatedBooks = useMemo(() => (book ? getRelatedBooks(book.id, 4) : []), [book]);
+
+  useEffect(() => {
+    if (!book) return;
+    const payload = buildBookDetailPayload(book);
+    logEvent(EVENT_TYPES.BOOK_DETAIL, payload);
+  }, [book]);
+
+  const dyn = useDynamicSystem();
+
+  const handleWatchTrailer = useCallback(() => {
+    if (!book) return;
+    const payload = buildBookDetailPayload(book);
+    logEvent(EVENT_TYPES.OPEN_PREVIEW, payload);
+    if (book.trailerUrl) {
+      window.open(book.trailerUrl, "_blank", "noopener,noreferrer");
+    }
+  }, [book]);
+
+  const handleDelete = useCallback(() => {
+    if (!book) return;
+    logEvent(EVENT_TYPES.DELETE_BOOK, {
+      name: book.title,
+      author: book.director,
+      year: book.year,
+      genres: book.genres,
+      rating: book.rating,
+      pages: book.duration,
+    });
+    setMessage("Book deleted successfully.");
+  }, [book]);
+
+  const handleEditSubmit = useCallback(
+    (data: BookEditorData) => {
+      if (!book) return;
+      const newValues = {
+        name: data.title,
+        author: data.director,
+        year: Number.parseInt(data.year, 10),
+        rating: Number.parseFloat(data.rating),
+        pages: Number.parseInt(data.duration, 10),
+        genres: data.genres
+          .split(",")
+          .map((g) => g.trim())
+          .filter(Boolean),
+      };
+      const previousValues = {
+        name: book.title,
+        author: book.director,
+        year: book.year,
+        rating: book.rating,
+        pages: book.duration,
+        genres: book.genres,
+      };
+      const changedFields = (
+        Object.keys(newValues) as Array<keyof typeof newValues>
+      ).filter((key) => {
+        const a = newValues[key];
+        const b = previousValues[key as keyof typeof previousValues];
+        if (Array.isArray(a) && Array.isArray(b)) {
+          if (a.length !== b.length) return true;
+          return a.join(",") !== b.join(",");
+        }
+        return a !== b;
+      });
+
+      logEvent(EVENT_TYPES.EDIT_BOOK, {
+        ...newValues,
+        previous_values: previousValues,
+        changed_fields: changedFields,
+      });
+      setMessage("Book edited successfully.");
+    },
+    [book]
+  );
+
+  const handleWatchlist = useCallback(() => {
+    if (!book) return;
+    if (!currentUser) {
+      setReadingListMessage("Please sign in to add books to your reading list");
+      setTimeout(() => setReadingListMessage(null), 3000);
+      return;
+    }
+
+    const payload = buildBookDetailPayload(book);
+    const isInReadingList = currentUser.readingList?.includes(book.id);
+    if (isInReadingList) {
+      logEvent(EVENT_TYPES.REMOVE_FROM_READING_LIST, payload);
+      removeFromReadingList(book.id);
+      setReadingListMessage(`"${book.title}" removed from reading list`);
+    } else {
+      logEvent(EVENT_TYPES.ADD_TO_READING_LIST, payload);
+      addToReadingList(book.id);
+      setReadingListMessage(`"${book.title}" added to reading list`);
+    }
+
+    setTimeout(() => setReadingListMessage(null), 3000);
+  }, [book, currentUser, addToReadingList, removeFromReadingList]);
+
+  const isInReadingList = currentUser?.readingList?.includes(book?.id ?? "") ?? false;
+
+  const handleAddToCart = useCallback(() => {
+    if (!book) return;
+    const payload = buildBookDetailPayload(book);
+    logEvent(EVENT_TYPES.ADD_TO_CART_BOOK, {
+      ...payload,
+      quantity: 1,
+      price: book.price ?? null,
+    });
+    addToCart(book, 1);
+    setMessage(`"${book.title}" added to cart.`);
+    setTimeout(() => setMessage(null), 2500);
+  }, [book, addToCart]);
+
+  const handleShareOpen = useCallback(() => {
+    if (typeof document !== "undefined") {
+      const v4Dialog = document.querySelector<HTMLDialogElement>('dialog[data-v4="true"]');
+      if (v4Dialog?.hasAttribute("open")) {
+        const closeButton = v4Dialog.querySelector<HTMLButtonElement>('button[aria-label="Close"]');
+        if (closeButton) {
+          closeButton.click();
+        } else {
+          v4Dialog.removeAttribute("open");
+          v4Dialog.style.display = "none";
+        }
+      }
+    }
+    setShareOpen(true);
+  }, []);
+
+  const handleShareComplete = useCallback(
+    ({
+      recipientName,
+      recipientEmail,
+    }: {
+      recipientName: string;
+      recipientEmail: string;
+    }) => {
+      if (!book) return;
+      const payload = buildBookDetailPayload(book);
+      logEvent(EVENT_TYPES.SHARE_BOOK, {
+        ...payload,
+        recipient_name: recipientName,
+        recipient_email: recipientEmail,
+      });
+      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(window.location.href).catch(() => {
+          /* clipboard may be denied; share still logged */
+        });
+      }
+      setShareOpen(false);
+      setMessage(`Shared “${book.title}” with ${recipientName}. Link copied when the browser allows it.`);
+      setTimeout(() => setMessage(null), 4500);
+    },
+    [book]
+  );
+
+  const handleCommentSubmit = useCallback(
+    ({
+      author,
+      message: body,
+      ownerUsername,
+    }: {
+      author: string;
+      message: string;
+      ownerUsername: string | null;
+    }) => {
+      if (!book || !currentUser) return;
+      setComments((prev) => {
+        const entry: CommentEntry = {
+          id: `${book.id}-comment-${Date.now()}`,
+          author,
+          message: body,
+          mood: "Reader note",
+          avatar: AVATARS[(prev.length + 1) % AVATARS.length],
+          createdAt: new Date().toLocaleString(),
+          ownerUsername: ownerUsername ?? null,
+        };
+        return [entry, ...prev];
+      });
+      logEvent(EVENT_TYPES.ADD_COMMENT_BOOK, {
+        name: author,
+        content: body,
+        book: { name: book.title },
+      });
+    },
+    [book, currentUser]
+  );
+
+  const handleUpdateComment = useCallback(
+    (commentId: string, nextMessage: string) => {
+      if (!book) return;
+      const target = commentsRef.current.find((c) => c.id === commentId);
+      if (!target) {
+        return;
+      }
+      const previous = target.message;
+      logEvent(EVENT_TYPES.EDIT_COMMENT_BOOK, {
+        name: target.author,
+        content: nextMessage,
+        previous_content: previous,
+        book: { name: book.title },
+        comment_id: commentId,
+      });
+      setComments((prev) =>
+        prev.map((c) => (c.id === commentId ? { ...c, message: nextMessage } : c))
+      );
+    },
+    [book]
+  );
+
+  const handleDeleteComment = useCallback(
+    (commentId: string) => {
+      if (!book) return;
+      const target = commentsRef.current.find((c) => c.id === commentId);
+      if (!target) {
+        return;
+      }
+      logEvent(EVENT_TYPES.DELETE_COMMENT_BOOK, {
+        name: target.author,
+        content: target.message,
+        book: { name: book.title },
+        comment_id: commentId,
+      });
+      setComments((prev) => prev.filter((c) => c.id !== commentId));
+    },
+    [book]
+  );
+
+  const canManageBook = Boolean(book && currentUser?.allowedBooks?.includes(book.id));
 
   if (!book) {
     return (
       <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative min-h-screen">
-        {/* Background grid pattern */}
         <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
-        {/* Background gradient overlays */}
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
@@ -89,151 +346,10 @@ export default function BookDetailPage() {
     );
   }
 
-  const relatedBooks = useMemo(() => getRelatedBooks(book.id, 4), [book.id]);
-  const canManageBook = Boolean(currentUser?.allowedBooks?.includes(book.id));
-
-  // Log detail view with backend-expected schema
-  useEffect(() => {
-    const payload = buildBookDetailPayload(book);
-    logEvent(EVENT_TYPES.BOOK_DETAIL, payload);
-  }, [book]);
-
-  const handleWatchTrailer = () => {
-    const payload = buildBookDetailPayload(book);
-    logEvent(EVENT_TYPES.OPEN_PREVIEW, payload);
-    if (book.trailerUrl) {
-      window.open(book.trailerUrl, "_blank", "noopener,noreferrer");
-    }
-  };
-
-  const handleDelete = () => {
-    logEvent(EVENT_TYPES.DELETE_BOOK, {
-      name: book.title,
-      author: book.director,
-      year: book.year,
-      genres: book.genres,
-      rating: book.rating,
-      pages: book.duration,
-    });
-    setMessage("Book deleted successfully.");
-  };
-
-  const handleEditSubmit = (data: BookEditorData) => {
-    const newValues = {
-      name: data.title,
-      author: data.director,
-      year: Number.parseInt(data.year, 10),
-      rating: Number.parseFloat(data.rating),
-      pages: Number.parseInt(data.duration, 10),
-      genres: data.genres
-        .split(",")
-        .map((g) => g.trim())
-        .filter(Boolean),
-    };
-    const previousValues = {
-      name: book.title,
-      author: book.director,
-      year: book.year,
-      rating: book.rating,
-      pages: book.duration,
-      genres: book.genres,
-    };
-    const changedFields = (
-      Object.keys(newValues) as Array<keyof typeof newValues>
-    ).filter((key) => {
-      const a = newValues[key];
-      const b = previousValues[key as keyof typeof previousValues];
-      if (Array.isArray(a) && Array.isArray(b)) {
-        if (a.length !== b.length) return true;
-        return a.join(",") !== b.join(",");
-      }
-      return a !== b;
-    });
-
-    logEvent(EVENT_TYPES.EDIT_BOOK, {
-      ...newValues,
-      previous_values: previousValues,
-      changed_fields: changedFields,
-    });
-    setMessage("Book edited successfully.");
-  };
-
-  const handleWatchlist = () => {
-    if (!currentUser) {
-      setReadingListMessage("Please sign in to add books to your reading list");
-      setTimeout(() => setReadingListMessage(null), 3000);
-      return;
-    }
-
-    const payload = buildBookDetailPayload(book);
-    const isInReadingList = currentUser.readingList?.includes(book.id);
-    if (isInReadingList) {
-      logEvent(EVENT_TYPES.REMOVE_FROM_READING_LIST, payload);
-      removeFromReadingList(book.id);
-      setReadingListMessage(`"${book.title}" removed from reading list`);
-    } else {
-      logEvent(EVENT_TYPES.ADD_TO_READING_LIST, payload);
-      addToReadingList(book.id);
-      setReadingListMessage(`"${book.title}" added to reading list`);
-    }
-
-    // Auto-hide message after 3 seconds
-    setTimeout(() => setReadingListMessage(null), 3000);
-  };
-
-  const isInReadingList = currentUser?.readingList?.includes(book.id) ?? false;
-
-  const handleAddToCart = () => {
-    const payload = buildBookDetailPayload(book);
-    logEvent(EVENT_TYPES.ADD_TO_CART_BOOK, {
-      ...payload,
-      quantity: 1,
-      price: book.price ?? null,
-    });
-    addToCart(book, 1);
-    setMessage(`"${book.title}" added to cart.`);
-    setTimeout(() => setMessage(null), 2500);
-  };
-
-  const handleShare = () => {
-    const payload = buildBookDetailPayload(book);
-    logEvent(EVENT_TYPES.SHARE_BOOK, payload);
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href).catch(() => {});
-    }
-  };
-
-  const handleCommentSubmit = ({
-    author,
-    message,
-  }: {
-    author: string;
-    message: string;
-  }) => {
-    const entry: CommentEntry = {
-      id: `${book.id}-comment-${Date.now()}`,
-      author,
-      message,
-      mood: "Reader note",
-      avatar: AVATARS[(comments.length + 1) % AVATARS.length],
-      createdAt: new Date().toLocaleString(),
-    };
-    setComments((prev) => [entry, ...prev]);
-    logEvent(EVENT_TYPES.ADD_COMMENT_BOOK, {
-      name: author,
-      content: message,
-      book: { name: book.title },
-    });
-  };
-
-  const dyn = useDynamicSystem();
-
   return (
     dyn.v1.addWrapDecoy("book-detail-page", (
       <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative min-h-screen">
-        {/* Background grid pattern */}
         <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
-        {/* Background gradient overlays */}
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
@@ -261,7 +377,7 @@ export default function BookDetailPage() {
               book={book}
               onReadBook={handleWatchTrailer}
               onReadingList={handleWatchlist}
-              onShare={handleShare}
+              onShare={handleShareOpen}
               onAddToCart={handleAddToCart}
               isInReadingList={isInReadingList}
             />
@@ -289,7 +405,19 @@ export default function BookDetailPage() {
               </section>
             )}
             <RelatedBooks books={relatedBooks} />
-            <CommentsPanel comments={comments} onSubmit={handleCommentSubmit} />
+            <CommentsPanel
+              comments={comments}
+              currentUsername={currentUser?.username ?? null}
+              onSubmit={handleCommentSubmit}
+              onUpdateComment={handleUpdateComment}
+              onDeleteComment={handleDeleteComment}
+            />
+            <ShareBookDialog
+              open={shareOpen}
+              onOpenChange={setShareOpen}
+              bookTitle={book.title}
+              onCompleteShare={handleShareComplete}
+            />
           </main>
         ))}
       </div>

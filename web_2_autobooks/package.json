@@ -9,7 +9,8 @@
     "lint": "bunx biome lint --write && bunx tsc --noEmit",
     "format": "bunx biome format --write",
     "verify-datagen": "node verify-data-gen.js",
-    "test-datagen": "node test-data-gen.js"
+    "test-datagen": "node test-data-gen.js",
+    "test:unit": "bun test tests/autobooks-domain.test.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",

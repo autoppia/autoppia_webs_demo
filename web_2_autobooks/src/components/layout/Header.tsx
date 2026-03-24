@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BookOpen, Bookmark, ShoppingCart, Home, Search, Info, Mail } from "lucide-react";
+import { BookOpen, Bookmark, ShoppingCart, Home, Search, Info, Mail, Users, Library } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useAuth } from "@/context/AuthContext";
@@ -13,6 +13,8 @@ import { TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 const NAV_LINKS = [
   { label: "Home", href: "/", preserveSeed: true, icon: Home },
   { label: "Search", href: "/search", preserveSeed: true, icon: Search },
+  { label: "Authors", href: "/authors", preserveSeed: true, icon: Users },
+  { label: "Libraries", href: "/libraries", preserveSeed: true, icon: Library },
   { label: "Wishlist", href: "/wishlist", preserveSeed: true, icon: Bookmark },
   { label: "Cart", href: "/cart", preserveSeed: true, icon: ShoppingCart },
   { label: "About", href: "/about", preserveSeed: true, icon: Info },

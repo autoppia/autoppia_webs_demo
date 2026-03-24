@@ -52,6 +52,7 @@
     "build/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "tests/**/*.test.ts"
   ]
 }

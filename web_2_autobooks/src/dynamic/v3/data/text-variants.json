@@ -982,5 +982,65 @@
     "Share",
     "Share",
     "Share"
+  ],
+  "comment_login_required": [
+    "Sign in to post reader notes. You can still browse existing notes below.",
+    "Inicia sesión para publicar notas. Puedes seguir leyendo las notas.",
+    "Log in to add notes. Existing notes remain visible.",
+    "Authentication required to post. Notes below are readable.",
+    "Please sign in to contribute a reader note.",
+    "Sign in required to post; you may read notes without signing in.",
+    "Post notes after sign-in. Browse others' notes anytime.",
+    "Reader notes need a signed-in account to publish.",
+    "Sign in to write; public notes stay visible.",
+    "Login to post reader notes; viewing is open."
+  ],
+  "comment_go_login": [
+    "Go to sign in",
+    "Ir a iniciar sesión",
+    "Sign in",
+    "Open login",
+    "Log in",
+    "Go to login",
+    "Authenticate",
+    "Sign in now",
+    "Account login",
+    "Login page"
+  ],
+  "authors_search_label": [
+    "Search authors",
+    "Buscar autores",
+    "Filter authors",
+    "Find an author",
+    "Author search",
+    "Look up authors",
+    "Search catalog authors",
+    "Author filter",
+    "Query authors",
+    "Browse authors"
+  ],
+  "authors_search_placeholder": [
+    "Filter by name, bio, or id…",
+    "Nombre, biografía o id…",
+    "Type to filter authors",
+    "Search name or bio",
+    "Find by author id",
+    "Narrow the author list",
+    "Search authors…",
+    "Filter the list",
+    "Author name or keyword",
+    "Match name, bio, id"
+  ],
+  "authors_no_match": [
+    "No authors match your search.",
+    "Ningún autor coincide.",
+    "Try a different search term.",
+    "No results for that filter.",
+    "Adjust your query to see authors.",
+    "Nothing matched; clear the filter.",
+    "No authors found.",
+    "Widen your search.",
+    "Empty result set.",
+    "No matches."
   ]
 }
