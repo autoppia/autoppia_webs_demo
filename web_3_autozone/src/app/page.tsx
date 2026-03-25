@@ -200,6 +200,12 @@ function HomeContent() {
     return () => clearTimeout(timeoutId);
   }, []);
 
+  /** Avoid hydration mismatch: SSR has no catalog; first client paint must match. */
+  const [catalogMounted, setCatalogMounted] = useState(false);
+  useEffect(() => {
+    setCatalogMounted(true);
+  }, []);
+
   return (
     <main
       id={dyn.v3.getVariant("home-main", ID_VARIANTS_MAP, "home-main")}
@@ -277,7 +283,7 @@ function HomeContent() {
             </section>
           ))}
 
-        {isLoadingProducts && (
+        {(!catalogMounted || isLoadingProducts) && (
           <div className="omnizon-container -mt-12 text-center text-sm text-slate-500">
             Loading products...
           </div>
@@ -366,7 +372,7 @@ function HomeContent() {
             ))
           )}
 
-          {!isLoadingProducts && allProducts.length > 0 && (
+          {catalogMounted && !isLoadingProducts && allProducts.length > 0 && (
             <DiscountedProductsSection
               allProducts={allProducts}
               effectiveSeed={effectiveSeed}
