@@ -6,7 +6,6 @@ import { CreateChannelModal } from "@/components/CreateChannelModal";
 import { CreateServerModal } from "@/components/CreateServerModal";
 import { DMChatPanel, type DMMessage } from "@/components/DMChatPanel";
 import { DMSidebar } from "@/components/DMSidebar";
-import { EmptyState } from "@/components/EmptyState";
 import { ErrorState } from "@/components/ErrorState";
 import { HomeDashboard } from "@/components/HomeDashboard";
 import { MemberSidebar } from "@/components/MemberSidebar";
@@ -17,6 +16,7 @@ import { CURRENT_USER } from "@/constants/mock";
 import { useDynamicSystem } from "@/dynamic";
 import { getDiscordData, dynamicDataProvider } from "@/dynamic/v2";
 import { ID_VARIANTS_MAP } from "@/dynamic/v3";
+import { useLocalDiscordOverlay } from "@/context/LocalDiscordOverlayContext";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import type {
@@ -49,6 +49,26 @@ export default function DiscordPage() {
   const searchParams = useSearchParams();
   const dyn = useDynamicSystem();
   const { seed } = useSeed();
+  const {
+    localServers,
+    setLocalServers,
+    localChannels,
+    setLocalChannels,
+    localMessages,
+    setLocalMessages,
+    localReactions,
+    setLocalReactions,
+    userReactions,
+    setUserReactions,
+    dmMessages,
+    setDmMessages,
+    voicePresence,
+    setVoicePresence,
+    voiceChannelId,
+    setVoiceChannelId,
+    voiceMuted,
+    setVoiceMuted,
+  } = useLocalDiscordOverlay();
   const data = getDiscordData();
   const [retryCount, setRetryCount] = useState(0);
 
@@ -60,6 +80,8 @@ export default function DiscordPage() {
   const serverParam = searchParams.get("server");
   const rawChannelParam = searchParams.get("channel");
   const channelParam = normalizeChannelParam(rawChannelParam);
+  const viewParam = searchParams.get("view");
+  const viewIsDms = viewParam === "dms";
 
   const [selectedServerId, setSelectedServerId] = useState<string | null>(null);
   const [selectedChannelId, setSelectedChannelId] = useState<string | null>(
@@ -67,30 +89,12 @@ export default function DiscordPage() {
   );
   const [viewMode, setViewMode] = useState<"servers" | "dms">("servers");
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-  const [dmMessages, setDmMessages] = useState<Record<string, DMMessage[]>>({});
-  const [localMessages, setLocalMessages] = useState<Record<string, Message[]>>(
-    {},
-  );
-  const [localReactions, setLocalReactions] = useState<
-    Record<string, MessageReaction[]>
-  >({});
-  const [userReactions, setUserReactions] = useState<
-    Record<string, Set<string>>
-  >({});
   const [unreadChannelIds, setUnreadChannelIds] = useState<Set<string>>(
     new Set(),
   );
   const [createServerModalOpen, setCreateServerModalOpen] = useState(false);
   const [createChannelModalOpen, setCreateChannelModalOpen] = useState(false);
   const [serverSettingsModalOpen, setServerSettingsModalOpen] = useState(false);
-  const [localServers, setLocalServers] = useState<Server[]>([]);
-  /** Local channels (and voice presence) are client-only; not persisted to API. */
-  const [localChannels, setLocalChannels] = useState<Channel[]>([]);
-  const [voicePresence, setVoicePresence] = useState<Record<string, string[]>>(
-    {},
-  );
-  const [voiceChannelId, setVoiceChannelId] = useState<string | null>(null);
-  const [voiceMuted, setVoiceMuted] = useState(false);
 
   const allServers = useMemo(
     () => [...(data?.servers ?? []), ...localServers],
@@ -237,7 +241,11 @@ export default function DiscordPage() {
   );
 
   const updateUrl = useCallback(
-    (serverId: string | null, channelId: string | null) => {
+    (
+      serverId: string | null,
+      channelId: string | null,
+      opts?: { clearView?: boolean },
+    ) => {
       if (typeof window === "undefined") return;
       const url = new URL(window.location.href);
       if (serverId) url.searchParams.set("server", serverId);
@@ -245,13 +253,24 @@ export default function DiscordPage() {
       if (channelId) url.searchParams.set("channel", channelId);
       else url.searchParams.delete("channel");
       url.searchParams.set("seed", String(seed));
+      if (serverId || channelId) url.searchParams.delete("view");
+      else if (opts?.clearView) url.searchParams.delete("view");
       window.history.replaceState({}, "", url.pathname + url.search);
     },
     [seed],
   );
 
   useEffect(() => {
+    setViewMode(viewIsDms ? "dms" : "servers");
+  }, [viewIsDms]);
+
+  useEffect(() => {
     if (!data) return;
+    if (viewIsDms) {
+      setSelectedServerId(null);
+      setSelectedChannelId(null);
+      return;
+    }
     const servers = allServersRef.current;
     const local = localChannelsRef.current;
     const serverId =
@@ -273,8 +292,11 @@ export default function DiscordPage() {
       const defaultChannelId = pickDefaultChannel(channels);
       setSelectedChannelId(channelId ?? defaultChannelId);
       updateUrl(resolvedServerId, channelId ?? defaultChannelId);
+    } else {
+      setSelectedChannelId(null);
+      updateUrl(null, null, { clearView: true });
     }
-  }, [data, serverParam, channelParam, updateUrl]);
+  }, [data, serverParam, channelParam, updateUrl, viewIsDms]);
 
   useEffect(() => {
     if (selectedServerId && selectedChannelId)
@@ -292,14 +314,37 @@ export default function DiscordPage() {
     }
   }, [selectedServerId, channelsForServer, selectedChannelId]);
 
-  const handleSelectServer = useCallback((id: string) => {
-    setSelectedServerId(id);
-  }, []);
+  const handleSelectServer = useCallback(
+    (id: string) => {
+      setSelectedServerId(id);
+      updateUrl(id, null);
+    },
+    [updateUrl],
+  );
+
+  const handleViewModeChange = useCallback(
+    (mode: "servers" | "dms") => {
+      setViewMode(mode);
+      if (typeof window === "undefined") return;
+      const url = new URL(window.location.href);
+      url.searchParams.set("seed", String(seed));
+      if (mode === "dms") {
+        url.searchParams.set("view", "dms");
+        url.searchParams.delete("server");
+        url.searchParams.delete("channel");
+      } else {
+        url.searchParams.delete("view");
+      }
+      window.history.replaceState({}, "", url.pathname + url.search);
+    },
+    [seed],
+  );
 
   const handleGoHome = useCallback(() => {
     setSelectedServerId(null);
     setSelectedChannelId(null);
-  }, []);
+    updateUrl(null, null, { clearView: true });
+  }, [updateUrl]);
 
   const handleSelectChannel = useCallback(
     (id: string) => {
@@ -543,30 +588,6 @@ export default function DiscordPage() {
     );
   }
 
-  if (allServers.length === 0) {
-    return (
-      <div className="min-h-screen bg-discord-darkest flex flex-col items-center justify-center gap-4 p-8">
-        <EmptyState
-          title={dyn.v3.getVariant("no_servers", undefined, "No servers")}
-          description="Create a server to get started. (Demo: data is mocked.)"
-        />
-        <button
-          type="button"
-          onClick={() => setCreateServerModalOpen(true)}
-          className="px-4 py-2 rounded-md bg-discord-accent text-white hover:bg-discord-accent/90"
-          data-testid={dyn.v3.getVariant("create-server-first", undefined, "create-server-first")}
-        >
-          {dyn.v3.getVariant("create_server_first", undefined, "Create server")}
-        </button>
-        <CreateServerModal
-          open={createServerModalOpen}
-          onClose={() => setCreateServerModalOpen(false)}
-          onCreateServer={handleCreateServer}
-        />
-      </div>
-    );
-  }
-
   return (
     <div className="flex h-screen overflow-hidden" data-testid={dyn.v3.getVariant("discord-page", undefined, "discord-page")}>
       <ServerList
@@ -574,7 +595,7 @@ export default function DiscordPage() {
         selectedId={selectedServerId}
         viewMode={viewMode}
         onSelect={handleSelectServer}
-        onViewModeChange={setViewMode}
+        onViewModeChange={handleViewModeChange}
         onAddServer={() => setCreateServerModalOpen(true)}
         onGoHome={handleGoHome}
       />
@@ -586,6 +607,7 @@ export default function DiscordPage() {
               voiceChannels={voiceChannelsWithPresence}
               voicePresence={voicePresence}
               getServerName={getServerName}
+              hasServers={allServers.length > 0}
             />
           ) : (
             <>
