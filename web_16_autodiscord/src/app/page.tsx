@@ -381,7 +381,7 @@ export default function DiscordPage() {
         });
       }
     },
-    [allChannelsForLookup, voiceChannelId, allServers],
+    [allChannelsForLookup, voiceChannelId, allServers, setVoicePresence, setVoiceChannelId],
   );
 
   const handleVoiceLeave = useCallback(() => {
@@ -401,7 +401,7 @@ export default function DiscordPage() {
     }));
     setVoiceChannelId(null);
     setSelectedChannelId(null);
-  }, [voiceChannelId, allChannelsForLookup, getServerName]);
+  }, [voiceChannelId, allChannelsForLookup, getServerName, setVoicePresence, setVoiceChannelId]);
 
   const handleVoiceMuteToggle = useCallback(() => {
     const ch = voiceChannelId
@@ -415,7 +415,7 @@ export default function DiscordPage() {
       muted: !voiceMuted,
     });
     setVoiceMuted((v) => !v);
-  }, [voiceChannelId, voiceMuted, allChannelsForLookup, getServerName]);
+  }, [voiceChannelId, voiceMuted, allChannelsForLookup, getServerName, setVoiceMuted]);
 
   const handleSendDMMessage = useCallback(
     (content: string) => {
@@ -431,7 +431,7 @@ export default function DiscordPage() {
         return { ...prev, [selectedUserId]: [...list, msg] };
       });
     },
-    [selectedUserId],
+    [selectedUserId, setDmMessages],
   );
 
   const handleSendMessage = useCallback(
@@ -449,7 +449,7 @@ export default function DiscordPage() {
         return { ...prev, [selectedChannelId]: [...list, msg] };
       });
     },
-    [selectedChannelId],
+    [selectedChannelId, setLocalMessages],
   );
 
   const handleReaction = useCallback(
@@ -484,7 +484,7 @@ export default function DiscordPage() {
         return { ...prev, [messageId]: next };
       });
     },
-    [userReactions],
+    [userReactions, setUserReactions, setLocalReactions],
   );
 
   const handleCreateServer = useCallback((name: string) => {
@@ -493,7 +493,7 @@ export default function DiscordPage() {
     setViewMode("servers");
     setSelectedServerId(id);
     setSelectedChannelId(null);
-  }, []);
+  }, [setLocalServers]);
 
   const handleDeleteServer = useCallback(
     (serverId: string) => {
@@ -515,7 +515,7 @@ export default function DiscordPage() {
         }
       }
     },
-    [data?.servers, localServers, selectedServerId, voiceChannelId],
+    [data?.servers, localServers, selectedServerId, voiceChannelId, setLocalServers, setLocalChannels, setVoicePresence, setVoiceChannelId],
   );
 
   const handleCreateChannel = useCallback(
@@ -549,7 +549,7 @@ export default function DiscordPage() {
         setVoicePresence((prev) => ({ ...prev, [id]: ["current"] }));
       }
     },
-    [selectedServerId, selectedServer, channelsForServer, updateUrl],
+    [selectedServerId, selectedServer, channelsForServer, updateUrl, setLocalChannels, setVoiceChannelId, setVoicePresence],
   );
 
   const readChannelIds = useRef<Set<string>>(new Set());
