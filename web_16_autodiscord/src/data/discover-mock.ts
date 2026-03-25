@@ -1,4 +1,5 @@
 export type DiscoverCategoryId =
+  | "all"
   | "featured"
   | "gaming"
   | "music"
@@ -12,6 +13,7 @@ export interface DiscoverCategory {
 }
 
 export const DISCOVER_CATEGORIES: DiscoverCategory[] = [
+  { id: "all", label: "All" },
   { id: "featured", label: "Featured" },
   { id: "gaming", label: "Gaming" },
   { id: "music", label: "Music" },
@@ -158,9 +160,11 @@ export function filterDiscoverServers(
 ): DiscoverableServer[] {
   const q = query.trim().toLowerCase();
   const byCategory =
-    category === "featured"
-      ? DISCOVER_SERVERS.filter((s) => s.featured)
-      : DISCOVER_SERVERS.filter((s) => s.category === category);
+    category === "all"
+      ? DISCOVER_SERVERS
+      : category === "featured"
+        ? DISCOVER_SERVERS.filter((s) => s.featured)
+        : DISCOVER_SERVERS.filter((s) => s.category === category);
   if (!q) return byCategory;
   return byCategory.filter(
     (s) =>

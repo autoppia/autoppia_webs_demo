@@ -82,7 +82,7 @@ export default function DiscoverPage() {
   const allServers = useMemo(() => [...(data?.servers ?? []), ...localServers], [data?.servers, localServers]);
   const allServerIds = useMemo(() => new Set(allServers.map((s) => s.id)), [allServers]);
 
-  const [category, setCategory] = useState<DiscoverCategoryId>("featured");
+  const [category, setCategory] = useState<DiscoverCategoryId>("all");
   const [searchInput, setSearchInput] = useState("");
   const [appliedQuery, setAppliedQuery] = useState("");
   const [joinedIds, setJoinedIds] = useState<Set<string>>(new Set());
