@@ -74,7 +74,12 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
       params.set("seed", seed.toString());
       const enableDynamic = currentParams.get("enable_dynamic");
       if (enableDynamic) params.set("enable_dynamic", enableDynamic);
-      if (base === "" || base === "/") {
+      // Re-attach server/channel from the current page when building `/` links — but not
+      // when opening DMs (`view=dms`) or the main entry would wrongly keep a guild open.
+      if (
+        (base === "" || base === "/") &&
+        params.get("view") !== "dms"
+      ) {
         const server = currentParams.get("server");
         const channel = currentParams.get("channel");
         if (server) params.set("server", server);
