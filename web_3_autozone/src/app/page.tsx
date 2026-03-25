@@ -5,7 +5,8 @@ import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { BlurCard } from "@/components/ui/BlurCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Suspense } from "react";
-import { getProductsByCategory, getEffectiveSeed } from "@/dynamic/v2";
+import { getProductsByCategory, getAllProducts, getEffectiveSeed } from "@/dynamic/v2";
+import { DiscountedProductsSection } from "@/components/home/DiscountedProductsSection";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ArrowRight, Package, ShieldCheck, Sparkles } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/events";
@@ -121,6 +122,8 @@ function HomeContent() {
   const homeProducts = getProductsByCategory("Home");
   const electronicProducts = getProductsByCategory("Electronics");
   const fitnessProducts = getProductsByCategory("Fitness");
+
+  const allProducts = getAllProducts();
 
   const isLoadingProducts =
     kitchenProducts.length +
@@ -361,6 +364,13 @@ function HomeContent() {
                 </div>
               </section>
             ))
+          )}
+
+          {!isLoadingProducts && allProducts.length > 0 && (
+            <DiscountedProductsSection
+              allProducts={allProducts}
+              effectiveSeed={effectiveSeed}
+            />
           )}
 
           {/* Product Highlights */}

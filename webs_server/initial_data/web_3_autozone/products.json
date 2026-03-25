@@ -9,7 +9,8 @@
     "rating": 4.5,
     "brand": "BlendPro",
     "inStock": true,
-    "reviews": 272
+    "reviews": 272,
+    "originalPrice": "$112.49"
   },
   {
     "id": "kitchen-2",
@@ -69,7 +70,8 @@
     "rating": 4.8,
     "brand": "StoragePro",
     "inStock": true,
-    "reviews": 268
+    "reviews": 268,
+    "originalPrice": "$399.97"
   },
   {
     "id": "home-1",
@@ -129,7 +131,8 @@
     "rating": 4.4,
     "brand": "ActiveGear",
     "inStock": true,
-    "reviews": 62
+    "reviews": 62,
+    "originalPrice": "$83.32"
   },
   {
     "id": "fitness-3",
@@ -189,7 +192,8 @@
     "rating": 4.5,
     "brand": "BlendWave",
     "inStock": true,
-    "reviews": 287
+    "reviews": 287,
+    "originalPrice": "$115.00"
   },
   {
     "id": "kitchen-v2-2",
@@ -249,7 +253,8 @@
     "rating": 4.5,
     "brand": "BakeCraft",
     "inStock": true,
-    "reviews": 174
+    "reviews": 174,
+    "originalPrice": "$460.00"
   },
   {
     "id": "kitchen-v2-7",
@@ -309,7 +314,8 @@
     "rating": 4.5,
     "brand": "LumaHome",
     "inStock": true,
-    "reviews": 214
+    "reviews": 214,
+    "originalPrice": "$83.32"
   },
   {
     "id": "electronics-v2-4",
@@ -369,7 +375,8 @@
     "rating": 4.4,
     "brand": "TypeWave",
     "inStock": true,
-    "reviews": 143
+    "reviews": 143,
+    "originalPrice": "$72.50"
   },
   {
     "id": "home-v2-1",
@@ -429,7 +436,8 @@
     "rating": 4.5,
     "brand": "LuxeSeat",
     "inStock": true,
-    "reviews": 163
+    "reviews": 163,
+    "originalPrice": "$598.33"
   },
   {
     "id": "home-v2-6",
@@ -489,7 +497,8 @@
     "rating": 4.6,
     "brand": "CalmRest",
     "inStock": true,
-    "reviews": 251
+    "reviews": 251,
+    "originalPrice": "$199.92"
   },
   {
     "id": "fitness-v2-1",
@@ -549,7 +558,8 @@
     "rating": 4.5,
     "brand": "PowerBell",
     "inStock": true,
-    "reviews": 235
+    "reviews": 235,
+    "originalPrice": "$162.49"
   },
   {
     "id": "fitness-v2-6",
@@ -609,7 +619,8 @@
     "rating": 4.6,
     "brand": "TechWear",
     "inStock": true,
-    "reviews": 312
+    "reviews": 312,
+    "originalPrice": "$999.97"
   },
   {
     "id": "technology-5",
@@ -669,7 +680,8 @@
     "rating": 4.5,
     "brand": "NetSpeed",
     "inStock": true,
-    "reviews": 197
+    "reviews": 197,
+    "originalPrice": "$299.98"
   },
   {
     "id": "technology-10",
@@ -729,7 +741,8 @@
     "rating": 4.7,
     "brand": "Bose",
     "inStock": true,
-    "reviews": 15678
+    "reviews": 15678,
+    "originalPrice": "$412.49"
   },
   {
     "id": "electronics-5",
@@ -789,7 +802,8 @@
     "rating": 4.7,
     "brand": "Nintendo",
     "inStock": true,
-    "reviews": 27890
+    "reviews": 27890,
+    "originalPrice": "$1166.63"
   },
   {
     "id": "electronics-10",
@@ -849,7 +863,8 @@
     "rating": 4.8,
     "brand": "Canon",
     "inStock": true,
-    "reviews": 5678
+    "reviews": 5678,
+    "originalPrice": "$4166.65"
   },
   {
     "id": "electronics-15",
@@ -909,7 +924,8 @@
     "rating": 4.7,
     "brand": "Apple",
     "inStock": true,
-    "reviews": 34567
+    "reviews": 34567,
+    "originalPrice": "$499.99"
   },
   {
     "id": "electronics-20",
@@ -969,7 +985,8 @@
     "rating": 4.8,
     "brand": "Logitech",
     "inStock": true,
-    "reviews": 34567
+    "reviews": 34567,
+    "originalPrice": "$333.30"
   },
   {
     "id": "electronics-25",
@@ -1029,7 +1046,8 @@
     "rating": 4.7,
     "brand": "Elgato",
     "inStock": false,
-    "reviews": 12345
+    "reviews": 12345,
+    "originalPrice": "$249.98"
   },
   {
     "id": "electronics-30",
@@ -1089,7 +1107,8 @@
     "rating": 4.6,
     "brand": "Philips",
     "inStock": true,
-    "reviews": 34567
+    "reviews": 34567,
+    "originalPrice": "$249.99"
   },
   {
     "id": "electronics-35",
@@ -1149,7 +1168,8 @@
     "rating": 4.7,
     "brand": "Sonos",
     "inStock": true,
-    "reviews": 18976
+    "reviews": 18976,
+    "originalPrice": "$1499.97"
   },
   {
     "id": "electronics-40",
@@ -1209,7 +1229,8 @@
     "rating": 4.7,
     "brand": "Valve",
     "inStock": true,
-    "reviews": 23456
+    "reviews": 23456,
+    "originalPrice": "$666.65"
   },
   {
     "id": "electronics-45",
@@ -1269,7 +1290,8 @@
     "rating": 4.7,
     "brand": "Lenovo",
     "inStock": false,
-    "reviews": 12345
+    "reviews": 12345,
+    "originalPrice": "$1749.99"
   },
   {
     "id": "electronics-50",
@@ -1329,7 +1351,8 @@
     "rating": 4.5,
     "brand": "iRobot",
     "inStock": false,
-    "reviews": 23456
+    "reviews": 23456,
+    "originalPrice": "$1333.30"
   },
   {
     "id": "home-5",
@@ -1389,7 +1412,8 @@
     "rating": 4.5,
     "brand": "De'Longhi",
     "inStock": false,
-    "reviews": 18976
+    "reviews": 18976,
+    "originalPrice": "$166.65"
   },
   {
     "id": "home-10",
@@ -1449,7 +1473,8 @@
     "rating": 4.3,
     "brand": "Lasko",
     "inStock": true,
-    "reviews": 23456
+    "reviews": 23456,
+    "originalPrice": "$62.49"
   },
   {
     "id": "home-15",
@@ -1509,7 +1534,8 @@
     "rating": 4.6,
     "brand": "Hatch",
     "inStock": true,
-    "reviews": 12345
+    "reviews": 12345,
+    "originalPrice": "$666.63"
   },
   {
     "id": "home-20",
@@ -1569,7 +1595,8 @@
     "rating": 4.4,
     "brand": "Wyze",
     "inStock": true,
-    "reviews": 34567
+    "reviews": 34567,
+    "originalPrice": "$33.32"
   },
   {
     "id": "home-25",
@@ -1629,7 +1656,8 @@
     "rating": 4.5,
     "brand": "Arlo",
     "inStock": true,
-    "reviews": 45678
+    "reviews": 45678,
+    "originalPrice": "$249.99"
   },
   {
     "id": "home-30",
@@ -1689,7 +1717,8 @@
     "rating": 4.6,
     "brand": "Bissell",
     "inStock": true,
-    "reviews": 34567
+    "reviews": 34567,
+    "originalPrice": "$999.97"
   },
   {
     "id": "home-35",
@@ -1749,7 +1778,8 @@
     "rating": 4.7,
     "brand": "Dyson",
     "inStock": false,
-    "reviews": 34567
+    "reviews": 34567,
+    "originalPrice": "$999.98"
   },
   {
     "id": "home-40",
@@ -1809,7 +1839,8 @@
     "rating": 4.5,
     "brand": "Panasonic",
     "inStock": true,
-    "reviews": 23456
+    "reviews": 23456,
+    "originalPrice": "$124.99"
   },
   {
     "id": "home-45",
@@ -1869,7 +1900,8 @@
     "rating": 4.5,
     "brand": "Shark",
     "inStock": false,
-    "reviews": 18976
+    "reviews": 18976,
+    "originalPrice": "$999.97"
   },
   {
     "id": "home-50",
@@ -1929,7 +1961,8 @@
     "rating": 4.6,
     "brand": "NordicTrack",
     "inStock": false,
-    "reviews": 12345
+    "reviews": 12345,
+    "originalPrice": "$3333.32"
   },
   {
     "id": "fitness-5",
@@ -1989,7 +2022,8 @@
     "rating": 4.5,
     "brand": "Echelon",
     "inStock": true,
-    "reviews": 18976
+    "reviews": 18976,
+    "originalPrice": "$1249.99"
   },
   {
     "id": "fitness-10",
@@ -2049,7 +2083,8 @@
     "rating": 4.8,
     "brand": "Rogue",
     "inStock": true,
-    "reviews": 9876
+    "reviews": 9876,
+    "originalPrice": "$1083.33"
   },
   {
     "id": "fitness-15",
@@ -2109,7 +2144,8 @@
     "rating": 4.3,
     "brand": "Weider",
     "inStock": false,
-    "reviews": 23456
+    "reviews": 23456,
+    "originalPrice": "$499.98"
   },
   {
     "id": "fitness-20",
@@ -2169,7 +2205,8 @@
     "rating": 4.6,
     "brand": "Sole",
     "inStock": true,
-    "reviews": 18976
+    "reviews": 18976,
+    "originalPrice": "$1249.99"
   },
   {
     "id": "fitness-25",
@@ -2229,7 +2266,8 @@
     "rating": 4.3,
     "brand": "Sunny Health",
     "inStock": true,
-    "reviews": 34567
+    "reviews": 34567,
+    "originalPrice": "$333.30"
   },
   {
     "id": "fitness-30",
@@ -2289,7 +2327,8 @@
     "rating": 4.7,
     "brand": "Lululemon",
     "inStock": false,
-    "reviews": 456789
+    "reviews": 456789,
+    "originalPrice": "$163.33"
   },
   {
     "id": "fitness-35",
@@ -2349,7 +2388,8 @@
     "rating": 4.8,
     "brand": "Brooks",
     "inStock": true,
-    "reviews": 234567
+    "reviews": 234567,
+    "originalPrice": "$175.00"
   },
   {
     "id": "fitness-40",
@@ -2409,7 +2449,8 @@
     "rating": 4.5,
     "brand": "Whoop",
     "inStock": true,
-    "reviews": 34567
+    "reviews": 34567,
+    "originalPrice": "$796.67"
   },
   {
     "id": "fitness-45",
@@ -2469,7 +2510,8 @@
     "rating": 4.5,
     "brand": "RumbleRoller",
     "inStock": true,
-    "reviews": 23456
+    "reviews": 23456,
+    "originalPrice": "$83.32"
   },
   {
     "id": "fitness-50",
@@ -2529,7 +2571,8 @@
     "rating": 4.7,
     "brand": "Razer",
     "inStock": true,
-    "reviews": 12345
+    "reviews": 12345,
+    "originalPrice": "$287.49"
   },
   {
     "id": "technology-5",
@@ -2589,7 +2632,8 @@
     "rating": 4.7,
     "brand": "Razer",
     "inStock": true,
-    "reviews": 23456
+    "reviews": 23456,
+    "originalPrice": "$533.30"
   },
   {
     "id": "technology-10",
@@ -2649,7 +2693,8 @@
     "rating": 4.6,
     "brand": "BenQ",
     "inStock": true,
-    "reviews": 12345
+    "reviews": 12345,
+    "originalPrice": "$749.98"
   },
   {
     "id": "technology-15",
@@ -2709,7 +2754,8 @@
     "rating": 4.8,
     "brand": "Alienware",
     "inStock": false,
-    "reviews": 9876
+    "reviews": 9876,
+    "originalPrice": "$1624.99"
   },
   {
     "id": "technology-20",
@@ -2769,7 +2815,8 @@
     "rating": 4.6,
     "brand": "Elgato",
     "inStock": true,
-    "reviews": 18976
+    "reviews": 18976,
+    "originalPrice": "$666.63"
   },
   {
     "id": "technology-25",
@@ -2829,7 +2876,8 @@
     "rating": 4.7,
     "brand": "Focusrite",
     "inStock": false,
-    "reviews": 34567
+    "reviews": 34567,
+    "originalPrice": "$283.32"
   },
   {
     "id": "technology-30",
@@ -2889,7 +2937,8 @@
     "rating": 4.7,
     "brand": "Logitech",
     "inStock": false,
-    "reviews": 34567
+    "reviews": 34567,
+    "originalPrice": "$249.99"
   },
   {
     "id": "technology-35",
@@ -2949,7 +2998,8 @@
     "rating": 4.6,
     "brand": "Anker",
     "inStock": true,
-    "reviews": 12345
+    "reviews": 12345,
+    "originalPrice": "$999.97"
   },
   {
     "id": "technology-40",
@@ -3009,7 +3059,8 @@
     "rating": 4.5,
     "brand": "HyperDrive",
     "inStock": true,
-    "reviews": 18976
+    "reviews": 18976,
+    "originalPrice": "$149.98"
   },
   {
     "id": "technology-45",
@@ -3069,7 +3120,8 @@
     "rating": 4.7,
     "brand": "Logitech",
     "inStock": false,
-    "reviews": 18976
+    "reviews": 18976,
+    "originalPrice": "$187.49"
   },
   {
     "id": "technology-50",
@@ -3129,7 +3181,8 @@
     "rating": 4.8,
     "brand": "KitchenAid",
     "inStock": true,
-    "reviews": 456789
+    "reviews": 456789,
+    "originalPrice": "$1433.30"
   },
   {
     "id": "kitchen-5",
@@ -3189,7 +3242,8 @@
     "rating": 4.6,
     "brand": "OXO",
     "inStock": true,
-    "reviews": 234567
+    "reviews": 234567,
+    "originalPrice": "$166.65"
   },
   {
     "id": "kitchen-10",
@@ -3249,7 +3303,8 @@
     "rating": 4.6,
     "brand": "Cosori",
     "inStock": true,
-    "reviews": 456789
+    "reviews": 456789,
+    "originalPrice": "$149.99"
   },
   {
     "id": "kitchen-15",
@@ -3309,7 +3364,8 @@
     "rating": 4.6,
     "brand": "Calphalon",
     "inStock": true,
-    "reviews": 234567
+    "reviews": 234567,
+    "originalPrice": "$666.63"
   },
   {
     "id": "kitchen-20",
@@ -3369,7 +3425,8 @@
     "rating": 4.8,
     "brand": "Miyabi",
     "inStock": true,
-    "reviews": 12345
+    "reviews": 12345,
+    "originalPrice": "$333.32"
   },
   {
     "id": "kitchen-25",
@@ -3429,7 +3486,8 @@
     "rating": 4.7,
     "brand": "OXO",
     "inStock": true,
-    "reviews": 345678
+    "reviews": 345678,
+    "originalPrice": "$37.49"
   },
   {
     "id": "kitchen-30",
@@ -3489,7 +3547,8 @@
     "rating": 4.6,
     "brand": "OXO",
     "inStock": false,
-    "reviews": 189765
+    "reviews": 189765,
+    "originalPrice": "$66.63"
   },
   {
     "id": "kitchen-35",
@@ -3549,7 +3608,8 @@
     "rating": 4.5,
     "brand": "Hamilton Beach",
     "inStock": true,
-    "reviews": 345678
+    "reviews": 345678,
+    "originalPrice": "$49.98"
   },
   {
     "id": "kitchen-40",
@@ -3609,7 +3669,8 @@
     "rating": 4.6,
     "brand": "Cuisinart",
     "inStock": true,
-    "reviews": 345678
+    "reviews": 345678,
+    "originalPrice": "$99.99"
   },
   {
     "id": "kitchen-45",
@@ -3669,7 +3730,8 @@
     "rating": 4.6,
     "brand": "Cuisinart",
     "inStock": true,
-    "reviews": 189765
+    "reviews": 189765,
+    "originalPrice": "$83.30"
   },
   {
     "id": "kitchen-50",
