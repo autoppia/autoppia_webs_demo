@@ -41,6 +41,8 @@ export function ProductReviewsSection({
   const [body, setBody] = useState("");
   const [rating, setRating] = useState(5);
   const [formError, setFormError] = useState<string | null>(null);
+  /** Errors from edit/delete only — kept separate so they do not appear on the compose form. */
+  const [listActionError, setListActionError] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editBody, setEditBody] = useState("");
   const [editRating, setEditRating] = useState(5);
@@ -55,12 +57,14 @@ export function ProductReviewsSection({
   }, [product.id]);
 
   const startEdit = (r: ProductReview) => {
+    setListActionError(null);
     setEditingId(r.id);
     setEditBody(r.body);
     setEditRating(r.rating);
   };
 
   const cancelEdit = () => {
+    setListActionError(null);
     setEditingId(null);
     setEditBody("");
     setEditRating(5);
@@ -68,6 +72,7 @@ export function ProductReviewsSection({
 
   const submitNew = () => {
     setFormError(null);
+    setListActionError(null);
     const res = addReview({
       product,
       authorName: name,
@@ -90,6 +95,7 @@ export function ProductReviewsSection({
   };
 
   const submitEdit = (reviewId: string) => {
+    setListActionError(null);
     const res = updateReview({
       productId: product.id,
       reviewId,
@@ -97,7 +103,7 @@ export function ProductReviewsSection({
       rating: editRating,
     });
     if (!res.ok) {
-      setFormError(res.error);
+      setListActionError(res.error);
       return;
     }
     logEvent(EVENT_TYPES.REVIEW_UPDATED, {
@@ -110,9 +116,10 @@ export function ProductReviewsSection({
   };
 
   const remove = (reviewId: string) => {
+    setListActionError(null);
     const res = deleteReview(product.id, reviewId);
     if (!res.ok) {
-      setFormError(res.error);
+      setListActionError(res.error);
       return;
     }
     logEvent(EVENT_TYPES.REVIEW_DELETED, {
@@ -224,6 +231,12 @@ export function ProductReviewsSection({
         </Button>
       </BlurCard>
 
+      {listActionError && !editingId && (
+        <p className="text-sm font-medium text-red-600" role="alert">
+          {listActionError}
+        </p>
+      )}
+
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-slate-900">
           {t("reviews_list_title", "All reviews")} ({reviews.length})
@@ -270,6 +283,11 @@ export function ProductReviewsSection({
             </div>
             {editingId === r.id ? (
               <div className="space-y-3">
+                {listActionError && (
+                  <p className="text-sm font-medium text-red-600" role="alert">
+                    {listActionError}
+                  </p>
+                )}
                 <select
                   className="flex h-9 w-full max-w-xs rounded-md border border-slate-200 px-3 text-sm"
                   value={editRating}

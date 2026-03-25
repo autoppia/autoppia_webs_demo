@@ -89,18 +89,28 @@ export function DiscountedProductsSection({
             </button>
           ))
         )}
-        <button
-          type="button"
-          id={dyn.v3.getVariant("discount-filter-all", ID_VARIANTS_MAP, "discount-all")}
-          onClick={() => setBucket(null)}
-          className={
-            bucket === null
-              ? "rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow"
-              : "rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400"
-          }
-        >
-          {t("discount_show_all", "All deals")}
-        </button>
+        {dyn.v1.addWrapDecoy("discount-filter-all", (
+          <button
+            type="button"
+            id={dyn.v3.getVariant("discount-filter-all", ID_VARIANTS_MAP, "discount-all")}
+            onClick={() => setBucket(null)}
+            className={
+              bucket === null
+                ? dyn.v3.getVariant(
+                    "discount-filter-active",
+                    CLASS_VARIANTS_MAP,
+                    "rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow"
+                  )
+                : dyn.v3.getVariant(
+                    "discount-filter-idle",
+                    CLASS_VARIANTS_MAP,
+                    "rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400"
+                  )
+            }
+          >
+            {t("discount_show_all", "All deals")}
+          </button>
+        ))}
       </div>
       {filtered.length === 0 ? (
         <p className="text-sm text-slate-600">
