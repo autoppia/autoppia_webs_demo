@@ -761,13 +761,13 @@ function HomePageContent() {
                   >
                 <div className="mb-6">
                   <h2 className="text-3xl font-bold mb-2">
-                    {dyn.v3.getVariant("section_expensive", undefined, "Expensive")}
+                    {dyn.v3.getVariant("section_expensive_title", TEXT_VARIANTS_MAP, "Fine dining")}
                   </h2>
                   <p className="text-gray-600 text-lg">
                     Fine dining experiences for special occasions
                   </p>
                 </div>
-                <CardScroller title={dyn.v3.getVariant("section_expensive", undefined, "Expensive")}>
+                <CardScroller title={dyn.v3.getVariant("section_expensive_title", TEXT_VARIANTS_MAP, "Fine dining")}>
                   {expensiveRestaurants.map((r) => (
                     <RestaurantCard
                       key={`${r.id}-expensive`}
@@ -791,13 +791,13 @@ function HomePageContent() {
                   >
                 <div className="mb-6">
                   <h2 className="text-3xl font-bold mb-2">
-                    {dyn.v3.getVariant("section_medium", undefined, "Mid ticket")}
+                    {dyn.v3.getVariant("section_medium_title", TEXT_VARIANTS_MAP, "Everyday favorites")}
                   </h2>
                   <p className="text-gray-600 text-lg">
                     Great value restaurants for everyday dining
                   </p>
                 </div>
-                <CardScroller title={dyn.v3.getVariant("section_medium", undefined, "Mid ticket")}>
+                <CardScroller title={dyn.v3.getVariant("section_medium_title", TEXT_VARIANTS_MAP, "Everyday favorites")}>
                   {mediumRestaurants.map((r) => (
                     <RestaurantCard
                       key={`${r.id}-medium`}
@@ -821,13 +821,13 @@ function HomePageContent() {
                   >
                 <div className="mb-6">
                   <h2 className="text-3xl font-bold mb-2">
-                    {dyn.v3.getVariant("section_cheap", undefined, "Cheap")}
+                    {dyn.v3.getVariant("section_cheap_title", TEXT_VARIANTS_MAP, "Budget eats")}
                   </h2>
                   <p className="text-gray-600 text-lg">
                     Budget-friendly options without compromising quality
                   </p>
                 </div>
-                <CardScroller title={dyn.v3.getVariant("section_cheap", undefined, "Cheap")}>
+                <CardScroller title={dyn.v3.getVariant("section_cheap_title", TEXT_VARIANTS_MAP, "Budget eats")}>
                   {cheapRestaurants.map((r) => (
                     <RestaurantCard
                       key={`${r.id}-cheap`}
