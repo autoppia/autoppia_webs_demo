@@ -164,6 +164,13 @@ export default function ProfilePage() {
       book_id: baseBook.id,
       username: currentUser.username,
       name: baseBook.title,
+      // Include full book payload so backend DeleteBookEvent.parse() can
+      // populate all optional fields (author/year/genres/rating/pages).
+      author: baseBook.director,
+      year: baseBook.year,
+      genres: baseBook.genres,
+      rating: baseBook.rating,
+      pages: baseBook.duration,
     });
 
     // Remove the book from the user's allowed books

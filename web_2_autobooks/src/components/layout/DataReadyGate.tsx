@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { dynamicDataProvider } from "@/dynamic/v2";
 import { useSeed } from "@/context/SeedContext";
 
+const SEED_DATA_READY_EVENT = "autobooks:seedDataReady";
+
 const LOADING_UI = (
   <div className="min-h-screen bg-neutral-950 text-white flex items-center justify-center">
     <span className="text-white/80">Loading catalog…</span>
@@ -16,6 +18,11 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
   const { seed } = useSeed();
   const prevSeedRef = useRef<number | null>(null);
+
+  const emitSeedDataReady = (seedValue: number) => {
+    if (typeof window === "undefined") return;
+    window.dispatchEvent(new CustomEvent(SEED_DATA_READY_EVENT, { detail: { seed: seedValue } }));
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -30,11 +37,17 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
     dynamicDataProvider
       .whenReady()
       .then(() => {
-        if (!cancelled) setReady(true);
+        if (!cancelled) {
+          setReady(true);
+          emitSeedDataReady(seed);
+        }
       })
       .catch((error) => {
         console.error("[autobooks] Data load failed", error);
-        if (!cancelled) setReady(true);
+        if (!cancelled) {
+          setReady(true);
+          emitSeedDataReady(seed);
+        }
       });
 
     return () => {
@@ -57,9 +70,11 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
       try {
         await dynamicDataProvider.reload();
         setReady(true);
+        emitSeedDataReady(seed);
       } catch (error) {
         console.error("[autobooks] Failed to reload data on seed change", error);
         setReady(true);
+        emitSeedDataReady(seed);
       }
     };
 

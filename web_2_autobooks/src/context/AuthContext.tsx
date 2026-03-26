@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { findUser, createUser, hashPassword, type UserRecord } from "@/data/users";
+import { getBooks } from "@/dynamic/v2";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 interface AuthUser {
@@ -23,13 +24,48 @@ interface AuthContextValue {
 }
 
 const STORAGE_KEY = "autobooksUser";
+const SEED_DATA_READY_EVENT = "autobooks:seedDataReady";
 
 type StoredAuthUser = AuthUser & { allowedMovies?: string[] };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
+function getDeterministicUserIndex(username: string): number {
+  const match = /^user(\d+)$/i.exec(username.trim());
+  if (match) {
+    const parsed = Number.parseInt(match[1], 10);
+    if (Number.isFinite(parsed) && parsed > 0) {
+      return parsed - 1;
+    }
+  }
+
+  // Fallback for non "userN" usernames: deterministic index from chars
+  return Array.from(username).reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+}
+
+function resolveAllowedBooksForSeed(username: string, fallbackAllowedBooks: string[] = []): string[] {
+  const books = getBooks();
+  if (!Array.isArray(books) || books.length === 0) {
+    return fallbackAllowedBooks;
+  }
+
+  const userIndex = getDeterministicUserIndex(username);
+  const bookIndex = ((userIndex % books.length) + books.length) % books.length;
+  const selectedBook = books[bookIndex];
+  return selectedBook ? [selectedBook.id] : fallbackAllowedBooks;
+}
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
+
+  const persistAuthUser = useCallback((user: AuthUser | null) => {
+    setCurrentUser(user);
+    if (!user) {
+      localStorage.removeItem(STORAGE_KEY);
+      return;
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+  }, []);
 
   useEffect(() => {
     try {
@@ -44,11 +80,43 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (!parsed.readingList) {
           parsed.readingList = [];
         }
-        setCurrentUser(parsed);
+        const resolvedAllowedBooks = resolveAllowedBooksForSeed(parsed.username, parsed.allowedBooks || []);
+        const resolvedUser: AuthUser = {
+          ...parsed,
+          allowedBooks: resolvedAllowedBooks,
+        };
+        persistAuthUser(resolvedUser);
       }
     } catch {
       // ignore corrupted storage
     }
+  }, [persistAuthUser]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleSeedDataReady = () => {
+      setCurrentUser((prev) => {
+        if (!prev) return prev;
+        const resolvedAllowedBooks = resolveAllowedBooksForSeed(prev.username, prev.allowedBooks || []);
+        const same =
+          resolvedAllowedBooks.length === prev.allowedBooks.length &&
+          resolvedAllowedBooks.every((bookId, index) => bookId === prev.allowedBooks[index]);
+        if (same) return prev;
+
+        const updated: AuthUser = {
+          ...prev,
+          allowedBooks: resolvedAllowedBooks,
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+        return updated;
+      });
+    };
+
+    window.addEventListener(SEED_DATA_READY_EVENT, handleSeedDataReady as EventListener);
+    return () => {
+      window.removeEventListener(SEED_DATA_READY_EVENT, handleSeedDataReady as EventListener);
+    };
   }, []);
 
   const login = useCallback(async (username: string, password: string) => {
@@ -59,15 +127,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       ? (await hashPassword(password)) === record.password
       : password === record.password;
     if (!passwordOk) throw new Error("Invalid credentials");
+    const resolvedAllowedBooks = resolveAllowedBooksForSeed(record.username, record.allowedBooks);
     const authUser: AuthUser = {
       username: record.username,
-      allowedBooks: record.allowedBooks,
+      allowedBooks: resolvedAllowedBooks,
       readingList: [],
     };
-    setCurrentUser(authUser);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
+    persistAuthUser(authUser);
     logEvent(EVENT_TYPES.LOGIN_BOOK, { username: authUser.username });
-  }, []);
+  }, [persistAuthUser]);
 
   const signup = useCallback(async (username: string, password: string, confirmPassword: string) => {
     if (!username.trim()) {
@@ -88,23 +156,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const newUser = await createUser(username, password);
+    const resolvedAllowedBooks = resolveAllowedBooksForSeed(newUser.username, newUser.allowedBooks);
     const authUser: AuthUser = {
       username: newUser.username,
-      allowedBooks: newUser.allowedBooks,
+      allowedBooks: resolvedAllowedBooks,
       readingList: [],
     };
-    setCurrentUser(authUser);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
+    persistAuthUser(authUser);
     logEvent(EVENT_TYPES.REGISTRATION_BOOK, { username: authUser.username });
-  }, []);
+  }, [persistAuthUser]);
 
   const logout = useCallback(() => {
     if (currentUser) {
       logEvent(EVENT_TYPES.LOGOUT_BOOK, { username: currentUser.username });
     }
-    setCurrentUser(null);
-    localStorage.removeItem(STORAGE_KEY);
-  }, [currentUser]);
+    persistAuthUser(null);
+  }, [currentUser, persistAuthUser]);
 
   const addAllowedBook = useCallback(
     (bookId: string) => {

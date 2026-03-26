@@ -14,8 +14,8 @@ export async function hashPassword(plain: string): Promise<string> {
     .join("");
 }
 
-const TOTAL_USERS = 256;
-const BOOK_POOL_SIZE = 256;
+const TOTAL_USERS = 50;
+const BOOK_POOL_SIZE = 50;
 
 const buildBookId = (value: number): string => `book-${value}`;
 
