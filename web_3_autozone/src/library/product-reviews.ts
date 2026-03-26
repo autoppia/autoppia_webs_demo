@@ -96,7 +96,7 @@ export function addReview(input: {
 }): ReviewMutationResult {
   const authorId = getReviewAuthorId();
   if (!authorId) {
-    return { ok: false, error: "Sign in required: open the site with a ?user= id to post a review." };
+    return { ok: false, error: "Sign in required: login or register to post a review." };
   }
   const productId = input.product?.id;
   if (!productId) {
@@ -139,7 +139,7 @@ export function updateReview(input: {
 }): ReviewMutationResult {
   const authorId = getReviewAuthorId();
   if (!authorId) {
-    return { ok: false, error: "Sign in required: open the site with a ?user= id to edit a review." };
+    return { ok: false, error: "Sign in required: login to edit a review." };
   }
   const bodyErr = validateBody(input.body);
   if (bodyErr) return { ok: false, error: bodyErr };
@@ -175,7 +175,7 @@ export function updateReview(input: {
 export function deleteReview(productId: string, reviewId: string): ReviewMutationResult {
   const authorId = getReviewAuthorId();
   if (!authorId) {
-    return { ok: false, error: "Sign in required: open the site with a ?user= id to delete a review." };
+    return { ok: false, error: "Sign in required: login to delete a review." };
   }
   const store = readStore();
   const list = store[productId];

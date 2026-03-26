@@ -161,7 +161,7 @@ export function ProductReviewsSection({
           <p className="text-sm text-amber-800">
             {t(
               "reviews_signin_hint",
-              "Open the store with ?user=your-id in the URL to post and manage your review."
+              "Login or register to post and manage your own review."
             )}
           </p>
         )}

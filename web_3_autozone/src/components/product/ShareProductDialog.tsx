@@ -65,13 +65,18 @@ export function ShareProductDialog({
       return;
     }
     setError(null);
-    logEvent(EVENT_TYPES.SHARE_COMPLETED, {
+    const payload = {
       ...productEventPayload,
       productId,
       productTitle,
       shareUrl,
       recipientName: name,
       recipientEmail: email,
+      stage: "completed",
+    };
+    logEvent(EVENT_TYPES.SHARE_PRODUCT, payload);
+    logEvent(EVENT_TYPES.SHARE_COMPLETED, {
+      ...payload,
     });
     resetForm();
     onOpenChange(false);
