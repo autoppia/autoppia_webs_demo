@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { findUser, type UserRecord } from "@/data/users";
+import { getMovies } from "@/dynamic/v2";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { hashPassword, isStoredPasswordHash } from "@/shared/hash";
 import { readJson, writeJson } from "@/shared/storage";
@@ -32,6 +33,7 @@ interface RegisterInput {
 
 const STORAGE_KEY = "autocinemaUser";
 const CUSTOM_USERS_KEY = "autocinemaCustomUsers";
+const SEED_DATA_READY_EVENT = "autocinema:seedDataReady";
 
 interface CustomUserRecord extends AuthUser {
   password: string;
@@ -68,6 +70,31 @@ const persistCustomUsers = (users: UserRecord[]) => {
   writeJson(CUSTOM_USERS_KEY, users);
 };
 
+function getDeterministicUserIndex(username: string): number {
+  const match = /^user(\d+)$/i.exec(username.trim());
+  if (match) {
+    const parsed = Number.parseInt(match[1], 10);
+    if (Number.isFinite(parsed) && parsed > 0) {
+      return parsed - 1;
+    }
+  }
+
+  // Fallback for non "userN" usernames: deterministic index from chars.
+  return Array.from(username).reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+}
+
+function resolveAllowedMoviesForIndex(username: string, fallbackAllowedMovies: string[] = []): string[] {
+  const movies = getMovies();
+  if (!Array.isArray(movies) || movies.length === 0) {
+    return fallbackAllowedMovies;
+  }
+
+  const userIndex = getDeterministicUserIndex(username);
+  const movieIndex = ((userIndex % movies.length) + movies.length) % movies.length;
+  const selectedMovie = movies[movieIndex];
+  return selectedMovie ? [selectedMovie.id] : fallbackAllowedMovies;
+}
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [customUsers, setCustomUsers] = useState<UserRecord[]>([]);
@@ -81,12 +108,46 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (!parsed.watchlist) {
           parsed.watchlist = [];
         }
-        setCurrentUser(parsed);
+        const resolvedAllowedMovies = resolveAllowedMoviesForIndex(
+          parsed.username,
+          parsed.allowedMovies || []
+        );
+        setCurrentUser({ ...parsed, allowedMovies: resolvedAllowedMovies });
       }
     } catch {
       // ignore corrupted storage
     }
     setCustomUsers(getStoredCustomUsers());
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleSeedDataReady = () => {
+      setCurrentUser((prev) => {
+        if (!prev) return prev;
+        const resolvedAllowedMovies = resolveAllowedMoviesForIndex(
+          prev.username,
+          prev.allowedMovies || []
+        );
+        const same =
+          resolvedAllowedMovies.length === prev.allowedMovies.length &&
+          resolvedAllowedMovies.every((movieId, index) => movieId === prev.allowedMovies[index]);
+        if (same) return prev;
+
+        const updated: AuthUser = {
+          ...prev,
+          allowedMovies: resolvedAllowedMovies,
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+        return updated;
+      });
+    };
+
+    window.addEventListener(SEED_DATA_READY_EVENT, handleSeedDataReady as EventListener);
+    return () => {
+      window.removeEventListener(SEED_DATA_READY_EVENT, handleSeedDataReady as EventListener);
+    };
   }, []);
 
   const resolveUserRecord = useCallback(
@@ -134,8 +195,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           ? (await hashPassword(password)) === record.password
           : record.password === password;
         if (ok) {
+          const resolvedAllowedMovies = resolveAllowedMoviesForIndex(
+            record.username,
+            record.allowedMovies
+          );
           persistUser(
-            { username: record.username, allowedMovies: record.allowedMovies, watchlist: [] },
+            { username: record.username, allowedMovies: resolvedAllowedMovies, watchlist: [] },
             "login"
           );
           return;
@@ -149,8 +214,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           ? (await hashPassword(password)) === custom.password
           : custom.password === password;
         if (ok) {
+          const resolvedAllowedMovies = resolveAllowedMoviesForIndex(
+            custom.username,
+            custom.allowedMovies
+          );
           persistUser(
-            { username: custom.username, allowedMovies: custom.allowedMovies, watchlist: [] },
+            { username: custom.username, allowedMovies: resolvedAllowedMovies, watchlist: [] },
             "login"
           );
           return;
@@ -162,17 +231,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [persistUser]
   );
 
-  const resolveOrCreateAllowedMovies = (username: string, requested?: string[]): string[] => {
-    if (requested && requested.length > 0) {
-      return requested;
-    }
-    const hash = username.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
-    const movieIndex = (hash % 120) + 1;
-    const movieId = `movie-v2-${movieIndex.toString().padStart(3, "0")}`;
-    return [movieId];
-  };
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: resolveOrCreateAllowedMovies is stable; setCustomUsers is setState
+  // biome-ignore lint/correctness/useExhaustiveDependencies: setCustomUsers is setState
   const register = useCallback(
     async ({ username, password, allowedMovies }: RegisterInput) => {
       const safeUsername = normalizeUsername(username);
@@ -192,9 +251,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (!samePassword) {
           throw new Error("Username already registered with different credentials.");
         }
+        const resolvedAllowedMovies = resolveAllowedMoviesForIndex(
+          existingRecord.username,
+          existingRecord.allowedMovies
+        );
         const authUser: AuthUser = {
           username: existingRecord.username,
-          allowedMovies: existingRecord.allowedMovies,
+          allowedMovies: resolvedAllowedMovies,
           watchlist: [],
         };
         persistUser(authUser, "login");
@@ -202,7 +265,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       const passwordHash = await hashPassword(safePassword);
-      const allowed = resolveOrCreateAllowedMovies(safeUsername, allowedMovies);
+      const allowed = resolveAllowedMoviesForIndex(safeUsername, allowedMovies ?? []);
       const customUsers = loadCustomUsers();
       const nextCustomUsers: CustomUserRecord[] = [
         ...customUsers,
