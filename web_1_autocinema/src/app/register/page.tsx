@@ -21,6 +21,7 @@ export default function RegisterPage() {
   const { register } = useAuth();
   const router = useSeedRouter();
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [assignedMovie, setAssignedMovie] = useState(FALLBACK_MOVIE_ID);
@@ -56,11 +57,16 @@ export default function RegisterPage() {
     event.preventDefault();
     setError(null);
     const normalizedUsername = username.trim();
+    const normalizedEmail = email.trim();
     const normalizedPassword = password.trim();
     const normalizedConfirmPassword = confirmPassword.trim();
 
     if (!normalizedUsername) {
       setError("Username is required");
+      return;
+    }
+    if (!normalizedEmail) {
+      setError("Email is required");
       return;
     }
     if (normalizedPassword.length < MIN_PASSWORD_LENGTH) {
@@ -82,6 +88,7 @@ export default function RegisterPage() {
       });
       logEvent(EVENT_TYPES.REGISTRATION, {
         username: normalizedUsername,
+        email: normalizedEmail,
         assigned_movie: movieId ?? undefined,
       });
       router.push("/profile");
@@ -132,6 +139,23 @@ export default function RegisterPage() {
                     className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
                     placeholder={dyn.v3.getVariant("username_placeholder", undefined, "Choose a username")}
                     autoComplete="username"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
+                    <User className="h-4 w-4 text-secondary" />
+                    Email
+                  </label>
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    id={dyn.v3.getVariant("register-email-input", ID_VARIANTS_MAP, "register-email-input")}
+                    className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                    placeholder={dyn.v3.getVariant("email_placeholder", undefined, "you@example.com")}
+                    autoComplete="email"
                     required
                   />
                 </div>
