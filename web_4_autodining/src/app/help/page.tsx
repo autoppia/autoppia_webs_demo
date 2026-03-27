@@ -105,11 +105,6 @@ export default function HelpPage() {
   const toggleFAQ = (index: number, faq: FAQItem) => {
     const nextIndex = openIndex === index ? null : index;
     setOpenIndex(nextIndex);
-    logEvent(EVENT_TYPES.HELP_FAQ_TOGGLED, {
-      question: faq.question,
-      category: faq.category,
-      opened: nextIndex === index,
-    });
   };
 
   const helpSections = [
@@ -149,7 +144,7 @@ export default function HelpPage() {
   return (
     dyn.v1.addWrapDecoy("help-page", (
       <main id={dyn.v3.getVariant("help-page", ID_VARIANTS_MAP, "help-page")}>
-        <Navbar />
+        <Navbar showBack />
         {dyn.v1.addWrapDecoy("help-content", (
           <div className="max-w-6xl mx-auto px-4 py-8" id={dyn.v3.getVariant("help-content", ID_VARIANTS_MAP, "help-content")}>
         {/* Hero Section */}

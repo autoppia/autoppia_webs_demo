@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import { SeedProvider } from "@/context/SeedContext";
+import { AuthProvider } from "@/context/AuthContext";
 import { Suspense } from "react";
 import { SeedRedirect } from "@/components/layout/SeedRedirect";
 import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
@@ -37,13 +38,15 @@ export default function RootLayout({
         <ClientBody>
           <Suspense fallback={<div>Loading...</div>}>
             <SeedProvider>
-              <Suspense fallback={null}>
-                <SeedRedirect />
-              </Suspense>
-              <V4PopupLayer>
-                {children}
-              </V4PopupLayer>
-              <DynamicDebug />
+              <AuthProvider>
+                <Suspense fallback={null}>
+                  <SeedRedirect />
+                </Suspense>
+                <V4PopupLayer>
+                  {children}
+                </V4PopupLayer>
+                <DynamicDebug />
+              </AuthProvider>
             </SeedProvider>
           </Suspense>
         </ClientBody>

@@ -64,7 +64,7 @@ export default function FaqsPage() {
 
   return (
     <main>
-      <Navbar />
+      <Navbar showBack />
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="mb-12 text-left">

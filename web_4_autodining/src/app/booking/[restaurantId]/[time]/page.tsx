@@ -15,6 +15,7 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
 
 type RestaurantView = {
   id: string;
@@ -51,13 +52,24 @@ export default function Page() {
   const [reservationPeople, setReservationPeople] = useState<string | null>(
     null
   );
+  
+  const { currentUser, isAuthenticated } = useAuth();
+  
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [occasion, setOccasion] = useState("");
   const [specialRequest, setSpecialRequest] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
-  const [email, setEmail] = useState("user_name@gmail.com");
+  const [email, setEmail] = useState("");
+
+  // Autofill email when user logs in or is already logged in
+  useEffect(() => {
+    if (isAuthenticated && currentUser?.email) {
+      setEmail(currentUser.email);
+    }
+  }, [isAuthenticated, currentUser]);
+
   const dyn = useDynamicSystem();
 
   // Debug: Verify V2 status
@@ -192,7 +204,7 @@ export default function Page() {
   return (
     dyn.v1.addWrapDecoy("booking-page", (
       <main suppressHydrationWarning id={dyn.v3.getVariant("booking-page", ID_VARIANTS_MAP, "booking-page")}>
-        <Navbar />
+        <Navbar showBack />
 
       {/* Hero Banner - Restaurant Image */}
       {dyn.v1.addWrapDecoy("booking-banner", (

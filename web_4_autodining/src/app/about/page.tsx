@@ -56,7 +56,7 @@ export default function AboutPage() {
 
   return (
     <main>
-      <Navbar />
+      <Navbar showBack />
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="mb-12 text-center">
@@ -96,12 +96,6 @@ export default function AboutPage() {
                 <div
                   key={feature.title}
                   className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300"
-                  onClick={() =>
-                    logEvent(EVENT_TYPES.ABOUT_FEATURE_CLICK, {
-                      feature: feature.title,
-                      seed,
-                    })
-                  }
                 >
                   <div className="text-[#46a758] mb-4">{feature.icon}</div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">

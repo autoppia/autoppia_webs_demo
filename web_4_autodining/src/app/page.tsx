@@ -16,6 +16,7 @@ import {
   UserIcon,
   ChevronLeft,
   ChevronRight,
+  SearchX,
 } from "lucide-react";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
@@ -39,6 +40,7 @@ type UiRestaurant = {
   price: string;
   bookings: number;
   times: string[];
+  tags: string[];
 };
 
 const defaultRestaurants: UiRestaurant[] = [];
@@ -102,92 +104,88 @@ function RestaurantCard({
   return (
     dyn.v1.addWrapDecoy(`restaurant-card-${r.id}`, (
       <div
-        className="w-[320px] flex-shrink-0 rounded-xl overflow-hidden shadow-lg bg-white hover:-translate-y-1 transition-all duration-300 hover:shadow-xl"
+        className="w-[320px] flex-shrink-0 rounded-xl overflow-hidden shadow-lg bg-white hover:-translate-y-1 transition-all duration-300 hover:shadow-xl group cursor-pointer"
         id={dyn.v3.getVariant("restaurant-card", ID_VARIANTS_MAP, `restaurant-card-${r.id}`)}
       >
-        {dyn.v1.addWrapDecoy(`restaurant-card-image-${r.id}`, (
-          <div className="relative w-full h-[280px] overflow-hidden">
-            <img
-              src={r.image}
-              alt={r.name}
-              className="w-full h-full object-cover"
-              id={dyn.v3.getVariant("restaurant-image", ID_VARIANTS_MAP, `restaurant-image-${r.id}`)}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+        <SeedLink href={`/restaurant/${encodeURIComponent(r.id)}`} className="block w-full h-full">
+          {dyn.v1.addWrapDecoy(`restaurant-card-image-${r.id}`, (
+            <div className="relative w-full h-[280px] overflow-hidden">
+              <img
+                src={r.image}
+                alt={r.name}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                id={dyn.v3.getVariant("restaurant-image", ID_VARIANTS_MAP, `restaurant-image-${r.id}`)}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
-            {/* Badges at top */}
-            {dyn.v1.addWrapDecoy(`restaurant-card-badges-${r.id}`, (
-              <div
-                className="absolute top-0 left-0 right-0 p-3 flex justify-between items-start z-10"
-                id={dyn.v3.getVariant("restaurant-badges", ID_VARIANTS_MAP, `restaurant-badges-${r.id}`)}
-              >
-                <span
-                  className="px-3 py-1.5 rounded-full bg-orange-500/90 backdrop-blur-sm text-white text-xs font-bold shadow-lg"
-                  id={dyn.v3.getVariant("restaurant-cuisine-badge", ID_VARIANTS_MAP, `restaurant-cuisine-${r.id}`)}
+              {/* Badges at top */}
+              {dyn.v1.addWrapDecoy(`restaurant-card-badges-${r.id}`, (
+                <div
+                  className="absolute top-0 left-0 right-0 p-3 flex justify-between items-start z-10"
+                  id={dyn.v3.getVariant("restaurant-badges", ID_VARIANTS_MAP, `restaurant-badges-${r.id}`)}
                 >
-                  {r.cuisine}
-                </span>
-                <span
-                  className="px-3 py-1.5 rounded-full bg-yellow-500/90 backdrop-blur-sm text-white text-xs font-bold shadow-lg"
-                  id={dyn.v3.getVariant("restaurant-price-badge", ID_VARIANTS_MAP, `restaurant-price-${r.id}`)}
-                >
-                  {priceTag}
-                </span>
-              </div>
-            ))}
+                  <span
+                    className="px-3 py-1.5 rounded-full bg-orange-500/90 backdrop-blur-sm text-white text-xs font-bold shadow-lg"
+                    id={dyn.v3.getVariant("restaurant-cuisine-badge", ID_VARIANTS_MAP, `restaurant-cuisine-${r.id}`)}
+                  >
+                    {r.cuisine}
+                  </span>
+                  <span
+                    className="px-3 py-1.5 rounded-full bg-yellow-500/90 backdrop-blur-sm text-white text-xs font-bold shadow-lg"
+                    id={dyn.v3.getVariant("restaurant-price-badge", ID_VARIANTS_MAP, `restaurant-price-${r.id}`)}
+                  >
+                    {priceTag}
+                  </span>
+                </div>
+              ))}
 
-            {/* Content overlay at bottom */}
-            {dyn.v1.addWrapDecoy(`restaurant-card-content-${r.id}`, (
-              <div
-                className="absolute bottom-0 left-0 right-0 p-4 text-white"
-                id={dyn.v3.getVariant("restaurant-card-content", ID_VARIANTS_MAP, `restaurant-content-${r.id}`)}
-              >
-                <SeedLink href={`/restaurant/${encodeURIComponent(r.id)}`}>
+              {/* Content overlay at bottom */}
+              {dyn.v1.addWrapDecoy(`restaurant-card-content-${r.id}`, (
+                <div
+                  className="absolute bottom-0 left-0 right-0 p-4 text-white"
+                  id={dyn.v3.getVariant("restaurant-card-content", ID_VARIANTS_MAP, `restaurant-content-${r.id}`)}
+                >
                   {dyn.v1.addWrapDecoy(`restaurant-card-title-${r.id}`, (
                     <h3
-                      className="font-bold text-xl mb-0 hover:text-[#46a758] transition-colors drop-shadow-lg"
+                      className="font-bold text-xl mb-0 group-hover:text-emerald-400 transition-colors drop-shadow-lg"
                       id={dyn.v3.getVariant("restaurant-name", ID_VARIANTS_MAP, `restaurant-name-${r.id}`)}
                     >
                       {r.name}
                     </h3>
                   ))}
-                </SeedLink>
-                <div className="mb-3">
-                  {dyn.v1.addWrapDecoy(`restaurant-card-rating-${r.id}`, (
-                    <div
-                      className="flex items-center gap-2 mb-0"
-                      id={dyn.v3.getVariant("restaurant-rating", ID_VARIANTS_MAP, `restaurant-rating-${r.id}`)}
-                    >
-                      <StarRating count={starsCount} />
-                      <span className="text-sm font-semibold drop-shadow">
-                        {ratingValue.toFixed(1)}
-                        {reviewsCount > 0 && ` (${reviewsCount} reviews)`}
+                  <div className="mb-3">
+                    {dyn.v1.addWrapDecoy(`restaurant-card-rating-${r.id}`, (
+                      <div
+                        className="flex items-center gap-2 mb-0"
+                        id={dyn.v3.getVariant("restaurant-rating", ID_VARIANTS_MAP, `restaurant-rating-${r.id}`)}
+                      >
+                        <StarRating count={starsCount} />
+                        <span className="text-sm font-semibold drop-shadow">
+                          {ratingValue.toFixed(1)}
+                          {reviewsCount > 0 && ` (${reviewsCount} reviews)`}
+                        </span>
+                      </div>
+                    ))}
+                    <div className="flex items-center justify-between">
+                      <span
+                        className="text-xs text-gray-200 opacity-80 font-bold"
+                        id={dyn.v3.getVariant("restaurant-area", ID_VARIANTS_MAP, `restaurant-area-${r.id}`)}
+                      >
+                        {r.area}
                       </span>
+                      <div
+                        id={dyn.v3.getVariant("view_details_button", ID_VARIANTS_MAP, `view-details-${r.id}`)}
+                        className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "text-sm bg-emerald-600 group-hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors")}
+                      >
+                        {viewDetailsLabel}
+                      </div>
                     </div>
-                  ))}
-                  <div className="flex items-center justify-between">
-                    <span
-                      className="text-xs text-gray-200 opacity-80 font-bold"
-                      id={dyn.v3.getVariant("restaurant-area", ID_VARIANTS_MAP, `restaurant-area-${r.id}`)}
-                    >
-                      {r.area}
-                    </span>
-                    <SeedLink
-                      id={dyn.v3.getVariant("view_details_button", ID_VARIANTS_MAP, `view-details-${r.id}`)}
-                      href={`/restaurant/${encodeURIComponent(r.id)}`}
-                      className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "text-sm bg-[#46a758] hover:bg-[#3d8f4a] text-white px-4 py-2 rounded-lg font-semibold transition-colors")}
-                      onClick={() =>
-                        logEvent(EVENT_TYPES.VIEW_RESTAURANT, { restaurantId: r.id })
-                      }
-                    >
-                      {viewDetailsLabel}
-                    </SeedLink>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        ))}
+              ))}
+            </div>
+          ))}
+        </SeedLink>
       </div>
     ), `restaurant-card-wrap-${r.id}`)
   );
@@ -359,6 +357,21 @@ function HomePageContent() {
   const { seed } = useSeed();
   const v2Seed = seed;
 
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const tagOptions = [
+    "top-rated",
+    "local favourite",
+    "outdoor seating",
+    "good for groups",
+    "romantic",
+    "gourmet",
+    "sushi",
+    "pasta",
+    "burgers",
+    "spicy",
+    "tapas",
+  ];
+
   // Debug: Verify V1, V2, and V3 are working
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
@@ -393,7 +406,7 @@ function HomePageContent() {
     setDate(d);
     if (d) {
       const isoDate = toLocalISO(d);
-      logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: isoDate });
+      logEvent(EVENT_TYPES.DATE_SELECTED, { date: isoDate });
     }
   };
 
@@ -415,22 +428,24 @@ function HomePageContent() {
 
   const handleTimeSelect = (t: string) => {
     setTime(t);
-    logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
+    logEvent(EVENT_TYPES.TIME_SELECTED, { time: t });
   };
 
   const handlePeopleSelect = (n: number) => {
     setPeople(n);
-    logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
+    logEvent(EVENT_TYPES.PEOPLE_SELECTED, { people: n });
   };
 
   function matches(r: UiRestaurant): boolean {
     const q = search.trim().toLowerCase();
-    return (
+    const matchesSearch = (
       !q ||
       r.name.toLowerCase().includes(q) ||
       r.cuisine.toLowerCase().includes(q) ||
       r.area.toLowerCase().includes(q)
     );
+    const matchesTag = !selectedTag || (r as any).tags?.includes(selectedTag);
+    return matchesSearch && matchesTag;
   }
 
   const filtered = list.filter(matches);
@@ -500,6 +515,7 @@ function HomePageContent() {
               price: r.price ?? "$$",
               bookings: r.bookings ?? 0,
               times: ["1:00 PM"],
+              tags: (r as any).tags ?? [],
             };
           });
           const mapped = fresh.length > 0 ? fresh : defaultRestaurants;
@@ -598,18 +614,79 @@ function HomePageContent() {
             style={{ minHeight: "auto", visibility: "visible", display: "flex" }}
           >
             {/* Search input - left side */}
-            {dyn.v1.addWrapDecoy("home-search-input-container", (
-              <input
-                id={dyn.v3.getVariant("search-input", ID_VARIANTS_MAP, "search-input")}
-                type="text"
-                placeholder={
-                  dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search restaurant, cuisine...")
+            <div className="flex-1 flex flex-col gap-3 min-w-[400px]">
+              {dyn.v1.addWrapDecoy("home-search-input-container", (
+                <input
+                  id={dyn.v3.getVariant("search-input", ID_VARIANTS_MAP, "search-input")}
+                  type="text"
+                  placeholder={
+                    dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search restaurant, cuisine...")
+                  }
+                  className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "w-full h-9 px-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]")}
+                  value={search}
+                  onChange={handleSearchChange}
+                />
+              ))}
+
+              {/* Tag Carousel with Marquee Effect */}
+              <div className="overflow-hidden relative group/marquee h-10 flex items-center">
+                <div className="flex items-center gap-2 animate-marquee group-hover/marquee:pause-animation">
+                  <button
+                    onClick={() => {
+                      setSelectedTag(null);
+                      logEvent(EVENT_TYPES.TAG_FILTER_SELECTED, { tag: null, action: "clear", search });
+                    }}
+                    className={cn(
+                      "px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-colors border",
+                      !selectedTag 
+                        ? "bg-emerald-600 border-emerald-600 text-white" 
+                        : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
+                    )}
+                  >
+                    All
+                  </button>
+                  {[...tagOptions, ...tagOptions].map((tag, idx) => (
+                    <button
+                      key={`${tag}-${idx}`}
+                      onClick={() => {
+                        const isSelect = selectedTag !== tag;
+                        const newTag = isSelect ? tag : null;
+                        setSelectedTag(newTag);
+                        logEvent(EVENT_TYPES.TAG_FILTER_SELECTED, { 
+                          tag: newTag, 
+                          action: isSelect ? "select" : "clear",
+                          search 
+                        });
+                      }}
+                      className={cn(
+                        "px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-colors border",
+                        selectedTag === tag 
+                          ? "bg-emerald-600 border-emerald-600 text-white" 
+                          : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
+                      )}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Added CSS for Marquee in the same file if possible, or advising a style tag */}
+              <style jsx global>{`
+                @keyframes marquee {
+                  0% { transform: translateX(0); }
+                  100% { transform: translateX(-50%); }
                 }
-                className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "min-w-[400px] flex-1 h-9 px-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]")}
-                value={search}
-                onChange={handleSearchChange}
-              />
-            ))}
+                .animate-marquee {
+                  display: flex;
+                  white-space: nowrap;
+                  animation: marquee 30s linear infinite;
+                }
+                .pause-animation {
+                  animation-play-state: paused;
+                }
+              `}</style>
+            </div>
 
             {/* Filters - right side */}
             <div className="flex gap-4 items-end">
@@ -623,11 +700,6 @@ function HomePageContent() {
                         dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
                         "w-[200px] justify-start text-left font-normal"
                       )}
-                      onClick={() =>
-                        logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, {
-                          action: "open",
-                        })
-                      }
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {date ? (
@@ -662,11 +734,6 @@ function HomePageContent() {
                         dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
                         "w-[150px] justify-start text-left font-normal"
                       )}
-                      onClick={() =>
-                        logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, {
-                          action: "open",
-                        })
-                      }
                     >
                       <ClockIcon className="mr-2 h-4 w-4" />
                       {time}
@@ -710,11 +777,6 @@ function HomePageContent() {
                         dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
                         "w-[150px] justify-start text-left font-normal"
                       )}
-                      onClick={() =>
-                        logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, {
-                          action: "open",
-                        })
-                      }
                     >
                       <UserIcon className="mr-2 h-4 w-4" />
                       {people} {people === 1 ? personLabel : peopleLabel}
@@ -750,6 +812,26 @@ function HomePageContent() {
 
         {/* Main Content - Cards, Sections, etc. */}
         {isLoading || !isReady || list.length === 0 ? null : (
+          filtered.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 px-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-6">
+                <SearchX className="w-10 h-10 text-emerald-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">No results found</h3>
+              <p className="text-gray-500 max-w-md mx-auto">
+                We couldn't find any restaurants of this style in this area. Try clearing your filters or searching for something else!
+              </p>
+              <Button 
+                onClick={() => {
+                  setSelectedTag(null);
+                  setSearch("");
+                }}
+                className="mt-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-2 rounded-full transition-all hover:scale-105"
+              >
+                Clear all filters
+              </Button>
+            </div>
+          ) : (
           dyn.v1.addWrapDecoy("home-sections", (
             <>
               {/* Expensive Restaurants ($$$$) */}
@@ -843,7 +925,7 @@ function HomePageContent() {
               )}
             </>
           ), "home-sections-wrap")
-        )}
+        ))}
       </section>
     </main>
   );

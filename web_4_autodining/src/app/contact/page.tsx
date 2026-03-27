@@ -87,7 +87,7 @@ export default function ContactPage() {
   return (
     dyn.v1.addWrapDecoy("contact-page", (
       <main id={dyn.v3.getVariant("contact-page", ID_VARIANTS_MAP, "contact-page")}>
-        <Navbar />
+        <Navbar showBack />
         {dyn.v1.addWrapDecoy("contact-content", (
           <div className="max-w-6xl mx-auto px-4 py-8" id={dyn.v3.getVariant("contact-content", ID_VARIANTS_MAP, "contact-content")}>
         {/* Hero Section */}
@@ -116,7 +116,7 @@ export default function ContactPage() {
             <div className="space-y-4">
               {contactInfo.map((info) => (
                 <a
-                  key={info.link}
+                  key={info.title}
                   href={info.link}
                   className="flex items-start gap-4 p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md hover:border-[#46a758] transition-all duration-300 group cursor-default"
                   onClick={() =>
