@@ -73,7 +73,7 @@ export default function AboutPage() {
         <div className="space-y-10">
           {/* Mission Section */}
           <section className="mb-12">
-            <div className="bg-gradient-to-r from-[#46a758] to-[#3d8f4e] rounded-2xl p-8 md:p-12 text-white">
+            <div className="bg-gradient-to-r from-[#dc2626] to-[#b91c1c] rounded-2xl p-8 md:p-12 text-white">
               <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
               <p className="text-lg leading-relaxed max-w-3xl">
                 At AutoDining, we believe that great food deserves great
@@ -95,9 +95,9 @@ export default function AboutPage() {
               {features.map((feature) => (
                 <div
                   key={feature.title}
-                  className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300"
+                  className="bg-white border border-gray-300 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300"
                 >
-                  <div className="text-[#46a758] mb-4">{feature.icon}</div>
+                  <div className="text-[#dc2626] mb-4">{feature.icon}</div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     {feature.title}
                   </h3>
@@ -109,28 +109,28 @@ export default function AboutPage() {
 
           {/* Stats Section */}
           <section className="mb-12">
-            <div className="bg-gray-50 rounded-2xl p-8 md:p-12">
+            <div className="bg-gray-50 rounded-2xl p-8 md:p-12 border border-gray-200">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div>
-                  <div className="text-4xl font-bold text-[#46a758] mb-2">
+                  <div className="text-4xl font-bold text-[#dc2626] mb-2">
                     500+
                   </div>
-                  <div className="text-gray-600">Restaurants</div>
+                  <div className="text-gray-400">Restaurants</div>
                 </div>
                 <div>
-                  <div className="text-4xl font-bold text-[#46a758] mb-2">
+                  <div className="text-4xl font-bold text-[#dc2626] mb-2">
                     50K+
                   </div>
-                  <div className="text-gray-600">Happy Customers</div>
+                  <div className="text-gray-400">Happy Customers</div>
                 </div>
                 <div>
-                  <div className="text-4xl font-bold text-[#46a758] mb-2">
+                  <div className="text-4xl font-bold text-[#dc2626] mb-2">
                     100K+
                   </div>
-                  <div className="text-gray-600">Reservations</div>
+                  <div className="text-gray-400">Reservations</div>
                 </div>
                 <div>
-                  <div className="text-4xl font-bold text-[#46a758] mb-2">
+                  <div className="text-4xl font-bold text-[#dc2626] mb-2">
                     4.8★
                   </div>
                   <div className="text-gray-600">Average Rating</div>
@@ -148,7 +148,7 @@ export default function AboutPage() {
               {["Excellence", "Integrity", "Innovation"].map((value, idx) => (
                 <div
                   key={value}
-                  className="border-l-4 border-[#46a758] pl-6 py-2"
+                  className="border-l-4 border-[#dc2626] pl-6 py-2"
                 >
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     {value}

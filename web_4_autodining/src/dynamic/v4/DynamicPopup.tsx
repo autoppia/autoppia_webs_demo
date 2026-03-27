@@ -101,21 +101,21 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`max-w-none rounded-xl border-2 border-[#46a758] bg-white text-slate-900 shadow-2xl shadow-black/40 ${getPlacementClasses(variant.placement)}`}
+        className={`max-w-none rounded-xl border-2 border-[#dc2626] bg-zinc-950 text-white shadow-2xl shadow-black/40 ${getPlacementClasses(variant.placement)}`}
         style={{
           ...placementStyle,
           position: (placementStyle?.position as React.CSSProperties["position"]) ?? "relative",
         }}
         data-popup-id={variant.popupId}
         >
-        <div className="absolute left-0 right-0 top-0 h-1.5 rounded-t-xl bg-gradient-to-r from-[#46a758] via-emerald-500 to-[#46a758]" />
+        <div className="absolute left-0 right-0 top-0 h-1.5 rounded-t-xl bg-gradient-to-r from-[#dc2626] via-red-500 to-[#dc2626]" />
         <div className="flex flex-col gap-5 px-6 py-6 sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:gap-8">
           <div className="min-w-0 flex-1">
-            <h2 className="pr-8 text-xl font-semibold leading-tight text-slate-900 sm:text-2xl">
+            <h2 className="pr-8 text-xl font-semibold leading-tight text-white sm:text-2xl">
               {variant.title}
             </h2>
             {variant.body && (
-              <p className="mt-3 text-sm leading-relaxed text-slate-700 sm:mt-4 sm:text-base">
+              <p className="mt-3 text-sm leading-relaxed text-slate-400 sm:mt-4 sm:text-base">
                 {variant.body}
               </p>
             )}
@@ -124,7 +124,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
             <button
               type="button"
               onClick={onClose}
-              className="w-full rounded-lg bg-[#46a758] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-emerald-600 transition focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:ring-offset-2 focus:ring-offset-white lg:w-auto"
+              className="w-full rounded-lg bg-[#dc2626] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-red-700 transition focus:outline-none focus:ring-2 focus:ring-[#dc2626] focus:ring-offset-2 focus:ring-offset-white lg:w-auto"
             >
               {variant.cta}
             </button>
@@ -133,7 +133,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-md p-1.5 text-slate-500 transition hover:bg-emerald-50 hover:text-[#46a758] focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:ring-offset-2 focus:ring-offset-white"
+          className="absolute right-4 top-4 rounded-md p-1.5 text-slate-500 transition hover:bg-red-950 hover:text-[#dc2626] focus:outline-none focus:ring-2 focus:ring-[#dc2626] focus:ring-offset-2 focus:ring-offset-white"
           aria-label="Close"
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

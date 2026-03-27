@@ -237,7 +237,7 @@ export default function Page() {
             <span className="font-bold text-2xl">
               {data?.name ?? "Loading..."}
             </span>
-            <div className="flex items-center gap-5 text-gray-700 mt-1 text-[15px]">
+            <div className="flex items-center gap-5 text-gray-300 mt-1 text-[15px]">
               <span className="flex items-center gap-1">
                 <CalendarIcon className="w-4 h-4 mr-1" />
                 {formattedDate ?? dyn.v3.getVariant("select_date", undefined, "Select date")}
@@ -263,7 +263,7 @@ export default function Page() {
           {dyn.v1.addWrapDecoy("full-name-field", (
             <div id={dyn.v3.getVariant("full-name-field-container", ID_VARIANTS_MAP, "full-name-field-container")}>
               <label
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-300 mb-1"
                 htmlFor={dyn.v3.getVariant("full-name-input", ID_VARIANTS_MAP, "full-name-input")}
                 id={dyn.v3.getVariant("full-name-label", ID_VARIANTS_MAP, "full-name-label")}
               >
@@ -273,7 +273,7 @@ export default function Page() {
                 type="text"
                 id={dyn.v3.getVariant("full-name-input", ID_VARIANTS_MAP, "full-name-input")}
                 placeholder={dyn.v3.getVariant("full_name_placeholder", TEXT_VARIANTS_MAP, "Enter your full name")}
-                className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]")}
+                className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "w-full border border-zinc-700 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
@@ -284,7 +284,7 @@ export default function Page() {
           {dyn.v1.addWrapDecoy("phone-field", (
             <div id={dyn.v3.getVariant("phone-field-container", ID_VARIANTS_MAP, "phone-field-container")}>
               <label
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-300 mb-1"
                 htmlFor={dyn.v3.getVariant("phone-number-input", ID_VARIANTS_MAP, "phone-number-input")}
                 id={dyn.v3.getVariant("phone-number-label", ID_VARIANTS_MAP, "phone-number-label")}
               >
@@ -293,7 +293,7 @@ export default function Page() {
               <div className="flex">
                 <select
                   id={dyn.v3.getVariant("country-select", ID_VARIANTS_MAP, "country-select")}
-                  className={dyn.v3.getVariant("select-dropdown", CLASS_VARIANTS_MAP, "border border-gray-300 border-r-0 rounded-l-lg px-3 py-2.5 bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#46a758]")}
+                  className={dyn.v3.getVariant("select-dropdown", CLASS_VARIANTS_MAP, "border border-zinc-700 border-r-0 rounded-l-lg px-3 py-2.5 bg-zinc-950 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#46a758]")}
                   value={selectedCountry.code}
                   onChange={(e) => {
                     const country = countries.find(
@@ -320,7 +320,7 @@ export default function Page() {
                   type="tel"
                   id={dyn.v3.getVariant("phone-number-input", ID_VARIANTS_MAP, "phone-number-input")}
                   placeholder={dyn.v3.getVariant("phone_number_placeholder", TEXT_VARIANTS_MAP, "Phone number")}
-                  className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "flex-1 border border-gray-300 rounded-r-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]")}
+                  className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "flex-1 border border-zinc-700 rounded-r-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]")}
                   value={phoneNumber}
                   onChange={(e) => {
                     setPhoneNumber(e.target.value);
@@ -340,7 +340,7 @@ export default function Page() {
           {dyn.v1.addWrapDecoy("email-field", (
             <div id={dyn.v3.getVariant("email-field-container", ID_VARIANTS_MAP, "email-field-container")}>
               <label
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-300 mb-1"
                 htmlFor={dyn.v3.getVariant("email-input", ID_VARIANTS_MAP, "email-input")}
                 id={dyn.v3.getVariant("email-label", ID_VARIANTS_MAP, "email-label")}
               >
@@ -352,7 +352,7 @@ export default function Page() {
                 placeholder={dyn.v3.getVariant("email_placeholder", TEXT_VARIANTS_MAP, "your.email@example.com")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "w-full border border-gray-300 rounded-lg px-4 py-2.5 bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]")}
+                className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "w-full border border-zinc-700 rounded-lg px-4 py-2.5 bg-zinc-900 text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]")}
               />
             </div>
           ), "email-field-wrap")}
@@ -361,7 +361,7 @@ export default function Page() {
           {dyn.v1.addWrapDecoy("occasion-field", (
             <div id={dyn.v3.getVariant("occasion-field-container", ID_VARIANTS_MAP, "occasion-field-container")}>
               <label
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-300 mb-1"
                 htmlFor={dyn.v3.getVariant("occasion-select", ID_VARIANTS_MAP, "occasion-select")}
                 id={dyn.v3.getVariant("occasion-label", ID_VARIANTS_MAP, "occasion-label")}
               >
@@ -369,7 +369,7 @@ export default function Page() {
               </label>
               <select
                 id={dyn.v3.getVariant("occasion-select", ID_VARIANTS_MAP, "occasion-select")}
-                className={dyn.v3.getVariant("select-dropdown", CLASS_VARIANTS_MAP, "w-full border border-gray-300 rounded-lg px-4 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]")}
+                className={dyn.v3.getVariant("select-dropdown", CLASS_VARIANTS_MAP, "w-full border border-zinc-700 rounded-lg px-4 py-2.5 bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]")}
                 value={occasion}
                 onChange={(e) => {
                   setOccasion(e.target.value);
@@ -398,7 +398,7 @@ export default function Page() {
           {dyn.v1.addWrapDecoy("special-request-field", (
             <div id={dyn.v3.getVariant("special-request-field-container", ID_VARIANTS_MAP, "special-request-field-container")}>
               <label
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-300 mb-1"
                 htmlFor={dyn.v3.getVariant("special-requests-textarea", ID_VARIANTS_MAP, "special-requests-textarea")}
                 id={dyn.v3.getVariant("special-requests-label", ID_VARIANTS_MAP, "special-requests-label")}
               >
@@ -407,7 +407,7 @@ export default function Page() {
               <textarea
                 id={dyn.v3.getVariant("special-requests-textarea", ID_VARIANTS_MAP, "special-requests-textarea")}
                 placeholder={dyn.v3.getVariant("special_request_placeholder", TEXT_VARIANTS_MAP, "Any special requests or dietary requirements?")}
-                className={dyn.v3.getVariant("textarea-text", CLASS_VARIANTS_MAP, "w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] resize-none")}
+                className={dyn.v3.getVariant("textarea-text", CLASS_VARIANTS_MAP, "w-full border border-zinc-700 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] resize-none")}
                 rows={3}
                 value={specialRequest}
                 onChange={(e) => setSpecialRequest(e.target.value)}
@@ -426,7 +426,7 @@ export default function Page() {
           </Button>
         ), "confirm-booking-button-wrap")}
 
-        <p className="text-xs text-gray-600 mt-3 text-center">
+        <p className="text-xs text-gray-400 mt-3 text-center">
           By completing this reservation, you agree to our{" "}
           <Link href="#" className="text-[#46a758] underline">
             {dyn.v3.getVariant("terms_of_use", undefined, "Terms of Use")}

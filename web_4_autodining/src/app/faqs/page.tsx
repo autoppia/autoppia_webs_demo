@@ -68,12 +68,12 @@ export default function FaqsPage() {
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="mb-12 text-left">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-5xl font-bold text-white mb-4">
             Frequently Asked Questions
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
             Find quick answers to the most common questions about AutoDining.
-            Can't find what you're looking for? <SeedLink href="/help" className="text-[#46a758] hover:underline">Visit our Help Center</SeedLink> or <SeedLink href="/contact" className="text-[#46a758] hover:underline">contact our support team</SeedLink>.
+            Can't find what you're looking for? <SeedLink href="/help" className="text-[#dc2626] hover:underline">Visit our Help Center</SeedLink> or <SeedLink href="/contact" className="text-[#dc2626] hover:underline">contact our support team</SeedLink>.
           </p>
         </div>
 
@@ -83,13 +83,13 @@ export default function FaqsPage() {
             {faqs.map((faq, index) => (
               <div
                 key={faq.question}
-                className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow"
+                className="bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden hover:shadow-md transition-shadow"
               >
                 <button
                   onClick={() => toggleFAQ(index)}
-                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-zinc-900 transition-colors"
                 >
-                  <span className="text-lg font-semibold text-gray-900 pr-8">{faq.question}</span>
+                  <span className="text-lg font-semibold text-white pr-8">{faq.question}</span>
                   {openIndex === index ? (
                     <ChevronUp className="w-5 h-5 text-gray-400 flex-shrink-0" />
                   ) : (
@@ -98,8 +98,8 @@ export default function FaqsPage() {
                 </button>
                 {openIndex === index && (
                   <div className="px-6 pb-5 pt-0">
-                    <div className="pl-0 border-l-4 border-[#46a758] pl-4">
-                      <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                    <div className="pl-0 border-l-4 border-[#dc2626] pl-4">
+                      <p className="text-gray-400 leading-relaxed">{faq.answer}</p>
                     </div>
                   </div>
                 )}
@@ -110,7 +110,7 @@ export default function FaqsPage() {
 
         {/* Still Need Help Section */}
         <div className="mb-12">
-          <div className="bg-gradient-to-r from-[#46a758] to-[#3d8f4e] rounded-2xl p-8 md:p-12 text-white text-center">
+          <div className="bg-gradient-to-r from-[#dc2626] to-[#b91c1c] rounded-2xl p-8 md:p-12 text-white text-center">
             <h2 className="text-3xl font-bold mb-4">Still have questions?</h2>
             <p className="text-lg mb-6 opacity-90">
               Our support team is here to help! Get in touch and we'll respond as soon as possible.
@@ -118,13 +118,13 @@ export default function FaqsPage() {
             <div className="flex flex-wrap gap-4 justify-center">
               <SeedLink
                 href="/help"
-                className="inline-block bg-white text-[#46a758] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                className="inline-block bg-zinc-950 text-[#dc2626] px-8 py-3 rounded-lg font-semibold hover:bg-zinc-800 transition-colors"
               >
                 Visit Help Center
               </SeedLink>
               <SeedLink
                 href="/contact"
-                className="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
+                className="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-zinc-950/10 transition-colors"
               >
                 Contact Support
               </SeedLink>

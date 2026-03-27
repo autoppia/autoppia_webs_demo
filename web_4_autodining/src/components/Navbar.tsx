@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 
 import { useSeed } from "@/context/SeedContext";
 import { SeedLink } from "@/components/ui/SeedLink";
@@ -13,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 interface NavbarProps {
   showSearch?: boolean;
   showBack?: boolean;
+  transparent?: boolean;
   searchInputId?: string;
   searchButtonId?: string;
   onSearchClick?: () => void;
@@ -21,10 +23,22 @@ interface NavbarProps {
 export default function Navbar({
   showSearch = false,
   showBack = false,
+  transparent = false,
   searchInputId,
   searchButtonId,
   onSearchClick
 }: NavbarProps) {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    if (!transparent) return;
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [transparent]);
+
   const dyn = useDynamicSystem();
   const { currentUser, isAuthenticated } = useAuth();
 
@@ -40,7 +54,12 @@ export default function Navbar({
 
   return (
     <nav
-      className="w-full border-b bg-white sticky top-0 z-10"
+      className={cn(
+        "w-full sticky top-0 z-50 transition-all duration-300",
+        transparent 
+          ? (isScrolled ? "bg-[#dc2626] border-b border-red-700 shadow-lg text-white" : "bg-transparent border-transparent text-white") 
+          : "bg-[#dc2626] border-b border-red-700 text-white shadow-lg"
+      )}
       id={dyn.v3.getVariant("navbar", ID_VARIANTS_MAP, "navbar")}
     >
       {dyn.v1.addWrapDecoy("navbar-container", (
@@ -50,7 +69,10 @@ export default function Navbar({
             {showBack && (
               <SeedLink
                 href="/"
-                className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors text-gray-600"
+                className={cn(
+                  "flex items-center justify-center w-10 h-10 rounded-full transition-colors",
+                  transparent ? "hover:bg-white/10 text-white" : "hover:bg-gray-100 text-gray-600"
+                )}
                 id="navbar-back-button"
               >
                 <ArrowLeft className="w-6 h-6" />
@@ -62,10 +84,10 @@ export default function Navbar({
                 <SeedLink href="/">
                   {dyn.v1.addWrapDecoy("navbar-logo-link", (
                     <div
-                      className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9"
+                      className="bg-white px-3 py-1 rounded flex items-center h-9"
                       id={dyn.v3.getVariant("navbar-logo", ID_VARIANTS_MAP, "navbar-logo")}
                     >
-                      <span className="font-bold text-white text-lg">
+                      <span className="font-bold text-[#dc2626] text-lg">
                         AutoDining
                       </span>
                     </div>
@@ -88,7 +110,8 @@ export default function Navbar({
                   key={link.key}
                   className={cn(
                     dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, "nav-link"),
-                    "text-sm text-gray-600 hover:text-[#46a758] transition-colors"
+                    "text-sm transition-colors",
+                    "text-white/90 hover:text-white"
                   )}
                   href={link.href}
                   id={dyn.v3.getVariant(link.key, ID_VARIANTS_MAP, link.key)}
@@ -103,8 +126,8 @@ export default function Navbar({
                     className={cn(
                       "text-sm font-semibold flex items-center gap-2 px-4 py-2 rounded-full transition-all border",
                       isAuthenticated 
-                        ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100" 
-                        : "bg-white text-gray-700 border-gray-200 hover:border-emerald-500 hover:text-emerald-600"
+                        ? "bg-white/20 text-white border-white/30 hover:bg-white/30"
+                        : "bg-white/10 text-white border-white/20 hover:bg-white/30"
                     )}
                     id="navbar-account-button"
                   >
@@ -112,7 +135,7 @@ export default function Navbar({
                     {isAuthenticated && currentUser ? currentUser.username : "Account"}
                   </button>
                 </PopoverTrigger>
-                <PopoverContent className="w-80 p-0 mr-6 mt-2" align="end">
+                <PopoverContent className="w-auto p-0 border-none bg-transparent shadow-none mr-6 mt-2" align="end">
                   <AuthModal />
                 </PopoverContent>
               </Popover>

@@ -6,7 +6,7 @@ import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynami
 import Navbar from "@/components/Navbar";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Send, User, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { cn } from "@/library/utils";
@@ -118,7 +118,7 @@ export default function ContactPage() {
                 <a
                   key={info.title}
                   href={info.link}
-                  className="flex items-start gap-4 p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md hover:border-[#46a758] transition-all duration-300 group cursor-default"
+                  className="flex items-start gap-4 p-4 bg-white border border-gray-300 rounded-lg hover:shadow-md hover:border-[#dc2626] transition-all duration-300 group cursor-default"
                   onClick={() =>
                     logEvent(EVENT_TYPES.CONTACT_CARD_CLICK, {
                       type: info.title,
@@ -126,7 +126,7 @@ export default function ContactPage() {
                     })
                   }
                 >
-                  <div className="text-[#46a758] group-hover:scale-110 transition-transform">
+                  <div className="text-[#dc2626] group-hover:scale-110 transition-transform">
                     {info.icon}
                   </div>
                   <div>
@@ -142,12 +142,12 @@ export default function ContactPage() {
 
           {/* Contact Form */}
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 font-display">
               Send us a Message
             </h2>
-            <div className="bg-white border border-gray-200 rounded-2xl p-8">
+            <div className="bg-zinc-950 border-2 border-zinc-900 rounded-2xl p-8 shadow-2xl transition-all duration-300 hover:border-[#dc2626] group/container">
               {submitted && (
-                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800">
+                <div className="mb-6 p-4 bg-red-950/50 border border-red-900 rounded-lg text-red-500 text-sm italic">
                   Thank you for your message! We'll get back to you soon.
                 </div>
               )}
@@ -155,95 +155,103 @@ export default function ContactPage() {
               {dyn.v1.addWrapDecoy("contact-form", (
                 <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Name */}
-                <div>
+                <div className="group">
                   <label
                     htmlFor="name"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-gray-300 mb-2 transition-colors group-focus-within:text-white"
                   >
                     Name *
                   </label>
-                  <input
-                    type="text"
-                    id={dyn.v3.getVariant("contact-name-input", ID_VARIANTS_MAP, "name")}
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={handleChange}
-                    className={cn(
-                      dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "input-text"),
-                      "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
-                    )}
-                    placeholder={dyn.v3.getVariant("name_placeholder", TEXT_VARIANTS_MAP, "Your full name")}
-                  />
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[#dc2626] transition-colors" />
+                    <input
+                      type="text"
+                      id={dyn.v3.getVariant("contact-name-input", ID_VARIANTS_MAP, "name")}
+                      name="name"
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
+                      className={cn(
+                        "w-full pl-10 pr-4 py-3 bg-white border border-transparent rounded-lg focus:ring-2 focus:ring-[#dc2626] focus:border-[#dc2626] outline-none transition-all text-gray-900 font-medium placeholder:text-gray-400"
+                      )}
+                      placeholder={dyn.v3.getVariant("name_placeholder", TEXT_VARIANTS_MAP, "Your full name")}
+                    />
+                  </div>
                 </div>
 
                 {/* Email */}
-                <div>
+                <div className="group">
                   <label
                     htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-gray-300 mb-2 transition-colors group-focus-within:text-white"
                   >
                     Email *
                   </label>
-                  <input
-                    type="email"
-                    id={dyn.v3.getVariant("contact-email-input", ID_VARIANTS_MAP, "email")}
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className={cn(
-                      dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "input-text"),
-                      "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
-                    )}
-                    placeholder={dyn.v3.getVariant("email_placeholder", TEXT_VARIANTS_MAP, "your.email@example.com")}
-                  />
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[#dc2626] transition-colors" />
+                    <input
+                      type="email"
+                      id={dyn.v3.getVariant("contact-email-input", ID_VARIANTS_MAP, "email")}
+                      name="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={cn(
+                        "w-full pl-10 pr-4 py-3 bg-white border border-transparent rounded-lg focus:ring-2 focus:ring-[#dc2626] focus:border-[#dc2626] outline-none transition-all text-gray-900 font-medium placeholder:text-gray-400"
+                      )}
+                      placeholder={dyn.v3.getVariant("email_placeholder", TEXT_VARIANTS_MAP, "your.email@example.com")}
+                    />
+                  </div>
                 </div>
 
                 {/* Subject */}
-                <div>
+                <div className="group">
                   <label
                     htmlFor="subject"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-gray-300 mb-2 transition-colors group-focus-within:text-white"
                   >
                     Subject *
                   </label>
-                  <input
-                    type="text"
-                    id={dyn.v3.getVariant("contact-subject-input", ID_VARIANTS_MAP, "subject")}
-                    name="subject"
-                    required
-                    value={formData.subject}
-                    onChange={handleChange}
-                    className={cn(
-                      dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "input-text"),
-                      "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
-                    )}
-                    placeholder={dyn.v3.getVariant("subject_placeholder", TEXT_VARIANTS_MAP, "What's this about?")}
-                  />
+                  <div className="relative">
+                    <Send className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[#dc2626] transition-colors" />
+                    <input
+                      type="text"
+                      id={dyn.v3.getVariant("contact-subject-input", ID_VARIANTS_MAP, "subject")}
+                      name="subject"
+                      required
+                      value={formData.subject}
+                      onChange={handleChange}
+                      className={cn(
+                        "w-full pl-10 pr-4 py-3 bg-white border border-transparent rounded-lg focus:ring-2 focus:ring-[#dc2626] focus:border-[#dc2626] outline-none transition-all text-gray-900 font-medium placeholder:text-gray-400"
+                      )}
+                      placeholder={dyn.v3.getVariant("subject_placeholder", TEXT_VARIANTS_MAP, "What's this about?")}
+                    />
+                  </div>
                 </div>
 
                 {/* Message */}
-                <div>
+                <div className="group">
                   <label
                     htmlFor="message"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-gray-300 mb-2 transition-colors group-focus-within:text-white"
                   >
                     Message *
                   </label>
-                  <textarea
-                    id={dyn.v3.getVariant("contact-message-textarea", ID_VARIANTS_MAP, "message")}
-                    name="message"
-                    required
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows={6}
-                    className={cn(
-                      dyn.v3.getVariant("textarea-text", CLASS_VARIANTS_MAP, "textarea-text"),
-                      "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none resize-none transition-colors"
-                    )}
-                    placeholder={dyn.v3.getVariant("message_placeholder", TEXT_VARIANTS_MAP, "Tell us more about your inquiry...")}
-                  />
+                  <div className="relative">
+                    <MessageSquare className="absolute left-3 top-4 w-4 h-4 text-gray-500 group-focus-within:text-[#dc2626] transition-colors" />
+                    <textarea
+                      id={dyn.v3.getVariant("contact-message-textarea", ID_VARIANTS_MAP, "message")}
+                      name="message"
+                      required
+                      value={formData.message}
+                      onChange={handleChange}
+                      rows={5}
+                      className={cn(
+                        "w-full pl-10 pr-4 py-3 bg-white border border-transparent rounded-lg focus:ring-2 focus:ring-[#dc2626] focus:border-[#dc2626] outline-none resize-none transition-all text-gray-900 font-medium placeholder:text-gray-400"
+                      )}
+                      placeholder={dyn.v3.getVariant("message_placeholder", TEXT_VARIANTS_MAP, "Tell us more about your inquiry...")}
+                    />
+                  </div>
                 </div>
 
                 {/* Submit Button */}
@@ -252,7 +260,9 @@ export default function ContactPage() {
                     <Button
                       type="submit"
                       id={dyn.v3.getVariant("send-message-button", ID_VARIANTS_MAP, "send-message-button")}
-                      className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "w-full bg-[#46a758] hover:bg-[#3d8f4e] text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors")}
+                      className={cn(
+                        "w-full bg-[#dc2626] hover:bg-[#b91c1c] text-white px-6 py-4 rounded-lg font-bold flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95"
+                      )}
                     >
                       <Send className="w-5 h-5" />
                       {dyn.v3.getVariant("send_message", TEXT_VARIANTS_MAP, "Send Message")}
@@ -266,7 +276,7 @@ export default function ContactPage() {
         </div>
 
         {/* FAQ Section */}
-        <div className="bg-gray-50 rounded-2xl p-8 md:p-12">
+        <div className="bg-gray-50 rounded-2xl p-8 md:p-12 border border-gray-200">
           <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
             Frequently Asked Questions
           </h2>
@@ -290,7 +300,7 @@ export default function ContactPage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="bg-white rounded-lg p-6 shadow-sm"
+                className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm"
               >
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   {item.title}

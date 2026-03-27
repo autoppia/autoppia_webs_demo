@@ -104,16 +104,16 @@ function RestaurantCard({
   return (
     dyn.v1.addWrapDecoy(`restaurant-card-${r.id}`, (
       <div
-        className="w-[320px] flex-shrink-0 rounded-xl overflow-hidden shadow-lg bg-white hover:-translate-y-1 transition-all duration-300 hover:shadow-xl group cursor-pointer"
+        className="w-[320px] flex-shrink-0 rounded-xl overflow-hidden shadow-lg bg-zinc-950 hover:-translate-y-1 transition-all duration-300 hover:shadow-xl group/card cursor-pointer transform translate-z-0"
         id={dyn.v3.getVariant("restaurant-card", ID_VARIANTS_MAP, `restaurant-card-${r.id}`)}
       >
         <SeedLink href={`/restaurant/${encodeURIComponent(r.id)}`} className="block w-full h-full">
           {dyn.v1.addWrapDecoy(`restaurant-card-image-${r.id}`, (
-            <div className="relative w-full h-[280px] overflow-hidden">
+            <div className="relative w-full h-[280px] overflow-hidden rounded-t-xl">
               <img
                 src={r.image}
                 alt={r.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110 rounded-t-xl"
                 id={dyn.v3.getVariant("restaurant-image", ID_VARIANTS_MAP, `restaurant-image-${r.id}`)}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
@@ -125,7 +125,7 @@ function RestaurantCard({
                   id={dyn.v3.getVariant("restaurant-badges", ID_VARIANTS_MAP, `restaurant-badges-${r.id}`)}
                 >
                   <span
-                    className="px-3 py-1.5 rounded-full bg-orange-500/90 backdrop-blur-sm text-white text-xs font-bold shadow-lg"
+                    className="px-3 py-1.5 rounded-full bg-[#dc2626]/90 backdrop-blur-sm text-white text-xs font-bold shadow-lg"
                     id={dyn.v3.getVariant("restaurant-cuisine-badge", ID_VARIANTS_MAP, `restaurant-cuisine-${r.id}`)}
                   >
                     {r.cuisine}
@@ -147,7 +147,7 @@ function RestaurantCard({
                 >
                   {dyn.v1.addWrapDecoy(`restaurant-card-title-${r.id}`, (
                     <h3
-                      className="font-bold text-xl mb-0 group-hover:text-emerald-400 transition-colors drop-shadow-lg"
+                      className="font-bold text-xl mb-0 group-hover/card:text-red-400 transition-colors drop-shadow-lg"
                       id={dyn.v3.getVariant("restaurant-name", ID_VARIANTS_MAP, `restaurant-name-${r.id}`)}
                     >
                       {r.name}
@@ -175,7 +175,7 @@ function RestaurantCard({
                       </span>
                       <div
                         id={dyn.v3.getVariant("view_details_button", ID_VARIANTS_MAP, `view-details-${r.id}`)}
-                        className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "text-sm bg-emerald-600 group-hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors")}
+                        className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "text-sm bg-red-600 group-hover/card:bg-red-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors")}
                       >
                         {viewDetailsLabel}
                       </div>
@@ -280,15 +280,15 @@ function CardScroller({
               onClick={() => scroll("left")}
               className="absolute -left-5 top-1/2 -translate-y-1/2 z-20
                 w-12 h-12 flex items-center justify-center
-                bg-white/95 backdrop-blur-sm border-2 border-gray-200
+                bg-zinc-950/95 backdrop-blur-sm border-2 border-zinc-800
                 rounded-full shadow-xl hover:shadow-2xl
-                hover:bg-emerald-50 hover:border-emerald-400 hover:scale-110
+                hover:bg-red-50 hover:border-red-400 hover:scale-110
                 transition-all duration-300 ease-out"
               data-testid={`scroll-left-${seed ?? 1}`}
               aria-label={dyn.v3.getVariant("scroll_left", undefined, "Scroll left")}
               id={dyn.v3.getVariant("scroll-left-button", ID_VARIANTS_MAP, `scroll-left-${title}`)}
             >
-              <ChevronLeft className="w-6 h-6 text-gray-700 group-hover:text-emerald-600" />
+              <ChevronLeft className="w-6 h-6 text-gray-300 group-hover:text-red-600" />
             </button>
           ))
         )}
@@ -300,7 +300,7 @@ function CardScroller({
               onClick={() => scroll("right")}
               className="absolute -right-5 top-1/2 -translate-y-1/2 z-20
                 w-12 h-12 flex items-center justify-center
-                bg-white/95 backdrop-blur-sm border-2 border-gray-200
+                bg-zinc-950/95 backdrop-blur-sm border-2 border-zinc-800
                 rounded-full shadow-xl hover:shadow-2xl
                 hover:bg-emerald-50 hover:border-emerald-400 hover:scale-110
                 transition-all duration-300 ease-out"
@@ -308,7 +308,7 @@ function CardScroller({
               aria-label={dyn.v3.getVariant("scroll_right", undefined, "Scroll right")}
               id={dyn.v3.getVariant("scroll-right-button", ID_VARIANTS_MAP, `scroll-right-${title}`)}
             >
-              <ChevronRight className="w-6 h-6 text-gray-700 group-hover:text-emerald-600" />
+              <ChevronRight className="w-6 h-6 text-gray-300 group-hover:text-red-600" />
             </button>
           ))
         )}
@@ -575,14 +575,14 @@ function HomePageContent() {
 
   return (
     <main suppressHydrationWarning>
-      {/* Navigation/Header */}
-      <Navbar />
-
-      {/* Hero Section */}
-      <section className="mb-10 px-6">
-        <div className="relative overflow-hidden bg-gradient-to-r from-emerald-700 via-emerald-600 to-lime-500 text-white px-8 py-10 shadow-2xl">
+      {/* Hero Section with merged Navbar */}
+      <section className="mb-10 relative">
+        <div className="relative overflow-hidden bg-gradient-to-r from-red-700 via-red-600 to-red-500 text-white shadow-2xl">
           <div className="absolute inset-0 opacity-10 bg-[url('/images/restaurant1.jpg')] bg-cover bg-center" />
-          <div className="relative max-w-3xl space-y-3">
+          
+          <Navbar transparent />
+
+          <div className="relative max-w-6xl mx-auto px-8 py-16 md:py-24 space-y-3">
             <p className="uppercase tracking-[0.3em] text-sm font-semibold">
               Curated dining
             </p>
@@ -594,13 +594,13 @@ function HomePageContent() {
               details.
             </p>
             <div className="flex flex-wrap gap-3 pt-2">
-              <span className="px-3 py-1 bg-white/15 rounded-full text-sm backdrop-blur-sm">
+              <span className="px-3 py-1 bg-zinc-950/15 rounded-full text-sm backdrop-blur-sm">
                 Trending tonight
               </span>
-              <span className="px-3 py-1 bg-white/15 rounded-full text-sm backdrop-blur-sm">
+              <span className="px-3 py-1 bg-zinc-950/15 rounded-full text-sm backdrop-blur-sm">
                 Chef-owned
               </span>
-              <span className="px-3 py-1 bg-white/15 rounded-full text-sm backdrop-blur-sm">
+              <span className="px-3 py-1 bg-zinc-950/15 rounded-full text-sm backdrop-blur-sm">
                 Group friendly
               </span>
             </div>
@@ -622,25 +622,29 @@ function HomePageContent() {
                   placeholder={
                     dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search restaurant, cuisine...")
                   }
-                  className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "w-full h-9 px-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]")}
+                  className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "w-full h-9 px-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#dc2626] focus:border-[#dc2626]")}
                   value={search}
                   onChange={handleSearchChange}
                 />
               ))}
 
               {/* Tag Carousel with Marquee Effect */}
-              <div className="overflow-hidden relative group/marquee h-10 flex items-center">
-                <div className="flex items-center gap-2 animate-marquee group-hover/marquee:pause-animation">
+              <div className="overflow-hidden relative h-10 flex items-center group/marquee">
+                {/* Fade Masks */}
+                <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+                <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+                
+                <div className="flex items-center gap-2 animate-marquee group-hover/marquee:pause-animation px-4">
                   <button
                     onClick={() => {
                       setSelectedTag(null);
                       logEvent(EVENT_TYPES.TAG_FILTER_SELECTED, { tag: null, action: "clear", search });
                     }}
                     className={cn(
-                      "px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-colors border",
+                      "px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border",
                       !selectedTag 
-                        ? "bg-emerald-600 border-emerald-600 text-white" 
-                        : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
+                        ? "bg-[#dc2626] border-[#dc2626] text-white shadow-[0_0_15px_rgba(220,38,38,0.2)]" 
+                        : "bg-black border-white/20 text-white hover:border-[#dc2626] hover:text-[#dc2626]"
                     )}
                   >
                     All
@@ -659,10 +663,10 @@ function HomePageContent() {
                         });
                       }}
                       className={cn(
-                        "px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-colors border",
+                        "px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border",
                         selectedTag === tag 
-                          ? "bg-emerald-600 border-emerald-600 text-white" 
-                          : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
+                          ? "bg-[#dc2626] border-[#dc2626] text-white shadow-[0_0_15px_rgba(220,38,38,0.2)]" 
+                          : "bg-black border-white/20 text-white hover:border-[#dc2626] hover:text-[#dc2626]"
                       )}
                     >
                       {tag}
@@ -814,8 +818,8 @@ function HomePageContent() {
         {isLoading || !isReady || list.length === 0 ? null : (
           filtered.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 px-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-6">
-                <SearchX className="w-10 h-10 text-emerald-600" />
+              <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mb-6">
+                <SearchX className="w-10 h-10 text-red-600" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">No results found</h3>
               <p className="text-gray-500 max-w-md mx-auto">
@@ -826,7 +830,7 @@ function HomePageContent() {
                   setSelectedTag(null);
                   setSearch("");
                 }}
-                className="mt-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-2 rounded-full transition-all hover:scale-105"
+                className="mt-6 bg-red-600 hover:bg-red-700 text-white font-bold px-8 py-2 rounded-full transition-all hover:scale-105"
               >
                 Clear all filters
               </Button>
@@ -845,7 +849,7 @@ function HomePageContent() {
                   <h2 className="text-3xl font-bold mb-2">
                     {dyn.v3.getVariant("section_expensive_title", TEXT_VARIANTS_MAP, "Fine dining")}
                   </h2>
-                  <p className="text-gray-600 text-lg">
+                  <p className="text-gray-400 text-lg">
                     Fine dining experiences for special occasions
                   </p>
                 </div>
@@ -875,7 +879,7 @@ function HomePageContent() {
                   <h2 className="text-3xl font-bold mb-2">
                     {dyn.v3.getVariant("section_medium_title", TEXT_VARIANTS_MAP, "Everyday favorites")}
                   </h2>
-                  <p className="text-gray-600 text-lg">
+                  <p className="text-gray-400 text-lg">
                     Great value restaurants for everyday dining
                   </p>
                 </div>
@@ -905,7 +909,7 @@ function HomePageContent() {
                   <h2 className="text-3xl font-bold mb-2">
                     {dyn.v3.getVariant("section_cheap_title", TEXT_VARIANTS_MAP, "Budget eats")}
                   </h2>
-                  <p className="text-gray-600 text-lg">
+                  <p className="text-gray-400 text-lg">
                     Budget-friendly options without compromising quality
                   </p>
                 </div>
