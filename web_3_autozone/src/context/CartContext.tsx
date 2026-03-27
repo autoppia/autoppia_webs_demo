@@ -9,6 +9,8 @@ export interface Product {
   id: string;
   title: string;
   price: string;
+  /** Optional list price when item is on sale (must be above `price`). */
+  originalPrice?: string;
   image: string;
   description?: string;
   category?: string;

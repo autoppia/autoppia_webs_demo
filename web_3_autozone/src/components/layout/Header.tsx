@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
-import { useSeed } from "@/context/SeedContext";
+import { useAuth } from "@/context/AuthContext";
 import { logEvent, EVENT_TYPES } from "@/events";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { cn } from "@/library/utils";
@@ -88,6 +88,7 @@ export function Header() {
   };
 
   const { state } = useCart();
+  const { currentUser, logout } = useAuth();
   const cartItemCount = isMounted ? state.totalItems : 0;
   const categoryRef = useRef<HTMLDivElement>(null);
 
@@ -291,6 +292,37 @@ export function Header() {
                             </span>
                           </SeedLink>
                         ))}
+                        {isMounted && (
+                          currentUser ? (
+                            <>
+                              <span className="inline-flex h-12 items-center rounded-full border border-slate-200 bg-white/70 px-4 text-sm font-semibold text-slate-700">
+                                {currentUser.username}
+                              </span>
+                              <button
+                                type="button"
+                                className="inline-flex h-12 items-center rounded-full border border-slate-200 bg-white/70 px-4 text-sm font-semibold text-slate-700 hover:bg-white hover:border-slate-300"
+                                onClick={logout}
+                              >
+                                Logout
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <SeedLink
+                                href="/register"
+                                className="inline-flex h-12 items-center rounded-full border border-slate-200 bg-white/70 px-4 text-sm font-semibold text-slate-700 shadow-sm hover:bg-white hover:border-slate-300"
+                              >
+                                Register
+                              </SeedLink>
+                              <SeedLink
+                                href="/login"
+                                className="inline-flex h-12 items-center rounded-full border border-slate-200 bg-white/70 px-4 text-sm font-semibold text-slate-700 shadow-sm hover:bg-white hover:border-slate-300"
+                              >
+                                Login
+                              </SeedLink>
+                            </>
+                          )
+                        )}
                       </div>
                     ))}
 
@@ -408,6 +440,37 @@ export function Header() {
                             {dyn.v3.getVariant("shopping_cart", dynamicV3TextVariants, "Shopping Cart")}
                           </SeedLink>
                         ))}
+                        {isMounted && (
+                          currentUser ? (
+                            <button
+                              type="button"
+                              className="rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                              onClick={() => {
+                                logout();
+                                setMobileMenuOpen(false);
+                              }}
+                            >
+                              Logout ({currentUser.username})
+                            </button>
+                          ) : (
+                            <>
+                              <SeedLink
+                                href="/register"
+                                className="rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                Register
+                              </SeedLink>
+                              <SeedLink
+                                href="/login"
+                                className="rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                Login
+                              </SeedLink>
+                            </>
+                          )
+                        )}
                       </nav>
                     ))}
                   </div>

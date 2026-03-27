@@ -12,6 +12,12 @@ import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useEffect, useMemo, useState } from "react";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { Input } from "@/components/ui/input";
+import {
+  cardLastFour,
+  validateOnlinePayment,
+  type PaymentMethodChoice,
+} from "@/library/checkout-payment";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +34,13 @@ export default function CheckoutPage() {
 
   // Avoid hydration mismatch: compute date string on client after mount.
   const [formattedDate, setFormattedDate] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodChoice>("on_delivery");
+  const [cardName, setCardName] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [cardExpiry, setCardExpiry] = useState("");
+  const [cardCvv, setCardCvv] = useState("");
+  const [paymentFieldError, setPaymentFieldError] = useState<string | null>(null);
+
   useEffect(() => {
     const deliveryDate = new Date();
     deliveryDate.setDate(deliveryDate.getDate() + 2);
@@ -200,11 +213,18 @@ export default function CheckoutPage() {
                       {dyn.v1.addWrapDecoy(
                         "checkout-payment",
                         (
-                          <BlurCard className="flex gap-4 p-5">
+                          <BlurCard
+                            id={dyn.v3.getVariant(
+                              "checkout-payment-card",
+                              ID_VARIANTS_MAP,
+                              "checkout-payment-card"
+                            )}
+                            className="flex gap-4 p-5"
+                          >
                             <div className="flex-shrink-0 rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white h-fit">
                               2
                             </div>
-                            <div className="flex-1 space-y-2 text-sm">
+                            <div className="flex-1 space-y-4 text-sm">
                               <p className="text-base font-semibold text-slate-900">
                                 {dyn.v3.getVariant(
                                   "payment_method",
@@ -212,16 +232,179 @@ export default function CheckoutPage() {
                                   "Payment Method"
                                 )}
                               </p>
-                              <p className="text-slate-700">
-                                MasterCard ending in 1234
-                              </p>
-                              <p className="text-slate-600 text-xs">
-                                {dyn.v3.getVariant(
-                                  "billing_matches_shipping",
-                                  TEXT_VARIANTS_MAP,
-                                  "Billing address matches shipping address"
-                                )}
-                              </p>
+                              {paymentFieldError && (
+                                <p className="text-sm font-medium text-red-600">{paymentFieldError}</p>
+                              )}
+                              <div className="flex flex-col gap-3">
+                                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-3 hover:bg-slate-50">
+                                  <input
+                                    type="radio"
+                                    name="checkout-payment-method"
+                                    className="mt-1"
+                                    checked={paymentMethod === "on_delivery"}
+                                    onChange={() => {
+                                      setPaymentMethod("on_delivery");
+                                      setPaymentFieldError(null);
+                                    }}
+                                    id={dyn.v3.getVariant(
+                                      "pay-on-delivery",
+                                      ID_VARIANTS_MAP,
+                                      "payment-on-delivery"
+                                    )}
+                                  />
+                                  <span>
+                                    <span className="font-semibold text-slate-900">
+                                      {dyn.v3.getVariant(
+                                        "pay_on_delivery",
+                                        TEXT_VARIANTS_MAP,
+                                        "Pay on delivery"
+                                      )}
+                                    </span>
+                                    <span className="mt-1 block text-slate-600">
+                                      {dyn.v3.getVariant(
+                                        "pay_on_delivery_hint",
+                                        TEXT_VARIANTS_MAP,
+                                        "Pay with cash or card when your order arrives."
+                                      )}
+                                    </span>
+                                  </span>
+                                </label>
+                                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-3 hover:bg-slate-50">
+                                  <input
+                                    type="radio"
+                                    name="checkout-payment-method"
+                                    className="mt-1"
+                                    checked={paymentMethod === "online"}
+                                    onChange={() => {
+                                      setPaymentMethod("online");
+                                      setPaymentFieldError(null);
+                                    }}
+                                    id={dyn.v3.getVariant(
+                                      "pay-online",
+                                      ID_VARIANTS_MAP,
+                                      "payment-online"
+                                    )}
+                                  />
+                                  <span>
+                                    <span className="font-semibold text-slate-900">
+                                      {dyn.v3.getVariant(
+                                        "pay_online",
+                                        TEXT_VARIANTS_MAP,
+                                        "Pay online"
+                                      )}
+                                    </span>
+                                    <span className="mt-1 block text-slate-600">
+                                      {dyn.v3.getVariant(
+                                        "pay_online_hint",
+                                        TEXT_VARIANTS_MAP,
+                                        "Charge a card now (demo — card is not stored)."
+                                      )}
+                                    </span>
+                                  </span>
+                                </label>
+                              </div>
+                              {paymentMethod === "online" && (
+                                <div className="grid gap-3 sm:grid-cols-2">
+                                  <div className="space-y-1 sm:col-span-2">
+                                    <label
+                                      htmlFor={dyn.v3.getVariant(
+                                        "card-name",
+                                        ID_VARIANTS_MAP,
+                                        "card-name"
+                                      )}
+                                      className="text-xs font-semibold text-slate-500"
+                                    >
+                                      {dyn.v3.getVariant(
+                                        "card_name_label",
+                                        TEXT_VARIANTS_MAP,
+                                        "Name on card"
+                                      )}
+                                    </label>
+                                    <Input
+                                      id={dyn.v3.getVariant("card-name", ID_VARIANTS_MAP, "card-name")}
+                                      value={cardName}
+                                      onChange={(e) => setCardName(e.target.value)}
+                                      autoComplete="cc-name"
+                                    />
+                                  </div>
+                                  <div className="space-y-1 sm:col-span-2">
+                                    <label
+                                      htmlFor={dyn.v3.getVariant(
+                                        "card-number",
+                                        ID_VARIANTS_MAP,
+                                        "card-number"
+                                      )}
+                                      className="text-xs font-semibold text-slate-500"
+                                    >
+                                      {dyn.v3.getVariant(
+                                        "card_number_label",
+                                        TEXT_VARIANTS_MAP,
+                                        "Card number"
+                                      )}
+                                    </label>
+                                    <Input
+                                      id={dyn.v3.getVariant(
+                                        "card-number",
+                                        ID_VARIANTS_MAP,
+                                        "card-number"
+                                      )}
+                                      inputMode="numeric"
+                                      value={cardNumber}
+                                      onChange={(e) => setCardNumber(e.target.value)}
+                                      autoComplete="cc-number"
+                                    />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <label
+                                      htmlFor={dyn.v3.getVariant(
+                                        "card-expiry",
+                                        ID_VARIANTS_MAP,
+                                        "card-expiry"
+                                      )}
+                                      className="text-xs font-semibold text-slate-500"
+                                    >
+                                      {dyn.v3.getVariant(
+                                        "card_expiry_label",
+                                        TEXT_VARIANTS_MAP,
+                                        "Expiry (MM/YY)"
+                                      )}
+                                    </label>
+                                    <Input
+                                      id={dyn.v3.getVariant(
+                                        "card-expiry",
+                                        ID_VARIANTS_MAP,
+                                        "card-expiry"
+                                      )}
+                                      placeholder="MM/YY"
+                                      value={cardExpiry}
+                                      onChange={(e) => setCardExpiry(e.target.value)}
+                                      autoComplete="cc-exp"
+                                    />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <label
+                                      htmlFor={dyn.v3.getVariant("card-cvv", ID_VARIANTS_MAP, "card-cvv")}
+                                      className="text-xs font-semibold text-slate-500"
+                                    >
+                                      {dyn.v3.getVariant("card_cvv_label", TEXT_VARIANTS_MAP, "CVV")}
+                                    </label>
+                                    <Input
+                                      id={dyn.v3.getVariant("card-cvv", ID_VARIANTS_MAP, "card-cvv")}
+                                      inputMode="numeric"
+                                      value={cardCvv}
+                                      onChange={(e) => setCardCvv(e.target.value)}
+                                      autoComplete="cc-csc"
+                                    />
+                                  </div>
+                                  <p className="text-slate-600 text-xs sm:col-span-2">
+                                    {dyn.v3.getVariant(
+                                      "billing_matches_shipping",
+                                      TEXT_VARIANTS_MAP,
+                                      "Billing address matches shipping address"
+                                    )}
+                                  </p>
+                                </div>
+                              )}
                             </div>
                           </BlurCard>
                         )
@@ -387,6 +570,24 @@ export default function CheckoutPage() {
                             "w-full rounded-full bg-gradient-to-r from-indigo-500 to-sky-500 px-6 py-4 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all"
                           )}
                           onClick={() => {
+                            if (paymentMethod === "online") {
+                              const err = validateOnlinePayment({
+                                cardName,
+                                cardNumber,
+                                expiry: cardExpiry,
+                                cvv: cardCvv,
+                              });
+                              if (err) {
+                                setPaymentFieldError(err);
+                                toast.error(err);
+                                return;
+                              }
+                            }
+                            setPaymentFieldError(null);
+                            const last4 =
+                              paymentMethod === "online"
+                                ? cardLastFour(cardNumber)
+                                : null;
                             logEvent(EVENT_TYPES.ORDER_COMPLETED, {
                               items: items.map((item) => ({
                                 id: item.id,
@@ -399,6 +600,8 @@ export default function CheckoutPage() {
                               tax: tax.toFixed(2),
                               shipping: shipping.toFixed(2),
                               orderTotal: orderTotal.toFixed(2),
+                              paymentMethod,
+                              cardLast4: last4,
                             });
                             toast.success("🎉 Order placed successfully!");
                             setTimeout(() => {

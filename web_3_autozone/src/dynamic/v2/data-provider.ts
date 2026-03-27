@@ -117,6 +117,13 @@ export class DynamicDataProvider {
     return this.products.filter((product) => product.category === category);
   }
 
+  public getAllProducts(): Product[] {
+    if (!Array.isArray(this.products)) {
+      return [];
+    }
+    return [...this.products];
+  }
+
 
   public searchProducts(query: string): Product[] {
     const trimmed = query.trim().toLowerCase();
@@ -156,5 +163,6 @@ export const dynamicDataProvider = DynamicDataProvider.getInstance();
 // Helper functions for easy access
 export const getProductById = (id: string) => dynamicDataProvider.getProductById(id);
 export const getProductsByCategory = (category: string) => dynamicDataProvider.getProductsByCategory(category);
+export const getAllProducts = () => dynamicDataProvider.getAllProducts();
 export const searchProducts = (query: string) => dynamicDataProvider.searchProducts(query);
 export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
