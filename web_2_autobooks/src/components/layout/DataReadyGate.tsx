@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { dynamicDataProvider } from "@/dynamic/v2";
 import { useSeed } from "@/context/SeedContext";
 
@@ -18,11 +18,16 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
   const { seed } = useSeed();
   const prevSeedRef = useRef<number | null>(null);
+  const latestSeedRef = useRef(seed);
 
-  const emitSeedDataReady = (seedValue: number) => {
+  useEffect(() => {
+    latestSeedRef.current = seed;
+  }, [seed]);
+
+  const emitSeedDataReady = useCallback((seedValue: number) => {
     if (typeof window === "undefined") return;
     window.dispatchEvent(new CustomEvent(SEED_DATA_READY_EVENT, { detail: { seed: seedValue } }));
-  };
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -39,21 +44,21 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
       .then(() => {
         if (!cancelled) {
           setReady(true);
-          emitSeedDataReady(seed);
+          emitSeedDataReady(latestSeedRef.current);
         }
       })
       .catch((error) => {
         console.error("[autobooks] Data load failed", error);
         if (!cancelled) {
           setReady(true);
-          emitSeedDataReady(seed);
+          emitSeedDataReady(latestSeedRef.current);
         }
       });
 
     return () => {
       cancelled = true;
     };
-  }, [mounted]);
+  }, [mounted, emitSeedDataReady]);
 
   // Reload data only when seed changes (not on initial mount)
   useEffect(() => {
@@ -79,7 +84,7 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
     };
 
     reloadData();
-  }, [seed, mounted]);
+  }, [seed, mounted, emitSeedDataReady]);
 
   // Server: render loading so client hydration matches (client starts with ready=false).
   if (typeof window === "undefined") {
