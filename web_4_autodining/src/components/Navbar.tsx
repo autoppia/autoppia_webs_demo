@@ -21,7 +21,6 @@ export default function Navbar({
 }: NavbarProps) {
   const dyn = useDynamicSystem();
 
-  // V1: Order navigation links dynamically
   const navLinks = [
     { href: "/help", label: "Help", key: "nav-help", textKey: "nav_help" },
     { href: "/about", label: "About", key: "nav-about", textKey: "nav_about" },
@@ -33,43 +32,32 @@ export default function Navbar({
 
   return (
     <nav
-      className="w-full border-b bg-white sticky top-0 z-10"
+      className="w-full sticky top-0 z-50 border-b border-white/[0.06] bg-background/80 backdrop-blur-xl"
       id={dyn.v3.getVariant("navbar", ID_VARIANTS_MAP, "navbar")}
     >
       {dyn.v1.addWrapDecoy("navbar-container", (
-        <div className="w-full flex items-center h-20 px-6 gap-6">
-          {/* Logo section - always on left */}
+        <div className="w-full flex items-center h-16 px-8 gap-6 max-w-[1400px] mx-auto">
           {dyn.v1.addWrapDecoy("navbar-logo", (
             <div className="flex items-center gap-3 ml-0">
               <SeedLink href="/">
                 {dyn.v1.addWrapDecoy("navbar-logo-link", (
-                  <div
-                    className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9"
-                    id={dyn.v3.getVariant("navbar-logo", ID_VARIANTS_MAP, "navbar-logo")}
-                  >
-                    <span className="font-bold text-white text-lg">
-                      AutoDining
-                    </span>
+                  <div className="flex items-center h-9 gap-2.5" id={dyn.v3.getVariant("navbar-logo", ID_VARIANTS_MAP, "navbar-logo")}>
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/20"><span className="text-white font-black text-xs tracking-tighter">AD</span></div>
+                    <span className="font-bold text-white/90 text-lg tracking-tight">Auto<span className="text-amber-500">Dining</span></span>
                   </div>
                 ))}
               </SeedLink>
             </div>
           ), "navbar-logo-wrap")}
-
           <div className="flex-1" />
-
-          {/* Navigation links - right */}
           {dyn.v1.addWrapDecoy("navbar-links-container", (
-            <div
-              className="flex items-center gap-6 mr-0"
-              id={dyn.v3.getVariant("navbar-links", ID_VARIANTS_MAP, "navbar-links")}
-            >
+            <div className="flex items-center gap-1 mr-0" id={dyn.v3.getVariant("navbar-links", ID_VARIANTS_MAP, "navbar-links")}>
               {orderedNavLinks.map((link) => (
                 <SeedLink
                   key={link.key}
                   className={cn(
                     dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, "nav-link"),
-                    "text-sm text-gray-600 hover:text-[#46a758] transition-colors"
+                    "text-[13px] text-white/50 hover:text-amber-400 px-4 py-2 rounded-full hover:bg-white/[0.06] transition-all duration-300 font-medium tracking-wide"
                   )}
                   href={link.href}
                   id={dyn.v3.getVariant(link.key, ID_VARIANTS_MAP, link.key)}
