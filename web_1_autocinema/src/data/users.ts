@@ -4,7 +4,7 @@ export interface UserRecord {
   allowedMovies: string[];
 }
 
-const TOTAL_USERS = 50;
+const TOTAL_USERS = 256;
 const MOVIE_POOL_SIZE = 50;
 
 const padMovieId = (value: number): string => value.toString().padStart(3, "0");
