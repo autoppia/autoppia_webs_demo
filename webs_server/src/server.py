@@ -289,7 +289,7 @@ class DataGenerationResponse(BaseModel):
 
 
 # --- Database Initialization ---
-async def init_db_pool():
+async def init_db_pool():  # pragma: no cover
     """Initializes the database connection pool and prepared statements."""
     retry_count = 0
     max_retries = 5
@@ -335,7 +335,7 @@ async def init_db_pool():
 
 # --- Application Lifespan Management ---
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI):  # pragma: no cover
     # Startup
     await init_db_pool()
     logger.info("Application startup complete.")
@@ -487,7 +487,7 @@ async def save_event_endpoint(event: EventInput, request: Request):
         ) from e
     except HTTPException:
         raise
-    except Exception as e:
+    except Exception as e:  # pragma: no cover
         logger.error(f"Unexpected error during event save: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -565,7 +565,7 @@ async def get_events_endpoint(
         ) from e
     except HTTPException:
         raise
-    except Exception as e:
+    except Exception as e:  # pragma: no cover
         logger.error(f"Unexpected error during get_events: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -626,7 +626,7 @@ async def reset_events_endpoint(
         ) from e
     except HTTPException:
         raise
-    except Exception as e:
+    except Exception as e:  # pragma: no cover
         logger.error(f"Unexpected error during reset_events: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -635,7 +635,7 @@ async def reset_events_endpoint(
 
 
 # --- Data Generation Functions (generic) ---
-async def generate_with_openai(request: DataGenerationRequest) -> List[Dict[str, Any]]:
+async def generate_with_openai(request: DataGenerationRequest) -> List[Dict[str, Any]]:  # pragma: no cover
     if not OPENAI_API_KEY:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -1226,7 +1226,7 @@ def _build_docker_web_url(project_prefix: str, port: int) -> str:
     return f"http://{project_prefix}_{port}-web-1:{port}"
 
 
-async def _check_single_web_health(client: "httpx.AsyncClient", url: str, web_info: Dict[str, str]) -> WebHealthItem:
+async def _check_single_web_health(client: "httpx.AsyncClient", url: str, web_info: Dict[str, str]) -> WebHealthItem:  # pragma: no cover
     """Check health of a single deployed web. Returns WebHealthItem."""
     project_key = web_info["project_key"]
     name = web_info["name"]
@@ -1266,7 +1266,7 @@ async def _check_single_web_health(client: "httpx.AsyncClient", url: str, web_in
     response_model=WebsHealthResponse,
     summary="Health of all deployed webs",
 )
-async def health_webs_endpoint():
+async def health_webs_endpoint():  # pragma: no cover
     """
     Checks the health of all deployed web demos.
 

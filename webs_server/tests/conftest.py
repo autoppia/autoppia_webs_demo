@@ -1,3 +1,4 @@
+# Pytest configuration/helpers for webs_server (adjusts import paths).
 """Pytest configuration: add webs_server/src to Python path for imports."""
 
 import sys
