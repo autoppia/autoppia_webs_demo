@@ -45,10 +45,11 @@ function getPlacementClasses(placement: string): string {
     case "top-left":
     case "middle-right":
     case "middle-left":
-      return "w-full max-w-md sm:max-w-lg";
+      // Fixed placements should never use full width; keep a stable responsive width.
+      return "w-[min(30rem,calc(100vw-2rem))] lg:w-[min(46rem,calc(100vw-4rem))]";
     case "banner":
     case "top-banner":
-      return "w-full max-w-xl";
+      return "w-[min(46rem,calc(100vw-2rem))]";
     default:
       return "";
   }
@@ -100,7 +101,7 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`w-full min-w-[min(20rem,calc(100vw-2rem))] max-w-md rounded-xl border-2 border-[#46a758] bg-white text-slate-900 shadow-2xl shadow-black/40 px-6 py-6 sm:max-w-lg sm:px-8 sm:py-8 ${getPlacementClasses(variant.placement)}`}
+        className={`max-w-none rounded-xl border-2 border-[#46a758] bg-white text-slate-900 shadow-2xl shadow-black/40 ${getPlacementClasses(variant.placement)}`}
         style={{
           ...placementStyle,
           position: (placementStyle?.position as React.CSSProperties["position"]) ?? "relative",
@@ -108,16 +109,26 @@ export function DynamicPopup({ variant, onClose }: DynamicPopupProps) {
         data-popup-id={variant.popupId}
         >
         <div className="absolute left-0 right-0 top-0 h-1.5 rounded-t-xl bg-gradient-to-r from-[#46a758] via-emerald-500 to-[#46a758]" />
-        <h2 className="pr-8 text-xl font-semibold leading-tight text-slate-900 sm:text-2xl">{variant.title}</h2>
-        {variant.body && <p className="mt-3 text-sm leading-relaxed text-slate-700 sm:mt-4 sm:text-base">{variant.body}</p>}
-        <div className="mt-5 flex flex-wrap items-center justify-end gap-3 sm:mt-6">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg bg-[#46a758] px-5 py-2.5 text-sm font-semibold text-white shadow-lg hover:bg-emerald-600 transition focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:ring-offset-2 focus:ring-offset-white"
-          >
-            {variant.cta}
-          </button>
+        <div className="flex flex-col gap-5 px-6 py-6 sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:gap-8">
+          <div className="min-w-0 flex-1">
+            <h2 className="pr-8 text-xl font-semibold leading-tight text-slate-900 sm:text-2xl">
+              {variant.title}
+            </h2>
+            {variant.body && (
+              <p className="mt-3 text-sm leading-relaxed text-slate-700 sm:mt-4 sm:text-base">
+                {variant.body}
+              </p>
+            )}
+          </div>
+          <div className="flex shrink-0 items-center justify-end">
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full rounded-lg bg-[#46a758] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-emerald-600 transition focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:ring-offset-2 focus:ring-offset-white lg:w-auto"
+            >
+              {variant.cta}
+            </button>
+          </div>
         </div>
         <button
           type="button"

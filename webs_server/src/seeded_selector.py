@@ -190,8 +190,8 @@ def verify_reproducibility(data_pool: List[Dict[str, Any]], seed: int, count: in
     return True
 
 
-# Example usage and tests
-if __name__ == "__main__":
+# Example usage and manual tests (excluded from coverage)
+if __name__ == "__main__":  # pragma: no cover
     # Test data
     test_pool = [
         {"id": 1, "name": "Product A", "category": "Kitchen"},
