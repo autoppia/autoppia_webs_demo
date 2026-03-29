@@ -1,0 +1,302 @@
+[
+  {
+    "id": "tmpl-001",
+    "name": "Warm Introduction",
+    "subject": "Introduction and next steps",
+    "body": "Hi <name>,\n\nIt was great speaking with you today. I appreciate your time and the context you shared. As discussed, I have summarized the next steps below so we can keep momentum.\n\nPlease let me know if you would like to adjust anything.\n\nBest regards,\nMe"
+  },
+  {
+    "id": "tmpl-002",
+    "name": "Friendly Follow-Up",
+    "subject": "Quick follow-up from our recent conversation",
+    "body": "Hello <name>,\n\nI wanted to follow up on our recent discussion. I am available to help move the open items forward and answer any remaining questions.\n\nIf helpful, I can also propose a short action plan.\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-003",
+    "name": "Meeting Recap",
+    "subject": "Recap and action items",
+    "body": "Hi <name>,\n\nThank you for the productive meeting today. Here is a quick recap of key points and agreed actions:\n- <item 1>\n- <item 2>\n- <item 3>\n\nPlease reply with any edits.\n\nRegards,\nMe"
+  },
+  {
+    "id": "tmpl-004",
+    "name": "Thank You Note",
+    "subject": "Thank you for your time today",
+    "body": "Hi <name>,\n\nThank you again for your time and thoughtful input today. I appreciate the discussion and look forward to working together.\n\nWarm regards,\nMe"
+  },
+  {
+    "id": "tmpl-005",
+    "name": "Gentle Reminder",
+    "subject": "Friendly reminder on pending items",
+    "body": "Hello <name>,\n\nJust a quick reminder regarding the pending items below. When you have a moment, please share an update so we can proceed.\n\nThank you,\nMe"
+  },
+  {
+    "id": "tmpl-006",
+    "name": "Project Kickoff",
+    "subject": "Project kickoff details and timeline",
+    "body": "Hi <name>,\n\nWelcome to the project kickoff. I am sharing the proposed timeline, ownership, and milestones for alignment.\n\nPlease confirm if this plan works for your team.\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-007",
+    "name": "Status Update",
+    "subject": "Weekly status update",
+    "body": "Hi <name>,\n\nHere is this week's status update:\n- Progress: <summary>\n- Risks: <summary>\n- Next steps: <summary>\n\nLet me know if you would like a deeper review.\n\nRegards,\nMe"
+  },
+  {
+    "id": "tmpl-008",
+    "name": "Request for Feedback",
+    "subject": "Request for your feedback",
+    "body": "Hello <name>,\n\nCould you please review the attached material and share your feedback by <date>? Your input will help us finalize the next version.\n\nThank you in advance,\nMe"
+  },
+  {
+    "id": "tmpl-009",
+    "name": "Proposal Submission",
+    "subject": "Proposal for your review",
+    "body": "Hi <name>,\n\nPlease find our proposal attached. It includes scope, assumptions, timeline, and pricing.\n\nI would be happy to walk through it with you in a short call.\n\nBest regards,\nMe"
+  },
+  {
+    "id": "tmpl-010",
+    "name": "Quote Follow-Up",
+    "subject": "Following up on the submitted quote",
+    "body": "Hello <name>,\n\nI am following up on the quote we shared. Please let me know if you need revisions, additional options, or clarification on any line items.\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-011",
+    "name": "Scheduling Request",
+    "subject": "Scheduling a short meeting",
+    "body": "Hi <name>,\n\nWould you be available for a 30-minute meeting next week to discuss <topic>? I can accommodate your preferred time.\n\nLooking forward to your reply,\nMe"
+  },
+  {
+    "id": "tmpl-012",
+    "name": "Reschedule Meeting",
+    "subject": "Request to reschedule our meeting",
+    "body": "Hi <name>,\n\nDue to a scheduling conflict, I would like to reschedule our meeting. I apologize for the inconvenience.\n\nPlease share a suitable alternative time.\n\nThank you,\nMe"
+  },
+  {
+    "id": "tmpl-013",
+    "name": "Deadline Confirmation",
+    "subject": "Confirmation of delivery deadline",
+    "body": "Hello <name>,\n\nThis is to confirm our agreed delivery deadline of <date> for <deliverable>. We are on track and will notify you immediately if anything changes.\n\nRegards,\nMe"
+  },
+  {
+    "id": "tmpl-014",
+    "name": "Delay Notification",
+    "subject": "Update on revised delivery timeline",
+    "body": "Hi <name>,\n\nI want to proactively inform you that delivery of <deliverable> requires a revised timeline. The updated expected date is <date>.\n\nWe are taking steps to minimize impact and appreciate your understanding.\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-015",
+    "name": "Invoice Sent",
+    "subject": "Invoice attached for your records",
+    "body": "Hello <name>,\n\nPlease find the invoice attached for <service/project>. Kindly confirm receipt and let me know if your accounting team needs any additional documentation.\n\nThank you,\nMe"
+  },
+  {
+    "id": "tmpl-016",
+    "name": "Payment Reminder",
+    "subject": "Reminder: outstanding invoice",
+    "body": "Hi <name>,\n\nThis is a friendly reminder that invoice <number> is currently outstanding. Please let us know if payment has already been processed or if you need any support from our side.\n\nBest regards,\nMe"
+  },
+  {
+    "id": "tmpl-017",
+    "name": "Contract Review Request",
+    "subject": "Contract draft for review",
+    "body": "Hi <name>,\n\nPlease review the attached contract draft and share your comments. Once aligned, we can proceed with signature.\n\nHappy to discuss any clauses in detail.\n\nRegards,\nMe"
+  },
+  {
+    "id": "tmpl-018",
+    "name": "Contract Signed Confirmation",
+    "subject": "Confirmation of signed agreement",
+    "body": "Hello <name>,\n\nThank you for completing the signature process. This message confirms we have received the signed agreement.\n\nWe will begin execution according to the agreed timeline.\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-019",
+    "name": "Onboarding Welcome",
+    "subject": "Welcome aboard and onboarding steps",
+    "body": "Hi <name>,\n\nWelcome aboard. We are excited to work with you. Below are your onboarding steps and key contacts to get started smoothly.\n\nPlease reach out with any questions.\n\nWarm regards,\nMe"
+  },
+  {
+    "id": "tmpl-020",
+    "name": "Access Credentials Sent",
+    "subject": "Your access details",
+    "body": "Hello <name>,\n\nYour account access details have been set up and sent securely. Please verify your login and let us know if you encounter any issues.\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-021",
+    "name": "Technical Support Response",
+    "subject": "Update on your support request",
+    "body": "Hi <name>,\n\nThank you for contacting support. We have reviewed your request and identified the next steps to resolve it.\n\nPlease find the details below and confirm whether the issue persists.\n\nRegards,\nMe"
+  },
+  {
+    "id": "tmpl-022",
+    "name": "Issue Resolved Confirmation",
+    "subject": "Issue resolved - please confirm",
+    "body": "Hello <name>,\n\nWe have applied a fix for the reported issue. Could you please verify on your side and confirm that everything is now working as expected?\n\nThank you,\nMe"
+  },
+  {
+    "id": "tmpl-023",
+    "name": "Apology and Resolution",
+    "subject": "Our apologies and corrective actions",
+    "body": "Hi <name>,\n\nI sincerely apologize for the inconvenience caused. We have completed corrective actions and put safeguards in place to prevent recurrence.\n\nThank you for your patience.\n\nBest regards,\nMe"
+  },
+  {
+    "id": "tmpl-024",
+    "name": "Escalation Notice",
+    "subject": "Your request has been escalated",
+    "body": "Hello <name>,\n\nTo ensure a faster resolution, I have escalated your request to our specialist team. We will keep you updated and share progress by <date/time>.\n\nRegards,\nMe"
+  },
+  {
+    "id": "tmpl-025",
+    "name": "Partnership Inquiry",
+    "subject": "Exploring a potential partnership",
+    "body": "Hi <name>,\n\nI am reaching out to explore a potential partnership between our teams. I believe there are strong opportunities for collaboration in <area>.\n\nWould you be open to a brief introductory call?\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-026",
+    "name": "Sales Outreach",
+    "subject": "Helping your team with <challenge>",
+    "body": "Hi <name>,\n\nI noticed your team is focused on <goal>. We help organizations improve outcomes in this area through <solution>.\n\nIf useful, I can share a short, tailored overview.\n\nRegards,\nMe"
+  },
+  {
+    "id": "tmpl-027",
+    "name": "Post-Demo Follow-Up",
+    "subject": "Thank you for attending the demo",
+    "body": "Hello <name>,\n\nThank you for attending the demo. I appreciated your questions and feedback. I have included the requested resources and next-step options below.\n\nHappy to schedule a follow-up.\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-028",
+    "name": "Trial Activation",
+    "subject": "Your trial is now active",
+    "body": "Hi <name>,\n\nGreat news - your trial has been activated. You can get started immediately using the onboarding guide linked below.\n\nIf you would like a quick walkthrough, I am happy to help.\n\nBest regards,\nMe"
+  },
+  {
+    "id": "tmpl-029",
+    "name": "Renewal Reminder",
+    "subject": "Upcoming renewal reminder",
+    "body": "Hello <name>,\n\nThis is a reminder that your subscription is scheduled to renew on <date>. Please let us know if you need any changes before renewal.\n\nThank you,\nMe"
+  },
+  {
+    "id": "tmpl-030",
+    "name": "Renewal Confirmation",
+    "subject": "Renewal confirmed",
+    "body": "Hi <name>,\n\nThank you for confirming your renewal. We appreciate your continued partnership and look forward to supporting your team.\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-031",
+    "name": "Feature Announcement",
+    "subject": "New feature available",
+    "body": "Hello <name>,\n\nWe are pleased to announce a new feature that is now available in your account. This update helps with <benefit> and can be enabled immediately.\n\nPlease let me know if you want a guided walkthrough.\n\nRegards,\nMe"
+  },
+  {
+    "id": "tmpl-032",
+    "name": "Maintenance Notification",
+    "subject": "Scheduled maintenance notice",
+    "body": "Hi <name>,\n\nWe will perform scheduled maintenance on <date/time>. During this window, some services may be temporarily unavailable.\n\nWe appreciate your understanding and will notify you once maintenance is complete.\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-033",
+    "name": "Security Advisory",
+    "subject": "Important security update",
+    "body": "Hello <name>,\n\nWe are sharing an important security advisory related to your account setup. Please review the recommended actions below and complete them at your earliest convenience.\n\nContact us if you need assistance.\n\nRegards,\nMe"
+  },
+  {
+    "id": "tmpl-034",
+    "name": "Policy Update",
+    "subject": "Update to our terms and policies",
+    "body": "Hi <name>,\n\nWe are updating our terms and policies effective <date>. The key changes and full documents are linked below.\n\nPlease review and reach out with any questions.\n\nBest regards,\nMe"
+  },
+  {
+    "id": "tmpl-035",
+    "name": "Reference Check Request",
+    "subject": "Request for a professional reference",
+    "body": "Hello <name>,\n\nI hope you are well. I am reaching out to ask whether you would be comfortable serving as a professional reference for me.\n\nIf yes, I can share relevant context and timelines.\n\nThank you,\nMe"
+  },
+  {
+    "id": "tmpl-036",
+    "name": "Interview Invitation",
+    "subject": "Interview invitation",
+    "body": "Hi <name>,\n\nThank you for your application. We would like to invite you to an interview for the <role> position.\n\nPlease share your availability for the coming week.\n\nKind regards,\nMe"
+  },
+  {
+    "id": "tmpl-037",
+    "name": "Candidate Rejection",
+    "subject": "Update on your application",
+    "body": "Hello <name>,\n\nThank you for your interest in the <role> position and for taking the time to interview with us. After careful consideration, we have decided to move forward with another candidate at this time.\n\nWe appreciate your effort and wish you continued success.\n\nSincerely,\nMe"
+  },
+  {
+    "id": "tmpl-038",
+    "name": "Offer Letter",
+    "subject": "Offer for <role>",
+    "body": "Hi <name>,\n\nWe are pleased to extend an offer for the <role> position. Please find the offer details attached, including compensation and start date.\n\nWe look forward to your response.\n\nBest regards,\nMe"
+  },
+  {
+    "id": "tmpl-039",
+    "name": "Internal Announcement",
+    "subject": "Team announcement",
+    "body": "Hi team,\n\nI am pleased to share the following announcement: <announcement>. Additional details are included below.\n\nPlease reach out if you have questions.\n\nThanks,\nMe"
+  },
+  {
+    "id": "tmpl-040",
+    "name": "Client Check-In",
+    "subject": "Quarterly check-in",
+    "body": "Hello <name>,\n\nI wanted to schedule our quarterly check-in to review progress, priorities, and upcoming goals.\n\nPlease share a time that works best for you.\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-041",
+    "name": "Scope Change Request",
+    "subject": "Proposed scope adjustment",
+    "body": "Hi <name>,\n\nBased on recent requirements, we recommend a scope adjustment to ensure delivery quality and timeline realism.\n\nI have outlined the proposed changes and impact below.\n\nRegards,\nMe"
+  },
+  {
+    "id": "tmpl-042",
+    "name": "Budget Approval Request",
+    "subject": "Request for budget approval",
+    "body": "Hello <name>,\n\nPlease review the attached budget proposal for <initiative>. Approval by <date> will help us maintain the planned schedule.\n\nLet me know if you need additional details.\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-043",
+    "name": "Procurement Request",
+    "subject": "Procurement request submission",
+    "body": "Hi <name>,\n\nI am submitting a procurement request for <item/service>. The business justification and required documents are attached.\n\nPlease confirm the next processing step.\n\nThank you,\nMe"
+  },
+  {
+    "id": "tmpl-044",
+    "name": "Document Request",
+    "subject": "Request for required documents",
+    "body": "Hello <name>,\n\nTo proceed with the current process, we need the following documents:\n- <document 1>\n- <document 2>\n\nPlease share them by <date>.\n\nRegards,\nMe"
+  },
+  {
+    "id": "tmpl-045",
+    "name": "Approval Granted",
+    "subject": "Approval confirmed",
+    "body": "Hi <name>,\n\nThis message confirms that your request has been approved. You may proceed with the next step as outlined.\n\nPlease keep me posted on progress.\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-046",
+    "name": "Approval Denied",
+    "subject": "Update on approval request",
+    "body": "Hello <name>,\n\nThank you for your submission. After review, we are unable to approve the request at this time.\n\nPlease see the notes below, and feel free to resubmit with updates.\n\nRegards,\nMe"
+  },
+  {
+    "id": "tmpl-047",
+    "name": "Training Invitation",
+    "subject": "Invitation: training session",
+    "body": "Hi <name>,\n\nYou are invited to a training session on <topic> scheduled for <date/time>. The session agenda and joining details are included below.\n\nPlease confirm your attendance.\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-048",
+    "name": "Webinar Follow-Up",
+    "subject": "Thank you for attending our webinar",
+    "body": "Hello <name>,\n\nThank you for attending our webinar. As promised, here are the slides, recording, and additional resources.\n\nPlease let me know if you would like to discuss your use case.\n\nBest regards,\nMe"
+  },
+  {
+    "id": "tmpl-049",
+    "name": "Holiday Notice",
+    "subject": "Office holiday schedule",
+    "body": "Hi <name>,\n\nPlease note our office holiday schedule for the upcoming period. Response times may be slightly extended during these dates.\n\nThank you for your understanding.\n\nBest,\nMe"
+  },
+  {
+    "id": "tmpl-050",
+    "name": "Out of Office Auto-Reply",
+    "subject": "Out of office",
+    "body": "Hello,\n\nThank you for your message. I am currently out of office and will return on <date>. I will respond as soon as possible after I return.\n\nFor urgent matters, please contact <backup contact>.\n\nBest regards,\nMe"
+  }
+]
