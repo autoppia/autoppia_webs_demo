@@ -59,6 +59,24 @@
     "Book Immediately",
     "Reserve Immediately"
   ],
+  "section_expensive_title": [
+    "Fine dining",
+    "Luxury dining",
+    "Chef’s table picks",
+    "Premium experiences"
+  ],
+  "section_medium_title": [
+    "Everyday favorites",
+    "Great value",
+    "Popular spots",
+    "Top picks"
+  ],
+  "section_cheap_title": [
+    "Budget eats",
+    "Affordable bites",
+    "Best on a budget",
+    "Wallet-friendly"
+  ],
   "select_time": [
     "Select Time",
     "Pick Time",

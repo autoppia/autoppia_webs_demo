@@ -80,6 +80,9 @@ cython_debug/
 .idea/
 
 
+# Jest / frontend coverage output (per-app; do not commit)
+web_*/coverage/
+
 # Node Modules
 **/node_modules/
 **/.next/
