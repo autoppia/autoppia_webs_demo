@@ -1,23 +1,23 @@
 export interface UserRecord {
   username: string;
   password: string;
+  /** Not used for assignment; primary movie comes from the live catalog (see `user-movie-assignment`). */
   allowedMovies: string[];
 }
 
 const TOTAL_USERS = 256;
-const MOVIE_POOL_SIZE = 50;
 
-const padMovieId = (value: number): string => value.toString().padStart(3, "0");
-
-export const USERS: UserRecord[] = Array.from({ length: TOTAL_USERS }, (_, index) => {
-  const movieIndex = (index % MOVIE_POOL_SIZE) + 1;
-  return {
+export const USERS: UserRecord[] = Array.from(
+  { length: TOTAL_USERS },
+  (_, index) => ({
     username: `user${index + 1}`,
     password: "Passw0rd!",
-    allowedMovies: [`movie-v2-${padMovieId(movieIndex)}`],
-  };
-});
+    allowedMovies: [],
+  }),
+);
 
 export function findUser(username: string): UserRecord | undefined {
-  return USERS.find((user) => user.username.toLowerCase() === username.toLowerCase());
+  return USERS.find(
+    (user) => user.username.toLowerCase() === username.toLowerCase(),
+  );
 }
