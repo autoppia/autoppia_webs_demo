@@ -4,8 +4,9 @@ repos:
     hooks:
       - id: check-added-large-files
       - id: trailing-whitespace
+        exclude: \.tsbuildinfo$
       - id: end-of-file-fixer
-        exclude: ^\.vscode/
+        exclude: ^\.vscode/|\.tsbuildinfo$
       - id: mixed-line-ending
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
