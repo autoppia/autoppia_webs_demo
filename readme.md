@@ -47,6 +47,7 @@ demo-webs/
 ├── web_12_autolist/
 ├── web_13_autodrive/
 ├── web_14_autohealth/
+├── web_16_autodiscord/
 ├── webs_server/
 └── scripts/
     ├── install_docker.sh
@@ -83,6 +84,7 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 | **AutoList** | 8011 | — | Next.js, no database required |
 | **AutoDrive** | 8012 | — | Next.js, no database required |
 | **AutoHealth** | 8013 | — | Next.js, no database required |
+| **AutoDiscord** | 8015 | — | Next.js, Discord-like chat (mocked) |
 | **webs_server** | 8090 | 5437 | API service used for event logging |
 
 
@@ -218,6 +220,14 @@ The command launches `web_2_autobooks` and the shared `webs_server` instance, mi
 ./scripts/setup.sh --demo=autohealth --web_port=8013
 ```
 
+#### **💬 Deploy AutoDiscord Demo**
+
+```bash
+./scripts/setup.sh --demo=autodiscord --web_port=8015
+```
+
+Starts `web_16_autodiscord` (Discord-like chat UI) and the shared `webs_server` for dataset API.
+
 #### **🎨 Dynamic Features (Enabled by Default)**
 
 All demo webs support dynamic features for anti-scraping protection. **By default, v1 and v3 are enabled**, which provides:
@@ -273,7 +283,7 @@ See the [Dynamic Versions](#dynamic-versions-shorthand) section below for detail
 | `-y, --yes` | Skip confirmation prompts / force Docker cleanup (convenience flag) | - | `-y` |
 | `-h, --help` | Show help and exit | - | `-h` |
 
-**Valid demo names:** `movies`, `books`, `autozone`, `autodining`, `autocrm`, `automail`, `autoconnect`, `autodelivery`, `autolodge`, `autowork`, `autocalendar`, `autolist`, `autodrive`, `all`
+**Valid demo names:** `movies`, `books`, `autozone`, `autodining`, `autocrm`, `automail`, `autoconnect`, `autodelivery`, `autolodge`, `autowork`, `autocalendar`, `autolist`, `autodrive`, `autohealth`, `autodiscord`, `all`
 
 ---
 
@@ -429,6 +439,7 @@ After deployment, access the demo webs locally at:
 - Web 12 (Autolist): `http://localhost:8011`
 - Web 13 (Autodrive): `http://localhost:8012`
 - Web 14 (Autohealth): `http://localhost:8013`
+- Web 16 (AutoDiscord): `http://localhost:8015`
 
 ### Server Access
 
