@@ -886,6 +886,11 @@ function CalendarApp() {
     setEventModal((e) => ({ ...e, open: false }));
   }
 
+  function onEventModalOpenChange(open: boolean) {
+    // Radix calls onOpenChange(true) when opening; only react to close events.
+    if (!open) onModalClose();
+  }
+
   function handleModalSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     // --- Full Form Validation ---
@@ -2265,13 +2270,12 @@ function CalendarApp() {
             <DialogContent
               className={`max-w-md ${getClassVariant("modal")}`}
               id={getIdVariant("add-calendar-modal")}
-              aria-describedby={getIdVariant("add-calendar-modal-description")}
             >
               <DialogHeader>
                 <DialogTitle className="text-[#1b1a1a] font-normal text-xl mb-2">
                   {getTextVariant("add_calendar_title", "Create new calendar")}
                 </DialogTitle>
-                <DialogDescription id={getIdVariant("add-calendar-modal-description")}>
+                <DialogDescription>
                   {getTextVariant("add_calendar_description", "Set up a new calendar with a name, description, and color.")}
                 </DialogDescription>
               </DialogHeader>
@@ -2347,24 +2351,33 @@ function CalendarApp() {
         )}
       </Dialog>
 
-      <Dialog open={eventModal.open} onOpenChange={onModalClose}>
+      <Dialog open={eventModal.open} onOpenChange={onEventModalOpenChange}>
         {addWrapDecoy(
           "event-modal",
           (
             <DialogContent
               className={`max-w-xl ${getClassVariant("modal")}`}
               id={getIdVariant("event-modal")}
-              aria-describedby={getIdVariant("event-modal-description")}
             >
-              <form onSubmit={handleModalSave} className="space-y-5" id={`${getIdVariant("event-modal")}-form`}>
-                <DialogHeader>
-                  <DialogTitle id={getIdVariant("event-modal-title")}>
-                    {eventModal.editing ? getLocalText("modal_heading", "Edit event") : getLocalText("modal_heading", "Add event")}
-                  </DialogTitle>
-                  <DialogDescription id={getIdVariant("event-modal-description")}>
-                    {getTextVariant("event_modal_description", "Fill in the event details, attendees, and options, then save to add it to your calendar.")}
-                  </DialogDescription>
-                </DialogHeader>
+              <DialogHeader>
+                <DialogTitle>
+                  {eventModal.editing
+                    ? getLocalText("modal_heading", "Edit event")
+                    : getLocalText("modal_heading", "Add event")}
+                </DialogTitle>
+                <DialogDescription>
+                  {getTextVariant(
+                    "event_modal_description",
+                    "Fill in the event details, attendees, and options, then save to add it to your calendar."
+                  )}
+                </DialogDescription>
+              </DialogHeader>
+
+              <form
+                onSubmit={handleModalSave}
+                className="space-y-5"
+                id={`${getIdVariant("event-modal")}-form`}
+              >
 
             {/* Stepper */}
             <div className="flex items-center gap-2 text-sm">

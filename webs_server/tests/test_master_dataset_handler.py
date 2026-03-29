@@ -1,3 +1,4 @@
+# Unit/integration coverage tests for master_dataset_handler utilities.
 """
 Unit tests for master_dataset_handler: get_master_pool, select_from_pool,
 log_seed_usage, get_pool_info, list_available_pools.
