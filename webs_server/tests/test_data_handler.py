@@ -1,3 +1,4 @@
+# Unit/integration coverage tests for data_handler (path validation + safe I/O).
 """
 Unit tests for data_handler path validation and safe I/O (new code coverage for SonarCloud).
 Tests run with BASE_DATA_PATH set to a temp dir so no real /app/data is used.
