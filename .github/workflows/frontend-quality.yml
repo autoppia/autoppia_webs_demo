@@ -7,6 +7,9 @@ on:
   pull_request:
     branches: ['**']
 
+permissions:
+  contents: read
+
 concurrency:
   group: frontend-quality-${{ github.ref }}
   cancel-in-progress: true
@@ -39,6 +42,7 @@ jobs:
     needs: discover
     runs-on: ubuntu-latest
     permissions:
+      actions: write
       contents: read
     timeout-minutes: 20
     strategy:
