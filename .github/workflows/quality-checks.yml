@@ -2,9 +2,11 @@ name: Quality checks
 
 on:
   push:
-    branches: [main, master, 'fix/**']
+    branches:
+      - '**'
   pull_request:
-    branches: [main, master, 'fix/**']
+    branches:
+      - '**'
 
 jobs:
   lint-and-audit:
