@@ -11,7 +11,7 @@ import { User, Lock, Mail, LogIn, UserPlus, LogOut } from "lucide-react";
 
 export function AuthModal() {
   const { currentUser, login, register, logout, isAuthenticated } = useAuth();
-  const dyn = useDynamicSystem();
+  useDynamicSystem();
 
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
