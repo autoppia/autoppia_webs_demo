@@ -2,7 +2,8 @@
 import { useParams } from "next/navigation";
 import { CalendarIcon, UserIcon, ChevronDownIcon, ClockIcon, Star, MessageSquare, Trash2, Edit2, Send } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
-import React, { useMemo, useEffect, useState } from "react";
+import type React from "react";
+import { useMemo, useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { format, formatDistanceToNow } from "date-fns";
@@ -83,15 +84,14 @@ export default function RestaurantPage() {
         if (!mounted) return;
         const found = getRestaurantById(id);
         if (found) {
-          const foundWithRating = found as { rating?: number; stars?: number };
-          const rating = foundWithRating.rating ?? found.stars ?? 4.5;
-          const stars = foundWithRating.stars ?? Math.round(rating);
+          const rating = found.rating ?? found.stars ?? 4.5;
+          const stars = found.stars ?? Math.round(rating);
           setR({
             id: found.id, name: found.name, image: found.image,
             rating: Number(rating), stars: Number(stars),
             reviews: Number(found.reviews ?? 0), bookings: Number(found.bookings ?? 0),
             price: String(found.price ?? "$$"), cuisine: String(found.cuisine ?? "International"),
-            tags: (found as any).tags || ["cozy", "modern", "casual"],
+            tags: found.tags ?? ["cozy", "modern", "casual"],
             desc: `Enjoy a delightful experience at ${found.name}, offering a fusion of flavors in the heart of ${found.area ?? "Downtown"}.`,
             photos,
           });
@@ -353,7 +353,6 @@ export default function RestaurantPage() {
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-1 mt-2">
-                                  {/* biome-ignore lint/suspicious/noArrayIndexKey: static star icons never reorder */}
                                   {Array.from({ length: 5 }, (_, i) => (
                                     <Star
                                       key={`user-review-star-${review.id}-${i}`}

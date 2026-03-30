@@ -354,7 +354,7 @@ function HomePageContent() {
 	              cuisine: r.cuisine ?? "International", area: r.area ?? "Downtown",
 	              reviews: r.reviews ?? 64, rating, stars,
 	              price: r.price ?? "$$", bookings: r.bookings ?? 0, times: ["1:00 PM"],
-	              tags: (r as any).tags ?? [],
+	              tags: r.tags ?? [],
 	            };
 	          });
           const mapped = fresh.length > 0 ? fresh : defaultRestaurants;

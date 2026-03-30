@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setCurrentUser(authUser);
     writeJson(STORAGE_KEY, authUser);
     localStorage.setItem("user", authUser.username); // Fallback for existing logEvent user tracking
-    
+
     if (source === "login") {
       logEvent(EVENT_TYPES.LOGIN, { username: authUser.username, source });
     } else if (source === "register") {
@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const safeUsername = normalizeUsername(username);
       const safeEmail = email.trim();
       const safePassword = password.trim();
-      
+
       if (!safeUsername) throw new Error("Username is required");
       if (!safeEmail) throw new Error("Email is required");
       if (!safePassword) throw new Error("Password is required");

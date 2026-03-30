@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useDynamicSystem } from "@/dynamic/shared";
@@ -11,7 +12,7 @@ import { User, Lock, Mail, LogIn, UserPlus, LogOut } from "lucide-react";
 export function AuthModal() {
   const { currentUser, login, register, logout, isAuthenticated } = useAuth();
   const dyn = useDynamicSystem();
-  
+
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -24,7 +25,7 @@ export function AuthModal() {
     e.preventDefault();
     setError(null);
     setIsSubmitting(true);
-    
+
     try {
       if (isLogin) {
         await login(username, password);
@@ -56,7 +57,7 @@ export function AuthModal() {
             <p className="text-sm text-gray-500">Logged in as</p>
             <p className="font-bold text-white">{currentUser.username}</p>
           </div>
-          <Button 
+          <Button
             onClick={logout}
             className="w-full bg-red-950 text-red-600 hover:bg-red-900 border-none shadow-none"
           >
@@ -150,8 +151,8 @@ export function AuthModal() {
           </p>
         )}
 
-        <Button 
-          type="submit" 
+        <Button
+          type="submit"
           disabled={isSubmitting}
           className="w-full bg-red-600 hover:bg-red-700 text-white font-bold h-11"
         >

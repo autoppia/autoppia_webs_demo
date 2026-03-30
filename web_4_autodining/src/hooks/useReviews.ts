@@ -39,7 +39,7 @@ export function useReviews(restaurantId: string) {
     };
     const updated = [newReview, ...allReviews];
     writeJson(STORAGE_KEY, updated);
-    
+
     logEvent(EVENT_TYPES.REVIEW_CREATED, {
       review_id: newReview.id,
       restaurant_id: restaurantId,
@@ -47,14 +47,14 @@ export function useReviews(restaurantId: string) {
       rating,
       comment_length: comment.length,
     });
-    
+
     loadReviews();
   };
 
   const updateReview = (id: string, rating: number, comment: string) => {
     const allReviews = readJson<Review[]>(STORAGE_KEY, []) || [];
     let updatedReview: Review | undefined;
-    
+
     const nextReviews = allReviews.map(r => {
       if (r.id === id) {
         updatedReview = { ...r, rating, comment, date: new Date().toISOString() };
@@ -62,9 +62,9 @@ export function useReviews(restaurantId: string) {
       }
       return r;
     });
-    
+
     writeJson(STORAGE_KEY, nextReviews);
-    
+
     if (updatedReview) {
       logEvent(EVENT_TYPES.REVIEW_EDITED, {
         review_id: id,
@@ -74,7 +74,7 @@ export function useReviews(restaurantId: string) {
         comment_length: comment.length,
       });
     }
-    
+
     loadReviews();
   };
 
@@ -83,7 +83,7 @@ export function useReviews(restaurantId: string) {
     const toDelete = allReviews.find(r => r.id === id);
     const updated = allReviews.filter(r => r.id !== id);
     writeJson(STORAGE_KEY, updated);
-    
+
     if (toDelete) {
       logEvent(EVENT_TYPES.REVIEW_DELETED, {
         review_id: id,
@@ -91,7 +91,7 @@ export function useReviews(restaurantId: string) {
         username: toDelete.username,
       });
     }
-    
+
     loadReviews();
   };
 

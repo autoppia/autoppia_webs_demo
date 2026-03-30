@@ -59,7 +59,7 @@ function generateTags(cuisine: string, index: number): string[] {
     "International": ["fusion", "modern", "creative", "diverse"],
   };
 
-  const specificTags = cuisineTags[cuisine] || cuisineTags["International"];
+  const specificTags = cuisineTags[cuisine] || cuisineTags.International;
   const selectedSpecific = specificTags[index % specificTags.length];
   const selectedBase = baseTags[(index + 2) % baseTags.length];
   const selectedBase2 = baseTags[(index + 5) % baseTags.length];
