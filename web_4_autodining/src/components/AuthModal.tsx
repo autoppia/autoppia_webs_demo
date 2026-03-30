@@ -49,8 +49,8 @@ export function AuthModal() {
     return (
       <div className="p-4 w-64 bg-zinc-950 rounded-lg shadow-xl border">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
-            <User className="w-8 h-8 text-red-600" />
+          <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center">
+            <User className="w-8 h-8 text-amber-600" />
           </div>
           <div className="text-center">
             <p className="text-sm text-gray-500">Logged in as</p>
@@ -58,7 +58,7 @@ export function AuthModal() {
           </div>
           <Button
             onClick={logout}
-            className="w-full bg-red-950 text-red-600 hover:bg-red-900 border-none shadow-none"
+            className="w-full bg-amber-500 text-black hover:bg-amber-400 border-none shadow-none"
           >
             <LogOut className="w-4 h-4 mr-2" />
             Logout
@@ -69,7 +69,7 @@ export function AuthModal() {
   }
 
   return (
-    <div className="bg-zinc-950 border-2 border-zinc-900 rounded-2xl p-8 shadow-2xl transition-all duration-300 hover:border-[#dc2626] group/container">
+    <div className="bg-zinc-950 border-2 border-zinc-900 rounded-2xl p-8 shadow-2xl transition-all duration-300 hover:border-amber-500/60 group/container">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-white">
           {isLogin ? "Welcome Back" : "Create Account"}
@@ -88,7 +88,7 @@ export function AuthModal() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none text-white"
+              className="w-full pl-10 pr-4 py-2 border border-zinc-300 bg-white text-black placeholder:text-zinc-500 rounded-lg focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 outline-none"
               placeholder="Enter username"
               required
             />
@@ -104,7 +104,7 @@ export function AuthModal() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none text-white"
+                className="w-full pl-10 pr-4 py-2 border border-zinc-300 bg-white text-black placeholder:text-zinc-500 rounded-lg focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 outline-none"
                 placeholder="Enter email address"
                 required
               />
@@ -120,7 +120,7 @@ export function AuthModal() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none text-white"
+              className="w-full pl-10 pr-4 py-2 border border-zinc-300 bg-white text-black placeholder:text-zinc-500 rounded-lg focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 outline-none"
               placeholder="Enter password"
               required
             />
@@ -136,7 +136,7 @@ export function AuthModal() {
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none text-white"
+                className="w-full pl-10 pr-4 py-2 border border-zinc-300 bg-white text-black placeholder:text-zinc-500 rounded-lg focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 outline-none"
                 placeholder="Confirm your password"
                 required
               />
@@ -145,7 +145,7 @@ export function AuthModal() {
         )}
 
         {error && (
-          <p className="text-xs text-red-600 bg-red-950 p-2 rounded border border-red-900 italic">
+          <p className="text-xs text-amber-300 bg-amber-950/40 p-2 rounded border border-amber-700/40 italic">
             {error}
           </p>
         )}
@@ -153,7 +153,7 @@ export function AuthModal() {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-red-600 hover:bg-red-700 text-white font-bold h-11"
+          className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold h-11"
         >
           {isSubmitting ? "Processing..." : (isLogin ? "Sign In" : "Register")}
           {isLogin ? <LogIn className="ml-2 w-4 h-4" /> : <UserPlus className="ml-2 w-4 h-4" />}
@@ -170,7 +170,7 @@ export function AuthModal() {
             setIsLogin(!isLogin);
             setError(null);
           }}
-          className="text-red-600 font-bold hover:underline mt-1"
+          className="text-amber-500 font-bold hover:underline mt-1"
         >
           {isLogin ? "Create one now" : "Go to Login"}
         </button>
