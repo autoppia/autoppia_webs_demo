@@ -122,7 +122,7 @@ export default function Page() {
     setTimeout(() => setShowToast(false), 4000);
     setName(""); setPhoneNumber(""); setOccasion(""); setSpecialRequest(""); setSelectedCountry(countries[0]);
   };
-  const inputClasses = "w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50 transition-all text-sm";
+  const inputClasses = "w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:border-red-500/50 transition-all text-sm";
   return (
     dyn.v1.addWrapDecoy("booking-page", (
       <main className="min-h-screen bg-background" suppressHydrationWarning id={dyn.v3.getVariant("booking-page", ID_VARIANTS_MAP, "booking-page")}>
@@ -141,7 +141,7 @@ export default function Page() {
       ), "booking-banner-wrap")}
       <div className="max-w-xl mx-auto px-6 -mt-20 relative z-10 pb-16">
         <div className="glass rounded-3xl p-8 shadow-2xl shadow-black/40 animate-fade-in-up" style={{ animationFillMode: "forwards" }}>
-          <p className="uppercase tracking-[0.3em] text-[10px] font-semibold text-amber-500 mb-3">
+          <p className="uppercase tracking-[0.3em] text-[10px] font-semibold text-red-500 mb-3">
             {dyn.v3.getVariant("you_almost_done", undefined, "Almost there")}
           </p>
           <div className="flex items-center gap-4 mb-8">
@@ -149,9 +149,9 @@ export default function Page() {
             <div className="flex flex-col gap-0.5">
               <span className="font-bold text-lg text-white tracking-tight">{data?.name ?? "Loading..."}</span>
               <div className="flex items-center gap-4 text-white/35 text-xs">
-                <span className="flex items-center gap-1"><CalendarIcon className="w-3.5 h-3.5 text-amber-500/60" />{formattedDate ?? dyn.v3.getVariant("select_date", undefined, "Select date")}</span>
-                <span className="flex items-center gap-1"><ClockIcon className="w-3.5 h-3.5 text-amber-500/60" />{reservationTime ?? dyn.v3.getVariant("select_time", undefined, "Select time")}</span>
-                <span className="flex items-center gap-1"><UserIcon className="w-3.5 h-3.5 text-amber-500/60" />{reservationPeople ?? dyn.v3.getVariant("select_people", undefined, "Select people")} {dyn.v3.getVariant("people", undefined, "people")}</span>
+                <span className="flex items-center gap-1"><CalendarIcon className="w-3.5 h-3.5 text-red-500/60" />{formattedDate ?? dyn.v3.getVariant("select_date", undefined, "Select date")}</span>
+                <span className="flex items-center gap-1"><ClockIcon className="w-3.5 h-3.5 text-red-500/60" />{reservationTime ?? dyn.v3.getVariant("select_time", undefined, "Select time")}</span>
+                <span className="flex items-center gap-1"><UserIcon className="w-3.5 h-3.5 text-red-500/60" />{reservationPeople ?? dyn.v3.getVariant("select_people", undefined, "Select people")} {dyn.v3.getVariant("people", undefined, "people")}</span>
               </div>
             </div>
           </div>
@@ -181,7 +181,7 @@ export default function Page() {
                 <div className="flex">
                   <select
                     id={dyn.v3.getVariant("country-select", ID_VARIANTS_MAP, "country-select")}
-                    className={cn(dyn.v3.getVariant("select-dropdown", CLASS_VARIANTS_MAP, "select-dropdown"), "bg-white/[0.04] border border-white/[0.08] border-r-0 rounded-l-xl px-3 py-2.5 text-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-500/30 text-sm")}
+                    className={cn(dyn.v3.getVariant("select-dropdown", CLASS_VARIANTS_MAP, "select-dropdown"), "bg-white/[0.04] border border-white/[0.08] border-r-0 rounded-l-xl px-3 py-2.5 text-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500/30 text-sm")}
                     value={selectedCountry.code}
                     onChange={(e) => {
                       const country = countries.find((c) => c.code === e.target.value);
@@ -195,7 +195,7 @@ export default function Page() {
                   </select>
                   <input type="tel" id={dyn.v3.getVariant("phone-number-input", ID_VARIANTS_MAP, "phone-number-input")}
                     placeholder={dyn.v3.getVariant("phone_number_placeholder", TEXT_VARIANTS_MAP, "Phone number")}
-                    className={cn(dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "input-text"), "flex-1 bg-white/[0.04] border border-white/[0.08] rounded-r-xl px-4 py-2.5 text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50 transition-all text-sm")}
+                    className={cn(dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "input-text"), "flex-1 bg-white/[0.04] border border-white/[0.08] rounded-r-xl px-4 py-2.5 text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:border-red-500/50 transition-all text-sm")}
                     value={phoneNumber}
                     onChange={(e) => { setPhoneNumber(e.target.value); if (e.target.value.trim()) setPhoneError(false); }} />
                 </div>
@@ -225,7 +225,7 @@ export default function Page() {
                   {dyn.v3.getVariant("select_occasion", TEXT_VARIANTS_MAP, "Occasion (Optional)")}
                 </label>
                 <select id={dyn.v3.getVariant("occasion-select", ID_VARIANTS_MAP, "occasion-select")}
-                  className={cn(dyn.v3.getVariant("select-dropdown", CLASS_VARIANTS_MAP, "select-dropdown"), "w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50 transition-all text-sm")}
+                  className={cn(dyn.v3.getVariant("select-dropdown", CLASS_VARIANTS_MAP, "select-dropdown"), "w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:border-red-500/50 transition-all text-sm")}
                   value={occasion}
                   onChange={(e) => { setOccasion(e.target.value); logEvent(EVENT_TYPES.OCCASION_SELECTED, { ...restaurantInfo, occasion: e.target.value }); }}>
                   <option value="">{dyn.v3.getVariant("select_occasion_placeholder", TEXT_VARIANTS_MAP, "Select an occasion (optional)")}</option>
@@ -253,22 +253,22 @@ export default function Page() {
             <Button
               id={dyn.v3.getVariant("confirm_button", ID_VARIANTS_MAP, "confirm_button")}
               onClick={handleReservation}
-              className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "button-primary"), "w-full bg-amber-500 hover:bg-amber-400 text-black py-6 text-sm rounded-xl font-bold mt-6 transition-all hover:shadow-lg hover:shadow-amber-500/20")}
+              className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "button-primary"), "w-full bg-red-500 hover:bg-red-400 text-black py-6 text-sm rounded-xl font-bold mt-6 transition-all hover:shadow-lg hover:shadow-red-500/20")}
             >
               {dyn.v3.getVariant("confirm_booking", TEXT_VARIANTS_MAP, "Complete Reservation")}
             </Button>
           ), "confirm-booking-button-wrap")}
           <p className="text-[11px] text-white/25 mt-4 text-center leading-relaxed">
             By completing this reservation, you agree to our{" "}
-            <Link href="#" className="text-amber-500/70 underline underline-offset-2">{dyn.v3.getVariant("terms_of_use", undefined, "Terms of Use")}</Link>{" "}
+            <Link href="#" className="text-red-500/70 underline underline-offset-2">{dyn.v3.getVariant("terms_of_use", undefined, "Terms of Use")}</Link>{" "}
             and{" "}
-            <Link href="#" className="text-amber-500/70 underline underline-offset-2">{dyn.v3.getVariant("privacy_policy", undefined, "Privacy Policy")}</Link>
+            <Link href="#" className="text-red-500/70 underline underline-offset-2">{dyn.v3.getVariant("privacy_policy", undefined, "Privacy Policy")}</Link>
             . {dyn.v3.getVariant("message_rates", undefined, "Message and data rates may apply.")}
           </p>
         </div>
       </div>
       {showToast && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-amber-500 text-black px-8 py-4 rounded-2xl shadow-2xl shadow-amber-500/30 z-50 text-sm font-bold animate-fade-in-up" style={{ animationFillMode: "forwards" }}>
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-red-500 text-black px-8 py-4 rounded-2xl shadow-2xl shadow-red-500/30 z-50 text-sm font-bold animate-fade-in-up" style={{ animationFillMode: "forwards" }}>
           {dyn.v3.getVariant("confirmation_message", TEXT_VARIANTS_MAP, "Reservation confirmed!")}
         </div>
       )}

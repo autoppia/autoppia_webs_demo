@@ -124,7 +124,7 @@ export default function RestaurantPage() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-white/20 border-t-amber-500 rounded-full animate-spin mx-auto mb-3" />
+          <div className="w-8 h-8 border-2 border-white/20 border-t-red-500 rounded-full animate-spin mx-auto mb-3" />
           <p className="text-white/40 text-sm">Loading restaurant...</p>
         </div>
       </div>
@@ -204,7 +204,7 @@ export default function RestaurantPage() {
             <div className="flex flex-wrap items-center gap-3 text-sm mb-5" id={dyn.v3.getVariant("restaurant-meta", ID_VARIANTS_MAP, "restaurant-meta")}>
               <span className="flex items-center gap-0.5" id={dyn.v3.getVariant("rating-stars", ID_VARIANTS_MAP, "rating-stars")}>
                 {/* biome-ignore lint/suspicious/noArrayIndexKey: static star icons never reorder */}
-                {Array.from({ length: r?.stars ?? 5 }, (_, i) => (<Star key={`star-filled-${i}`} className="w-4 h-4 text-amber-400 fill-amber-400" />))}
+                {Array.from({ length: r?.stars ?? 5 }, (_, i) => (<Star key={`star-filled-${i}`} className="w-4 h-4 text-red-400 fill-red-400" />))}
                 {/* biome-ignore lint/suspicious/noArrayIndexKey: static star icons never reorder */}
                 {Array.from({ length: 5 - (r?.stars ?? 5) }, (_, i) => (<Star key={`star-empty-${i}`} className="w-4 h-4 text-white/15" />))}
               </span>
@@ -213,7 +213,7 @@ export default function RestaurantPage() {
                 <span className="text-white/35">({r?.reviews ?? 0} reviews)</span>
               </span>
               <span className="text-white/15">|</span>
-              <span className="text-amber-500 font-semibold" id={dyn.v3.getVariant("price-range", ID_VARIANTS_MAP, "price-range")}>{r?.price ?? "$$"}</span>
+              <span className="text-red-500 font-semibold" id={dyn.v3.getVariant("price-range", ID_VARIANTS_MAP, "price-range")}>{r?.price ?? "$$"}</span>
               <span className="text-white/15">|</span>
               <span className="text-white/50" id={dyn.v3.getVariant("cuisine-type", ID_VARIANTS_MAP, "cuisine-type")}>{r?.cuisine ?? "International"}</span>
             </div>
@@ -250,11 +250,11 @@ export default function RestaurantPage() {
               <h2 className="text-xl font-bold mb-4 mt-8 text-white tracking-tight" id={dyn.v3.getVariant("menu-title", ID_VARIANTS_MAP, "menu-title")}>Menu</h2>
               <div className="glass rounded-2xl p-6" id={dyn.v3.getVariant("menu-container", ID_VARIANTS_MAP, "menu-container")}>
                 <div className="flex gap-6 border-b border-white/[0.06] mb-6 pb-2" id={dyn.v3.getVariant("menu-tabs", ID_VARIANTS_MAP, "menu-tabs")}>
-                  <button className="border-b-2 border-amber-500 text-white font-medium text-sm px-4 py-2 -mb-px" id={dyn.v3.getVariant("menu-tab", ID_VARIANTS_MAP, "menu-tab")}>Main Menu</button>
+                  <button className="border-b-2 border-red-500 text-white font-medium text-sm px-4 py-2 -mb-px" id={dyn.v3.getVariant("menu-tab", ID_VARIANTS_MAP, "menu-tab")}>Main Menu</button>
                 </div>
                 <div className="space-y-8">
                   <div>
-                    <div className="font-semibold text-xs mb-4 text-amber-500/70 uppercase tracking-[0.2em]">Starters</div>
+                    <div className="font-semibold text-xs mb-4 text-red-500/70 uppercase tracking-[0.2em]">Starters</div>
                     <div className="space-y-4">
                       {[{ name: "Cheese Board", desc: "Assorted artisan cheeses with honey and nuts", price: "$14.00" },
                         { name: "Smoked Salmon Tartine", desc: "Capers, creme fraiche, dill, and red onion", price: "$12.00" },
@@ -265,14 +265,14 @@ export default function RestaurantPage() {
                             <div className="font-medium text-sm text-white">{item.name}</div>
                             <div className="text-xs text-white/30 mt-0.5">{item.desc}</div>
                           </div>
-                          <div className="text-right font-semibold text-sm text-amber-500 ml-4">{item.price}</div>
+                          <div className="text-right font-semibold text-sm text-red-500 ml-4">{item.price}</div>
                         </div>
                       ))}
                     </div>
                   </div>
                   {showFullMenu && (
                     <div>
-                      <div className="font-semibold text-xs mb-4 text-amber-500/70 uppercase tracking-[0.2em]">Main Courses</div>
+                      <div className="font-semibold text-xs mb-4 text-red-500/70 uppercase tracking-[0.2em]">Main Courses</div>
                       <div className="space-y-4">
                         {[{ name: "Coq au Vin", desc: "Classic French braised chicken in wine sauce", price: "$26.00" },
                           { name: "Ratatouille", desc: "Provencal vegetable stew with herbs", price: "$20.00" },
@@ -282,7 +282,7 @@ export default function RestaurantPage() {
                               <div className="font-medium text-sm text-white">{item.name}</div>
                               <div className="text-xs text-white/30 mt-0.5">{item.desc}</div>
                             </div>
-                            <div className="text-right font-semibold text-sm text-amber-500 ml-4">{item.price}</div>
+                            <div className="text-right font-semibold text-sm text-red-500 ml-4">{item.price}</div>
                           </div>
                         ))}
                       </div>
@@ -328,7 +328,7 @@ export default function RestaurantPage() {
             <section className="w-full mb-10" id={dyn.v3.getVariant("reviews-section", ID_VARIANTS_MAP, "reviews-section")}>
               <div className="flex items-center justify-between gap-4 mb-5">
                 <div className="flex items-center gap-3">
-                  <MessageSquare className="w-5 h-5 text-amber-500/70" />
+                  <MessageSquare className="w-5 h-5 text-red-500/70" />
                   <h2 className="text-xl font-bold text-white tracking-tight" id={dyn.v3.getVariant("reviews-title", ID_VARIANTS_MAP, "reviews-title")}>Customer Reviews</h2>
                 </div>
                 <div className="text-[11px] text-white/30">{reviews.length} local {reviews.length === 1 ? "review" : "reviews"}</div>
@@ -356,7 +356,7 @@ export default function RestaurantPage() {
                                   {Array.from({ length: 5 }, (_, i) => (
                                     <Star
                                       key={`user-review-star-${review.id}-${i}`}
-                                      className={cn("w-4 h-4", i < review.rating ? "text-amber-400 fill-amber-400" : "text-white/15")}
+                                      className={cn("w-4 h-4", i < review.rating ? "text-red-400 fill-red-400" : "text-white/15")}
                                     />
                                   ))}
                                 </div>
@@ -409,7 +409,7 @@ export default function RestaurantPage() {
                               onClick={() => setRating(value)}
                               aria-label={`Set rating to ${value}`}
                             >
-                              <Star className={cn("w-5 h-5", value <= rating ? "text-amber-400 fill-amber-400" : "text-white/15")} />
+                              <Star className={cn("w-5 h-5", value <= rating ? "text-red-400 fill-red-400" : "text-white/15")} />
                             </button>
                           ))}
                         </div>
@@ -417,7 +417,7 @@ export default function RestaurantPage() {
                       <div>
                         <label className="block text-[10px] font-medium text-white/35 mb-1.5 uppercase tracking-[0.15em]">Comment</label>
                         <textarea
-                          className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50 transition-all text-sm resize-none"
+                          className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:border-red-500/50 transition-all text-sm resize-none"
                           rows={4}
                           value={comment}
                           onChange={(e) => setComment(e.target.value)}
@@ -427,7 +427,7 @@ export default function RestaurantPage() {
                       <div className="flex items-center gap-2">
                         <Button
                           type="submit"
-                          className="bg-amber-500 hover:bg-amber-400 text-black rounded-xl font-semibold text-sm px-5 py-2.5"
+                          className="bg-red-500 hover:bg-red-400 text-black rounded-xl font-semibold text-sm px-5 py-2.5"
                           disabled={!comment.trim()}
                         >
                           <Send className="w-4 h-4 mr-2" />
@@ -452,7 +452,7 @@ export default function RestaurantPage() {
         </div>
         {/* Reservation Box */}
         {dyn.v1.addWrapDecoy("booking-widget", (
-          <div className="glass rounded-3xl p-6 w-full max-w-sm md:sticky md:top-24 self-start mt-10 glow-amber-sm"
+          <div className="glass rounded-3xl p-6 w-full max-w-sm md:sticky md:top-24 self-start mt-10 glow-red-sm"
             id={dyn.v3.getVariant("reservation-box", ID_VARIANTS_MAP, "reservation-box")}>
             <h2 className="font-bold text-lg mb-5 text-center text-white tracking-tight" id={dyn.v3.getVariant("reservation-title", ID_VARIANTS_MAP, "reservation-title")}>Make a Reservation</h2>
             <div className="flex flex-col gap-4">
@@ -462,9 +462,9 @@ export default function RestaurantPage() {
                 <Popover open={peopleOpen} onOpenChange={setPeopleOpen} modal={false}>
                   <PopoverTrigger asChild>
                     <Button id={dyn.v3.getVariant("people_picker", ID_VARIANTS_MAP, "people_picker")} variant="outline"
-                      className="w-full flex items-center justify-between border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-amber-500/30 rounded-xl text-sm text-white/70">
+                      className="w-full flex items-center justify-between border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-red-500/30 rounded-xl text-sm text-white/70">
                       <div className="flex items-center gap-2">
-                        <UserIcon className="h-4 w-4 text-amber-500/60" />
+                        <UserIcon className="h-4 w-4 text-red-500/60" />
                         <span>{people ? `${people} ${people === 1 ? personLabel : peopleLabel}` : `${pickLabel} ${peopleLabel}`}</span>
                       </div>
                       <ChevronDownIcon className="h-4 w-4 text-white/30" />
@@ -490,9 +490,9 @@ export default function RestaurantPage() {
                   <Popover open={dateOpen} onOpenChange={setDateOpen} modal={false}>
                     <PopoverTrigger asChild>
                       <Button id={dyn.v3.getVariant("date_picker", ID_VARIANTS_MAP, "date_picker")} variant="outline"
-                        className="w-full flex items-center justify-between border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-amber-500/30 rounded-xl text-sm text-white/70">
+                        className="w-full flex items-center justify-between border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-red-500/30 rounded-xl text-sm text-white/70">
                         <div className="flex items-center gap-2">
-                          <CalendarIcon className="h-4 w-4 text-amber-500/60" />
+                          <CalendarIcon className="h-4 w-4 text-red-500/60" />
                           <span>{date ? format(date, "MMM d") : selectDateLabel}</span>
                         </div>
                       </Button>
@@ -507,9 +507,9 @@ export default function RestaurantPage() {
                   <Popover open={timeOpen} onOpenChange={setTimeOpen} modal={false}>
                     <PopoverTrigger asChild>
                       <Button id={dyn.v3.getVariant("time_picker", ID_VARIANTS_MAP, "time_picker")} variant="outline"
-                        className="w-full flex items-center justify-between border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-amber-500/30 rounded-xl text-sm text-white/70">
+                        className="w-full flex items-center justify-between border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-red-500/30 rounded-xl text-sm text-white/70">
                         <div className="flex items-center gap-2">
-                          <ClockIcon className="h-4 w-4 text-amber-500/60" />
+                          <ClockIcon className="h-4 w-4 text-red-500/60" />
                           <span>{time ? time : selectTimeLabel}</span>
                         </div>
                         <ChevronDownIcon className="h-4 w-4 text-white/30" />
@@ -539,7 +539,7 @@ export default function RestaurantPage() {
                 })}>
                 <Button
                   id={dyn.v3.getVariant("book_button", ID_VARIANTS_MAP, "book_button")}
-                  className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "button-primary"), "w-full bg-amber-500 hover:bg-amber-400 text-black px-6 py-3 rounded-xl font-bold text-sm transition-all hover:shadow-lg hover:shadow-amber-500/20 pulse-glow")}>
+                  className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "button-primary"), "w-full bg-red-500 hover:bg-red-400 text-black px-6 py-3 rounded-xl font-bold text-sm transition-all hover:shadow-lg hover:shadow-red-500/20 pulse-glow")}>
                   {bookNowLabel}
                 </Button>
               </SeedLink>

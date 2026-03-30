@@ -29,11 +29,11 @@ export default function FaqsPage() {
     <main className="min-h-screen bg-background">
       <Navbar showBack />
       <div className="relative overflow-hidden py-24 px-6">
-        <div className="absolute top-10 left-1/4 w-72 h-72 bg-amber-500/5 rounded-full blur-[100px]" />
+        <div className="absolute top-10 left-1/4 w-72 h-72 bg-red-500/5 rounded-full blur-[100px]" />
         <div className="max-w-3xl mx-auto relative z-10">
-          <p className="uppercase tracking-[0.5em] text-[11px] font-semibold text-amber-500 mb-4">Support</p>
+          <p className="uppercase tracking-[0.5em] text-[11px] font-semibold text-red-500 mb-4">Support</p>
           <h1 className="text-4xl md:text-5xl font-black text-white mb-5 tracking-tight">Frequently Asked Questions</h1>
-          <p className="text-lg text-white/40 leading-relaxed">Find quick answers to the most common questions about AutoDining. Can't find what you're looking for? <SeedLink href="/help" className="text-amber-500 hover:text-amber-400 underline underline-offset-4 decoration-amber-500/30">Visit our Help Center</SeedLink> or <SeedLink href="/contact" className="text-amber-500 hover:text-amber-400 underline underline-offset-4 decoration-amber-500/30">contact our support team</SeedLink>.</p>
+          <p className="text-lg text-white/40 leading-relaxed">Find quick answers to the most common questions about AutoDining. Can't find what you're looking for? <SeedLink href="/help" className="text-red-500 hover:text-red-400 underline underline-offset-4 decoration-red-500/30">Visit our Help Center</SeedLink> or <SeedLink href="/contact" className="text-red-500 hover:text-red-400 underline underline-offset-4 decoration-red-500/30">contact our support team</SeedLink>.</p>
         </div>
       </div>
       <div className="max-w-3xl mx-auto px-6 pb-20">
@@ -42,11 +42,11 @@ export default function FaqsPage() {
             <div key={faq.question} className="glass rounded-2xl overflow-hidden transition-all duration-300 hover:bg-white/[0.06] opacity-0 animate-fade-in-up" style={{ animationDelay: `${index * 50}ms`, animationFillMode: "forwards" }}>
               <button onClick={() => toggleFAQ(index)} className="w-full px-6 py-5 flex items-center justify-between text-left transition-colors">
                 <span className="text-sm font-semibold text-white pr-8">{faq.question}</span>
-                {openIndex === index ? <ChevronUp className="w-4 h-4 text-amber-500 flex-shrink-0" /> : <ChevronDown className="w-4 h-4 text-white/30 flex-shrink-0" />}
+                {openIndex === index ? <ChevronUp className="w-4 h-4 text-red-500 flex-shrink-0" /> : <ChevronDown className="w-4 h-4 text-white/30 flex-shrink-0" />}
               </button>
               {openIndex === index && (
                 <div className="px-6 pb-5 pt-0">
-                  <div className="border-l-2 border-amber-500/50 pl-4">
+                  <div className="border-l-2 border-red-500/50 pl-4">
                     <p className="text-white/40 text-sm leading-relaxed">{faq.answer}</p>
                   </div>
                 </div>
@@ -56,12 +56,12 @@ export default function FaqsPage() {
         </div>
         <div className="relative overflow-hidden rounded-3xl p-10 md:p-12 text-center">
           <div className="absolute inset-0 animated-gradient" />
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-orange-500/10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-red-500/10" />
           <div className="relative z-10">
             <h2 className="text-2xl font-bold text-white mb-3 tracking-tight">Still have questions?</h2>
             <p className="text-white/40 mb-6">Our support team is here to help! Get in touch and we'll respond as soon as possible.</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <SeedLink href="/help" className="inline-block bg-amber-500 text-black px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-amber-400 transition-all hover:shadow-lg hover:shadow-amber-500/20">Visit Help Center</SeedLink>
+              <SeedLink href="/help" className="inline-block bg-red-500 text-black px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-red-400 transition-all hover:shadow-lg hover:shadow-red-500/20">Visit Help Center</SeedLink>
               <SeedLink href="/contact" className="inline-block bg-white/10 border border-white/10 text-white px-6 py-2.5 rounded-full font-medium text-sm hover:bg-white/15 transition-all">Contact Support</SeedLink>
             </div>
           </div>

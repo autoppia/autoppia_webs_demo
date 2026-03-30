@@ -65,9 +65,9 @@ export default function HelpPage() {
         {/* Hero */}
         {dyn.v1.addWrapDecoy("help-hero", (
           <div className="relative overflow-hidden py-24 px-6" id={dyn.v3.getVariant("help-hero", ID_VARIANTS_MAP, "help-hero")}>
-            <div className="absolute top-10 left-1/3 w-72 h-72 bg-amber-500/5 rounded-full blur-[100px]" />
+            <div className="absolute top-10 left-1/3 w-72 h-72 bg-red-500/5 rounded-full blur-[100px]" />
             <div className="max-w-4xl mx-auto text-center relative z-10">
-              <p className="uppercase tracking-[0.5em] text-[11px] font-semibold text-amber-500 mb-4">Support center</p>
+              <p className="uppercase tracking-[0.5em] text-[11px] font-semibold text-red-500 mb-4">Support center</p>
               <h1 className="text-4xl md:text-6xl font-black text-white mb-5 tracking-tight" id={dyn.v3.getVariant("help-title", ID_VARIANTS_MAP, "help-title")}>
                 {dyn.v3.getVariant("help_center", TEXT_VARIANTS_MAP, "How can we help you?")}
               </h1>
@@ -91,7 +91,7 @@ export default function HelpPage() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className={cn(
                   dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "input-text"),
-                  "w-full pl-11 pr-4 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-white/25 focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50 outline-none text-sm"
+                  "w-full pl-11 pr-4 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-white placeholder-white/25 focus:ring-2 focus:ring-red-500/30 focus:border-red-500/50 outline-none text-sm"
                 )}
                 />
               </div>
@@ -109,7 +109,7 @@ export default function HelpPage() {
                       id={dyn.v3.getVariant(`help-section-${index === 0 ? "guides" : index === 1 ? "chat" : index === 2 ? "forum" : "videos"}`, ID_VARIANTS_MAP, `help-section-${index}`)}
                       className={cn(dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "card"), "glass rounded-2xl p-5 card-lift text-center cursor-default")}
                     >
-                      <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-3">
+                      <div className="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center mx-auto mb-3">
                         {section.icon}
                       </div>
                       <h3 className={cn(dyn.v3.getVariant("card-title", CLASS_VARIANTS_MAP, "card-title"), "text-sm font-semibold text-white mb-1")}>
@@ -138,7 +138,7 @@ export default function HelpPage() {
                         dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
                         "px-4 py-1.5 rounded-full text-[12px] font-medium transition-all",
                         selectedCategory === category
-                          ? "bg-amber-500 text-black"
+                          ? "bg-red-500 text-black"
                           : "bg-white/[0.04] text-white/50 border border-white/[0.08] hover:bg-white/[0.08] hover:text-white/70"
                       )}
                     >
@@ -170,16 +170,16 @@ export default function HelpPage() {
                         className="w-full px-6 py-4 flex items-center justify-between text-left transition-colors"
                       >
                         <div className="flex-1">
-                          <span className="text-[10px] font-semibold text-amber-500 uppercase tracking-wider mr-2">{faq.category}</span>
+                          <span className="text-[10px] font-semibold text-red-500 uppercase tracking-wider mr-2">{faq.category}</span>
                           <span className="text-sm font-semibold text-white" id={dyn.v3.getVariant(`faq-question-${index}`, ID_VARIANTS_MAP, `faq-question-${index}`)}>{faq.question}</span>
                         </div>
                         {openIndex === index
-                          ? <ChevronUp className="w-4 h-4 text-amber-500 flex-shrink-0 ml-4" />
+                          ? <ChevronUp className="w-4 h-4 text-red-500 flex-shrink-0 ml-4" />
                           : <ChevronDown className="w-4 h-4 text-white/30 flex-shrink-0 ml-4" />}
                       </button>
                       {openIndex === index && (
                         <div className="px-6 pb-5 pt-0">
-                          <div className="border-l-2 border-amber-500/50 pl-4">
+                          <div className="border-l-2 border-red-500/50 pl-4">
                             <p className="text-white/40 text-sm leading-relaxed" id={dyn.v3.getVariant(`faq-answer-${index}`, ID_VARIANTS_MAP, `faq-answer-${index}`)}>{faq.answer}</p>
                           </div>
                         </div>
@@ -198,7 +198,7 @@ export default function HelpPage() {
             <section id={dyn.v3.getVariant("help-cta-section", ID_VARIANTS_MAP, "help-cta-section")}>
               <div className="relative overflow-hidden rounded-3xl p-10 md:p-12 text-center">
                 <div className="absolute inset-0 animated-gradient" />
-                <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-orange-500/10" />
+                <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-red-500/10" />
                 <div className="relative z-10">
                   <h2 className="text-2xl font-bold text-white mb-3 tracking-tight" id={dyn.v3.getVariant("still-need-help-title", ID_VARIANTS_MAP, "still-need-help-title")}>
                     {dyn.v3.getVariant("still_need_help", TEXT_VARIANTS_MAP, "Still need help?")}
@@ -209,7 +209,7 @@ export default function HelpPage() {
                   {dyn.v1.addWrapDecoy("contact-support-button", (
                     <a
                       href="/contact"
-                      className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "button-primary"), "inline-block bg-amber-500 text-black px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-amber-400 transition-all hover:shadow-lg hover:shadow-amber-500/20")}
+                      className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "button-primary"), "inline-block bg-red-500 text-black px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-red-400 transition-all hover:shadow-lg hover:shadow-red-500/20")}
                       id={dyn.v3.getVariant("contact-support-button", ID_VARIANTS_MAP, "contact-support-button")}
                     >
                       {dyn.v3.getVariant("contact_support", TEXT_VARIANTS_MAP, "Contact Support")}

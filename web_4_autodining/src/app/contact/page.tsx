@@ -42,7 +42,7 @@ export default function ContactPage() {
     logEvent(EVENT_TYPES.CONTACT_PAGE_VIEW, { seed, fromSeedParam: hasSeedParam });
   }, [seed, hasSeedParam]);
 
-  const inputClasses = "w-full px-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white placeholder-white/25 focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50 outline-none transition-all text-sm";
+  const inputClasses = "w-full px-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white placeholder-white/25 focus:ring-2 focus:ring-red-500/30 focus:border-red-500/50 outline-none transition-all text-sm";
 
   return (
     dyn.v1.addWrapDecoy("contact-page", (
@@ -54,9 +54,9 @@ export default function ContactPage() {
         {/* Hero */}
         {dyn.v1.addWrapDecoy("contact-hero", (
           <div className="relative overflow-hidden py-24 px-6" id={dyn.v3.getVariant("contact-hero", ID_VARIANTS_MAP, "contact-hero")}>
-            <div className="absolute top-10 right-1/3 w-72 h-72 bg-amber-500/5 rounded-full blur-[100px]" />
+            <div className="absolute top-10 right-1/3 w-72 h-72 bg-red-500/5 rounded-full blur-[100px]" />
             <div className="max-w-4xl mx-auto text-center relative z-10">
-              <p className="uppercase tracking-[0.5em] text-[11px] font-semibold text-amber-500 mb-4">Reach out</p>
+              <p className="uppercase tracking-[0.5em] text-[11px] font-semibold text-red-500 mb-4">Reach out</p>
               <h1 className="text-4xl md:text-6xl font-black text-white mb-5 tracking-tight" id={dyn.v3.getVariant("contact-title", ID_VARIANTS_MAP, "contact-title")}>{dyn.v3.getVariant("get_in_touch", TEXT_VARIANTS_MAP, "Get in Touch")}</h1>
               <p className="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed" id={dyn.v3.getVariant("contact-subtitle", ID_VARIANTS_MAP, "contact-subtitle")}>{dyn.v3.getVariant("contact_description", TEXT_VARIANTS_MAP, "Have questions or feedback? We'd love to hear from you! Reach out to us and we'll get back to you as soon as possible.")}</p>
             </div>
@@ -75,7 +75,7 @@ export default function ContactPage() {
                     className="flex items-start gap-4 p-4 glass rounded-2xl hover:bg-white/[0.06] transition-all duration-300 group cursor-default"
                     onClick={() => logEvent(EVENT_TYPES.CONTACT_CARD_CLICK, { type: info.title, seed })}
                   >
-                    <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center flex-shrink-0 group-hover:bg-amber-500/20 transition-colors">
+                    <div className="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center flex-shrink-0 group-hover:bg-red-500/20 transition-colors">
                       {info.icon}
                     </div>
                     <div>
@@ -125,7 +125,7 @@ export default function ContactPage() {
                     <div className="pt-1">
                       {dyn.v1.addWrapDecoy("send-message-button", (
                         <Button type="submit" id={dyn.v3.getVariant("send-message-button", ID_VARIANTS_MAP, "send-message-button")}
-                          className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "button-primary"), "w-full bg-amber-500 hover:bg-amber-400 text-black px-6 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all text-sm hover:shadow-lg hover:shadow-amber-500/20")}>
+                          className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "button-primary"), "w-full bg-red-500 hover:bg-red-400 text-black px-6 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all text-sm hover:shadow-lg hover:shadow-red-500/20")}>
                           <Send className="w-4 h-4" />
                           {dyn.v3.getVariant("send_message", TEXT_VARIANTS_MAP, "Send Message")}
                         </Button>
@@ -140,7 +140,7 @@ export default function ContactPage() {
           {/* FAQ Section */}
           <div className="glass rounded-3xl p-10 md:p-14">
             <div className="text-center mb-8">
-              <p className="uppercase tracking-[0.3em] text-[10px] font-semibold text-amber-500 mb-3">Quick answers</p>
+              <p className="uppercase tracking-[0.3em] text-[10px] font-semibold text-red-500 mb-3">Quick answers</p>
               <h2 className="text-2xl font-bold text-white tracking-tight">Frequently Asked Questions</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

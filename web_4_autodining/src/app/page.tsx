@@ -30,7 +30,7 @@ function StarRating({ count }: { count: number }) {
   return (
     <span className="flex items-center gap-0.5">
       {Array.from({ length: 5 }, (_, i) => i).map((i) => (
-        <Star key={`star-${i}`} className={cn("w-3.5 h-3.5", i < clamped ? "text-amber-400 fill-amber-400" : "text-white/20")} />
+        <Star key={`star-${i}`} className={cn("w-3.5 h-3.5", i < clamped ? "text-red-400 fill-red-400" : "text-white/20")} />
       ))}
     </span>
   );
@@ -84,7 +84,7 @@ function RestaurantCard({ r, date, people, time, index }: {
                     id={dyn.v3.getVariant("restaurant-cuisine-badge", ID_VARIANTS_MAP, `restaurant-cuisine-${r.id}`)}
                   >{r.cuisine}</span>
                   <span
-                    className="px-2.5 py-1 rounded-full bg-amber-500/90 text-black text-[11px] font-bold"
+                    className="px-2.5 py-1 rounded-full bg-red-500/90 text-black text-[11px] font-bold"
                     id={dyn.v3.getVariant("restaurant-price-badge", ID_VARIANTS_MAP, `restaurant-price-${r.id}`)}
                   >{priceTag}</span>
                 </div>
@@ -98,7 +98,7 @@ function RestaurantCard({ r, date, people, time, index }: {
             >
               {dyn.v1.addWrapDecoy(`restaurant-card-title-${r.id}`, (
                 <h3
-                  className="font-bold text-base text-white group-hover:text-amber-400 transition-colors duration-300 leading-tight"
+                  className="font-bold text-base text-white group-hover:text-red-400 transition-colors duration-300 leading-tight"
                   id={dyn.v3.getVariant("restaurant-name", ID_VARIANTS_MAP, `restaurant-name-${r.id}`)}
                 >{r.name}</h3>
               ))}
@@ -121,7 +121,7 @@ function RestaurantCard({ r, date, people, time, index }: {
                 </span>
                 <span
                   id={dyn.v3.getVariant("view_details_button", ID_VARIANTS_MAP, `view-details-${r.id}`)}
-                  className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "button-primary"), "text-[12px] bg-amber-500 hover:bg-amber-400 text-black px-4 py-1.5 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/20")}
+                  className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "button-primary"), "text-[12px] bg-red-500 hover:bg-red-400 text-black px-4 py-1.5 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-red-500/20")}
                 >{viewDetailsLabel}</span>
               </div>
             </div>
@@ -195,9 +195,9 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
               onClick={() => scroll("left")}
               className="absolute -left-4 top-1/2 -translate-y-1/2 z-20
                 w-10 h-10 flex items-center justify-center
-                bg-amber-500 text-black
-                rounded-full shadow-xl shadow-amber-500/30
-                hover:bg-amber-400 hover:scale-110
+                bg-red-500 text-black
+                rounded-full shadow-xl shadow-red-500/30
+                hover:bg-red-400 hover:scale-110
                 transition-all duration-300 opacity-0 group-hover:opacity-100"
               data-testid={`scroll-left-${seed ?? 1}`}
               aria-label={dyn.v3.getVariant("scroll_left", undefined, "Scroll left")}
@@ -213,9 +213,9 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
               onClick={() => scroll("right")}
               className="absolute -right-4 top-1/2 -translate-y-1/2 z-20
                 w-10 h-10 flex items-center justify-center
-                bg-amber-500 text-black
-                rounded-full shadow-xl shadow-amber-500/30
-                hover:bg-amber-400 hover:scale-110
+                bg-red-500 text-black
+                rounded-full shadow-xl shadow-red-500/30
+                hover:bg-red-400 hover:scale-110
                 transition-all duration-300 opacity-0 group-hover:opacity-100"
               data-testid={`scroll-right-${seed ?? 1}`}
               aria-label={dyn.v3.getVariant("scroll_right", undefined, "Scroll right")}
@@ -399,10 +399,10 @@ function HomePageContent() {
       <section className="relative">
         <div className="animated-gradient noise relative overflow-hidden text-white px-8 py-24 md:py-32">
           {/* Decorative orbs */}
-          <div className="absolute top-20 left-1/4 w-72 h-72 bg-amber-500/10 rounded-full blur-[100px]" />
+          <div className="absolute top-20 left-1/4 w-72 h-72 bg-red-500/10 rounded-full blur-[100px]" />
           <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-[120px]" />
           <div className="relative z-10 max-w-4xl mx-auto text-center space-y-6">
-            <p className="uppercase tracking-[0.5em] text-[11px] font-semibold text-amber-500">Curated dining experiences</p>
+            <p className="uppercase tracking-[0.5em] text-[11px] font-semibold text-red-500">Curated dining experiences</p>
             <h1 className="text-5xl md:text-7xl font-black leading-[1.05] tracking-tight">
               Discover your next<br />
               <span className="text-gradient">unforgettable</span> meal
@@ -426,7 +426,7 @@ function HomePageContent() {
                     placeholder={dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search restaurant, cuisine...")}
                     className={cn(
                       dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "input-text"),
-                      "w-full h-10 pl-10 pr-4 bg-white/[0.06] border border-white/[0.08] rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50 transition-all text-sm"
+                      "w-full h-10 pl-10 pr-4 bg-white/[0.06] border border-white/[0.08] rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:border-red-500/50 transition-all text-sm"
                     )}
                     value={search}
                     onChange={handleSearchChange}
@@ -439,7 +439,7 @@ function HomePageContent() {
                   className={cn(
                     "px-3 py-1.5 rounded-full text-[11px] font-semibold border transition-colors whitespace-nowrap",
                     selectedTag === null
-                      ? "bg-amber-500 text-black border-amber-500/30"
+                      ? "bg-red-500 text-black border-red-500/30"
                       : "bg-white/[0.04] text-white/60 border-white/[0.08] hover:bg-white/[0.06]"
                   )}
                   onClick={() => {
@@ -456,7 +456,7 @@ function HomePageContent() {
                     className={cn(
                       "px-3 py-1.5 rounded-full text-[11px] font-medium border transition-colors whitespace-nowrap",
                       selectedTag === tag
-                        ? "bg-amber-500/15 text-amber-300 border-amber-500/20"
+                        ? "bg-red-500/15 text-red-300 border-red-500/20"
                         : "bg-white/[0.04] text-white/60 border-white/[0.08] hover:bg-white/[0.06]"
                     )}
                     onClick={() => {
@@ -477,11 +477,11 @@ function HomePageContent() {
                       variant="outline"
                       className={cn(
                         dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
-                        "w-[170px] justify-start text-left font-normal rounded-xl border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-amber-500/30 text-white/70 text-sm h-10 transition-all"
+                        "w-[170px] justify-start text-left font-normal rounded-xl border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-red-500/30 text-white/70 text-sm h-10 transition-all"
                       )}
                       onClick={() => logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { action: "open" })}
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4 text-amber-500/70" />
+                      <CalendarIcon className="mr-2 h-4 w-4 text-red-500/70" />
                       {date ? format(date, "MMM d, yyyy") : <span className="text-white/30">{dyn.v3.getVariant("select_date", TEXT_VARIANTS_MAP, "Select date")}</span>}
                     </Button>
                   </PopoverTrigger>
@@ -498,11 +498,11 @@ function HomePageContent() {
                       variant="outline"
                       className={cn(
                         dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
-                        "w-[130px] justify-start text-left font-normal rounded-xl border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-amber-500/30 text-white/70 text-sm h-10 transition-all"
+                        "w-[130px] justify-start text-left font-normal rounded-xl border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-red-500/30 text-white/70 text-sm h-10 transition-all"
                       )}
                       onClick={() => logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { action: "open" })}
                     >
-                      <ClockIcon className="mr-2 h-4 w-4 text-amber-500/70" />
+                      <ClockIcon className="mr-2 h-4 w-4 text-red-500/70" />
                       {time}
                     </Button>
                   </PopoverTrigger>
@@ -525,11 +525,11 @@ function HomePageContent() {
                       variant="outline"
                       className={cn(
                         dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
-                        "w-[130px] justify-start text-left font-normal rounded-xl border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-amber-500/30 text-white/70 text-sm h-10 transition-all"
+                        "w-[130px] justify-start text-left font-normal rounded-xl border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-red-500/30 text-white/70 text-sm h-10 transition-all"
                       )}
                       onClick={() => logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { action: "open" })}
                     >
-                      <UserIcon className="mr-2 h-4 w-4 text-amber-500/70" />
+                      <UserIcon className="mr-2 h-4 w-4 text-red-500/70" />
                       {people} {people === 1 ? personLabel : peopleLabel}
                     </Button>
                   </PopoverTrigger>
@@ -551,7 +551,7 @@ function HomePageContent() {
       {isReady && !isLoading && filtered.length === 0 && (search.trim() || selectedTag) && (
         <div className="max-w-3xl mx-auto px-8 mb-14">
           <div className="glass rounded-3xl p-10 text-center">
-            <SearchX className="w-8 h-8 text-amber-500/70 mx-auto mb-3" />
+            <SearchX className="w-8 h-8 text-red-500/70 mx-auto mb-3" />
             <h2 className="text-lg font-bold text-white mb-2 tracking-tight">No matches found</h2>
             <p className="text-white/40 text-sm">Try a different search or clear the tag filter.</p>
           </div>
@@ -567,7 +567,7 @@ function HomePageContent() {
                 <section id={dyn.v3.getVariant("section_expensive", ID_VARIANTS_MAP, "section_expensive")}>
                   <div className="mb-6 flex items-end justify-between">
                     <div>
-                      <p className="uppercase tracking-[0.3em] text-[10px] font-semibold text-amber-500 mb-1.5">Premium</p>
+                      <p className="uppercase tracking-[0.3em] text-[10px] font-semibold text-red-500 mb-1.5">Premium</p>
                       <h2 className="text-2xl font-bold text-white tracking-tight">{dyn.v3.getVariant("section_expensive_title", TEXT_VARIANTS_MAP, "Fine dining")}</h2>
                     </div>
                     <p className="text-white/30 text-sm hidden md:block">Fine dining experiences for special occasions</p>
@@ -587,7 +587,7 @@ function HomePageContent() {
                 <section id={dyn.v3.getVariant("section_medium", ID_VARIANTS_MAP, "section_medium")}>
                   <div className="mb-6 flex items-end justify-between">
                     <div>
-                      <p className="uppercase tracking-[0.3em] text-[10px] font-semibold text-amber-500 mb-1.5">Popular</p>
+                      <p className="uppercase tracking-[0.3em] text-[10px] font-semibold text-red-500 mb-1.5">Popular</p>
                       <h2 className="text-2xl font-bold text-white tracking-tight">{dyn.v3.getVariant("section_medium_title", TEXT_VARIANTS_MAP, "Everyday favorites")}</h2>
                     </div>
                     <p className="text-white/30 text-sm hidden md:block">Great value restaurants for everyday dining</p>
@@ -607,7 +607,7 @@ function HomePageContent() {
                 <section id={dyn.v3.getVariant("section_cheap", ID_VARIANTS_MAP, "section_cheap")}>
                   <div className="mb-6 flex items-end justify-between">
                     <div>
-                      <p className="uppercase tracking-[0.3em] text-[10px] font-semibold text-amber-500 mb-1.5">Great value</p>
+                      <p className="uppercase tracking-[0.3em] text-[10px] font-semibold text-red-500 mb-1.5">Great value</p>
                       <h2 className="text-2xl font-bold text-white tracking-tight">{dyn.v3.getVariant("section_cheap_title", TEXT_VARIANTS_MAP, "Budget eats")}</h2>
                     </div>
                     <p className="text-white/30 text-sm hidden md:block">Budget-friendly without compromising quality</p>
