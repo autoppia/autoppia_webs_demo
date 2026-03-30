@@ -53,7 +53,9 @@ export default function ProfilePage() {
   const initialProfileState: ProfileFormState = {
     firstName: "",
     lastName: "",
-    email: currentUser ? `${currentUser.username}@autobooks.com` : "",
+    email: currentUser
+      ? currentUser.email || `${currentUser.username}@autobooks.com`
+      : "",
     bio: "",
     location: "",
     website: "",
@@ -69,13 +71,15 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!currentUser) return;
+    const defaultEmail =
+      currentUser.email || `${currentUser.username}@autobooks.com`;
     setProfileForm((prev) => ({
       ...prev,
-      email: prev.email || `${currentUser.username}@autobooks.com`,
+      email: prev.email || defaultEmail,
     }));
     setPreviousProfileValues((prev) => ({
       ...prev,
-      email: prev.email || `${currentUser.username}@autobooks.com`,
+      email: prev.email || defaultEmail,
     }));
   }, [currentUser]);
 
@@ -164,6 +168,13 @@ export default function ProfilePage() {
       book_id: baseBook.id,
       username: currentUser.username,
       name: baseBook.title,
+      // Include full book payload so backend DeleteBookEvent.parse() can
+      // populate all optional fields (author/year/genres/rating/pages).
+      author: baseBook.director,
+      year: baseBook.year,
+      genres: baseBook.genres,
+      rating: baseBook.rating,
+      pages: baseBook.duration,
     });
 
     // Remove the book from the user's allowed books
