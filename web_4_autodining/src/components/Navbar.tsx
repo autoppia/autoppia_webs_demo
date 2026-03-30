@@ -56,8 +56,8 @@ export default function Navbar({
     <nav
       className={cn(
         "w-full sticky top-0 z-50 transition-all duration-300",
-        transparent
-          ? (isScrolled ? "bg-[#dc2626] border-b border-red-700 shadow-lg text-white" : "bg-transparent border-transparent text-white")
+        transparent 
+          ? (isScrolled ? "bg-[#dc2626] border-b border-red-700 shadow-lg text-white" : "bg-transparent border-transparent text-white") 
           : "bg-[#dc2626] border-b border-red-700 text-white shadow-lg"
       )}
       id={dyn.v3.getVariant("navbar", ID_VARIANTS_MAP, "navbar")}
@@ -125,7 +125,7 @@ export default function Navbar({
                   <button
                     className={cn(
                       "text-sm font-semibold flex items-center gap-2 px-4 py-2 rounded-full transition-all border",
-                      isAuthenticated
+                      isAuthenticated 
                         ? "bg-white/20 text-white border-white/30 hover:bg-white/30"
                         : "bg-white/10 text-white border-white/20 hover:bg-white/30"
                     )}
@@ -146,4 +146,3 @@ export default function Navbar({
     </nav>
   );
 }
-
