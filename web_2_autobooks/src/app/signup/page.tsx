@@ -1,29 +1,31 @@
 "use client";
 
-import { type FormEvent, useEffect, useMemo, useState } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SeedLink } from "@/components/ui/SeedLink";
-import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { getBooks } from "@/dynamic/v2";
-import { EVENT_TYPES, logEvent } from "@/library/events";
-import { BookOpen, UserPlus, Lock, User, Book as BookIcon } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { getBooks } from "@/dynamic/v2";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { cn } from "@/library/utils";
+import {
+  BOOK_LIBRARY_UNAVAILABLE,
+  resolvePrimaryAllowedBookId,
+} from "@/shared/user-book-assignment";
+import { BookOpen, Lock, Mail, User, UserPlus } from "lucide-react";
+import { type FormEvent, useMemo, useState } from "react";
 
 const MIN_PASSWORD_LENGTH = 6;
-const FALLBACK_BOOK_ID = "book-v2-001";
 
 export default function SignupPage() {
   const { signup } = useAuth();
   const router = useSeedRouter();
   const dyn = useDynamicSystem();
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [assignedBook, setAssignedBook] = useState(FALLBACK_BOOK_ID);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -33,85 +35,177 @@ export default function SignupPage() {
     signup_description: [
       "Join Autobooks and start curating your favorite books",
       "Start your book collection journey",
-      "Become a member and explore books"
+      "Become a member and explore books",
     ],
     username_label: ["Username", "User Name", "Account Name"],
+    email_label: ["Email", "E-mail", "Email address"],
     password_label: ["Password", "Pass", "Security Key"],
-    confirm_password_label: ["Confirm Password", "Re-enter Password", "Verify Password"],
-    assign_book_label: ["Assign Book", "Select Book", "Choose Book"],
-    username_placeholder: ["Choose a username", "Pick a username", "Enter username"],
-    password_placeholder: ["Create a password", "Set a password", "Enter password"],
-    confirm_password_placeholder: ["Confirm your password", "Re-enter password", "Verify password"],
-    password_minimum: ["Minimum {MIN} characters", "At least {MIN} characters", "Requires {MIN} characters"],
-    assign_book_help: ["Select a book to manage", "Choose your assigned book", "Pick a book to curate"],
+    confirm_password_label: [
+      "Confirm Password",
+      "Re-enter Password",
+      "Verify Password",
+    ],
+    username_placeholder: [
+      "Choose a username",
+      "Pick a username",
+      "Enter username",
+    ],
+    email_placeholder: [
+      "you@example.com",
+      "your.email@example.com",
+      "Enter your email",
+    ],
+    password_placeholder: [
+      "Create a password",
+      "Set a password",
+      "Enter password",
+    ],
+    confirm_password_placeholder: [
+      "Confirm your password",
+      "Re-enter password",
+      "Verify password",
+    ],
+    password_minimum: [
+      "Minimum {MIN} characters",
+      "At least {MIN} characters",
+      "Requires {MIN} characters",
+    ],
     submit_button: ["Create account", "Sign up", "Register"],
     submitting_button: ["Creating account…", "Signing up…", "Registering…"],
-    already_have_account: ["Already have an account?", "Existing user?", "Have an account?"],
+    already_have_account: [
+      "Already have an account?",
+      "Existing user?",
+      "Have an account?",
+    ],
     sign_in: ["Sign in", "Login", "Access Account"],
-    error_username_required: ["Username is required", "Please enter a username", "Username cannot be empty"],
-    error_password_too_short: ["Password must be at least {MIN} characters", "Password needs {MIN} or more characters", "Minimum {MIN} characters required"],
-    error_password_mismatch: ["Passwords do not match", "Password confirmation failed", "Passwords don't match"],
-    error_unknown: ["Unable to register", "Registration failed", "Sign up error"]
+    error_username_required: [
+      "Username is required",
+      "Please enter a username",
+      "Username cannot be empty",
+    ],
+    error_email_required: [
+      "Email is required",
+      "Please enter your email",
+      "Email cannot be empty",
+    ],
+    error_password_too_short: [
+      "Password must be at least {MIN} characters",
+      "Password needs {MIN} or more characters",
+      "Minimum {MIN} characters required",
+    ],
+    error_password_mismatch: [
+      "Passwords do not match",
+      "Password confirmation failed",
+      "Passwords don't match",
+    ],
+    error_unknown: [
+      "Unable to register",
+      "Registration failed",
+      "Sign up error",
+    ],
   };
 
   // Dynamic ordering for form fields
   const formFields = useMemo(() => {
     const fields = [
       { key: "username", component: "username" },
+      { key: "email", component: "email" },
       { key: "password", component: "password" },
       { key: "confirmPassword", component: "confirmPassword" },
-      { key: "assignBook", component: "assignBook" }
     ];
-    const order = dyn.v1.changeOrderElements("signup-form-fields", fields.length);
+    const order = dyn.v1.changeOrderElements(
+      "signup-form-fields",
+      fields.length,
+    );
     return order.map((idx) => fields[idx]);
   }, [dyn.v1]);
 
   const books = getBooks();
-  const bookOptions = useMemo(() => {
-    if (!books || books.length === 0) return [];
-    return [...books]
-      .sort((a, b) => a.title.localeCompare(b.title))
-      .slice(0, 25);
-  }, [books]);
+  const catalogEmpty = !books || books.length === 0;
 
-  const preferredDefaultBook = bookOptions[0]?.id ?? FALLBACK_BOOK_ID;
+  const previewAssignedId = useMemo(() => {
+    const u = username.trim();
+    if (!u || catalogEmpty) return null;
+    return resolvePrimaryAllowedBookId(books, u);
+  }, [username, books, catalogEmpty]);
 
-  useEffect(() => {
-    if (!assignedBook && preferredDefaultBook) {
-      setAssignedBook(preferredDefaultBook);
-    }
-  }, [assignedBook, preferredDefaultBook]);
+  const previewTitle = useMemo(() => {
+    if (!previewAssignedId) return null;
+    return (
+      books.find((b) => b.id === previewAssignedId)?.title ?? previewAssignedId
+    );
+  }, [previewAssignedId, books]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
     const normalizedUsername = username.trim();
+    const normalizedEmail = email.trim();
     const normalizedPassword = password.trim();
     const normalizedConfirmPassword = confirmPassword.trim();
 
     if (!normalizedUsername) {
-      setError(dyn.v3.getVariant("error_username_required", dynamicV3TextVariants, "Username is required"));
+      setError(
+        dyn.v3.getVariant(
+          "error_username_required",
+          dynamicV3TextVariants,
+          "Username is required",
+        ),
+      );
+      return;
+    }
+    if (!normalizedEmail) {
+      setError(
+        dyn.v3.getVariant(
+          "error_email_required",
+          dynamicV3TextVariants,
+          "Email is required",
+        ),
+      );
       return;
     }
     if (normalizedPassword.length < MIN_PASSWORD_LENGTH) {
-      const errorText = dyn.v3.getVariant("error_password_too_short", dynamicV3TextVariants, `Password must be at least ${MIN_PASSWORD_LENGTH} characters`);
+      const errorText = dyn.v3.getVariant(
+        "error_password_too_short",
+        dynamicV3TextVariants,
+        `Password must be at least ${MIN_PASSWORD_LENGTH} characters`,
+      );
       setError(errorText.replace("{MIN}", MIN_PASSWORD_LENGTH.toString()));
       return;
     }
     if (normalizedPassword !== normalizedConfirmPassword) {
-      setError(dyn.v3.getVariant("error_password_mismatch", dynamicV3TextVariants, "Passwords do not match"));
+      setError(
+        dyn.v3.getVariant(
+          "error_password_mismatch",
+          dynamicV3TextVariants,
+          "Passwords do not match",
+        ),
+      );
+      return;
+    }
+    if (catalogEmpty) {
+      setError(BOOK_LIBRARY_UNAVAILABLE);
       return;
     }
 
     setIsSubmitting(true);
     try {
-      await signup(normalizedUsername, normalizedPassword, normalizedConfirmPassword);
-      logEvent(EVENT_TYPES.REGISTRATION_BOOK, {
-        username: normalizedUsername,
-      });
+      await signup(
+        normalizedUsername,
+        normalizedPassword,
+        normalizedConfirmPassword,
+        normalizedEmail,
+      );
       router.push("/profile");
     } catch (err) {
-      setError((err as Error).message ?? dyn.v3.getVariant("error_unknown", dynamicV3TextVariants, "Unable to register"));
+      setError(
+        (err as Error).message ??
+          dyn.v3.getVariant(
+            "error_unknown",
+            dynamicV3TextVariants,
+            "Unable to register",
+          ),
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -130,7 +224,7 @@ export default function SignupPage() {
         id={dyn.v3.getVariant("signup-main", ID_VARIANTS_MAP, "signup-main")}
         className={cn(
           "relative mx-auto w-full max-w-xl px-6",
-          dyn.v3.getVariant("signup-main", CLASS_VARIANTS_MAP, "")
+          dyn.v3.getVariant("signup-main", CLASS_VARIANTS_MAP, ""),
         )}
       >
         {dyn.v1.addWrapDecoy("signup-main-container", (
@@ -235,6 +329,44 @@ export default function SignupPage() {
                           </div>
                         );
                       }
+                      if (field.key === "email") {
+                        return (
+                          <div key="email">
+                            {dyn.v1.addWrapDecoy("email-field", (
+                              <div>
+                                <label
+                                  id={dyn.v3.getVariant("signup-email-label", ID_VARIANTS_MAP, "signup-email-label")}
+                                  className={cn(
+                                    "flex items-center gap-2 text-sm font-semibold text-white/80 mb-2",
+                                    dyn.v3.getVariant("form-label", CLASS_VARIANTS_MAP, "")
+                                  )}
+                                >
+                                  <Mail
+                                    id={dyn.v3.getVariant("signup-email-icon", ID_VARIANTS_MAP, "signup-email-icon")}
+                                    className={cn("h-4 w-4 text-secondary", dyn.v3.getVariant("icon-mail", CLASS_VARIANTS_MAP, ""))}
+                                  />
+                                  {dyn.v3.getVariant("email_label", dynamicV3TextVariants, "Email")}
+                                </label>
+                                {dyn.v1.addWrapDecoy("email-input-container", (
+                                  <Input
+                                    id={dyn.v3.getVariant("signup-email-input", ID_VARIANTS_MAP, "signup-email-input")}
+                                    type="email"
+                                    value={email}
+                                    onChange={(event) => setEmail(event.target.value)}
+                                    className={cn(
+                                      "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20",
+                                      dyn.v3.getVariant("form-input", CLASS_VARIANTS_MAP, "")
+                                    )}
+                                    placeholder={dyn.v3.getVariant("email_placeholder", dynamicV3TextVariants, "you@example.com")}
+                                    autoComplete="email"
+                                    required
+                                  />
+                                ))}
+                              </div>
+                            ))}
+                          </div>
+                        );
+                      }
                       if (field.key === "password") {
                         return (
                           <div key="password">
@@ -320,64 +452,21 @@ export default function SignupPage() {
                           </div>
                         );
                       }
-                      if (field.key === "assignBook" && bookOptions.length > 0) {
-                        return (
-                          <div key="assignBook">
-                            {dyn.v1.addWrapDecoy("assign-book-field", (
-                              <div>
-                                <label
-                                  id={dyn.v3.getVariant("assign-book-label", ID_VARIANTS_MAP, "assign-book-label")}
-                                  className={cn(
-                                    "flex items-center gap-2 text-sm font-semibold text-white/80 mb-2",
-                                    dyn.v3.getVariant("form-label", CLASS_VARIANTS_MAP, "")
-                                  )}
-                                >
-                                  <BookIcon
-                                    id={dyn.v3.getVariant("assign-book-icon", ID_VARIANTS_MAP, "assign-book-icon")}
-                                    className={cn("h-4 w-4 text-secondary", dyn.v3.getVariant("icon-book", CLASS_VARIANTS_MAP, ""))}
-                                  />
-                                  {dyn.v3.getVariant("assign_book_label", dynamicV3TextVariants, "Assign Book")}
-                                </label>
-                                {dyn.v1.addWrapDecoy("assign-book-select-container", (
-                                  <select
-                                    id={dyn.v3.getVariant("assign-book-select", ID_VARIANTS_MAP, "assign-book-select")}
-                                    value={assignedBook}
-                                    onChange={(event) => setAssignedBook(event.target.value)}
-                                    className={cn(
-                                      "h-12 w-full rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary hover:bg-white/15 cursor-pointer",
-                                      dyn.v3.getVariant("form-select", CLASS_VARIANTS_MAP, "")
-                                    )}
-                                    style={{
-                                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
-                                      backgroundRepeat: 'no-repeat',
-                                      backgroundPosition: 'right 12px center',
-                                      backgroundSize: '12px',
-                                    }}
-                                  >
-                                    {bookOptions.map((book) => (
-                                      <option key={book.id} value={book.id} className="bg-neutral-900 text-white">
-                                        {book.title}
-                                      </option>
-                                    ))}
-                                  </select>
-                                ))}
-                                <p
-                                  id={dyn.v3.getVariant("assign-book-help", ID_VARIANTS_MAP, "assign-book-help")}
-                                  className={cn(
-                                    "mt-1 text-xs text-white/50",
-                                    dyn.v3.getVariant("form-help", CLASS_VARIANTS_MAP, "")
-                                  )}
-                                >
-                                  {dyn.v3.getVariant("assign_book_help", dynamicV3TextVariants, "Select a book to manage")}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        );
-                      }
                       return null;
                     })}
                   </div>
+
+                  {previewTitle && (
+                    <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-white/50 mb-1">
+                        Assigned book (from catalog)
+                      </p>
+                      <p className="text-sm text-white/90">{previewTitle}</p>
+                      <p className="mt-1 text-xs text-white/45 font-mono">
+                        {previewAssignedId}
+                      </p>
+                    </div>
+                  )}
 
                   {error && (
                     <div
@@ -391,6 +480,12 @@ export default function SignupPage() {
                     </div>
                   )}
 
+                  {catalogEmpty && (
+                    <p className="text-sm text-amber-200/90">
+                      {BOOK_LIBRARY_UNAVAILABLE}
+                    </p>
+                  )}
+
                   {dyn.v1.addWrapDecoy("signup-submit-button", (
                     <Button
                       id={dyn.v3.getVariant("signup-submit-button", ID_VARIANTS_MAP, "signup-submit-button")}
@@ -399,7 +494,7 @@ export default function SignupPage() {
                         "w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105",
                         dyn.v3.getVariant("submit-button", CLASS_VARIANTS_MAP, "")
                       )}
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || catalogEmpty}
                     >
                       <UserPlus
                         id={dyn.v3.getVariant("signup-submit-icon", ID_VARIANTS_MAP, "signup-submit-icon")}
