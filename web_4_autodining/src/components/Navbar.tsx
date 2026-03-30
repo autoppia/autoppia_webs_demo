@@ -114,7 +114,10 @@ export default function Navbar({
                     {isAuthenticated && currentUser ? currentUser.username : "Account"}
                   </button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 border-none bg-transparent shadow-none mt-2" align="end">
+                <PopoverContent
+                  className="w-[calc(100vw-1rem)] sm:w-auto max-w-[26rem] p-0 border-none bg-transparent shadow-none mt-2"
+                  align="end"
+                >
                   <AuthModal />
                 </PopoverContent>
               </Popover>

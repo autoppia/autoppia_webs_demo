@@ -47,7 +47,7 @@ export function AuthModal() {
 
   if (isAuthenticated && currentUser) {
     return (
-      <div className="p-4 w-64 bg-zinc-950 rounded-lg shadow-xl border">
+      <div className="w-full sm:w-64 max-w-full p-4 bg-zinc-950 rounded-lg shadow-xl border">
         <div className="flex flex-col items-center gap-4">
           <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center">
             <User className="w-8 h-8 text-amber-600" />
@@ -69,7 +69,7 @@ export function AuthModal() {
   }
 
   return (
-    <div className="bg-zinc-950 border-2 border-zinc-900 rounded-2xl p-8 shadow-2xl transition-all duration-300 hover:border-amber-500/60 group/container">
+    <div className="w-full max-w-full sm:max-w-md max-h-[80vh] overflow-y-auto bg-zinc-950 border-2 border-zinc-900 rounded-2xl p-4 sm:p-8 shadow-2xl transition-all duration-300 hover:border-amber-500/60 group/container">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-white">
           {isLogin ? "Welcome Back" : "Create Account"}
