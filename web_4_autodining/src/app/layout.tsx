@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import { SeedProvider } from "@/context/SeedContext";
+import { AuthProvider } from "@/context/AuthContext";
 import { Suspense } from "react";
 import { SeedRedirect } from "@/components/layout/SeedRedirect";
 import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
@@ -32,18 +33,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`dark ${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
         <ClientBody>
           <Suspense fallback={<div>Loading...</div>}>
             <SeedProvider>
-              <Suspense fallback={null}>
-                <SeedRedirect />
-              </Suspense>
-              <V4PopupLayer>
-                {children}
-              </V4PopupLayer>
-              <DynamicDebug />
+              <AuthProvider>
+                <Suspense fallback={null}>
+                  <SeedRedirect />
+                </Suspense>
+                <V4PopupLayer>
+                  {children}
+                </V4PopupLayer>
+                <DynamicDebug />
+              </AuthProvider>
             </SeedProvider>
           </Suspense>
         </ClientBody>
