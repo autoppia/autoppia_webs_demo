@@ -1,0 +1,7 @@
+{
+  "validators": ["./validators.json"],
+  "subnets": ["./subnets.json"],
+  "blocks": ["./blocks.json"],
+  "accounts": ["./accounts.json"],
+  "transfers": ["./transfers.json"]
+}
