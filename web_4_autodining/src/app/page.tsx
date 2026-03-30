@@ -444,7 +444,7 @@ function HomePageContent() {
       r.cuisine.toLowerCase().includes(q) ||
       r.area.toLowerCase().includes(q)
     );
-    const matchesTag = !selectedTag || (r as any).tags?.includes(selectedTag);
+    const matchesTag = !selectedTag || r.tags?.includes(selectedTag);
     return matchesSearch && matchesTag;
   }
 
@@ -515,7 +515,7 @@ function HomePageContent() {
               price: r.price ?? "$$",
               bookings: r.bookings ?? 0,
               times: ["1:00 PM"],
-              tags: (r as any).tags ?? [],
+              tags: r.tags ?? [],
             };
           });
           const mapped = fresh.length > 0 ? fresh : defaultRestaurants;
@@ -573,13 +573,18 @@ function HomePageContent() {
     return order.map((idx) => cheap[idx]);
   }, [filtered, dyn.v1]);
 
+  const marqueeTags = [
+    ...tagOptions.map((tag) => ({ id: `${tag}-a`, tag })),
+    ...tagOptions.map((tag) => ({ id: `${tag}-b`, tag })),
+  ];
+
   return (
     <main suppressHydrationWarning>
       {/* Hero Section with merged Navbar */}
       <section className="mb-10 relative">
         <div className="relative overflow-hidden bg-gradient-to-r from-red-700 via-red-600 to-red-500 text-white shadow-2xl">
           <div className="absolute inset-0 opacity-10 bg-[url('/images/restaurant1.jpg')] bg-cover bg-center" />
-          
+
           <Navbar transparent />
 
           <div className="relative max-w-6xl mx-auto px-8 py-16 md:py-24 space-y-3">
@@ -633,7 +638,7 @@ function HomePageContent() {
                 {/* Fade Masks */}
                 <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
                 <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-                
+
                 <div className="flex items-center gap-2 animate-marquee group-hover/marquee:pause-animation px-4">
                   <button
                     onClick={() => {
@@ -642,30 +647,30 @@ function HomePageContent() {
                     }}
                     className={cn(
                       "px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border",
-                      !selectedTag 
-                        ? "bg-[#dc2626] border-[#dc2626] text-white shadow-[0_0_15px_rgba(220,38,38,0.2)]" 
+                      !selectedTag
+                        ? "bg-[#dc2626] border-[#dc2626] text-white shadow-[0_0_15px_rgba(220,38,38,0.2)]"
                         : "bg-black border-white/20 text-white hover:border-[#dc2626] hover:text-[#dc2626]"
                     )}
                   >
                     All
                   </button>
-                  {[...tagOptions, ...tagOptions].map((tag, idx) => (
+                  {marqueeTags.map(({ id, tag }) => (
                     <button
-                      key={`${tag}-${idx}`}
+                      key={id}
                       onClick={() => {
                         const isSelect = selectedTag !== tag;
                         const newTag = isSelect ? tag : null;
                         setSelectedTag(newTag);
-                        logEvent(EVENT_TYPES.TAG_FILTER_SELECTED, { 
-                          tag: newTag, 
+                        logEvent(EVENT_TYPES.TAG_FILTER_SELECTED, {
+                          tag: newTag,
                           action: isSelect ? "select" : "clear",
-                          search 
+                          search
                         });
                       }}
                       className={cn(
                         "px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border",
-                        selectedTag === tag 
-                          ? "bg-[#dc2626] border-[#dc2626] text-white shadow-[0_0_15px_rgba(220,38,38,0.2)]" 
+                        selectedTag === tag
+                          ? "bg-[#dc2626] border-[#dc2626] text-white shadow-[0_0_15px_rgba(220,38,38,0.2)]"
                           : "bg-black border-white/20 text-white hover:border-[#dc2626] hover:text-[#dc2626]"
                       )}
                     >
@@ -825,7 +830,7 @@ function HomePageContent() {
               <p className="text-gray-500 max-w-md mx-auto">
                 We couldn't find any restaurants of this style in this area. Try clearing your filters or searching for something else!
               </p>
-              <Button 
+              <Button
                 onClick={() => {
                   setSelectedTag(null);
                   setSearch("");

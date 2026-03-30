@@ -7,7 +7,8 @@ import {
   ClockIcon,
 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
-import React, { useMemo, useEffect, useState } from "react";
+import type React from "react";
+import { useMemo, useEffect, useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -27,7 +28,7 @@ import { buildBookingHref } from "@/utils/bookingPaths";
 import Navbar from "@/components/Navbar";
 import { Star, MessageSquare, Trash2, Edit2, Send } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { useReviews } from "@/hooks/useReviews";
+import { useReviews, type Review } from "@/hooks/useReviews";
 import { formatDistanceToNow } from "date-fns";
 
 const photos = [
@@ -63,10 +64,10 @@ export default function RestaurantPage() {
   const [timeOpen, setTimeOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const dyn = useDynamicSystem();
-  
+
   const { currentUser, isAuthenticated } = useAuth();
   const { reviews, addReview, updateReview, deleteReview } = useReviews(id);
-  
+
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -85,7 +86,7 @@ export default function RestaurantPage() {
     setComment("");
   };
 
-  const handleEdit = (review: any) => {
+  const handleEdit = (review: Review) => {
     setEditingId(review.id);
     setRating(review.rating);
     setComment(review.comment);
@@ -159,9 +160,8 @@ export default function RestaurantPage() {
         console.log(`[restaurant/[restaurantId]/page] Restaurant ${id} found:`, found ? found.name : "NOT FOUND");
 
         if (found) {
-          const foundWithRating = found as { rating?: number; stars?: number };
-          const rating = foundWithRating.rating ?? found.stars ?? 4.5;
-          const stars = foundWithRating.stars ?? Math.round(rating);
+          const rating = found.rating ?? found.stars ?? 4.5;
+          const stars = found.stars ?? Math.round(rating);
 
           const mapped: RestaurantView = {
             id: found.id,
@@ -173,7 +173,7 @@ export default function RestaurantPage() {
             bookings: Number(found.bookings ?? 0),
             price: String(found.price ?? "$$"),
             cuisine: String(found.cuisine ?? "International"),
-            tags: (found as any).tags || ["cozy", "modern", "casual"],
+            tags: found.tags ?? ["cozy", "modern", "casual"],
             desc: `Enjoy a delightful experience at ${
               found.name
             }, offering a fusion of flavors in the heart of ${
@@ -675,10 +675,10 @@ export default function RestaurantPage() {
                   ))}
                 </div>
                 <div className="text-gray-500 text-xs font-bold uppercase tracking-widest mt-3 whitespace-nowrap">
-                  {`Verified on other platforms`}
+                  {"Verified on other platforms"}
                 </div>
               </div>
-              
+
               <div className="flex-1 text-center md:text-left">
                 <p className="text-gray-300 text-lg leading-relaxed italic">
                   {`"Autodining users consistently praise the exceptional atmosphere and outstanding food quality at ${r?.name ?? "this restaurant"}. Recent reviews highlighted the excellent service, authentic flavors, and memorable dining experience."`}
@@ -789,7 +789,7 @@ export default function RestaurantPage() {
                       </div>
                     </div>
                     <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{review.comment}</p>
-                    
+
                     {/* Actions for owner */}
                     {isAuthenticated && currentUser?.username === review.username && (
                       <div className="absolute top-4 right-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
