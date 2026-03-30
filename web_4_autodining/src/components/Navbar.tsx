@@ -1,7 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
 
-import { useSeed } from "@/context/SeedContext";
+import { useEffect, useState } from "react";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
@@ -42,7 +41,6 @@ export default function Navbar({
   const dyn = useDynamicSystem();
   const { currentUser, isAuthenticated } = useAuth();
 
-  // V1: Order navigation links dynamically
   const navLinks = [
     { href: "/help", label: "Help", key: "nav-help", textKey: "nav_help" },
     { href: "/about", label: "About", key: "nav-about", textKey: "nav_about" },
@@ -57,61 +55,43 @@ export default function Navbar({
       className={cn(
         "w-full sticky top-0 z-50 transition-all duration-300",
         transparent
-          ? (isScrolled ? "bg-[#dc2626] border-b border-red-700 shadow-lg text-white" : "bg-transparent border-transparent text-white")
-          : "bg-[#dc2626] border-b border-red-700 text-white shadow-lg"
+          ? (isScrolled ? "bg-background/80 backdrop-blur-xl border-b border-white/[0.06]" : "bg-transparent border-transparent")
+          : "bg-background/80 backdrop-blur-xl border-b border-white/[0.06]"
       )}
       id={dyn.v3.getVariant("navbar", ID_VARIANTS_MAP, "navbar")}
     >
       {dyn.v1.addWrapDecoy("navbar-container", (
-        <div className="w-full flex items-center h-20 px-6 gap-6">
-          {/* Logo section - always on left */}
-          <div className="flex items-center gap-4">
-            {showBack && (
-              <SeedLink
-                href="/"
-                className={cn(
-                  "flex items-center justify-center w-10 h-10 rounded-full transition-colors",
-                  transparent ? "hover:bg-white/10 text-white" : "hover:bg-gray-100 text-gray-600"
-                )}
-                id="navbar-back-button"
-              >
-                <ArrowLeft className="w-6 h-6" />
-              </SeedLink>
-            )}
-
-            {dyn.v1.addWrapDecoy("navbar-logo", (
-              <div className="flex items-center gap-3 ml-0">
-                <SeedLink href="/">
-                  {dyn.v1.addWrapDecoy("navbar-logo-link", (
-                    <div
-                      className="bg-white px-3 py-1 rounded flex items-center h-9"
-                      id={dyn.v3.getVariant("navbar-logo", ID_VARIANTS_MAP, "navbar-logo")}
-                    >
-                      <span className="font-bold text-[#dc2626] text-lg">
-                        AutoDining
-                      </span>
-                    </div>
-                  ))}
-                </SeedLink>
-              </div>
-            ), "navbar-logo-wrap")}
-          </div>
-
-          <div className="flex-1" />
-
-          {/* Navigation links - right */}
-          {dyn.v1.addWrapDecoy("navbar-links-container", (
-            <div
-              className="flex items-center gap-6 mr-0"
-              id={dyn.v3.getVariant("navbar-links", ID_VARIANTS_MAP, "navbar-links")}
+        <div className="w-full flex items-center h-16 px-8 gap-6 max-w-[1400px] mx-auto">
+          {showBack && (
+            <SeedLink
+              href="/"
+              className="flex items-center justify-center w-9 h-9 rounded-full border border-white/[0.08] text-white/70 hover:text-white hover:border-amber-500/40 hover:bg-white/[0.06] transition-all"
+              id="navbar-back-button"
             >
+              <ArrowLeft className="w-4 h-4" />
+            </SeedLink>
+          )}
+          {dyn.v1.addWrapDecoy("navbar-logo", (
+            <div className="flex items-center gap-3 ml-0">
+              <SeedLink href="/">
+                {dyn.v1.addWrapDecoy("navbar-logo-link", (
+                  <div className="flex items-center h-9 gap-2.5" id={dyn.v3.getVariant("navbar-logo", ID_VARIANTS_MAP, "navbar-logo")}>
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/20"><span className="text-white font-black text-xs tracking-tighter">AD</span></div>
+                    <span className="font-bold text-white/90 text-lg tracking-tight">Auto<span className="text-amber-500">Dining</span></span>
+                  </div>
+                ))}
+              </SeedLink>
+            </div>
+          ), "navbar-logo-wrap")}
+          <div className="flex-1" />
+          {dyn.v1.addWrapDecoy("navbar-links-container", (
+            <div className="flex items-center gap-1 mr-0" id={dyn.v3.getVariant("navbar-links", ID_VARIANTS_MAP, "navbar-links")}>
               {orderedNavLinks.map((link) => (
                 <SeedLink
                   key={link.key}
                   className={cn(
                     dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, "nav-link"),
-                    "text-sm transition-colors",
-                    "text-white/90 hover:text-white"
+                    "text-[13px] text-white/50 hover:text-amber-400 px-4 py-2 rounded-full hover:bg-white/[0.06] transition-all duration-300 font-medium tracking-wide"
                   )}
                   href={link.href}
                   id={dyn.v3.getVariant(link.key, ID_VARIANTS_MAP, link.key)}
@@ -119,15 +99,14 @@ export default function Navbar({
                   {dyn.v1.addWrapDecoy(link.key, dyn.v3.getVariant(link.textKey, TEXT_VARIANTS_MAP, link.label))}
                 </SeedLink>
               ))}
-
               <Popover>
                 <PopoverTrigger asChild>
                   <button
                     className={cn(
-                      "text-sm font-semibold flex items-center gap-2 px-4 py-2 rounded-full transition-all border",
+                      "ml-2 text-[13px] font-semibold flex items-center gap-2 px-4 py-2 rounded-full transition-all border",
                       isAuthenticated
-                        ? "bg-white/20 text-white border-white/30 hover:bg-white/30"
-                        : "bg-white/10 text-white border-white/20 hover:bg-white/30"
+                        ? "bg-amber-500/15 text-amber-300 border-amber-500/30 hover:bg-amber-500/25"
+                        : "bg-white/[0.06] text-white/70 border-white/[0.08] hover:bg-white/[0.1]"
                     )}
                     id="navbar-account-button"
                   >
@@ -135,7 +114,7 @@ export default function Navbar({
                     {isAuthenticated && currentUser ? currentUser.username : "Account"}
                   </button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 border-none bg-transparent shadow-none mr-6 mt-2" align="end">
+                <PopoverContent className="w-auto p-0 border-none bg-transparent shadow-none mt-2" align="end">
                   <AuthModal />
                 </PopoverContent>
               </Popover>
