@@ -1,6 +1,7 @@
 export interface UserRecord {
   username: string;
   password: string;
+  email?: string;
   /** Not used for assignment; primary book comes from the live catalog (see `user-book-assignment`). */
   allowedBooks: string[];
 }
@@ -76,16 +77,19 @@ export function syncCustomUserAllowedBooks(
 export async function createUser(
   username: string,
   password: string,
+  email?: string,
 ): Promise<UserRecord> {
   if (findUser(username)) {
     throw new Error("Username already exists");
   }
 
   const passwordHash = await hashPassword(password);
+  const trimmedEmail = email?.trim();
   const newUser: UserRecord = {
     username: username.trim(),
     password: passwordHash,
     allowedBooks: [],
+    ...(trimmedEmail ? { email: trimmedEmail } : {}),
   };
 
   if (typeof window !== "undefined") {

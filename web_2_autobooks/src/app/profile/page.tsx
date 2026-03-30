@@ -53,7 +53,9 @@ export default function ProfilePage() {
   const initialProfileState: ProfileFormState = {
     firstName: "",
     lastName: "",
-    email: currentUser ? `${currentUser.username}@autobooks.com` : "",
+    email: currentUser
+      ? currentUser.email || `${currentUser.username}@autobooks.com`
+      : "",
     bio: "",
     location: "",
     website: "",
@@ -69,13 +71,15 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!currentUser) return;
+    const defaultEmail =
+      currentUser.email || `${currentUser.username}@autobooks.com`;
     setProfileForm((prev) => ({
       ...prev,
-      email: prev.email || `${currentUser.username}@autobooks.com`,
+      email: prev.email || defaultEmail,
     }));
     setPreviousProfileValues((prev) => ({
       ...prev,
-      email: prev.email || `${currentUser.username}@autobooks.com`,
+      email: prev.email || defaultEmail,
     }));
   }, [currentUser]);
 

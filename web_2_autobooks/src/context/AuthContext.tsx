@@ -24,6 +24,7 @@ import {
 
 interface AuthUser {
   username: string;
+  email?: string;
   allowedBooks: string[];
   readingList?: string[];
 }
@@ -36,6 +37,7 @@ interface AuthContextValue {
     username: string,
     password: string,
     confirmPassword: string,
+    email: string,
   ) => Promise<void>;
   logout: () => void;
   addAllowedBook: (bookId: string) => void;
@@ -131,8 +133,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             return null;
           }
           const hydrated: AuthUser = {
-            ...parsed,
+            username: parsed.username,
+            email: parsed.email,
             allowedBooks: resolvedAllowedBooks,
+            readingList: parsed.readingList ?? [],
           };
           localStorage.setItem(STORAGE_KEY, JSON.stringify(hydrated));
           return hydrated;
@@ -166,6 +170,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const resolvedAllowedBooks = ensureResolvedAllowedBooks(record.username);
       const authUser: AuthUser = {
         username: record.username,
+        email: record.email,
         allowedBooks: resolvedAllowedBooks,
         readingList: [],
       };
@@ -177,10 +182,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   const signup = useCallback(
-    async (username: string, password: string, confirmPassword: string) => {
+    async (
+      username: string,
+      password: string,
+      confirmPassword: string,
+      email: string,
+    ) => {
       const safeUsername = username.trim();
+      const safeEmail = email.trim();
       if (!safeUsername) {
         throw new Error("Username is required");
+      }
+      if (!safeEmail) {
+        throw new Error("Email is required");
       }
       if (!password || password.length < 3) {
         throw new Error("Password must be at least 3 characters");
@@ -195,16 +209,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         throw new Error(BOOK_LIBRARY_UNAVAILABLE);
       }
 
-      const newUser = await createUser(safeUsername, password);
+      const newUser = await createUser(safeUsername, password, safeEmail);
       const resolvedAllowedBooks = ensureResolvedAllowedBooks(newUser.username);
       syncCustomUserAllowedBooks(newUser.username, resolvedAllowedBooks);
       const authUser: AuthUser = {
         username: newUser.username,
+        email: newUser.email,
         allowedBooks: resolvedAllowedBooks,
         readingList: [],
       };
       persistAuthUser(authUser);
-      logEvent(EVENT_TYPES.REGISTRATION_BOOK, { username: authUser.username });
+      logEvent(EVENT_TYPES.REGISTRATION_BOOK, {
+        username: authUser.username,
+        email: safeEmail,
+      });
     },
     [persistAuthUser],
   );

@@ -13,7 +13,7 @@ import {
   BOOK_LIBRARY_UNAVAILABLE,
   resolvePrimaryAllowedBookId,
 } from "@/shared/user-book-assignment";
-import { BookOpen, Lock, User, UserPlus } from "lucide-react";
+import { BookOpen, Lock, Mail, User, UserPlus } from "lucide-react";
 import { type FormEvent, useMemo, useState } from "react";
 
 const MIN_PASSWORD_LENGTH = 6;
@@ -23,6 +23,7 @@ export default function SignupPage() {
   const router = useSeedRouter();
   const dyn = useDynamicSystem();
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -37,6 +38,7 @@ export default function SignupPage() {
       "Become a member and explore books",
     ],
     username_label: ["Username", "User Name", "Account Name"],
+    email_label: ["Email", "E-mail", "Email address"],
     password_label: ["Password", "Pass", "Security Key"],
     confirm_password_label: [
       "Confirm Password",
@@ -47,6 +49,11 @@ export default function SignupPage() {
       "Choose a username",
       "Pick a username",
       "Enter username",
+    ],
+    email_placeholder: [
+      "you@example.com",
+      "your.email@example.com",
+      "Enter your email",
     ],
     password_placeholder: [
       "Create a password",
@@ -76,6 +83,11 @@ export default function SignupPage() {
       "Please enter a username",
       "Username cannot be empty",
     ],
+    error_email_required: [
+      "Email is required",
+      "Please enter your email",
+      "Email cannot be empty",
+    ],
     error_password_too_short: [
       "Password must be at least {MIN} characters",
       "Password needs {MIN} or more characters",
@@ -97,6 +109,7 @@ export default function SignupPage() {
   const formFields = useMemo(() => {
     const fields = [
       { key: "username", component: "username" },
+      { key: "email", component: "email" },
       { key: "password", component: "password" },
       { key: "confirmPassword", component: "confirmPassword" },
     ];
@@ -127,6 +140,7 @@ export default function SignupPage() {
     event.preventDefault();
     setError(null);
     const normalizedUsername = username.trim();
+    const normalizedEmail = email.trim();
     const normalizedPassword = password.trim();
     const normalizedConfirmPassword = confirmPassword.trim();
 
@@ -136,6 +150,16 @@ export default function SignupPage() {
           "error_username_required",
           dynamicV3TextVariants,
           "Username is required",
+        ),
+      );
+      return;
+    }
+    if (!normalizedEmail) {
+      setError(
+        dyn.v3.getVariant(
+          "error_email_required",
+          dynamicV3TextVariants,
+          "Email is required",
         ),
       );
       return;
@@ -170,6 +194,7 @@ export default function SignupPage() {
         normalizedUsername,
         normalizedPassword,
         normalizedConfirmPassword,
+        normalizedEmail,
       );
       router.push("/profile");
     } catch (err) {
@@ -296,6 +321,44 @@ export default function SignupPage() {
                                     )}
                                     placeholder={dyn.v3.getVariant("username_placeholder", dynamicV3TextVariants, "Choose a username")}
                                     autoComplete="username"
+                                    required
+                                  />
+                                ))}
+                              </div>
+                            ))}
+                          </div>
+                        );
+                      }
+                      if (field.key === "email") {
+                        return (
+                          <div key="email">
+                            {dyn.v1.addWrapDecoy("email-field", (
+                              <div>
+                                <label
+                                  id={dyn.v3.getVariant("signup-email-label", ID_VARIANTS_MAP, "signup-email-label")}
+                                  className={cn(
+                                    "flex items-center gap-2 text-sm font-semibold text-white/80 mb-2",
+                                    dyn.v3.getVariant("form-label", CLASS_VARIANTS_MAP, "")
+                                  )}
+                                >
+                                  <Mail
+                                    id={dyn.v3.getVariant("signup-email-icon", ID_VARIANTS_MAP, "signup-email-icon")}
+                                    className={cn("h-4 w-4 text-secondary", dyn.v3.getVariant("icon-mail", CLASS_VARIANTS_MAP, ""))}
+                                  />
+                                  {dyn.v3.getVariant("email_label", dynamicV3TextVariants, "Email")}
+                                </label>
+                                {dyn.v1.addWrapDecoy("email-input-container", (
+                                  <Input
+                                    id={dyn.v3.getVariant("signup-email-input", ID_VARIANTS_MAP, "signup-email-input")}
+                                    type="email"
+                                    value={email}
+                                    onChange={(event) => setEmail(event.target.value)}
+                                    className={cn(
+                                      "h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20",
+                                      dyn.v3.getVariant("form-input", CLASS_VARIANTS_MAP, "")
+                                    )}
+                                    placeholder={dyn.v3.getVariant("email_placeholder", dynamicV3TextVariants, "you@example.com")}
+                                    autoComplete="email"
                                     required
                                   />
                                 ))}
