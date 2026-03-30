@@ -52,9 +52,9 @@ export default function Page() {
   const [reservationPeople, setReservationPeople] = useState<string | null>(
     null
   );
-  
+
   const { currentUser, isAuthenticated } = useAuth();
-  
+
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [occasion, setOccasion] = useState("");
