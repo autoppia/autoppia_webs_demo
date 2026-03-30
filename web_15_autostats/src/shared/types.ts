@@ -1,0 +1,211 @@
+// Core type definitions for AutoStats blockchain explorer
+
+export interface Block {
+  number: number;
+  hash: string;
+  timestamp: Date;
+  parentHash: string;
+  stateRoot: string;
+  extrinsicsCount: number;
+  eventsCount: number;
+  validator: string;
+  extrinsics: Extrinsic[];
+}
+
+export interface Extrinsic {
+  hash: string;
+  method: string;
+  section: string;
+  args: Record<string, unknown>;
+  signer: string;
+  nonce: number;
+  success: boolean;
+}
+
+export interface BlockWithDetails extends Block {
+  successRate: number;
+  totalFees: number;
+  sizeKB: number;
+  epoch: number;
+  specVersion: number;
+  extrinsicsRoot: string;
+  extrinsicBreakdown: {
+    balances: number;
+    staking: number;
+    subtensorModule: number;
+    system: number;
+  };
+  timeSinceLastBlock: number;
+}
+
+export interface Subnet {
+  id: number;
+  name: string;
+  description: string;
+  emission: number;
+  validatorCount: number;
+  minerCount: number;
+  registrationCost: number;
+  tempo: number;
+  difficulty: number;
+}
+
+export interface Validator {
+  hotkey: string;
+  coldkey: string;
+  stake: number;
+  returnPercentage: number;
+  nominatorCount: number;
+  nominatorChange24h: number;
+  totalDelegated: number;
+  commission: number;
+  subnet: number;
+  rank: number;
+  dominance: number;
+  activeSubnets: number;
+  totalWeight: number;
+  rootStake: number;
+  alphaStake: number;
+  weightChange24h: number;
+}
+
+export interface ValidatorSubnetPerformance {
+  netuid: number;
+  subnetName: string;
+  type: "Key" | "Server";
+  hotkey: string;
+  take: number;
+  proportion: number;
+  subnetWeight: number;
+  subnetBalance: number;
+  noms: number;
+  familyWeight: number;
+  familyBalance: number;
+  dominance: number;
+  divs: number;
+  uid: number;
+  vtrust: number;
+  updated: number;
+}
+
+export interface Account {
+  address: string;
+  balance: number;
+  stakedAmount: number;
+  delegations: Delegation[];
+  transactions: Transfer[];
+}
+
+export interface AccountWithDetails extends Account {
+  rank: number;
+  totalValue: number;
+  stakingRatio: number;
+  delegationCount: number;
+  transactionCount: number;
+  balanceChange24h: number;
+  firstSeen: Date;
+  lastActive: Date;
+  accountType: "validator" | "nominator" | "miner" | "regular";
+  balanceTrend: number[];
+}
+
+export interface Delegation {
+  validator: string;
+  amount: number;
+  timestamp: Date;
+}
+
+export interface Transfer {
+  hash: string;
+  from: string;
+  to: string;
+  amount: number;
+  timestamp: Date;
+  blockNumber: number;
+  fee: number;
+  success: boolean;
+}
+
+export interface NetworkStats {
+  totalIssuance: number;
+  circulatingSupply: number;
+  stakedTAO: number;
+  taoPrice: number;
+  totalValidators: number;
+  totalSubnets: number;
+  totalAccounts: number;
+  blockTime: number;
+}
+
+export interface SeedContextType {
+  seed: string;
+  setSeed: (seed: string) => void;
+}
+
+export interface PriceDataPoint {
+  timestamp: Date;
+  price: number;
+}
+
+export interface CandleDataPoint {
+  timestamp: Date;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+}
+
+export interface VolumeDataPoint {
+  timestamp: Date;
+  volume: number;
+}
+
+export interface SubnetWithTrend extends Subnet {
+  price: number;
+  marketCap: number;
+  volume24h: number;
+  priceChange1h: number;
+  priceChange24h: number;
+  priceChange1w: number;
+  priceChange1m: number;
+  trendData: number[];
+}
+
+export interface ValidatorWithTrend extends Validator {
+  performanceTrend: number[];
+  subnetPerformance: ValidatorSubnetPerformance[];
+}
+
+export interface TransactionWithMethod extends Transfer {
+  method: string;
+  section: string;
+}
+
+export interface TransferWithExtrinsicId extends Transfer {
+  extrinsicId: string; // Format: "blockNumber-index" (e.g., "1234567-2")
+}
+
+export interface WalletState {
+  connected: boolean;
+  address: string | null;
+  walletName: string | null;
+  balance: number | null;
+}
+
+export interface TransferFormData {
+  from: string;
+  to: string;
+  amount: string;
+  memo: string;
+}
+
+export interface MockTransactionResult {
+  hash: string;
+  from: string;
+  to: string;
+  amount: number;
+  fee: number;
+  blockNumber: number;
+  timestamp: Date;
+  status: "success" | "failed";
+}
