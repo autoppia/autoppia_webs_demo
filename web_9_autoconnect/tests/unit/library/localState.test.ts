@@ -3,10 +3,13 @@ import {
   loadAppliedJobs,
   loadHiddenPostIds,
   loadHiddenPosts,
+  loadNotificationReadState,
   loadSavedPosts,
+  NOTIFICATIONS_STATE_EVENT,
   persistAppliedJobs,
   persistHiddenPostIds,
   persistHiddenPosts,
+  persistNotificationReadState,
   persistSavedPosts,
 } from "../../../src/library/localState";
 
@@ -15,10 +18,13 @@ describe("library/localState", () => {
     localStorage.clear();
   });
 
-  it("loadSavedPosts returns [] when missing or invalid", () => {
+  it("loadSavedPosts returns [] when missing, invalid, or non-array", () => {
     expect(loadSavedPosts()).toEqual([]);
 
     localStorage.setItem("web9_saved_posts", "{bad json");
+    expect(loadSavedPosts()).toEqual([]);
+
+    localStorage.setItem("web9_saved_posts", JSON.stringify({ not: "array" }));
     expect(loadSavedPosts()).toEqual([]);
   });
 
@@ -52,6 +58,11 @@ describe("library/localState", () => {
       JSON.stringify(["a", 123, "b", null]),
     );
     expect(loadHiddenPostIds()).toEqual(new Set(["a", "b"]));
+  });
+
+  it("loadHiddenPostIds returns empty Set on invalid JSON", () => {
+    localStorage.setItem("web9_hidden_posts", "{bad");
+    expect(loadHiddenPostIds()).toEqual(new Set());
   });
 
   it("persistHiddenPostIds stores ids as JSON array", () => {
@@ -121,5 +132,22 @@ describe("library/localState", () => {
 
     persistAppliedJobs(applied as any);
     expect(loadAppliedJobs()).toEqual(applied);
+  });
+
+  it("loadNotificationReadState returns {} when missing, invalid, or non-object", () => {
+    expect(loadNotificationReadState()).toEqual({});
+    localStorage.setItem("web9_notification_read_state", "{bad");
+    expect(loadNotificationReadState()).toEqual({});
+    localStorage.setItem("web9_notification_read_state", "42");
+    expect(loadNotificationReadState()).toEqual({});
+  });
+
+  it("persistNotificationReadState writes, reads back, and dispatches event", () => {
+    const spy = jest.fn();
+    window.addEventListener(NOTIFICATIONS_STATE_EVENT, spy);
+    persistNotificationReadState({ n1: true, n2: false });
+    expect(loadNotificationReadState()).toEqual({ n1: true, n2: false });
+    expect(spy).toHaveBeenCalled();
+    window.removeEventListener(NOTIFICATIONS_STATE_EVENT, spy);
   });
 });
