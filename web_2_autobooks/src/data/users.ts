@@ -1,8 +1,12 @@
 export interface UserRecord {
   username: string;
   password: string;
+  email?: string;
+  /** Not used for assignment; primary book comes from the live catalog (see `user-book-assignment`). */
   allowedBooks: string[];
 }
+
+const CUSTOM_USERS_KEY = "autobooks_custom_users";
 
 /** Hash password for storage (CodeQL: avoid clear-text sensitive storage). */
 export async function hashPassword(plain: string): Promise<string> {
@@ -15,31 +19,30 @@ export async function hashPassword(plain: string): Promise<string> {
 }
 
 const TOTAL_USERS = 256;
-const BOOK_POOL_SIZE = 256;
 
-const buildBookId = (value: number): string => `book-${value}`;
-
-export const USERS: UserRecord[] = Array.from({ length: TOTAL_USERS }, (_, index) => {
-  const bookIndex = (index % BOOK_POOL_SIZE) + 1;
-  return {
+export const USERS: UserRecord[] = Array.from(
+  { length: TOTAL_USERS },
+  (_, index) => ({
     username: `user${index + 1}`,
     password: "Passw0rd!",
-    allowedBooks: [buildBookId(bookIndex)],
-  };
-});
+    allowedBooks: [],
+  }),
+);
 
 export function findUser(username: string): UserRecord | undefined {
-  // First check static users
-  const staticUser = USERS.find((user) => user.username.toLowerCase() === username.toLowerCase());
+  const staticUser = USERS.find(
+    (user) => user.username.toLowerCase() === username.toLowerCase(),
+  );
   if (staticUser) return staticUser;
 
-  // Then check localStorage for dynamically created users
   if (typeof window !== "undefined") {
     try {
-      const storedUsers = localStorage.getItem("autobooks_custom_users");
+      const storedUsers = localStorage.getItem(CUSTOM_USERS_KEY);
       if (storedUsers) {
         const customUsers: UserRecord[] = JSON.parse(storedUsers);
-        return customUsers.find((user) => user.username.toLowerCase() === username.toLowerCase());
+        return customUsers.find(
+          (user) => user.username.toLowerCase() === username.toLowerCase(),
+        );
       }
     } catch {
       // ignore corrupted storage
@@ -49,28 +52,54 @@ export function findUser(username: string): UserRecord | undefined {
   return undefined;
 }
 
-export async function createUser(username: string, password: string): Promise<UserRecord> {
+/** Update `allowedBooks` for a custom user after catalog-based resolution. */
+export function syncCustomUserAllowedBooks(
+  username: string,
+  allowedBooks: string[],
+): void {
+  if (typeof window === "undefined") return;
+  try {
+    const storedUsers = localStorage.getItem(CUSTOM_USERS_KEY);
+    if (!storedUsers) return;
+    const customUsers: UserRecord[] = JSON.parse(storedUsers);
+    const lower = username.toLowerCase();
+    const idx = customUsers.findIndex(
+      (u) => u.username.toLowerCase() === lower,
+    );
+    if (idx === -1) return;
+    customUsers[idx] = { ...customUsers[idx], allowedBooks };
+    localStorage.setItem(CUSTOM_USERS_KEY, JSON.stringify(customUsers));
+  } catch {
+    // ignore storage errors
+  }
+}
+
+export async function createUser(
+  username: string,
+  password: string,
+  email?: string,
+): Promise<UserRecord> {
   if (findUser(username)) {
     throw new Error("Username already exists");
   }
 
-  const randomBookIndex =
-    typeof crypto !== "undefined" && crypto.getRandomValues
-      ? ((crypto.getRandomValues(new Uint32Array(1))[0] ?? 0) % BOOK_POOL_SIZE) + 1
-      : ((username.length + (username.charCodeAt(0) ?? 0)) % BOOK_POOL_SIZE) + 1;
   const passwordHash = await hashPassword(password);
+  const trimmedEmail = email?.trim();
   const newUser: UserRecord = {
     username: username.trim(),
     password: passwordHash,
-    allowedBooks: [buildBookId(randomBookIndex)],
+    allowedBooks: [],
+    ...(trimmedEmail ? { email: trimmedEmail } : {}),
   };
 
   if (typeof window !== "undefined") {
     try {
-      const storedUsers = localStorage.getItem("autobooks_custom_users");
-      const customUsers: UserRecord[] = storedUsers ? JSON.parse(storedUsers) : [];
+      const storedUsers = localStorage.getItem(CUSTOM_USERS_KEY);
+      const customUsers: UserRecord[] = storedUsers
+        ? JSON.parse(storedUsers)
+        : [];
       customUsers.push(newUser);
-      localStorage.setItem("autobooks_custom_users", JSON.stringify(customUsers));
+      localStorage.setItem(CUSTOM_USERS_KEY, JSON.stringify(customUsers));
     } catch {
       // ignore storage errors
     }
