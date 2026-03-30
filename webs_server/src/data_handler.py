@@ -15,6 +15,7 @@ import os
 import re
 import json
 import fcntl
+import tempfile
 from datetime import datetime
 from typing import Dict, Any, List, Optional, Tuple
 from loguru import logger
@@ -103,17 +104,30 @@ def _path_for_io_under_base(path: str) -> str:
     return path_real
 
 
-def _safe_remove_temp_for_io(validated_io_path: str) -> None:
+def _mkstemp_tmp_next_to_validated_file(validated_file_io: str) -> str:
     """
-    Safely remove "<validated_io_path>.tmp" only when it resolves under BASE_PATH.
-    This keeps cleanup paths constrained to the same trusted base used for file I/O.
+    Create a unique temp file in the same directory as validated_file_io.
+    Uses the OS temp name generator (not string concat from user-derived paths) so
+    path-injection analysis does not treat the temp path as tainted user input.
     """
+    parent = os.path.dirname(validated_file_io)
+    parent_io = _path_for_io_under_base(parent)
+    fd, path = tempfile.mkstemp(suffix=".tmp", dir=parent_io, text=True)
+    os.close(fd)
+    return path
+
+
+def _unlink_under_base_if_exists(candidate_path: str) -> None:
+    """Remove a file only after _path_for_io_under_base confirms it is under BASE_PATH."""
     try:
-        temp_io = _path_for_io_under_base(f"{validated_io_path}.tmp")
+        safe = _path_for_io_under_base(candidate_path)
     except ValueError:
         return
-    if os.path.exists(temp_io):
-        os.remove(temp_io)
+    try:
+        if os.path.isfile(safe):
+            os.remove(safe)
+    except OSError:
+        pass
 
 
 def _get_validated_main_io_path(web_name: str) -> Optional[Tuple[str, str]]:
@@ -266,9 +280,10 @@ def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], ent
     file_io = _path_for_io_under_base(file_path)
     _ensure_dir(data_dir)
 
-    # Write data atomically
-    temp_path = _path_for_io_under_base(f"{file_io}.tmp")
+    # Write data atomically (temp path from mkstemp, not derived from user-controlled strings)
+    temp_path: Optional[str] = None
     try:
+        temp_path = _mkstemp_tmp_next_to_validated_file(file_io)
         with open(temp_path, "w", encoding="utf-8") as f:
             if HAS_FILELOCK:
                 lock = FileLock(f"{temp_path}.lock")
@@ -282,7 +297,8 @@ def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], ent
         # Atomic replace
         os.replace(temp_path, file_io)
     finally:
-        _safe_remove_temp_for_io(file_io)
+        if temp_path:
+            _unlink_under_base_if_exists(temp_path)
 
     # Update main.json to reference this file
     main_path = os.path.join(data_dir, "main.json")
@@ -568,14 +584,16 @@ def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, 
     # Append new data
     combined_data = existing_data + data
 
-    # Write combined data
-    temp_path = _path_for_io_under_base(f"{file_io}.tmp")
+    # Write combined data (temp path from mkstemp, not derived from user-controlled strings)
+    temp_path: Optional[str] = None
     try:
+        temp_path = _mkstemp_tmp_next_to_validated_file(file_io)
         with open(temp_path, "w", encoding="utf-8") as f:
             json.dump(combined_data, f, indent=2, ensure_ascii=False)
         os.replace(temp_path, file_io)
     finally:
-        _safe_remove_temp_for_io(file_io)
+        if temp_path:
+            _unlink_under_base_if_exists(temp_path)
 
     # Update main.json to reference this file (if not already)
     main_path = os.path.join(data_dir, "main.json")

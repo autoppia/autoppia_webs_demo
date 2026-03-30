@@ -1,14 +1,16 @@
 # Lint and build all web_* apps (discovers them automatically).
 name: Frontend quality
 
+# Least privilege for GITHUB_TOKEN (CodeQL / security policy)
+permissions:
+  contents: read
+  pull-requests: read
+
 on:
   push:
     branches: ['**']
   pull_request:
     branches: ['**']
-
-permissions:
-  contents: read
 
 concurrency:
   group: frontend-quality-${{ github.ref }}
@@ -19,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: read
     outputs:
       apps: ${{ steps.list.outputs.apps }}
     steps:
@@ -44,6 +47,7 @@ jobs:
     permissions:
       actions: write
       contents: read
+      pull-requests: read
     timeout-minutes: 20
     strategy:
       fail-fast: false
