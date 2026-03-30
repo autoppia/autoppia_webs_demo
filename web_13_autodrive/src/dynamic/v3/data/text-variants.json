@@ -658,5 +658,89 @@
     "Cancel booking",
     "Delete trip",
     "Cancel this ride"
+  ],
+  "available-trips-title": [
+    "Available Trips",
+    "Browse Trips",
+    "Trip Offers",
+    "Find a Trip",
+    "Explore Trips",
+    "Open Trips",
+    "Trip Listings",
+    "Discover Trips",
+    "All Trips",
+    "Trip Catalog"
+  ],
+  "available-trips-book-button": [
+    "Book Trip",
+    "Reserve Trip",
+    "Book Now",
+    "Reserve Now",
+    "Confirm Trip",
+    "Book Ride",
+    "Get This Trip",
+    "Select Trip",
+    "Book This Trip",
+    "Reserve Ride"
+  ],
+  "filter-location-label": [
+    "Pickup Location",
+    "From",
+    "Origin",
+    "Pickup",
+    "Starting Point",
+    "Pick up from",
+    "Departure",
+    "Start",
+    "Location",
+    "Pickup Area"
+  ],
+  "filter-destination-label": [
+    "Destination",
+    "To",
+    "Drop off",
+    "Dropoff",
+    "End Point",
+    "Going to",
+    "Arrival",
+    "Finish",
+    "Drop-off",
+    "Destination Area"
+  ],
+  "filter-price-label": [
+    "Price Range",
+    "Budget",
+    "Max Price",
+    "Price Filter",
+    "Cost",
+    "Price Limit",
+    "Fare Range",
+    "Price",
+    "Budget Range",
+    "Cost Range"
+  ],
+  "submit-review-button": [
+    "Submit Review",
+    "Send Review",
+    "Post Review",
+    "Leave Review",
+    "Add Review",
+    "Share Review",
+    "Submit Feedback",
+    "Post Feedback",
+    "Send Feedback",
+    "Share Feedback"
+  ],
+  "review-section-title": [
+    "Trip Reviews",
+    "Reviews",
+    "Guest Reviews",
+    "Rider Reviews",
+    "Trip Feedback",
+    "User Reviews",
+    "Ratings & Reviews",
+    "Trip Ratings",
+    "Feedback",
+    "What riders say"
   ]
 }
