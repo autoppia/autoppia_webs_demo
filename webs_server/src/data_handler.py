@@ -103,6 +103,19 @@ def _path_for_io_under_base(path: str) -> str:
     return path_real
 
 
+def _safe_remove_temp_for_io(validated_io_path: str) -> None:
+    """
+    Safely remove "<validated_io_path>.tmp" only when it resolves under BASE_PATH.
+    This keeps cleanup paths constrained to the same trusted base used for file I/O.
+    """
+    try:
+        temp_io = _path_for_io_under_base(f"{validated_io_path}.tmp")
+    except ValueError:
+        return
+    if os.path.exists(temp_io):
+        os.remove(temp_io)
+
+
 def _get_validated_main_io_path(web_name: str) -> Optional[Tuple[str, str]]:
     """
     Resolve main.json path only from allowlisted project keys (not from web_name in path).
@@ -254,7 +267,7 @@ def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], ent
     _ensure_dir(data_dir)
 
     # Write data atomically
-    temp_path = f"{file_io}.tmp"
+    temp_path = _path_for_io_under_base(f"{file_io}.tmp")
     try:
         with open(temp_path, "w", encoding="utf-8") as f:
             if HAS_FILELOCK:
@@ -269,8 +282,7 @@ def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], ent
         # Atomic replace
         os.replace(temp_path, file_io)
     finally:
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
+        _safe_remove_temp_for_io(file_io)
 
     # Update main.json to reference this file
     main_path = os.path.join(data_dir, "main.json")
@@ -557,14 +569,13 @@ def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, 
     combined_data = existing_data + data
 
     # Write combined data
-    temp_path = f"{file_io}.tmp"
+    temp_path = _path_for_io_under_base(f"{file_io}.tmp")
     try:
         with open(temp_path, "w", encoding="utf-8") as f:
             json.dump(combined_data, f, indent=2, ensure_ascii=False)
         os.replace(temp_path, file_io)
     finally:
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
+        _safe_remove_temp_for_io(file_io)
 
     # Update main.json to reference this file (if not already)
     main_path = os.path.join(data_dir, "main.json")
