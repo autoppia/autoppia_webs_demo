@@ -57,7 +57,7 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
   // Only show loading if we are on the client and it truly is not ready
   if (mounted && !ready) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center text-gray-700">
+      <div className="min-h-screen bg-zinc-800 flex items-center justify-center text-gray-300">
         Loading restaurants…
       </div>
     );
