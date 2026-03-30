@@ -4,6 +4,8 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 describe("logEvent (autodining)", () => {
   beforeEach(() => {
     jest.restoreAllMocks();
+    jest.spyOn(console, "log").mockImplementation(() => undefined);
+    jest.spyOn(console, "error").mockImplementation(() => undefined);
     window.localStorage.clear();
     (globalThis as any).fetch = jest.fn().mockResolvedValue({ ok: true });
   });
@@ -53,5 +55,22 @@ describe("logEvent (autodining)", () => {
     const [, options] = fetchMock.mock.calls[0];
     const payload = JSON.parse((options as RequestInit).body as string);
     expect(payload.data.user_id).toBeNull();
+  });
+
+  test("logs error when fetch rejects", async () => {
+    const error = new Error("network");
+    (globalThis as any).fetch = jest.fn().mockReturnValue({
+      catch: (handler: (err: Error) => void) => {
+        try {
+          handler(error);
+        } catch {
+          // swallow to avoid unhandled rejection in test
+        }
+      },
+    });
+
+    logEvent(EVENT_TYPES.SEARCH_RESTAURANT, { query: "sushi" });
+
+    expect(console.error).toHaveBeenCalledWith("❌ Failed to log event:", error);
   });
 });
