@@ -42,6 +42,10 @@ export function DiscountedProductsSection({
     });
   }, [onSale, bucket]);
 
+  if (onSale.length === 0) {
+    return null;
+  }
+
   return (
     <section
       id={dyn.v3.getVariant("discounted-products-section", ID_VARIANTS_MAP, "discounted-products")}
@@ -59,40 +63,16 @@ export function DiscountedProductsSection({
           "Items with a real list price drop. Pick a minimum discount tier to narrow results."
         )}
       />
-      {onSale.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {DISCOUNT_BUCKETS.map((b) =>
-            dyn.v1.addWrapDecoy(`discount-filter-${b}`, (
-              <button
-                key={b}
-                type="button"
-                id={dyn.v3.getVariant("discount-filter", ID_VARIANTS_MAP, `discount-${b}pct`)}
-                onClick={() => setBucket(b)}
-                className={
-                  bucket === b
-                    ? dyn.v3.getVariant(
-                        "discount-filter-active",
-                        CLASS_VARIANTS_MAP,
-                        "rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow"
-                      )
-                    : dyn.v3.getVariant(
-                        "discount-filter-idle",
-                        CLASS_VARIANTS_MAP,
-                        "rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400"
-                      )
-                }
-              >
-                {t(`discount_at_least_${b}`, `${b}%+ off`)}
-              </button>
-            ))
-          )}
-          {dyn.v1.addWrapDecoy("discount-filter-all", (
+      <div className="flex flex-wrap gap-2">
+        {DISCOUNT_BUCKETS.map((b) =>
+          dyn.v1.addWrapDecoy(`discount-filter-${b}`, (
             <button
+              key={b}
               type="button"
-              id={dyn.v3.getVariant("discount-filter-all", ID_VARIANTS_MAP, "discount-all")}
-              onClick={() => setBucket(null)}
+              id={dyn.v3.getVariant("discount-filter", ID_VARIANTS_MAP, `discount-${b}pct`)}
+              onClick={() => setBucket(b)}
               className={
-                bucket === null
+                bucket === b
                   ? dyn.v3.getVariant(
                       "discount-filter-active",
                       CLASS_VARIANTS_MAP,
@@ -105,16 +85,34 @@ export function DiscountedProductsSection({
                     )
               }
             >
-              {t("discount_show_all", "All deals")}
+              {t(`discount_at_least_${b}`, `${b}%+ off`)}
             </button>
-          ))}
-        </div>
-      )}
-      {onSale.length === 0 ? (
-        <p className="text-sm text-slate-600">
-          {t("discount_none", "No discounted products are available at the moment.")}
-        </p>
-      ) : filtered.length === 0 ? (
+          ))
+        )}
+        {dyn.v1.addWrapDecoy("discount-filter-all", (
+          <button
+            type="button"
+            id={dyn.v3.getVariant("discount-filter-all", ID_VARIANTS_MAP, "discount-all")}
+            onClick={() => setBucket(null)}
+            className={
+              bucket === null
+                ? dyn.v3.getVariant(
+                    "discount-filter-active",
+                    CLASS_VARIANTS_MAP,
+                    "rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow"
+                  )
+                : dyn.v3.getVariant(
+                    "discount-filter-idle",
+                    CLASS_VARIANTS_MAP,
+                    "rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400"
+                  )
+            }
+          >
+            {t("discount_show_all", "All deals")}
+          </button>
+        ))}
+      </div>
+      {filtered.length === 0 ? (
         <p className="text-sm text-slate-600">
           {t("discount_empty", "No products match this discount tier. Try another filter.")}
         </p>
