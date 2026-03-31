@@ -153,7 +153,7 @@ export function Header() {
               {dyn.v1.addWrapDecoy("header-nav-content", (
                 <div className="glass-panel w-full rounded-[28px] border-white/60 bg-white/85 shadow-lg px-4 py-3 shadow-elevated md:px-6 md:py-4">
                   {/* 3-zone layout: Logo | Search | Actions (stable symmetry across pages) */}
-                  <div className="grid w-full grid-cols-1 items-center gap-3 md:grid-cols-[auto,1fr,auto] md:gap-4">
+                  <div className="grid w-full grid-cols-1 items-center gap-3 lg:grid-cols-[auto,1fr,auto] lg:gap-4">
                     {/* Logo */}
                     {dyn.v1.addWrapDecoy("header-logo", (
                       <SeedLink
@@ -254,7 +254,7 @@ export function Header() {
 
                     {/* Desktop Navigation */}
                     {dyn.v1.addWrapDecoy("header-desktop-nav", (
-                      <div className="hidden items-center justify-end gap-3 md:flex">
+                      <div className="hidden items-center justify-end gap-2 lg:flex xl:gap-3">
                         {dyn.v1.addWrapDecoy("header-wishlist-link", (
                           <SeedLink
                             href="/wishlist"
@@ -326,9 +326,9 @@ export function Header() {
                       </div>
                     ))}
 
-                    {/* Mobile Actions */}
+                    {/* Mobile/Tablet Actions */}
                     {dyn.v1.addWrapDecoy("header-mobile-actions", (
-                      <div className="ml-auto flex items-center gap-2 md:hidden">
+                      <div className="ml-auto flex items-center gap-2 lg:hidden">
                         {dyn.v1.addWrapDecoy("header-mobile-cart-link", (
                           <SeedLink
                             href="/cart"
@@ -366,7 +366,7 @@ export function Header() {
           {/* Mobile Menu */}
           {mobileMenuOpen && (
             dyn.v1.addWrapDecoy("header-mobile-menu", (
-              <div className="fixed inset-0 z-50 md:hidden">
+              <div className="fixed inset-0 z-50 lg:hidden">
                 <div
                   className="absolute inset-0 bg-slate-950/50"
                   onClick={() => setMobileMenuOpen(false)}
