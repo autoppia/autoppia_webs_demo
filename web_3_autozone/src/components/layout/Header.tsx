@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
-import { useSeed } from "@/context/SeedContext";
+import { useAuth } from "@/context/AuthContext";
 import { logEvent, EVENT_TYPES } from "@/events";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { cn } from "@/library/utils";
@@ -88,6 +88,7 @@ export function Header() {
   };
 
   const { state } = useCart();
+  const { currentUser, logout } = useAuth();
   const cartItemCount = isMounted ? state.totalItems : 0;
   const categoryRef = useRef<HTMLDivElement>(null);
 
@@ -152,7 +153,7 @@ export function Header() {
               {dyn.v1.addWrapDecoy("header-nav-content", (
                 <div className="glass-panel w-full rounded-[28px] border-white/60 bg-white/85 shadow-lg px-4 py-3 shadow-elevated md:px-6 md:py-4">
                   {/* 3-zone layout: Logo | Search | Actions (stable symmetry across pages) */}
-                  <div className="grid w-full grid-cols-1 items-center gap-3 md:grid-cols-[auto,1fr,auto] md:gap-4">
+                  <div className="grid w-full grid-cols-1 items-center gap-3 lg:grid-cols-[auto,1fr,auto] lg:gap-4">
                     {/* Logo */}
                     {dyn.v1.addWrapDecoy("header-logo", (
                       <SeedLink
@@ -253,7 +254,7 @@ export function Header() {
 
                     {/* Desktop Navigation */}
                     {dyn.v1.addWrapDecoy("header-desktop-nav", (
-                      <div className="hidden items-center justify-end gap-3 md:flex">
+                      <div className="hidden items-center justify-end gap-2 lg:flex xl:gap-3">
                         {dyn.v1.addWrapDecoy("header-wishlist-link", (
                           <SeedLink
                             href="/wishlist"
@@ -291,12 +292,43 @@ export function Header() {
                             </span>
                           </SeedLink>
                         ))}
+                        {isMounted && (
+                          currentUser ? (
+                            <>
+                              <span className="inline-flex h-12 items-center rounded-full border border-slate-200 bg-white/70 px-4 text-sm font-semibold text-slate-700">
+                                {currentUser.username}
+                              </span>
+                              <button
+                                type="button"
+                                className="inline-flex h-12 items-center rounded-full border border-slate-200 bg-white/70 px-4 text-sm font-semibold text-slate-700 hover:bg-white hover:border-slate-300"
+                                onClick={logout}
+                              >
+                                Logout
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <SeedLink
+                                href="/register"
+                                className="inline-flex h-12 items-center rounded-full border border-slate-200 bg-white/70 px-4 text-sm font-semibold text-slate-700 shadow-sm hover:bg-white hover:border-slate-300"
+                              >
+                                Register
+                              </SeedLink>
+                              <SeedLink
+                                href="/login"
+                                className="inline-flex h-12 items-center rounded-full border border-slate-200 bg-white/70 px-4 text-sm font-semibold text-slate-700 shadow-sm hover:bg-white hover:border-slate-300"
+                              >
+                                Login
+                              </SeedLink>
+                            </>
+                          )
+                        )}
                       </div>
                     ))}
 
-                    {/* Mobile Actions */}
+                    {/* Mobile/Tablet Actions */}
                     {dyn.v1.addWrapDecoy("header-mobile-actions", (
-                      <div className="ml-auto flex items-center gap-2 md:hidden">
+                      <div className="ml-auto flex items-center gap-2 lg:hidden">
                         {dyn.v1.addWrapDecoy("header-mobile-cart-link", (
                           <SeedLink
                             href="/cart"
@@ -334,7 +366,7 @@ export function Header() {
           {/* Mobile Menu */}
           {mobileMenuOpen && (
             dyn.v1.addWrapDecoy("header-mobile-menu", (
-              <div className="fixed inset-0 z-50 md:hidden">
+              <div className="fixed inset-0 z-50 lg:hidden">
                 <div
                   className="absolute inset-0 bg-slate-950/50"
                   onClick={() => setMobileMenuOpen(false)}
@@ -408,6 +440,37 @@ export function Header() {
                             {dyn.v3.getVariant("shopping_cart", dynamicV3TextVariants, "Shopping Cart")}
                           </SeedLink>
                         ))}
+                        {isMounted && (
+                          currentUser ? (
+                            <button
+                              type="button"
+                              className="rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                              onClick={() => {
+                                logout();
+                                setMobileMenuOpen(false);
+                              }}
+                            >
+                              Logout ({currentUser.username})
+                            </button>
+                          ) : (
+                            <>
+                              <SeedLink
+                                href="/register"
+                                className="rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                Register
+                              </SeedLink>
+                              <SeedLink
+                                href="/login"
+                                className="rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                Login
+                              </SeedLink>
+                            </>
+                          )
+                        )}
                       </nav>
                     ))}
                   </div>

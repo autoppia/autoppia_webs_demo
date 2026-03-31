@@ -5,7 +5,8 @@ import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { BlurCard } from "@/components/ui/BlurCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Suspense } from "react";
-import { getProductsByCategory, getEffectiveSeed } from "@/dynamic/v2";
+import { getProductsByCategory, getAllProducts, getEffectiveSeed } from "@/dynamic/v2";
+import { DiscountedProductsSection } from "@/components/home/DiscountedProductsSection";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ArrowRight, Package, ShieldCheck, Sparkles } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/events";
@@ -122,6 +123,8 @@ function HomeContent() {
   const electronicProducts = getProductsByCategory("Electronics");
   const fitnessProducts = getProductsByCategory("Fitness");
 
+  const allProducts = getAllProducts();
+
   const isLoadingProducts =
     kitchenProducts.length +
       techProducts.length +
@@ -176,8 +179,9 @@ function HomeContent() {
     if (webAgentId) localStorage.setItem("web_agent_id", webAgentId);
     else localStorage.setItem("web_agent_id", "null");
 
+    // Only set when the harness passes ?user=; do not clear on every home load — that
+    // would wipe the logged-in id from AuthContext and break reviews/events until refresh.
     if (userId) localStorage.setItem("user", userId);
-    else localStorage.setItem("user", "null");
 
     const loadWishlist = () => setWishlistItems(getWishlistItems());
     loadWishlist();
@@ -195,6 +199,12 @@ function HomeContent() {
       }
     }, 0);
     return () => clearTimeout(timeoutId);
+  }, []);
+
+  /** Avoid hydration mismatch: SSR has no catalog; first client paint must match. */
+  const [catalogMounted, setCatalogMounted] = useState(false);
+  useEffect(() => {
+    setCatalogMounted(true);
   }, []);
 
   return (
@@ -274,7 +284,7 @@ function HomeContent() {
             </section>
           ))}
 
-        {isLoadingProducts && (
+        {(!catalogMounted || isLoadingProducts) && (
           <div className="omnizon-container -mt-12 text-center text-sm text-slate-500">
             Loading products...
           </div>
@@ -361,6 +371,13 @@ function HomeContent() {
                 </div>
               </section>
             ))
+          )}
+
+          {catalogMounted && !isLoadingProducts && allProducts.length > 0 && (
+            <DiscountedProductsSection
+              allProducts={allProducts}
+              effectiveSeed={effectiveSeed}
+            />
           )}
 
           {/* Product Highlights */}
