@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { dynamicDataProvider } from "@/dynamic/v2";
 import { useSeed } from "@/context/SeedContext";
 
+const SEED_DATA_READY_EVENT = "autocinema:seedDataReady";
 const LOADING_UI = (
   <div className="min-h-screen bg-neutral-950 text-white flex items-center justify-center">
     <span className="text-white/80">Loading film library…</span>
@@ -30,7 +31,10 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
     dynamicDataProvider
       .whenReady()
       .then(() => {
-        if (!cancelled) setReady(true);
+        if (!cancelled) {
+          setReady(true);
+          window.dispatchEvent(new Event(SEED_DATA_READY_EVENT));
+        }
       })
       .catch((error) => {
         console.error("[autocinema] Data load failed", error);
@@ -57,6 +61,7 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
       try {
         await dynamicDataProvider.reload();
         setReady(true);
+        window.dispatchEvent(new Event(SEED_DATA_READY_EVENT));
       } catch (error) {
         console.error("[autocinema] Failed to reload data on seed change", error);
         setReady(true);

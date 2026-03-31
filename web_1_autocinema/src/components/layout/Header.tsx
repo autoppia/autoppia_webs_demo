@@ -2,6 +2,7 @@
 
 import { Film } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
 import { useAuth } from "@/context/AuthContext";
@@ -17,11 +18,41 @@ const NAV_LINKS = [
 ];
 
 export function Header() {
+  const [mounted, setMounted] = useState(false);
   const { seed } = useSeed();
   const dyn = useDynamicSystem();
   const { currentUser, logout } = useAuth();
   const pathname = usePathname();
   const router = useSeedRouter();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Avoid hydration mismatches (auth/localStorage, dynamic variants, pathname).
+  // Server and first client render return the same placeholder markup.
+  if (!mounted) {
+    return (
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-neutral-950/80 backdrop-blur">
+        <div className="mx-auto flex w-full flex-col gap-2 px-6 py-4 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Film className="h-6 w-6 text-secondary" />
+              <div>
+                <p className="text-lg font-semibold uppercase tracking-widest">Autocinema</p>
+                <p className="text-xs uppercase text-white/50">AI Film Library</p>
+              </div>
+            </div>
+          </div>
+          <nav className="flex flex-wrap items-center gap-4 text-sm text-white/70">
+            <span className="h-4 w-16 rounded bg-white/10" />
+            <span className="h-4 w-16 rounded bg-white/10" />
+            <span className="h-4 w-16 rounded bg-white/10" />
+          </nav>
+        </div>
+      </header>
+    );
+  }
 
   const isActive = (href: string) => {
     if (!pathname) return false;

@@ -22,6 +22,7 @@ export interface RestaurantGenerated {
   stars?: number; // stars entero 1-5
   price?: string;
   bookings?: number;
+  tags?: string[];
 }
 
 type DatasetRestaurant = {
@@ -40,7 +41,31 @@ type DatasetRestaurant = {
   staticReviews?: number;
   staticBookings?: number;
   staticPrices?: string;
+  tags?: string[];
 };
+
+/**
+ * Generate tags based on cuisine
+ */
+function generateTags(cuisine: string, index: number): string[] {
+  const baseTags = ["top-rated", "local favourite", "outdoor seating", "good for groups", "romantic"];
+  const cuisineTags: Record<string, string[]> = {
+    "Italian": ["pasta", "pizza", "homemade", "authentic"],
+    "French": ["gourmet", "fine dining", "wine list", "romantic"],
+    "Japanese": ["sushi", "fresh", "minimalist", "tea"],
+    "Mexican": ["spicy", "tacos", "vibrant", "margaritas"],
+    "American": ["burgers", "classic", "family friendly", "casual"],
+    "Spanish": ["tapas", "paella", "lively", "sharing"],
+    "International": ["fusion", "modern", "creative", "diverse"],
+  };
+
+  const specificTags = cuisineTags[cuisine] || cuisineTags.International;
+  const selectedSpecific = specificTags[index % specificTags.length];
+  const selectedBase = baseTags[(index + 2) % baseTags.length];
+  const selectedBase2 = baseTags[(index + 5) % baseTags.length];
+
+  return [selectedSpecific, selectedBase, selectedBase2].filter(Boolean);
+}
 
 // Cache for loaded restaurants
 export let dynamicRestaurants: RestaurantGenerated[] = [];
@@ -75,18 +100,21 @@ function normalizeRestaurantWithIndex(
     const reviews = r.reviews ?? r.staticReviews ?? 0;
     const bookings = r.bookings ?? r.staticBookings ?? 0;
     const price = r.price || r.staticPrices || "$$";
+    const cuisine = r.cuisine || "International";
+    const tags = r.tags || generateTags(cuisine, index);
 
     return {
       id: r.id || `gen-${index + 1}`,
       name: normalizedName,
       image: normalizedImage,
-      cuisine: r.cuisine || "International",
+      cuisine,
       area: r.area || "Downtown",
       reviews,
       rating,
       stars,
       price,
       bookings,
+      tags,
     };
 }
 

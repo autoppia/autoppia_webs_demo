@@ -1,0 +1,1402 @@
+[
+  {
+    "address": "5GV5L51H7Kk3d8ojDri5QhvAFmx66kKPskfsjoeb4uuMd1Vd",
+    "balance": 29378.43,
+    "stakedAmount": 20724.8507,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5q9T6Ptc2rfXHJBd3w6daNHSLyeXfV92yq6cnt48Pb5hkSrP",
+    "balance": 83341.1301,
+    "stakedAmount": 19108.5986,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5QNit5bqhENtDxPXigbseveb4uEE3dNepwoqP4mzTuZPq4Nh",
+    "balance": 8172.7146,
+    "stakedAmount": 27689.1802,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5PDQkfbnQa6ffdoziyeHsfd9ZLavP28Yq3QLSdWGsou8YE6v",
+    "balance": 65952.5175,
+    "stakedAmount": 22817.6268,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5mrU7uWRCXsw97zXdhQPsd23qbkViMNLJxsY3voexkcLdRBA",
+    "balance": 10677.0827,
+    "stakedAmount": 34197.3936,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5NzvH6qrNmwSScrhz967wJ592XdH23g1ETQwwWcMe4BpTVqe",
+    "balance": 17088.548,
+    "stakedAmount": 23277.3717,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5rMxCPCHDeks9zgGgcMG5DrNeSESERC8oKgvvqVW2gWLrknL",
+    "balance": 51098.5168,
+    "stakedAmount": 38872.0662,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5uViZEsYBarAAd8mcUTyJZSxP1SYkdtFdqtofRvkSwtyxwRQ",
+    "balance": 97527.8709,
+    "stakedAmount": 1397.5553,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5wpCdPkvkqHWUwDigMwuFKe8H7iV6qYfEgLy43P88kYhBem5",
+    "balance": 17569.8389,
+    "stakedAmount": 22941.0108,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5KrZUPABG1AbWVYazXmJoXrxCtdt3qkrHKeMYqNztjr2duLc",
+    "balance": 9783.8819,
+    "stakedAmount": 37987.5562,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Dyc3X8Kf5qggK7XfwfkTEYwZ4drVgAgYoVSStzXFjFt6Qv3",
+    "balance": 83206.6892,
+    "stakedAmount": 30169.0996,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5i4jw2EpobwaEoJDGACnS1w9GWMvpsU4F93RGD3DyLhQLQTR",
+    "balance": 92787.8563,
+    "stakedAmount": 4442.3171,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5qiqns5Lcs1MCGncya4FM6nyu1pxDECQsp78osnJWryQbow7",
+    "balance": 12291.0026,
+    "stakedAmount": 16885.9918,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5CwCNHnfNFm7t8w1tM2wZM9oV9DcYUrU6Tu4FS7igdCypCVS",
+    "balance": 14193.7879,
+    "stakedAmount": 2439.8977,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "55Dyo54DXFyvj8SKBNQBKGca7GM2FANx5CEHkQ3vShk8qoVh",
+    "balance": 35132.2146,
+    "stakedAmount": 36082.5616,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5TX5yRtb8xnvTUfYJfJ46pBrsc3qAcxm69xXntbEhRoTJecV",
+    "balance": 73149.8435,
+    "stakedAmount": 41953.6158,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5UzRhaekbB1G8ZB1oqHx4kjutEqsDQPMAtQ96ArjrYwbLWNF",
+    "balance": 50490.5611,
+    "stakedAmount": 30224.7765,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "52p4X6SYgjxsH4YH8GEoXoUpNpASUdfdF4dufKnKjuC7arSf",
+    "balance": 45835.196,
+    "stakedAmount": 29475.5691,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5TRN99EQM1X3wCGpKHUVuBe3Vkb2FMzprGWJXg5zUsfJUS3A",
+    "balance": 30329.4001,
+    "stakedAmount": 32041.708,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5WBXqLYhsCRs9mE9bDzvyKYksujUym68We1g8xRgqrmyCbDW",
+    "balance": 3183.326,
+    "stakedAmount": 43952.1426,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5SoEtNcnG7q1C9Ceu4W3L7rLJtkWmECW7HAsV3K4JM4KxZWm",
+    "balance": 66452.6764,
+    "stakedAmount": 38132.573,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5hBLAJ7X5J4zSz6dYLhj1f3pW6iGh69Y3rVrSLJ8cf1wyw8A",
+    "balance": 18336.9998,
+    "stakedAmount": 7308.6432,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5d3vFC46eGPcrDWXT436P6DWVTem9MwoPsj6JBYfcpmCMJRh",
+    "balance": 59297.2116,
+    "stakedAmount": 10448.9107,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5niuBx7LtAH72MJXUy9hNTMFgW4LUinsLC5aJHTQECU6Wou2",
+    "balance": 38016.6069,
+    "stakedAmount": 13129.3701,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "53eNDp4asKt2P3Cdk16nfEJUpWfnkejQ1RCV14CxU4PxExFt",
+    "balance": 65106.3448,
+    "stakedAmount": 38461.5086,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Wjcf9n4isJ9CKoG1MnbRiC2WjTowBQRHQkvGrqDEaf2Avkh",
+    "balance": 99849.988,
+    "stakedAmount": 45222.3256,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Wf4JYTAr5te3xkofCGkcbf9hWJC6XQSsQHUV4YNuinX8ngA",
+    "balance": 30940.0506,
+    "stakedAmount": 38476.6241,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5CzqE9CUoasscts3ApQDKmyHvjodah846XhdQNFidnqWD7SE",
+    "balance": 22028.7723,
+    "stakedAmount": 5373.3016,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5ao7qiLaDhqujvoSiFMNztXeTqTFBCpdCzdAp2Tz7n3bVLjg",
+    "balance": 89564.082,
+    "stakedAmount": 180.8873,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5MrpGgmkZ3Sts6YcCDdCNhnpHJNZKQ1qfrpmgLtkjCF4pa5o",
+    "balance": 45648.3623,
+    "stakedAmount": 13383.0144,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5cau1YY8veGZzQMnfufRhZDMWxfgGaNxyX8pgYD2UxEB9hf8",
+    "balance": 98740.6728,
+    "stakedAmount": 26866.6083,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5APL5w3Wmd9j2jfDYhKdHqxE6ALpG2GCBHje9Foi6P2ARwBQ",
+    "balance": 7751.619,
+    "stakedAmount": 7126.3814,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "51qvwJgxTVeBxhXhS32eVziy7cnTpjLGKJwGEdb43BwHixwJ",
+    "balance": 71553.2492,
+    "stakedAmount": 30588.229,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Po7Ldgjs78mGzd3aCKPFzb4Ut21zpUdqLEuVUFwfrXBC8kC",
+    "balance": 40708.4097,
+    "stakedAmount": 32623.7264,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5YVAFX846qCBftCQJ28rQg9NVGY5swSiEwFzK6tk1hYtoyu7",
+    "balance": 21329.9175,
+    "stakedAmount": 11820.8939,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5M9d8nMBs1wyuuUxVVCiqAvFND1ZASH6n21mfEYSpPnyTBt7",
+    "balance": 23342.6826,
+    "stakedAmount": 46629.4808,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5DMuBUT7QSF2zXQp3p7WqZhxPGY774zFiAR25bR4qsw9i8Je",
+    "balance": 23986.5539,
+    "stakedAmount": 22110.2403,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "58xtuLAM6e7bUpEriRXP9nSiEAaiWKxavRdkXhAcWZWhgR4V",
+    "balance": 40002.6818,
+    "stakedAmount": 32783.4504,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5oi2ugbKJHzxvqUrFzRzkgynbXB4zFwh9wAN2ocRRZCAB1FA",
+    "balance": 44977.3929,
+    "stakedAmount": 9024.0038,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5eQeMLZtJuRLAqxKsbM7382o5gZzYGsgDEa38p3j4XEQEVZA",
+    "balance": 57340.6099,
+    "stakedAmount": 48670.0764,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5QLu3noWbkcPszwWAGxZ92RwxH2YfGUeasuQSHpkQ6RR8i3b",
+    "balance": 29406.1215,
+    "stakedAmount": 12736.1588,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5TceEoJqkckYD74dVTzA8ULNTaijTgrnKjkWueYSVEWNqVMD",
+    "balance": 75528.9368,
+    "stakedAmount": 31117.7509,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5vebHbSeXZaTJUzu2KqP2iQh59d3diKtn3ZeB2KxAnekUszA",
+    "balance": 91030.116,
+    "stakedAmount": 23176.9733,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5gaWRi8feB1HLPBBdkbKeKH5fKGFBG3uxGGyq3S8xZx5nGAV",
+    "balance": 97925.8778,
+    "stakedAmount": 46327.4195,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5XN1bjyei4kzyCfGrub4mH7pF8yHGgUfpRxkwRYU35r58i1o",
+    "balance": 6018.2281,
+    "stakedAmount": 48215.0105,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5or1Ed5Q5GwR2CooGmXC2HNok4CupYZPjkuhwW1j376gtta6",
+    "balance": 98208.2376,
+    "stakedAmount": 25950.42,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5JtCjEFarPTiSiqdvfxHUuMbykUkSUeCBNhzuDz1BaaCdhdW",
+    "balance": 27882.3118,
+    "stakedAmount": 33398.2948,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5aCkZxQjRu7fmqRgqfjmZRZKjjjg3DYGB4BZDA9LeXHByEqD",
+    "balance": 61650.1479,
+    "stakedAmount": 15513.7652,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5E5uXwEk95RmGCXQYLVAovEokNhjaFPFjSwvDuwzeR4iJxeo",
+    "balance": 80523.8451,
+    "stakedAmount": 34289.1371,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5h7n85wtVsWPqUuPYGBPfS7VfS1JDwvnCzesWNuFU5q9RC2D",
+    "balance": 42267.102,
+    "stakedAmount": 21504.4048,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5uJQzR5WRf6s8VHw7AGEMGnNoF9qkohzXzMYT7QpxJFM1aKe",
+    "balance": 14644.9611,
+    "stakedAmount": 3753.818,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5KJEhZn9p47pqhNQb1YvQmMftWf69zbfBPnUFEcqQ7tt8bRF",
+    "balance": 26791.0727,
+    "stakedAmount": 4890.018,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "53rbrNk59tbDbwCYMpodHxeVzpVqnzicERHQfFKpLd34GYnM",
+    "balance": 73160.6998,
+    "stakedAmount": 21367.9357,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5X9pVWD3joeFUHwFw878BTm9pumPBFZzkbxeRSsUS3y4tY7h",
+    "balance": 73621.541,
+    "stakedAmount": 31103.7764,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5eGS3HtTV11WfZVMPhxas6NQZYKdzdZDXN33Uzd9T4JDBeXn",
+    "balance": 43686.8551,
+    "stakedAmount": 49015.0034,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5GyQnitwAMa2xLXiaBruSoz6oC488p8dwBARLwQHfHcRsZEi",
+    "balance": 37500.9975,
+    "stakedAmount": 34954.771,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Q9uZyHX7nPCvPNaKXBbLRNWkpCEHq4VVJRaB1jfieYF7k2V",
+    "balance": 75540.6068,
+    "stakedAmount": 28160.4259,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5gmALsCagEH4GCW6cy5u1XJfthZvYS9eKMTaZYTp3Hhxw33y",
+    "balance": 9787.9616,
+    "stakedAmount": 5805.5011,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "51HQtZVmLJUdcX8kkshVo7fTFWT3fnUuJEcatDnCtLK7Vdsu",
+    "balance": 6548.3353,
+    "stakedAmount": 24951.323,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5bfzUKYD6Ue5tyYuryLhAesmSpNdzk55neckqjAbGfZwxZ4d",
+    "balance": 84133.8203,
+    "stakedAmount": 8162.6578,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5ErJnYPMYHSuziQaGbEAFL5L1FRdz4h54z1RLAHbb5AypMJj",
+    "balance": 11067.9068,
+    "stakedAmount": 19400.1843,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Zu29dqWPoASU2wGFPqGSTRRz7uwKsNS8LL7G2KXZhxqmKpB",
+    "balance": 67187.1023,
+    "stakedAmount": 12581.1646,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5nimirJiA73EcC9dXooKHJXVKVeQ6bD6SEmg3msJNeFLFsHK",
+    "balance": 97013.6122,
+    "stakedAmount": 28706.0133,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5v64uCuLoRiGVmGiDdUnFdgjN5H55Q7AZoBUZqxnXK9HN8nL",
+    "balance": 22756.066,
+    "stakedAmount": 44973.7818,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5TcPtSfUkBgrqdppZaF1zf5eeL81t8PXkq3fApdKheczP2Zu",
+    "balance": 5794.4032,
+    "stakedAmount": 32461.5475,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5WVLK9P9mw3BoMpnmoyWSjkSdV371k8KyGVi44nexJEAVeWn",
+    "balance": 63766.3168,
+    "stakedAmount": 15901.2365,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "52qrr7ztnfXsYPLtFDxGm3QzEULhvRd6ktBXakBWn8DsVwcn",
+    "balance": 99522.0314,
+    "stakedAmount": 10490.862,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5DKTTXM73RDxLduunLfjtdPKt4mnPx8Tfgs8ZkBQKhdGrLmU",
+    "balance": 49910.3115,
+    "stakedAmount": 40165.8295,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5ARp9T3q4atNjb8VMTssFVPk8pjdW8zLqcn2aCoTgLnfPCVV",
+    "balance": 733.3725,
+    "stakedAmount": 23018.124,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5XQGueBHN87nWvgPs3uE1MXK3S5uCAM4ghWMHwTHckakkQxn",
+    "balance": 1813.6121,
+    "stakedAmount": 35353.4322,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Ty6oiNHC794bdNPqYHtR497q53GANLNtYNwppnAXpGLg95N",
+    "balance": 69053.1994,
+    "stakedAmount": 17336.5423,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5db2f6N6228HT61eDZsSwcHzq8upQhxNadF8nsq2cx3K31ga",
+    "balance": 80077.7359,
+    "stakedAmount": 41327.297,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5ERFNk1GjjZzENLZw9quAMgGq9uiABTPomRg48RFxhk9HaXU",
+    "balance": 83823.1699,
+    "stakedAmount": 6952.8715,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5yhWQruQkrig1KQrfatjuGgwx1moHivPv8uHta526fiFNUZJ",
+    "balance": 42291.6962,
+    "stakedAmount": 30901.4435,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5v6HUu6sFy3QqPtmGBungsAfqtRcry165cSZhaKvc1UZWAfG",
+    "balance": 6409.7874,
+    "stakedAmount": 174.3495,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5UYcomi2MoixNLL2m3aJgDA1GAgYaqRTTRZBxW2F1y5MjxuZ",
+    "balance": 98562.3114,
+    "stakedAmount": 17795.0369,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Bzh3CBFVvL3nGtpFsWdqgrQ5wqAUS3mxDJHdqy6s1Xc5xZo",
+    "balance": 76831.1421,
+    "stakedAmount": 45195.993,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5m6VNbH5p351gy6nHK2UDi2AWFmN3NH1AZjQvLhdc6nHKixD",
+    "balance": 6289.9467,
+    "stakedAmount": 40324.1133,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Jit1vJRM8X2Hs55ZoMaDEyYMQsLexYmLeC9YNWPXazaxXBn",
+    "balance": 22152.5262,
+    "stakedAmount": 31045.7202,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5zeSh8b5s4vj48KnZeSXbhME7VApAmk7e4JMUjtQNmujdbmk",
+    "balance": 3784.3014,
+    "stakedAmount": 21696.7625,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "57VuerBTGGHNJewQvF5QC6qu3A39J64q7CncB6Tj7D5M7TMw",
+    "balance": 81990.2599,
+    "stakedAmount": 37252.7066,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "52WqB7mJ8Xvg65bxh5KJuLMj5wNzkmXwLbUP4EtUhP7kfhyP",
+    "balance": 77807.5389,
+    "stakedAmount": 26687.6513,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5fHsjKXARkYvxAmixfozCk93F3tL5J5RNpJZtP8qnCpbiNxo",
+    "balance": 58929.003,
+    "stakedAmount": 9243.3385,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5XurmkQk5Nn7UY586ozfkTxtQgaYgLJT46hWCkyVzgxu3Qzm",
+    "balance": 34114.2674,
+    "stakedAmount": 34963.5619,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5SNfguKFnzVhGvN1seufdjoyMW1F4E2oxskNpaXTKEcTPsqz",
+    "balance": 36066.3278,
+    "stakedAmount": 27408.1738,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "53SeVfNjzQHzGUkTQS3kkex3MJwL8rviYmhHrxYkiRattP77",
+    "balance": 91015.1941,
+    "stakedAmount": 6365.5194,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5X9sN4fyf2EQbzvYFFCuYvarRxN9kvNfawx9hM8SQUFdGY3D",
+    "balance": 89480.4111,
+    "stakedAmount": 8362.069,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5JBmGAmWeRJAdxNDhW9fQohby7eynYKVe8cYdkncAx7pde4P",
+    "balance": 87543.4418,
+    "stakedAmount": 30512.1481,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "57TpJnHZ1PVnUYYJDwQFdQLnmrdmJmKKfn6C7bAjpejzWkXo",
+    "balance": 25643.0252,
+    "stakedAmount": 47662.6632,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "55JiZke9n16bnz15uwAvfxWnQXbsxr7PbnVdMMGBN9uS4k2J",
+    "balance": 19754.8994,
+    "stakedAmount": 4702.2156,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5WdzqHM1V1HRskWzoUJT6NiV6v4CrotyNmejDFneZtP5svMx",
+    "balance": 56382.028,
+    "stakedAmount": 38851.583,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "535g9Cp7pDuvDfn9Thek2wHVUFYzLPMqw3Np7PzSsUdeHqLw",
+    "balance": 84800.3015,
+    "stakedAmount": 3962.714,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5xeiW9bFB7dSaYz55UsstStiQaRWdfUQjaeGLwHpVgfPoavv",
+    "balance": 47546.7538,
+    "stakedAmount": 19132.6007,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5NLRrUbaPfhvemfhsgezQd1FHwNF32zVBtPMWt9ZKtkihntU",
+    "balance": 92523.9012,
+    "stakedAmount": 10627.112,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5z3okDStppXN2F6ja6FC2USUkYDkjDQ7LUytTHMEVgSR11ii",
+    "balance": 59143.3941,
+    "stakedAmount": 39449.7384,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5BKZtH8jN7xFLsCZ5scZJe2QaWioBsKmZAtcTGeqVjTZ6Jsb",
+    "balance": 16048.7214,
+    "stakedAmount": 22879.2198,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Xk3bRZvSnDA84ymZSz2uwBEbecSzUpqaSbSTkTraojwueMb",
+    "balance": 18044.9634,
+    "stakedAmount": 15973.087,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5dCFL888jDMLj12SQmS7RUGfZwvQHSXGQkWARiyrARLGKLro",
+    "balance": 21417.598,
+    "stakedAmount": 982.8694,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5G2YcfsCxkFCZHpe2L8ayfJ3NcS9sP2mnRGdbJLxBsW4FTJH",
+    "balance": 81640.6742,
+    "stakedAmount": 555.9593,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "56s6gqTUqqPth8xtxNhpQo9o4ACSzriAbB5RJtY3GyAhQoe6",
+    "balance": 89711.5913,
+    "stakedAmount": 10416.4669,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5v6jHjeoCeESWToC37YxmX4wSkSS2ZAzqoHJwB5ai7V58eZ5",
+    "balance": 18644.8592,
+    "stakedAmount": 29379.6062,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "56mNxRmjKFW53A4wZRCCTym77NNhxhVo1HdkLdgaNXn3nx5u",
+    "balance": 56037.2001,
+    "stakedAmount": 40294.7581,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "57oQHWP7sFPJM2kuCmHpPK28RKRcPHHeXvpFgvQ3vwiWYTqE",
+    "balance": 70871.7391,
+    "stakedAmount": 31908.8954,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5hrMaUAWHdG8LggfTjxBXvEdjNbtZ24cpotZ2QqGpHiPWr2N",
+    "balance": 55768.6054,
+    "stakedAmount": 44643.7213,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5guRgL262dwsZA9EzgjwsAbKnxwvTbD9YBjpCHYP9R9j1m1j",
+    "balance": 88138.471,
+    "stakedAmount": 12220.1008,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5qT8cqkNemJFjz7XMsS7syhhARy8GqwCtXvPK1uCRdxCkMV3",
+    "balance": 23996.7217,
+    "stakedAmount": 19716.2213,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5M6TP7Jh2sc5TAKzCDKBZ22RGuQJFgEXwa48Yqiw1oYoxWuM",
+    "balance": 39508.3818,
+    "stakedAmount": 37837.3891,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5e2zztf9ToUnTyUPrtPhoe8BNkRa8HzukU7A3WFrf6ZYdLZ5",
+    "balance": 6538.2526,
+    "stakedAmount": 26553.4851,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5yizQbynXHy8iD5UBagPNgJoAFwG1g7W5nQNbxnmcWaKf5vn",
+    "balance": 6814.3173,
+    "stakedAmount": 8066.0809,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5PmeRrEJKPe8PgupbYKTHSvLJbRCvevNer2ij3JAidL375CT",
+    "balance": 99051.6181,
+    "stakedAmount": 25156.2652,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5FU3dRkFJCkusQQbHdJJVAhjaxquAwk5Z1SuLgYdmSpVnMp4",
+    "balance": 58139.3541,
+    "stakedAmount": 48584.991,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5a2SzEcQy1XuVqrowQktLddvyyAMiAJpodu3xFezHikLqLdv",
+    "balance": 67265.1744,
+    "stakedAmount": 35527.604,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5YjSvkMtHpWXdPSPDivJg2bdKBx1g8KqSaCkS4YFcU679DFU",
+    "balance": 31500.627,
+    "stakedAmount": 33144.3723,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5ZcLmC7u86gMohgrRsuxbijoKTX1LwSNKfn8TzUeUSn3j3c7",
+    "balance": 28447.995,
+    "stakedAmount": 24006.8598,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5C9ExU94gerP6DyjuuF5aQ1vwd8QGbYX4G6JLPG6zJbMuuT3",
+    "balance": 41364.4495,
+    "stakedAmount": 38701.7885,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5JMLrL8U5vP9VwmQaZTeEDPdPqw2V164MCzCf2NVmwT8rXZz",
+    "balance": 5491.3942,
+    "stakedAmount": 43776.2216,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5MTMmhCFijRn65jB9Dk3UNHPEXbyDhtVYK5MFfYr9LcPbmVR",
+    "balance": 47848.1104,
+    "stakedAmount": 7400.5821,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5zaJDzK2Ce7eGPMtQVPwY7g1PgfJzEcBf3LA9uzH4jYFyoke",
+    "balance": 21785.7443,
+    "stakedAmount": 27838.1202,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5s5m4xzssqFyRveU2KBD1fwYZbA6pxJ27uRkcHppC7Wdhy22",
+    "balance": 20684.1114,
+    "stakedAmount": 18505.5754,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5aaP4P6nTKn6nLWobgxDimUUiz7FVYdZnmxnZge471daQojS",
+    "balance": 42284.7034,
+    "stakedAmount": 17925.0598,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "56J3HnxT6HEiCRheNeuCg5j5xtqh9DD8fhS2V2UMeUQDmJhV",
+    "balance": 10923.708,
+    "stakedAmount": 15158.0472,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5W87TJzwmDGb2d2FyHr7PiXwmZkTSJH8CVHRr3XqzSTVKtdq",
+    "balance": 50911.6875,
+    "stakedAmount": 6927.6381,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5qzwHgZwFq3ZXKUPnYTmJxkobctMEdQGTYfSkXXRxfMw7uEv",
+    "balance": 83272.7795,
+    "stakedAmount": 48603.7107,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5MgP33qt4eF3Ggc2rFgNDooRDzgSfqXQoQFGnvZutNPmsbKF",
+    "balance": 35200.7653,
+    "stakedAmount": 33559.3619,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5dxVcHLk82NJwGzG5morkx7N6F1hL5KbteHFdu6UqbjAV1E2",
+    "balance": 62731.44,
+    "stakedAmount": 46967.1501,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5xRAUiVVaq5TvtRnUHgeSPhZRYmUEMTxr6WyZYJVXGkEdG6b",
+    "balance": 94545.0618,
+    "stakedAmount": 20997.385,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5AdaFnWEciJShV7SHuNMy6fNMp3KSZfULEEtjQozKbUh7Kjt",
+    "balance": 16281.0398,
+    "stakedAmount": 30832.0564,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5kBjwHQSUk4etkdX1TQhje1ys8ef1JzER2KEHJZPXnhGF9v6",
+    "balance": 74225.3942,
+    "stakedAmount": 9521.6368,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5tfd71kG2VGc3e34HUsG4ggwavw7F9KKJ3hD7FhkWHBHWqXs",
+    "balance": 88066.6034,
+    "stakedAmount": 32911.443,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5ag8iqmkSTtD11WVQjSRCSpQVNTT4U4MwWQYpo275VjqA5w5",
+    "balance": 57681.5531,
+    "stakedAmount": 33695.336,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5jAKXAqtYuzDdG9uV4hUhw89wTPgoywm698gFFfiKesxuvqU",
+    "balance": 72403.0816,
+    "stakedAmount": 8612.4821,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "58ZJcBQmrUcCAarU8oEeHKzMuUS187Ys1H1ozEuypSjgYme7",
+    "balance": 13706.4864,
+    "stakedAmount": 27507.3715,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5nCtNqvKiFof5ey5rB8eGnW3AAp2k36zpv1LBt1nxRXmtkRA",
+    "balance": 78154.1974,
+    "stakedAmount": 10886.0104,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5LUUStV2pti8oqn8BGCtkZ8WTVssgcXFjcxzhaMm4FFRuqur",
+    "balance": 33844.7114,
+    "stakedAmount": 23921.9772,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5F5EF8LYu5XkZf3xPEazJnfCbXPMJQp5Dgp8fL4qEudgSTi2",
+    "balance": 25322.154,
+    "stakedAmount": 4694.6755,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "55WeUycQ1T2VMrJDk23cnQ7TPBqdaTMFFtsk6HQLgUXtz1Dk",
+    "balance": 9250.9329,
+    "stakedAmount": 25788.6156,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5dmqWzn45YmLRh43AUSSFE6SQDggYv6ac5QAxaMcuR8rwKfi",
+    "balance": 63159.9014,
+    "stakedAmount": 37448.4569,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "599ct451tPhcbENfthxmkg7JuFopQP6rg2siDsRnboKEtD4Y",
+    "balance": 15166.9404,
+    "stakedAmount": 7824.4145,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5pxhfj2UHtUEYNSNcxaHd7pw8YT7xqEcJHbZFhjxzdLqNyLL",
+    "balance": 80917.0142,
+    "stakedAmount": 47310.3547,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "56njLXkz9pmQhgrE2maTEJZ7mP1cxuHd9NSE1VH81zbwtv3x",
+    "balance": 10117.2011,
+    "stakedAmount": 38545.6935,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5PHXkwE1w1WzXUuVhzmEDPU1NsawHbTkKY8wUQuw35NQQr3J",
+    "balance": 38178.8834,
+    "stakedAmount": 14318.8346,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5uNDn5p2LTsVyPZQBGkV2rkAqXjX6G6HomGCRY54uqogRz8B",
+    "balance": 90121.495,
+    "stakedAmount": 19041.6269,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5pPt27S73aNgMdKCTYLACNyCmZWXrAJyWpA9TMKFQDvpSve4",
+    "balance": 81624.2573,
+    "stakedAmount": 19356.3874,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5gpM5sfTQqq8TUUA85iGiEZUtXVp4vTj2zbTpdk16GXwuHM5",
+    "balance": 68318.8804,
+    "stakedAmount": 40461.0584,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5WpHksdknqaih4FY5Sk1puUpniDpHdAzKz326zAdBzeyDN7A",
+    "balance": 51675.1973,
+    "stakedAmount": 40272.3018,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5TGaZitPtZrphkTktpu3JusgKP3QbkMZ962ZaoBJp3MeVNfE",
+    "balance": 45545.4843,
+    "stakedAmount": 14145.8419,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5jVc8LgAapS6rj6iLh8S2XbAtAvHdxZSqqE1b8yEXcV1RwVG",
+    "balance": 73003.5414,
+    "stakedAmount": 24595.4515,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5d29eUkx1YRM8ui5zpAeM4punvCp5R95YJ85XaN4BAA3NCtd",
+    "balance": 62410.0845,
+    "stakedAmount": 2033.2443,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5wW7BhTqt8DPnTYM9HnzNPzNZQ32N7Zu92A4HVr8wP4vtHgW",
+    "balance": 93924.984,
+    "stakedAmount": 25464.0858,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "53HA6m1r1GNgiUU1kBHezjVbCCgY7Rye3p3oLDy1NbEKdT2V",
+    "balance": 4830.2022,
+    "stakedAmount": 14902.3024,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "51bmnETRctDcgesoufpBdMgWkT4xvx9BPJhcqY486v1cpoP1",
+    "balance": 2606.5759,
+    "stakedAmount": 29899.8132,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5EauXBx6kojHdJGByetLfvAu656GqCgSnF3t1B6CJbPYXR9D",
+    "balance": 23075.0153,
+    "stakedAmount": 29057.6262,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "57RCC7Pq8gwgbwwjxaWJEVrmAu91jbC5NNpmm7CnLkkLsxAG",
+    "balance": 12175.1874,
+    "stakedAmount": 21500.5632,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5f7WiZsu7TsxoHuFvjNePLBeftxoxsLFhNMbtabNEeVBSsD8",
+    "balance": 65715.1537,
+    "stakedAmount": 6184.6854,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5sTmP8xTuyMLx6xCbAx8pG1H3jbhFbq2jjYycsYo3VaYpQrE",
+    "balance": 85834.5297,
+    "stakedAmount": 22764.76,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5k35BFej7rQXW87DFpSHkakZJKgmVA6sjTQbmZNG2SZzy13F",
+    "balance": 75283.3432,
+    "stakedAmount": 3193.4514,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5h46FH3Vr5thTZ3223XpLwo3e3EHfWBHe3YmRh9fkKmK5hAh",
+    "balance": 70050.4141,
+    "stakedAmount": 3582.2725,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5GWHh3wueaEWatB5c7Lt8QLSfTDiPYNMFCFcby2hKmugNSFe",
+    "balance": 26484.9962,
+    "stakedAmount": 25423.865,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5mfXXYFXQ56Q4YMfLkNHFm6J7cjSKUNpX6cjj1x3nmDKSPtt",
+    "balance": 76992.5973,
+    "stakedAmount": 32737.8119,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5dP8JcLd3wbyEku2Fko2qa1bBVvQGuSGfcicLRmsTfxkKTMN",
+    "balance": 63055.9577,
+    "stakedAmount": 19885.2736,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5BfBn9N3D2nk2gU1Z3Wp5T9T3pLDeLPE4WKP3ChvVkaFwhEN",
+    "balance": 18264.0469,
+    "stakedAmount": 32852.2668,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5a1mFJedijJzYjgnJ9ocPG3YbSBYeYEYKVY9bFY4Ed2fJT9L",
+    "balance": 58376.4319,
+    "stakedAmount": 1797.2665,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5gofdRff3yGRrpryST7xiC8rjQboaLB2MbdAogtPKdf2qnxo",
+    "balance": 68481.6055,
+    "stakedAmount": 39405.1738,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5DUiKfohogEg5SdF5DeZ818KqA69TPbgvuh8ePZAaedvaY4X",
+    "balance": 22545.4993,
+    "stakedAmount": 23575.7387,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5xJDLBqxssCzXNp3haGVGJGoWD1ADQFD7nJCm3mApdJ6DWQE",
+    "balance": 95308.3543,
+    "stakedAmount": 15559.4187,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "53jHXvnJnbkYZFSCLKwVXC8MJYQr7sP83dcvfpXCiWDMHvdn",
+    "balance": 5710.8128,
+    "stakedAmount": 36163.6579,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5jvShpEAJatgXPFLhxbzJcLJ8reHyYaBcDwSyStB7LYGKoj9",
+    "balance": 73474.825,
+    "stakedAmount": 45260.4479,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5t7Nhh9iWi4zryYKysj1URvrDXxV5HmoV2r6vvK3MKYGcuLH",
+    "balance": 87555.7519,
+    "stakedAmount": 6635.3101,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "58JRc8qJa48Pp2fZqhtbRqQSmhKF2RJuyWrp5ueyK5xQR9o6",
+    "balance": 13225.8666,
+    "stakedAmount": 15802.0809,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5ByPkVURgNBWirGBuaSUnoAbbk4WhB9g4Gk3khnXfPcJM4co",
+    "balance": 19420.6196,
+    "stakedAmount": 47481.7217,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5ToYAACkHhdAu28MsnGjSQEGuGQr8f2VFY4TAuZSRkQ5q7tL",
+    "balance": 46424.6767,
+    "stakedAmount": 39555.5748,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Gqr5QSkRgWeb4hHruuHmpSBUWKzFKx1b8LBXTrVugPo37o7",
+    "balance": 26877.5382,
+    "stakedAmount": 41449.6982,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5wFTSJ6p82tyGxaJyAPjtXx6HfQAfY469hryi57CJp5Z372q",
+    "balance": 93470.5074,
+    "stakedAmount": 13329.9802,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5NkerJKh5rA2jQsWTirWJ5Pb9DheD1Ds1Z7qgHE7ZtaQES91",
+    "balance": 36999.5858,
+    "stakedAmount": 36850.064,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5o7GvoP8A1VFjaVnrjni8gC2t14VTUuyKCwpiTqvLaTYhNuQ",
+    "balance": 80367.2918,
+    "stakedAmount": 6304.0243,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5TYtzzFBHrivrRrkPTNzpGVCJ4pvKxRTteUxDFVuU4PztRjK",
+    "balance": 45443.0243,
+    "stakedAmount": 26902.9507,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5aths8gzk9P9WLhaR5GqNrWGHU8NDLLv1Qgw6nWUS1GgiKaY",
+    "balance": 57185.893,
+    "stakedAmount": 43696.0351,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5xPYYob8hWVN9WKKTAuhBQLWivP895fJFsYHbZaeUe5HfsWS",
+    "balance": 94746.4056,
+    "stakedAmount": 19339.6962,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "53JPs3HH8LA1wHPYiPaH9kttWDpC5CzcRWbdgAxA8rbYs82V",
+    "balance": 5107.376,
+    "stakedAmount": 15231.7241,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5w5caGkDRLPCFG9u2zS1dT9EsFiY5KqiFyxVkjxUnvWgSNKC",
+    "balance": 92528.1875,
+    "stakedAmount": 5128.9954,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5yvQgy6UFT74hMBBG59oZLC5GrEenUzC4P55UxJSGCxrnfv9",
+    "balance": 96608.4451,
+    "stakedAmount": 45614.4461,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5atJKU1X9HvAzTbficgyhPXuyR689u2oVLBiJEzqLAbjehaA",
+    "balance": 57728.0746,
+    "stakedAmount": 43579.9297,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Zz1khtn5CQLfBChVXXupnV69Dwv1YQUguyN4pRJwCrWZTp2",
+    "balance": 55797.4949,
+    "stakedAmount": 48308.8487,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5JTzLRoSe19gbmKR5sdStUPcRq7n23YFxh3KcT2wBHyWHLyZ",
+    "balance": 30616.1181,
+    "stakedAmount": 22879.6734,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Nh4UNVJRmZSsETdNzqdV91noYVWafPj619r54F8ANL3kjDZ",
+    "balance": 36780.4801,
+    "stakedAmount": 34592.3333,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5fkDVzAxZ6CQWorrZ3HGADRzt7acfUXUaQGXhCQfRyB1bf6p",
+    "balance": 66058.5526,
+    "stakedAmount": 36907.5617,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5hWkvqgCkZ5nbeBoZUF6zRUr8pbdZTzg3wYjRFy3dd2tTo8b",
+    "balance": 69362.1278,
+    "stakedAmount": 25823.5264,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "58idjv5ptMkVDxhvNoTfdwVoD2HLMPh6U2HxW45CrrWeLNL4",
+    "balance": 13639.3567,
+    "stakedAmount": 35338.0214,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Qf3k4ZzNxaGtK3thArxb2qPFeXG3X36oWMH3MVYhj1Lnvna",
+    "balance": 40229.7118,
+    "stakedAmount": 33050.2106,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "51j4BgkZ2WiLoBiWVaY7xLipKoiyR9o7pySHnLbQFau7fMAY",
+    "balance": 1702.2414,
+    "stakedAmount": 35765.382,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5dwxtgfR4AKZSM5XuPj7vQaPycqPjzubdXzpcnnjza15nhVk",
+    "balance": 63070.9059,
+    "stakedAmount": 46461.5758,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5vRuaC51GPzvXzQC8XRmtysAjUHbJzk3Qb24BbiZyR7Y9ij5",
+    "balance": 91063.2391,
+    "stakedAmount": 21475.8692,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "53yVde7CsHSyFL1bsaNeztAtr4ryH3o8GWuTBiZV5p5fdEco",
+    "balance": 5237.2713,
+    "stakedAmount": 47716.035,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5daJfPuEfB4WH7WbByk9pwJnCdqSrTQfm82QCsXjyTps24UC",
+    "balance": 62808.3518,
+    "stakedAmount": 28507.2495,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5jmX9mKJnKtCk9VkMoZemJ45pp8HwsYdADbqks78F8fQP2D9",
+    "balance": 72632.0566,
+    "stakedAmount": 37990.5542,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "59rmGvUSGuRvwDadWUaP44f83yGk9FmHQvanwSW2Y2sU7ZB2",
+    "balance": 16131.111,
+    "stakedAmount": 41883.3503,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5EznEQhpZ5QmUbtDN7m5GAXwdXTYt8fi2sDedeABpGknpgGf",
+    "balance": 24488.737,
+    "stakedAmount": 48831.3162,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Jpzhzr3N3WiiXjPnKcWyBcJA67LzJiYkAQFptDEAs6opHm8",
+    "balance": 29796.1691,
+    "stakedAmount": 40026.8499,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "55KtP8VjTZbXr2oezvUqnZiyCbz8LdeY5ojcetoXknp2LLy1",
+    "balance": 8915.3657,
+    "stakedAmount": 16234.0185,
+    "delegations": [],
+    "transactions": []
+  },
+  {
+    "address": "5Y5Ug9mGkYzTtcZXXY2FJpTopNtMp8vaLCHozYzbGSPuRjVF",
+    "balance": 55000.5178,
+    "stakedAmount": 4490.0341,
+    "delegations": [],
+    "transactions": []
+  }
+]
