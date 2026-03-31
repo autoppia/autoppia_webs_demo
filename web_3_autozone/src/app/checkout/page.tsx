@@ -9,6 +9,8 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { BadgeCheck, ShieldCheck, Truck, ShoppingBag } from "lucide-react";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useAuth } from "@/context/AuthContext";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { useEffect, useMemo, useState } from "react";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
@@ -23,6 +25,7 @@ export const dynamic = "force-dynamic";
 
 export default function CheckoutPage() {
   const router = useSeedRouter();
+  const { isAuthenticated } = useAuth();
   const { state, clearCart } = useCart();
   const { items, totalItems, totalAmount } = state;
   const dyn = useDynamicSystem();
@@ -106,6 +109,25 @@ export default function CheckoutPage() {
           "checkout-container",
           (
             <div className="omnizon-container space-y-10">
+              {!isAuthenticated && (
+                <BlurCard
+                  className="border-amber-200 bg-amber-50/90 p-4 text-sm text-amber-950"
+                  id={dyn.v3.getVariant("checkout-auth-required", ID_VARIANTS_MAP, "checkout-auth-required")}
+                >
+                  <p className="font-semibold">Sign in required to place an order</p>
+                  <p className="mt-1 text-amber-900/90">
+                    Complete checkout only when you are logged in.{" "}
+                    <SeedLink href="/login" className="font-semibold text-slate-900 underline underline-offset-2">
+                      Login
+                    </SeedLink>{" "}
+                    or{" "}
+                    <SeedLink href="/register" className="font-semibold text-slate-900 underline underline-offset-2">
+                      Register
+                    </SeedLink>
+                    .
+                  </p>
+                </BlurCard>
+              )}
               {dyn.v1.addWrapDecoy(
                 "checkout-header",
                 (
@@ -569,7 +591,12 @@ export default function CheckoutPage() {
                             CLASS_VARIANTS_MAP,
                             "w-full rounded-full bg-gradient-to-r from-indigo-500 to-sky-500 px-6 py-4 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all"
                           )}
+                          disabled={!isAuthenticated}
                           onClick={() => {
+                            if (!isAuthenticated) {
+                              toast.error("Please log in or register to complete your order.");
+                              return;
+                            }
                             if (paymentMethod === "online") {
                               const err = validateOnlinePayment({
                                 cardName,

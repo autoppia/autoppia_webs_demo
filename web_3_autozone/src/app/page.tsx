@@ -179,8 +179,9 @@ function HomeContent() {
     if (webAgentId) localStorage.setItem("web_agent_id", webAgentId);
     else localStorage.setItem("web_agent_id", "null");
 
+    // Only set when the harness passes ?user=; do not clear on every home load — that
+    // would wipe the logged-in id from AuthContext and break reviews/events until refresh.
     if (userId) localStorage.setItem("user", userId);
-    else localStorage.setItem("user", "null");
 
     const loadWishlist = () => setWishlistItems(getWishlistItems());
     loadWishlist();

@@ -1,7 +1,15 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { EVENT_TYPES, logEvent } from "@/events";
+import { hashPassword, isStoredPasswordHash } from "@/shared/hash";
 
 const USERS_STORAGE_KEY = "autozone_auth_users_v1";
 const CURRENT_USER_STORAGE_KEY = "autozone_auth_current_user_v1";
@@ -9,13 +17,21 @@ const CURRENT_USER_STORAGE_KEY = "autozone_auth_current_user_v1";
 type StoredUser = {
   id: string;
   username: string;
+  /** SHA-256 hex (preferred) or legacy plain text for backward compatibility. */
   password: string;
+  createdAt: string;
+};
+
+type SessionUser = {
+  id: string;
+  username: string;
   createdAt: string;
 };
 
 type AuthUser = {
   id: string;
   username: string;
+  createdAt: string;
 };
 
 type AuthContextValue = {
@@ -41,6 +57,17 @@ function isStoredUser(value: unknown): value is StoredUser {
   );
 }
 
+function isSessionUser(value: unknown): value is SessionUser {
+  if (!value || typeof value !== "object") return false;
+  const o = value as Partial<SessionUser>;
+  return (
+    typeof o.id === "string" &&
+    o.id.length > 0 &&
+    typeof o.username === "string" &&
+    typeof o.createdAt === "string"
+  );
+}
+
 function readUsers(): StoredUser[] {
   if (typeof window === "undefined") return [];
   try {
@@ -60,25 +87,54 @@ function writeUsers(users: StoredUser[]): void {
 }
 
 function toAuthUser(user: StoredUser): AuthUser {
-  return { id: user.id, username: user.username };
+  return { id: user.id, username: user.username, createdAt: user.createdAt };
+}
+
+function persistSession(session: SessionUser): void {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(session));
+  window.localStorage.setItem("user", session.id);
+}
+
+function emitAuthChanged(): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent("autozone:auth-changed"));
+}
+
+function readInitialSession(): AuthUser | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(CURRENT_USER_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as unknown;
+    if (!isSessionUser(parsed)) return null;
+    return { id: parsed.id, username: parsed.username, createdAt: parsed.createdAt };
+  } catch {
+    return null;
+  }
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(readInitialSession);
+
+  useEffect(() => {
+    const session = readInitialSession();
+    if (session) {
+      setCurrentUser(session);
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("user", session.id);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    try {
-      const raw = window.localStorage.getItem(CURRENT_USER_STORAGE_KEY);
-      if (!raw) return;
-      const parsed = JSON.parse(raw) as unknown;
-      if (!isStoredUser(parsed)) return;
-      const authUser = toAuthUser(parsed);
-      setCurrentUser(authUser);
-      window.localStorage.setItem("user", authUser.id);
-    } catch {
-      // ignore invalid storage
-    }
+    const onStorage = (event: StorageEvent) => {
+      if (event.key !== CURRENT_USER_STORAGE_KEY && event.key !== "user") return;
+      setCurrentUser(readInitialSession());
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
   }, []);
 
   const login = useCallback(async (username: string, password: string) => {
@@ -92,16 +148,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const existing = users.find(
       (user) => user.username.toLowerCase() === normalizedUsername.toLowerCase()
     );
-    if (!existing || existing.password !== normalizedPassword) {
+    if (!existing) {
       throw new Error("Invalid credentials.");
+    }
+
+    const passwordOk = isStoredPasswordHash(existing.password)
+      ? (await hashPassword(normalizedPassword)) === existing.password
+      : existing.password === normalizedPassword;
+
+    if (!passwordOk) {
+      throw new Error("Invalid credentials.");
+    }
+
+    let nextUsers = users;
+    if (!isStoredPasswordHash(existing.password) && existing.password === normalizedPassword) {
+      const upgradedHash = await hashPassword(normalizedPassword);
+      nextUsers = users.map((u) =>
+        u.id === existing.id ? { ...u, password: upgradedHash } : u
+      );
+      writeUsers(nextUsers);
     }
 
     const authUser = toAuthUser(existing);
     setCurrentUser(authUser);
+    persistSession({
+      id: authUser.id,
+      username: authUser.username,
+      createdAt: authUser.createdAt,
+    });
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(existing));
-      window.localStorage.setItem("user", authUser.id);
+      window.dispatchEvent(
+        new CustomEvent("autozone:auth-login", { detail: { userId: authUser.id } })
+      );
     }
+    emitAuthChanged();
     logEvent(EVENT_TYPES.LOGIN, { username: authUser.username, userId: authUser.id });
   }, []);
 
@@ -125,32 +205,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error("Username already exists.");
       }
 
+      const passwordHash = await hashPassword(normalizedPassword);
+      const now = new Date().toISOString();
       const newUser: StoredUser = {
         id: `u-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
         username: normalizedUsername,
-        password: normalizedPassword,
-        createdAt: new Date().toISOString(),
+        password: passwordHash,
+        createdAt: now,
       };
       writeUsers([...users, newUser]);
 
       const authUser = toAuthUser(newUser);
       setCurrentUser(authUser);
+      persistSession({
+        id: authUser.id,
+        username: authUser.username,
+        createdAt: authUser.createdAt,
+      });
       if (typeof window !== "undefined") {
-        window.localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(newUser));
-        window.localStorage.setItem("user", authUser.id);
+        window.dispatchEvent(
+          new CustomEvent("autozone:auth-login", { detail: { userId: authUser.id } })
+        );
       }
+      emitAuthChanged();
       logEvent(EVENT_TYPES.REGISTER, { username: authUser.username, userId: authUser.id });
     },
     []
   );
 
   const logout = useCallback(() => {
+    if (currentUser && typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("autozone:auth-logout", { detail: { previousUserId: currentUser.id } })
+      );
+    }
+    if (currentUser) {
+      logEvent(EVENT_TYPES.LOGOUT, { username: currentUser.username, userId: currentUser.id });
+    }
     setCurrentUser(null);
     if (typeof window !== "undefined") {
       window.localStorage.removeItem(CURRENT_USER_STORAGE_KEY);
       window.localStorage.setItem("user", "null");
     }
-  }, []);
+    emitAuthChanged();
+  }, [currentUser]);
 
   const value = useMemo<AuthContextValue>(
     () => ({

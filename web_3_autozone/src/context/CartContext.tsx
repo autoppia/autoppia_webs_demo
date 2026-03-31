@@ -1,57 +1,36 @@
 "use client";
 
 import type React from "react";
-import { createContext, useContext, useReducer, useEffect } from "react";
-import { readJson, writeJson } from "@/shared/storage";
+import { createContext, useContext, useEffect, useReducer, useRef } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { writeJson } from "@/shared/storage";
+import type { Product, CartItem, CartState } from "@/types/cart";
+import {
+  GUEST_CART_KEY,
+  LEGACY_CART_KEY,
+  getInitialCartStateFromStorage,
+  mergeCartItems,
+  normalizeCartItems,
+  readGuestCartState,
+  readUserCartState,
+  userCartStorageKey,
+} from "@/library/cart-storage";
 
-// Define types
-export interface Product {
-  id: string;
-  title: string;
-  price: string;
-  /** Optional list price when item is on sale (must be above `price`). */
-  originalPrice?: string;
-  image: string;
-  description?: string;
-  category?: string;
-  rating?: number;
-  reviews?: number;
-  brand?: string;
-  inStock?: boolean;
-  color?: string;
-  size?: string;
-  dimensions?: {
-    depth?: string;
-    length?: string;
-    width?: string;
-  };
-  careInstructions?: string;
-}
-
-export interface CartItem extends Product {
-  quantity: number;
-}
-
-interface CartState {
-  items: CartItem[];
-  totalItems: number;
-  totalAmount: number;
-}
+export type { Product, CartItem } from "@/types/cart";
 
 type CartAction =
   | { type: "ADD_TO_CART"; payload: Product }
   | { type: "REMOVE_FROM_CART"; payload: string }
   | { type: "UPDATE_QUANTITY"; payload: { id: string; quantity: number } }
-  | { type: "CLEAR_CART" };
+  | { type: "CLEAR_CART" }
+  | { type: "LOAD_CART"; payload: CartItem[] };
 
-// Initialize cart state
 const initialCartState: CartState = {
   items: [],
   totalItems: 0,
   totalAmount: 0,
 };
 
-// Create context
 const CartContext = createContext<{
   state: CartState;
   dispatch: React.Dispatch<CartAction>;
@@ -68,13 +47,11 @@ const CartContext = createContext<{
   clearCart: () => null,
 });
 
-// Calculate total amount from items
 const calculateTotals = (
   items: CartItem[]
 ): { totalItems: number; totalAmount: number } => {
   return items.reduce(
     (total, item) => {
-      // Convert price (e.g. "$120.99") to number; be defensive in case upstream data is missing/invalid.
       const priceRaw =
         typeof item.price === "string" ? item.price : String(item.price ?? "");
       const parsed = Number.parseFloat(priceRaw.replace(/[^0-9.]/g, ""));
@@ -89,7 +66,6 @@ const calculateTotals = (
   );
 };
 
-// Cart reducer
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
     case "ADD_TO_CART": {
@@ -97,19 +73,16 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
 
       let updatedItems: CartItem[] = [];
       if (existingItemIndex >= 0) {
-        // Item exists, update quantity
         updatedItems = [...state.items];
         updatedItems[existingItemIndex] = {
           ...updatedItems[existingItemIndex],
           quantity: updatedItems[existingItemIndex].quantity + 1,
         };
       } else {
-        // Add new item
         updatedItems = [
           ...state.items,
           {
             ...action.payload,
-            // Ensure price is always a string to avoid downstream calculations crashing.
             price:
               typeof action.payload.price === "string"
                 ? action.payload.price
@@ -142,34 +115,85 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
     case "CLEAR_CART":
       return initialCartState;
 
+    case "LOAD_CART": {
+      const items = normalizeCartItems(action.payload);
+      const { totalItems, totalAmount } = calculateTotals(items);
+      return { items, totalItems, totalAmount };
+    }
+
     default:
       return state;
   }
 };
 
-// Cart provider component
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  // Hydrate cart synchronously on first client render to avoid races where UI actions
-  // (e.g. "Quick add") happen before the effect-based hydration finishes and overwrites state.
-  const [state, dispatch] = useReducer(cartReducer, initialCartState, (initial) => {
-    const parsedCart = readJson<CartState>("omnizonCart", null);
-    if (!parsedCart?.items || parsedCart.items.length === 0) return initial;
+  const { currentUser } = useAuth();
+  const userId = currentUser?.id ?? null;
 
-    const normalizedItems: CartItem[] = parsedCart.items.map((item) => ({
-      ...item,
-      quantity: Math.max(1, Number(item.quantity) || 1),
-    }));
+  const [state, dispatch] = useReducer(cartReducer, initialCartState, () =>
+    getInitialCartStateFromStorage()
+  );
 
-    const { totalItems, totalAmount } = calculateTotals(normalizedItems);
-    return { items: normalizedItems, totalItems, totalAmount };
-  });
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
-  // Save cart to localStorage when it changes
+  /** Avoid persisting merged cart to guest key before React applies authenticated userId. */
+  const skipNextPersistRef = useRef(false);
+  /** After logout flush: wait until userId is null before persisting guest cart. */
+  const skipPersistUntilGuestRef = useRef(false);
+
   useEffect(() => {
-    writeJson("omnizonCart", state);
-  }, [state]);
+    const onLogin = (event: Event) => {
+      const detail = (event as CustomEvent<{ userId: string }>).detail;
+      if (!detail?.userId) return;
+      const guestItems = stateRef.current.items;
+      const userCart = readUserCartState(detail.userId);
+      const userItems = userCart?.items?.length ? normalizeCartItems(userCart.items) : [];
+      const merged = mergeCartItems(guestItems, userItems);
+      const { totalItems, totalAmount } = calculateTotals(merged);
+      const nextState: CartState = { items: merged, totalItems, totalAmount };
+      writeJson(userCartStorageKey(detail.userId), nextState);
+      writeJson(GUEST_CART_KEY, { items: [], totalItems: 0, totalAmount: 0 });
+      writeJson(LEGACY_CART_KEY, { items: [], totalItems: 0, totalAmount: 0 });
+      skipNextPersistRef.current = true;
+      dispatch({ type: "LOAD_CART", payload: merged });
+    };
 
-  // Helper functions
+    const onLogout = (event: Event) => {
+      const detail = (event as CustomEvent<{ previousUserId: string }>).detail;
+      if (!detail?.previousUserId) return;
+      writeJson(userCartStorageKey(detail.previousUserId), stateRef.current);
+      skipPersistUntilGuestRef.current = true;
+      const guest = readGuestCartState();
+      dispatch({ type: "LOAD_CART", payload: guest.items });
+    };
+
+    window.addEventListener("autozone:auth-login", onLogin);
+    window.addEventListener("autozone:auth-logout", onLogout);
+    return () => {
+      window.removeEventListener("autozone:auth-login", onLogin);
+      window.removeEventListener("autozone:auth-logout", onLogout);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (skipNextPersistRef.current) {
+      skipNextPersistRef.current = false;
+      return;
+    }
+    if (skipPersistUntilGuestRef.current) {
+      if (userId !== null) return;
+      skipPersistUntilGuestRef.current = false;
+      writeJson(GUEST_CART_KEY, state);
+      return;
+    }
+    if (userId) {
+      writeJson(userCartStorageKey(userId), state);
+    } else {
+      writeJson(GUEST_CART_KEY, state);
+    }
+  }, [state, userId]);
+
   const addToCart = (product: Product) => {
     dispatch({ type: "ADD_TO_CART", payload: product });
   };
@@ -195,7 +219,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// Custom hook to use cart context
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {

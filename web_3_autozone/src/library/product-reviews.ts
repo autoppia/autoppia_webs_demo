@@ -51,14 +51,26 @@ function writeStore(store: ReviewStore): void {
   }
 }
 
+const SESSION_USER_KEY = "autozone_auth_current_user_v1";
+
 /** Resolved user id for ownership, or null when reviews cannot be attributed. */
 export function getReviewAuthorId(): string | null {
   if (!isBrowser()) return null;
   const raw = window.localStorage.getItem("user");
-  if (raw == null || raw === "" || raw === "null") {
-    return null;
+  if (raw != null && raw !== "" && raw !== "null") {
+    return raw;
   }
-  return raw;
+  try {
+    const sessionRaw = window.localStorage.getItem(SESSION_USER_KEY);
+    if (!sessionRaw) return null;
+    const parsed = JSON.parse(sessionRaw) as { id?: unknown };
+    if (typeof parsed?.id === "string" && parsed.id.length > 0) {
+      return parsed.id;
+    }
+  } catch {
+    /* ignore */
+  }
+  return null;
 }
 
 export function listReviewsForProduct(productId: string): ProductReview[] {

@@ -18,6 +18,7 @@ import {
   type ProductReview,
 } from "@/library/product-reviews";
 import { logEvent, EVENT_TYPES } from "@/events";
+import { useAuth } from "@/context/AuthContext";
 
 type Dyn = ReturnType<typeof useDynamicSystem>;
 
@@ -32,6 +33,7 @@ export function ProductReviewsSection({
   dyn,
   productEventPayload,
 }: ProductReviewsSectionProps) {
+  const { currentUser } = useAuth();
   const t = (key: string, fallback: string) =>
     dyn.v3.getVariant(key, TEXT_VARIANTS_MAP, fallback);
 
@@ -50,11 +52,17 @@ export function ProductReviewsSection({
   useEffect(() => {
     const sync = () => {
       setReviews(listReviewsForProduct(product.id));
-      setAuthorId(getReviewAuthorId());
+      setAuthorId(currentUser?.id ?? getReviewAuthorId());
     };
     sync();
-    return onProductReviewsChange(sync);
-  }, [product.id]);
+    const offReviews = onProductReviewsChange(sync);
+    const onAuth = () => sync();
+    window.addEventListener("autozone:auth-changed", onAuth);
+    return () => {
+      offReviews();
+      window.removeEventListener("autozone:auth-changed", onAuth);
+    };
+  }, [product.id, currentUser?.id]);
 
   const startEdit = (r: ProductReview) => {
     setListActionError(null);
