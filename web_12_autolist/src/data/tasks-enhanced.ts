@@ -7,7 +7,10 @@ export interface RemoteTask {
   name?: string;
   description?: string;
   due_date?: string | null;
+  dueDate?: string | null;
   priority?: number;
+  status?: string;
+  createdAt?: string | null;
   completed_at?: string | null;
 }
 
