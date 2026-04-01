@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useSearchStore } from '@/store/search-store';
 import { useLayout } from '@/contexts/LayoutProvider';
 import { useRestaurants } from '@/contexts/RestaurantContext';
-import { Loader2 } from "lucide-react";
+import { Loader2, Search, SlidersHorizontal, Sparkles } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { useEffect, useState } from "react";
 import QuickOrderModal from "./QuickOrderModal";
@@ -29,6 +29,7 @@ export default function RestaurantsListPage() {
 
   const { restaurants, isLoading } = useRestaurants();
   const cuisineOptions = Array.from(new Set(restaurants.map((r) => r.cuisine)));
+  const featuredCuisineChips = cuisineOptions.slice(0, 6);
   // Offer granular filters even if most items are high-rated
   const ratingOptions = [2.5, 3, 3.5, 4, 4.5, 5];
 
@@ -134,33 +135,46 @@ export default function RestaurantsListPage() {
     >
       {dyn.v1.addWrapDecoy("search-filters", (
       <div
-        className={`mb-8 rounded-2xl border border-emerald-100 bg-white/90 px-4 py-4 shadow-md backdrop-blur ${layout.searchBar.containerClass} ${dyn.v3.getVariant('search-filters-container', CLASS_VARIANTS_MAP, '')}`}
+        className={`mb-8 rounded-3xl border border-emerald-200/80 bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/40 px-4 py-4 shadow-[0_14px_35px_-24px_rgba(5,150,105,0.7)] backdrop-blur md:px-5 md:py-5 ${layout.searchBar.containerClass} ${dyn.v3.getVariant('search-filters-container', CLASS_VARIANTS_MAP, '')}`}
         id={dyn.v3.getVariant('search-filters', ID_VARIANTS_MAP, 'search-filters')}
         {...layout.getElementAttributes('search-filters', 0)}
       >
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+            <Sparkles className="h-4 w-4" />
+            Find your next meal
+          </div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-white/90 px-3 py-1 text-xs font-medium text-zinc-600 shadow-sm">
+            <SlidersHorizontal className="h-3.5 w-3.5 text-emerald-700" />
+            Live filters
+          </div>
+        </div>
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-          <Input
-            type="text"
-            placeholder={dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search by name, cuisine, or menu...")}
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && search.trim()) {
-                logEvent(EVENT_TYPES.SEARCH_RESTAURANT, {
-                  query: search.trim(),
-                  total_results: filtered.length,
-                  trigger: 'enter_key',
-                });
-              }
-            }}
-            className={`h-11 flex-1 rounded-xl border-emerald-100 bg-white shadow-xs focus-visible:ring-emerald-500 ${layout.searchBar.inputClass} ${dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP, "")}`}
-            id={dyn.v3.getVariant('search-input', ID_VARIANTS_MAP, 'search-input')}
-            {...layout.getElementAttributes('search-input', 0)}
-          />
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-700" />
+            <Input
+              type="text"
+              placeholder={dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search by name, cuisine, or menu...")}
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && search.trim()) {
+                  logEvent(EVENT_TYPES.SEARCH_RESTAURANT, {
+                    query: search.trim(),
+                    total_results: filtered.length,
+                    trigger: 'enter_key',
+                  });
+                }
+              }}
+              className={`h-12 flex-1 rounded-2xl border-emerald-200 bg-white pl-10 shadow-sm focus-visible:ring-emerald-500 ${layout.searchBar.inputClass} ${dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP, "")}`}
+              id={dyn.v3.getVariant('search-input', ID_VARIANTS_MAP, 'search-input')}
+              {...layout.getElementAttributes('search-input', 0)}
+            />
+          </div>
           <div className="flex w-full gap-3 lg:w-auto lg:shrink-0">
             <Select value={cuisine || "all"} onValueChange={v => setCuisine(v === "all" ? "" : v)}>
               <SelectTrigger
-                className={`h-11 w-full rounded-xl border-emerald-100 shadow-xs sm:w-44 ${layout.generateSeedClass('cuisine-select')} ${dyn.v3.getVariant("cuisine-select", CLASS_VARIANTS_MAP, "")}`}
+                className={`h-12 w-full rounded-2xl border-emerald-200 bg-white shadow-sm sm:w-44 ${layout.generateSeedClass('cuisine-select')} ${dyn.v3.getVariant("cuisine-select", CLASS_VARIANTS_MAP, "")}`}
                 {...layout.getElementAttributes('cuisine-select', 0)}
               >
                 <SelectValue placeholder="All cuisines" />
@@ -174,7 +188,7 @@ export default function RestaurantsListPage() {
             </Select>
             <Select value={rating || "all"} onValueChange={v => setRating(v === "all" ? "" : v)}>
               <SelectTrigger
-                className={`h-11 w-full rounded-xl border-emerald-100 shadow-xs sm:w-36 ${layout.generateSeedClass('rating-select')} ${dyn.v3.getVariant("rating-select", CLASS_VARIANTS_MAP, "")}`}
+                className={`h-12 w-full rounded-2xl border-emerald-200 bg-white shadow-sm sm:w-36 ${layout.generateSeedClass('rating-select')} ${dyn.v3.getVariant("rating-select", CLASS_VARIANTS_MAP, "")}`}
                 {...layout.getElementAttributes('rating-select', 0)}
               >
                 <SelectValue placeholder="All ratings" />
@@ -188,8 +202,34 @@ export default function RestaurantsListPage() {
             </Select>
           </div>
         </div>
+        <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-emerald-100/80 pt-3">
+          <span className="mr-1 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">Popular:</span>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => setRating("4.5")}
+            className="h-8 rounded-full border border-amber-200 bg-amber-50 px-3 text-xs font-semibold text-amber-800 hover:bg-amber-100"
+          >
+            4.5+ Rated
+          </Button>
+          {featuredCuisineChips.map((chip) => (
+            <Button
+              key={chip}
+              type="button"
+              variant="ghost"
+              onClick={() => setCuisine(chip)}
+              className={`h-8 rounded-full border px-3 text-xs font-semibold transition-colors ${
+                cuisine === chip
+                  ? "border-emerald-300 bg-emerald-100 text-emerald-900"
+                  : "border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50"
+              }`}
+            >
+              {chip}
+            </Button>
+          ))}
+        </div>
         {isFiltered && (
-          <div className="flex justify-end border-t border-emerald-100 pt-3">
+          <div className="mt-4 flex justify-end border-t border-emerald-100 pt-3">
             <Button
               type="button"
               variant="ghost"

@@ -67,7 +67,7 @@ export default function RestaurantCard({ id, name, image, cuisine, rating, descr
         >
           <Card
             id={dyn.v3.getVariant("restaurant-card", ID_VARIANTS_MAP, "restaurant-card")}
-            className={`group flex h-full min-h-[320px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg ${layout.restaurantCard.containerClass} ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")}`}
+            className={`group flex h-full min-h-[320px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-emerald-200/80 bg-white shadow-[0_10px_30px_-22px_rgba(2,132,199,0.75)] transition-all duration-200 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-[0_20px_40px_-28px_rgba(5,150,105,0.8)] ${layout.restaurantCard.containerClass} ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")}`}
           >
             <div
               id={dyn.v3.getVariant("restaurant-image", ID_VARIANTS_MAP, "restaurant-image")}
@@ -83,7 +83,7 @@ export default function RestaurantCard({ id, name, image, cuisine, rating, descr
               />
               <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/35 to-transparent" />
             </div>
-            <CardContent className={`flex flex-1 flex-col space-y-2 p-4 ${layout.restaurantCard.containerClass}`}>
+            <CardContent className={`flex flex-1 flex-col space-y-2 bg-gradient-to-b from-white to-emerald-50/30 p-4 ${layout.restaurantCard.containerClass}`}>
               <div className="flex items-center justify-between">
                 <h2
                   id={dyn.v3.getVariant("restaurant-name", ID_VARIANTS_MAP, "restaurant-name")}
