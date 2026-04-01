@@ -11,13 +11,24 @@ import { useLayout } from "@/contexts/LayoutProvider";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { useSeed } from "@/context/SeedContext";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useHasHydrated } from "@/hooks/use-hydrated";
+
+const STATIC_DYN = {
+  v1: {
+    addWrapDecoy: <T,>(_key: string, node: T) => node,
+    changeOrderElements: (_key: string, count: number) =>
+      Array.from({ length: count }, (_, i) => i),
+  },
+  v3: {
+    getVariant: (_key: string, _map: unknown, fallback: string) => fallback,
+  },
+};
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -56,7 +67,9 @@ function ReviewsSection({
 }) {
   const layout = useLayout();
   const seedStructure = layout.seed;
-  const dyn = useDynamicSystem();
+  const hasHydrated = useHasHydrated();
+  const dynamicSystem = useDynamicSystem();
+  const dyn = hasHydrated ? dynamicSystem : STATIC_DYN;
   if (!reviews?.length) return null;
 
   const reviewsTitleAttributes = layout.getElementAttributes("reviews-title", 0);
@@ -93,11 +106,12 @@ function ReviewsSection({
             id={dyn.v3.getVariant(`review-item-${i}`, ID_VARIANTS_MAP, `review-item-${i}`)}
           >
             <SafeImage
-              src={r.avatar}
+              src={r.avatar.startsWith("/media/") ? "" : r.avatar}
               alt={r.author}
               width={48}
               height={48}
               className="rounded-full object-cover border"
+              fallbackText=""
             />
             <div className="flex-1">
               <div className="flex items-center gap-4 mb-1">
@@ -142,31 +156,15 @@ export default function RestaurantDetailPage({
   restaurantId: string;
 }) {
   const layout = useLayout();
-  const seedStructure = layout.seed;
-  const dyn = useDynamicSystem();
+  const hasHydrated = useHasHydrated();
+  const seedStructure = hasHydrated ? layout.seed : 0;
+  const dynamicSystem = useDynamicSystem();
+  const dyn = hasHydrated ? dynamicSystem : STATIC_DYN;
   const router = useSeedRouter();
-  const { restaurants, isLoading, getRestaurantById } = useRestaurants();
-  const { seed } = useSeed();
+  const { isLoading, getRestaurantById } = useRestaurants();
   const restaurant = useMemo(() => {
-    const found = getRestaurantById(restaurantId);
-    console.log(`[autodelivery] Searching for restaurant ${restaurantId} in ${restaurants.length} restaurants`);
-    if (found) {
-      console.log(`[autodelivery] Restaurant ${restaurantId} found:`, found.name);
-    } else {
-      console.log(`[autodelivery] Restaurant ${restaurantId} not found. Available restaurants (${restaurants.length}):`,
-        restaurants.slice(0, 5).map(r => ({ id: r.id, name: r.name }))
-      );
-    }
-    return found;
-  }, [restaurantId, restaurants, getRestaurantById]);
-
-  // Log V2 status for debugging
-  useEffect(() => {
-    console.log("[autodelivery] V2 Status:", {
-      seed,
-      v2Enabled: dyn.v2.isEnabled(),
-    });
-  }, [seed, dyn]);
+    return getRestaurantById(restaurantId);
+  }, [restaurantId, getRestaurantById]);
 
   const addToCart = useCartStore((state) => state.addToCart);
   const [modalOpen, setModalOpen] = useState(false);
@@ -193,16 +191,32 @@ export default function RestaurantDetailPage({
     }
   }, [restaurant]);
 
-  if (isLoading && !restaurant) {
+  // Keep SSR and first client render deterministic while provider data hydrates.
+  if (!hasHydrated || (isLoading && !restaurant)) {
     return (
-      <div className="flex items-center justify-center py-16">
-        <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
+      <div className="flex items-center justify-center rounded-2xl border border-emerald-100 bg-white/80 py-16 shadow-sm">
+        <Loader2 className="h-6 w-6 animate-spin text-emerald-600" />
       </div>
     );
   }
 
-  if (!restaurant)
-    return <div className="text-lg text-zinc-500">Restaurant not found.</div>;
+  if (!restaurant) {
+    return (
+      <div className="mx-auto mt-8 max-w-3xl rounded-3xl border border-emerald-100 bg-white/90 p-10 text-center shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">AutoDelivery</p>
+        <h2 className="mt-3 text-2xl font-bold text-zinc-900">Restaurant not found</h2>
+        <p className="mt-2 text-zinc-600">
+          The restaurant you are trying to open is not available for this seed. Browse all restaurants to continue ordering.
+        </p>
+        <Button
+          className="mt-6 rounded-full bg-emerald-600 px-6 text-white hover:bg-emerald-700"
+          onClick={() => router.push("/restaurants")}
+        >
+          Back to restaurants
+        </Button>
+      </div>
+    );
+  }
 
   type CartCustomItem = {
     size?: MenuItemSize;
@@ -236,7 +250,7 @@ export default function RestaurantDetailPage({
   return (
     dyn.v1.addWrapDecoy("restaurant-detail-page", (
     <div
-      className={`max-w-5xl mx-auto px-2 sm:px-0 ${layout.restaurantDetail.containerClass} ${dyn.v3.getVariant("container", CLASS_VARIANTS_MAP, "")} ds-${seedStructure}`}
+      className={`mx-auto mt-4 max-w-5xl px-2 sm:px-0 ${layout.restaurantDetail.containerClass} ${dyn.v3.getVariant("container", CLASS_VARIANTS_MAP, "")} ds-${seedStructure}`}
       id={dyn.v3.getVariant('restaurant-detail-page', ID_VARIANTS_MAP, `restaurant-detail-page-${seedStructure}`)}
       aria-label={dyn.v3.getVariant('restaurant-detail-page', TEXT_VARIANTS_MAP, 'Restaurant detail page')}
     >
@@ -411,7 +425,7 @@ export default function RestaurantDetailPage({
           onSubmit={(payload) => {
             setReviews((prev) => [
               {
-                avatar: "/media/avatars/default-avatar.jpg",
+                avatar: "",
                 author: payload.author || "Guest",
                 rating: payload.rating,
                 comment: payload.comment,
@@ -452,7 +466,9 @@ export default function RestaurantDetailPage({
 function CartFab() {
   const items = useCartStore((s) => s.items);
   const router = useSeedRouter();
-  const dyn = useDynamicSystem();
+  const hasHydrated = useHasHydrated();
+  const dynamicSystem = useDynamicSystem();
+  const dyn = hasHydrated ? dynamicSystem : STATIC_DYN;
   const total = items.reduce((acc, i) => acc + i.quantity, 0);
 
   if (total === 0) return null;
@@ -491,7 +507,9 @@ function AddReviewForm({
   restaurant: Restaurant;
   onSubmit: (payload: { author: string; rating: number; comment: string }) => void;
 }) {
-  const dyn = useDynamicSystem();
+  const hasHydrated = useHasHydrated();
+  const dynamicSystem = useDynamicSystem();
+  const dyn = hasHydrated ? dynamicSystem : STATIC_DYN;
   const [author, setAuthor] = useState("");
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");

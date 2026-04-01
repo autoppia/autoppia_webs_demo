@@ -1,6 +1,6 @@
 "use client";
-import { useMemo, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,6 +24,16 @@ interface QuickOrderModalProps {
 export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"popular" | "search" | "recent">("popular");
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const statusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    return () => {
+      if (statusTimerRef.current) {
+        clearTimeout(statusTimerRef.current);
+      }
+    };
+  }, []);
+
   const addToCart = useCartStore((s) => s.addToCart);
   const layout = useSeedLayout();
   const { getNavigationUrl } = useLayout();
@@ -90,6 +100,12 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-4xl max-h-[80vh] flex items-center justify-center">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Loading quick order</DialogTitle>
+            <DialogDescription>
+              Loading restaurants and menu data for quick ordering.
+            </DialogDescription>
+          </DialogHeader>
           <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
         </DialogContent>
       </Dialog>
@@ -149,8 +165,14 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
         restaurantName: restaurant.name,
         source: "quick_order_modal"
       });
-
-      alert(`${popularItem.name} from ${restaurant.name} added to cart!`);
+      setStatusMessage(`${popularItem.name} from ${restaurant.name} added to cart.`);
+      if (statusTimerRef.current) {
+        clearTimeout(statusTimerRef.current);
+      }
+      statusTimerRef.current = setTimeout(() => {
+        setStatusMessage(null);
+        statusTimerRef.current = null;
+      }, 1800);
     }
   };
 
@@ -163,9 +185,9 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
             <DialogTitle className="text-2xl font-bold text-center">
               Quick Order
             </DialogTitle>
-            <p className="text-center text-zinc-600">
+            <DialogDescription className="text-center text-zinc-600">
               Choose a restaurant to start ordering delicious food
-            </p>
+            </DialogDescription>
           </DialogHeader>
 
         {/* Search Bar */}
@@ -185,6 +207,11 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
             className="pl-10"
           />
         </div>
+        {statusMessage && (
+          <div className="mb-4 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-800">
+            {statusMessage}
+          </div>
+        )}
 
         {/* Tabs */}
         <div className="flex gap-1 mb-6 bg-zinc-100 p-1 rounded-lg">

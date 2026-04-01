@@ -1,21 +1,7 @@
 "use client";
 import RestaurantsListPage from "@/components/food/RestaurantsListPage";
-import { useDynamicSystem } from "@/dynamic/shared";
-import { useSeed } from "@/context/SeedContext";
-import { useEffect } from "react";
 
 export default function HomePage() {
-  const dyn = useDynamicSystem();
-  const { seed } = useSeed();
-
-  // Log V2 status for debugging
-  useEffect(() => {
-    console.log("[autodelivery] V2 Status:", {
-      seed,
-      v2Enabled: dyn.v2.isEnabled(),
-    });
-  }, [seed, dyn]);
-
   return (
     <main className="max-w-7xl mx-auto px-4 py-8">
       <section className="mb-10 rounded-2xl bg-gradient-to-r from-[#0f1e1b] via-[#0b442c] to-[#0a8a43] text-white px-8 py-10 shadow-lg">

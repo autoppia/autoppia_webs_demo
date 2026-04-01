@@ -16,6 +16,7 @@ import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynami
 export default function RestaurantsListPage() {
   const layout = useLayout();
   const dyn = useDynamicSystem();
+  const [isClientMounted, setIsClientMounted] = useState(false);
   const search = useSearchStore(s => s.search);
   const setSearch = useSearchStore(s => s.setSearch);
   const cuisine = useSearchStore(s => s.cuisine);
@@ -64,6 +65,10 @@ export default function RestaurantsListPage() {
 
   // Log SEARCH_RESTAURANT event when user searches
   useEffect(() => {
+    setIsClientMounted(true);
+  }, []);
+
+  useEffect(() => {
     if (!restaurants.length) return;
     if (!search.trim()) return;
 
@@ -105,8 +110,18 @@ export default function RestaurantsListPage() {
 
   if (isLoading && restaurants.length === 0) {
     return (
-      <div className="flex items-center justify-center py-16">
-        <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
+      <div className="flex items-center justify-center rounded-2xl border border-emerald-100 bg-white/80 py-16 shadow-sm">
+        <Loader2 className="h-6 w-6 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
+
+  // Prevent hydration mismatch when SSR has empty provider data but client rehydrates
+  // with loaded restaurants before first paint.
+  if (!isClientMounted) {
+    return (
+      <div className="flex items-center justify-center rounded-2xl border border-emerald-100 bg-white/80 py-16 shadow-sm">
+        <Loader2 className="h-6 w-6 animate-spin text-emerald-600" />
       </div>
     );
   }
@@ -119,11 +134,11 @@ export default function RestaurantsListPage() {
     >
       {dyn.v1.addWrapDecoy("search-filters", (
       <div
-        className={`mb-8 bg-white/80 backdrop-blur border border-zinc-200/70 shadow-sm rounded-xl px-4 py-3 flex flex-col gap-3 ${layout.searchBar.containerClass} ${dyn.v3.getVariant('search-filters-container', CLASS_VARIANTS_MAP, '')}`}
+        className={`mb-8 rounded-2xl border border-emerald-100 bg-white/90 px-4 py-4 shadow-md backdrop-blur ${layout.searchBar.containerClass} ${dyn.v3.getVariant('search-filters-container', CLASS_VARIANTS_MAP, '')}`}
         id={dyn.v3.getVariant('search-filters', ID_VARIANTS_MAP, 'search-filters')}
         {...layout.getElementAttributes('search-filters', 0)}
       >
-        <div className="flex flex-col md:flex-row md:items-center gap-3">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
           <Input
             type="text"
             placeholder={dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search by name, cuisine, or menu...")}
@@ -138,14 +153,14 @@ export default function RestaurantsListPage() {
                 });
               }
             }}
-            className={`flex-1 rounded-lg border-zinc-200 shadow-xs focus:ring-2 focus:ring-emerald-500 ${layout.searchBar.inputClass} ${dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP, "")}`}
+            className={`h-11 flex-1 rounded-xl border-emerald-100 bg-white shadow-xs focus-visible:ring-emerald-500 ${layout.searchBar.inputClass} ${dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP, "")}`}
             id={dyn.v3.getVariant('search-input', ID_VARIANTS_MAP, 'search-input')}
             {...layout.getElementAttributes('search-input', 0)}
           />
-          <div className="flex flex-row gap-3 shrink-0">
+          <div className="flex w-full gap-3 lg:w-auto lg:shrink-0">
             <Select value={cuisine || "all"} onValueChange={v => setCuisine(v === "all" ? "" : v)}>
               <SelectTrigger
-                className={`w-44 rounded-lg border-zinc-200 shadow-xs ${layout.generateSeedClass('cuisine-select')} ${dyn.v3.getVariant("cuisine-select", CLASS_VARIANTS_MAP, "")}`}
+                className={`h-11 w-full rounded-xl border-emerald-100 shadow-xs sm:w-44 ${layout.generateSeedClass('cuisine-select')} ${dyn.v3.getVariant("cuisine-select", CLASS_VARIANTS_MAP, "")}`}
                 {...layout.getElementAttributes('cuisine-select', 0)}
               >
                 <SelectValue placeholder="All cuisines" />
@@ -159,7 +174,7 @@ export default function RestaurantsListPage() {
             </Select>
             <Select value={rating || "all"} onValueChange={v => setRating(v === "all" ? "" : v)}>
               <SelectTrigger
-                className={`w-36 rounded-lg border-zinc-200 shadow-xs ${layout.generateSeedClass('rating-select')} ${dyn.v3.getVariant("rating-select", CLASS_VARIANTS_MAP, "")}`}
+                className={`h-11 w-full rounded-xl border-emerald-100 shadow-xs sm:w-36 ${layout.generateSeedClass('rating-select')} ${dyn.v3.getVariant("rating-select", CLASS_VARIANTS_MAP, "")}`}
                 {...layout.getElementAttributes('rating-select', 0)}
               >
                 <SelectValue placeholder="All ratings" />
@@ -174,11 +189,11 @@ export default function RestaurantsListPage() {
           </div>
         </div>
         {isFiltered && (
-          <div className="flex justify-end">
+          <div className="flex justify-end border-t border-emerald-100 pt-3">
             <Button
               type="button"
               variant="ghost"
-              className={`text-emerald-700 hover:text-emerald-800 ${layout.generateSeedClass('reset-filters-btn')} ${dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "")} ${dyn.v3.getVariant('reset-filters-btn-class', CLASS_VARIANTS_MAP, '')}`}
+              className={`h-9 rounded-full border border-emerald-100 px-4 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800 ${layout.generateSeedClass('reset-filters-btn')} ${dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "")} ${dyn.v3.getVariant('reset-filters-btn-class', CLASS_VARIANTS_MAP, '')}`}
               id={dyn.v3.getVariant('reset-filters-btn', ID_VARIANTS_MAP, 'reset-filters-btn')}
               onClick={() => {
                 setSearch("");
@@ -195,7 +210,7 @@ export default function RestaurantsListPage() {
       ))}
       {dyn.v1.addWrapDecoy("restaurants-grid", (
       <div
-        className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 ${layout.grid.containerClass} ${dyn.v3.getVariant('restaurants-grid-class', CLASS_VARIANTS_MAP, '')}`}
+        className={`grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 ${layout.grid.containerClass} ${dyn.v3.getVariant('restaurants-grid-class', CLASS_VARIANTS_MAP, '')}`}
         id={dyn.v3.getVariant('restaurants-grid', ID_VARIANTS_MAP, 'restaurants-grid')}
         {...layout.getElementAttributes('restaurants-grid', 0)}
       >
@@ -226,7 +241,7 @@ export default function RestaurantsListPage() {
           })()
         ) : (
           <div
-            className={`text-zinc-400 text-center col-span-full py-16 text-lg ${layout.generateSeedClass('no-restaurants-message')} ${dyn.v3.getVariant('no-restaurants-message-class', CLASS_VARIANTS_MAP, '')}`}
+            className={`col-span-full rounded-2xl border border-emerald-100 bg-white/80 py-16 text-center text-lg text-zinc-500 ${layout.generateSeedClass('no-restaurants-message')} ${dyn.v3.getVariant('no-restaurants-message-class', CLASS_VARIANTS_MAP, '')}`}
             id={dyn.v3.getVariant('no-restaurants-message', ID_VARIANTS_MAP, 'no-restaurants-message')}
             {...layout.getElementAttributes('no-restaurants-message', 0)}
           >
@@ -237,7 +252,7 @@ export default function RestaurantsListPage() {
       ))}
 
       {filtered.length > itemsPerPage && (
-        <div className={`mt-8 flex flex-col md:flex-row items-center justify-between gap-4 ${dyn.v3.getVariant('pagination-container-class', CLASS_VARIANTS_MAP, '')}`} id={dyn.v3.getVariant('pagination-container', ID_VARIANTS_MAP, 'pagination-container')}>
+        <div className={`mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-emerald-100 bg-white/80 px-4 py-3 md:flex-row ${dyn.v3.getVariant('pagination-container-class', CLASS_VARIANTS_MAP, '')}`} id={dyn.v3.getVariant('pagination-container', ID_VARIANTS_MAP, 'pagination-container')}>
           <div className={dyn.v3.getVariant('pagination-info-class', CLASS_VARIANTS_MAP, 'text-sm text-muted-foreground')}>
             {dyn.v3.getVariant('pagination-info-text', TEXT_VARIANTS_MAP, `Showing ${startIndex + 1}–${Math.min(endIndex, filtered.length)} of ${filtered.length}`)}
           </div>

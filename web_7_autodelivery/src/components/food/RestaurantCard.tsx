@@ -62,41 +62,44 @@ export default function RestaurantCard({ id, name, image, cuisine, rating, descr
         <SeedLink
           href={`/restaurants/${id || 'unknown'}`}
           onClick={handleClick}
+          className="block h-full"
           {...layout.getElementAttributes('VIEW_DELIVERY_RESTAURANT', cardIndex)}
         >
           <Card
             id={dyn.v3.getVariant("restaurant-card", ID_VARIANTS_MAP, "restaurant-card")}
-            className={`hover:shadow-xl transition-shadow duration-200 cursor-pointer ${layout.restaurantCard.containerClass} ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")}`}
+            className={`group flex h-full min-h-[320px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg ${layout.restaurantCard.containerClass} ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")}`}
           >
             <div
               id={dyn.v3.getVariant("restaurant-image", ID_VARIANTS_MAP, "restaurant-image")}
-              className={`relative w-full h-48 rounded-t-xl overflow-hidden ${layout.restaurantCard.imageClass} ${dyn.v3.getVariant("card-image", CLASS_VARIANTS_MAP, "")}`}
+              className={`relative h-52 w-full overflow-hidden ${layout.restaurantCard.imageClass} ${dyn.v3.getVariant("card-image", CLASS_VARIANTS_MAP, "")}`}
             >
               <SafeImage
                 src={image}
                 alt={name}
                 fill
                 style={{ objectFit: 'cover' }}
+                className="transition-transform duration-300 group-hover:scale-105"
                 sizes="(max-width: 768px) 100vw, 400px"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/35 to-transparent" />
             </div>
-            <CardContent className={`p-4 ${layout.restaurantCard.containerClass}`}>
+            <CardContent className={`flex flex-1 flex-col space-y-2 p-4 ${layout.restaurantCard.containerClass}`}>
               <div className="flex items-center justify-between">
                 <h2
                   id={dyn.v3.getVariant("restaurant-name", ID_VARIANTS_MAP, "restaurant-name")}
-                  className={`font-bold text-lg truncate ${layout.restaurantCard.titleClass} ${dyn.v3.getVariant("card-title", CLASS_VARIANTS_MAP, "")}`}
+                  className={`truncate text-lg font-bold text-zinc-900 ${layout.restaurantCard.titleClass} ${dyn.v3.getVariant("card-title", CLASS_VARIANTS_MAP, "")}`}
                 >
                   {name}
                 </h2>
                 <span
                   id={dyn.v3.getVariant("rating-stars", ID_VARIANTS_MAP, "rating-stars")}
-                  className={`bg-green-100 text-green-700 rounded-full px-3 py-1 text-xs font-semibold ${dyn.v3.getVariant("badge", CLASS_VARIANTS_MAP, "")}`}
+                  className={`rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ${dyn.v3.getVariant("badge", CLASS_VARIANTS_MAP, "")}`}
                 >
                   ★ {rating}
                 </span>
               </div>
-              <div className={`text-zinc-500 text-sm mt-1 mb-0.5 ${layout.restaurantCard.descriptionClass}`}>{cuisine}</div>
-              {description && <div className="text-xs text-zinc-400 line-clamp-2">{description}</div>}
+              <div className={`text-sm font-medium text-emerald-700 ${layout.restaurantCard.descriptionClass}`}>{cuisine}</div>
+              {description && <div className="line-clamp-2 text-sm text-zinc-500">{description}</div>}
             </CardContent>
           </Card>
         </SeedLink>

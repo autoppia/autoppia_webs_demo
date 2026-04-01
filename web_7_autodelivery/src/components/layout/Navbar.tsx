@@ -15,27 +15,31 @@ export default function Navbar() {
   return (
     <>
       {dyn.v1.addWrapDecoy("navbar", (
-        <nav className={`sticky top-0 z-30 bg-white border-b border-zinc-200 shadow-sm h-20 ${layout.navbar?.containerClass || ''}`}>
-          <div className="max-w-7xl mx-auto h-full px-6 flex items-center gap-6 justify-between">
-            <SeedLink
-              href="/"
-              className="font-extrabold text-xl text-zinc-800 tracking-tight flex items-center"
-            >Auto<span className="text-green-600">Delivery</span>
-            </SeedLink>
+        <nav className={`sticky top-0 z-40 border-b border-emerald-950/10 bg-white/90 backdrop-blur-xl ${layout.navbar?.containerClass || ""}`}>
+          <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
+            <div className="justify-self-start">
+              <SeedLink
+                href="/"
+                className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-gradient-to-r from-emerald-950 to-emerald-700 px-4 py-2 text-white shadow-sm"
+              >
+                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-100">Auto</span>
+                <span className="text-base font-extrabold tracking-tight">Delivery</span>
+              </SeedLink>
+            </div>
 
-            <div className="flex items-center gap-4">
-              <h1
+            <div className="flex items-center justify-self-end gap-2 sm:gap-3">
+              <SeedLink
+                href="/restaurants"
                 id={dyn.v3.getVariant("nav-link", ID_VARIANTS_MAP, "nav-link")}
-                className="text-zinc-700 hover:text-green-600 font-medium px-3 py-1"
+                className="hidden items-center text-sm font-semibold text-emerald-900 transition-colors hover:text-emerald-700 md:inline-flex"
                 aria-label={dyn.v3.getVariant("nav_menu", undefined, "Main navigation")}
               >
                 {dyn.v3.getVariant("menu_restaurants", TEXT_VARIANTS_MAP, "Restaurants")}
-              </h1>
-              <div className="hidden md:block w-px h-6 bg-zinc-200" />
+              </SeedLink>
               <CartNavIcon />
               <Button
                 id={dyn.v3.getVariant("quick-order-header", ID_VARIANTS_MAP, "quick-order-header")}
-                className={`bg-green-600 hover:bg-green-700 text-white ${dyn.v3.getVariant("quick-order-button", CLASS_VARIANTS_MAP, "")}`}
+                className={`h-10 rounded-full bg-emerald-600 px-4 text-white hover:bg-emerald-700 sm:px-5 ${dyn.v3.getVariant("quick-order-button", CLASS_VARIANTS_MAP, "")}`}
                 onClick={() => {
                   logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, { source: "navbar" });
                   if (typeof window !== "undefined") {
