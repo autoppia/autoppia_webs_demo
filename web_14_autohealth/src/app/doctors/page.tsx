@@ -378,7 +378,9 @@ export default function DoctorsPage() {
                             doctorId: d.id,
                             doctorName: d.name,
                             specialty: d.specialty,
-                            rating: d.rating
+                            rating: d.rating,
+                            languages: d.languages ?? [],
+                            consultationFee: d.consultationFee,
                           });
                         }}
                       >
