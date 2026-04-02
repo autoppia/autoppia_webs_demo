@@ -14,7 +14,7 @@ import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynami
 import { cn } from "@/library/utils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MEDICAL_SPECIALTIES } from "@/data/medical-specialties";
+import { deriveSpecialtiesFromDoctors } from "@/data/medical-specialties";
 import { Pagination } from "@/components/ui/pagination";
 
 const DOCTORS_PAGE_SIZE = 9;
@@ -122,6 +122,11 @@ export default function DoctorsPage() {
     return [...set].sort();
   }, [doctorList]);
 
+  const availableSpecialties = useMemo(
+    () => deriveSpecialtiesFromDoctors(doctorList),
+    [doctorList],
+  );
+
   // Filter doctors by applied name, speciality, language
   const filteredDoctors = useMemo(() => {
     let filtered = doctorList;
@@ -225,7 +230,7 @@ export default function DoctorsPage() {
                     data-testid="doctor-specialty-filter"
                   >
                     <option value="">All Specialties</option>
-                    {[...MEDICAL_SPECIALTIES].sort().map((specialty: string) => (
+                    {availableSpecialties.map((specialty: string) => (
                       <option key={specialty} value={specialty}>
                         {specialty}
                       </option>
