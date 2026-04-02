@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MEDICAL_SPECIALTIES } from "@/data/medical-specialties";
 import { Pagination } from "@/components/ui/pagination";
+import { Badge } from "@/components/ui/badge";
 
 const DOCTORS_PAGE_SIZE = 9;
 
@@ -353,8 +354,25 @@ export default function DoctorsPage() {
                   </div>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <Stars value={d.rating} />
+                  <div className="flex items-center justify-between gap-4">
+                    <Stars value={d.rating} />
+                    <span className="text-sm text-muted-foreground whitespace-nowrap">
+                      Consultation fee:
+                      {d.consultationFee != null ? `$${d.consultationFee}` : "N/A"}
+                    </span>
+                  </div>
+
                   <p className="mt-3 text-sm text-muted-foreground">{d.bio}</p>
+
+                  {(d.languages || []).length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {d.languages.map((language) => (
+                        <Badge key={language} variant="outline">
+                          {language}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
                 <CardFooter className="mt-auto flex items-center justify-end pt-2">
                   <SeedLink href={`/doctors/${d.id}`}>
