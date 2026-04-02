@@ -102,7 +102,7 @@ function ReviewsSection({
         {reviews.map((r, i) => (
           <div
             key={r.author + r.date}
-            className={`bg-white rounded-xl shadow p-5 flex items-start gap-4 group relative ${dyn.v3.getVariant('review-item-class', CLASS_VARIANTS_MAP, '')}`}
+            className={`flex items-start gap-4 rounded-xl border-2 border-zinc-300 bg-white p-5 shadow-sm group relative ${dyn.v3.getVariant('review-item-class', CLASS_VARIANTS_MAP, '')}`}
             id={dyn.v3.getVariant(`review-item-${i}`, ID_VARIANTS_MAP, `review-item-${i}`)}
           >
             <SafeImage
@@ -110,7 +110,7 @@ function ReviewsSection({
               alt={r.author}
               width={48}
               height={48}
-              className="rounded-full object-cover border"
+              className="rounded-full border-2 border-zinc-400 object-cover"
               fallbackText=""
             />
             <div className="flex-1">
@@ -194,7 +194,7 @@ export default function RestaurantDetailPage({
   // Keep SSR and first client render deterministic while provider data hydrates.
   if (!hasHydrated || (isLoading && !restaurant)) {
     return (
-      <div className="flex items-center justify-center rounded-2xl border border-emerald-100 bg-white/80 py-16 shadow-sm">
+      <div className="flex items-center justify-center rounded-2xl border-2 border-zinc-300 bg-white py-16 shadow-md">
         <Loader2 className="h-6 w-6 animate-spin text-emerald-600" />
       </div>
     );
@@ -202,7 +202,7 @@ export default function RestaurantDetailPage({
 
   if (!restaurant) {
     return (
-      <div className="mx-auto mt-8 max-w-3xl rounded-3xl border border-emerald-100 bg-white/90 p-10 text-center shadow-sm">
+      <div className="mx-auto mt-8 max-w-3xl rounded-3xl border-2 border-zinc-400 bg-white p-10 text-center shadow-md">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">AutoDelivery</p>
         <h2 className="mt-3 text-2xl font-bold text-zinc-900">Restaurant not found</h2>
         <p className="mt-2 text-zinc-600">
@@ -260,7 +260,7 @@ export default function RestaurantDetailPage({
         className={`flex flex-col md:flex-row gap-6 md:items-center mt-6 mb-8 ${layout.restaurantDetail.headerClass} ds-${seedStructure}`}
         {...layout.getElementAttributes('restaurant-header', 0)}
       >
-        <div className="relative w-full md:w-80 h-52 rounded-xl overflow-hidden shadow">
+        <div className="relative h-52 w-full overflow-hidden rounded-xl border-2 border-zinc-400 shadow-md md:w-80">
           <SafeImage
             src={restaurant.image}
             alt={restaurant.name}
@@ -278,7 +278,7 @@ export default function RestaurantDetailPage({
             >
               {dyn.v3.getVariant('restaurant-name', TEXT_VARIANTS_MAP, restaurant.name)}
             </h1>
-            <span className="inline-flex items-center gap-1 text-sm font-semibold text-green-700 bg-green-50 border border-green-100 px-2 py-1 rounded-full">
+            <span className="inline-flex items-center gap-1 rounded-full border-2 border-emerald-700 bg-emerald-50 px-2 py-1 text-sm font-semibold text-emerald-900">
               ★ {restaurant.rating.toFixed(1)}
             </span>
           </div>
@@ -342,7 +342,7 @@ export default function RestaurantDetailPage({
               return (
             <div
               key={item.id}
-              className={`bg-white rounded-lg shadow p-4 flex flex-col ${layout.generateSeedClass('menu-item')} ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")} ds-${seedStructure}`}
+              className={`flex flex-col rounded-lg border-2 border-zinc-300 bg-white p-4 shadow-sm ${layout.generateSeedClass('menu-item')} ${dyn.v3.getVariant("card", CLASS_VARIANTS_MAP, "")} ds-${seedStructure}`}
               id={dyn.v3.getVariant(`menu-item-${index}`, ID_VARIANTS_MAP, `menu-item-${seedStructure}-${index}`)}
             >
               <div className="relative w-full h-32 mb-3 rounded-md overflow-hidden">
@@ -526,7 +526,7 @@ function AddReviewForm({
   };
 
   return (
-    <Card className="mt-10 p-6 bg-white shadow-sm border border-zinc-200">
+    <Card className="mt-10 border-2 border-zinc-400 bg-white p-6 shadow-md">
       <h3 className="text-lg font-semibold mb-4">
         {dyn.v3.getVariant("review-title", TEXT_VARIANTS_MAP, "Leave a review")}
       </h3>

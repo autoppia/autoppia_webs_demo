@@ -111,7 +111,7 @@ export default function RestaurantsListPage() {
 
   if (isLoading && restaurants.length === 0) {
     return (
-      <div className="flex items-center justify-center rounded-2xl border border-emerald-100 bg-white/80 py-16 shadow-sm">
+      <div className="flex items-center justify-center rounded-2xl border-2 border-zinc-300 bg-white py-16 shadow-md">
         <Loader2 className="h-6 w-6 animate-spin text-emerald-600" />
       </div>
     );
@@ -121,7 +121,7 @@ export default function RestaurantsListPage() {
   // with loaded restaurants before first paint.
   if (!isClientMounted) {
     return (
-      <div className="flex items-center justify-center rounded-2xl border border-emerald-100 bg-white/80 py-16 shadow-sm">
+      <div className="flex items-center justify-center rounded-2xl border-2 border-zinc-300 bg-white py-16 shadow-md">
         <Loader2 className="h-6 w-6 animate-spin text-emerald-600" />
       </div>
     );
@@ -135,7 +135,7 @@ export default function RestaurantsListPage() {
     >
       {dyn.v1.addWrapDecoy("search-filters", (
       <div
-        className={`mb-8 rounded-3xl border border-emerald-200/80 bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/40 px-4 py-4 shadow-[0_14px_35px_-24px_rgba(5,150,105,0.7)] backdrop-blur md:px-5 md:py-5 ${layout.searchBar.containerClass} ${dyn.v3.getVariant('search-filters-container', CLASS_VARIANTS_MAP, '')}`}
+        className={`mb-8 rounded-3xl border-2 border-zinc-300 bg-gradient-to-br from-white via-emerald-50/40 to-teal-50/50 px-4 py-4 shadow-md backdrop-blur md:px-5 md:py-5 ${layout.searchBar.containerClass} ${dyn.v3.getVariant('search-filters-container', CLASS_VARIANTS_MAP, '')}`}
         id={dyn.v3.getVariant('search-filters', ID_VARIANTS_MAP, 'search-filters')}
         {...layout.getElementAttributes('search-filters', 0)}
       >
@@ -144,7 +144,7 @@ export default function RestaurantsListPage() {
             <Sparkles className="h-4 w-4" />
             Find your next meal
           </div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-white/90 px-3 py-1 text-xs font-medium text-zinc-600 shadow-sm">
+          <div className="inline-flex items-center gap-2 rounded-full border-2 border-zinc-300 bg-white px-3 py-1 text-xs font-medium text-zinc-700 shadow-sm">
             <SlidersHorizontal className="h-3.5 w-3.5 text-emerald-700" />
             Live filters
           </div>
@@ -166,7 +166,7 @@ export default function RestaurantsListPage() {
                   });
                 }
               }}
-              className={`h-12 flex-1 rounded-2xl border-emerald-200 bg-white pl-10 shadow-sm focus-visible:ring-emerald-500 ${layout.searchBar.inputClass} ${dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP, "")}`}
+              className={`h-12 flex-1 rounded-2xl border-2 border-zinc-400 bg-white pl-10 shadow-sm focus-visible:border-emerald-600 focus-visible:ring-emerald-600 ${layout.searchBar.inputClass} ${dyn.v3.getVariant("search-input", CLASS_VARIANTS_MAP, "")}`}
               id={dyn.v3.getVariant('search-input', ID_VARIANTS_MAP, 'search-input')}
               {...layout.getElementAttributes('search-input', 0)}
             />
@@ -174,7 +174,7 @@ export default function RestaurantsListPage() {
           <div className="flex w-full gap-3 lg:w-auto lg:shrink-0">
             <Select value={cuisine || "all"} onValueChange={v => setCuisine(v === "all" ? "" : v)}>
               <SelectTrigger
-                className={`h-12 w-full rounded-2xl border-emerald-200 bg-white shadow-sm sm:w-44 ${layout.generateSeedClass('cuisine-select')} ${dyn.v3.getVariant("cuisine-select", CLASS_VARIANTS_MAP, "")}`}
+                className={`h-12 w-full rounded-2xl border-2 border-zinc-400 bg-white shadow-sm sm:w-44 focus:border-emerald-600 ${layout.generateSeedClass('cuisine-select')} ${dyn.v3.getVariant("cuisine-select", CLASS_VARIANTS_MAP, "")}`}
                 {...layout.getElementAttributes('cuisine-select', 0)}
               >
                 <SelectValue placeholder="All cuisines" />
@@ -188,7 +188,7 @@ export default function RestaurantsListPage() {
             </Select>
             <Select value={rating || "all"} onValueChange={v => setRating(v === "all" ? "" : v)}>
               <SelectTrigger
-                className={`h-12 w-full rounded-2xl border-emerald-200 bg-white shadow-sm sm:w-36 ${layout.generateSeedClass('rating-select')} ${dyn.v3.getVariant("rating-select", CLASS_VARIANTS_MAP, "")}`}
+                className={`h-12 w-full rounded-2xl border-2 border-zinc-400 bg-white shadow-sm sm:w-36 focus:border-emerald-600 ${layout.generateSeedClass('rating-select')} ${dyn.v3.getVariant("rating-select", CLASS_VARIANTS_MAP, "")}`}
                 {...layout.getElementAttributes('rating-select', 0)}
               >
                 <SelectValue placeholder="All ratings" />
@@ -202,13 +202,13 @@ export default function RestaurantsListPage() {
             </Select>
           </div>
         </div>
-        <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-emerald-100/80 pt-3">
+        <div className="mt-4 flex flex-wrap items-center gap-2 border-t-2 border-zinc-200 pt-3">
           <span className="mr-1 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">Popular:</span>
           <Button
             type="button"
             variant="ghost"
             onClick={() => setRating("4.5")}
-            className="h-8 rounded-full border border-amber-200 bg-amber-50 px-3 text-xs font-semibold text-amber-800 hover:bg-amber-100"
+            className="h-8 rounded-full border-2 border-amber-600 bg-amber-50 px-3 text-xs font-semibold text-amber-950 hover:bg-amber-100"
           >
             4.5+ Rated
           </Button>
@@ -220,8 +220,8 @@ export default function RestaurantsListPage() {
               onClick={() => setCuisine(chip)}
               className={`h-8 rounded-full border px-3 text-xs font-semibold transition-colors ${
                 cuisine === chip
-                  ? "border-emerald-300 bg-emerald-100 text-emerald-900"
-                  : "border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50"
+                  ? "border-2 border-emerald-700 bg-emerald-100 text-emerald-950"
+                  : "border-2 border-zinc-400 bg-white text-zinc-800 hover:bg-zinc-50"
               }`}
             >
               {chip}
@@ -229,11 +229,11 @@ export default function RestaurantsListPage() {
           ))}
         </div>
         {isFiltered && (
-          <div className="mt-4 flex justify-end border-t border-emerald-100 pt-3">
+          <div className="mt-4 flex justify-end border-t-2 border-zinc-200 pt-3">
             <Button
               type="button"
               variant="ghost"
-              className={`h-9 rounded-full border border-emerald-100 px-4 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800 ${layout.generateSeedClass('reset-filters-btn')} ${dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "")} ${dyn.v3.getVariant('reset-filters-btn-class', CLASS_VARIANTS_MAP, '')}`}
+              className={`h-9 rounded-full border-2 border-zinc-500 px-4 font-semibold text-zinc-800 hover:bg-zinc-100 ${layout.generateSeedClass('reset-filters-btn')} ${dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "")} ${dyn.v3.getVariant('reset-filters-btn-class', CLASS_VARIANTS_MAP, '')}`}
               id={dyn.v3.getVariant('reset-filters-btn', ID_VARIANTS_MAP, 'reset-filters-btn')}
               onClick={() => {
                 setSearch("");
@@ -281,7 +281,7 @@ export default function RestaurantsListPage() {
           })()
         ) : (
           <div
-            className={`col-span-full rounded-2xl border border-emerald-100 bg-white/80 py-16 text-center text-lg text-zinc-500 ${layout.generateSeedClass('no-restaurants-message')} ${dyn.v3.getVariant('no-restaurants-message-class', CLASS_VARIANTS_MAP, '')}`}
+            className={`col-span-full rounded-2xl border-2 border-zinc-300 bg-white py-16 text-center text-lg text-zinc-600 shadow-sm ${layout.generateSeedClass('no-restaurants-message')} ${dyn.v3.getVariant('no-restaurants-message-class', CLASS_VARIANTS_MAP, '')}`}
             id={dyn.v3.getVariant('no-restaurants-message', ID_VARIANTS_MAP, 'no-restaurants-message')}
             {...layout.getElementAttributes('no-restaurants-message', 0)}
           >
@@ -292,7 +292,7 @@ export default function RestaurantsListPage() {
       ))}
 
       {filtered.length > itemsPerPage && (
-        <div className={`mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-emerald-100 bg-white/80 px-4 py-3 md:flex-row ${dyn.v3.getVariant('pagination-container-class', CLASS_VARIANTS_MAP, '')}`} id={dyn.v3.getVariant('pagination-container', ID_VARIANTS_MAP, 'pagination-container')}>
+        <div className={`mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border-2 border-zinc-300 bg-white px-4 py-3 shadow-sm md:flex-row ${dyn.v3.getVariant('pagination-container-class', CLASS_VARIANTS_MAP, '')}`} id={dyn.v3.getVariant('pagination-container', ID_VARIANTS_MAP, 'pagination-container')}>
           <div className={dyn.v3.getVariant('pagination-info-class', CLASS_VARIANTS_MAP, 'text-sm text-muted-foreground')}>
             {dyn.v3.getVariant('pagination-info-text', TEXT_VARIANTS_MAP, `Showing ${startIndex + 1}–${Math.min(endIndex, filtered.length)} of ${filtered.length}`)}
           </div>

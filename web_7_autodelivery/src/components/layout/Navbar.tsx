@@ -15,12 +15,12 @@ export default function Navbar() {
   return (
     <>
       {dyn.v1.addWrapDecoy("navbar", (
-        <nav className={`sticky top-0 z-40 border-b border-emerald-950/10 bg-white/90 backdrop-blur-xl ${layout.navbar?.containerClass || ""}`}>
+        <nav className={`sticky top-0 z-40 border-b-2 border-zinc-300 bg-white/95 shadow-sm backdrop-blur-xl ${layout.navbar?.containerClass || ""}`}>
           <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
             <div className="justify-self-start">
               <SeedLink
                 href="/"
-                className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-gradient-to-r from-emerald-950 to-emerald-700 px-4 py-2 text-white shadow-sm"
+                className="inline-flex items-center gap-2 rounded-full border-2 border-white/35 bg-gradient-to-r from-emerald-950 to-emerald-700 px-4 py-2 text-white shadow-md"
               >
                 <span className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-100">Auto</span>
                 <span className="text-base font-extrabold tracking-tight">Delivery</span>

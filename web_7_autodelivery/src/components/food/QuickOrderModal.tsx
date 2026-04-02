@@ -208,7 +208,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
           />
         </div>
         {statusMessage && (
-          <div className="mb-4 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-800">
+          <div className="mb-4 rounded-xl border-2 border-emerald-700 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-900">
             {statusMessage}
           </div>
         )}
