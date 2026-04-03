@@ -9,6 +9,7 @@ updates:
       - "/web_12_autolist"
       - "/web_13_autodrive"
       - "/web_14_autohealth"
+      - "/web_15_autostats"
       - "/web_16_autodiscord"
       - "/web_1_autocinema"
       - "/web_2_autobooks"

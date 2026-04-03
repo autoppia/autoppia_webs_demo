@@ -1,11 +1,12 @@
 "use client";
 import { useParams } from "next/navigation";
-import { CalendarIcon, UserIcon, ChevronDownIcon, ClockIcon, Star } from "lucide-react";
+import { CalendarIcon, UserIcon, ChevronDownIcon, ClockIcon, Star, MessageSquare, Trash2, Edit2, Send } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
-import React, { useMemo, useEffect, useState } from "react";
+import type React from "react";
+import { useMemo, useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 import Image from "next/image";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
@@ -16,6 +17,8 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { buildBookingHref } from "@/utils/bookingPaths";
 import { cn } from "@/library/utils";
 import Navbar from "@/components/Navbar";
+import { useAuth } from "@/context/AuthContext";
+import { useReviews, type Review } from "@/hooks/useReviews";
 
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=150&h=150",
@@ -42,6 +45,33 @@ export default function RestaurantPage() {
   const [timeOpen, setTimeOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const dyn = useDynamicSystem();
+  const { currentUser, isAuthenticated } = useAuth();
+  const { reviews, addReview, updateReview, deleteReview } = useReviews(id);
+
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const handleReviewSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentUser || !comment.trim()) return;
+    if (editingId) {
+      updateReview(editingId, rating, comment);
+      setEditingId(null);
+    } else {
+      addReview(currentUser.username, rating, comment);
+    }
+    setRating(5);
+    setComment("");
+  };
+
+  const handleEdit = (review: Review) => {
+    setEditingId(review.id);
+    setRating(review.rating);
+    setComment(review.comment);
+    const formElement = document.getElementById("review-form");
+    if (formElement) formElement.scrollIntoView({ behavior: "smooth" });
+  };
   const personLabel = "Guest";
   const peopleLabel = "Guests";
   const pickLabel = "Pick";
@@ -49,7 +79,6 @@ export default function RestaurantPage() {
   const selectTimeLabel = "Select time";
   const bookNowLabel = dyn.v3.getVariant("reserve_now", TEXT_VARIANTS_MAP, "Book Now");
   const { seed } = useSeed();
-  const v2Seed = seed;
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
       console.log("[restaurant/[restaurantId]/page] V2 status:", { v2Enabled: dyn.v2.isEnabled() });
@@ -84,7 +113,7 @@ export default function RestaurantPage() {
             rating: Number(rating), stars: Number(stars),
             reviews: Number(found.reviews ?? 0), bookings: Number(found.bookings ?? 0),
             price: String(found.price ?? "$$"), cuisine: String(found.cuisine ?? "International"),
-            tags: ["cozy", "modern", "casual"],
+            tags: found.tags ?? ["cozy", "modern", "casual"],
             desc: `Enjoy a delightful experience at ${found.name}, offering a fusion of flavors in the heart of ${found.area ?? "Downtown"}.`,
             photos,
           });
@@ -156,7 +185,7 @@ export default function RestaurantPage() {
   return (
     dyn.v1.addWrapDecoy("restaurant-detail-page", (
       <main className="min-h-screen bg-background" id={dyn.v3.getVariant("restaurant-detail-page", ID_VARIANTS_MAP, "restaurant-detail-page")}>
-      <Navbar />
+      <Navbar showBack />
       {/* Banner */}
       {dyn.v1.addWrapDecoy("restaurant-banner", (
         <div className="w-full h-[380px] relative overflow-hidden" id={dyn.v3.getVariant("restaurant-banner", ID_VARIANTS_MAP, "restaurant-banner")}>
@@ -298,21 +327,161 @@ export default function RestaurantPage() {
           {/* Reviews */}
           {dyn.v1.addWrapDecoy("reviews-section", (
             <section className="w-full mb-10" id={dyn.v3.getVariant("reviews-section", ID_VARIANTS_MAP, "reviews-section")}>
-              <h2 className="text-xl font-bold mb-5 text-white tracking-tight" id={dyn.v3.getVariant("reviews-title", ID_VARIANTS_MAP, "reviews-title")}>Customer Reviews</h2>
-              <div className="glass rounded-2xl p-8" id={dyn.v3.getVariant("reviews-container", ID_VARIANTS_MAP, "reviews-container")}>
-                <div className="flex items-center gap-6 mb-5" id={dyn.v3.getVariant("reviews-header", ID_VARIANTS_MAP, "reviews-header")}>
-                  <div className="text-4xl font-black text-white" id={dyn.v3.getVariant("reviews-rating", ID_VARIANTS_MAP, "reviews-rating")}>{r?.rating?.toFixed(1) ?? "4.5"}</div>
-                  <div>
-                    <div className="flex items-center gap-0.5 text-xl mb-1" id={dyn.v3.getVariant("reviews-stars", ID_VARIANTS_MAP, "reviews-stars")}>
+              <h2 className="text-xl font-bold mb-5 text-white tracking-tight flex items-center gap-2" id={dyn.v3.getVariant("reviews-title", ID_VARIANTS_MAP, "reviews-title")}>
+                <MessageSquare className="w-5 h-5 text-amber-400" />
+                Customer Reviews
+              </h2>
+              <div className="glass rounded-2xl p-8 mb-8" id={dyn.v3.getVariant("reviews-container", ID_VARIANTS_MAP, "reviews-container")}>
+                <div className="flex flex-col md:flex-row items-center md:items-start gap-6" id={dyn.v3.getVariant("reviews-header", ID_VARIANTS_MAP, "reviews-header")}>
+                  <div className="flex flex-col items-center">
+                    <div className="text-5xl font-black text-white" id={dyn.v3.getVariant("reviews-rating", ID_VARIANTS_MAP, "reviews-rating")}>{r?.rating?.toFixed(1) ?? "4.5"}</div>
+                    <div className="flex items-center gap-0.5 text-amber-400 text-xl mt-1" id={dyn.v3.getVariant("reviews-stars", ID_VARIANTS_MAP, "reviews-stars")}>
                       {/* biome-ignore lint/suspicious/noArrayIndexKey: static star icons never reorder */}
                       {Array.from({ length: r?.stars ?? 5 }, (_, i) => (<Star key={`review-star-${i}`} className="w-5 h-5 text-amber-400 fill-amber-400" />))}
                     </div>
-                    <div className="text-white/35 text-sm" id={dyn.v3.getVariant("reviews-count", ID_VARIANTS_MAP, "reviews-count")}>{`Based on ${r?.reviews ?? 0} verified reviews`}</div>
+                    <div className="text-white/35 text-xs font-semibold uppercase tracking-[0.2em] mt-3 whitespace-nowrap">
+                      Verified on other platforms
+                    </div>
+                  </div>
+                  <div className="flex-1 text-center md:text-left">
+                    <p className="text-white/45 text-sm leading-relaxed" id={dyn.v3.getVariant("reviews-description", ID_VARIANTS_MAP, "reviews-description")}>
+                      {`"Autodining users consistently praise the exceptional atmosphere and outstanding food quality at ${r?.name ?? "this restaurant"}. Recent reviews highlighted the excellent service, authentic flavors, and memorable dining experience."`}
+                    </p>
+                    <div className="mt-4 flex flex-wrap justify-center md:justify-start gap-3">
+                      <div className="px-3 py-1 bg-amber-500/10 rounded text-xs font-bold text-amber-300 uppercase tracking-tighter">
+                        {`${r?.reviews ?? 305} Total reviews`}
+                      </div>
+                      <div className="px-3 py-1 bg-white/[0.06] rounded text-xs font-bold text-white/60 uppercase tracking-tighter">
+                        {`Top 10% in ${r?.cuisine ?? "Area"}`}
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <p className="text-white/40 text-sm leading-relaxed" id={dyn.v3.getVariant("reviews-description", ID_VARIANTS_MAP, "reviews-description")}>
-                  {`Customers consistently praise the exceptional atmosphere and outstanding food quality at ${r?.name ?? "this restaurant"}. Recent reviews highlight the excellent service, authentic flavors, and memorable dining experience. Many guests return regularly and recommend it to friends and family.`}
-                </p>
+              </div>
+
+              {isAuthenticated ? (
+                <div className="glass rounded-2xl p-6 mb-8" id="review-form">
+                  <h3 className="font-bold text-lg mb-4 text-white/90">
+                    {editingId ? "Edit your review" : "Write a review"}
+                  </h3>
+                  <form onSubmit={handleReviewSubmit} className="space-y-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-sm font-medium text-white/60">Rating:</span>
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5].map((s) => (
+                          <button
+                            key={s}
+                            type="button"
+                            onClick={() => setRating(s)}
+                            className="focus:outline-none transition-transform active:scale-110"
+                          >
+                            <Star
+                              className={cn(
+                                "w-6 h-6",
+                                s <= rating ? "fill-amber-400 text-amber-400" : "text-white/20"
+                              )}
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <textarea
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      placeholder="Tell us about your experience..."
+                      className="w-full p-4 border border-white/[0.08] rounded-xl bg-white/[0.04] focus:ring-2 focus:ring-amber-500/30 outline-none text-white min-h-[110px] transition-all"
+                      required
+                    />
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        type="submit"
+                        className="bg-amber-500 hover:bg-amber-400 text-black px-6 font-bold rounded-lg shadow-md hover:shadow-lg transition-all"
+                      >
+                        {editingId ? "Update Review" : "Submit Review"}
+                        <Send className="ml-2 w-4 h-4" />
+                      </Button>
+                      {editingId && (
+                        <Button
+                          type="button"
+                          onClick={() => {
+                            setEditingId(null);
+                            setRating(5);
+                            setComment("");
+                          }}
+                          className="bg-white/[0.06] text-white/70 hover:bg-white/[0.12]"
+                        >
+                          Cancel
+                        </Button>
+                      )}
+                    </div>
+                  </form>
+                </div>
+              ) : (
+                <div className="glass rounded-2xl p-6 text-center mb-8">
+                  <p className="text-white/60">Please sign in to leave a review.</p>
+                </div>
+              )}
+
+              <div className="space-y-6">
+                {reviews.length === 0 ? (
+                  <div className="glass rounded-2xl p-8 text-center">
+                    <Star className="w-12 h-12 text-white/20 mx-auto mb-3" />
+                    <p className="text-white/60 text-sm">No reviews yet. Be the first to write one!</p>
+                  </div>
+                ) : (
+                  reviews.map((review) => (
+                    <div
+                      key={review.id}
+                      className="glass rounded-2xl p-6 hover:shadow-lg transition-shadow relative group"
+                    >
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-amber-500/15 rounded-full flex items-center justify-center font-bold text-amber-300 border border-amber-500/20">
+                            {review.username[0].toUpperCase()}
+                          </div>
+                          <div>
+                            <p className="font-bold text-white/90">{review.username}</p>
+                            <p className="text-xs text-white/40 uppercase font-medium">
+                              {formatDistanceToNow(new Date(review.date), { addSuffix: true })}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center bg-white/[0.06] px-2 py-1 rounded-lg border border-white/[0.08]">
+                          <Star className="w-4 h-4 fill-amber-400 text-amber-400 mr-1" />
+                          <span className="font-bold text-white/90">{review.rating}</span>
+                        </div>
+                      </div>
+                      <p className="text-white/70 leading-relaxed whitespace-pre-wrap text-sm">{review.comment}</p>
+
+                      {isAuthenticated && currentUser?.username === review.username && (
+                        <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => handleEdit(review)}
+                            className="p-2 text-white/50 hover:text-amber-300 hover:bg-white/[0.06] rounded-lg transition-colors"
+                            title="Edit review"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => deleteReview(review.id)}
+                            className="p-2 text-white/50 hover:text-amber-300 hover:bg-white/[0.06] rounded-lg transition-colors"
+                            title="Delete review"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
+
+                {reviews.length > 0 && (
+                  <div className="bg-amber-500/10 rounded-xl p-4 border border-dashed border-amber-500/20">
+                    <p className="text-xs text-center text-amber-200 uppercase tracking-widest font-bold">
+                      User reviews are verified for dining experiences
+                    </p>
+                  </div>
+                )}
               </div>
             </section>
           ), "reviews-section-wrap")}

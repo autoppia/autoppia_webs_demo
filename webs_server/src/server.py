@@ -97,6 +97,8 @@ DOCKER_WEB_PROJECTS: List[tuple] = [
     ("autolist", 8011),
     ("autodrive", 8012),
     ("autohealth", 8013),
+    ("autostats", 8014),
+    ("autodiscord", 8015),
 ]
 
 # Deployed web projects (from scripts/setup.sh WEBS_PROJECTS)
@@ -116,6 +118,7 @@ DEPLOYED_WEBS: List[Dict[str, str]] = [
     {"project_key": "web_12_autolist", "name": "autolist"},
     {"project_key": "web_13_autodrive", "name": "autodrive"},
     {"project_key": "web_14_autohealth", "name": "autohealth"},
+    {"project_key": "web_15_autostats", "name": "autostats"},
     {"project_key": "web_16_autodiscord", "name": "autodiscord"},
 ]
 

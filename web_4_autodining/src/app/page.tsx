@@ -1,6 +1,5 @@
 "use client";
 import React, { useCallback, useState, useRef, useEffect, useMemo, Suspense } from "react";
-import { useRouter } from "next/navigation";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -10,7 +9,6 @@ import { CalendarIcon, ClockIcon, UserIcon, ChevronLeft, ChevronRight, Search, M
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { getRestaurants, initializeRestaurants } from "@/dynamic/v2";
-import { useSearchParams } from "next/navigation";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
@@ -19,7 +17,7 @@ import Navbar from "@/components/Navbar";
 
 type UiRestaurant = {
   id: string; name: string; image: string; cuisine: string; area: string;
-  reviews: number; rating: number; stars: number; price: string; bookings: number; times: string[];
+  reviews: number; rating: number; stars: number; price: string; bookings: number; times: string[]; tags: string[];
 };
 
 const defaultRestaurants: UiRestaurant[] = [];
@@ -35,16 +33,12 @@ function StarRating({ count }: { count: number }) {
   );
 }
 
-function RestaurantCard({ r, date, people, time, index }: {
+function RestaurantCard({ r, date: _date, people: _people, time: _time, index }: {
   r: { id: string; name: string; cuisine: string; area: string; reviews: number; rating: number; stars: number; price: string; bookings: number; image: string; times: string[] };
   date: Date | undefined; people: number; time: string; index?: number;
 }) {
   const dyn = useDynamicSystem();
-  const personLabel = dyn.v3.getVariant("person", undefined, "Guest");
-  const peopleLabel = dyn.v3.getVariant("people", undefined, "Guests");
-  const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
   const viewDetailsLabel = dyn.v3.getVariant("see_details", TEXT_VARIANTS_MAP, "View details");
-  const bookNowLabel = dyn.v3.getVariant("reserve_now", TEXT_VARIANTS_MAP, "Book now");
   const ratingValue = r.rating ?? 4.5;
   const starsCount = r.stars ?? 5;
   const reviewsCount = r.reviews || 0;
@@ -241,7 +235,6 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
 }
 
 function HomePageContent() {
-  const router = useRouter();
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [list, setList] = useState<UiRestaurant[]>(defaultRestaurants);
@@ -254,11 +247,24 @@ function HomePageContent() {
   const [peopleOpen, setPeopleOpen] = useState(false);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const dyn = useDynamicSystem();
-  const searchParams = useSearchParams();
   const personLabel = dyn.v3.getVariant("person", undefined, "Guest");
   const peopleLabel = dyn.v3.getVariant("people", undefined, "Guests");
   const { seed } = useSeed();
   const v2Seed = seed;
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const tagOptions = [
+    "top-rated",
+    "local favourite",
+    "outdoor seating",
+    "good for groups",
+    "romantic",
+    "gourmet",
+    "sushi",
+    "pasta",
+    "burgers",
+    "spicy",
+    "tapas",
+  ];
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
       console.log("[page.tsx] Debug dinámico:", { seed: dyn.seed, v1Enabled: isV1Enabled(), v2Enabled: dyn.v2.isEnabled(), v3Enabled: isV3Enabled() });
@@ -283,6 +289,7 @@ function HomePageContent() {
     if (d) {
       const isoDate = toLocalISO(d);
       logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: isoDate });
+      logEvent(EVENT_TYPES.DATE_SELECTED, { date: isoDate });
     }
   };
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -296,14 +303,22 @@ function HomePageContent() {
   const handleTimeSelect = (t: string) => {
     setTime(t);
     logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
+    logEvent(EVENT_TYPES.TIME_SELECTED, { time: t });
   };
   const handlePeopleSelect = (n: number) => {
     setPeople(n);
     logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
+    logEvent(EVENT_TYPES.PEOPLE_SELECTED, { people: n });
+  };
+  const handleTagSelect = (tag: string | null) => {
+    setSelectedTag(tag);
+    logEvent(EVENT_TYPES.TAG_FILTER_SELECTED, { tag: tag ?? "all" });
   };
   function matches(r: UiRestaurant): boolean {
     const q = search.trim().toLowerCase();
-    return !q || r.name.toLowerCase().includes(q) || r.cuisine.toLowerCase().includes(q) || r.area.toLowerCase().includes(q);
+    const matchesSearch = !q || r.name.toLowerCase().includes(q) || r.cuisine.toLowerCase().includes(q) || r.area.toLowerCase().includes(q);
+    const matchesTag = !selectedTag || r.tags?.includes(selectedTag);
+    return matchesSearch && matchesTag;
   }
   const filtered = list.filter(matches);
   const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -337,6 +352,7 @@ function HomePageContent() {
               cuisine: r.cuisine ?? "International", area: r.area ?? "Downtown",
               reviews: r.reviews ?? 64, rating, stars,
               price: r.price ?? "$$", bookings: r.bookings ?? 0, times: ["1:00 PM"],
+              tags: r.tags ?? [],
             };
           });
           const mapped = fresh.length > 0 ? fresh : defaultRestaurants;
@@ -380,6 +396,16 @@ function HomePageContent() {
       {/* Hero Section */}
       <section className="relative">
         <div className="animated-gradient noise relative overflow-hidden text-white px-8 py-24 md:py-32">
+          <div className="absolute inset-0">
+            <div
+              className="absolute inset-0 bg-cover bg-center opacity-25 scale-105"
+              style={{
+                backgroundImage: "url('/images/help-about-banner.jpg')",
+                filter: "blur(4px)",
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/55 to-background/95" />
+          </div>
           {/* Decorative orbs */}
           <div className="absolute top-20 left-1/4 w-72 h-72 bg-amber-500/10 rounded-full blur-[100px]" />
           <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-[120px]" />
@@ -493,6 +519,39 @@ function HomePageContent() {
               ))}
             </div>
           </section>
+        ))}
+        {dyn.v1.addWrapDecoy("home-tags-section", (
+          <div className="flex justify-center px-6 pb-6">
+            <div className="flex flex-wrap gap-2 max-w-5xl w-full justify-center">
+              <button
+                type="button"
+                onClick={() => handleTagSelect(null)}
+                className={cn(
+                  "px-4 py-1.5 rounded-full text-xs font-semibold border transition-all",
+                  !selectedTag
+                    ? "bg-amber-500 text-black border-amber-500/60 shadow-md shadow-amber-500/20"
+                    : "bg-white/[0.04] text-white/60 border-white/[0.08] hover:text-white hover:border-amber-500/30"
+                )}
+              >
+                All
+              </button>
+              {tagOptions.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => handleTagSelect(tag)}
+                  className={cn(
+                    "px-4 py-1.5 rounded-full text-xs font-semibold border transition-all capitalize",
+                    selectedTag === tag
+                      ? "bg-amber-500 text-black border-amber-500/60 shadow-md shadow-amber-500/20"
+                      : "bg-white/[0.04] text-white/60 border-white/[0.08] hover:text-white hover:border-amber-500/30"
+                  )}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
         ))}
       </section>
       {/* Main Content - Cards */}
