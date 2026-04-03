@@ -1,5 +1,17 @@
 import type { Email } from "@/types/email";
-import { emails, initializeEmails, loadEmailsFromDb, writeCachedEmails, readCachedEmails } from "@/data/emails-enhanced";
+import type { MailTemplate } from "@/types/template";
+import {
+  emails,
+  templates,
+  initializeEmails,
+  initializeTemplates,
+  loadEmailsFromDb,
+  loadTemplatesFromDb,
+  writeCachedEmails,
+  readCachedEmails,
+  writeCachedTemplates,
+  readCachedTemplates,
+} from "@/data/automail-enhanced";
 import { isV2Enabled } from "@/dynamic/shared/flags";
 import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 
@@ -7,10 +19,12 @@ import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private emails: Email[] = [];
+  private templates: MailTemplate[] = [];
   private ready = false;
   private readyPromise: Promise<void>;
   private resolveReady!: () => void;
   private listeners = new Set<(emails: Email[]) => void>();
+  private templateListeners = new Set<(templates: MailTemplate[]) => void>();
   private currentSeed: number | null = null;
   private loadingPromise: Promise<void> | null = null;
 
@@ -26,11 +40,13 @@ export class DynamicDataProvider {
     }
 
     // hydrate from cache if available to keep content stable across reloads
-    const cached = readCachedEmails();
-    this.emails = Array.isArray(cached) && cached.length > 0 ? cached : emails;
+    const cachedEmails = readCachedEmails();
+    this.emails = Array.isArray(cachedEmails) && cachedEmails.length > 0 ? cachedEmails : emails;
+    const cachedTemplates = readCachedTemplates();
+    this.templates = Array.isArray(cachedTemplates) && cachedTemplates.length > 0 ? cachedTemplates : templates;
 
-    // Initialize emails with data generation if enabled
-    this.initializeEmails();
+    // Initialize dynamic data with data generation if enabled
+    this.initializeData();
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -40,31 +56,33 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  private async initializeEmails(): Promise<void> {
+  private async initializeData(): Promise<void> {
     const seed = this.getSeed();
     this.currentSeed = seed;
 
     try {
-      const dbEmails = await loadEmailsFromDb(seed);
-      if (dbEmails.length > 0) {
-        this.setEmails(dbEmails);
-        return;
-      }
-
-      const initializedEmails = await initializeEmails(seed);
-      this.setEmails(initializedEmails);
+      const [dbEmails, dbTemplates] = await Promise.all([
+        loadEmailsFromDb(seed),
+        loadTemplatesFromDb(seed),
+      ]);
+      const initializedEmails = dbEmails.length > 0 ? dbEmails : await initializeEmails(seed);
+      const initializedTemplates = dbTemplates.length > 0 ? dbTemplates : await initializeTemplates(seed);
+      this.setData(initializedEmails, initializedTemplates);
     } catch (error) {
-      console.warn("[automail/data-provider] Failed to load emails:", error);
+      console.warn("[automail/data-provider] Failed to load data:", error);
       try {
-        const initializedEmails = await initializeEmails(seed);
-        this.setEmails(initializedEmails);
+        const [initializedEmails, initializedTemplates] = await Promise.all([
+          initializeEmails(seed),
+          initializeTemplates(seed),
+        ]);
+        this.setData(initializedEmails, initializedTemplates);
       } catch {
-        this.setEmails([]);
+        this.setData([], []);
       }
     }
   }
     /**
-   * Reload emails with a new seed
+   * Reload data with a new seed
    */
   public async reload(seedValue?: number | null): Promise<void> {
     // Prevent concurrent reloads
@@ -86,10 +104,13 @@ export class DynamicDataProvider {
         });
         previousResolve(); // Unblock any waiter (e.g. DataReadyGate) that was waiting on the old promise
 
-        const initializedEmails = await initializeEmails(v2Seed);
-        this.setEmails(initializedEmails);
+        const [initializedEmails, initializedTemplates] = await Promise.all([
+          initializeEmails(v2Seed),
+          initializeTemplates(v2Seed),
+        ]);
+        this.setData(initializedEmails, initializedTemplates);
       } catch (error) {
-        console.warn("[automail] Failed to reload emails:", error);
+        console.warn("[automail] Failed to reload data:", error);
         this.ready = true;
         this.resolveReady();
       } finally {
@@ -112,10 +133,21 @@ export class DynamicDataProvider {
     return this.emails; // Return empty until ready when generation is enabled
   }
 
+  public getTemplates(): MailTemplate[] {
+    return this.templates;
+  }
+
   public subscribe(listener: (emails: Email[]) => void): () => void {
     this.listeners.add(listener);
     return () => {
       this.listeners.delete(listener);
+    };
+  }
+
+  public subscribeTemplates(listener: (templates: MailTemplate[]) => void): () => void {
+    this.templateListeners.add(listener);
+    return () => {
+      this.templateListeners.delete(listener);
     };
   }
   // Get effective seed value - returns 1 (default) when dynamic HTML is disabled
@@ -125,14 +157,19 @@ export class DynamicDataProvider {
     return clampSeed(getSeedFromUrl());
   }
 
-  private setEmails(nextEmails: Email[]): void {
+  private setData(nextEmails: Email[], nextTemplates: MailTemplate[]): void {
     this.emails = nextEmails;
+    this.templates = nextTemplates;
     if (this.emails.length > 0) {
       writeCachedEmails(this.emails);
+    }
+    if (this.templates.length > 0) {
+      writeCachedTemplates(this.templates);
     }
     this.ready = true;
     this.resolveReady();
     this.notifyListeners();
+    this.notifyTemplateListeners();
   }
 
   private notifyListeners(): void {
@@ -142,6 +179,17 @@ export class DynamicDataProvider {
         listener(snapshot);
       } catch (err) {
         console.warn("[dynamicDataProvider] listener error", err);
+      }
+    }
+  }
+
+  private notifyTemplateListeners(): void {
+    const snapshot = [...this.templates];
+    for (const listener of this.templateListeners) {
+      try {
+        listener(snapshot);
+      } catch (err) {
+        console.warn("[dynamicDataProvider] template listener error", err);
       }
     }
   }
