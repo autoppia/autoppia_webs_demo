@@ -1,51 +1,62 @@
-/**
- * Medical Specialties Constants
- *
- * This file contains all available medical specialties in the system.
- * These specialties are extracted from the doctors dataset and are used
- * throughout the application for filtering, autocomplete, and validation.
- */
-
-export const MEDICAL_SPECIALTIES = [
-  "Anesthesiology",
-  "Cardiology",
-  "Dermatology",
-  "Emergency Medicine",
-  "Endocrinology",
-  "Gastroenterology",
-  "Internal Medicine",
-  "Nephrology",
-  "Neurology",
-  "Oncology",
-  "Ophthalmology",
-  "Orthopedics",
-  "Otolaryngology",
-  "Pathology",
-  "Pediatrics",
-  "Psychiatry",
-  "Pulmonology",
-  "Radiology",
-  "Rheumatology",
-  "Urology",
-] as const;
+import type { Appointment, Doctor, MedicalRecord } from "@/data/types";
 
 /**
- * Get all medical specialties as a sorted array
+ * Unique specialties from the doctors currently loaded from the web dataset.
  */
-export function getAllSpecialties(): string[] {
-  return [...MEDICAL_SPECIALTIES].sort();
+export function deriveSpecialtiesFromDoctors(doctors: Doctor[]): string[] {
+  const set = new Set<string>();
+  for (const d of doctors) {
+    const primary = d.specialty?.trim();
+    if (primary) set.add(primary);
+    for (const s of d.specialties ?? []) {
+      const t = typeof s === "string" ? s.trim() : "";
+      if (t) set.add(t);
+    }
+  }
+  return [...set].sort((a, b) => a.localeCompare(b));
 }
 
 /**
- * Filter specialties by search term (case-insensitive)
+ * Specialties implied by appointment rows plus doctors who appear on medical records
+ * (same sources as the Appointments and Medical Analysis pages).
  */
-export function filterSpecialties(searchTerm: string): string[] {
-  if (!searchTerm.trim()) {
-    return getAllSpecialties();
+export function deriveSpecialtiesFromAppointmentAndRecordData(
+  appointments: Appointment[],
+  medicalRecords: MedicalRecord[],
+  doctors: Doctor[],
+): string[] {
+  const set = new Set<string>();
+  for (const a of appointments) {
+    const s = a.specialty?.trim();
+    if (s) set.add(s);
   }
 
+  const byNameLower = new Map<string, Doctor>();
+  for (const d of doctors) {
+    const k = d.name.trim().toLowerCase();
+    if (!byNameLower.has(k)) byNameLower.set(k, d);
+  }
+
+  for (const r of medicalRecords) {
+    const name = r.doctorName?.trim();
+    if (!name) continue;
+    const d = byNameLower.get(name.toLowerCase());
+    if (!d) continue;
+    const primary = d.specialty?.trim();
+    if (primary) set.add(primary);
+    for (const s of d.specialties ?? []) {
+      const t = typeof s === "string" ? s.trim() : "";
+      if (t) set.add(t);
+    }
+  }
+
+  return [...set].sort((a, b) => a.localeCompare(b));
+}
+
+export function filterSpecialtiesList(specialties: string[], searchTerm: string): string[] {
+  if (!searchTerm.trim()) {
+    return [...specialties].sort((a, b) => a.localeCompare(b));
+  }
   const term = searchTerm.toLowerCase();
-  return MEDICAL_SPECIALTIES.filter(specialty =>
-    specialty.toLowerCase().includes(term)
-  );
+  return specialties.filter((s) => s.toLowerCase().includes(term));
 }

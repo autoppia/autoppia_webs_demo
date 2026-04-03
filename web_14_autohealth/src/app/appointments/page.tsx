@@ -4,7 +4,8 @@ import { useEffect, useState, useMemo, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { initializeAppointments } from "@/data/appointments-enhanced";
 import { initializeDoctors } from "@/data/doctors-enhanced";
-import type { Appointment, Doctor } from "@/data/types";
+import { initializeMedicalRecords } from "@/data/medical-records-enhanced";
+import type { Appointment, Doctor, MedicalRecord } from "@/data/types";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
@@ -14,7 +15,10 @@ import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynami
 import { cn } from "@/library/utils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MEDICAL_SPECIALTIES, filterSpecialties } from "@/data/medical-specialties";
+import {
+  deriveSpecialtiesFromAppointmentAndRecordData,
+  filterSpecialtiesList,
+} from "@/data/medical-specialties";
 import { Pagination, PAGINATION_PAGE_SIZE } from "@/components/ui/pagination";
 
 function AppointmentsPageContent() {
@@ -24,6 +28,7 @@ function AppointmentsPageContent() {
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [appointmentList, setAppointmentList] = useState<Appointment[]>([]);
   const [doctorList, setDoctorList] = useState<Doctor[]>([]);
+  const [medicalRecords, setMedicalRecords] = useState<MedicalRecord[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDoctors, setIsLoadingDoctors] = useState(true);
@@ -139,6 +144,20 @@ function AppointmentsPageContent() {
 
   useEffect(() => {
     let mounted = true;
+    initializeMedicalRecords()
+      .then((records) => {
+        if (mounted) setMedicalRecords(records);
+      })
+      .catch((err) => {
+        console.error("[AppointmentsPage] Failed to load medical records for specialty list:", err);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
     initializeDoctors()
       .then((data) => {
         if (mounted) {
@@ -150,10 +169,23 @@ function AppointmentsPageContent() {
     return () => { mounted = false; };
   }, []);
 
-  // Initialize filtered specialties
+  const availableSpecialties = useMemo(
+    () =>
+      deriveSpecialtiesFromAppointmentAndRecordData(
+        appointmentList,
+        medicalRecords,
+        doctorList,
+      ),
+    [appointmentList, medicalRecords, doctorList],
+  );
+
   useEffect(() => {
-    setFilteredSpecialties([...MEDICAL_SPECIALTIES].sort());
-  }, []);
+    if (!specialtySearchText.trim()) {
+      setFilteredSpecialties([...availableSpecialties]);
+    } else {
+      setFilteredSpecialties(filterSpecialtiesList(availableSpecialties, specialtySearchText));
+    }
+  }, [availableSpecialties, specialtySearchText]);
 
   // Handle clicks outside suggestions
   useEffect(() => {
@@ -339,19 +371,18 @@ function AppointmentsPageContent() {
     setSpecialtySearchText(value);
 
     if (!value.trim()) {
-      setFilteredSpecialties([...MEDICAL_SPECIALTIES].sort());
+      setFilteredSpecialties([...availableSpecialties]);
       setShowSpecialtySuggestions(false);
       setSelectedSpecialty("");
       return;
     }
 
-    const filtered = filterSpecialties(value);
+    const filtered = filterSpecialtiesList(availableSpecialties, value);
     setFilteredSpecialties(filtered);
     setShowSpecialtySuggestions(filtered.length > 0);
 
-    // If exact match found, select it
-    const exactMatch = MEDICAL_SPECIALTIES.find(specialty =>
-      specialty.toLowerCase() === value.toLowerCase()
+    const exactMatch = availableSpecialties.find(
+      (specialty) => specialty.toLowerCase() === value.toLowerCase(),
     );
     if (exactMatch) {
       setSelectedSpecialty(exactMatch);
