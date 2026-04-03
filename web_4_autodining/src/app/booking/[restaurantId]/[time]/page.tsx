@@ -12,6 +12,7 @@ import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
+import { useAuth } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { cn } from "@/library/utils";
@@ -25,7 +26,6 @@ export default function Page() {
   const params = useParams();
   const searchParams = useSearchParams();
   const { seed } = useSeed();
-  const v2Seed = seed;
   const restaurantId = params.restaurantId as string;
   const reservationTimeParam = decodeURIComponent(params.time as string);
   const reservationPeopleParam = searchParams.get("people");
@@ -44,8 +44,14 @@ export default function Page() {
   const [specialRequest, setSpecialRequest] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
-  const [email, setEmail] = useState("user_name@gmail.com");
+  const [email, setEmail] = useState("");
   const dyn = useDynamicSystem();
+  const { currentUser, isAuthenticated } = useAuth();
+  useEffect(() => {
+    if (isAuthenticated && currentUser?.email) {
+      setEmail(currentUser.email);
+    }
+  }, [isAuthenticated, currentUser]);
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
       console.log("[booking/[restaurantId]/[time]/page] V2 status:", { v2Enabled: dyn.v2.isEnabled() });
@@ -121,7 +127,7 @@ export default function Page() {
   return (
     dyn.v1.addWrapDecoy("booking-page", (
       <main className="min-h-screen bg-background" suppressHydrationWarning id={dyn.v3.getVariant("booking-page", ID_VARIANTS_MAP, "booking-page")}>
-        <Navbar />
+        <Navbar showBack />
       {/* Hero Banner */}
       {dyn.v1.addWrapDecoy("booking-banner", (
         <div className="w-full h-[300px] relative overflow-hidden" id={dyn.v3.getVariant("booking-banner", ID_VARIANTS_MAP, "booking-banner")}>

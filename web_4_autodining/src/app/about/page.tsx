@@ -28,10 +28,17 @@ export default function AboutPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <Navbar />
+      <Navbar showBack />
 
       {/* Hero */}
       <div className="relative overflow-hidden py-24 px-6">
+        <div className="absolute inset-0">
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-25 scale-105"
+            style={{ backgroundImage: "url('/images/help-about-banner.jpg')", filter: "blur(4px)" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/55 to-background/95" />
+        </div>
         <div className="absolute top-10 left-1/3 w-72 h-72 bg-amber-500/5 rounded-full blur-[100px]" />
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <p className="uppercase tracking-[0.5em] text-[11px] font-semibold text-amber-500 mb-4">Our story</p>
