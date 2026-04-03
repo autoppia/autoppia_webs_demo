@@ -1,27 +1,14 @@
 "use client";
 import React, { useCallback, useState, useRef, useEffect, useMemo, Suspense } from "react";
-import { useRouter } from "next/navigation";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import {
-  CalendarIcon,
-  ClockIcon,
-  UserIcon,
-  ChevronLeft,
-  ChevronRight,
-  SearchX,
-} from "lucide-react";
+import { CalendarIcon, ClockIcon, UserIcon, ChevronLeft, ChevronRight, Search, MapPin, Star } from "lucide-react";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { getRestaurants, initializeRestaurants } from "@/dynamic/v2";
-import { useSearchParams } from "next/navigation";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
@@ -29,195 +16,131 @@ import { cn } from "@/library/utils";
 import Navbar from "@/components/Navbar";
 
 type UiRestaurant = {
-  id: string;
-  name: string;
-  image: string;
-  cuisine: string;
-  area: string;
-  reviews: number;
-  rating: number; // rating con decimales (ej: 4.6, 4.8)
-  stars: number; // stars entero 1-5 ya redondeado
-  price: string;
-  bookings: number;
-  times: string[];
-  tags: string[];
+  id: string; name: string; image: string; cuisine: string; area: string;
+  reviews: number; rating: number; stars: number; price: string; bookings: number; times: string[]; tags: string[];
 };
 
 const defaultRestaurants: UiRestaurant[] = [];
 
 function StarRating({ count }: { count: number }) {
-  // count ya viene como entero (1-5) del JSON, no necesitamos round
-  // Solo asegurar que esté en el rango válido
   const clamped = Math.max(1, Math.min(5, Math.floor(count)));
   return (
-    <span className="text-lg align-middle mr-1">
+    <span className="flex items-center gap-0.5">
       {Array.from({ length: 5 }, (_, i) => i).map((i) => (
-        <span
-          key={`star-${i}`}
-          className={i < clamped ? "text-yellow-400" : "text-gray-400"}
-        >
-          ★
-        </span>
+        <Star key={`star-${i}`} className={cn("w-3.5 h-3.5", i < clamped ? "text-amber-400 fill-amber-400" : "text-white/20")} />
       ))}
     </span>
   );
 }
 
-function RestaurantCard({
-  r,
-  date,
-  people,
-  time,
-}: {
-  r: {
-    id: string;
-    name: string;
-    cuisine: string;
-    area: string;
-    reviews: number;
-    rating: number; // rating con decimales
-    stars: number; // stars entero 1-5
-    price: string;
-    bookings: number;
-    image: string;
-    times: string[];
-  };
-  date: Date | undefined;
-  people: number;
-  time: string;
+function RestaurantCard({ r, date: _date, people: _people, time: _time, index }: {
+  r: { id: string; name: string; cuisine: string; area: string; reviews: number; rating: number; stars: number; price: string; bookings: number; image: string; times: string[] };
+  date: Date | undefined; people: number; time: string; index?: number;
 }) {
   const dyn = useDynamicSystem();
-  const personLabel = dyn.v3.getVariant("person", undefined, "Guest");
-  const peopleLabel = dyn.v3.getVariant("people", undefined, "Guests");
-
-  const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
-
   const viewDetailsLabel = dyn.v3.getVariant("see_details", TEXT_VARIANTS_MAP, "View details");
-  const bookNowLabel = dyn.v3.getVariant("reserve_now", TEXT_VARIANTS_MAP, "Book now");
-
-  // Usar rating para el número y stars para las estrellas
-  const ratingValue = r.rating ?? 4.5; // Para mostrar el número (con decimales)
-  const starsCount = r.stars ?? 5; // Para mostrar las estrellas (ya viene redondeado)
+  const ratingValue = r.rating ?? 4.5;
+  const starsCount = r.stars ?? 5;
   const reviewsCount = r.reviews || 0;
   const priceTag = r.price || "$$";
-
   return (
     dyn.v1.addWrapDecoy(`restaurant-card-${r.id}`, (
-      <div
-        className="w-[320px] flex-shrink-0 rounded-xl overflow-hidden shadow-lg bg-zinc-950 hover:-translate-y-1 transition-all duration-300 hover:shadow-xl group/card cursor-pointer transform translate-z-0"
-        id={dyn.v3.getVariant("restaurant-card", ID_VARIANTS_MAP, `restaurant-card-${r.id}`)}
+      <SeedLink
+        href={`/restaurant/${encodeURIComponent(r.id)}`}
+        className="block w-[320px] flex-shrink-0"
+        onClick={() => logEvent(EVENT_TYPES.VIEW_RESTAURANT, { restaurantId: r.id })}
       >
-        <SeedLink href={`/restaurant/${encodeURIComponent(r.id)}`} className="block w-full h-full">
+        <div
+          className={cn(
+            "w-full rounded-2xl overflow-hidden bg-card border border-white/[0.06] card-lift group cursor-pointer",
+            "opacity-0 animate-fade-in-up",
+            index !== undefined && index < 8 ? `animate-delay-${(index % 4) * 100 + 100}` : ""
+          )}
+          style={index !== undefined ? { animationDelay: `${(index % 4) * 80}ms`, animationFillMode: "forwards" } : undefined}
+          id={dyn.v3.getVariant("restaurant-card", ID_VARIANTS_MAP, `restaurant-card-${r.id}`)}
+        >
           {dyn.v1.addWrapDecoy(`restaurant-card-image-${r.id}`, (
-            <div className="relative w-full h-[280px] overflow-hidden rounded-t-xl">
+            <div className="relative w-full h-[200px] overflow-hidden">
               <img
-                src={r.image}
-                alt={r.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110 rounded-t-xl"
+                src={r.image} alt={r.name}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 id={dyn.v3.getVariant("restaurant-image", ID_VARIANTS_MAP, `restaurant-image-${r.id}`)}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-
-              {/* Badges at top */}
+              <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
               {dyn.v1.addWrapDecoy(`restaurant-card-badges-${r.id}`, (
                 <div
-                  className="absolute top-0 left-0 right-0 p-3 flex justify-between items-start z-10"
+                  className="absolute top-3 left-3 right-3 flex justify-between items-start z-10"
                   id={dyn.v3.getVariant("restaurant-badges", ID_VARIANTS_MAP, `restaurant-badges-${r.id}`)}
                 >
                   <span
-                    className="px-3 py-1.5 rounded-full bg-[#dc2626]/90 backdrop-blur-sm text-white text-xs font-bold shadow-lg"
+                    className="px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-md text-white/80 text-[11px] font-medium border border-white/10"
                     id={dyn.v3.getVariant("restaurant-cuisine-badge", ID_VARIANTS_MAP, `restaurant-cuisine-${r.id}`)}
-                  >
-                    {r.cuisine}
-                  </span>
+                  >{r.cuisine}</span>
                   <span
-                    className="px-3 py-1.5 rounded-full bg-yellow-500/90 backdrop-blur-sm text-white text-xs font-bold shadow-lg"
+                    className="px-2.5 py-1 rounded-full bg-amber-500/90 text-black text-[11px] font-bold"
                     id={dyn.v3.getVariant("restaurant-price-badge", ID_VARIANTS_MAP, `restaurant-price-${r.id}`)}
-                  >
-                    {priceTag}
-                  </span>
-                </div>
-              ))}
-
-              {/* Content overlay at bottom */}
-              {dyn.v1.addWrapDecoy(`restaurant-card-content-${r.id}`, (
-                <div
-                  className="absolute bottom-0 left-0 right-0 p-4 text-white"
-                  id={dyn.v3.getVariant("restaurant-card-content", ID_VARIANTS_MAP, `restaurant-content-${r.id}`)}
-                >
-                  {dyn.v1.addWrapDecoy(`restaurant-card-title-${r.id}`, (
-                    <h3
-                      className="font-bold text-xl mb-0 group-hover/card:text-red-400 transition-colors drop-shadow-lg"
-                      id={dyn.v3.getVariant("restaurant-name", ID_VARIANTS_MAP, `restaurant-name-${r.id}`)}
-                    >
-                      {r.name}
-                    </h3>
-                  ))}
-                  <div className="mb-3">
-                    {dyn.v1.addWrapDecoy(`restaurant-card-rating-${r.id}`, (
-                      <div
-                        className="flex items-center gap-2 mb-0"
-                        id={dyn.v3.getVariant("restaurant-rating", ID_VARIANTS_MAP, `restaurant-rating-${r.id}`)}
-                      >
-                        <StarRating count={starsCount} />
-                        <span className="text-sm font-semibold drop-shadow">
-                          {ratingValue.toFixed(1)}
-                          {reviewsCount > 0 && ` (${reviewsCount} reviews)`}
-                        </span>
-                      </div>
-                    ))}
-                    <div className="flex items-center justify-between">
-                      <span
-                        className="text-xs text-gray-200 opacity-80 font-bold"
-                        id={dyn.v3.getVariant("restaurant-area", ID_VARIANTS_MAP, `restaurant-area-${r.id}`)}
-                      >
-                        {r.area}
-                      </span>
-                      <div
-                        id={dyn.v3.getVariant("view_details_button", ID_VARIANTS_MAP, `view-details-${r.id}`)}
-                        className={dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "text-sm bg-red-600 group-hover/card:bg-red-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors")}
-                      >
-                        {viewDetailsLabel}
-                      </div>
-                    </div>
-                  </div>
+                  >{priceTag}</span>
                 </div>
               ))}
             </div>
           ))}
-        </SeedLink>
-      </div>
+          {dyn.v1.addWrapDecoy(`restaurant-card-content-${r.id}`, (
+            <div
+              className="p-5 space-y-3"
+              id={dyn.v3.getVariant("restaurant-card-content", ID_VARIANTS_MAP, `restaurant-content-${r.id}`)}
+            >
+              {dyn.v1.addWrapDecoy(`restaurant-card-title-${r.id}`, (
+                <h3
+                  className="font-bold text-base text-white group-hover:text-amber-400 transition-colors duration-300 leading-tight"
+                  id={dyn.v3.getVariant("restaurant-name", ID_VARIANTS_MAP, `restaurant-name-${r.id}`)}
+                >{r.name}</h3>
+              ))}
+              {dyn.v1.addWrapDecoy(`restaurant-card-rating-${r.id}`, (
+                <div
+                  className="flex items-center gap-2"
+                  id={dyn.v3.getVariant("restaurant-rating", ID_VARIANTS_MAP, `restaurant-rating-${r.id}`)}
+                >
+                  <StarRating count={starsCount} />
+                  <span className="text-xs font-semibold text-white/70">{ratingValue.toFixed(1)}</span>
+                  {reviewsCount > 0 && <span className="text-[11px] text-white/30">({reviewsCount})</span>}
+                </div>
+              ))}
+              <div className="flex items-center justify-between pt-1">
+                <span
+                  className="text-[11px] text-white/30 flex items-center gap-1"
+                  id={dyn.v3.getVariant("restaurant-area", ID_VARIANTS_MAP, `restaurant-area-${r.id}`)}
+                >
+                  <MapPin className="w-3 h-3" />{r.area}
+                </span>
+                <span
+                  id={dyn.v3.getVariant("view_details_button", ID_VARIANTS_MAP, `view-details-${r.id}`)}
+                  className={cn(dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "button-primary"), "text-[12px] bg-amber-500 hover:bg-amber-400 text-black px-4 py-1.5 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/20")}
+                >{viewDetailsLabel}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SeedLink>
     ), `restaurant-card-wrap-${r.id}`)
   );
 }
 
-function CardScroller({
-  children,
-  title,
-}: {
-  children: React.ReactNode;
-  title: string;
-}) {
+function CardScroller({ children, title }: { children: React.ReactNode; title: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const tickingRef = useRef(false);
   const rafIdRef = useRef<number | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const dyn = useDynamicSystem();
-  const { seed } = useSeed(); // Get seed from context for data-testid
-
-  // LAYOUT FIJO - Sin variaciones
+  const { seed } = useSeed();
   const childCount = React.Children.count(children);
-
   const checkScroll = useCallback(() => {
     if (ref.current) {
       const { scrollLeft, scrollWidth, clientWidth } = ref.current;
-      // Usar un pequeño margen para evitar problemas de precisión
       setCanScrollLeft(scrollLeft > 10);
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
     }
   }, []);
-
   const scheduleCheck = useCallback(() => {
     if (tickingRef.current) return;
     tickingRef.current = true;
@@ -226,7 +149,6 @@ function CardScroller({
       tickingRef.current = false;
     });
   }, [checkScroll]);
-
   useEffect(() => {
     checkScroll();
     let ro: ResizeObserver | null = null;
@@ -243,86 +165,65 @@ function CardScroller({
       tickingRef.current = false;
     };
   }, [checkScroll, scheduleCheck]);
-
   const scroll = (direction: "left" | "right") => {
     if (ref.current) {
-      // Ancho de tarjeta (320px) + gap (16px) = 336px
-      // Scroll por el ancho exacto de una tarjeta
       const cardWidth = 320;
       const gap = 16;
       const scrollAmount = cardWidth + gap;
-
-      const newScrollLeft =
-        ref.current.scrollLeft +
-        (direction === "left" ? -scrollAmount : scrollAmount);
-
+      const newScrollLeft = ref.current.scrollLeft + (direction === "left" ? -scrollAmount : scrollAmount);
       ref.current.scrollTo({ left: newScrollLeft, behavior: "smooth" });
-
-      // Log scroll event
       logEvent(EVENT_TYPES.SCROLL_VIEW, { direction, title });
     }
   };
-
-  if (childCount === 0) {
-    return null;
-  }
-
+  if (childCount === 0) return null;
   return (
     dyn.v1.addWrapDecoy(`card-scroller-${title}`, (
       <div
         className="relative group"
         id={dyn.v3.getVariant("card-scroller", ID_VARIANTS_MAP, `card-scroller-${title}`)}
       >
-        {/* Flecha izquierda - fuera del contenedor */}
         {canScrollLeft && (
           dyn.v1.addWrapDecoy(`card-scroller-left-btn-${title}`, (
             <button
               onClick={() => scroll("left")}
-              className="absolute -left-5 top-1/2 -translate-y-1/2 z-20
-                w-12 h-12 flex items-center justify-center
-                bg-zinc-950/95 backdrop-blur-sm border-2 border-zinc-800
-                rounded-full shadow-xl hover:shadow-2xl
-                hover:bg-red-50 hover:border-red-400 hover:scale-110
-                transition-all duration-300 ease-out"
+              className="absolute -left-4 top-1/2 -translate-y-1/2 z-20
+                w-10 h-10 flex items-center justify-center
+                bg-amber-500 text-black
+                rounded-full shadow-xl shadow-amber-500/30
+                hover:bg-amber-400 hover:scale-110
+                transition-all duration-300 opacity-0 group-hover:opacity-100"
               data-testid={`scroll-left-${seed ?? 1}`}
               aria-label={dyn.v3.getVariant("scroll_left", undefined, "Scroll left")}
               id={dyn.v3.getVariant("scroll-left-button", ID_VARIANTS_MAP, `scroll-left-${title}`)}
             >
-              <ChevronLeft className="w-6 h-6 text-gray-300 group-hover:text-red-600" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
           ))
         )}
-
-        {/* Flecha derecha - fuera del contenedor */}
         {canScrollRight && (
           dyn.v1.addWrapDecoy(`card-scroller-right-btn-${title}`, (
             <button
               onClick={() => scroll("right")}
-              className="absolute -right-5 top-1/2 -translate-y-1/2 z-20
-                w-12 h-12 flex items-center justify-center
-                bg-zinc-950/95 backdrop-blur-sm border-2 border-zinc-800
-                rounded-full shadow-xl hover:shadow-2xl
-                hover:bg-emerald-50 hover:border-emerald-400 hover:scale-110
-                transition-all duration-300 ease-out"
+              className="absolute -right-4 top-1/2 -translate-y-1/2 z-20
+                w-10 h-10 flex items-center justify-center
+                bg-amber-500 text-black
+                rounded-full shadow-xl shadow-amber-500/30
+                hover:bg-amber-400 hover:scale-110
+                transition-all duration-300 opacity-0 group-hover:opacity-100"
               data-testid={`scroll-right-${seed ?? 1}`}
               aria-label={dyn.v3.getVariant("scroll_right", undefined, "Scroll right")}
               id={dyn.v3.getVariant("scroll-right-button", ID_VARIANTS_MAP, `scroll-right-${title}`)}
             >
-              <ChevronRight className="w-6 h-6 text-gray-300 group-hover:text-red-600" />
+              <ChevronRight className="w-5 h-5" />
             </button>
           ))
         )}
-
-        {/* Contenedor con padding para mostrar media tarjeta del siguiente */}
         {dyn.v1.addWrapDecoy(`card-scroller-content-${title}`, (
           <div
             ref={ref}
-            className="flex gap-4 pb-4 px-5 scroll-smooth overflow-x-auto overflow-y-hidden no-scrollbar"
+            className="flex gap-4 pb-4 px-1 scroll-smooth overflow-x-auto overflow-y-hidden no-scrollbar"
             onScroll={scheduleCheck}
-            style={{
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-            }}
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             id={dyn.v3.getVariant("card-scroller-content", ID_VARIANTS_MAP, `card-scroller-content-${title}`)}
           >
             {children}
@@ -333,11 +234,7 @@ function CardScroller({
   );
 }
 
-// LAYOUT FIJO - Sin variaciones
-
-// Client-only component that uses seed from context
 function HomePageContent() {
-  const router = useRouter();
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [list, setList] = useState<UiRestaurant[]>(defaultRestaurants);
@@ -350,13 +247,10 @@ function HomePageContent() {
   const [peopleOpen, setPeopleOpen] = useState(false);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const dyn = useDynamicSystem();
-  const searchParams = useSearchParams();
   const personLabel = dyn.v3.getVariant("person", undefined, "Guest");
   const peopleLabel = dyn.v3.getVariant("people", undefined, "Guests");
-
   const { seed } = useSeed();
   const v2Seed = seed;
-
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const tagOptions = [
     "top-rated",
@@ -371,150 +265,93 @@ function HomePageContent() {
     "spicy",
     "tapas",
   ];
-
-  // Debug: Verify V1, V2, and V3 are working
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
-      console.log("[page.tsx] Debug dinámico:", {
-        seed: dyn.seed,
-        v1Enabled: isV1Enabled(),
-        v2Enabled: dyn.v2.isEnabled(),
-        v3Enabled: isV3Enabled(),
-      });
+      console.log("[page.tsx] Debug dinámico:", { seed: dyn.seed, v1Enabled: isV1Enabled(), v2Enabled: dyn.v2.isEnabled(), v3Enabled: isV3Enabled() });
     }
   }, [dyn.seed, dyn.v2]);
-
   function toLocalISO(date: Date): string {
     const pad = (n: number) => String(n).padStart(2, "0");
-
     const year = date.getFullYear();
     const month = pad(date.getMonth() + 1);
     const day = pad(date.getDate());
     const hours = pad(date.getHours());
     const minutes = pad(date.getMinutes());
     const seconds = pad(date.getSeconds());
-
     const tzOffset = -date.getTimezoneOffset();
     const sign = tzOffset >= 0 ? "+" : "-";
     const offsetHours = pad(Math.floor(Math.abs(tzOffset) / 60));
     const offsetMinutes = pad(Math.abs(tzOffset) % 60);
-
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${offsetHours}:${offsetMinutes}`;
   }
-
   const handleDateSelect = (d: Date | undefined) => {
     setDate(d);
     if (d) {
       const isoDate = toLocalISO(d);
+      logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: isoDate });
       logEvent(EVENT_TYPES.DATE_SELECTED, { date: isoDate });
     }
   };
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearch(value);
-    // Clear previous timeout
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
-    // Only log search event after user stops typing (debounce) to avoid breaking layout
-    // The search event no longer triggers layout variations, so we can log it less frequently
+    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
     searchTimeoutRef.current = setTimeout(() => {
-      if (value.trim()) {
-        logEvent(EVENT_TYPES.SEARCH_RESTAURANT, { query: value });
-      }
+      if (value.trim()) logEvent(EVENT_TYPES.SEARCH_RESTAURANT, { query: value });
     }, 500);
   };
-
   const handleTimeSelect = (t: string) => {
     setTime(t);
+    logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
     logEvent(EVENT_TYPES.TIME_SELECTED, { time: t });
   };
-
   const handlePeopleSelect = (n: number) => {
     setPeople(n);
+    logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
     logEvent(EVENT_TYPES.PEOPLE_SELECTED, { people: n });
   };
-
+  const handleTagSelect = (tag: string | null) => {
+    setSelectedTag(tag);
+    logEvent(EVENT_TYPES.TAG_FILTER_SELECTED, { tag: tag ?? "all" });
+  };
   function matches(r: UiRestaurant): boolean {
     const q = search.trim().toLowerCase();
-    const matchesSearch = (
-      !q ||
-      r.name.toLowerCase().includes(q) ||
-      r.cuisine.toLowerCase().includes(q) ||
-      r.area.toLowerCase().includes(q)
-    );
+    const matchesSearch = !q || r.name.toLowerCase().includes(q) || r.cuisine.toLowerCase().includes(q) || r.area.toLowerCase().includes(q);
     const matchesTag = !selectedTag || r.tags?.includes(selectedTag);
     return matchesSearch && matchesTag;
   }
-
   const filtered = list.filter(matches);
   const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
-  const timeOptions = [
-    "12:00 PM",
-    "12:30 PM",
-    "1:00 PM",
-    "1:30 PM",
-    "2:00 PM",
-    "2:30 PM",
-  ];
-
-  // Track the last v2Seed we used to avoid duplicate loads
+  const timeOptions = ["12:00 PM", "12:30 PM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM"];
   const lastV2SeedRef = useRef<number | null>(null);
   const lastBaseSeedRef = useRef<number | null>(null);
-
-  // Reset lastV2SeedRef when base seed changes (user changed seed in URL)
   useEffect(() => {
     if (lastBaseSeedRef.current !== null && lastBaseSeedRef.current !== seed) {
-      console.log(
-        `[autodining] Base seed changed from ${lastBaseSeedRef.current} to ${seed}, resetting cache`
-      );
-      lastV2SeedRef.current = null; // Force reload with new seed
+      console.log(`[autodining] Base seed changed from ${lastBaseSeedRef.current} to ${seed}, resetting cache`);
+      lastV2SeedRef.current = null;
     }
     lastBaseSeedRef.current = seed;
   }, [seed]);
-
   useEffect(() => {
-    // Only load if v2Seed is valid and different from last load
     const currentV2Seed = v2Seed ?? seed;
-    if (currentV2Seed === null || currentV2Seed === undefined) {
-      return; // Wait for valid seed
-    }
-
-    // Skip if we already loaded with this seed
-    if (lastV2SeedRef.current === currentV2Seed) {
-      return;
-    }
-
+    if (currentV2Seed === null || currentV2Seed === undefined) return;
+    if (lastV2SeedRef.current === currentV2Seed) return;
     let cancelled = false;
-
     const loadRestaurants = async () => {
-      console.log(
-        `[autodining] V2 Data - Seed: ${currentV2Seed} (from base seed: ${seed})`
-      );
-      lastV2SeedRef.current = currentV2Seed; // Mark as loading
+      console.log(`[autodining] V2 Data - Seed: ${currentV2Seed} (from base seed: ${seed})`);
+      lastV2SeedRef.current = currentV2Seed;
       setIsLoading(true);
       try {
-        // Pass v2Seed to initializeRestaurants when v2 is enabled
-        await initializeRestaurants(currentV2Seed); // waits for DB/gen
-
-        // Only update state if this effect hasn't been cancelled
+        await initializeRestaurants(currentV2Seed);
         if (!cancelled) {
           const fresh = getRestaurants().map((r) => {
             const rating = r.rating ?? 4.5;
             const stars = r.stars ?? Math.round(rating);
             return {
-              id: r.id,
-              name: r.name,
-              image: r.image,
-              cuisine: r.cuisine ?? "International",
-              area: r.area ?? "Downtown",
-              reviews: r.reviews ?? 64,
-              rating,
-              stars,
-              price: r.price ?? "$$",
-              bookings: r.bookings ?? 0,
-              times: ["1:00 PM"],
+              id: r.id, name: r.name, image: r.image,
+              cuisine: r.cuisine ?? "International", area: r.area ?? "Downtown",
+              reviews: r.reviews ?? 64, rating, stars,
+              price: r.price ?? "$$", bookings: r.bookings ?? 0, times: ["1:00 PM"],
               tags: r.tags ?? [],
             };
           });
@@ -523,182 +360,88 @@ function HomePageContent() {
           setIsReady(mapped.length > 0);
         }
       } finally {
-        if (!cancelled) {
-          setIsLoading(false);
-        }
+        if (!cancelled) setIsLoading(false);
       }
     };
-
     loadRestaurants();
-
-    // Cleanup: cancel if seed changes before async completes
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [v2Seed, seed]);
-
   const expensiveRestaurants = useMemo(() => {
-    const expensive = filtered
-      .filter((r) => {
-        const priceCount = (r.price || "").match(/\$/g)?.length || 0;
-        return priceCount >= 4; // $$$$ or more
-      })
-      .slice(0, 8);
-    // V1: Order restaurants dynamically
+    const expensive = filtered.filter((r) => {
+      const priceCount = (r.price || "").match(/\$/g)?.length || 0;
+      return priceCount >= 4;
+    }).slice(0, 8);
     const order = dyn.v1.changeOrderElements("expensive-restaurants", expensive.length);
     return order.map((idx) => expensive[idx]);
   }, [filtered, dyn.v1]);
-
   const mediumRestaurants = useMemo(() => {
-    const medium = filtered
-      .filter((r) => {
-        const priceCount = (r.price || "").match(/\$/g)?.length || 0;
-        return priceCount >= 2 && priceCount <= 3; // $$ or $$$
-      })
-      .slice(0, 8);
-    // V1: Order restaurants dynamically
+    const medium = filtered.filter((r) => {
+      const priceCount = (r.price || "").match(/\$/g)?.length || 0;
+      return priceCount >= 2 && priceCount <= 3;
+    }).slice(0, 8);
     const order = dyn.v1.changeOrderElements("medium-restaurants", medium.length);
     return order.map((idx) => medium[idx]);
   }, [filtered, dyn.v1]);
-
   const cheapRestaurants = useMemo(() => {
-    const cheap = filtered
-      .filter((r) => {
-        const priceCount = (r.price || "").match(/\$/g)?.length || 0;
-        return priceCount === 1; // $
-      })
-      .slice(0, 8);
-    // V1: Order restaurants dynamically
+    const cheap = filtered.filter((r) => {
+      const priceCount = (r.price || "").match(/\$/g)?.length || 0;
+      return priceCount === 1;
+    }).slice(0, 8);
     const order = dyn.v1.changeOrderElements("cheap-restaurants", cheap.length);
     return order.map((idx) => cheap[idx]);
   }, [filtered, dyn.v1]);
-
-  const marqueeTags = [
-    ...tagOptions.map((tag) => ({ id: `${tag}-a`, tag })),
-    ...tagOptions.map((tag) => ({ id: `${tag}-b`, tag })),
-  ];
-
   return (
-    <main suppressHydrationWarning>
-      {/* Hero Section with merged Navbar */}
-      <section className="mb-10 relative">
-        <div className="relative overflow-hidden bg-gradient-to-r from-red-700 via-red-600 to-red-500 text-white shadow-2xl">
-          <div className="absolute inset-0 opacity-10 bg-[url('/images/restaurant1.jpg')] bg-cover bg-center" />
-
-          <Navbar transparent />
-
-          <div className="relative max-w-6xl mx-auto px-8 py-16 md:py-24 space-y-3">
-            <p className="uppercase tracking-[0.3em] text-sm font-semibold">
-              Curated dining
-            </p>
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
-              Book standout tables, by cuisine, mood, or budget
+    <main suppressHydrationWarning className="min-h-screen bg-background">
+      <Navbar />
+      {/* Hero Section */}
+      <section className="relative">
+        <div className="animated-gradient noise relative overflow-hidden text-white px-8 py-24 md:py-32">
+          <div className="absolute inset-0">
+            <div
+              className="absolute inset-0 bg-cover bg-center opacity-25 scale-105"
+              style={{
+                backgroundImage: "url('/images/help-about-banner.jpg')",
+                filter: "blur(4px)",
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/55 to-background/95" />
+          </div>
+          {/* Decorative orbs */}
+          <div className="absolute top-20 left-1/4 w-72 h-72 bg-amber-500/10 rounded-full blur-[100px]" />
+          <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-[120px]" />
+          <div className="relative z-10 max-w-4xl mx-auto text-center space-y-6">
+            <p className="uppercase tracking-[0.5em] text-[11px] font-semibold text-amber-500">Curated dining experiences</p>
+            <h1 className="text-5xl md:text-7xl font-black leading-[1.05] tracking-tight">
+              Discover your next<br />
+              <span className="text-gradient">unforgettable</span> meal
             </h1>
-            <p className="text-white/80 text-lg">
-              Fresh picks updated daily. Choose your vibe, we’ll handle the
-              details.
-            </p>
-            <div className="flex flex-wrap gap-3 pt-2">
-              <span className="px-3 py-1 bg-zinc-950/15 rounded-full text-sm backdrop-blur-sm">
-                Trending tonight
-              </span>
-              <span className="px-3 py-1 bg-zinc-950/15 rounded-full text-sm backdrop-blur-sm">
-                Chef-owned
-              </span>
-              <span className="px-3 py-1 bg-zinc-950/15 rounded-full text-sm backdrop-blur-sm">
-                Group friendly
-              </span>
-            </div>
+            <p className="text-white/40 text-lg max-w-xl mx-auto leading-relaxed">Handpicked restaurants, seamless reservations. From intimate dinners to grand celebrations.</p>
           </div>
         </div>
-
-        {/* Search and Filters */}
+        {/* Search and Filters - floating bar */}
         {dyn.v1.addWrapDecoy("home-search-section", (
           <section
-            className="flex flex-wrap gap-4 items-end justify-between mt-6 mb-8 relative w-full px-6"
+            className="flex justify-center -mt-8 mb-12 relative z-20 px-6"
             style={{ minHeight: "auto", visibility: "visible", display: "flex" }}
           >
-            {/* Search input - left side */}
-            <div className="flex-1 flex flex-col gap-3 min-w-[400px]">
+            <div className="flex flex-wrap gap-3 items-center glass rounded-2xl p-3 shadow-2xl shadow-black/30 max-w-4xl w-full">
               {dyn.v1.addWrapDecoy("home-search-input-container", (
-                <input
-                  id={dyn.v3.getVariant("search-input", ID_VARIANTS_MAP, "search-input")}
-                  type="text"
-                  placeholder={
-                    dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search restaurant, cuisine...")
-                  }
-                  className={dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "w-full h-9 px-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#dc2626] focus:border-[#dc2626]")}
-                  value={search}
-                  onChange={handleSearchChange}
-                />
-              ))}
-
-              {/* Tag Carousel with Marquee Effect */}
-              <div className="overflow-hidden relative h-10 flex items-center group/marquee">
-                {/* Fade Masks */}
-                <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-                <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-
-                <div className="flex items-center gap-2 animate-marquee group-hover/marquee:pause-animation px-4">
-                  <button
-                    onClick={() => {
-                      setSelectedTag(null);
-                      logEvent(EVENT_TYPES.TAG_FILTER_SELECTED, { tag: null, action: "clear", search });
-                    }}
+                <div className="relative flex-1 min-w-[200px]">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+                  <input
+                    id={dyn.v3.getVariant("search-input", ID_VARIANTS_MAP, "search-input")}
+                    type="text"
+                    placeholder={dyn.v3.getVariant("search_placeholder", TEXT_VARIANTS_MAP, "Search restaurant, cuisine...")}
                     className={cn(
-                      "px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border",
-                      !selectedTag
-                        ? "bg-[#dc2626] border-[#dc2626] text-white shadow-[0_0_15px_rgba(220,38,38,0.2)]"
-                        : "bg-black border-white/20 text-white hover:border-[#dc2626] hover:text-[#dc2626]"
+                      dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, "input-text"),
+                      "w-full h-10 pl-10 pr-4 bg-white/[0.06] border border-white/[0.08] rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50 transition-all text-sm"
                     )}
-                  >
-                    All
-                  </button>
-                  {marqueeTags.map(({ id, tag }) => (
-                    <button
-                      key={id}
-                      onClick={() => {
-                        const isSelect = selectedTag !== tag;
-                        const newTag = isSelect ? tag : null;
-                        setSelectedTag(newTag);
-                        logEvent(EVENT_TYPES.TAG_FILTER_SELECTED, {
-                          tag: newTag,
-                          action: isSelect ? "select" : "clear",
-                          search
-                        });
-                      }}
-                      className={cn(
-                        "px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border",
-                        selectedTag === tag
-                          ? "bg-[#dc2626] border-[#dc2626] text-white shadow-[0_0_15px_rgba(220,38,38,0.2)]"
-                          : "bg-black border-white/20 text-white hover:border-[#dc2626] hover:text-[#dc2626]"
-                      )}
-                    >
-                      {tag}
-                    </button>
-                  ))}
+                    value={search}
+                    onChange={handleSearchChange}
+                  />
                 </div>
-              </div>
-
-              {/* Added CSS for Marquee in the same file if possible, or advising a style tag */}
-              <style jsx global>{`
-                @keyframes marquee {
-                  0% { transform: translateX(0); }
-                  100% { transform: translateX(-50%); }
-                }
-                .animate-marquee {
-                  display: flex;
-                  white-space: nowrap;
-                  animation: marquee 30s linear infinite;
-                }
-                .pause-animation {
-                  animation-play-state: paused;
-                }
-              `}</style>
-            </div>
-
-            {/* Filters - right side */}
-            <div className="flex gap-4 items-end">
+              ))}
+              <div className="h-8 w-px bg-white/10 hidden md:block" />
               {dyn.v1.addWrapDecoy("home-date-selector", (
                 <Popover open={dateOpen} onOpenChange={setDateOpen} modal={false}>
                   <PopoverTrigger asChild>
@@ -707,30 +450,17 @@ function HomePageContent() {
                       variant="outline"
                       className={cn(
                         dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
-                        "w-[200px] justify-start text-left font-normal"
+                        "w-[170px] justify-start text-left font-normal rounded-xl border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-amber-500/30 text-white/70 text-sm h-10 transition-all"
                       )}
+                      onClick={() => logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { action: "open" })}
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? (
-                        format(date, "PPP")
-                      ) : (
-                        <span>{dyn.v3.getVariant("select_date", TEXT_VARIANTS_MAP, "Select date")}</span>
-                      )}
+                      <CalendarIcon className="mr-2 h-4 w-4 text-amber-500/70" />
+                      {date ? format(date, "MMM d, yyyy") : <span className="text-white/30">{dyn.v3.getVariant("select_date", TEXT_VARIANTS_MAP, "Select date")}</span>}
                     </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-auto p-0 z-[100]"
-                align="start"
-                side="bottom"
-                sideOffset={8}
-              >
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={handleDateSelect}
-                  initialFocus
-                />
-              </PopoverContent>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0 z-[100]" align="start" side="bottom" sideOffset={8}>
+                    <Calendar mode="single" selected={date} onSelect={handleDateSelect} initialFocus />
+                  </PopoverContent>
                 </Popover>
               ))}
               {dyn.v1.addWrapDecoy("home-time-selector", (
@@ -741,30 +471,18 @@ function HomePageContent() {
                       variant="outline"
                       className={cn(
                         dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
-                        "w-[150px] justify-start text-left font-normal"
+                        "w-[130px] justify-start text-left font-normal rounded-xl border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-amber-500/30 text-white/70 text-sm h-10 transition-all"
                       )}
+                      onClick={() => logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { action: "open" })}
                     >
-                      <ClockIcon className="mr-2 h-4 w-4" />
+                      <ClockIcon className="mr-2 h-4 w-4 text-amber-500/70" />
                       {time}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent
-                    className="w-auto p-0 z-[100]"
-                    align="start"
-                    side="bottom"
-                    sideOffset={8}
-                  >
+                  <PopoverContent className="w-auto p-0 z-[100]" align="start" side="bottom" sideOffset={8}>
                     <div className="p-2">
                       {timeOptions.map((t) => (
-                        <Button
-                          key={t}
-                          variant="ghost"
-                          className="w-full justify-start"
-                          onClick={() => {
-                            handleTimeSelect(t);
-                            setTimeOpen(false);
-                          }}
-                        >
+                        <Button key={t} variant="ghost" className="w-full justify-start text-sm" onClick={() => { handleTimeSelect(t); setTimeOpen(false); }}>
                           {t}
                         </Button>
                       ))}
@@ -773,41 +491,25 @@ function HomePageContent() {
                 </Popover>
               ))}
               {dyn.v1.addWrapDecoy("home-guests-selector", (
-                <Popover
-                  open={peopleOpen}
-                  onOpenChange={setPeopleOpen}
-                  modal={false}
-                >
+                <Popover open={peopleOpen} onOpenChange={setPeopleOpen} modal={false}>
                   <PopoverTrigger asChild>
                     <Button
                       id={dyn.v3.getVariant("people_picker", ID_VARIANTS_MAP, "people_picker")}
                       variant="outline"
                       className={cn(
                         dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "button-secondary"),
-                        "w-[150px] justify-start text-left font-normal"
+                        "w-[130px] justify-start text-left font-normal rounded-xl border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] hover:border-amber-500/30 text-white/70 text-sm h-10 transition-all"
                       )}
+                      onClick={() => logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { action: "open" })}
                     >
-                      <UserIcon className="mr-2 h-4 w-4" />
+                      <UserIcon className="mr-2 h-4 w-4 text-amber-500/70" />
                       {people} {people === 1 ? personLabel : peopleLabel}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent
-                    className="w-auto p-0 z-[100]"
-                    align="start"
-                    side="bottom"
-                    sideOffset={8}
-                  >
+                  <PopoverContent className="w-auto p-0 z-[100]" align="start" side="bottom" sideOffset={8}>
                     <div className="p-2">
                       {peopleOptions.map((n) => (
-                        <Button
-                          key={n}
-                          variant="ghost"
-                          className="w-full justify-start"
-                          onClick={() => {
-                            handlePeopleSelect(n);
-                            setPeopleOpen(false);
-                          }}
-                        >
+                        <Button key={n} variant="ghost" className="w-full justify-start text-sm" onClick={() => { handlePeopleSelect(n); setPeopleOpen(false); }}>
                           {n} {n === 1 ? personLabel : peopleLabel}
                         </Button>
                       ))}
@@ -818,146 +520,131 @@ function HomePageContent() {
             </div>
           </section>
         ))}
-
-        {/* Main Content - Cards, Sections, etc. */}
-        {isLoading || !isReady || list.length === 0 ? null : (
-          filtered.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 px-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mb-6">
-                <SearchX className="w-10 h-10 text-red-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">No results found</h3>
-              <p className="text-gray-500 max-w-md mx-auto">
-                We couldn't find any restaurants of this style in this area. Try clearing your filters or searching for something else!
-              </p>
-              <Button
-                onClick={() => {
-                  setSelectedTag(null);
-                  setSearch("");
-                }}
-                className="mt-6 bg-red-600 hover:bg-red-700 text-white font-bold px-8 py-2 rounded-full transition-all hover:scale-105"
+        {dyn.v1.addWrapDecoy("home-tags-section", (
+          <div className="flex justify-center px-6 pb-6">
+            <div className="flex flex-wrap gap-2 max-w-5xl w-full justify-center">
+              <button
+                type="button"
+                onClick={() => handleTagSelect(null)}
+                className={cn(
+                  "px-4 py-1.5 rounded-full text-xs font-semibold border transition-all",
+                  !selectedTag
+                    ? "bg-amber-500 text-black border-amber-500/60 shadow-md shadow-amber-500/20"
+                    : "bg-white/[0.04] text-white/60 border-white/[0.08] hover:text-white hover:border-amber-500/30"
+                )}
               >
-                Clear all filters
-              </Button>
+                All
+              </button>
+              {tagOptions.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => handleTagSelect(tag)}
+                  className={cn(
+                    "px-4 py-1.5 rounded-full text-xs font-semibold border transition-all capitalize",
+                    selectedTag === tag
+                      ? "bg-amber-500 text-black border-amber-500/60 shadow-md shadow-amber-500/20"
+                      : "bg-white/[0.04] text-white/60 border-white/[0.08] hover:text-white hover:border-amber-500/30"
+                  )}
+                >
+                  {tag}
+                </button>
+              ))}
             </div>
-          ) : (
-          dyn.v1.addWrapDecoy("home-sections", (
-            <>
-              {/* Expensive Restaurants ($$$$) */}
-              {expensiveRestaurants.length > 0 && (
-                dyn.v1.addWrapDecoy("section-expensive", (
-                  <section
-                    id={dyn.v3.getVariant("section_expensive", ID_VARIANTS_MAP, "section_expensive")}
-                    className="px-6"
-                  >
-                <div className="mb-6">
-                  <h2 className="text-3xl font-bold mb-2">
-                    {dyn.v3.getVariant("section_expensive_title", TEXT_VARIANTS_MAP, "Fine dining")}
-                  </h2>
-                  <p className="text-gray-400 text-lg">
-                    Fine dining experiences for special occasions
-                  </p>
-                </div>
-                <CardScroller title={dyn.v3.getVariant("section_expensive_title", TEXT_VARIANTS_MAP, "Fine dining")}>
-                  {expensiveRestaurants.map((r) => (
-                    <RestaurantCard
-                      key={`${r.id}-expensive`}
-                      r={r}
-                      date={date}
-                      people={people}
-                      time={time}
-                    />
-                  ))}
-                </CardScroller>
-                  </section>
-                ), "section-expensive-wrap")
-              )}
-
-              {/* Medium Price Restaurants ($$-$$$) */}
-              {mediumRestaurants.length > 0 && (
-                dyn.v1.addWrapDecoy("section-medium", (
-                  <section
-                    id={dyn.v3.getVariant("section_medium", ID_VARIANTS_MAP, "section_medium")}
-                    className="px-6 mt-8"
-                  >
-                <div className="mb-6">
-                  <h2 className="text-3xl font-bold mb-2">
-                    {dyn.v3.getVariant("section_medium_title", TEXT_VARIANTS_MAP, "Everyday favorites")}
-                  </h2>
-                  <p className="text-gray-400 text-lg">
-                    Great value restaurants for everyday dining
-                  </p>
-                </div>
-                <CardScroller title={dyn.v3.getVariant("section_medium_title", TEXT_VARIANTS_MAP, "Everyday favorites")}>
-                  {mediumRestaurants.map((r) => (
-                    <RestaurantCard
-                      key={`${r.id}-medium`}
-                      r={r}
-                      date={date}
-                      people={people}
-                      time={time}
-                    />
-                  ))}
-                </CardScroller>
-                  </section>
-                ), "section-medium-wrap")
-              )}
-
-              {/* Cheap Restaurants ($) */}
-              {cheapRestaurants.length > 0 && (
-                dyn.v1.addWrapDecoy("section-cheap", (
-                  <section
-                    id={dyn.v3.getVariant("section_cheap", ID_VARIANTS_MAP, "section_cheap")}
-                    className="px-6 mt-8"
-                  >
-                <div className="mb-6">
-                  <h2 className="text-3xl font-bold mb-2">
-                    {dyn.v3.getVariant("section_cheap_title", TEXT_VARIANTS_MAP, "Budget eats")}
-                  </h2>
-                  <p className="text-gray-400 text-lg">
-                    Budget-friendly options without compromising quality
-                  </p>
-                </div>
-                <CardScroller title={dyn.v3.getVariant("section_cheap_title", TEXT_VARIANTS_MAP, "Budget eats")}>
-                  {cheapRestaurants.map((r) => (
-                    <RestaurantCard
-                      key={`${r.id}-cheap`}
-                      r={r}
-                      date={date}
-                      people={people}
-                      time={time}
-                    />
-                  ))}
-                </CardScroller>
-                  </section>
-                ), "section-cheap-wrap")
-              )}
-            </>
-          ), "home-sections-wrap")
+          </div>
         ))}
       </section>
+      {/* Main Content - Cards */}
+      {isLoading || !isReady || list.length === 0 ? null : (
+        dyn.v1.addWrapDecoy("home-sections", (
+          <div className="max-w-[1400px] mx-auto px-8 pb-20 space-y-16">
+            {/* Expensive Restaurants ($$$$) */}
+            {expensiveRestaurants.length > 0 && (
+              dyn.v1.addWrapDecoy("section-expensive", (
+                <section id={dyn.v3.getVariant("section_expensive", ID_VARIANTS_MAP, "section_expensive")}>
+                  <div className="mb-6 flex items-end justify-between">
+                    <div>
+                      <p className="uppercase tracking-[0.3em] text-[10px] font-semibold text-amber-500 mb-1.5">Premium</p>
+                      <h2 className="text-2xl font-bold text-white tracking-tight">{dyn.v3.getVariant("section_expensive_title", TEXT_VARIANTS_MAP, "Fine dining")}</h2>
+                    </div>
+                    <p className="text-white/30 text-sm hidden md:block">Fine dining experiences for special occasions</p>
+                  </div>
+                  <div className="divider-gradient mb-6" />
+                  <CardScroller title={dyn.v3.getVariant("section_expensive_title", TEXT_VARIANTS_MAP, "Fine dining")}>
+                    {expensiveRestaurants.map((r, i) => (
+                      <RestaurantCard key={`${r.id}-expensive`} r={r} date={date} people={people} time={time} index={i} />
+                    ))}
+                  </CardScroller>
+                </section>
+              ), "section-expensive-wrap")
+            )}
+            {/* Medium Price Restaurants */}
+            {mediumRestaurants.length > 0 && (
+              dyn.v1.addWrapDecoy("section-medium", (
+                <section id={dyn.v3.getVariant("section_medium", ID_VARIANTS_MAP, "section_medium")}>
+                  <div className="mb-6 flex items-end justify-between">
+                    <div>
+                      <p className="uppercase tracking-[0.3em] text-[10px] font-semibold text-amber-500 mb-1.5">Popular</p>
+                      <h2 className="text-2xl font-bold text-white tracking-tight">{dyn.v3.getVariant("section_medium_title", TEXT_VARIANTS_MAP, "Everyday favorites")}</h2>
+                    </div>
+                    <p className="text-white/30 text-sm hidden md:block">Great value restaurants for everyday dining</p>
+                  </div>
+                  <div className="divider-gradient mb-6" />
+                  <CardScroller title={dyn.v3.getVariant("section_medium_title", TEXT_VARIANTS_MAP, "Everyday favorites")}>
+                    {mediumRestaurants.map((r, i) => (
+                      <RestaurantCard key={`${r.id}-medium`} r={r} date={date} people={people} time={time} index={i} />
+                    ))}
+                  </CardScroller>
+                </section>
+              ), "section-medium-wrap")
+            )}
+            {/* Cheap Restaurants */}
+            {cheapRestaurants.length > 0 && (
+              dyn.v1.addWrapDecoy("section-cheap", (
+                <section id={dyn.v3.getVariant("section_cheap", ID_VARIANTS_MAP, "section_cheap")}>
+                  <div className="mb-6 flex items-end justify-between">
+                    <div>
+                      <p className="uppercase tracking-[0.3em] text-[10px] font-semibold text-amber-500 mb-1.5">Great value</p>
+                      <h2 className="text-2xl font-bold text-white tracking-tight">{dyn.v3.getVariant("section_cheap_title", TEXT_VARIANTS_MAP, "Budget eats")}</h2>
+                    </div>
+                    <p className="text-white/30 text-sm hidden md:block">Budget-friendly without compromising quality</p>
+                  </div>
+                  <div className="divider-gradient mb-6" />
+                  <CardScroller title={dyn.v3.getVariant("section_cheap_title", TEXT_VARIANTS_MAP, "Budget eats")}>
+                    {cheapRestaurants.map((r, i) => (
+                      <RestaurantCard key={`${r.id}-cheap`} r={r} date={date} people={people} time={time} index={i} />
+                    ))}
+                  </CardScroller>
+                </section>
+              ), "section-cheap-wrap")
+            )}
+          </div>
+        ), "home-sections-wrap")
+      )}
     </main>
   );
 }
 
-// Loading component for Suspense fallback
 function HomePageLoading() {
   return (
-    <main>
+    <main className="min-h-screen bg-background">
       <Navbar />
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="animate-pulse">
-          <div className="h-10 bg-gray-200 rounded mb-6" />
-          <div className="h-8 bg-gray-200 rounded mb-4" />
-          <div className="h-32 bg-gray-200 rounded mb-4" />
-          <div className="h-32 bg-gray-200 rounded mb-4" />
+      <div className="max-w-6xl mx-auto px-8 py-32">
+        <div className="animate-pulse space-y-8 flex flex-col items-center">
+          <div className="h-4 bg-white/10 rounded-full w-40" />
+          <div className="h-12 bg-white/10 rounded-2xl w-96" />
+          <div className="h-4 bg-white/5 rounded-full w-72" />
+          <div className="flex gap-4 mt-12">
+            <div className="h-72 bg-white/5 rounded-2xl w-[320px]" />
+            <div className="h-72 bg-white/5 rounded-2xl w-[320px]" />
+            <div className="h-72 bg-white/5 rounded-2xl w-[320px]" />
+          </div>
         </div>
       </div>
     </main>
   );
 }
 
-// Main export with Suspense boundary
 export default function HomePage() {
   return (
     <Suspense fallback={<HomePageLoading />}>
