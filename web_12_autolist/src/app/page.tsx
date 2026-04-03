@@ -131,9 +131,13 @@ const normalizeRemoteTask = (task: RemoteTask, index: number): Task => ({
   id: task.id ?? `remote-task-${index}`,
   name: task.name?.trim() || "Untitled task",
   description: task.description ?? "",
-  date: task.due_date ? dayjs(task.due_date) : null,
+  date: task.due_date ? dayjs(task.due_date) : task.dueDate ? dayjs(task.dueDate) : null,
   priority: clampPriorityValue(task.priority ?? 4),
-  completedAt: task.completed_at ?? undefined,
+  completedAt:
+    task.completed_at ??
+    (task.status === "completed"
+      ? task.createdAt ?? new Date().toISOString()
+      : undefined),
 });
 
 function getUpcoming(label: "today" | "tomorrow" | "weekend" | "nextweek") {
@@ -687,17 +691,28 @@ export default function Home() {
     setUserTasks([]);
   }, [seed]);
 
-  // Combine V2 tasks with user-created tasks
+  // Combine V2 tasks with user-created tasks.
+  // User tasks with matching ids act as overrides for V2 tasks
+  // (e.g. completed state after user action).
   const allTasks = useMemo(() => {
     // Normalize V2 tasks
     const normalizedV2Tasks = v2Tasks.map((task, index) =>
       normalizeRemoteTask(task, index)
     );
 
-    // Merge V2 tasks with user tasks, avoiding duplicates
-    const v2TaskIds = new Set(normalizedV2Tasks.map(t => t.id));
-    const uniqueUserTasks = userTasks.filter(t => !v2TaskIds.has(t.id));
-    return [...normalizedV2Tasks, ...uniqueUserTasks];
+    const userTaskById = new Map(userTasks.map((task) => [task.id, task]));
+
+    // Apply user overrides on top of V2 tasks
+    const mergedV2Tasks = normalizedV2Tasks.map((task) => {
+      const override = userTaskById.get(task.id);
+      return override ? { ...task, ...override } : task;
+    });
+
+    // Include user-only tasks that don't exist in V2
+    const v2TaskIds = new Set(normalizedV2Tasks.map((task) => task.id));
+    const userOnlyTasks = userTasks.filter((task) => !v2TaskIds.has(task.id));
+
+    return [...mergedV2Tasks, ...userOnlyTasks];
   }, [v2Tasks, userTasks]);
 
   // Separate active and completed tasks from allTasks
