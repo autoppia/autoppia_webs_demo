@@ -1,66 +1,65 @@
 "use client";
 
-import { type FormEvent, useEffect, useMemo, useState } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SeedLink } from "@/components/ui/SeedLink";
-import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { getMovies } from "@/dynamic/v2";
-import { EVENT_TYPES, logEvent } from "@/library/events";
-import { Film, UserPlus, Lock, User, Film as FilmIcon } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { getMovies } from "@/dynamic/v2";
+import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 import { cn } from "@/library/utils";
+import {
+  FILM_LIBRARY_UNAVAILABLE,
+  resolvePrimaryAllowedMovieId,
+} from "@/shared/user-movie-assignment";
+import { Film, Lock, User, UserPlus } from "lucide-react";
+import { type FormEvent, useMemo, useState } from "react";
 
 const MIN_PASSWORD_LENGTH = 6;
-const FALLBACK_MOVIE_ID = "movie-v2-001";
 
 export default function RegisterPage() {
   const dyn = useDynamicSystem();
   const { register } = useAuth();
   const router = useSeedRouter();
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [assignedMovie, setAssignedMovie] = useState(FALLBACK_MOVIE_ID);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const movies = getMovies();
-  const movieOptions = useMemo(() => {
-    if (!movies || movies.length === 0) return [];
-    return [...movies]
-      .sort((a, b) => a.title.localeCompare(b.title))
-      .slice(0, 25);
-  }, [movies]);
+  const catalogEmpty = !movies || movies.length === 0;
 
-  const preferredDefaultMovie = movieOptions[0]?.id ?? FALLBACK_MOVIE_ID;
+  const previewAssignedId = useMemo(() => {
+    const u = username.trim();
+    if (!u || catalogEmpty) return null;
+    return resolvePrimaryAllowedMovieId(movies, u);
+  }, [username, movies, catalogEmpty]);
 
-  useEffect(() => {
-    if (!assignedMovie && preferredDefaultMovie) {
-      setAssignedMovie(preferredDefaultMovie);
-    }
-  }, [assignedMovie, preferredDefaultMovie]);
-
-  // Debug: Verify V2 status
-  useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      console.log("[register/page] V2 status:", {
-        v2Enabled: dyn.v2.isEnabled(),
-      });
-    }
-  }, [dyn.v2]);
+  const previewTitle = useMemo(() => {
+    if (!previewAssignedId) return null;
+    return (
+      movies.find((m) => m.id === previewAssignedId)?.title ?? previewAssignedId
+    );
+  }, [previewAssignedId, movies]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
     const normalizedUsername = username.trim();
+    const normalizedEmail = email.trim();
     const normalizedPassword = password.trim();
     const normalizedConfirmPassword = confirmPassword.trim();
 
     if (!normalizedUsername) {
       setError("Username is required");
+      return;
+    }
+    if (!normalizedEmail) {
+      setError("Email is required");
       return;
     }
     if (normalizedPassword.length < MIN_PASSWORD_LENGTH) {
@@ -71,18 +70,21 @@ export default function RegisterPage() {
       setError("Passwords do not match");
       return;
     }
+    if (catalogEmpty) {
+      setError(FILM_LIBRARY_UNAVAILABLE);
+      return;
+    }
 
     setIsSubmitting(true);
     try {
-      const movieId = assignedMovie || preferredDefaultMovie;
       await register({
         username: normalizedUsername,
         password: normalizedPassword,
-        allowedMovies: movieId ? [movieId] : undefined,
       });
       logEvent(EVENT_TYPES.REGISTRATION, {
         username: normalizedUsername,
-        assigned_movie: movieId ?? undefined,
+        email: normalizedEmail,
+        assigned_movie: previewAssignedId ?? undefined,
       });
       router.push("/profile");
     } catch (err) {
@@ -138,6 +140,23 @@ export default function RegisterPage() {
 
                 <div>
                   <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
+                    <User className="h-4 w-4 text-secondary" />
+                    Email
+                  </label>
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    id={dyn.v3.getVariant("register-email-input", ID_VARIANTS_MAP, "register-email-input")}
+                    className={cn("h-12 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20", dyn.v3.getVariant("input-text", CLASS_VARIANTS_MAP, ""))}
+                    placeholder={dyn.v3.getVariant("email_placeholder", undefined, "you@example.com")}
+                    autoComplete="email"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
                     <Lock className="h-4 w-4 text-secondary" />
                     Password
                   </label>
@@ -171,24 +190,15 @@ export default function RegisterPage() {
                   />
                 </div>
 
-                {movieOptions.length > 0 && (
-                  <div>
-                    <label className="flex items-center gap-2 text-sm font-semibold text-white/80 mb-2">
-                      <FilmIcon className="h-4 w-4 text-secondary" />
-                      Assign Film
-                    </label>
-                    <select
-                      value={assignedMovie}
-                      onChange={(event) => setAssignedMovie(event.target.value)}
-                      className="h-12 w-full rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary hover:bg-white/15 cursor-pointer"
-                    >
-                      {movieOptions.map((movie) => (
-                        <option key={movie.id} value={movie.id} className="bg-neutral-900 text-white">
-                          {movie.title}
-                        </option>
-                      ))}
-                    </select>
-                    <p className="mt-1 text-xs text-white/50">Select a film to manage</p>
+                {previewTitle && (
+                  <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-white/50 mb-1">
+                      Assigned film (from catalog)
+                    </p>
+                    <p className="text-sm text-white/90">{previewTitle}</p>
+                    <p className="mt-1 text-xs text-white/45 font-mono">
+                      {previewAssignedId}
+                    </p>
                   </div>
                 )}
               </div>
@@ -199,14 +209,33 @@ export default function RegisterPage() {
                 </div>
               )}
 
+              {catalogEmpty && (
+                <p className="text-sm text-amber-200/90">
+                  {FILM_LIBRARY_UNAVAILABLE}
+                </p>
+              )}
+
               <Button
                 type="submit"
-                id={dyn.v3.getVariant("create-account-button", ID_VARIANTS_MAP, "create-account-button")}
-                className={cn("w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105", dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""))}
-                disabled={isSubmitting}
+                id={dyn.v3.getVariant(
+                  "create-account-button",
+                  ID_VARIANTS_MAP,
+                  "create-account-button",
+                )}
+                className={cn(
+                  "w-full h-12 bg-secondary text-black hover:bg-secondary/90 font-bold text-base shadow-lg shadow-secondary/20 transition-all hover:scale-105",
+                  dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, ""),
+                )}
+                disabled={isSubmitting || catalogEmpty}
               >
                 <UserPlus className="h-5 w-5 mr-2" />
-                {isSubmitting ? "Creating account…" : dyn.v3.getVariant("create_account", undefined, "Create account")}
+                {isSubmitting
+                  ? "Creating account…"
+                  : dyn.v3.getVariant(
+                      "create_account",
+                      undefined,
+                      "Create account",
+                    )}
               </Button>
             </form>
           </div>
@@ -215,7 +244,18 @@ export default function RegisterPage() {
           <div className="text-center">
             <p className="text-sm text-white/60">
               Already have an account?{" "}
-              <SeedLink href="/login" className={cn("font-semibold text-secondary hover:text-secondary/80 transition-colors", dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, ""))} id={dyn.v3.getVariant("sign-in-link", ID_VARIANTS_MAP, "sign-in-link")}>
+              <SeedLink
+                href="/login"
+                className={cn(
+                  "font-semibold text-secondary hover:text-secondary/80 transition-colors",
+                  dyn.v3.getVariant("nav-link", CLASS_VARIANTS_MAP, ""),
+                )}
+                id={dyn.v3.getVariant(
+                  "sign-in-link",
+                  ID_VARIANTS_MAP,
+                  "sign-in-link",
+                )}
+              >
                 {dyn.v3.getVariant("sign_in", undefined, "Sign in")}
               </SeedLink>
             </p>
