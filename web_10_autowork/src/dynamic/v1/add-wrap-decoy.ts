@@ -61,6 +61,15 @@ export function applyV1Wrapper(
     componentKey.includes("stats-card");
   const WrapperElement = useDivWrapper ? "div" : "span";
 
+  // Modal shells (e.g. post job wizard) wrap a flex-1 form plus a footer. Without
+  // flex-1 min-h-0 flex flex-col on this wrapper, the inner form grows with content
+  // and the footer is clipped by the parent's overflow-hidden for seeds where V1
+  // adds a wrapper (wrapper variant > 0).
+  const divWrapperClassName =
+    componentKey === "postjob-form-shell"
+      ? "flex w-full min-h-0 flex-1 flex-col"
+      : "w-full h-full";
+
   const core = shouldWrap
     ? React.createElement(
         WrapperElement,
@@ -68,7 +77,7 @@ export function applyV1Wrapper(
           "data-dyn-wrap": componentKey,
           "data-v1": "true",
           "data-wrapper-variant": wrapperVariant,
-          className: useDivWrapper ? "w-full h-full" : undefined,
+          className: useDivWrapper ? divWrapperClassName : undefined,
         },
         children
       )

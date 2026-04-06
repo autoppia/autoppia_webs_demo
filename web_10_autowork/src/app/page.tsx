@@ -274,7 +274,7 @@ function PostJobWizard({
               {dyn.v1.addWrapDecoy("postjob-form-shell", (
                 <>
                 <form
-                  className="flex-1 flex flex-col xl:flex-row xl:items-start overflow-y-auto px-10 py-10"
+                  className="min-h-0 flex-1 flex flex-col xl:flex-row xl:items-start overflow-y-auto px-10 py-10"
                   onSubmit={(e) => {
                     e.preventDefault();
                     if (step < totalSteps) next();
