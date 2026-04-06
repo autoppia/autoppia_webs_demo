@@ -565,7 +565,7 @@ export default function CartPage() {
                             setForm((f) => ({ ...f, address: addr }));
                             setIsAddressModalOpen(false);
                           }}
-                          className="border border-zinc-300 rounded-lg px-4 py-2 hover:bg-zinc-100 text-left"
+                          className="border-2 border-zinc-400 rounded-lg px-4 py-2 hover:bg-zinc-100 text-left"
                         >
                           {addr}
                         </button>
@@ -668,7 +668,7 @@ export default function CartPage() {
                             });
                             setIsDropoffModalOpen(false);
                           }}
-                          className="border border-zinc-300 rounded-lg px-4 py-2 hover:bg-zinc-100 text-left"
+                          className="border-2 border-zinc-400 rounded-lg px-4 py-2 hover:bg-zinc-100 text-left"
                         >
                           {option}
                         </button>
@@ -735,7 +735,7 @@ export default function CartPage() {
                           setForm((f) => ({ ...f, address: addr }));
                           setIsPickupInfoModalOpen(false);
                         }}
-                        className="border border-zinc-300 rounded-lg px-4 py-2 hover:bg-zinc-100 text-left"
+                        className="border-2 border-zinc-400 rounded-lg px-4 py-2 hover:bg-zinc-100 text-left"
                       >
                         {addr}
                       </button>
@@ -788,7 +788,7 @@ export default function CartPage() {
       </div>
       ))}
       {orderSuccess ? (
-        <div id="order-success-message" className="bg-green-50 border border-green-200 text-green-800 rounded-lg p-8 text-center text-xl font-semibold shadow">
+        <div id="order-success-message" className="bg-green-50 border-2 border-green-600 text-green-900 rounded-lg p-8 text-center text-xl font-semibold shadow-md">
           ✅ Order placed! Thank you for ordering 🙏
           <br />
           We'll deliver your meal soon.
