@@ -322,6 +322,58 @@ export class DynamicDataProvider {
     return this.users;
   }
 
+  /**
+   * Authors in the feed may not appear in the seeded `users` slice (limit 50) while still
+   * being present on posts/comments. Resolve profile targets from post payloads when needed.
+   */
+  private findUserFromPosts(username: string): User | undefined {
+    const searchUsername = String(username || "").trim().toLowerCase();
+    if (!searchUsername || !Array.isArray(this.posts) || this.posts.length === 0) {
+      return undefined;
+    }
+
+    let decodedSearch: string | undefined;
+    try {
+      const decoded = decodeURIComponent(username);
+      if (decoded !== username) {
+        decodedSearch = decoded.trim().toLowerCase();
+      }
+    } catch {
+      // ignore
+    }
+
+    const matchesCandidate = (rawUsername: string | undefined): boolean => {
+      const u = String(rawUsername || "").trim().toLowerCase();
+      if (!u) return false;
+      if (u === searchUsername) return true;
+      if (u.includes(searchUsername) || searchUsername.includes(u)) return true;
+      if (decodedSearch) {
+        if (u === decodedSearch || u.includes(decodedSearch) || decodedSearch.includes(u)) {
+          return true;
+        }
+      }
+      const uNoDots = u.replace(/\./g, "");
+      const sNoDots = searchUsername.replace(/\./g, "");
+      return (
+        uNoDots === sNoDots ||
+        uNoDots.includes(sNoDots) ||
+        sNoDots.includes(uNoDots)
+      );
+    };
+
+    for (const p of this.posts) {
+      if (p.user && matchesCandidate(p.user.username)) {
+        return p.user;
+      }
+      for (const c of p.comments || []) {
+        if (c.user && matchesCandidate(c.user.username)) {
+          return c.user;
+        }
+      }
+    }
+    return undefined;
+  }
+
   public getUserByUsername(username: string): User | undefined {
     if (!Array.isArray(this.users) || this.users.length === 0) {
       console.log("[autoconnect] getUserByUsername: users array is empty or invalid");
@@ -330,6 +382,10 @@ export class DynamicDataProvider {
 
     // Normalize search username
     const searchUsername = String(username || "").trim().toLowerCase();
+    if (searchUsername === "me") {
+      return this.users[2] || this.users[0];
+    }
+
     console.log(`[autoconnect] getUserByUsername: searching for username="${username}" (normalized: "${searchUsername}") in ${this.users.length} users`);
 
     // Strategy 1: Exact match (case-insensitive)
@@ -389,6 +445,14 @@ export class DynamicDataProvider {
         console.log("[autoconnect] getUserByUsername: ✅ Found via dot-removed match");
         return found;
       }
+    }
+
+    const fromPosts = this.findUserFromPosts(username);
+    if (fromPosts) {
+      console.log(
+        "[autoconnect] getUserByUsername: ✅ Found via posts/comments (author outside seeded users list)"
+      );
+      return fromPosts;
     }
 
     // Log for debugging if not found
