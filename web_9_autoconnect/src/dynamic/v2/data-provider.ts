@@ -571,23 +571,18 @@ export class DynamicDataProvider {
   }
 
   public getJobById(id: string): Job | undefined {
-    // Try exact match first
+    // Exact id only — never substring match (e.g. "j51" must not match "j5").
     let job = this.jobs.find((job) => job.id === id);
 
-    // If not found, try string conversion
+    // If not found, try numeric equality when both sides parse as numbers
     if (!job) {
       const numId = Number(id);
       if (Number.isFinite(numId)) {
         job = this.jobs.find((j) => {
-          const jId = typeof j.id === 'string' ? Number(j.id) : j.id;
+          const jId = typeof j.id === "string" ? Number(j.id) : j.id;
           return Number.isFinite(jId) && jId === numId;
         });
       }
-    }
-
-    // If still not found, try partial match
-    if (!job) {
-      job = this.jobs.find((j) => String(j.id).includes(String(id)) || String(id).includes(String(j.id)));
     }
 
     return job;

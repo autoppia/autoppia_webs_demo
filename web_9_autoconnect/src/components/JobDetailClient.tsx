@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import Image from "next/image";
 import { SeedLink } from "@/components/ui/SeedLink";
@@ -14,16 +14,33 @@ import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
 function JobDetailContent({ jobId }: { jobId: string }) {
-  const job = dynamicDataProvider.getJobById(jobId);
   const dyn = useDynamicSystem();
-  const [appliedJobs, setAppliedJobs] = useState<
-    Record<string, StoredAppliedJob>
-  >({});
-  const isApplied = useMemo(() => Boolean(appliedJobs[jobId]), [appliedJobs, jobId]);
+  const [appliedJobs, setAppliedJobs] = useState<Record<string, StoredAppliedJob>>(
+    () => (typeof window !== "undefined" ? loadAppliedJobs() : {})
+  );
+  const [jobsTick, setJobsTick] = useState(0);
 
   useEffect(() => {
     setAppliedJobs(loadAppliedJobs());
   }, []);
+
+  useEffect(() => {
+    return dynamicDataProvider.subscribeJobs(() => {
+      setJobsTick((t) => t + 1);
+    });
+  }, []);
+
+  const liveJob = useMemo(() => {
+    void jobsTick;
+    return dynamicDataProvider.getJobById(jobId);
+  }, [jobId, jobsTick]);
+
+  const job = useMemo(() => {
+    if (liveJob) return liveJob;
+    return appliedJobs[jobId]?.job;
+  }, [liveJob, appliedJobs, jobId]);
+
+  const isApplied = useMemo(() => Boolean(appliedJobs[jobId]), [appliedJobs, jobId]);
 
   useEffect(() => {
     persistAppliedJobs(appliedJobs);
@@ -44,6 +61,51 @@ function JobDetailContent({ jobId }: { jobId: string }) {
     }
   }, [job]);
 
+  const handleApply = useCallback(() => {
+    const resolved =
+      dynamicDataProvider.getJobById(jobId) ?? appliedJobs[jobId]?.job;
+    if (!resolved || isApplied) return;
+
+    logEvent(EVENT_TYPES.APPLY_FOR_JOB, {
+      jobId: resolved.id,
+      jobTitle: resolved.title,
+      company: resolved.company,
+      location: resolved.location,
+    });
+
+    setAppliedJobs((prev) => ({
+      ...prev,
+      [resolved.id]: { job: resolved, appliedAt: new Date().toISOString() },
+    }));
+  }, [jobId, appliedJobs, isApplied]);
+
+  const handleCancel = useCallback(() => {
+    const resolved =
+      dynamicDataProvider.getJobById(jobId) ?? appliedJobs[jobId]?.job;
+    if (!resolved || !isApplied) return;
+    setAppliedJobs((prev) => {
+      const next = { ...prev };
+      delete next[resolved.id];
+      return next;
+    });
+    logEvent(EVENT_TYPES.CANCEL_APPLICATION, {
+      jobId: resolved.id,
+      jobTitle: resolved.title,
+      company: resolved.company,
+      location: resolved.location,
+      source: "job_detail",
+    });
+  }, [jobId, appliedJobs, isApplied]);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
   if (!job) {
     return (
       <div className="text-center text-red-600 mt-8">
@@ -58,47 +120,6 @@ function JobDetailContent({ jobId }: { jobId: string }) {
       </div>
     );
   }
-
-  const handleApply = () => {
-    if (!job || isApplied) return;
-
-    logEvent(EVENT_TYPES.APPLY_FOR_JOB, {
-      jobId: job.id,
-      jobTitle: job.title,
-      company: job.company,
-      location: job.location,
-    });
-
-    setAppliedJobs((prev) => ({
-      ...prev,
-      [job.id]: { job, appliedAt: new Date().toISOString() },
-    }));
-  };
-
-  const handleCancel = () => {
-    if (!job || !isApplied) return;
-    setAppliedJobs((prev) => {
-      const next = { ...prev };
-      delete next[job.id];
-      return next;
-    });
-    logEvent(EVENT_TYPES.CANCEL_APPLICATION, {
-      jobId: job.id,
-      jobTitle: job.title,
-      company: job.company,
-      location: job.location,
-      source: "job_detail",
-    });
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
 
   return (
     <section className="max-w-4xl mx-auto">
@@ -117,6 +138,12 @@ function JobDetailContent({ jobId }: { jobId: string }) {
       >
         ← Back to Jobs
       </SeedLink>
+
+      {!liveJob && (
+        <p className="text-sm text-amber-900 bg-amber-50 border border-amber-100 rounded-lg px-4 py-3 mb-6">
+          This role isn&apos;t in the current demo job list; showing the details saved when you applied.
+        </p>
+      )}
 
       {/* Job Header */}
       <div className="bg-white rounded-lg shadow p-6 mb-6">

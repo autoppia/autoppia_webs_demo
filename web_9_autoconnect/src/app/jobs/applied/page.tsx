@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { DataReadyGate } from "@/components/DataReadyGate";
+import { dynamicDataProvider } from "@/dynamic/v2";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import type { Job } from "@/library/dataset";
 import {
@@ -12,12 +13,19 @@ import {
 
 function AppliedJobsContent() {
   const [applied, setApplied] = useState<Record<string, StoredAppliedJob>>({});
+  const [jobsTick, setJobsTick] = useState(0);
 
   useEffect(() => {
     const loaded = loadAppliedJobs();
     setApplied(loaded);
     logEvent(EVENT_TYPES.VIEW_APPLIED_JOBS, {
       count: Object.keys(loaded).length,
+    });
+  }, []);
+
+  useEffect(() => {
+    return dynamicDataProvider.subscribeJobs(() => {
+      setJobsTick((t) => t + 1);
     });
   }, []);
 
@@ -33,6 +41,15 @@ function AppliedJobsContent() {
       ),
     [applied]
   );
+
+  /** Prefer live job from the current seeded list when ids match exactly (same as job detail). */
+  const appliedRows = useMemo(() => {
+    void jobsTick;
+    return appliedList.map((entry) => {
+      const live = dynamicDataProvider.getJobById(entry.job.id);
+      return { entry, displayJob: live ?? entry.job };
+    });
+  }, [appliedList, jobsTick]);
 
   const cancelApplication = (job: Job) => {
     setApplied((prev) => {
@@ -78,33 +95,33 @@ function AppliedJobsContent() {
         </div>
       ) : (
         <div className="space-y-4">
-          {appliedList.map(({ job, appliedAt }) => (
+          {appliedRows.map(({ entry, displayJob }) => (
             <div
-              key={job.id}
+              key={entry.job.id}
               className="bg-white rounded-lg shadow p-4 border border-gray-100 flex flex-col gap-2"
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="text-lg font-semibold text-gray-900">
-                    {job.title}
+                    {displayJob.title}
                   </div>
-                  <div className="text-sm text-gray-700">{job.company}</div>
-                  <div className="text-xs text-gray-500">{job.location}</div>
+                  <div className="text-sm text-gray-700">{displayJob.company}</div>
+                  <div className="text-xs text-gray-500">{displayJob.location}</div>
                 </div>
                 <div className="text-xs text-gray-500">
-                  Applied {new Date(appliedAt).toLocaleDateString()}
+                  Applied {new Date(entry.appliedAt).toLocaleDateString()}
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <SeedLink
-                  href={`/jobs/${job.id}`}
+                  href={`/jobs/${entry.job.id}`}
                   className="text-blue-600 hover:underline text-sm"
                 >
                   View details
                 </SeedLink>
                 <button
                   className="text-sm text-red-600 hover:underline"
-                  onClick={() => cancelApplication(job)}
+                  onClick={() => cancelApplication(entry.job)}
                 >
                   Cancel application
                 </button>
