@@ -5,6 +5,7 @@ import { CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { X } from "lucide-react";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 
 interface CreateServerModalProps {
   open: boolean;
@@ -31,9 +32,9 @@ export function CreateServerModal({
     onClose();
   };
 
-  return (
+  const modal = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60"
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60"
       aria-modal="true"
       aria-labelledby="create-server-title"
       data-testid="create-server-modal"
@@ -92,4 +93,7 @@ export function CreateServerModal({
       </div>
     </div>
   );
+
+  if (typeof document === "undefined") return null;
+  return createPortal(modal, document.body);
 }

@@ -2,9 +2,11 @@
 
 import { useDynamicSystem } from "@/dynamic";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
+import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import type { Server } from "@/types/discord";
-import { Home, MessageCircle, Plus, Settings } from "lucide-react";
+import { Compass, Home, MessageCircle, Plus, Settings } from "lucide-react";
+import Link from "next/link";
 
 interface ServerListProps {
   servers: Server[];
@@ -14,6 +16,8 @@ interface ServerListProps {
   onViewModeChange: (mode: "servers" | "dms") => void;
   onAddServer: () => void;
   onGoHome?: () => void;
+  /** Highlight Discover (e.g. on `/discover`); dims Home so it is not shown as active */
+  discoverNavActive?: boolean;
 }
 
 export function ServerList({
@@ -24,13 +28,20 @@ export function ServerList({
   onViewModeChange,
   onAddServer,
   onGoHome,
+  discoverNavActive = false,
 }: ServerListProps) {
   const dyn = useDynamicSystem();
+  const { getNavigationUrl } = useSeed();
   const order = dyn.v1.changeOrderElements("server-list-items", Math.max(servers.length, 1));
 
+  const homeIsAccent =
+    !discoverNavActive && viewMode === "servers" && !selectedId;
+  const homeIsSecondary =
+    !discoverNavActive && viewMode === "servers" && Boolean(selectedId);
+
   const handleSelectServer = (id: string) => {
-    onViewModeChange("servers");
     onSelect(id);
+    onViewModeChange("servers");
     const server = servers.find((s) => s.id === id);
     logEvent(EVENT_TYPES.SELECT_SERVER, {
       server_id: id,
@@ -64,18 +75,38 @@ export function ServerList({
           type="button"
           onClick={handleHome}
           className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${
-            viewMode === "servers" && !selectedId
+            homeIsAccent
               ? "bg-discord-accent text-white rounded-xl"
-              : viewMode === "servers"
+              : homeIsSecondary
                 ? "bg-discord-dark text-gray-300 hover:bg-discord-accent hover:text-white rounded-xl"
                 : "text-gray-400 hover:bg-white/10 hover:text-white"
           } ${dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "")}`}
           title={dyn.v3.getVariant("go_home", undefined, "Home")}
-          aria-pressed={viewMode === "servers" && !selectedId}
+          aria-pressed={homeIsAccent}
           data-testid={dyn.v3.getVariant("server-list-home", ID_VARIANTS_MAP, "server-list-home")}
         >
           <Home className="w-6 h-6" />
         </button>
+      ))}
+      {dyn.v1.addWrapDecoy("server-list-discover-wrap", (
+        <Link
+          href={getNavigationUrl("/discover")}
+          className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${
+            discoverNavActive
+              ? "bg-discord-accent text-white rounded-xl"
+              : `text-gray-400 hover:bg-white/10 hover:text-white ${dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "")}`
+          }`}
+          title="Discover"
+          aria-label="Discover"
+          aria-current={discoverNavActive ? "page" : undefined}
+          data-testid={dyn.v3.getVariant(
+            "server-list-discover",
+            ID_VARIANTS_MAP,
+            "server-list-discover",
+          )}
+        >
+          <Compass className="w-6 h-6" />
+        </Link>
       ))}
       {dyn.v1.addWrapDecoy("server-list-dms-wrap", (
         <button
@@ -124,23 +155,28 @@ export function ServerList({
         <button
           type="button"
           onClick={handleAddServer}
-          className={`w-12 h-12 rounded-2xl flex items-center justify-center bg-discord-dark text-gray-400 hover:bg-green-600 hover:text-white transition-colors ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`}
-          title={dyn.v3.getVariant("create_server", undefined, "Add Server")}
-          data-testid={dyn.v3.getVariant("create-server-button", ID_VARIANTS_MAP, "server-list-add")}
+          className={`w-12 h-12 rounded-2xl flex items-center justify-center bg-discord-dark text-gray-400 hover:bg-green-600 hover:text-white transition-colors shrink-0 ${dyn.v3.getVariant("button-primary", CLASS_VARIANTS_MAP, "")}`}
+          title={dyn.v3.getVariant("create_server", undefined, "Add a Server")}
+          aria-label={dyn.v3.getVariant("create_server", undefined, "Add a Server")}
+          data-testid={dyn.v3.getVariant(
+            "create-server-button",
+            ID_VARIANTS_MAP,
+            servers.length === 0 ? "create-server-first" : "server-list-add",
+          )}
         >
           <Plus className="w-6 h-6" />
         </button>
       ))}
       {dyn.v1.addWrapDecoy("server-settings-button", (
-        <a
-          href={`/settings${typeof window !== "undefined" && window.location.search ? window.location.search : ""}`}
+        <Link
+          href={getNavigationUrl("/settings")}
           className={`mt-auto w-12 h-12 rounded-2xl flex items-center justify-center text-gray-400 hover:bg-white/10 hover:text-white transition-colors ${dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "")}`}
           title={dyn.v3.getVariant("settings_button_label", undefined, "Settings")}
           aria-label={dyn.v3.getVariant("settings_button_label", undefined, "Settings")}
           data-testid={dyn.v3.getVariant("server-list-settings", ID_VARIANTS_MAP, "server-list-settings")}
         >
           <Settings className="w-5 h-5" />
-        </a>
+        </Link>
       ))}
     </aside>
   );

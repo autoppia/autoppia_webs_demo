@@ -16,6 +16,8 @@ interface HomeDashboardProps {
   voiceChannels: Channel[];
   voicePresence: Record<string, string[]>;
   getServerName: (serverId: string) => string;
+  /** When false, show a hint to use the sidebar + to create a server */
+  hasServers?: boolean;
 }
 
 export function HomeDashboard({
@@ -23,6 +25,7 @@ export function HomeDashboard({
   voiceChannels,
   voicePresence,
   getServerName,
+  hasServers = true,
 }: HomeDashboardProps) {
   const onlineMembers = [...members]
     .filter((m) => (m.status ?? "offline") !== "offline")
@@ -49,6 +52,20 @@ export function HomeDashboard({
         <span className="font-semibold text-white">Home</span>
       </div>
       <div className="flex-1 overflow-y-auto p-6 space-y-8">
+        {!hasServers && (
+          <section
+            className="rounded-lg bg-white/5 border border-white/10 p-4"
+            aria-label="Getting started"
+            data-testid="home-no-servers-hint"
+          >
+            <p className="text-sm text-gray-300">
+              You don&apos;t have any servers yet. Use the green{" "}
+              <span className="text-green-400 font-medium">+</span> button in
+              the left bar (below Direct Messages) to{" "}
+              <span className="text-gray-200">create a server</span>.
+            </p>
+          </section>
+        )}
         <section aria-labelledby="online-heading">
           <h2
             id="online-heading"

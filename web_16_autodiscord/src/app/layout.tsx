@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import "./globals.css";
 import { SeedProvider } from "@/context/SeedContext";
+import { LocalDiscordOverlayProvider } from "@/context/LocalDiscordOverlayContext";
 import { DataReadyGate } from "@/components/layout/DataReadyGate";
 import { V4PopupLayer } from "@/components/layout/V4PopupLayer";
 
@@ -31,9 +32,11 @@ export default function RootLayout({
           }
         >
           <SeedProvider>
-            <V4PopupLayer>
-              <DataReadyGate>{children}</DataReadyGate>
-            </V4PopupLayer>
+            <LocalDiscordOverlayProvider>
+              <V4PopupLayer>
+                <DataReadyGate>{children}</DataReadyGate>
+              </V4PopupLayer>
+            </LocalDiscordOverlayProvider>
           </SeedProvider>
         </Suspense>
       </body>
