@@ -1,8 +1,5 @@
 {
   "emails": [
     "./emails.json"
-  ],
-  "templates": [
-    "./templates.json"
   ]
 }

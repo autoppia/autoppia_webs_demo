@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { MailTemplate } from "@/types/template";
+import { MAIL_TEMPLATES, type MailTemplate } from "@/data/templates";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,7 +13,6 @@ import { cn } from "@/library/utils";
 import { useSeed } from "@/context/SeedContext";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3/utils/variant-selector";
-import { dynamicDataProvider } from "@/dynamic/v2";
 
 type TemplateState = Record<
   string,
@@ -30,45 +29,29 @@ export default function TemplatesPage() {
   const router = useRouter();
   const { getNavigationUrl } = useSeed();
   const dyn = useDynamicSystem();
-  const [templates, setTemplates] = useState<MailTemplate[]>([]);
-  const [activeTemplateId, setActiveTemplateId] = useState<string>("");
-  const [templatesState, setTemplatesState] = useState<TemplateState>({});
-
-  useEffect(() => {
-    const syncTemplates = (nextTemplates: MailTemplate[]) => {
-      setTemplates(nextTemplates);
-      setTemplatesState((prev) => {
-        const nextState: TemplateState = {};
-        for (const template of nextTemplates) {
-          const prevEntry = prev[template.id];
-          nextState[template.id] = {
-            to: prevEntry?.to ?? "",
-            from: prevEntry?.from ?? DEFAULT_FROM,
-            body: prevEntry?.body ?? template.body,
-          };
-        }
-        return nextState;
-      });
-      setActiveTemplateId((prev) => {
-        if (prev && nextTemplates.some((t) => t.id === prev)) return prev;
-        return nextTemplates[0]?.id ?? "";
-      });
-    };
-
-    syncTemplates(dynamicDataProvider.getTemplates());
-    const unsubscribe = dynamicDataProvider.subscribeTemplates(syncTemplates);
-    return () => unsubscribe();
-  }, []);
+  const [activeTemplateId, setActiveTemplateId] = useState<string>(
+    MAIL_TEMPLATES[0]?.id ?? ""
+  );
+  const [templatesState, setTemplatesState] = useState<TemplateState>(() =>
+    MAIL_TEMPLATES.reduce((acc, template) => {
+      acc[template.id] = {
+        to: "",
+        from: DEFAULT_FROM,
+        body: template.body,
+      };
+      return acc;
+    }, {} as TemplateState)
+  );
 
   useEffect(() => {
     logEvent(EVENT_TYPES.VIEW_TEMPLATES, {
-      template_count: templates.length,
+      template_count: MAIL_TEMPLATES.length,
     });
-  }, [templates.length]);
+  }, []);
 
   const activeTemplate = useMemo(
-    () => templates.find((t) => t.id === activeTemplateId),
-    [activeTemplateId, templates]
+    () => MAIL_TEMPLATES.find((t) => t.id === activeTemplateId),
+    [activeTemplateId]
   );
 
   const handleSelectTemplate = (template: MailTemplate) => {
@@ -172,7 +155,7 @@ export default function TemplatesPage() {
             {dyn.v3.getVariant("templates_header", TEXT_VARIANTS_MAP, "Templates")}
           </h2>
           <div className="space-y-2">
-            {templates.map((template) => (
+            {MAIL_TEMPLATES.map((template) => (
               <button
                 key={template.id}
                 onClick={() => handleSelectTemplate(template)}
@@ -189,11 +172,6 @@ export default function TemplatesPage() {
                 </div>
               </button>
             ))}
-            {templates.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                No templates available.
-              </p>
-            ) : null}
           </div>
         </div>
 
