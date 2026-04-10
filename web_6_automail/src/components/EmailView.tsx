@@ -31,6 +31,7 @@ import { useSeed } from "@/context/SeedContext";
 
 export function EmailView() {
   const {
+    emails,
     currentEmail,
     setCurrentEmail,
     toggleStar,
@@ -194,13 +195,20 @@ export function EmailView() {
   };
 
   const handleEditDraft = () => {
-    setEditingDraftId(currentEmail.id);
+    const draft = emails.find((e) => e.id === currentEmail.id) ?? currentEmail;
+    const to = draft.to.map((r) => r.email);
+    const cc = draft.cc?.map((r) => r.email) || [];
+    const bcc = draft.bcc?.map((r) => r.email) || [];
+    const subject = draft.subject || "";
+    const body = draft.body || "";
+
+    setEditingDraftId(draft.id);
     updateComposeData({
-      to: currentEmail.to.map((r) => r.email),
-      cc: currentEmail.cc?.map((r) => r.email) || [],
-      bcc: currentEmail.bcc?.map((r) => r.email) || [],
-      subject: currentEmail.subject || "",
-      body: currentEmail.body || "",
+      to,
+      cc,
+      bcc,
+      subject,
+      body,
       action: "edit_draft",
       forwardedEmailId: null,
       forwardedFrom: null,
@@ -208,12 +216,13 @@ export function EmailView() {
     });
     toggleCompose(true);
     logEvent(EVENT_TYPES.EDIT_DRAFT_EMAIL, {
-      email_id: currentEmail.id,
-      subject: currentEmail.subject,
-      to: currentEmail.to.map((r) => r.email),
-      cc: currentEmail.cc?.map((r) => r.email) || [],
-      bcc: currentEmail.bcc?.map((r) => r.email) || [],
-      body: currentEmail.body || "",
+      email_id: draft.id,
+      subject,
+      to,
+      cc,
+      bcc,
+      body,
+      from: draft.from.email,
     });
   };
 
