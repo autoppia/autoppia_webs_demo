@@ -50,7 +50,8 @@ export function NewEventModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const mappedColor = COLOR_MAP[color] || "forest";
+    const selectedCategory = color;
+    const mappedColor = COLOR_MAP[selectedCategory] || "forest";
 
     const newEvent: CalendarEvent = {
       id: Date.now(),
@@ -65,6 +66,7 @@ export function NewEventModal({
       label,
       time,
       color: mappedColor,
+      event_type: selectedCategory,
     };
     logEvent(EVENT_TYPES.NEW_CALENDAR_EVENT_ADDED, eventToTrigger);
     onSave(newEvent);

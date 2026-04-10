@@ -47,47 +47,14 @@ function ProfileContent({ username }: { username: string }) {
     return () => unsubscribe();
   }, []);
 
-  // Serialize usersState for stable dependency
-  const usersStateKey = useMemo(() => {
-    if (!usersState || usersState.length === 0) return '';
-    return usersState.map(u => u.username).sort().join(',');
-  }, [usersState]);
-
-  // Memoize user lookup to avoid reference changes - search in usersState directly
+  // Resolve user via data provider so we match seeded users AND authors only present on posts
   const user = useMemo(() => {
-    if (!usersState || usersState.length === 0) return undefined;
     const searchUsername = String(username || "").trim().toLowerCase();
-
-    // "me" = current user (same as elsewhere: users[2] || users[0])
     if (searchUsername === "me") {
+      if (!usersState || usersState.length === 0) return undefined;
       return usersState[2] || usersState[0];
     }
-
-    // Strategy 1: Exact match
-    let found = usersState.find((u) => {
-      const userUsername = String(u.username || "").trim().toLowerCase();
-      return userUsername === searchUsername;
-    });
-
-    if (found) return found;
-
-    // Strategy 2: Partial match
-    found = usersState.find((u) => {
-      const userUsername = String(u.username || "").trim().toLowerCase();
-      return userUsername.includes(searchUsername) || searchUsername.includes(userUsername);
-    });
-
-    if (found) return found;
-
-    // Strategy 3: Without dots
-    const searchWithoutDots = searchUsername.replace(/\./g, "");
-    found = usersState.find((u) => {
-      const userUsername = String(u.username || "").trim().toLowerCase();
-      const userWithoutDots = userUsername.replace(/\./g, "");
-      return userWithoutDots === searchWithoutDots;
-    });
-
-    return found;
+    return dynamicDataProvider.getUserByUsername(username);
   }, [username, usersState]);
 
   // Memoize currentUser to avoid reference changes
@@ -297,12 +264,6 @@ function ProfileContent({ username }: { username: string }) {
   // Calculate posts for this user - memoize with stable dependencies
   // IMPORTANT: All hooks must be called before any early returns to follow React's rules of hooks
   const userUsername = user?.username;
-
-  // Serialize mockPosts for stable dependency check
-  const mockPostsKey = useMemo(() => {
-    if (!mockPosts || mockPosts.length === 0) return '';
-    return mockPosts.map(p => `${p.id}:${p.user?.username || ''}`).sort().join(',');
-  }, [mockPosts]);
 
   const posts = useMemo(() => {
     if (!userUsername || !mockPosts || mockPosts.length === 0) return [];

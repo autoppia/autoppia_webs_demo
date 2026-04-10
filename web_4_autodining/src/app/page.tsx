@@ -570,7 +570,7 @@ function HomePageContent() {
                     <p className="text-white/30 text-sm hidden md:block">Fine dining experiences for special occasions</p>
                   </div>
                   <div className="divider-gradient mb-6" />
-                  <CardScroller title={dyn.v3.getVariant("section_expensive_title", TEXT_VARIANTS_MAP, "Fine dining")}>
+                  <CardScroller title="Premium">
                     {expensiveRestaurants.map((r, i) => (
                       <RestaurantCard key={`${r.id}-expensive`} r={r} date={date} people={people} time={time} index={i} />
                     ))}
@@ -590,7 +590,7 @@ function HomePageContent() {
                     <p className="text-white/30 text-sm hidden md:block">Great value restaurants for everyday dining</p>
                   </div>
                   <div className="divider-gradient mb-6" />
-                  <CardScroller title={dyn.v3.getVariant("section_medium_title", TEXT_VARIANTS_MAP, "Everyday favorites")}>
+                  <CardScroller title="Popular">
                     {mediumRestaurants.map((r, i) => (
                       <RestaurantCard key={`${r.id}-medium`} r={r} date={date} people={people} time={time} index={i} />
                     ))}
@@ -610,7 +610,7 @@ function HomePageContent() {
                     <p className="text-white/30 text-sm hidden md:block">Budget-friendly without compromising quality</p>
                   </div>
                   <div className="divider-gradient mb-6" />
-                  <CardScroller title={dyn.v3.getVariant("section_cheap_title", TEXT_VARIANTS_MAP, "Budget eats")}>
+                  <CardScroller title="Great value">
                     {cheapRestaurants.map((r, i) => (
                       <RestaurantCard key={`${r.id}-cheap`} r={r} date={date} people={people} time={time} index={i} />
                     ))}

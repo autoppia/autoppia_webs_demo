@@ -14,8 +14,9 @@ import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynami
 import { cn } from "@/library/utils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MEDICAL_SPECIALTIES } from "@/data/medical-specialties";
+import { deriveSpecialtiesFromDoctors } from "@/data/medical-specialties";
 import { Pagination } from "@/components/ui/pagination";
+import { Badge } from "@/components/ui/badge";
 
 const DOCTORS_PAGE_SIZE = 9;
 
@@ -122,6 +123,11 @@ export default function DoctorsPage() {
     return [...set].sort();
   }, [doctorList]);
 
+  const availableSpecialties = useMemo(
+    () => deriveSpecialtiesFromDoctors(doctorList),
+    [doctorList],
+  );
+
   // Filter doctors by applied name, speciality, language
   const filteredDoctors = useMemo(() => {
     let filtered = doctorList;
@@ -225,7 +231,7 @@ export default function DoctorsPage() {
                     data-testid="doctor-specialty-filter"
                   >
                     <option value="">All Specialties</option>
-                    {[...MEDICAL_SPECIALTIES].sort().map((specialty: string) => (
+                    {availableSpecialties.map((specialty: string) => (
                       <option key={specialty} value={specialty}>
                         {specialty}
                       </option>
@@ -353,8 +359,25 @@ export default function DoctorsPage() {
                   </div>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <Stars value={d.rating} />
+                  <div className="flex items-center justify-between gap-4">
+                    <Stars value={d.rating} />
+                    <span className="text-sm text-muted-foreground whitespace-nowrap">
+                      Consultation fee:
+                      {d.consultationFee != null ? `$${d.consultationFee}` : "N/A"}
+                    </span>
+                  </div>
+
                   <p className="mt-3 text-sm text-muted-foreground">{d.bio}</p>
+
+                  {(d.languages || []).length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {d.languages.map((language) => (
+                        <Badge key={language} variant="outline">
+                          {language}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
                 <CardFooter className="mt-auto flex items-center justify-end pt-2">
                   <SeedLink href={`/doctors/${d.id}`}>
@@ -373,7 +396,9 @@ export default function DoctorsPage() {
                             doctorId: d.id,
                             doctorName: d.name,
                             specialty: d.specialty,
-                            rating: d.rating
+                            rating: d.rating,
+                            languages: d.languages ?? [],
+                            consultationFee: d.consultationFee,
                           });
                         }}
                       >

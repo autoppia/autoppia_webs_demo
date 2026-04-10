@@ -33,12 +33,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <head>
-        <Script
-          crossOrigin="anonymous"
-          src="//unpkg.com/same-runtime/dist/index.global.js"
-        />
-      </head>
       <body suppressHydrationWarning className="antialiased bg-[#f5f6fa]">
         <Suspense fallback={<div className="min-h-screen bg-[#f5f6fa]" />}>
           <SeedProvider>
@@ -72,6 +66,10 @@ export default function RootLayout({
             </V4PopupLayer>
           </SeedProvider>
         </Suspense>
+        <Script
+          src="/third-party/same-runtime.global.js"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );
