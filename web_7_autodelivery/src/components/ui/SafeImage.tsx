@@ -7,8 +7,12 @@ type SafeImageProps = ImageProps & {
   wrapperClassName?: string;
 };
 
+const DEFAULT_FALLBACK_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 140"><rect width="200" height="140" fill="#eef2f7"/><text x="100" y="74" text-anchor="middle" font-size="14" fill="#64748b" font-family="Arial, sans-serif">Image unavailable</text></svg>'
+)}`;
+
 export function SafeImage({
-  fallbackSrc = "/images/placeholder-restaurant.png",
+  fallbackSrc = DEFAULT_FALLBACK_SVG,
   fallbackText = "No image",
   wrapperClassName,
   onError,

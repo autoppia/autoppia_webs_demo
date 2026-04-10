@@ -1,6 +1,5 @@
 /** @type {import('jest').Config} */
 module.exports = {
-  preset: "ts-jest",
   testEnvironment: "jsdom",
   testMatch: ["<rootDir>/tests/**/*.(test|spec).[jt]s?(x)"],
   coverageProvider: "v8",
@@ -10,14 +9,14 @@ module.exports = {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
   },
   transform: {
-    "^.+\\.(t|j)sx?$": "ts-jest",
-  },
-  globals: {
-    "ts-jest": {
-      tsconfig: {
-        jsx: "react-jsx",
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: {
+          jsx: "react-jsx",
+        },
       },
-    },
+    ],
   },
   collectCoverageFrom: [
     "src/shared/**/*.{ts,tsx}",

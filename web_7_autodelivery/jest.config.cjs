@@ -2,6 +2,16 @@
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
+  transform: {
+    "^.+\\.(ts|tsx)$": [
+      "ts-jest",
+      {
+        tsconfig: {
+          jsx: "react-jsx",
+        },
+      },
+    ],
+  },
   testMatch: ["<rootDir>/tests/**/*.(test|spec).[jt]s?(x)"],
   coverageProvider: "v8",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],

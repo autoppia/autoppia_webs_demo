@@ -1,4 +1,5 @@
 import type {Product} from "@/context/CartContext";
+import { hasMeaningfulOriginalPrice } from "@/library/pricing";
 import {fetchSeededSelection} from "@/shared/seeded-loader";
 import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
 import { isV2Enabled } from "@/dynamic/shared/flags";
@@ -66,6 +67,7 @@ type DatasetProduct = {
   id?: string;
   title?: string;
   price?: string | number;
+  originalPrice?: string | number;
   image?: string;
   description?: string;
   category?: string;
@@ -83,11 +85,26 @@ type DatasetProduct = {
   careInstructions?: string;
 };
 
+const formatMoney = (value: string | number | undefined): string | undefined => {
+  if (value === undefined || value === null) return undefined;
+  if (typeof value === "string") {
+    const t = value.trim();
+    return t.length > 0 ? t : undefined;
+  }
+  return `$${Number.isFinite(value) ? value.toFixed(2) : "0.00"}`;
+};
+
 const normalizeProduct = (product: DatasetProduct): Product => {
+  const priceStr =
+    typeof product.price === "string" ? product.price : `$${product.price ?? "0.00"}`;
+  const originalRaw = formatMoney(product.originalPrice);
+  const originalPrice =
+    originalRaw && hasMeaningfulOriginalPrice(originalRaw, priceStr) ? originalRaw : undefined;
   return {
     id: product.id || `product-${Math.random().toString(36).slice(2, 10)}`,
     title: product.title?.trim() || "Untitled Product",
-    price: typeof product.price === "string" ? product.price : `$${product.price ?? "0.00"}`,
+    price: priceStr,
+    originalPrice,
     image: product.image || "",
     description: product.description?.trim(),
     category: product.category?.trim() || "General",
