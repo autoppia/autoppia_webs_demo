@@ -47,17 +47,6 @@ function ProfileContent({ username }: { username: string }) {
     return () => unsubscribe();
   }, []);
 
-  // Serialize usersState for stable dependency
-  const usersStateKey = useMemo(() => {
-    if (!usersState || usersState.length === 0) return '';
-    return usersState.map(u => u.username).sort().join(',');
-  }, [usersState]);
-
-  const mockPostsKey = useMemo(() => {
-    if (!mockPosts || mockPosts.length === 0) return '';
-    return mockPosts.map(p => `${p.id}:${p.user?.username || ''}`).sort().join(',');
-  }, [mockPosts]);
-
   // Resolve user via data provider so we match seeded users AND authors only present on posts
   const user = useMemo(() => {
     const searchUsername = String(username || "").trim().toLowerCase();
@@ -66,7 +55,7 @@ function ProfileContent({ username }: { username: string }) {
       return usersState[2] || usersState[0];
     }
     return dynamicDataProvider.getUserByUsername(username);
-  }, [username, usersStateKey, mockPostsKey]);
+  }, [username, usersState]);
 
   // Memoize currentUser to avoid reference changes
   const currentUser = useMemo(() => {
