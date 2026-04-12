@@ -1,6 +1,7 @@
 "use client";
 
 import { useDynamicSystem } from "@/dynamic/shared";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { useMemo } from "react";
 
 export default function Footer() {
@@ -14,6 +15,7 @@ export default function Footer() {
         items: [
           { href: '#', label: 'About' },
           { href: '#', label: 'Contact' },
+          { href: '/help', label: 'Help' },
         ],
       },
       {
@@ -66,9 +68,15 @@ export default function Footer() {
                             <ul className="space-y-1 text-sm text-muted-foreground">
                               {g.items.map((it, ii) => (
                                 <li key={ii}>
-                                  <span className="text-muted-foreground cursor-default select-none" aria-disabled="true">
-                                    {it.label}
-                                  </span>
+                                  {it.href === '#' ? (
+                                    <span className="text-muted-foreground cursor-default select-none" aria-disabled="true">
+                                      {it.label}
+                                    </span>
+                                  ) : (
+                                    <SeedLink href={it.href} className="text-muted-foreground hover:text-foreground">
+                                      {it.label}
+                                    </SeedLink>
+                                  )}
                                 </li>
                               ))}
                             </ul>
