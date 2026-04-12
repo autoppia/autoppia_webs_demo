@@ -37,6 +37,10 @@ export const EVENT_TYPES = {
   SEARCH_MEDICAL_ANALYSIS: "SEARCH_MEDICAL_ANALYSIS",
   /** Fired when user clicks View Analysis on a medical analysis card. */
   VIEW_MEDICAL_ANALYSIS: "VIEW_MEDICAL_ANALYSIS",
+
+  // Contact Events
+  /** Fired when user submits the general contact form. */
+  CONTACT_FORM_SUBMITTED: "CONTACT_FORM_SUBMITTED",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
