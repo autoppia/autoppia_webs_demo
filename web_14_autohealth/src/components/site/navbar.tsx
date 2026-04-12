@@ -15,6 +15,7 @@ export default function Navbar() {
       { href: "/doctors", title: "Doctors" },
       { href: "/prescriptions", title: "Prescriptions" },
       { href: "/medical-records", title: "Medical Analysis" },
+      { href: "/help", title: "Help" },
     ];
     const order = dyn.v1.changeOrderElements("navbar-links", links.length);
     return order.map((idx) => links[idx]);
