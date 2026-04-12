@@ -1,6 +1,7 @@
 "use client";
 
 import { useDynamicSystem } from "@/dynamic/shared";
+import { SeedLink } from "@/components/ui/SeedLink";
 import NavLinks from "./NavLinks";
 
 export default function Sidebar() {
@@ -24,14 +25,16 @@ export default function Sidebar() {
 
       {/* Bottom Section */}
       <div className="mt-auto pt-6 border-t border-gray-200">
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-100">
-          <div className="text-xs font-semibold text-gray-700 mb-1">
-            Need Help?
+        <SeedLink href="/contact" className="block">
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-100 hover:border-blue-300 hover:shadow-sm transition-all duration-200 cursor-pointer">
+            <div className="text-xs font-semibold text-gray-700 mb-1">
+              Need Help?
+            </div>
+            <div className="text-xs text-gray-600">
+              Contact support
+            </div>
           </div>
-          <div className="text-xs text-gray-600">
-            Contact support
-          </div>
-        </div>
+        </SeedLink>
       </div>
     </aside>
   ), "aside-wrap");

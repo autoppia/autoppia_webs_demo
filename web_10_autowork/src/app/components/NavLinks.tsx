@@ -3,7 +3,7 @@
 import type { ComponentType } from "react";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { Briefcase, Users, Sparkles, Heart, User, Clock3 } from "lucide-react";
+import { Briefcase, Users, Sparkles, Heart, User, Clock3, Mail } from "lucide-react";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
@@ -44,6 +44,11 @@ const links: NavLink[] = [
     href: "/profile/alexsmith",
     icon: User,
   },
+  {
+    label: "Contact",
+    href: "/contact",
+    icon: Mail,
+  },
 ];
 
 export default function NavLinks() {
@@ -56,6 +61,7 @@ export default function NavLinks() {
     if (href === "/favorites") return "nav-favorites-link";
     if (href === "/hire-later") return "nav-hire-later-link";
     if (href === "/profile/alexsmith") return "nav-profile-link";
+    if (href === "/contact") return "nav-contact-link";
     return "nav-link";
   };
 
@@ -72,6 +78,7 @@ export default function NavLinks() {
             "/favorites": EVENT_TYPES.NAVBAR_FAVORITES_CLICK,
             "/hire-later": EVENT_TYPES.NAVBAR_HIRE_LATER_CLICK,
             "/profile/alexsmith": EVENT_TYPES.NAVBAR_PROFILE_CLICK,
+            "/contact": EVENT_TYPES.NAVBAR_CONTACT_CLICK,
           }[link.href] || EVENT_TYPES.NAVBAR_CLICK;
         return (
           <SeedLink
