@@ -3,6 +3,7 @@ import * as React from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogTitle,
   DialogHeader,
   DialogFooter,
@@ -138,6 +139,9 @@ export function AddToCartModal({
                 {item.name}
               </span>
             </DialogTitle>
+            <DialogDescription className="sr-only">
+              Customize options, quantity, and special instructions for this menu item before adding it to your cart.
+            </DialogDescription>
           </DialogHeader>
           <div className="px-6 flex gap-3 items-center mb-2">
             <div className="rounded-xl overflow-hidden w-16 h-16 relative">

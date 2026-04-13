@@ -70,6 +70,7 @@ function EditableTime({
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -555,6 +556,9 @@ export default function CartPage() {
                   <DialogContent className="max-w-md">
                     <DialogHeader>
                       <DialogTitle>Select a Delivery Address</DialogTitle>
+                      <DialogDescription className="sr-only">
+                        Choose a saved address or enter a custom delivery address.
+                      </DialogDescription>
                     </DialogHeader>
                     <div id="address-options" className="flex flex-col gap-2 mt-2">
                       {predefinedAddresses.map((addr) => (
@@ -642,6 +646,9 @@ export default function CartPage() {
                   <DialogContent className="max-w-sm">
                     <DialogHeader>
                       <DialogTitle>Select Drop-off Preference</DialogTitle>
+                      <DialogDescription className="sr-only">
+                        Choose how the courier should deliver your order.
+                      </DialogDescription>
                     </DialogHeader>
                     <div id="dropoff-options" className="flex flex-col gap-3 mt-3">
                       {dropoffOptions.map((option) => (
@@ -725,6 +732,9 @@ export default function CartPage() {
                 <DialogContent className="max-w-md">
                   <DialogHeader>
                     <DialogTitle>Select a Pickup Address</DialogTitle>
+                    <DialogDescription className="sr-only">
+                      Choose a saved address or enter a custom pickup location.
+                    </DialogDescription>
                   </DialogHeader>
                   <div id="pickup-address-options" className="flex flex-col gap-2 mt-2">
                     {predefinedAddresses.map((addr) => (
@@ -991,6 +1001,9 @@ export default function CartPage() {
             <DialogContent className="max-w-sm">
               <DialogHeader>
                 <DialogTitle>Add contact number</DialogTitle>
+                <DialogDescription className="sr-only">
+                  Enter a phone number so the restaurant or courier can reach you about your order.
+                </DialogDescription>
               </DialogHeader>
               <Input
                 id="contact-number-modal-input"
