@@ -19,6 +19,8 @@ export const EVENT_TYPES = {
   /** Fired when a transfer completes successfully. Fields: hash, from, to, amount, block_number. */
   TRANSFER_COMPLETE: "TRANSFER_COMPLETE",
   FAVORITE_SUBNET: "FAVORITE_SUBNET",
+  DOCS_FEEDBACK_UP: "DOCS_FEEDBACK_UP",
+  DOCS_FEEDBACK_DOWN: "DOCS_FEEDBACK_DOWN",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
