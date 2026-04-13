@@ -82,6 +82,27 @@ import { AddToCartModal } from "../food/AddToCartModal";
 import type { CartItem } from "@/store/cart-store";
 import type { MenuItem } from "@/data/restaurants";
 
+/** Line items for ADDRESS_ADDED: includes menu size and preference text for validators. */
+function mapCartItemsForAddressAdded(items: CartItem[]) {
+  return items.map((item) => {
+    const optionsPart = item.selectedOptions?.filter(Boolean).join(", ") ?? "";
+    const prefPart = item.preferences?.trim() ?? "";
+    const preferences =
+      [prefPart, optionsPart ? `Options: ${optionsPart}` : ""]
+        .filter(Boolean)
+        .join(" · ") || null;
+
+    return {
+      itemId: item.id,
+      name: item.name,
+      quantity: item.quantity,
+      price: item.price,
+      size: item.selectedSize?.name ?? null,
+      preferences,
+    };
+  });
+}
+
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, clearCart, getTotal, updateCartItem } =
     useCartStore();
@@ -598,12 +619,7 @@ export default function CartPage() {
                                 mode: "delivery",
                                 restaurantId: restaurant?.id || "unknown",
                                 restaurantName: restaurant?.name || "Unknown Restaurant",
-                                items: items.map(item => ({
-                                  itemId: item.id,
-                                  name: item.name,
-                                  quantity: item.quantity,
-                                  price: item.price
-                                })),
+                                items: mapCartItemsForAddressAdded(items),
                                 cartTotal: getTotal()
                               });
                               setIsAddressModalOpen(false);
@@ -774,12 +790,7 @@ export default function CartPage() {
                               mode: "pickup",
                               restaurantId: restaurant?.id || "unknown",
                               restaurantName: restaurant?.name || "Unknown Restaurant",
-                              items: items.map(item => ({
-                                itemId: item.id,
-                                name: item.name,
-                                quantity: item.quantity,
-                                price: item.price
-                              })),
+                              items: mapCartItemsForAddressAdded(items),
                               cartTotal: getTotal()
                               });
                               setIsPickupInfoModalOpen(false);
