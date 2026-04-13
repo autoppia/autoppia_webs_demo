@@ -125,11 +125,11 @@ export function AddToCartModal({
       <DialogContent className={`max-w-xl rounded-2xl px-0 sm:px-0 p-0 ${layout.modal.containerClass} ${dyn.v3.getVariant("modal", CLASS_VARIANTS_MAP, "")}`}>
         <div className={`max-h-[90vh] overflow-y-auto ${layout.modal.contentClass}`}>
           <DialogHeader className={`px-6 pt-6 pb-0 ${layout.modal.headerClass}`}>
-            <DialogTitle
-              className={`${layout.modal.headerClass} space-y-1`}
-              id={modalTitleId}
-            >
-              <span className="block text-base md:text-lg font-semibold">
+            <DialogTitle className={`${layout.modal.headerClass} space-y-1`}>
+              <span
+                id={modalTitleId}
+                className="block text-base md:text-lg font-semibold"
+              >
                 {dyn.v3.getVariant("add-to-cart-modal-title", TEXT_VARIANTS_MAP, "Customize your order")}
               </span>
               <span
