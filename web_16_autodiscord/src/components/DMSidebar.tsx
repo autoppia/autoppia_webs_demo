@@ -4,17 +4,20 @@ import { useDynamicSystem } from "@/dynamic";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import type { Member } from "@/types/discord";
+import { UserPlus } from "lucide-react";
 
 interface DMSidebarProps {
   peers: Member[];
   selectedUserId: string | null;
   onSelectUser: (userId: string) => void;
+  onAddFriend: () => void;
 }
 
 export function DMSidebar({
   peers,
   selectedUserId,
   onSelectUser,
+  onAddFriend,
 }: DMSidebarProps) {
   const dyn = useDynamicSystem();
   const dmOrder = dyn.v1.changeOrderElements("dm-list", Math.max(peers.length, 1));
@@ -37,15 +40,25 @@ export function DMSidebar({
           data-testid={dyn.v3.getVariant("dm-sidebar", ID_VARIANTS_MAP, "dm-sidebar")}
         >
       {dyn.v1.addWrapDecoy("dm-header", (
-        <div className="h-12 px-4 flex items-center border-b border-black/20 shadow">
+        <div className="h-12 px-4 flex items-center justify-between border-b border-black/20 shadow">
           <span className="font-semibold text-white">Direct Messages</span>
+          <button
+            type="button"
+            onClick={onAddFriend}
+            className="p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-white/10"
+            aria-label="Add Friend"
+            title="Add Friend"
+            data-testid={dyn.v3.getVariant("add-friend-button", ID_VARIANTS_MAP, "add-friend-button")}
+          >
+            <UserPlus className="w-5 h-5" />
+          </button>
         </div>
       ))}
       {dyn.v1.addWrapDecoy("dm-list", (
         <div className="flex-1 overflow-y-auto scrollbar-thin py-2">
           {peers.length === 0 ? (
             <p className="px-4 py-2 text-sm text-gray-500">
-              No conversations. (Demo: add friends from servers.)
+              No conversations yet. Click the + icon above to add friends!
             </p>
           ) : (
             dmOrder.map((idx) => {

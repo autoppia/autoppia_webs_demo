@@ -26,5 +26,12 @@
   "dm-peer": ["dm-peer", "dm-user-row", "dm-entry", "dm-list-item", "conversation-entry", "dm-user-item", "dm-contact", "dm-recipient", "dm-user-line", "dm-row"],
   "channel-sidebar-settings": ["channel-sidebar-settings", "server-settings-button", "server-config-button", "guild-settings-button", "sidebar-settings-button", "server-options-button", "server-gear", "channel-header-settings", "server-header-settings", "guild-header-settings"],
   "empty-channel-state": ["empty-channel-state", "no-channel-state", "channel-empty-view", "channel-placeholder", "channel-empty-panel", "channel-empty-message", "no-channel-selected", "channel-none", "channel-blank", "channel-empty-screen"],
-  "dm-empty-state": ["dm-empty-state", "no-dm-state", "dm-empty-view", "dm-placeholder", "dm-empty-panel", "dm-empty-message", "no-dm-selected", "dm-none", "dm-blank", "dm-empty-screen"]
+  "dm-empty-state": ["dm-empty-state", "no-dm-state", "dm-empty-view", "dm-placeholder", "dm-empty-panel", "dm-empty-message", "no-dm-selected", "dm-none", "dm-blank", "dm-empty-screen"],
+  "add-friend-button": ["add-friend-button", "add-friend-btn", "friend-add-button", "new-friend-btn", "add-friend-trigger", "friend-add-btn", "add-friend-icon", "add-friend-action", "friend-add-trigger", "add-friend-control"],
+  "add-friend-modal": ["add-friend-modal", "friend-modal", "add-friend-dialog", "friend-add-modal", "add-friend-popup", "friend-dialog", "add-friend-panel", "friend-add-dialog", "add-friend-overlay", "friend-add-popup"],
+  "add-friend-modal-close": ["add-friend-modal-close", "friend-modal-close", "add-friend-close", "friend-close-button", "close-add-friend", "friend-modal-dismiss", "add-friend-dismiss", "friend-dialog-close", "add-friend-exit", "friend-modal-exit"],
+  "add-friend-search-input": ["add-friend-search-input", "friend-search-input", "friend-search-box", "add-friend-query", "friend-lookup-input", "friend-search-field", "add-friend-filter", "friend-find-input", "add-friend-search", "friend-query-input"],
+  "friend-user-row": ["friend-user-row", "friend-user-item", "friend-user-entry", "friend-row", "friend-item", "friend-entry", "friend-user-line", "friend-user-card", "friend-list-item", "friend-user-tile"],
+  "send-friend-request-button": ["send-friend-request-button", "send-request-btn", "friend-request-send", "add-friend-send", "send-friend-btn", "friend-request-button", "request-friend-btn", "send-request-button", "friend-send-btn", "add-request-btn"],
+  "pending-friend-status": ["pending-friend-status", "friend-pending-badge", "pending-request-status", "friend-request-pending", "pending-friend-label", "friend-pending-state", "pending-badge", "friend-pending-indicator", "pending-friend-tag", "friend-pending-text"]
 }

@@ -6,6 +6,7 @@ import { CreateChannelModal } from "@/components/CreateChannelModal";
 import { CreateServerModal } from "@/components/CreateServerModal";
 import { DMChatPanel, type DMMessage } from "@/components/DMChatPanel";
 import { DMSidebar } from "@/components/DMSidebar";
+import { AddFriendModal } from "@/components/AddFriendModal";
 import { ErrorState } from "@/components/ErrorState";
 import { HomeDashboard } from "@/components/HomeDashboard";
 import { MemberSidebar } from "@/components/MemberSidebar";
@@ -13,6 +14,7 @@ import { ServerList } from "@/components/ServerList";
 import { ServerSettingsModal } from "@/components/ServerSettingsModal";
 import { VoiceChannelPanel } from "@/components/VoiceChannelPanel";
 import { CURRENT_USER } from "@/constants/mock";
+import { MOCK_USERS, type MockUser } from "@/data/mock-users";
 import { useDynamicSystem } from "@/dynamic";
 import { getDiscordData, dynamicDataProvider } from "@/dynamic/v2";
 import { ID_VARIANTS_MAP } from "@/dynamic/v3";
@@ -68,6 +70,8 @@ export default function DiscordPage() {
     setVoiceChannelId,
     voiceMuted,
     setVoiceMuted,
+    friends,
+    setFriends,
   } = useLocalDiscordOverlay();
   const data = getDiscordData();
   const [retryCount, setRetryCount] = useState(0);
@@ -95,6 +99,7 @@ export default function DiscordPage() {
   const [createServerModalOpen, setCreateServerModalOpen] = useState(false);
   const [createChannelModalOpen, setCreateChannelModalOpen] = useState(false);
   const [serverSettingsModalOpen, setServerSettingsModalOpen] = useState(false);
+  const [addFriendModalOpen, setAddFriendModalOpen] = useState(false);
 
   const allServers = useMemo(
     () => [...(data?.servers ?? []), ...localServers],
@@ -154,13 +159,30 @@ export default function DiscordPage() {
   const dmPeers = useMemo(() => {
     if (!data) return [];
     const seen = new Set<string>();
-    return data.members.filter((m) => {
+    const peers: Member[] = data.members.filter((m) => {
       if (m.username === CURRENT_USER.username) return false;
       if (seen.has(m.id)) return false;
       seen.add(m.id);
       return true;
     });
-  }, [data]);
+    // Add accepted friends from mock users that aren't already peers
+    for (const [userId, status] of Object.entries(friends)) {
+      if (status !== "accepted" || seen.has(userId)) continue;
+      const mockUser = MOCK_USERS.find((u) => u.id === userId);
+      if (!mockUser) continue;
+      seen.add(userId);
+      peers.push({
+        id: mockUser.id,
+        serverId: "",
+        username: mockUser.username,
+        displayName: mockUser.displayName,
+        avatar: mockUser.avatar,
+        role: "user",
+        status: mockUser.status,
+      });
+    }
+    return peers;
+  }, [data, friends]);
 
   /** One message per DM peer from channel messages, matched by authorUsername === username */
   const initialDmMessagesByUserId = useMemo((): Record<string, DMMessage[]> => {
@@ -416,6 +438,44 @@ export default function DiscordPage() {
     });
     setVoiceMuted((v) => !v);
   }, [voiceChannelId, voiceMuted, allChannelsForLookup, getServerName, setVoiceMuted]);
+
+  const handleOpenAddFriend = useCallback(() => {
+    setAddFriendModalOpen(true);
+    logEvent(EVENT_TYPES.OPEN_ADD_FRIEND, {});
+  }, []);
+
+  const handleSendFriendRequest = useCallback(
+    (user: MockUser) => {
+      setFriends((prev) => ({ ...prev, [user.id]: "pending" }));
+      logEvent(EVENT_TYPES.SEND_FRIEND_REQUEST, {
+        user_id: user.id,
+        username: user.username,
+        display_name: user.displayName,
+      });
+      // Simulate the other user accepting after a short delay
+      setTimeout(() => {
+        setFriends((prev) => {
+          if (prev[user.id] !== "pending") return prev;
+          return { ...prev, [user.id]: "accepted" };
+        });
+        logEvent(EVENT_TYPES.ACCEPT_FRIEND_REQUEST, {
+          user_id: user.id,
+          username: user.username,
+          display_name: user.displayName,
+        });
+      }, 1500);
+    },
+    [setFriends],
+  );
+
+  const existingPeerIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const peer of dmPeers) {
+      if (friends[peer.id] === "accepted") continue;
+      ids.add(peer.id);
+    }
+    return ids;
+  }, [dmPeers, friends]);
 
   const handleSendDMMessage = useCallback(
     (content: string) => {
@@ -680,6 +740,7 @@ export default function DiscordPage() {
             peers={dmPeers}
             selectedUserId={selectedUserId}
             onSelectUser={setSelectedUserId}
+            onAddFriend={handleOpenAddFriend}
           />
           {selectedDMPeer ? (
             <DMChatPanel
@@ -714,6 +775,13 @@ export default function DiscordPage() {
         open={serverSettingsModalOpen}
         onClose={() => setServerSettingsModalOpen(false)}
         onDeleteServer={handleDeleteServer}
+      />
+      <AddFriendModal
+        open={addFriendModalOpen}
+        onClose={() => setAddFriendModalOpen(false)}
+        friends={friends}
+        onSendRequest={handleSendFriendRequest}
+        existingPeerIds={existingPeerIds}
       />
     </div>
   );

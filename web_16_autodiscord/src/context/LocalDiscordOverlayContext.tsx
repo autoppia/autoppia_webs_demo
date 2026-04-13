@@ -12,6 +12,8 @@ import {
   type SetStateAction,
 } from "react";
 
+export type FriendStatus = "pending" | "accepted";
+
 export interface LocalDiscordOverlayContextValue {
   localServers: Server[];
   setLocalServers: Dispatch<SetStateAction<Server[]>>;
@@ -33,6 +35,8 @@ export interface LocalDiscordOverlayContextValue {
   setVoiceChannelId: Dispatch<SetStateAction<string | null>>;
   voiceMuted: boolean;
   setVoiceMuted: Dispatch<SetStateAction<boolean>>;
+  friends: Record<string, FriendStatus>;
+  setFriends: Dispatch<SetStateAction<Record<string, FriendStatus>>>;
 }
 
 const LocalDiscordOverlayContext =
@@ -60,6 +64,7 @@ export function LocalDiscordOverlayProvider({
   );
   const [voiceChannelId, setVoiceChannelId] = useState<string | null>(null);
   const [voiceMuted, setVoiceMuted] = useState(false);
+  const [friends, setFriends] = useState<Record<string, FriendStatus>>({});
 
   const value = useMemo(
     () => ({
@@ -81,6 +86,8 @@ export function LocalDiscordOverlayProvider({
       setVoiceChannelId,
       voiceMuted,
       setVoiceMuted,
+      friends,
+      setFriends,
     }),
     [
       localServers,
@@ -92,6 +99,7 @@ export function LocalDiscordOverlayProvider({
       voicePresence,
       voiceChannelId,
       voiceMuted,
+      friends,
     ],
   );
 
