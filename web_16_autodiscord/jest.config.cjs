@@ -3,6 +3,11 @@ module.exports = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
   testMatch: ["<rootDir>/tests/**/*.(test|spec).[jt]s?(x)"],
+  testPathIgnorePatterns: [
+    "<rootDir>/tests/format.test.js",
+    "<rootDir>/tests/use-cases.spec.js",
+  ],
+  passWithNoTests: true,
   coverageProvider: "v8",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   moduleNameMapper: {

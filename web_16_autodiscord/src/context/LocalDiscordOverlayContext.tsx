@@ -1,7 +1,7 @@
 "use client";
 
 import type { DMMessage } from "@/components/DMChatPanel";
-import type { Channel, Message, MessageReaction, Server } from "@/types/discord";
+import type { Channel, Member, Message, MessageReaction, Server } from "@/types/discord";
 import {
   createContext,
   useContext,
@@ -37,6 +37,8 @@ export interface LocalDiscordOverlayContextValue {
   setVoiceMuted: Dispatch<SetStateAction<boolean>>;
   friends: Record<string, FriendStatus>;
   setFriends: Dispatch<SetStateAction<Record<string, FriendStatus>>>;
+  invitedMembers: Record<string, Member[]>;
+  setInvitedMembers: Dispatch<SetStateAction<Record<string, Member[]>>>;
 }
 
 const LocalDiscordOverlayContext =
@@ -65,6 +67,7 @@ export function LocalDiscordOverlayProvider({
   const [voiceChannelId, setVoiceChannelId] = useState<string | null>(null);
   const [voiceMuted, setVoiceMuted] = useState(false);
   const [friends, setFriends] = useState<Record<string, FriendStatus>>({});
+  const [invitedMembers, setInvitedMembers] = useState<Record<string, Member[]>>({});
 
   const value = useMemo(
     () => ({
@@ -88,6 +91,8 @@ export function LocalDiscordOverlayProvider({
       setVoiceMuted,
       friends,
       setFriends,
+      invitedMembers,
+      setInvitedMembers,
     }),
     [
       localServers,
@@ -100,6 +105,7 @@ export function LocalDiscordOverlayProvider({
       voiceChannelId,
       voiceMuted,
       friends,
+      invitedMembers,
     ],
   );
 
