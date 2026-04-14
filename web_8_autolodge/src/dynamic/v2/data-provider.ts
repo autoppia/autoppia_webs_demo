@@ -44,8 +44,8 @@ export class DynamicDataProvider {
   }
 
   private getSeed(): number {
-    if (!isV2Enabled()) return 1;
     if (typeof window === "undefined") return 1;
+    // getSeedFromUrl() is 1 when V2 is off; otherwise from ?seed=
     return clampSeed(getSeedFromUrl());
   }
 

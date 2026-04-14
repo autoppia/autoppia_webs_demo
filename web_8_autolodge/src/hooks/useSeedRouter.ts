@@ -6,7 +6,7 @@ import { useCallback } from "react";
 import type { NavigateOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 /**
- * Custom hook that wraps Next.js router and automatically preserves seed parameter
+ * Next.js router wrapper that adds `?seed=` to navigations when V2 is enabled.
  */
 export function useSeedRouter() {
   const router = useNextRouter();

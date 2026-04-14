@@ -9,7 +9,6 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import { dynamicDataProvider } from "@/dynamic/v2";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
-import { useSeedStructureNavigation } from "../../../../hooks/useSeedStructureNavigation";
 import type { Hotel, Amenity } from "@/types/hotel";
 
 function parseLocalDate(dateString: string | undefined) {
@@ -78,7 +77,6 @@ function ConfirmPageContent() {
   };
   const t = (key: string, fallback: string) => dyn.v3.getVariant(key, dynamicV3TextVariants, fallback);
   const idVariant = (key: string, fallback?: string) => dyn.v3.getVariant(key, ID_VARIANTS_MAP, fallback ?? key);
-  const { navigateWithSeedStructure } = useSeedStructureNavigation();
   const router = useSeedRouter();
   const params = useParams<{ id: string }>();
   const search = useSearchParams();
@@ -352,7 +350,7 @@ function ConfirmPageContent() {
             The hotel you're looking for (ID: {params.id}) is not available with the current seed value.
           </p>
           <button
-            onClick={() => navigateWithSeedStructure("/")}
+            onClick={() => router.push("/")}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Back to All Hotels
@@ -368,7 +366,7 @@ function ConfirmPageContent() {
         className="flex items-center gap-2 text-neutral-700 text-base font-medium hover:underline focus:underline focus:outline-none transition cursor-pointer mb-7 px-0 py-0"
         onClick={() => {
           logEvent(EVENT_TYPES.BACK_TO_ALL_HOTELS, { hotel: prop });
-          navigateWithSeedStructure("/");
+          router.push("/");
         }}
         type="button"
       >
