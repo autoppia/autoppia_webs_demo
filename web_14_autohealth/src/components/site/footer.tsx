@@ -15,6 +15,7 @@ export default function Footer() {
         items: [
           { href: '#', label: 'About' },
           { href: '/contact', label: 'Contact' },
+          { href: '/help', label: 'Help' },
         ],
       },
       {

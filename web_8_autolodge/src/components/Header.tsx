@@ -17,6 +17,7 @@ export default function Header() {
       { key: "nav-popular", name: dyn.v3.getVariant("nav_popular", TEXT_VARIANTS_MAP, "Popular"), href: "/popular" },
       { key: "nav-help", name: dyn.v3.getVariant("nav_help", TEXT_VARIANTS_MAP, "Help"), href: "/help" },
       { key: "nav-wishlist", name: dyn.v3.getVariant("nav_wishlist", TEXT_VARIANTS_MAP, "Wishlist"), href: "/wishlist" },
+      { key: "nav-contact", name: dyn.v3.getVariant("nav_contact", TEXT_VARIANTS_MAP, "Contact"), href: "/contact" },
     ],
     [dyn.v3]
   );
