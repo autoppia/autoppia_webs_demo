@@ -78,7 +78,6 @@ export default function NavLinks() {
             "/favorites": EVENT_TYPES.NAVBAR_FAVORITES_CLICK,
             "/hire-later": EVENT_TYPES.NAVBAR_HIRE_LATER_CLICK,
             "/profile/alexsmith": EVENT_TYPES.NAVBAR_PROFILE_CLICK,
-            "/contact": EVENT_TYPES.NAVBAR_CONTACT_CLICK,
           }[link.href] || EVENT_TYPES.NAVBAR_CLICK;
         return (
           <SeedLink

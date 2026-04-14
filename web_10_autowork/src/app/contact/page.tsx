@@ -70,7 +70,7 @@ export default function ContactPage() {
       name: form.name,
       email: form.email,
       subject: form.subject,
-      messageLength: form.message.length,
+      message: form.message,
     });
 
     // Simulate submission
