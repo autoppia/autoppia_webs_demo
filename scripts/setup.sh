@@ -9,7 +9,7 @@
 #   --postgres_port=PORT          Set base postgres port (default: 5434)
 #   --webs_port=PORT              Set webs_server port (default: 8090)
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
-#   --demo=NAME                   Deploy specific demo: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autostats, or all (default: all)
+#   --demo=NAME                   Deploy specific demo: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autostats, autodiscord, or all (default: all)
 #   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v2,v3)
 #                                            v2 = data by seed (dataset by ?seed=X)
 #   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
@@ -41,7 +41,7 @@ Options:
   --postgres_port=PORT          Set base postgres port (default: 5434)
   --webs_port=PORT              Set webs_server port (default: 8090)
   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
-  --demo=NAME                   One of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autostats, all (default: all)
+  --demo=NAME                   One of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autostats, autodiscord, all (default: all)
   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1,v2,v3). v2 = data by seed.
   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
   --clean_all=BOOL              If true, remove ALL Docker containers/images/volumes before deploy (default: false)
@@ -63,8 +63,8 @@ USAGE
 # Paths
 DEMOS_DIR="$(dirname "$SCRIPT_DIR")"
 EXTERNAL_NET="apps_net"
-WEBS_PROJECTS="web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive web_14_autohealth web_15_autostats"
-CURRENT_PROJECT_PREFIXES="webs_server movies_ books_ autozone_ autodining_ autocrm_ automail_ autodelivery_ autolodge_ autoconnect_ autowork_ autocalendar_ autolist_ autodrive_ autohealth_ autostats_"
+WEBS_PROJECTS="web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive web_14_autohealth web_15_autostats web_16_autodiscord"
+CURRENT_PROJECT_PREFIXES="webs_server movies_ books_ autozone_ autodining_ autocrm_ automail_ autodelivery_ autolodge_ autoconnect_ autowork_ autocalendar_ autolist_ autodrive_ autohealth_ autostats_ autodiscord_"
 
 echo "📂 Script directory: $SCRIPT_DIR"
 echo "📂 Demos root:      $DEMOS_DIR"
@@ -183,7 +183,7 @@ done
 
 # Validate demo name
 if ! is_valid_demo "$WEB_DEMO"; then
-  echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autostats, or all."
+  echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autostats, autodiscord, or all."
   exit 1
 fi
 
@@ -256,7 +256,7 @@ setup_docker() {
       docker network prune -f || true
     else
       echo "[INFO] Cleaning up only demo containers/volumes..."
-      local project_prefixes="webs_server movies_ books_ autozone_ autodining_ autocrm_ automail_ autodelivery_ autolodge_ autoconnect_ autowork_ autocalendar_ autolist_ autodrive_ autohealth_ autostats_"
+      local project_prefixes="webs_server movies_ books_ autozone_ autodining_ autocrm_ automail_ autodelivery_ autolodge_ autoconnect_ autowork_ autocalendar_ autolist_ autodrive_ autohealth_ autostats_ autodiscord_"
 
       # Remove demo containers by compose project label
       docker ps -a --format '{{.ID}}\t{{.Label "com.docker.compose.project"}}' | while IFS=$'\t' read -r id proj; do
@@ -550,6 +550,10 @@ case "$WEB_DEMO" in
     deploy_webs_server
     deploy_project "web_15_autostats" "$WEB_PORT" "" "autostats_${WEB_PORT}"
     ;;
+  autodiscord)
+    deploy_webs_server
+    deploy_project "web_16_autodiscord" "$WEB_PORT" "" "autodiscord_${WEB_PORT}"
+    ;;
   all)
     deploy_webs_server
     echo "📦 Deploying all web projects in parallel (max $PARALLEL_JOBS concurrent)..."
@@ -569,6 +573,7 @@ case "$WEB_DEMO" in
     run_with_limit deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
     run_with_limit deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     run_with_limit deploy_project "web_15_autostats" "$((WEB_PORT + 14))" "" "autostats_$((WEB_PORT + 14))"
+    run_with_limit deploy_project "web_16_autodiscord" "$((WEB_PORT + 15))" "" "autodiscord_$((WEB_PORT + 15))"
     failed=0
     for pid in "${PARALLEL_PIDS[@]}"; do
       wait "$pid" || failed=1
@@ -577,7 +582,7 @@ case "$WEB_DEMO" in
     [ $failed -eq 0 ] || exit 1
     ;;
   *)
-    echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autostats, or all."
+    echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autostats, autodiscord, or all."
     exit 1
     ;;
 esac
