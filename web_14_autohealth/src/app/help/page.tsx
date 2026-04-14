@@ -2,8 +2,9 @@
 
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 import { cn } from "@/library/utils";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 const faqItems = [
   {
@@ -40,6 +41,10 @@ const faqItems = [
 
 export default function HelpPage() {
   const dyn = useDynamicSystem();
+
+  useEffect(() => {
+    logEvent(EVENT_TYPES.VIEW_HELP_PAGE, { page: "help" });
+  }, []);
 
   const orderedFaqItems = useMemo(() => {
     const order = dyn.v1.changeOrderElements("help-faq-items", faqItems.length);
