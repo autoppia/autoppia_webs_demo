@@ -1,0 +1,11 @@
+{
+  "button-primary": ["btn-primary", "button-main", "btn-action", "primary-btn", "action-button", "main-button", "cta-button", "primary-action", "btn-cta", "action-btn-main"],
+  "button-secondary": ["btn-secondary", "button-alt", "btn-outline", "secondary-btn", "outline-button", "alt-button", "btn-ghost", "secondary-action", "btn-light", "action-btn-alt"],
+  "nav-link": ["nav-link", "menu-item", "nav-item", "link-nav", "menu-link", "navigation-link", "nav-action", "menu-action", "link-item", "nav-element"],
+  "input-text": ["input-field", "text-input", "form-input", "field-text", "input-box", "text-field", "form-field", "input-control", "text-control", "field-control"],
+  "card": ["card", "tile", "panel", "box", "block", "container-item", "item-wrapper", "card-container", "content-box", "content-panel"],
+  "server-list": ["server-list", "guild-list", "servers-rail", "guilds-rail", "server-nav", "guild-nav", "servers-panel", "guilds-panel", "server-sidebar", "guild-sidebar"],
+  "channel-list": ["channel-list", "channels-list", "channel-nav", "channels-nav", "channel-rail", "channels-rail", "channel-panel", "channels-panel", "channel-menu", "channels-menu"],
+  "message-bubble": ["message-bubble", "msg-bubble", "chat-bubble", "message-block", "msg-block", "chat-block", "message-box", "msg-box", "chat-msg", "message-content"],
+  "sidebar-panel": ["sidebar-panel", "side-panel", "panel-sidebar", "rail-panel", "nav-panel", "side-rail", "panel-rail", "sidebar-rail", "side-nav", "nav-sidebar"]
+}

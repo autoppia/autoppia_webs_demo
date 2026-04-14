@@ -1,0 +1,1002 @@
+[
+  {
+    "id": "s1",
+    "name": "Dev Squad",
+    "icon": null
+  },
+  {
+    "id": "s2",
+    "name": "Gaming Zone",
+    "icon": null
+  },
+  {
+    "id": "s3",
+    "name": "Design Hub",
+    "icon": null
+  },
+  {
+    "id": "s4",
+    "name": "Pixel Art Lounge",
+    "icon": null
+  },
+  {
+    "id": "s5",
+    "name": "React Devs",
+    "icon": null
+  },
+  {
+    "id": "s6",
+    "name": "Rust Players",
+    "icon": null
+  },
+  {
+    "id": "s7",
+    "name": "Indie Game Dev",
+    "icon": null
+  },
+  {
+    "id": "s8",
+    "name": "Music Production",
+    "icon": null
+  },
+  {
+    "id": "s9",
+    "name": "Frontend Hub",
+    "icon": null
+  },
+  {
+    "id": "s10",
+    "name": "Backend Gang",
+    "icon": null
+  },
+  {
+    "id": "s11",
+    "name": "Anime & Manga",
+    "icon": null
+  },
+  {
+    "id": "s12",
+    "name": "Photography Club",
+    "icon": null
+  },
+  {
+    "id": "s13",
+    "name": "Film Buffs",
+    "icon": null
+  },
+  {
+    "id": "s14",
+    "name": "Creative Writers",
+    "icon": null
+  },
+  {
+    "id": "s15",
+    "name": "Crypto Traders",
+    "icon": null
+  },
+  {
+    "id": "s16",
+    "name": "Sports Talk",
+    "icon": null
+  },
+  {
+    "id": "s17",
+    "name": "Fitness Crew",
+    "icon": null
+  },
+  {
+    "id": "s18",
+    "name": "Cooking Corner",
+    "icon": null
+  },
+  {
+    "id": "s19",
+    "name": "Travel Tales",
+    "icon": null
+  },
+  {
+    "id": "s20",
+    "name": "Book Club",
+    "icon": null
+  },
+  {
+    "id": "s21",
+    "name": "Meme Central",
+    "icon": null
+  },
+  {
+    "id": "s22",
+    "name": "Speedrunners",
+    "icon": null
+  },
+  {
+    "id": "s23",
+    "name": "Valorant Squad",
+    "icon": null
+  },
+  {
+    "id": "s24",
+    "name": "Minecraft Builders",
+    "icon": null
+  },
+  {
+    "id": "s25",
+    "name": "LoL Lounge",
+    "icon": null
+  },
+  {
+    "id": "s26",
+    "name": "D&D Tavern",
+    "icon": null
+  },
+  {
+    "id": "s27",
+    "name": "Tabletop Games",
+    "icon": null
+  },
+  {
+    "id": "s28",
+    "name": "Chess Club",
+    "icon": null
+  },
+  {
+    "id": "s29",
+    "name": "Puzzle Solvers",
+    "icon": null
+  },
+  {
+    "id": "s30",
+    "name": "Startup Founders",
+    "icon": null
+  },
+  {
+    "id": "s31",
+    "name": "UX Designers",
+    "icon": null
+  },
+  {
+    "id": "s32",
+    "name": "UI Crafters",
+    "icon": null
+  },
+  {
+    "id": "s33",
+    "name": "Figma Friends",
+    "icon": null
+  },
+  {
+    "id": "s34",
+    "name": "Blender Artists",
+    "icon": null
+  },
+  {
+    "id": "s35",
+    "name": "3D Modeling Hub",
+    "icon": null
+  },
+  {
+    "id": "s36",
+    "name": "Digital Artists",
+    "icon": null
+  },
+  {
+    "id": "s37",
+    "name": "Concept Art",
+    "icon": null
+  },
+  {
+    "id": "s38",
+    "name": "Illustration Station",
+    "icon": null
+  },
+  {
+    "id": "s39",
+    "name": "Podcast Studio",
+    "icon": null
+  },
+  {
+    "id": "s40",
+    "name": "Lo-Fi Beats",
+    "icon": null
+  },
+  {
+    "id": "s41",
+    "name": "Jazz Lounge",
+    "icon": null
+  },
+  {
+    "id": "s42",
+    "name": "Metal Heads",
+    "icon": null
+  },
+  {
+    "id": "s43",
+    "name": "K-Pop Squad",
+    "icon": null
+  },
+  {
+    "id": "s44",
+    "name": "Hip Hop Hub",
+    "icon": null
+  },
+  {
+    "id": "s45",
+    "name": "Classical Music",
+    "icon": null
+  },
+  {
+    "id": "s46",
+    "name": "Synth Wave",
+    "icon": null
+  },
+  {
+    "id": "s47",
+    "name": "Indie Music",
+    "icon": null
+  },
+  {
+    "id": "s48",
+    "name": "Songwriters",
+    "icon": null
+  },
+  {
+    "id": "s49",
+    "name": "Beat Makers",
+    "icon": null
+  },
+  {
+    "id": "s50",
+    "name": "Film Scoring",
+    "icon": null
+  },
+  {
+    "id": "s51",
+    "name": "Sound Design",
+    "icon": null
+  },
+  {
+    "id": "s52",
+    "name": "Voice Acting",
+    "icon": null
+  },
+  {
+    "id": "s53",
+    "name": "Streaming Hub",
+    "icon": null
+  },
+  {
+    "id": "s54",
+    "name": "Content Creators",
+    "icon": null
+  },
+  {
+    "id": "s55",
+    "name": "VTuber Fans",
+    "icon": null
+  },
+  {
+    "id": "s56",
+    "name": "Cosplay Corner",
+    "icon": null
+  },
+  {
+    "id": "s57",
+    "name": "Comic Readers",
+    "icon": null
+  },
+  {
+    "id": "s58",
+    "name": "Sci-Fi Fans",
+    "icon": null
+  },
+  {
+    "id": "s59",
+    "name": "Fantasy Realm",
+    "icon": null
+  },
+  {
+    "id": "s60",
+    "name": "Horror Squad",
+    "icon": null
+  },
+  {
+    "id": "s61",
+    "name": "True Crime",
+    "icon": null
+  },
+  {
+    "id": "s62",
+    "name": "History Buffs",
+    "icon": null
+  },
+  {
+    "id": "s63",
+    "name": "Science Chat",
+    "icon": null
+  },
+  {
+    "id": "s64",
+    "name": "Math Club",
+    "icon": null
+  },
+  {
+    "id": "s65",
+    "name": "Language Exchange",
+    "icon": null
+  },
+  {
+    "id": "s66",
+    "name": "Study Group",
+    "icon": null
+  },
+  {
+    "id": "s67",
+    "name": "Productivity Hub",
+    "icon": null
+  },
+  {
+    "id": "s68",
+    "name": "Remote Workers",
+    "icon": null
+  },
+  {
+    "id": "s69",
+    "name": "Freelance Hub",
+    "icon": null
+  },
+  {
+    "id": "s70",
+    "name": "No-Code Builders",
+    "icon": null
+  },
+  {
+    "id": "s71",
+    "name": "DevOps Den",
+    "icon": null
+  },
+  {
+    "id": "s72",
+    "name": "Cloud Native",
+    "icon": null
+  },
+  {
+    "id": "s73",
+    "name": "Data Science",
+    "icon": null
+  },
+  {
+    "id": "s74",
+    "name": "ML Engineers",
+    "icon": null
+  },
+  {
+    "id": "s75",
+    "name": "AI Ethics",
+    "icon": null
+  },
+  {
+    "id": "s76",
+    "name": "Open Source",
+    "icon": null
+  },
+  {
+    "id": "s77",
+    "name": "Linux Users",
+    "icon": null
+  },
+  {
+    "id": "s78",
+    "name": "Mac Fans",
+    "icon": null
+  },
+  {
+    "id": "s79",
+    "name": "Retro Gaming",
+    "icon": null
+  },
+  {
+    "id": "s80",
+    "name": "Arcade Legends",
+    "icon": null
+  },
+  {
+    "id": "s81",
+    "name": "Fighting Games",
+    "icon": null
+  },
+  {
+    "id": "s82",
+    "name": "Racing League",
+    "icon": null
+  },
+  {
+    "id": "s83",
+    "name": "FPS Pros",
+    "icon": null
+  },
+  {
+    "id": "s84",
+    "name": "RPG Haven",
+    "icon": null
+  },
+  {
+    "id": "s85",
+    "name": "MMO Guild",
+    "icon": null
+  },
+  {
+    "id": "s86",
+    "name": "Mobile Gamers",
+    "icon": null
+  },
+  {
+    "id": "s87",
+    "name": "Board Games",
+    "icon": null
+  },
+  {
+    "id": "s88",
+    "name": "Card Games",
+    "icon": null
+  },
+  {
+    "id": "s89",
+    "name": "Trivia Night",
+    "icon": null
+  },
+  {
+    "id": "s90",
+    "name": "Karaoke Club",
+    "icon": null
+  },
+  {
+    "id": "s91",
+    "name": "Stand-Up Comedy",
+    "icon": null
+  },
+  {
+    "id": "s92",
+    "name": "Sketch Comedy",
+    "icon": null
+  },
+  {
+    "id": "s93",
+    "name": "Improv Group",
+    "icon": null
+  },
+  {
+    "id": "s94",
+    "name": "Theatre Kids",
+    "icon": null
+  },
+  {
+    "id": "s95",
+    "name": "Dance Crew",
+    "icon": null
+  },
+  {
+    "id": "s96",
+    "name": "Yoga Studio",
+    "icon": null
+  },
+  {
+    "id": "s97",
+    "name": "Running Club",
+    "icon": null
+  },
+  {
+    "id": "s98",
+    "name": "Cycling Squad",
+    "icon": null
+  },
+  {
+    "id": "s99",
+    "name": "Hiking Buddies",
+    "icon": null
+  },
+  {
+    "id": "s100",
+    "name": "Skateboard Park",
+    "icon": null
+  },
+  {
+    "id": "s101",
+    "name": "Surf Culture",
+    "icon": null
+  },
+  {
+    "id": "s102",
+    "name": "Snow Sports",
+    "icon": null
+  },
+  {
+    "id": "s103",
+    "name": "Martial Arts",
+    "icon": null
+  },
+  {
+    "id": "s104",
+    "name": "Esports Arena",
+    "icon": null
+  },
+  {
+    "id": "s105",
+    "name": "Coaching Corner",
+    "icon": null
+  },
+  {
+    "id": "s106",
+    "name": "Fantasy Sports",
+    "icon": null
+  },
+  {
+    "id": "s107",
+    "name": "Soccer Fans",
+    "icon": null
+  },
+  {
+    "id": "s108",
+    "name": "Basketball Hoops",
+    "icon": null
+  },
+  {
+    "id": "s109",
+    "name": "Pet Lovers",
+    "icon": null
+  },
+  {
+    "id": "s110",
+    "name": "Cat Corner",
+    "icon": null
+  },
+  {
+    "id": "s111",
+    "name": "Dog Squad",
+    "icon": null
+  },
+  {
+    "id": "s112",
+    "name": "Plant Parents",
+    "icon": null
+  },
+  {
+    "id": "s113",
+    "name": "Gardening Gang",
+    "icon": null
+  },
+  {
+    "id": "s114",
+    "name": "Car Enthusiasts",
+    "icon": null
+  },
+  {
+    "id": "s115",
+    "name": "Motorcycle Club",
+    "icon": null
+  },
+  {
+    "id": "s116",
+    "name": "Aviation Fans",
+    "icon": null
+  },
+  {
+    "id": "s117",
+    "name": "Space Nerds",
+    "icon": null
+  },
+  {
+    "id": "s118",
+    "name": "Astronomy Club",
+    "icon": null
+  },
+  {
+    "id": "s119",
+    "name": "Nature Photography",
+    "icon": null
+  },
+  {
+    "id": "s120",
+    "name": "Wildlife Spotting",
+    "icon": null
+  },
+  {
+    "id": "s121",
+    "name": "Urban Exploration",
+    "icon": null
+  },
+  {
+    "id": "s122",
+    "name": "Architecture Appreciation",
+    "icon": null
+  },
+  {
+    "id": "s123",
+    "name": "Interior Design",
+    "icon": null
+  },
+  {
+    "id": "s124",
+    "name": "Fashion Forward",
+    "icon": null
+  },
+  {
+    "id": "s125",
+    "name": "Sneaker Heads",
+    "icon": null
+  },
+  {
+    "id": "s126",
+    "name": "Vintage Finds",
+    "icon": null
+  },
+  {
+    "id": "s127",
+    "name": "DIY Crafts",
+    "icon": null
+  },
+  {
+    "id": "s128",
+    "name": "Woodworking",
+    "icon": null
+  },
+  {
+    "id": "s129",
+    "name": "Pottery Studio",
+    "icon": null
+  },
+  {
+    "id": "s130",
+    "name": "Jewelry Making",
+    "icon": null
+  },
+  {
+    "id": "s131",
+    "name": "Knitting Circle",
+    "icon": null
+  },
+  {
+    "id": "s132",
+    "name": "Calligraphy",
+    "icon": null
+  },
+  {
+    "id": "s133",
+    "name": "Typography Hub",
+    "icon": null
+  },
+  {
+    "id": "s134",
+    "name": "Lettering Art",
+    "icon": null
+  },
+  {
+    "id": "s135",
+    "name": "Street Art",
+    "icon": null
+  },
+  {
+    "id": "s136",
+    "name": "Tattoo Talk",
+    "icon": null
+  },
+  {
+    "id": "s137",
+    "name": "Wellness Circle",
+    "icon": null
+  },
+  {
+    "id": "s138",
+    "name": "Mental Health",
+    "icon": null
+  },
+  {
+    "id": "s139",
+    "name": "Meditation Space",
+    "icon": null
+  },
+  {
+    "id": "s140",
+    "name": "Philosophy Cafe",
+    "icon": null
+  },
+  {
+    "id": "s141",
+    "name": "Debate Club",
+    "icon": null
+  },
+  {
+    "id": "s142",
+    "name": "News Junkies",
+    "icon": null
+  },
+  {
+    "id": "s143",
+    "name": "Local Events",
+    "icon": null
+  },
+  {
+    "id": "s144",
+    "name": "Foodie Finds",
+    "icon": null
+  },
+  {
+    "id": "s145",
+    "name": "Coffee Lovers",
+    "icon": null
+  },
+  {
+    "id": "s146",
+    "name": "Tea Time",
+    "icon": null
+  },
+  {
+    "id": "s147",
+    "name": "Wine Tasting",
+    "icon": null
+  },
+  {
+    "id": "s148",
+    "name": "Craft Beer",
+    "icon": null
+  },
+  {
+    "id": "s149",
+    "name": "Baking Club",
+    "icon": null
+  },
+  {
+    "id": "s150",
+    "name": "Vegan Kitchen",
+    "icon": null
+  },
+  {
+    "id": "s151",
+    "name": "BBQ Masters",
+    "icon": null
+  },
+  {
+    "id": "s152",
+    "name": "Recipe Swap",
+    "icon": null
+  },
+  {
+    "id": "s153",
+    "name": "Meal Prep",
+    "icon": null
+  },
+  {
+    "id": "s154",
+    "name": "Budget Eats",
+    "icon": null
+  },
+  {
+    "id": "s155",
+    "name": "Startup Pitches",
+    "icon": null
+  },
+  {
+    "id": "s156",
+    "name": "Side Hustle",
+    "icon": null
+  },
+  {
+    "id": "s157",
+    "name": "FIRE Movement",
+    "icon": null
+  },
+  {
+    "id": "s158",
+    "name": "Minimalism",
+    "icon": null
+  },
+  {
+    "id": "s159",
+    "name": "Sustainability",
+    "icon": null
+  },
+  {
+    "id": "s160",
+    "name": "Eco Living",
+    "icon": null
+  },
+  {
+    "id": "s161",
+    "name": "Mentorship",
+    "icon": null
+  },
+  {
+    "id": "s162",
+    "name": "Career Advice",
+    "icon": null
+  },
+  {
+    "id": "s163",
+    "name": "Resume Review",
+    "icon": null
+  },
+  {
+    "id": "s164",
+    "name": "Interview Prep",
+    "icon": null
+  },
+  {
+    "id": "s165",
+    "name": "Remote Jobs",
+    "icon": null
+  },
+  {
+    "id": "s166",
+    "name": "Freelance Gigs",
+    "icon": null
+  },
+  {
+    "id": "s167",
+    "name": "Notion Nerds",
+    "icon": null
+  },
+  {
+    "id": "s168",
+    "name": "Automation Nerds",
+    "icon": null
+  },
+  {
+    "id": "s169",
+    "name": "No-Code Tools",
+    "icon": null
+  },
+  {
+    "id": "s170",
+    "name": "API Builders",
+    "icon": null
+  },
+  {
+    "id": "s171",
+    "name": "Web3 Devs",
+    "icon": null
+  },
+  {
+    "id": "s172",
+    "name": "NFT Artists",
+    "icon": null
+  },
+  {
+    "id": "s173",
+    "name": "DeFi Degens",
+    "icon": null
+  },
+  {
+    "id": "s174",
+    "name": "Crypto News",
+    "icon": null
+  },
+  {
+    "id": "s175",
+    "name": "Stock Market",
+    "icon": null
+  },
+  {
+    "id": "s176",
+    "name": "Real Estate",
+    "icon": null
+  },
+  {
+    "id": "s177",
+    "name": "Personal Finance",
+    "icon": null
+  },
+  {
+    "id": "s178",
+    "name": "Budgeting Tips",
+    "icon": null
+  },
+  {
+    "id": "s179",
+    "name": "Deal Hunters",
+    "icon": null
+  },
+  {
+    "id": "s180",
+    "name": "E-commerce",
+    "icon": null
+  },
+  {
+    "id": "s181",
+    "name": "Shopify Sellers",
+    "icon": null
+  },
+  {
+    "id": "s182",
+    "name": "Affiliate Marketing",
+    "icon": null
+  },
+  {
+    "id": "s183",
+    "name": "SEO Tips",
+    "icon": null
+  },
+  {
+    "id": "s184",
+    "name": "Marketing Hub",
+    "icon": null
+  },
+  {
+    "id": "s185",
+    "name": "Copywriting",
+    "icon": null
+  },
+  {
+    "id": "s186",
+    "name": "Social Media",
+    "icon": null
+  },
+  {
+    "id": "s187",
+    "name": "Influencer Talk",
+    "icon": null
+  },
+  {
+    "id": "s188",
+    "name": "YouTube Creators",
+    "icon": null
+  },
+  {
+    "id": "s189",
+    "name": "TikTok Squad",
+    "icon": null
+  },
+  {
+    "id": "s190",
+    "name": "Discord Bots",
+    "icon": null
+  },
+  {
+    "id": "s191",
+    "name": "Community Mods",
+    "icon": null
+  },
+  {
+    "id": "s192",
+    "name": "Server Setup",
+    "icon": null
+  },
+  {
+    "id": "s193",
+    "name": "Networking",
+    "icon": null
+  },
+  {
+    "id": "s194",
+    "name": "Friends Hangout",
+    "icon": null
+  },
+  {
+    "id": "s195",
+    "name": "Chill Vibes",
+    "icon": null
+  },
+  {
+    "id": "s196",
+    "name": "Late Night Chat",
+    "icon": null
+  },
+  {
+    "id": "s197",
+    "name": "Morning Crew",
+    "icon": null
+  },
+  {
+    "id": "s198",
+    "name": "Weekend Warriors",
+    "icon": null
+  },
+  {
+    "id": "s199",
+    "name": "Night Owls",
+    "icon": null
+  },
+  {
+    "id": "s200",
+    "name": "Early Birds",
+    "icon": null
+  }
+]
