@@ -598,11 +598,11 @@
     "color": "#E53935",
     "startTime": [
       12,
-      45
+      0
     ],
     "endTime": [
       13,
-      45
+      0
     ],
     "description": "Annual health checkup and routine examination.",
     "location": "Medical Center",
@@ -627,11 +627,11 @@
     "color": "#43A047",
     "startTime": [
       10,
-      45
+      0
     ],
     "endTime": [
       11,
-      45
+      0
     ],
     "description": "Regular gym workout session focusing on strength training.",
     "location": "Fitness Club",
@@ -656,11 +656,11 @@
     "color": "#2196F3",
     "startTime": [
       11,
-      45
+      0
     ],
     "endTime": [
       13,
-      15
+      0
     ],
     "description": "Company-wide meeting to discuss company updates and announcements.",
     "location": "Main Auditorium",
@@ -686,11 +686,11 @@
     "color": "#2196F3",
     "startTime": [
       11,
-      45
+      0
     ],
     "endTime": [
       13,
-      45
+      0
     ],
     "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
     "location": "Virtual",
@@ -746,11 +746,11 @@
     "color": "#8E24AA",
     "startTime": [
       17,
-      45
+      0
     ],
     "endTime": [
       20,
-      45
+      0
     ],
     "description": "Celebrating family member birthday with special activities.",
     "location": "Home",
@@ -810,11 +810,11 @@
     "color": "#43A047",
     "startTime": [
       12,
-      45
+      0
     ],
     "endTime": [
       14,
-      45
+      0
     ],
     "description": "Guided meditation session for mindfulness and relaxation.",
     "location": "Wellness Studio",
@@ -897,11 +897,11 @@
     "color": "#FBC02D",
     "startTime": [
       19,
-      45
+      0
     ],
     "endTime": [
       22,
-      45
+      0
     ],
     "description": "Catching up with college friends over lunch.",
     "location": "Restaurant Downtown",
@@ -930,11 +930,11 @@
     "color": "#43A047",
     "startTime": [
       6,
-      45
+      0
     ],
     "endTime": [
       8,
-      15
+      0
     ],
     "description": "Swimming session for cardiovascular health.",
     "location": "Community Pool",
@@ -1146,11 +1146,11 @@
     "color": "#2196F3",
     "startTime": [
       7,
-      15
+      0
     ],
     "endTime": [
       8,
-      45
+      0
     ],
     "description": "Advanced technical workshop on modern development practices.",
     "location": "Training Center",
@@ -1179,11 +1179,11 @@
     "color": "#E53935",
     "startTime": [
       8,
-      15
+      0
     ],
     "endTime": [
       10,
-      15
+      0
     ],
     "description": "Routine car maintenance and service.",
     "location": "Auto Service Center",
@@ -1245,11 +1245,11 @@
     "color": "#43A047",
     "startTime": [
       17,
-      15
+      0
     ],
     "endTime": [
       19,
-      15
+      0
     ],
     "description": "Guided meditation session for mindfulness and relaxation.",
     "location": "Wellness Studio",
@@ -1275,11 +1275,11 @@
     "color": "#FBC02D",
     "startTime": [
       11,
-      15
+      0
     ],
     "endTime": [
       13,
-      45
+      0
     ],
     "description": "Attending live concert with friends.",
     "location": "Concert Hall",
@@ -1304,11 +1304,11 @@
     "color": "#2196F3",
     "startTime": [
       22,
-      15
+      0
     ],
     "endTime": [
       25,
-      15
+      0
     ],
     "description": "Planning next sprint goals and assigning tasks to team members.",
     "location": "Virtual",
@@ -1434,11 +1434,11 @@
     "color": "#8E24AA",
     "startTime": [
       18,
-      45
+      0
     ],
     "endTime": [
       21,
-      45
+      0
     ],
     "description": "Celebrating family anniversary.",
     "location": "Restaurant",
@@ -1523,11 +1523,11 @@
     "color": "#2196F3",
     "startTime": [
       22,
-      45
+      0
     ],
     "endTime": [
       25,
-      45
+      0
     ],
     "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
     "location": "Virtual",
@@ -1558,11 +1558,11 @@
     "color": "#E53935",
     "startTime": [
       9,
-      15
+      0
     ],
     "endTime": [
       10,
-      15
+      0
     ],
     "description": "Regular haircut appointment.",
     "location": "Salon",
@@ -1587,11 +1587,11 @@
     "color": "#2196F3",
     "startTime": [
       8,
-      15
+      0
     ],
     "endTime": [
       10,
-      45
+      0
     ],
     "description": "Internal hackathon to build innovative features and prototypes.",
     "location": "Office",
@@ -1688,11 +1688,11 @@
     "color": "#FBC02D",
     "startTime": [
       17,
-      45
+      0
     ],
     "endTime": [
       20,
-      45
+      0
     ],
     "description": "Attending live concert with friends.",
     "location": "Concert Hall",
@@ -1718,11 +1718,11 @@
     "color": "#2196F3",
     "startTime": [
       22,
-      15
+      0
     ],
     "endTime": [
       24,
-      15
+      0
     ],
     "description": "Reviewing UI/UX designs and gathering feedback from stakeholders.",
     "location": "Design Studio",
@@ -1752,11 +1752,11 @@
     "color": "#43A047",
     "startTime": [
       19,
-      15
+      0
     ],
     "endTime": [
       20,
-      15
+      0
     ],
     "description": "Pilates class for core strength and flexibility.",
     "location": "Fitness Center",
@@ -1782,11 +1782,11 @@
     "color": "#43A047",
     "startTime": [
       22,
-      15
+      0
     ],
     "endTime": [
       23,
-      45
+      0
     ],
     "description": "Pilates class for core strength and flexibility.",
     "location": "Fitness Center",
@@ -1811,11 +1811,11 @@
     "color": "#FBC02D",
     "startTime": [
       9,
-      45
+      0
     ],
     "endTime": [
       12,
-      15
+      0
     ],
     "description": "Dinner party at friend place.",
     "location": "Friend House",
@@ -1936,11 +1936,11 @@
     "color": "#2196F3",
     "startTime": [
       10,
-      15
+      0
     ],
     "endTime": [
       11,
-      15
+      0
     ],
     "description": "Company-wide meeting to discuss company updates and announcements.",
     "location": "Main Auditorium",
@@ -2000,11 +2000,11 @@
     "color": "#43A047",
     "startTime": [
       19,
-      45
+      0
     ],
     "endTime": [
       20,
-      45
+      0
     ],
     "description": "Pilates class for core strength and flexibility.",
     "location": "Fitness Center",
@@ -2098,11 +2098,11 @@
     "color": "#2196F3",
     "startTime": [
       14,
-      45
+      0
     ],
     "endTime": [
       17,
-      15
+      0
     ],
     "description": "Demonstrating new product features to potential clients.",
     "location": "Showroom",
@@ -2222,11 +2222,11 @@
     "color": "#2196F3",
     "startTime": [
       21,
-      45
+      0
     ],
     "endTime": [
       23,
-      15
+      0
     ],
     "description": "Reviewing pull requests and discussing code quality improvements.",
     "location": "Team Room",
@@ -2287,11 +2287,11 @@
     "color": "#2196F3",
     "startTime": [
       18,
-      15
+      0
     ],
     "endTime": [
       20,
-      15
+      0
     ],
     "description": "Advanced technical workshop on modern development practices.",
     "location": "Training Center",
@@ -2380,11 +2380,11 @@
     "color": "#2196F3",
     "startTime": [
       6,
-      45
+      0
     ],
     "endTime": [
       9,
-      15
+      0
     ],
     "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
     "location": "Virtual",
@@ -2410,11 +2410,11 @@
     "color": "#2196F3",
     "startTime": [
       21,
-      15
+      0
     ],
     "endTime": [
       24,
-      15
+      0
     ],
     "description": "Internal hackathon to build innovative features and prototypes.",
     "location": "Office",
@@ -2468,11 +2468,11 @@
     "color": "#2196F3",
     "startTime": [
       14,
-      45
+      0
     ],
     "endTime": [
       16,
-      15
+      0
     ],
     "description": "Technical interview with candidate for open position.",
     "location": "HR Office",
@@ -2499,11 +2499,11 @@
     "color": "#43A047",
     "startTime": [
       21,
-      45
+      0
     ],
     "endTime": [
       23,
-      15
+      0
     ],
     "description": "Morning run in the park for endurance training.",
     "location": "Central Park",
@@ -2528,11 +2528,11 @@
     "color": "#2196F3",
     "startTime": [
       21,
-      15
+      0
     ],
     "endTime": [
       24,
-      15
+      0
     ],
     "description": "Company-wide meeting to discuss company updates and announcements.",
     "location": "Main Auditorium",
@@ -2591,11 +2591,11 @@
     "color": "#E53935",
     "startTime": [
       17,
-      45
+      0
     ],
     "endTime": [
       18,
-      45
+      0
     ],
     "description": "Regular haircut appointment.",
     "location": "Salon",
@@ -2712,11 +2712,11 @@
     "color": "#FBC02D",
     "startTime": [
       18,
-      45
+      0
     ],
     "endTime": [
       20,
-      45
+      0
     ],
     "description": "Catching up with college friends over lunch.",
     "location": "Restaurant Downtown",
@@ -2747,11 +2747,11 @@
     "color": "#E53935",
     "startTime": [
       9,
-      15
+      0
     ],
     "endTime": [
       11,
-      15
+      0
     ],
     "description": "Grocery shopping and errands.",
     "location": "Supermarket",
@@ -2836,11 +2836,11 @@
     "color": "#2196F3",
     "startTime": [
       8,
-      15
+      0
     ],
     "endTime": [
       9,
-      45
+      0
     ],
     "description": "Company-wide meeting to discuss company updates and announcements.",
     "location": "Main Auditorium",
@@ -2868,11 +2868,11 @@
     "color": "#43A047",
     "startTime": [
       7,
-      45
+      0
     ],
     "endTime": [
       9,
-      45
+      0
     ],
     "description": "Pilates class for core strength and flexibility.",
     "location": "Fitness Center",
@@ -2897,11 +2897,11 @@
     "color": "#2196F3",
     "startTime": [
       10,
-      15
+      0
     ],
     "endTime": [
       11,
-      45
+      0
     ],
     "description": "Company-wide meeting to discuss company updates and announcements.",
     "location": "Main Auditorium",
@@ -2962,11 +2962,11 @@
     "color": "#FBC02D",
     "startTime": [
       16,
-      15
+      0
     ],
     "endTime": [
       18,
-      15
+      0
     ],
     "description": "Casual coffee meetup to catch up.",
     "location": "Coffee Shop",
@@ -2991,11 +2991,11 @@
     "color": "#2196F3",
     "startTime": [
       22,
-      15
+      0
     ],
     "endTime": [
       23,
-      45
+      0
     ],
     "description": "Monthly one-on-one with manager to discuss career development and goals.",
     "location": "Manager Office",
@@ -3115,11 +3115,11 @@
     "color": "#2196F3",
     "startTime": [
       10,
-      15
+      0
     ],
     "endTime": [
       11,
-      45
+      0
     ],
     "description": "Sprint retrospective to discuss what went well and improvements.",
     "location": "Team Room",
@@ -3217,11 +3217,11 @@
     "color": "#2196F3",
     "startTime": [
       11,
-      15
+      0
     ],
     "endTime": [
       13,
-      15
+      0
     ],
     "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
     "location": "Virtual",
@@ -3284,11 +3284,11 @@
     "color": "#2196F3",
     "startTime": [
       14,
-      45
+      0
     ],
     "endTime": [
       16,
-      15
+      0
     ],
     "description": "Daily standup with the development team to discuss progress and blockers.",
     "location": "Conference Room A",
@@ -3499,11 +3499,11 @@
     "color": "#2196F3",
     "startTime": [
       6,
-      15
+      0
     ],
     "endTime": [
       7,
-      15
+      0
     ],
     "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
     "location": "Virtual",
@@ -3566,11 +3566,11 @@
     "color": "#2196F3",
     "startTime": [
       17,
-      45
+      0
     ],
     "endTime": [
       19,
-      45
+      0
     ],
     "description": "Planning next sprint goals and assigning tasks to team members.",
     "location": "Virtual",
@@ -3664,11 +3664,11 @@
     "color": "#2196F3",
     "startTime": [
       14,
-      45
+      0
     ],
     "endTime": [
       15,
-      45
+      0
     ],
     "description": "Monthly one-on-one with manager to discuss career development and goals.",
     "location": "Manager Office",
@@ -3698,11 +3698,11 @@
     "color": "#E53935",
     "startTime": [
       21,
-      15
+      0
     ],
     "endTime": [
       22,
-      45
+      0
     ],
     "description": "Annual health checkup and routine examination.",
     "location": "Medical Center",
@@ -3763,11 +3763,11 @@
     "color": "#FBC02D",
     "startTime": [
       15,
-      45
+      0
     ],
     "endTime": [
       19,
-      45
+      0
     ],
     "description": "Catching up with college friends over lunch.",
     "location": "Restaurant Downtown",
@@ -3795,11 +3795,11 @@
     "color": "#FBC02D",
     "startTime": [
       6,
-      15
+      0
     ],
     "endTime": [
       10,
-      15
+      0
     ],
     "description": "Dinner party at friend place.",
     "location": "Friend House",
@@ -3827,11 +3827,11 @@
     "color": "#2196F3",
     "startTime": [
       8,
-      45
+      0
     ],
     "endTime": [
       11,
-      45
+      0
     ],
     "description": "Advanced technical workshop on modern development practices.",
     "location": "Training Center",
@@ -3886,11 +3886,11 @@
     "color": "#43A047",
     "startTime": [
       14,
-      45
+      0
     ],
     "endTime": [
       16,
-      15
+      0
     ],
     "description": "Swimming session for cardiovascular health.",
     "location": "Community Pool",
@@ -3915,11 +3915,11 @@
     "color": "#E53935",
     "startTime": [
       9,
-      15
+      0
     ],
     "endTime": [
       10,
-      15
+      0
     ],
     "description": "Meeting with bank advisor for financial planning.",
     "location": "Bank Branch",
@@ -3979,11 +3979,11 @@
     "color": "#FBC02D",
     "startTime": [
       6,
-      45
+      0
     ],
     "endTime": [
       10,
-      45
+      0
     ],
     "description": "Celebrating friend birthday party.",
     "location": "Event Venue",
@@ -4069,11 +4069,11 @@
     "color": "#E53935",
     "startTime": [
       10,
-      15
+      0
     ],
     "endTime": [
       11,
-      15
+      0
     ],
     "description": "Meeting with bank advisor for financial planning.",
     "location": "Bank Branch",
@@ -4132,11 +4132,11 @@
     "color": "#43A047",
     "startTime": [
       13,
-      15
+      0
     ],
     "endTime": [
       14,
-      15
+      0
     ],
     "description": "Morning run in the park for endurance training.",
     "location": "Central Park",
@@ -4161,11 +4161,11 @@
     "color": "#8E24AA",
     "startTime": [
       9,
-      15
+      0
     ],
     "endTime": [
       13,
-      15
+      0
     ],
     "description": "Weekly family breakfast to spend quality time together.",
     "location": "Home",
@@ -4191,11 +4191,11 @@
     "color": "#2196F3",
     "startTime": [
       18,
-      45
+      0
     ],
     "endTime": [
       21,
-      45
+      0
     ],
     "description": "Sprint retrospective to discuss what went well and improvements.",
     "location": "Team Room",
@@ -4253,11 +4253,11 @@
     "color": "#E53935",
     "startTime": [
       6,
-      15
+      0
     ],
     "endTime": [
       7,
-      45
+      0
     ],
     "description": "Regular dental cleaning and checkup.",
     "location": "Dental Clinic",
@@ -4317,11 +4317,11 @@
     "color": "#43A047",
     "startTime": [
       18,
-      45
+      0
     ],
     "endTime": [
       19,
-      45
+      0
     ],
     "description": "Morning run in the park for endurance training.",
     "location": "Central Park",
@@ -4375,11 +4375,11 @@
     "color": "#2196F3",
     "startTime": [
       12,
-      45
+      0
     ],
     "endTime": [
       15,
-      15
+      0
     ],
     "description": "Advanced technical workshop on modern development practices.",
     "location": "Training Center",
@@ -4405,11 +4405,11 @@
     "color": "#2196F3",
     "startTime": [
       19,
-      15
+      0
     ],
     "endTime": [
       22,
-      15
+      0
     ],
     "description": "Advanced technical workshop on modern development practices.",
     "location": "Training Center",
@@ -4439,11 +4439,11 @@
     "color": "#43A047",
     "startTime": [
       15,
-      15
+      0
     ],
     "endTime": [
       16,
-      15
+      0
     ],
     "description": "Regular gym workout session focusing on strength training.",
     "location": "Fitness Club",
@@ -4503,11 +4503,11 @@
     "color": "#2196F3",
     "startTime": [
       17,
-      45
+      0
     ],
     "endTime": [
       18,
-      45
+      0
     ],
     "description": "Quarterly budget planning session with finance team.",
     "location": "Conference Room B",
@@ -4562,11 +4562,11 @@
     "color": "#2196F3",
     "startTime": [
       7,
-      15
+      0
     ],
     "endTime": [
       8,
-      45
+      0
     ],
     "description": "Presenting the new product features to key clients.",
     "location": "Client Office",
@@ -4658,11 +4658,11 @@
     "color": "#2196F3",
     "startTime": [
       15,
-      45
+      0
     ],
     "endTime": [
       16,
-      45
+      0
     ],
     "description": "Monthly one-on-one with manager to discuss career development and goals.",
     "location": "Manager Office",
@@ -4843,11 +4843,11 @@
     "color": "#E53935",
     "startTime": [
       22,
-      45
+      0
     ],
     "endTime": [
       24,
-      15
+      0
     ],
     "description": "Regular dental cleaning and checkup.",
     "location": "Dental Clinic",
@@ -4873,11 +4873,11 @@
     "color": "#43A047",
     "startTime": [
       13,
-      15
+      0
     ],
     "endTime": [
       14,
-      45
+      0
     ],
     "description": "Guided meditation session for mindfulness and relaxation.",
     "location": "Wellness Studio",
@@ -4933,11 +4933,11 @@
     "color": "#2196F3",
     "startTime": [
       14,
-      45
+      0
     ],
     "endTime": [
       17,
-      45
+      0
     ],
     "description": "Presenting the new product features to key clients.",
     "location": "Client Office",
@@ -4996,11 +4996,11 @@
     "color": "#2196F3",
     "startTime": [
       17,
-      15
+      0
     ],
     "endTime": [
       18,
-      15
+      0
     ],
     "description": "Internal hackathon to build innovative features and prototypes.",
     "location": "Office",
@@ -5059,11 +5059,11 @@
     "color": "#2196F3",
     "startTime": [
       22,
-      15
+      0
     ],
     "endTime": [
       24,
-      15
+      0
     ],
     "description": "Demonstrating new product features to potential clients.",
     "location": "Showroom",
@@ -5090,11 +5090,11 @@
     "color": "#43A047",
     "startTime": [
       11,
-      45
+      0
     ],
     "endTime": [
       12,
-      45
+      0
     ],
     "description": "Guided meditation session for mindfulness and relaxation.",
     "location": "Wellness Studio",
@@ -5304,11 +5304,11 @@
     "color": "#43A047",
     "startTime": [
       9,
-      45
+      0
     ],
     "endTime": [
       11,
-      45
+      0
     ],
     "description": "Pilates class for core strength and flexibility.",
     "location": "Fitness Center",
@@ -5370,11 +5370,11 @@
     "color": "#43A047",
     "startTime": [
       16,
-      45
+      0
     ],
     "endTime": [
       18,
-      15
+      0
     ],
     "description": "Pilates class for core strength and flexibility.",
     "location": "Fitness Center",
@@ -5399,11 +5399,11 @@
     "color": "#2196F3",
     "startTime": [
       21,
-      15
+      0
     ],
     "endTime": [
       22,
-      15
+      0
     ],
     "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
     "location": "Virtual",
@@ -5434,11 +5434,11 @@
     "color": "#43A047",
     "startTime": [
       17,
-      45
+      0
     ],
     "endTime": [
       19,
-      45
+      0
     ],
     "description": "Weekly yoga session for stress relief and flexibility.",
     "location": "Fitness Center",
@@ -5585,11 +5585,11 @@
     "color": "#E53935",
     "startTime": [
       15,
-      45
+      0
     ],
     "endTime": [
       17,
-      15
+      0
     ],
     "description": "Routine car maintenance and service.",
     "location": "Auto Service Center",
@@ -5775,11 +5775,11 @@
     "color": "#E53935",
     "startTime": [
       8,
-      15
+      0
     ],
     "endTime": [
       9,
-      15
+      0
     ],
     "description": "Annual health checkup and routine examination.",
     "location": "Medical Center",
@@ -5804,11 +5804,11 @@
     "color": "#2196F3",
     "startTime": [
       10,
-      45
+      0
     ],
     "endTime": [
       12,
-      15
+      0
     ],
     "description": "Monthly one-on-one with manager to discuss career development and goals.",
     "location": "Manager Office",
@@ -5992,11 +5992,11 @@
     "color": "#43A047",
     "startTime": [
       15,
-      15
+      0
     ],
     "endTime": [
       16,
-      15
+      0
     ],
     "description": "Weekly yoga session for stress relief and flexibility.",
     "location": "Fitness Center",
@@ -6021,11 +6021,11 @@
     "color": "#E53935",
     "startTime": [
       8,
-      45
+      0
     ],
     "endTime": [
       10,
-      15
+      0
     ],
     "description": "Annual health checkup and routine examination.",
     "location": "Medical Center",
@@ -6050,11 +6050,11 @@
     "color": "#2196F3",
     "startTime": [
       20,
-      15
+      0
     ],
     "endTime": [
       21,
-      45
+      0
     ],
     "description": "Quarterly project review with stakeholders to discuss milestones and next steps.",
     "location": "Virtual",
@@ -6236,11 +6236,11 @@
     "color": "#E53935",
     "startTime": [
       11,
-      15
+      0
     ],
     "endTime": [
       13,
-      15
+      0
     ],
     "description": "Annual health checkup and routine examination.",
     "location": "Medical Center",
@@ -6392,11 +6392,11 @@
     "color": "#8E24AA",
     "startTime": [
       14,
-      15
+      0
     ],
     "endTime": [
       16,
-      15
+      0
     ],
     "description": "Attending child school event or performance.",
     "location": "School",
@@ -6421,11 +6421,11 @@
     "color": "#2196F3",
     "startTime": [
       6,
-      45
+      0
     ],
     "endTime": [
       7,
-      45
+      0
     ],
     "description": "Reviewing UI/UX designs and gathering feedback from stakeholders.",
     "location": "Design Studio",
@@ -6645,11 +6645,11 @@
     "color": "#2196F3",
     "startTime": [
       22,
-      45
+      0
     ],
     "endTime": [
       23,
-      45
+      0
     ],
     "description": "Demonstrating new product features to potential clients.",
     "location": "Showroom",
@@ -6678,11 +6678,11 @@
     "color": "#2196F3",
     "startTime": [
       18,
-      15
+      0
     ],
     "endTime": [
       20,
-      45
+      0
     ],
     "description": "Reviewing UI/UX designs and gathering feedback from stakeholders.",
     "location": "Design Studio",

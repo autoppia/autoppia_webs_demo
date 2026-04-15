@@ -21,6 +21,18 @@ export const EVENT_TYPES = {
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
 
+/**
+ * JSON.stringify drops trailing ".0" on whole numbers. Python's json decoder then
+ * yields int for "rating":5. Rewrite whole-number rating values to N.0 so the
+ * wire format keeps float semantics (e.g. ADD_FILM with input "5" → 5.0).
+ */
+export function jsonStringifyForLogEvent(payload: object): string {
+  return JSON.stringify(payload).replace(
+    /"rating"\s*:\s*(-?\d+)(?=\s*[,\}\]])/g,
+    '"rating":$1.0',
+  );
+}
+
 export function logEvent(eventType: EventType, data: object = {}, extra_headers: Record<string, string> = {}) {
   if (typeof window === "undefined") return;
 
@@ -60,7 +72,7 @@ export function logEvent(eventType: EventType, data: object = {}, extra_headers:
       "X-Validator-Id": resolvedValidatorId,
       ...extra_headers,
     },
-    body: JSON.stringify(backendPayload),
+    body: jsonStringifyForLogEvent(backendPayload),
   }).catch((error) => {
     console.error("❌ Failed to log event:", error);
     throw error; // User wants errors to fail

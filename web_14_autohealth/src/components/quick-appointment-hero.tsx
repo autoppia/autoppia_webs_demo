@@ -16,7 +16,17 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 import { cn } from "@/library/utils";
-import { MEDICAL_SPECIALTIES, filterSpecialties } from "@/data/medical-specialties";
+import { useSeed } from "@/context/SeedContext";
+import {
+  deriveSpecialtiesFromAppointmentAndRecordData,
+  filterSpecialtiesList,
+} from "@/data/medical-specialties";
+import {
+  whenReady,
+  getAppointments,
+  getMedicalRecords,
+  getDoctors,
+} from "@/dynamic/v2";
 
 interface QuickAppointmentFormData {
   name: string;
@@ -27,6 +37,8 @@ interface QuickAppointmentFormData {
 
 export function QuickAppointmentHero() {
   const dyn = useDynamicSystem();
+  const { seed } = useSeed();
+  const [catalogSpecialties, setCatalogSpecialties] = useState<string[]>([]);
   const [formData, setFormData] = useState<QuickAppointmentFormData>({
     name: "",
     email: "",
@@ -40,10 +52,26 @@ export function QuickAppointmentHero() {
   const specialtyInputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  // Initialize with all specialties
   useEffect(() => {
-    setFilteredSpecialties([...MEDICAL_SPECIALTIES].sort());
-  }, []);
+    let cancelled = false;
+    whenReady()
+      .then(() => {
+        if (cancelled) return;
+        const list = deriveSpecialtiesFromAppointmentAndRecordData(
+          getAppointments(),
+          getMedicalRecords(),
+          getDoctors(),
+        );
+        setCatalogSpecialties(list);
+        setFilteredSpecialties([...list]);
+      })
+      .catch((err) => {
+        console.error("[QuickAppointmentHero] Failed to load specialties from dataset:", err);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [seed]);
 
   // Handle clicks outside suggestions
   useEffect(() => {
@@ -70,9 +98,8 @@ export function QuickAppointmentHero() {
       [field]: value
     }));
 
-    // Filter specialties when typing in specialty field
     if (field === "specialty") {
-      const filtered = filterSpecialties(value);
+      const filtered = filterSpecialtiesList(catalogSpecialties, value);
       setFilteredSpecialties(filtered);
       setShowSuggestions(value.length > 0 && filtered.length > 0);
     }

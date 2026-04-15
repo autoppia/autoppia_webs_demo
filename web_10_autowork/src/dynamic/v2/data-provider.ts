@@ -96,9 +96,11 @@ export class DynamicDataProvider {
         this.currentSeed = seed;
 
         this.ready = false;
+        const releasePriorWaiters = this.resolveReady;
         this.readyPromise = new Promise<void>((resolve) => {
           this.resolveReady = resolve;
         });
+        releasePriorWaiters();
 
         // Clear current data so UI doesn't show stale seed data.
         this.jobs = [];

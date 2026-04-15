@@ -1,0 +1,6 @@
+{
+  "servers": ["./servers.json"],
+  "channels": ["./channels.json"],
+  "messages": ["./messages.json"],
+  "members": ["./members.json"]
+}

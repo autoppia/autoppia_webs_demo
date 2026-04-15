@@ -1,5 +1,5 @@
 // Unit tests for EVENT_TYPES and logEvent payload/header logic.
-import { EVENT_TYPES, logEvent } from "@/library/events";
+import { EVENT_TYPES, jsonStringifyForLogEvent, logEvent } from "@/library/events";
 
 describe("logEvent", () => {
   beforeEach(() => {
@@ -64,5 +64,66 @@ describe("logEvent", () => {
     const [, options] = fetchMock.mock.calls[0];
     const payload = JSON.parse((options as RequestInit).body as string);
     expect(payload.data.user_id).toBeNull();
+  });
+
+  test("ADD_FILM body uses N.0 for whole-number rating in JSON text", () => {
+    const fetchMock = (global as unknown as { fetch: jest.Mock }).fetch;
+    jest.spyOn(console, "log").mockImplementation(() => undefined);
+
+    logEvent(EVENT_TYPES.ADD_FILM, {
+      id: 1,
+      name: "X",
+      director: null,
+      year: 2020,
+      genres: [],
+      rating: 5,
+      duration: 100,
+      cast: null,
+    });
+
+    const [, options] = fetchMock.mock.calls[0];
+    const raw = (options as RequestInit).body as string;
+    expect(raw).toMatch(/"rating"\s*:\s*5\.0\b/);
+    expect(JSON.parse(raw).data.data.rating).toBe(5);
+  });
+
+  test("ADD_FILM body keeps fractional rating unchanged", () => {
+    const fetchMock = (global as unknown as { fetch: jest.Mock }).fetch;
+    jest.spyOn(console, "log").mockImplementation(() => undefined);
+
+    logEvent(EVENT_TYPES.ADD_FILM, {
+      id: 1,
+      name: "X",
+      director: null,
+      year: 2020,
+      genres: [],
+      rating: 8.5,
+      duration: 100,
+      cast: null,
+    });
+
+    const [, options] = fetchMock.mock.calls[0];
+    const raw = (options as RequestInit).body as string;
+    expect(raw).toMatch(/"rating"\s*:\s*8\.5\b/);
+    expect(raw).not.toMatch(/"rating"\s*:\s*8\.50/);
+  });
+});
+
+describe("jsonStringifyForLogEvent", () => {
+  test("rewrites top-level and nested whole-number rating keys", () => {
+    const s = jsonStringifyForLogEvent({
+      data: {
+        rating: 5,
+        previous_values: { rating: 10, name: "a" },
+        movie: { id: 1 },
+      },
+    });
+    expect(s).toContain('"rating":5.0');
+    expect(s).toContain('"rating":10.0');
+  });
+
+  test("does not alter rating with a fractional part", () => {
+    const s = jsonStringifyForLogEvent({ rating: 8.5 });
+    expect(s).toBe('{"rating":8.5}');
   });
 });

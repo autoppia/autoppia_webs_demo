@@ -274,7 +274,7 @@ function PostJobWizard({
               {dyn.v1.addWrapDecoy("postjob-form-shell", (
                 <>
                 <form
-                  className="flex-1 flex flex-col xl:flex-row xl:items-start overflow-y-auto px-10 py-10"
+                  className="min-h-0 flex-1 flex flex-col xl:flex-row xl:items-start overflow-y-auto px-10 py-10"
                   onSubmit={(e) => {
                     e.preventDefault();
                     if (step < totalSteps) next();
@@ -940,22 +940,25 @@ export default function Home() {
 	const [experts, setExperts] = useState<AutoworkExpert[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
-	// Pagination for Experts and Hires dedicated pages (display all fetched data)
+	// Pagination sizes for dedicated pages
+	const JOBS_PAGE_SIZE = 6;
 	const PAGE_SIZE = 9;
+	const [jobsPage, setJobsPage] = useState(1);
 	const [expertsPage, setExpertsPage] = useState(1);
 	const [hiresPage, setHiresPage] = useState(1);
 
-	// Reset pagination when navigating to experts/hires pages
+	// Reset pagination when navigating to jobs / experts / hires pages
 	useEffect(() => {
+		if (pathname?.includes("/jobs")) setJobsPage(1);
 		if (pathname?.includes("/experts")) setExpertsPage(1);
 		if (pathname?.includes("/hires")) setHiresPage(1);
 	}, [pathname]);
 
-	// Subscribe to data changes – full lists (no slice) so pagination can show all
+	// Subscribe to data changes – full job list so /jobs pagination can show all loaded jobs
 	useEffect(() => {
 		// Wait for data to be ready
 		dyn.v2.whenReady().then(() => {
-			setJobs(dynamicDataProvider.getJobs().slice(0, 6));
+			setJobs(dynamicDataProvider.getJobs());
 			setHires(dynamicDataProvider.getHires());
 			setExperts(dynamicDataProvider.getExperts());
 			setIsLoading(false);
@@ -963,7 +966,7 @@ export default function Home() {
 
 		// Subscribe to updates
 		const unsubscribeJobs = dynamicDataProvider.subscribeJobs((updatedJobs) => {
-			setJobs(updatedJobs.slice(0, 6));
+			setJobs(updatedJobs);
 		});
 		const unsubscribeHires = dynamicDataProvider.subscribeHires((updatedHires) => {
 			setHires(updatedHires);
@@ -997,6 +1000,12 @@ export default function Home() {
 	const allJobs = useMemo(() => {
 		return [...userJobs, ...jobs];
 	}, [userJobs, jobs]);
+
+	const totalJobsPages = Math.max(1, Math.ceil(allJobs.length / JOBS_PAGE_SIZE));
+
+	useEffect(() => {
+		setJobsPage((p) => Math.min(p, totalJobsPages));
+	}, [totalJobsPages]);
 
 	useEffect(() => {
 		if (typeof window === "undefined") return;
@@ -1086,6 +1095,11 @@ export default function Home() {
 			}
 		};
 
+		const isJobsPage = pathname?.includes("/jobs");
+		const displayedJobs = isJobsPage
+			? allJobs.slice((jobsPage - 1) * JOBS_PAGE_SIZE, jobsPage * JOBS_PAGE_SIZE)
+			: allJobs.slice(0, 6);
+
 		return dyn.v1.addWrapDecoy("jobs-section", (
 			<section id="jobs" className="px-10 mt-14 px-4">
 				{/* Header with Stats */}
@@ -1164,14 +1178,15 @@ export default function Home() {
 					</div>
 				</div>
 
-				{/* Jobs Cards Grid */}
+				{/* Jobs Cards Grid – on /jobs show paginated list; on home show preview */}
 				<div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-					{allJobs.map((job: HomeJob, i: number) => {
+					{displayedJobs.map((job: HomeJob, i: number) => {
 						const statusColors = getStatusColor(job.status);
+						const jobItemIndex = isJobsPage ? (jobsPage - 1) * JOBS_PAGE_SIZE + i : i;
 						return (
 							<div
-								key={job.id ?? i}
-								{...getElementAttributes('job-item', i)}
+								key={job.id ?? `job-${jobItemIndex}`}
+								{...getElementAttributes('job-item', jobItemIndex)}
 								className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 group"
 							>
 								<div className="flex items-start justify-between mb-4">
@@ -1218,6 +1233,29 @@ export default function Home() {
 						);
 					})}
 				</div>
+				{isJobsPage && totalJobsPages > 1 && (
+					<nav className="mt-8 flex items-center justify-center gap-3 flex-wrap" aria-label="Jobs pagination">
+						<button
+							type="button"
+							onClick={() => setJobsPage((p) => Math.max(1, p - 1))}
+							disabled={jobsPage <= 1}
+							className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+						>
+							Previous
+						</button>
+						<span className="text-sm text-gray-600">
+							Page {jobsPage} of {totalJobsPages}
+						</span>
+						<button
+							type="button"
+							onClick={() => setJobsPage((p) => Math.min(totalJobsPages, p + 1))}
+							disabled={jobsPage >= totalJobsPages}
+							className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+						>
+							Next
+						</button>
+					</nav>
+				)}
 			</section>
 		));
 	};

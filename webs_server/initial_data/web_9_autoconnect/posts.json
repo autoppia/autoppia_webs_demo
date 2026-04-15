@@ -2,11 +2,11 @@
   {
     "id": "p1",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "sarah.chen",
+      "name": "Sarah Chen",
+      "avatar": "/media/avatars/person1.jpg",
+      "bio": "Senior UX Designer at Google with 8+ years of experience in mobile and web design.",
+      "title": "Senior UX Designer"
     },
     "content": "Learning curve: steep but rewarding!",
     "timestamp": "2025-10-31T01:07:00.000Z",
@@ -18,11 +18,11 @@
   {
     "id": "p2",
     "user": {
-      "username": "chris.martinez",
-      "name": "Chris Martinez",
+      "username": "michael.rodriguez",
+      "name": "Michael Rodriguez",
       "avatar": "/media/avatars/person2.jpg",
-      "bio": "Mobile Developer building native iOS and Android applications. React Native enthusiast.",
-      "title": "Senior Mobile Developer"
+      "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
+      "title": "Full Stack Developer"
     },
     "content": "Performance improvements always feel so satisfying. Small optimizations can make a huge difference.",
     "timestamp": "2025-10-13T23:03:00.000Z",
@@ -75,11 +75,11 @@
   {
     "id": "p4",
     "user": {
-      "username": "amanda.white",
-      "name": "Amanda White",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Design Lead creating cohesive design systems and user experiences. Leading design teams.",
-      "title": "Design Lead"
+      "username": "david.kim",
+      "name": "David Kim",
+      "avatar": "/media/avatars/person4.jpg",
+      "bio": "Data Scientist specializing in machine learning and predictive analytics. Turning data into insights.",
+      "title": "Senior Data Scientist"
     },
     "content": "Looking back on this year, I'm grateful for all the growth and learning opportunities.",
     "timestamp": "2025-11-26T04:17:00.000Z",
@@ -91,11 +91,11 @@
   {
     "id": "p5",
     "user": {
-      "username": "william.taylor",
-      "name": "William Taylor",
+      "username": "lisa.anderson",
+      "name": "Lisa Anderson",
       "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Lead managing engineering teams and delivering high-quality software. Agile methodologies.",
-      "title": "Engineering Manager"
+      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
+      "title": "Marketing Director"
     },
     "content": "Coffee and code - the perfect combination for a productive morning!",
     "timestamp": "2025-10-08T21:59:00.000Z",
@@ -107,11 +107,11 @@
   {
     "id": "p6",
     "user": {
-      "username": "chris.martinez",
-      "name": "Chris Martinez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Mobile Developer building native iOS and Android applications. React Native enthusiast.",
-      "title": "Senior Mobile Developer"
+      "username": "james.wilson",
+      "name": "James Wilson",
+      "avatar": "/media/avatars/person1.jpg",
+      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
+      "title": "Senior DevOps Engineer"
     },
     "content": "System upgrade complete! Everything is running smoothly now.",
     "timestamp": "2025-10-11T00:17:00.000Z",
@@ -123,11 +123,11 @@
   {
     "id": "p7",
     "user": {
-      "username": "chris.martinez",
-      "name": "Chris Martinez",
+      "username": "maria.garcia",
+      "name": "Maria Garcia",
       "avatar": "/media/avatars/person2.jpg",
-      "bio": "Mobile Developer building native iOS and Android applications. React Native enthusiast.",
-      "title": "Senior Mobile Developer"
+      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
+      "title": "Backend Engineer"
     },
     "content": "Culinary adventure: expanding my cooking skills one recipe at a time.",
     "timestamp": "2025-10-18T21:13:00.000Z",
@@ -176,11 +176,11 @@
   {
     "id": "p8",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
+      "username": "robert.lee",
+      "name": "Robert Lee",
       "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
+      "title": "Frontend Architect"
     },
     "content": "Hobby update: learning something new is always exciting.",
     "timestamp": "2025-11-14T05:20:00.000Z",
@@ -217,11 +217,11 @@
   {
     "id": "p9",
     "user": {
-      "username": "daniel.clark",
-      "name": "Daniel Clark",
+      "username": "jennifer.brown",
+      "name": "Jennifer Brown",
       "avatar": "/media/avatars/person4.jpg",
-      "bio": "QA Engineer ensuring software quality through automated testing. Test automation and CI/CD.",
-      "title": "Senior QA Engineer"
+      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
+      "title": "UX Researcher"
     },
     "content": "Culinary adventure: expanding my cooking skills one recipe at a time.",
     "timestamp": "2025-10-17T20:01:00.000Z",
@@ -233,11 +233,11 @@
   {
     "id": "p10",
     "user": {
-      "username": "david.kim",
-      "name": "David Kim",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "Data Scientist specializing in machine learning and predictive analytics. Turning data into insights.",
-      "title": "Senior Data Scientist"
+      "username": "william.taylor",
+      "name": "William Taylor",
+      "avatar": "/media/avatars/default-avatar.jpg",
+      "bio": "Technical Lead managing engineering teams and delivering high-quality software. Agile methodologies.",
+      "title": "Engineering Manager"
     },
     "content": "Reflection time: sometimes the best decisions are the hardest ones to make.",
     "timestamp": "2025-11-15T11:57:00.000Z",
@@ -290,11 +290,11 @@
   {
     "id": "p12",
     "user": {
-      "username": "david.kim",
-      "name": "David Kim",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "Data Scientist specializing in machine learning and predictive analytics. Turning data into insights.",
-      "title": "Senior Data Scientist"
+      "username": "chris.martinez",
+      "name": "Chris Martinez",
+      "avatar": "/media/avatars/person2.jpg",
+      "bio": "Mobile Developer building native iOS and Android applications. React Native enthusiast.",
+      "title": "Senior Mobile Developer"
     },
     "content": "Our metrics just hit a new high! Huge milestone for the team. Investing in quality always pays off.",
     "timestamp": "2025-11-27T08:05:00.000Z",
@@ -319,11 +319,11 @@
   {
     "id": "p13",
     "user": {
-      "username": "amanda.white",
-      "name": "Amanda White",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Design Lead creating cohesive design systems and user experiences. Leading design teams.",
-      "title": "Design Lead"
+      "username": "nicole.thompson",
+      "name": "Nicole Thompson",
+      "avatar": "/media/avatars/person3.jpg",
+      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
+      "title": "Security Engineer"
     },
     "content": "Workshop was fantastic! Learned so much and met some great people.",
     "timestamp": "2025-10-27T17:16:00.000Z",
@@ -335,11 +335,11 @@
   {
     "id": "p14",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
+      "username": "daniel.clark",
+      "name": "Daniel Clark",
       "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "bio": "QA Engineer ensuring software quality through automated testing. Test automation and CI/CD.",
+      "title": "Senior QA Engineer"
     },
     "content": "Just discovered a new podcast. Already hooked after the first episode!",
     "timestamp": "2025-11-19T01:37:00.000Z",
@@ -351,11 +351,11 @@
   {
     "id": "p15",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "sophia.davis",
+      "name": "Sophia Davis",
+      "avatar": "/media/avatars/default-avatar.jpg",
+      "bio": "Technical Writer creating clear documentation and developer guides. Making complex concepts accessible.",
+      "title": "Senior Technical Writer"
     },
     "content": "Taking time to appreciate the journey. It's not always about the destination.",
     "timestamp": "2025-12-01T09:07:00.000Z",
@@ -380,11 +380,11 @@
   {
     "id": "p16",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "bella.wilcox",
+      "name": "Bella Wilcox",
+      "avatar": "https://randomuser.me/api/portraits/women/1.jpg",
+      "bio": "Machine Learning Engineer building ML models and systems.",
+      "title": "Machine Learning Engineer"
     },
     "content": "Growth mindset: embracing challenges as opportunities to learn.",
     "timestamp": "2025-10-02T04:11:00.000Z",
@@ -396,11 +396,11 @@
   {
     "id": "p17",
     "user": {
-      "username": "maria.garcia",
-      "name": "Maria Garcia",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
-      "title": "Backend Engineer"
+      "username": "mason.ferguson",
+      "name": "Mason Ferguson",
+      "avatar": "https://randomuser.me/api/portraits/men/1.jpg",
+      "bio": "Senior UX Designer with expertise in user research and design systems.",
+      "title": "Senior UX Designer"
     },
     "content": "Quick update: things are going well! Hope the same for everyone else.",
     "timestamp": "2025-11-12T20:31:00.000Z",
@@ -412,11 +412,11 @@
   {
     "id": "p18",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "savannah.ross",
+      "name": "Savannah Ross",
+      "avatar": "https://randomuser.me/api/portraits/women/2.jpg",
+      "bio": "Sales Manager managing sales teams and customer relationships.",
+      "title": "Sales Manager"
     },
     "content": "What's your go-to method for staying organized? Always looking to improve my system.",
     "timestamp": "2025-10-31T18:15:00.000Z",
@@ -441,11 +441,11 @@
   {
     "id": "p19",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "kevin.walsh",
+      "name": "Kevin Walsh",
+      "avatar": "https://randomuser.me/api/portraits/men/2.jpg",
+      "bio": "Operations Manager optimizing business processes and operations.",
+      "title": "Operations Manager"
     },
     "content": "Infrastructure improvements are making deployments so much smoother. Reliability is everything.",
     "timestamp": "2025-10-16T23:50:00.000Z",
@@ -457,11 +457,11 @@
   {
     "id": "p20",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "harper.hughes",
+      "name": "Harper Hughes",
+      "avatar": "https://randomuser.me/api/portraits/women/3.jpg",
+      "bio": "Data Scientist specializing in machine learning and predictive analytics.",
+      "title": "Data Scientist"
     },
     "content": "Creative outlet today. Always refreshing to work on something different.",
     "timestamp": "2025-10-15T09:34:00.000Z",
@@ -473,11 +473,11 @@
   {
     "id": "p21",
     "user": {
-      "username": "michael.rodriguez",
-      "name": "Michael Rodriguez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
-      "title": "Full Stack Developer"
+      "username": "aiden.cook",
+      "name": "Aiden Cook",
+      "avatar": "https://randomuser.me/api/portraits/men/3.jpg",
+      "bio": "Backend Developer building robust server-side applications.",
+      "title": "Backend Developer"
     },
     "content": "Personal project milestone reached! Small wins matter.",
     "timestamp": "2025-11-09T20:16:00.000Z",
@@ -502,11 +502,11 @@
   {
     "id": "p22",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "nicholas.sanders",
+      "name": "Nicholas Sanders",
+      "avatar": "https://randomuser.me/api/portraits/men/4.jpg",
+      "bio": "Senior UX Designer with expertise in user research and design systems.",
+      "title": "Senior UX Designer"
     },
     "content": "Mid-week check-in: how's everyone doing? We've got this!",
     "timestamp": "2025-10-02T23:39:00.000Z",
@@ -531,11 +531,11 @@
   {
     "id": "p23",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "riley.lowe",
+      "name": "Riley Lowe",
+      "avatar": "https://randomuser.me/api/portraits/women/4.jpg",
+      "bio": "Senior Data Scientist turning data into actionable insights.",
+      "title": "Senior Data Scientist"
     },
     "content": "Looking forward while appreciating the present. Balance is key.",
     "timestamp": "2025-11-26T18:47:00.000Z",
@@ -547,11 +547,11 @@
   {
     "id": "p24",
     "user": {
-      "username": "david.kim",
-      "name": "David Kim",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "Data Scientist specializing in machine learning and predictive analytics. Turning data into insights.",
-      "title": "Senior Data Scientist"
+      "username": "violet.mcdonald",
+      "name": "Violet Mcdonald",
+      "avatar": "https://randomuser.me/api/portraits/women/5.jpg",
+      "bio": "Senior UX Designer with expertise in user research and design systems.",
+      "title": "Senior UX Designer"
     },
     "content": "Just discovered a new tool that's been a game changer for my workflow. Highly recommend checking it out!",
     "timestamp": "2025-11-04T06:47:00.000Z",
@@ -600,11 +600,11 @@
   {
     "id": "p25",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "luke.boyd",
+      "name": "Luke Boyd",
+      "avatar": "https://randomuser.me/api/portraits/men/5.jpg",
+      "bio": "Program Manager managing multiple related projects.",
+      "title": "Program Manager"
     },
     "content": "Beautiful weather today! Perfect for a walk in the park.",
     "timestamp": "2025-10-07T07:22:00.000Z",
@@ -653,11 +653,11 @@
   {
     "id": "p26",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "claire.vargas",
+      "name": "Claire Vargas",
+      "avatar": "https://randomuser.me/api/portraits/women/6.jpg",
+      "bio": "Technical Lead driving technical decisions and architecture.",
+      "title": "Technical Lead"
     },
     "content": "How do you balance work and personal projects? It's a constant challenge for me.",
     "timestamp": "2025-10-29T19:45:00.000Z",
@@ -694,11 +694,11 @@
   {
     "id": "p27",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "jordan.curry",
+      "name": "Jordan Curry",
+      "avatar": "https://randomuser.me/api/portraits/women/7.jpg",
+      "bio": "Customer Success Manager ensuring customer satisfaction and retention.",
+      "title": "Customer Success Manager"
     },
     "content": "Conference day one complete! So many great talks and interesting discussions.",
     "timestamp": "2025-11-07T06:39:00.000Z",
@@ -710,11 +710,11 @@
   {
     "id": "p28",
     "user": {
-      "username": "amanda.white",
-      "name": "Amanda White",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Design Lead creating cohesive design systems and user experiences. Leading design teams.",
-      "title": "Design Lead"
+      "username": "isabella.barnes",
+      "name": "Isabella Barnes",
+      "avatar": "https://randomuser.me/api/portraits/women/8.jpg",
+      "bio": "Frontend Developer creating responsive and performant web applications.",
+      "title": "Frontend Developer"
     },
     "content": "Weekend brunch was amazing! Sometimes you need to treat yourself.",
     "timestamp": "2025-11-14T10:42:00.000Z",
@@ -726,11 +726,11 @@
   {
     "id": "p29",
     "user": {
-      "username": "amanda.white",
-      "name": "Amanda White",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Design Lead creating cohesive design systems and user experiences. Leading design teams.",
-      "title": "Design Lead"
+      "username": "tyler.sanchez",
+      "name": "Tyler Sanchez",
+      "avatar": "https://randomuser.me/api/portraits/men/6.jpg",
+      "bio": "Machine Learning Engineer building ML models and systems.",
+      "title": "Machine Learning Engineer"
     },
     "content": "Birthday wishes are making my day! Thank you to everyone who reached out.",
     "timestamp": "2025-10-28T19:34:00.000Z",
@@ -742,11 +742,11 @@
   {
     "id": "p30",
     "user": {
-      "username": "maria.garcia",
-      "name": "Maria Garcia",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
-      "title": "Backend Engineer"
+      "username": "jacob.lopez",
+      "name": "Jacob Lopez",
+      "avatar": "https://randomuser.me/api/portraits/men/7.jpg",
+      "bio": "UX Researcher focused on understanding user needs and behaviors.",
+      "title": "UX Researcher"
     },
     "content": "Growth mindset: embracing challenges as opportunities to learn.",
     "timestamp": "2025-11-25T14:35:00.000Z",
@@ -758,11 +758,11 @@
   {
     "id": "p31",
     "user": {
-      "username": "sophia.davis",
-      "name": "Sophia Davis",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Writer creating clear documentation and developer guides. Making complex concepts accessible.",
-      "title": "Senior Technical Writer"
+      "username": "ryan.coleman",
+      "name": "Ryan Coleman",
+      "avatar": "https://randomuser.me/api/portraits/men/8.jpg",
+      "bio": "Senior UX Designer with expertise in user research and design systems.",
+      "title": "Senior UX Designer"
     },
     "content": "Just published a write-up about my experience. Hope it's helpful for others!",
     "timestamp": "2025-10-12T07:02:00.000Z",
@@ -774,11 +774,11 @@
   {
     "id": "p32",
     "user": {
-      "username": "william.taylor",
-      "name": "William Taylor",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Lead managing engineering teams and delivering high-quality software. Agile methodologies.",
-      "title": "Engineering Manager"
+      "username": "ethan.young",
+      "name": "Ethan Young",
+      "avatar": "https://randomuser.me/api/portraits/men/9.jpg",
+      "bio": "Operations Manager optimizing business processes and operations.",
+      "title": "Operations Manager"
     },
     "content": "Grateful for the opportunities I've had this year. Looking forward to what's next!",
     "timestamp": "2025-10-30T02:33:00.000Z",
@@ -790,11 +790,11 @@
   {
     "id": "p33",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "noah.anderson",
+      "name": "Noah Anderson",
+      "avatar": "https://randomuser.me/api/portraits/men/10.jpg",
+      "bio": "Mobile Developer building native iOS and Android applications.",
+      "title": "Mobile Developer (iOS/Android)"
     },
     "content": "Great discussion in the comments! Love hearing different perspectives on this topic.",
     "timestamp": "2025-10-12T05:16:00.000Z",
@@ -806,11 +806,11 @@
   {
     "id": "p34",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "mason.cook",
+      "name": "Mason Cook",
+      "avatar": "https://randomuser.me/api/portraits/men/11.jpg",
+      "bio": "Sales Manager managing sales teams and customer relationships.",
+      "title": "Sales Manager"
     },
     "content": "Home cooking experiment: turned out better than expected!",
     "timestamp": "2025-11-08T05:26:00.000Z",
@@ -822,11 +822,11 @@
   {
     "id": "p35",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "william.fernandez",
+      "name": "William Fernandez",
+      "avatar": "https://randomuser.me/api/portraits/men/12.jpg",
+      "bio": "Sales Manager managing sales teams and customer relationships.",
+      "title": "Sales Manager"
     },
     "content": "Hobby time! Sometimes the best ideas come from outside work.",
     "timestamp": "2025-10-01T13:36:00.000Z",
@@ -838,11 +838,11 @@
   {
     "id": "p36",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "nathan.kennedy",
+      "name": "Nathan Kennedy",
+      "avatar": "https://randomuser.me/api/portraits/men/13.jpg",
+      "bio": "Mobile Developer building native iOS and Android applications.",
+      "title": "Mobile Developer (iOS/Android)"
     },
     "content": "Optimized our system performance significantly! The improvements are incredible. What's your favorite optimization technique?",
     "timestamp": "2025-10-28T12:31:00.000Z",
@@ -867,11 +867,11 @@
   {
     "id": "p37",
     "user": {
-      "username": "amanda.white",
-      "name": "Amanda White",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Design Lead creating cohesive design systems and user experiences. Leading design teams.",
-      "title": "Design Lead"
+      "username": "lily.wilcox",
+      "name": "Lily Wilcox",
+      "avatar": "https://randomuser.me/api/portraits/women/9.jpg",
+      "bio": "Digital Marketing Manager managing digital marketing campaigns.",
+      "title": "Digital Marketing Manager"
     },
     "content": "Great conversation with a colleague today. These discussions always spark new ideas.",
     "timestamp": "2025-11-17T00:11:00.000Z",
@@ -883,11 +883,11 @@
   {
     "id": "p38",
     "user": {
-      "username": "chris.martinez",
-      "name": "Chris Martinez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Mobile Developer building native iOS and Android applications. React Native enthusiast.",
-      "title": "Senior Mobile Developer"
+      "username": "aurora.watkins",
+      "name": "Aurora Watkins",
+      "avatar": "https://randomuser.me/api/portraits/women/10.jpg",
+      "bio": "Engineering Manager leading development teams and delivering high-quality software.",
+      "title": "Engineering Manager"
     },
     "content": "The little wins matter just as much as the big ones. Celebrating all of them!",
     "timestamp": "2025-10-31T16:47:00.000Z",
@@ -899,11 +899,11 @@
   {
     "id": "p39",
     "user": {
-      "username": "daniel.clark",
-      "name": "Daniel Clark",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "QA Engineer ensuring software quality through automated testing. Test automation and CI/CD.",
-      "title": "Senior QA Engineer"
+      "username": "henry.fleming",
+      "name": "Henry Fleming",
+      "avatar": "https://randomuser.me/api/portraits/men/14.jpg",
+      "bio": "Technical Writer creating clear documentation and developer guides.",
+      "title": "Technical Writer"
     },
     "content": "Thursday thoughts: almost there! Keep going.",
     "timestamp": "2025-10-11T04:00:00.000Z",
@@ -928,11 +928,11 @@
   {
     "id": "p40",
     "user": {
-      "username": "maria.garcia",
-      "name": "Maria Garcia",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
-      "title": "Backend Engineer"
+      "username": "grace.wright",
+      "name": "Grace Wright",
+      "avatar": "https://randomuser.me/api/portraits/women/11.jpg",
+      "bio": "Customer Success Manager ensuring customer satisfaction and retention.",
+      "title": "Customer Success Manager"
     },
     "content": "Home cooking experiment: turned out better than expected!",
     "timestamp": "2025-10-27T11:42:00.000Z",
@@ -944,11 +944,11 @@
   {
     "id": "p41",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "samantha.leonard",
+      "name": "Samantha Leonard",
+      "avatar": "https://randomuser.me/api/portraits/women/12.jpg",
+      "bio": "Product Owner defining product requirements and roadmap.",
+      "title": "Product Owner"
     },
     "content": "Creative work today. Love having outlets beyond the day job.",
     "timestamp": "2025-11-02T06:36:00.000Z",
@@ -985,11 +985,11 @@
   {
     "id": "p42",
     "user": {
-      "username": "chris.martinez",
-      "name": "Chris Martinez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Mobile Developer building native iOS and Android applications. React Native enthusiast.",
-      "title": "Senior Mobile Developer"
+      "username": "angela.alvarado",
+      "name": "Angela Alvarado",
+      "avatar": "https://randomuser.me/api/portraits/women/13.jpg",
+      "bio": "Technical Lead driving technical decisions and architecture.",
+      "title": "Technical Lead"
     },
     "content": "Quick share: something that made me smile today.",
     "timestamp": "2025-11-18T05:30:00.000Z",
@@ -1001,11 +1001,11 @@
   {
     "id": "p43",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "christopher.tucker",
+      "name": "Christopher Tucker",
+      "avatar": "https://randomuser.me/api/portraits/men/15.jpg",
+      "bio": "Program Manager managing multiple related projects.",
+      "title": "Program Manager"
     },
     "content": "Learning curve: steep but rewarding!",
     "timestamp": "2025-10-06T16:03:00.000Z",
@@ -1017,11 +1017,11 @@
   {
     "id": "p44",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "elias.sanchez",
+      "name": "Elias Sanchez",
+      "avatar": "https://randomuser.me/api/portraits/men/16.jpg",
+      "bio": "Operations Manager optimizing business processes and operations.",
+      "title": "Operations Manager"
     },
     "content": "Personal project milestone reached! Small wins matter.",
     "timestamp": "2025-10-12T08:26:00.000Z",
@@ -1033,11 +1033,11 @@
   {
     "id": "p45",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "anthony.romero",
+      "name": "Anthony Romero",
+      "avatar": "https://randomuser.me/api/portraits/men/17.jpg",
+      "bio": "Sales Manager managing sales teams and customer relationships.",
+      "title": "Sales Manager"
     },
     "content": "Friday feeling: time to celebrate the week's wins!",
     "timestamp": "2025-11-10T08:33:00.000Z",
@@ -1062,11 +1062,11 @@
   {
     "id": "p46",
     "user": {
-      "username": "sarah.chen",
-      "name": "Sarah Chen",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Senior UX Designer at Google with 8+ years of experience in mobile and web design.",
-      "title": "Senior UX Designer"
+      "username": "michelle.patel",
+      "name": "Michelle Patel",
+      "avatar": "https://randomuser.me/api/portraits/women/14.jpg",
+      "bio": "Sales Director leading sales teams and driving revenue growth.",
+      "title": "Sales Director"
     },
     "content": "Weekend creative time! These sessions are so therapeutic.",
     "timestamp": "2025-10-30T03:58:00.000Z",
@@ -1078,11 +1078,11 @@
   {
     "id": "p47",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "benjamin.wilcox",
+      "name": "Benjamin Wilcox",
+      "avatar": "https://randomuser.me/api/portraits/men/18.jpg",
+      "bio": "Program Manager managing multiple related projects.",
+      "title": "Program Manager"
     },
     "content": "Growth update: stepping outside comfort zone and learning a lot.",
     "timestamp": "2025-10-06T17:37:00.000Z",
@@ -1094,11 +1094,11 @@
   {
     "id": "p48",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "evelyn.may",
+      "name": "Evelyn May",
+      "avatar": "https://randomuser.me/api/portraits/women/15.jpg",
+      "bio": "Data Scientist specializing in machine learning and predictive analytics.",
+      "title": "Data Scientist"
     },
     "content": "Sharing some lessons learned from a recent project. Hope it helps others avoid similar pitfalls.",
     "timestamp": "2025-11-27T09:08:00.000Z",
@@ -1110,11 +1110,11 @@
   {
     "id": "p49",
     "user": {
-      "username": "sophia.davis",
-      "name": "Sophia Davis",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Writer creating clear documentation and developer guides. Making complex concepts accessible.",
-      "title": "Senior Technical Writer"
+      "username": "brian.wheeler",
+      "name": "Brian Wheeler",
+      "avatar": "https://randomuser.me/api/portraits/men/19.jpg",
+      "bio": "Marketing Director with expertise in digital marketing and brand strategy.",
+      "title": "Marketing Director"
     },
     "content": "Just shipped a major feature update! Built with focus on performance and user experience. Grateful for an amazing team.",
     "timestamp": "2025-10-14T03:10:00.000Z",
@@ -1151,11 +1151,11 @@
   {
     "id": "p50",
     "user": {
-      "username": "daniel.clark",
-      "name": "Daniel Clark",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "QA Engineer ensuring software quality through automated testing. Test automation and CI/CD.",
-      "title": "Senior QA Engineer"
+      "username": "isaac.lewis",
+      "name": "Isaac Lewis",
+      "avatar": "https://randomuser.me/api/portraits/men/20.jpg",
+      "bio": "Engineering Manager leading development teams and delivering high-quality software.",
+      "title": "Engineering Manager"
     },
     "content": "Just discovered a new tool that's been a game changer for my workflow. Highly recommend checking it out!",
     "timestamp": "2025-11-27T13:10:00.000Z",
@@ -1167,11 +1167,11 @@
   {
     "id": "p51",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "brian.griffith",
+      "name": "Brian Griffith",
+      "avatar": "https://randomuser.me/api/portraits/men/21.jpg",
+      "bio": "Project Manager leading cross-functional projects.",
+      "title": "Project Manager"
     },
     "content": "Weekend creative time! These sessions are so therapeutic.",
     "timestamp": "2025-11-16T02:50:00.000Z",
@@ -1220,11 +1220,11 @@
   {
     "id": "p52",
     "user": {
-      "username": "sarah.chen",
-      "name": "Sarah Chen",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Senior UX Designer at Google with 8+ years of experience in mobile and web design.",
-      "title": "Senior UX Designer"
+      "username": "stephanie.mann",
+      "name": "Stephanie Mann",
+      "avatar": "https://randomuser.me/api/portraits/women/16.jpg",
+      "bio": "Senior Product Manager leading product strategy and execution.",
+      "title": "Senior Product Manager"
     },
     "content": "Just published a write-up about my experience. Hope it's helpful for others!",
     "timestamp": "2025-11-01T11:18:00.000Z",
@@ -1236,11 +1236,11 @@
   {
     "id": "p53",
     "user": {
-      "username": "michael.rodriguez",
-      "name": "Michael Rodriguez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
-      "title": "Full Stack Developer"
+      "username": "victoria.horton",
+      "name": "Victoria Horton",
+      "avatar": "https://randomuser.me/api/portraits/women/17.jpg",
+      "bio": "Sales Director leading sales teams and driving revenue growth.",
+      "title": "Sales Director"
     },
     "content": "Skill development update: making progress on new capabilities.",
     "timestamp": "2025-10-19T23:28:00.000Z",
@@ -1252,11 +1252,11 @@
   {
     "id": "p54",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "victoria.nelson",
+      "name": "Victoria Nelson",
+      "avatar": "https://randomuser.me/api/portraits/women/18.jpg",
+      "bio": "Sales Manager managing sales teams and customer relationships.",
+      "title": "Sales Manager"
     },
     "content": "Reflecting on feedback received. Always valuable to hear different perspectives.",
     "timestamp": "2025-10-04T20:56:00.000Z",
@@ -1268,11 +1268,11 @@
   {
     "id": "p55",
     "user": {
-      "username": "amanda.white",
-      "name": "Amanda White",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Design Lead creating cohesive design systems and user experiences. Leading design teams.",
-      "title": "Design Lead"
+      "username": "layla.vasquez",
+      "name": "Layla Vasquez",
+      "avatar": "https://randomuser.me/api/portraits/women/19.jpg",
+      "bio": "Backend Developer building robust server-side applications.",
+      "title": "Backend Developer"
     },
     "content": "Workshop materials are now available! Hope they help others on their journey.",
     "timestamp": "2025-11-13T02:49:00.000Z",
@@ -1284,11 +1284,11 @@
   {
     "id": "p56",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "noah.french",
+      "name": "Noah French",
+      "avatar": "https://randomuser.me/api/portraits/men/22.jpg",
+      "bio": "Senior Data Scientist turning data into actionable insights.",
+      "title": "Senior Data Scientist"
     },
     "content": "Movie night! Any recommendations for what to watch next?",
     "timestamp": "2025-11-18T05:37:00.000Z",
@@ -1300,11 +1300,11 @@
   {
     "id": "p57",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "ava.burns",
+      "name": "Ava Burns",
+      "avatar": "https://randomuser.me/api/portraits/women/20.jpg",
+      "bio": "Customer Success Manager ensuring customer satisfaction and retention.",
+      "title": "Customer Success Manager"
     },
     "content": "Beautiful location for today's meeting. Sometimes the environment really enhances the experience.",
     "timestamp": "2025-11-03T10:16:00.000Z",
@@ -1316,11 +1316,11 @@
   {
     "id": "p58",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "claire.willis",
+      "name": "Claire Willis",
+      "avatar": "https://randomuser.me/api/portraits/women/21.jpg",
+      "bio": "Project Manager leading cross-functional projects.",
+      "title": "Project Manager"
     },
     "content": "Coffee and code - the perfect combination for a productive morning!",
     "timestamp": "2025-10-23T21:19:00.000Z",
@@ -1357,11 +1357,11 @@
   {
     "id": "p59",
     "user": {
-      "username": "daniel.clark",
-      "name": "Daniel Clark",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "QA Engineer ensuring software quality through automated testing. Test automation and CI/CD.",
-      "title": "Senior QA Engineer"
+      "username": "lincoln.porter",
+      "name": "Lincoln Porter",
+      "avatar": "https://randomuser.me/api/portraits/men/23.jpg",
+      "bio": "Machine Learning Engineer building ML models and systems.",
+      "title": "Machine Learning Engineer"
     },
     "content": "Weekend project update: making good progress! Love seeing it come together.",
     "timestamp": "2025-10-20T08:43:00.000Z",
@@ -1386,11 +1386,11 @@
   {
     "id": "p60",
     "user": {
-      "username": "sophia.davis",
-      "name": "Sophia Davis",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Writer creating clear documentation and developer guides. Making complex concepts accessible.",
-      "title": "Senior Technical Writer"
+      "username": "andrew.diaz",
+      "name": "Andrew Diaz",
+      "avatar": "https://randomuser.me/api/portraits/men/24.jpg",
+      "bio": "Data Scientist specializing in machine learning and predictive analytics.",
+      "title": "Data Scientist"
     },
     "content": "Learning something new every day. That's what I love about this field.",
     "timestamp": "2025-10-26T23:47:00.000Z",
@@ -1402,11 +1402,11 @@
   {
     "id": "p61",
     "user": {
-      "username": "daniel.clark",
-      "name": "Daniel Clark",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "QA Engineer ensuring software quality through automated testing. Test automation and CI/CD.",
-      "title": "Senior QA Engineer"
+      "username": "isabella.adams",
+      "name": "Isabella Adams",
+      "avatar": "https://randomuser.me/api/portraits/women/22.jpg",
+      "bio": "Senior Data Scientist turning data into actionable insights.",
+      "title": "Senior Data Scientist"
     },
     "content": "Anniversary celebration was wonderful! Grateful for all the support.",
     "timestamp": "2025-11-16T02:09:00.000Z",
@@ -1418,11 +1418,11 @@
   {
     "id": "p62",
     "user": {
-      "username": "william.taylor",
-      "name": "William Taylor",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Lead managing engineering teams and delivering high-quality software. Agile methodologies.",
-      "title": "Engineering Manager"
+      "username": "chloe.wood",
+      "name": "Chloe Wood",
+      "avatar": "https://randomuser.me/api/portraits/women/23.jpg",
+      "bio": "UX Researcher focused on understanding user needs and behaviors.",
+      "title": "UX Researcher"
     },
     "content": "Testing out a new approach. Early results look promising!",
     "timestamp": "2025-10-04T02:36:00.000Z",
@@ -1434,11 +1434,11 @@
   {
     "id": "p63",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "alex.riley",
+      "name": "Alex Riley",
+      "avatar": "https://randomuser.me/api/portraits/women/24.jpg",
+      "bio": "Business Analyst analyzing business requirements and processes.",
+      "title": "Business Analyst"
     },
     "content": "Side project progress: slow and steady wins the race.",
     "timestamp": "2025-11-02T14:01:00.000Z",
@@ -1475,11 +1475,11 @@
   {
     "id": "p64",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "michelle.daniels",
+      "name": "Michelle Daniels",
+      "avatar": "https://randomuser.me/api/portraits/women/25.jpg",
+      "bio": "DevOps Engineer focused on cloud infrastructure and automation.",
+      "title": "DevOps Engineer"
     },
     "content": "Skill building: investing time in developing new abilities.",
     "timestamp": "2025-10-18T14:22:00.000Z",
@@ -1491,11 +1491,11 @@
   {
     "id": "p65",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "megan.lane",
+      "name": "Megan Lane",
+      "avatar": "https://randomuser.me/api/portraits/women/26.jpg",
+      "bio": "Senior Product Manager leading product strategy and execution.",
+      "title": "Senior Product Manager"
     },
     "content": "Learning something new every day. That's what I love about this field.",
     "timestamp": "2025-10-09T03:09:00.000Z",
@@ -1507,11 +1507,11 @@
   {
     "id": "p66",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "nicole.nelson",
+      "name": "Nicole Nelson",
+      "avatar": "https://randomuser.me/api/portraits/women/27.jpg",
+      "bio": "Account Executive building relationships with enterprise clients.",
+      "title": "Account Executive"
     },
     "content": "Weekend brunch was amazing! Sometimes you need to treat yourself.",
     "timestamp": "2025-10-08T15:16:00.000Z",
@@ -1548,11 +1548,11 @@
   {
     "id": "p67",
     "user": {
-      "username": "chris.martinez",
-      "name": "Chris Martinez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Mobile Developer building native iOS and Android applications. React Native enthusiast.",
-      "title": "Senior Mobile Developer"
+      "username": "zachary.douglas",
+      "name": "Zachary Douglas",
+      "avatar": "https://randomuser.me/api/portraits/men/25.jpg",
+      "bio": "UX Researcher focused on understanding user needs and behaviors.",
+      "title": "UX Researcher"
     },
     "content": "Just finished a challenging project. The sense of accomplishment makes it all worth it.",
     "timestamp": "2025-10-31T14:05:00.000Z",
@@ -1564,11 +1564,11 @@
   {
     "id": "p68",
     "user": {
-      "username": "sarah.chen",
-      "name": "Sarah Chen",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Senior UX Designer at Google with 8+ years of experience in mobile and web design.",
-      "title": "Senior UX Designer"
+      "username": "samuel.wilson",
+      "name": "Samuel Wilson",
+      "avatar": "https://randomuser.me/api/portraits/men/26.jpg",
+      "bio": "Account Executive building relationships with enterprise clients.",
+      "title": "Account Executive"
     },
     "content": "Infrastructure improvements are making deployments so much smoother. Reliability is everything.",
     "timestamp": "2025-11-09T02:03:00.000Z",
@@ -1605,11 +1605,11 @@
   {
     "id": "p69",
     "user": {
-      "username": "william.taylor",
-      "name": "William Taylor",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Lead managing engineering teams and delivering high-quality software. Agile methodologies.",
-      "title": "Engineering Manager"
+      "username": "easton.fraser",
+      "name": "Easton Fraser",
+      "avatar": "https://randomuser.me/api/portraits/men/27.jpg",
+      "bio": "Design Lead creating cohesive design systems and leading design teams.",
+      "title": "Design Lead"
     },
     "content": "The best part of my work is seeing how it helps others. That's what keeps me going.",
     "timestamp": "2025-11-02T21:34:00.000Z",
@@ -1621,11 +1621,11 @@
   {
     "id": "p70",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "jessica.johnson",
+      "name": "Jessica Johnson",
+      "avatar": "https://randomuser.me/api/portraits/women/28.jpg",
+      "bio": "UX Researcher focused on understanding user needs and behaviors.",
+      "title": "UX Researcher"
     },
     "content": "Foodie moment: discovered an amazing new place.",
     "timestamp": "2025-10-14T06:13:00.000Z",
@@ -1662,11 +1662,11 @@
   {
     "id": "p71",
     "user": {
-      "username": "william.taylor",
-      "name": "William Taylor",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Lead managing engineering teams and delivering high-quality software. Agile methodologies.",
-      "title": "Engineering Manager"
+      "username": "scarlett.swanson",
+      "name": "Scarlett Swanson",
+      "avatar": "https://randomuser.me/api/portraits/women/29.jpg",
+      "bio": "Full Stack Developer building end-to-end web applications.",
+      "title": "Full Stack Developer"
     },
     "content": "How do you stay motivated during long projects? Looking for some inspiration!",
     "timestamp": "2025-10-26T00:42:00.000Z",
@@ -1678,11 +1678,11 @@
   {
     "id": "p72",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "ryan.mendez",
+      "name": "Ryan Mendez",
+      "avatar": "https://randomuser.me/api/portraits/men/28.jpg",
+      "bio": "Technical Lead driving technical decisions and architecture.",
+      "title": "Technical Lead"
     },
     "content": "Beautiful sunset today! Sometimes you need to step back and appreciate the simple moments.",
     "timestamp": "2025-10-13T22:39:00.000Z",
@@ -1719,11 +1719,11 @@
   {
     "id": "p73",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "alex.andrews",
+      "name": "Alex Andrews",
+      "avatar": "https://randomuser.me/api/portraits/women/30.jpg",
+      "bio": "Machine Learning Engineer building ML models and systems.",
+      "title": "Machine Learning Engineer"
     },
     "content": "Optimized our system performance significantly! The improvements are incredible. What's your favorite optimization technique?",
     "timestamp": "2025-10-02T03:09:00.000Z",
@@ -1735,11 +1735,11 @@
   {
     "id": "p74",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "ava.evans",
+      "name": "Ava Evans",
+      "avatar": "https://randomuser.me/api/portraits/women/31.jpg",
+      "bio": "Product Owner defining product requirements and roadmap.",
+      "title": "Product Owner"
     },
     "content": "Side project is coming along nicely! Excited to share it when it's ready.",
     "timestamp": "2025-11-03T01:16:00.000Z",
@@ -1751,11 +1751,11 @@
   {
     "id": "p75",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "jaxon.wells",
+      "name": "Jaxon Wells",
+      "avatar": "https://randomuser.me/api/portraits/men/29.jpg",
+      "bio": "Sales Manager managing sales teams and customer relationships.",
+      "title": "Sales Manager"
     },
     "content": "Learning something new every day keeps things interesting!",
     "timestamp": "2025-11-09T11:39:00.000Z",
@@ -1767,11 +1767,11 @@
   {
     "id": "p76",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "zachary.brooks",
+      "name": "Zachary Brooks",
+      "avatar": "https://randomuser.me/api/portraits/men/30.jpg",
+      "bio": "Business Analyst analyzing business requirements and processes.",
+      "title": "Business Analyst"
     },
     "content": "New week, new opportunities! Let's make it count.",
     "timestamp": "2025-11-22T17:46:00.000Z",
@@ -1783,11 +1783,11 @@
   {
     "id": "p77",
     "user": {
-      "username": "michael.rodriguez",
-      "name": "Michael Rodriguez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
-      "title": "Full Stack Developer"
+      "username": "harper.howard",
+      "name": "Harper Howard",
+      "avatar": "https://randomuser.me/api/portraits/women/32.jpg",
+      "bio": "Business Analyst analyzing business requirements and processes.",
+      "title": "Business Analyst"
     },
     "content": "Great conversation with a colleague today. These discussions always spark new ideas.",
     "timestamp": "2025-10-25T20:21:00.000Z",
@@ -1799,11 +1799,11 @@
   {
     "id": "p78",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "morgan.daniels",
+      "name": "Morgan Daniels",
+      "avatar": "https://randomuser.me/api/portraits/women/33.jpg",
+      "bio": "Data Scientist specializing in machine learning and predictive analytics.",
+      "title": "Data Scientist"
     },
     "content": "Morning run complete! Starting the day with some exercise always sets the right tone.",
     "timestamp": "2025-11-12T00:16:00.000Z",
@@ -1815,11 +1815,11 @@
   {
     "id": "p79",
     "user": {
-      "username": "sophia.davis",
-      "name": "Sophia Davis",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Writer creating clear documentation and developer guides. Making complex concepts accessible.",
-      "title": "Senior Technical Writer"
+      "username": "sebastian.reynolds",
+      "name": "Sebastian Reynolds",
+      "avatar": "https://randomuser.me/api/portraits/men/31.jpg",
+      "bio": "QA Engineer ensuring software quality through automated testing.",
+      "title": "QA Engineer"
     },
     "content": "New week, new opportunities! Let's make it count.",
     "timestamp": "2025-10-30T14:00:00.000Z",
@@ -1831,11 +1831,11 @@
   {
     "id": "p80",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "taylor.hopkins",
+      "name": "Taylor Hopkins",
+      "avatar": "https://randomuser.me/api/portraits/women/34.jpg",
+      "bio": "Product Manager with a focus on building products users love.",
+      "title": "Product Manager"
     },
     "content": "Anyone else find that the best ideas come when you're not actively working on the problem?",
     "timestamp": "2025-11-17T12:43:00.000Z",
@@ -1860,11 +1860,11 @@
   {
     "id": "p81",
     "user": {
-      "username": "michael.rodriguez",
-      "name": "Michael Rodriguez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
-      "title": "Full Stack Developer"
+      "username": "stephanie.hansen",
+      "name": "Stephanie Hansen",
+      "avatar": "https://randomuser.me/api/portraits/women/35.jpg",
+      "bio": "Business Analyst analyzing business requirements and processes.",
+      "title": "Business Analyst"
     },
     "content": "Weekend warrior mode: time for some personal projects.",
     "timestamp": "2025-10-16T10:08:00.000Z",
@@ -1876,11 +1876,11 @@
   {
     "id": "p82",
     "user": {
-      "username": "daniel.clark",
-      "name": "Daniel Clark",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "QA Engineer ensuring software quality through automated testing. Test automation and CI/CD.",
-      "title": "Senior QA Engineer"
+      "username": "casey.tate",
+      "name": "Casey Tate",
+      "avatar": "https://randomuser.me/api/portraits/women/36.jpg",
+      "bio": "Digital Marketing Manager managing digital marketing campaigns.",
+      "title": "Digital Marketing Manager"
     },
     "content": "Skill development update: making progress on new capabilities.",
     "timestamp": "2025-10-09T04:53:00.000Z",
@@ -1917,11 +1917,11 @@
   {
     "id": "p83",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "jaxon.gordon",
+      "name": "Jaxon Gordon",
+      "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
+      "bio": "Senior UX Designer with expertise in user research and design systems.",
+      "title": "Senior UX Designer"
     },
     "content": "Achievement unlocked! Small milestone but it feels great.",
     "timestamp": "2025-11-27T16:09:00.000Z",
@@ -1933,11 +1933,11 @@
   {
     "id": "p84",
     "user": {
-      "username": "sarah.chen",
-      "name": "Sarah Chen",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Senior UX Designer at Google with 8+ years of experience in mobile and web design.",
-      "title": "Senior UX Designer"
+      "username": "james.villa",
+      "name": "James Villa",
+      "avatar": "https://randomuser.me/api/portraits/men/33.jpg",
+      "bio": "Sales Manager managing sales teams and customer relationships.",
+      "title": "Sales Manager"
     },
     "content": "Reflection: growth comes from stepping outside your comfort zone.",
     "timestamp": "2025-11-04T03:18:00.000Z",
@@ -1949,11 +1949,11 @@
   {
     "id": "p85",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "isabella.ortiz",
+      "name": "Isabella Ortiz",
+      "avatar": "https://randomuser.me/api/portraits/women/37.jpg",
+      "bio": "Account Executive building relationships with enterprise clients.",
+      "title": "Account Executive"
     },
     "content": "Weekend brunch was amazing! Sometimes you need to treat yourself.",
     "timestamp": "2025-10-07T02:58:00.000Z",
@@ -1965,11 +1965,11 @@
   {
     "id": "p86",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "jack.rogers",
+      "name": "Jack Rogers",
+      "avatar": "https://randomuser.me/api/portraits/men/34.jpg",
+      "bio": "Senior Data Scientist turning data into actionable insights.",
+      "title": "Senior Data Scientist"
     },
     "content": "Friday vibes! Another productive week in the books.",
     "timestamp": "2025-11-19T13:15:00.000Z",
@@ -1981,11 +1981,11 @@
   {
     "id": "p87",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "owen.frank",
+      "name": "Owen Frank",
+      "avatar": "https://randomuser.me/api/portraits/men/35.jpg",
+      "bio": "Customer Success Manager ensuring customer satisfaction and retention.",
+      "title": "Customer Success Manager"
     },
     "content": "System upgrade complete! Everything is running smoothly now.",
     "timestamp": "2025-11-09T09:02:00.000Z",
@@ -2022,11 +2022,11 @@
   {
     "id": "p88",
     "user": {
-      "username": "daniel.clark",
-      "name": "Daniel Clark",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "QA Engineer ensuring software quality through automated testing. Test automation and CI/CD.",
-      "title": "Senior QA Engineer"
+      "username": "audrey.gibson",
+      "name": "Audrey Gibson",
+      "avatar": "https://randomuser.me/api/portraits/women/38.jpg",
+      "bio": "Technical Writer creating clear documentation and developer guides.",
+      "title": "Technical Writer"
     },
     "content": "Conference day one complete! So many great talks and interesting discussions.",
     "timestamp": "2025-11-26T07:34:00.000Z",
@@ -2038,11 +2038,11 @@
   {
     "id": "p89",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "bella.hernandez",
+      "name": "Bella Hernandez",
+      "avatar": "https://randomuser.me/api/portraits/women/39.jpg",
+      "bio": "Business Analyst analyzing business requirements and processes.",
+      "title": "Business Analyst"
     },
     "content": "Progress over perfection. That's been my mantra lately and it's been working well.",
     "timestamp": "2025-10-24T03:38:00.000Z",
@@ -2091,11 +2091,11 @@
   {
     "id": "p90",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "jessica.sharp",
+      "name": "Jessica Sharp",
+      "avatar": "https://randomuser.me/api/portraits/women/40.jpg",
+      "bio": "Customer Success Manager ensuring customer satisfaction and retention.",
+      "title": "Customer Success Manager"
     },
     "content": "Casual observation: the best conversations happen when you least expect them.",
     "timestamp": "2025-11-22T12:08:00.000Z",
@@ -2107,11 +2107,11 @@
   {
     "id": "p91",
     "user": {
-      "username": "maria.garcia",
-      "name": "Maria Garcia",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
-      "title": "Backend Engineer"
+      "username": "jason.bowen",
+      "name": "Jason Bowen",
+      "avatar": "https://randomuser.me/api/portraits/men/36.jpg",
+      "bio": "Program Manager managing multiple related projects.",
+      "title": "Program Manager"
     },
     "content": "Weekend vibes! Finally got some time to relax and recharge. How's everyone spending their weekend?",
     "timestamp": "2025-10-09T16:10:00.000Z",
@@ -2123,11 +2123,11 @@
   {
     "id": "p92",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "mason.sanchez",
+      "name": "Mason Sanchez",
+      "avatar": "https://randomuser.me/api/portraits/men/37.jpg",
+      "bio": "Design Lead creating cohesive design systems and leading design teams.",
+      "title": "Design Lead"
     },
     "content": "Reflection: growth comes from stepping outside your comfort zone.",
     "timestamp": "2025-11-07T20:43:00.000Z",
@@ -2139,11 +2139,11 @@
   {
     "id": "p93",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "david.butler",
+      "name": "David Butler",
+      "avatar": "https://randomuser.me/api/portraits/men/38.jpg",
+      "bio": "Business Analyst analyzing business requirements and processes.",
+      "title": "Business Analyst"
     },
     "content": "Weekend vibes! Finally got some time to relax and recharge. How's everyone spending their weekend?",
     "timestamp": "2025-11-01T17:37:00.000Z",
@@ -2180,11 +2180,11 @@
   {
     "id": "p94",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "kevin.mcgee",
+      "name": "Kevin Mcgee",
+      "avatar": "https://randomuser.me/api/portraits/men/39.jpg",
+      "bio": "Machine Learning Engineer building ML models and systems.",
+      "title": "Machine Learning Engineer"
     },
     "content": "Wednesday wisdom: progress, not perfection.",
     "timestamp": "2025-11-02T03:00:00.000Z",
@@ -2196,11 +2196,11 @@
   {
     "id": "p95",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "amelia.silva",
+      "name": "Amelia Silva",
+      "avatar": "https://randomuser.me/api/portraits/women/41.jpg",
+      "bio": "Mobile Developer building native iOS and Android applications.",
+      "title": "Mobile Developer (iOS/Android)"
     },
     "content": "Cooking experiment: not perfect but definitely edible!",
     "timestamp": "2025-11-10T12:27:00.000Z",
@@ -2212,10 +2212,10 @@
   {
     "id": "p96",
     "user": {
-      "username": "amanda.white",
-      "name": "Amanda White",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Design Lead creating cohesive design systems and user experiences. Leading design teams.",
+      "username": "brooklyn.williams",
+      "name": "Brooklyn Williams",
+      "avatar": "https://randomuser.me/api/portraits/women/42.jpg",
+      "bio": "Design Lead creating cohesive design systems and leading design teams.",
       "title": "Design Lead"
     },
     "content": "Just shared some resources that helped me. Hope they're useful for others too!",
@@ -2228,11 +2228,11 @@
   {
     "id": "p97",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "zoe.lawrence",
+      "name": "Zoe Lawrence",
+      "avatar": "https://randomuser.me/api/portraits/women/43.jpg",
+      "bio": "Mobile Developer building native iOS and Android applications.",
+      "title": "Mobile Developer (iOS/Android)"
     },
     "content": "Community meetup was fantastic! Always inspiring to connect with like-minded people.",
     "timestamp": "2025-11-21T09:16:00.000Z",
@@ -2244,11 +2244,11 @@
   {
     "id": "p98",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "melissa.henderson",
+      "name": "Melissa Henderson",
+      "avatar": "https://randomuser.me/api/portraits/women/44.jpg",
+      "bio": "Senior Product Manager leading product strategy and execution.",
+      "title": "Senior Product Manager"
     },
     "content": "Reflecting on feedback received. Always valuable to hear different perspectives.",
     "timestamp": "2025-11-23T07:11:00.000Z",
@@ -2260,11 +2260,11 @@
   {
     "id": "p99",
     "user": {
-      "username": "william.taylor",
-      "name": "William Taylor",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Lead managing engineering teams and delivering high-quality software. Agile methodologies.",
-      "title": "Engineering Manager"
+      "username": "sebastian.black",
+      "name": "Sebastian Black",
+      "avatar": "https://randomuser.me/api/portraits/men/40.jpg",
+      "bio": "Sales Manager managing sales teams and customer relationships.",
+      "title": "Sales Manager"
     },
     "content": "Documentation is code! Just rewrote our docs with clearer examples. Good docs reduce support requests and help teams move faster.",
     "timestamp": "2025-11-01T20:47:00.000Z",
@@ -2289,11 +2289,11 @@
   {
     "id": "p100",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "charles.cruz",
+      "name": "Charles Cruz",
+      "avatar": "https://randomuser.me/api/portraits/men/41.jpg",
+      "bio": "Business Analyst analyzing business requirements and processes.",
+      "title": "Business Analyst"
     },
     "content": "Infrastructure improvements are making deployments so much smoother. Reliability is everything.",
     "timestamp": "2025-10-12T11:00:00.000Z",
@@ -2342,11 +2342,11 @@
   {
     "id": "p101",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "gabriel.castillo",
+      "name": "Gabriel Castillo",
+      "avatar": "https://randomuser.me/api/portraits/men/42.jpg",
+      "bio": "UI Designer creating beautiful and functional interfaces.",
+      "title": "UI Designer"
     },
     "content": "Hobby time! Sometimes the best ideas come from outside work.",
     "timestamp": "2025-10-27T00:30:00.000Z",
@@ -2358,11 +2358,11 @@
   {
     "id": "p102",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "henry.olson",
+      "name": "Henry Olson",
+      "avatar": "https://randomuser.me/api/portraits/men/43.jpg",
+      "bio": "Technical Writer creating clear documentation and developer guides.",
+      "title": "Technical Writer"
     },
     "content": "Just landed in a new place. Excited to explore and see what this city has to offer!",
     "timestamp": "2025-10-10T21:01:00.000Z",
@@ -2399,11 +2399,11 @@
   {
     "id": "p103",
     "user": {
-      "username": "david.kim",
-      "name": "David Kim",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "Data Scientist specializing in machine learning and predictive analytics. Turning data into insights.",
-      "title": "Senior Data Scientist"
+      "username": "lisa.swanson",
+      "name": "Lisa Swanson",
+      "avatar": "https://randomuser.me/api/portraits/women/45.jpg",
+      "bio": "Sales Manager managing sales teams and customer relationships.",
+      "title": "Sales Manager"
     },
     "content": "Sometimes the best solutions come from the simplest ideas. Less is more.",
     "timestamp": "2025-10-28T18:23:00.000Z",
@@ -2428,11 +2428,11 @@
   {
     "id": "p104",
     "user": {
-      "username": "william.taylor",
-      "name": "William Taylor",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Lead managing engineering teams and delivering high-quality software. Agile methodologies.",
-      "title": "Engineering Manager"
+      "username": "jordan.baldwin",
+      "name": "Jordan Baldwin",
+      "avatar": "https://randomuser.me/api/portraits/women/46.jpg",
+      "bio": "Program Manager managing multiple related projects.",
+      "title": "Program Manager"
     },
     "content": "Excited about new opportunities on the horizon! Change can be scary but also exciting.",
     "timestamp": "2025-11-26T08:13:00.000Z",
@@ -2444,11 +2444,11 @@
   {
     "id": "p105",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "lisa.wells",
+      "name": "Lisa Wells",
+      "avatar": "https://randomuser.me/api/portraits/women/47.jpg",
+      "bio": "Business Analyst analyzing business requirements and processes.",
+      "title": "Business Analyst"
     },
     "content": "Always amazed by how much you can learn from others. Community is everything.",
     "timestamp": "2025-11-15T14:25:00.000Z",
@@ -2460,11 +2460,11 @@
   {
     "id": "p106",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "logan.horton",
+      "name": "Logan Horton",
+      "avatar": "https://randomuser.me/api/portraits/men/44.jpg",
+      "bio": "Product Owner defining product requirements and roadmap.",
+      "title": "Product Owner"
     },
     "content": "Our metrics just hit a new high! Huge milestone for the team. Investing in quality always pays off.",
     "timestamp": "2025-11-27T07:58:00.000Z",
@@ -2476,11 +2476,11 @@
   {
     "id": "p107",
     "user": {
-      "username": "michael.rodriguez",
-      "name": "Michael Rodriguez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
-      "title": "Full Stack Developer"
+      "username": "jordan.young",
+      "name": "Jordan Young",
+      "avatar": "https://randomuser.me/api/portraits/women/48.jpg",
+      "bio": "Backend Developer building robust server-side applications.",
+      "title": "Backend Developer"
     },
     "content": "Great discussion in the comments! Love hearing different perspectives on this topic.",
     "timestamp": "2025-11-20T11:07:00.000Z",
@@ -2492,11 +2492,11 @@
   {
     "id": "p108",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "noah.johnson",
+      "name": "Noah Johnson",
+      "avatar": "https://randomuser.me/api/portraits/men/45.jpg",
+      "bio": "Full Stack Developer building end-to-end web applications.",
+      "title": "Full Stack Developer"
     },
     "content": "What's your favorite part of your work? Mine is definitely the problem-solving aspect.",
     "timestamp": "2025-10-11T18:59:00.000Z",
@@ -2521,11 +2521,11 @@
   {
     "id": "p109",
     "user": {
-      "username": "sarah.chen",
-      "name": "Sarah Chen",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Senior UX Designer at Google with 8+ years of experience in mobile and web design.",
-      "title": "Senior UX Designer"
+      "username": "aria.phillips",
+      "name": "Aria Phillips",
+      "avatar": "https://randomuser.me/api/portraits/women/49.jpg",
+      "bio": "Digital Marketing Manager managing digital marketing campaigns.",
+      "title": "Digital Marketing Manager"
     },
     "content": "Big day today! Excited to share the news soon.",
     "timestamp": "2025-11-27T20:23:00.000Z",
@@ -2537,11 +2537,11 @@
   {
     "id": "p110",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "james.wallace",
+      "name": "James Wallace",
+      "avatar": "https://randomuser.me/api/portraits/men/46.jpg",
+      "bio": "Project Manager leading cross-functional projects.",
+      "title": "Project Manager"
     },
     "content": "Big day today! Excited to share the news soon.",
     "timestamp": "2025-10-11T06:31:00.000Z",
@@ -2553,11 +2553,11 @@
   {
     "id": "p111",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "mason.lowe",
+      "name": "Mason Lowe",
+      "avatar": "https://randomuser.me/api/portraits/men/47.jpg",
+      "bio": "Customer Success Manager ensuring customer satisfaction and retention.",
+      "title": "Customer Success Manager"
     },
     "content": "What tools are you using for your current project? Always curious to learn about new workflows.",
     "timestamp": "2025-10-24T18:53:00.000Z",
@@ -2569,11 +2569,11 @@
   {
     "id": "p112",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "jennifer.schultz",
+      "name": "Jennifer Schultz",
+      "avatar": "https://randomuser.me/api/portraits/women/50.jpg",
+      "bio": "DevOps Engineer focused on cloud infrastructure and automation.",
+      "title": "DevOps Engineer"
     },
     "content": "Finding balance is a constant challenge, but I'm getting better at it.",
     "timestamp": "2025-11-25T22:14:00.000Z",
@@ -2585,11 +2585,11 @@
   {
     "id": "p113",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "kimberly.black",
+      "name": "Kimberly Black",
+      "avatar": "https://randomuser.me/api/portraits/women/51.jpg",
+      "bio": "Account Executive building relationships with enterprise clients.",
+      "title": "Account Executive"
     },
     "content": "Beautiful location for today's meeting. Sometimes the environment really enhances the experience.",
     "timestamp": "2025-11-17T16:15:00.000Z",
@@ -2638,11 +2638,11 @@
   {
     "id": "p114",
     "user": {
-      "username": "maria.garcia",
-      "name": "Maria Garcia",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
-      "title": "Backend Engineer"
+      "username": "maria.walker",
+      "name": "Maria Walker",
+      "avatar": "https://randomuser.me/api/portraits/women/52.jpg",
+      "bio": "Full Stack Developer building end-to-end web applications.",
+      "title": "Full Stack Developer"
     },
     "content": "Starting a new role soon! Excited for the new challenges and opportunities ahead.",
     "timestamp": "2025-10-15T06:38:00.000Z",
@@ -2679,11 +2679,11 @@
   {
     "id": "p115",
     "user": {
-      "username": "sophia.davis",
-      "name": "Sophia Davis",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Writer creating clear documentation and developer guides. Making complex concepts accessible.",
-      "title": "Senior Technical Writer"
+      "username": "elizabeth.vasquez",
+      "name": "Elizabeth Vasquez",
+      "avatar": "https://randomuser.me/api/portraits/women/53.jpg",
+      "bio": "DevOps Engineer focused on cloud infrastructure and automation.",
+      "title": "DevOps Engineer"
     },
     "content": "Casual check-in: how's everyone's week going?",
     "timestamp": "2025-10-18T23:52:00.000Z",
@@ -2695,11 +2695,11 @@
   {
     "id": "p116",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "jessica.kelly",
+      "name": "Jessica Kelly",
+      "avatar": "https://randomuser.me/api/portraits/women/54.jpg",
+      "bio": "Sales Manager managing sales teams and customer relationships.",
+      "title": "Sales Manager"
     },
     "content": "Progress over perfection. That's been my mantra lately and it's been working well.",
     "timestamp": "2025-11-18T20:28:00.000Z",
@@ -2748,11 +2748,11 @@
   {
     "id": "p117",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "david.moreno",
+      "name": "David Moreno",
+      "avatar": "https://randomuser.me/api/portraits/men/48.jpg",
+      "bio": "Senior Product Manager leading product strategy and execution.",
+      "title": "Senior Product Manager"
     },
     "content": "Starting a new role soon! Excited for the new challenges and opportunities ahead.",
     "timestamp": "2025-11-12T16:50:00.000Z",
@@ -2801,11 +2801,11 @@
   {
     "id": "p118",
     "user": {
-      "username": "chris.martinez",
-      "name": "Chris Martinez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Mobile Developer building native iOS and Android applications. React Native enthusiast.",
-      "title": "Senior Mobile Developer"
+      "username": "jacob.harris",
+      "name": "Jacob Harris",
+      "avatar": "https://randomuser.me/api/portraits/men/49.jpg",
+      "bio": "Backend Developer building robust server-side applications.",
+      "title": "Backend Developer"
     },
     "content": "Continuous improvement: small changes lead to big results over time.",
     "timestamp": "2025-10-22T18:52:00.000Z",
@@ -2817,11 +2817,11 @@
   {
     "id": "p119",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "maria.simpson",
+      "name": "Maria Simpson",
+      "avatar": "https://randomuser.me/api/portraits/women/55.jpg",
+      "bio": "UX Researcher focused on understanding user needs and behaviors.",
+      "title": "UX Researcher"
     },
     "content": "Coffee shop vibes today. Perfect atmosphere for getting work done.",
     "timestamp": "2025-11-21T06:57:00.000Z",
@@ -2833,11 +2833,11 @@
   {
     "id": "p120",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "hazel.hansen",
+      "name": "Hazel Hansen",
+      "avatar": "https://randomuser.me/api/portraits/women/56.jpg",
+      "bio": "Security Engineer focused on application security and threat detection.",
+      "title": "Security Engineer"
     },
     "content": "Growth update: stepping outside comfort zone and learning a lot.",
     "timestamp": "2025-10-21T19:49:00.000Z",
@@ -2862,11 +2862,11 @@
   {
     "id": "p121",
     "user": {
-      "username": "daniel.clark",
-      "name": "Daniel Clark",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "QA Engineer ensuring software quality through automated testing. Test automation and CI/CD.",
-      "title": "Senior QA Engineer"
+      "username": "casey.wright",
+      "name": "Casey Wright",
+      "avatar": "https://randomuser.me/api/portraits/women/57.jpg",
+      "bio": "QA Engineer ensuring software quality through automated testing.",
+      "title": "QA Engineer"
     },
     "content": "Exploring a new city today! Love discovering hidden gems and local spots.",
     "timestamp": "2025-11-13T23:40:00.000Z",
@@ -2878,11 +2878,11 @@
   {
     "id": "p122",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "kimberly.burns",
+      "name": "Kimberly Burns",
+      "avatar": "https://randomuser.me/api/portraits/women/58.jpg",
+      "bio": "Marketing Director with expertise in digital marketing and brand strategy.",
+      "title": "Marketing Director"
     },
     "content": "Beautiful sunset today! Sometimes you need to step back and appreciate the simple moments.",
     "timestamp": "2025-11-29T07:51:00.000Z",
@@ -2931,11 +2931,11 @@
   {
     "id": "p123",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "jason.russell",
+      "name": "Jason Russell",
+      "avatar": "https://randomuser.me/api/portraits/men/50.jpg",
+      "bio": "Technical Writer creating clear documentation and developer guides.",
+      "title": "Technical Writer"
     },
     "content": "Culinary adventure: expanding my cooking skills one recipe at a time.",
     "timestamp": "2025-11-23T06:33:00.000Z",
@@ -2947,11 +2947,11 @@
   {
     "id": "p124",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "andrew.nelson",
+      "name": "Andrew Nelson",
+      "avatar": "https://randomuser.me/api/portraits/men/51.jpg",
+      "bio": "Security Engineer focused on application security and threat detection.",
+      "title": "Security Engineer"
     },
     "content": "Beautiful location for today's meeting. Sometimes the environment really enhances the experience.",
     "timestamp": "2025-11-16T12:00:00.000Z",
@@ -2988,11 +2988,11 @@
   {
     "id": "p125",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "matthew.hansen",
+      "name": "Matthew Hansen",
+      "avatar": "https://randomuser.me/api/portraits/men/52.jpg",
+      "bio": "Program Manager managing multiple related projects.",
+      "title": "Program Manager"
     },
     "content": "Community meetup was fantastic! Always inspiring to connect with like-minded people.",
     "timestamp": "2025-10-30T05:15:00.000Z",
@@ -3004,11 +3004,11 @@
   {
     "id": "p126",
     "user": {
-      "username": "michael.rodriguez",
-      "name": "Michael Rodriguez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
-      "title": "Full Stack Developer"
+      "username": "michael.tucker",
+      "name": "Michael Tucker",
+      "avatar": "https://randomuser.me/api/portraits/men/53.jpg",
+      "bio": "Design Lead creating cohesive design systems and leading design teams.",
+      "title": "Design Lead"
     },
     "content": "Community meetup was fantastic! Always inspiring to connect with like-minded people.",
     "timestamp": "2025-10-01T10:24:00.000Z",
@@ -3020,11 +3020,11 @@
   {
     "id": "p127",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "hudson.long",
+      "name": "Hudson Long",
+      "avatar": "https://randomuser.me/api/portraits/men/54.jpg",
+      "bio": "Technical Lead driving technical decisions and architecture.",
+      "title": "Technical Lead"
     },
     "content": "Beautiful weather today! Perfect for a walk in the park.",
     "timestamp": "2025-11-24T16:16:00.000Z",
@@ -3036,11 +3036,11 @@
   {
     "id": "p128",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "charles.miller",
+      "name": "Charles Miller",
+      "avatar": "https://randomuser.me/api/portraits/men/55.jpg",
+      "bio": "Account Executive building relationships with enterprise clients.",
+      "title": "Account Executive"
     },
     "content": "Sometimes you need to take a step back to see the bigger picture.",
     "timestamp": "2025-10-13T00:31:00.000Z",
@@ -3052,11 +3052,11 @@
   {
     "id": "p129",
     "user": {
-      "username": "sarah.chen",
-      "name": "Sarah Chen",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Senior UX Designer at Google with 8+ years of experience in mobile and web design.",
-      "title": "Senior UX Designer"
+      "username": "william.patterson",
+      "name": "William Patterson",
+      "avatar": "https://randomuser.me/api/portraits/men/56.jpg",
+      "bio": "Technical Lead driving technical decisions and architecture.",
+      "title": "Technical Lead"
     },
     "content": "Random observation: sometimes the best ideas come at the most unexpected times.",
     "timestamp": "2025-11-08T02:59:00.000Z",
@@ -3068,11 +3068,11 @@
   {
     "id": "p130",
     "user": {
-      "username": "amanda.white",
-      "name": "Amanda White",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Design Lead creating cohesive design systems and user experiences. Leading design teams.",
-      "title": "Design Lead"
+      "username": "taylor.butler",
+      "name": "Taylor Butler",
+      "avatar": "https://randomuser.me/api/portraits/women/59.jpg",
+      "bio": "Sales Director leading sales teams and driving revenue growth.",
+      "title": "Sales Director"
     },
     "content": "Casual observation: the best conversations happen when you least expect them.",
     "timestamp": "2025-10-27T21:44:00.000Z",
@@ -3084,11 +3084,11 @@
   {
     "id": "p131",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "amy.west",
+      "name": "Amy West",
+      "avatar": "https://randomuser.me/api/portraits/women/60.jpg",
+      "bio": "Data Scientist specializing in machine learning and predictive analytics.",
+      "title": "Data Scientist"
     },
     "content": "Taking time to appreciate how far we've come. Growth is a journey, not a destination.",
     "timestamp": "2025-11-24T01:38:00.000Z",
@@ -3125,11 +3125,11 @@
   {
     "id": "p132",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "avery.guerrero",
+      "name": "Avery Guerrero",
+      "avatar": "https://randomuser.me/api/portraits/women/61.jpg",
+      "bio": "Backend Developer building robust server-side applications.",
+      "title": "Backend Developer"
     },
     "content": "Reflection time: sometimes the best decisions are the hardest ones to make.",
     "timestamp": "2025-11-21T02:07:00.000Z",
@@ -3141,11 +3141,11 @@
   {
     "id": "p133",
     "user": {
-      "username": "sophia.davis",
-      "name": "Sophia Davis",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Writer creating clear documentation and developer guides. Making complex concepts accessible.",
-      "title": "Senior Technical Writer"
+      "username": "rachel.rivera",
+      "name": "Rachel Rivera",
+      "avatar": "https://randomuser.me/api/portraits/women/62.jpg",
+      "bio": "UX Researcher focused on understanding user needs and behaviors.",
+      "title": "UX Researcher"
     },
     "content": "Weekend recharge complete! Ready for another productive week.",
     "timestamp": "2025-11-20T09:35:00.000Z",
@@ -3194,11 +3194,11 @@
   {
     "id": "p134",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "quinn.ward",
+      "name": "Quinn Ward",
+      "avatar": "https://randomuser.me/api/portraits/women/63.jpg",
+      "bio": "Design Lead creating cohesive design systems and leading design teams.",
+      "title": "Design Lead"
     },
     "content": "Creative work today. Love having outlets beyond the day job.",
     "timestamp": "2025-10-23T17:33:00.000Z",
@@ -3223,11 +3223,11 @@
   {
     "id": "p135",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "james.carter",
+      "name": "James Carter",
+      "avatar": "https://randomuser.me/api/portraits/men/57.jpg",
+      "bio": "Mobile Developer building native iOS and Android applications.",
+      "title": "Mobile Developer (iOS/Android)"
     },
     "content": "Coffee shop vibes today. Perfect atmosphere for getting work done.",
     "timestamp": "2025-11-12T18:53:00.000Z",
@@ -3239,11 +3239,11 @@
   {
     "id": "p136",
     "user": {
-      "username": "chris.martinez",
-      "name": "Chris Martinez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Mobile Developer building native iOS and Android applications. React Native enthusiast.",
-      "title": "Senior Mobile Developer"
+      "username": "morgan.kim",
+      "name": "Morgan Kim",
+      "avatar": "https://randomuser.me/api/portraits/women/64.jpg",
+      "bio": "Design Lead creating cohesive design systems and leading design teams.",
+      "title": "Design Lead"
     },
     "content": "Foodie moment: discovered an amazing new place.",
     "timestamp": "2025-10-27T01:08:00.000Z",
@@ -3255,11 +3255,11 @@
   {
     "id": "p137",
     "user": {
-      "username": "william.taylor",
-      "name": "William Taylor",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Lead managing engineering teams and delivering high-quality software. Agile methodologies.",
-      "title": "Engineering Manager"
+      "username": "joshua.robinson",
+      "name": "Joshua Robinson",
+      "avatar": "https://randomuser.me/api/portraits/men/58.jpg",
+      "bio": "Technical Writer creating clear documentation and developer guides.",
+      "title": "Technical Writer"
     },
     "content": "Weekend mode: fully disconnected and recharged.",
     "timestamp": "2025-11-04T08:54:00.000Z",
@@ -3271,11 +3271,11 @@
   {
     "id": "p138",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "skylar.turner",
+      "name": "Skylar Turner",
+      "avatar": "https://randomuser.me/api/portraits/women/65.jpg",
+      "bio": "Senior Product Manager leading product strategy and execution.",
+      "title": "Senior Product Manager"
     },
     "content": "What's your favorite part of your work? Mine is definitely the problem-solving aspect.",
     "timestamp": "2025-11-29T08:08:00.000Z",
@@ -3287,11 +3287,11 @@
   {
     "id": "p139",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "samuel.johnson",
+      "name": "Samuel Johnson",
+      "avatar": "https://randomuser.me/api/portraits/men/59.jpg",
+      "bio": "Product Manager with a focus on building products users love.",
+      "title": "Product Manager"
     },
     "content": "Amazing trip! The views were incredible and the experience was unforgettable.",
     "timestamp": "2025-11-08T07:47:00.000Z",
@@ -3303,11 +3303,11 @@
   {
     "id": "p140",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "mason.king",
+      "name": "Mason King",
+      "avatar": "https://randomuser.me/api/portraits/men/60.jpg",
+      "bio": "Frontend Developer creating responsive and performant web applications.",
+      "title": "Frontend Developer"
     },
     "content": "Testing out a new approach. Early results look promising!",
     "timestamp": "2025-10-12T16:37:00.000Z",
@@ -3319,11 +3319,11 @@
   {
     "id": "p141",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "luke.stewart",
+      "name": "Luke Stewart",
+      "avatar": "https://randomuser.me/api/portraits/men/61.jpg",
+      "bio": "Technical Writer creating clear documentation and developer guides.",
+      "title": "Technical Writer"
     },
     "content": "Quick share: something that made me smile today.",
     "timestamp": "2025-10-20T19:57:00.000Z",
@@ -3335,11 +3335,11 @@
   {
     "id": "p142",
     "user": {
-      "username": "chris.martinez",
-      "name": "Chris Martinez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Mobile Developer building native iOS and Android applications. React Native enthusiast.",
-      "title": "Senior Mobile Developer"
+      "username": "lisa.palmer",
+      "name": "Lisa Palmer",
+      "avatar": "https://randomuser.me/api/portraits/women/66.jpg",
+      "bio": "UX Designer creating intuitive and delightful user experiences.",
+      "title": "UX Designer"
     },
     "content": "Team lunch was great! Love working with such talented and supportive people.",
     "timestamp": "2025-10-08T10:12:00.000Z",
@@ -3376,11 +3376,11 @@
   {
     "id": "p143",
     "user": {
-      "username": "maria.garcia",
-      "name": "Maria Garcia",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
-      "title": "Backend Engineer"
+      "username": "jason.strickland",
+      "name": "Jason Strickland",
+      "avatar": "https://randomuser.me/api/portraits/men/62.jpg",
+      "bio": "Product Owner defining product requirements and roadmap.",
+      "title": "Product Owner"
     },
     "content": "Great discussion in the comments! Love hearing different perspectives on this topic.",
     "timestamp": "2025-11-30T04:38:00.000Z",
@@ -3392,11 +3392,11 @@
   {
     "id": "p144",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "charles.wallace",
+      "name": "Charles Wallace",
+      "avatar": "https://randomuser.me/api/portraits/men/63.jpg",
+      "bio": "Customer Success Manager ensuring customer satisfaction and retention.",
+      "title": "Customer Success Manager"
     },
     "content": "Random observation: sometimes the best ideas come at the most unexpected times.",
     "timestamp": "2025-11-09T08:54:00.000Z",
@@ -3408,11 +3408,11 @@
   {
     "id": "p145",
     "user": {
-      "username": "maria.garcia",
-      "name": "Maria Garcia",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
-      "title": "Backend Engineer"
+      "username": "jackson.thompson",
+      "name": "Jackson Thompson",
+      "avatar": "https://randomuser.me/api/portraits/men/64.jpg",
+      "bio": "Operations Manager optimizing business processes and operations.",
+      "title": "Operations Manager"
     },
     "content": "Side project is coming along nicely! Excited to share it when it's ready.",
     "timestamp": "2025-11-04T01:56:00.000Z",
@@ -3424,11 +3424,11 @@
   {
     "id": "p146",
     "user": {
-      "username": "maria.garcia",
-      "name": "Maria Garcia",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
-      "title": "Backend Engineer"
+      "username": "ethan.medina",
+      "name": "Ethan Medina",
+      "avatar": "https://randomuser.me/api/portraits/men/65.jpg",
+      "bio": "Business Analyst analyzing business requirements and processes.",
+      "title": "Business Analyst"
     },
     "content": "Sharing some lessons learned from a recent project. Hope it helps others avoid similar pitfalls.",
     "timestamp": "2025-11-12T10:43:00.000Z",
@@ -3440,11 +3440,11 @@
   {
     "id": "p147",
     "user": {
-      "username": "amanda.white",
-      "name": "Amanda White",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Design Lead creating cohesive design systems and user experiences. Leading design teams.",
-      "title": "Design Lead"
+      "username": "scarlett.white",
+      "name": "Scarlett White",
+      "avatar": "https://randomuser.me/api/portraits/women/67.jpg",
+      "bio": "Product Manager with a focus on building products users love.",
+      "title": "Product Manager"
     },
     "content": "Weekend warrior mode: time for some personal projects.",
     "timestamp": "2025-10-25T16:19:00.000Z",
@@ -3456,11 +3456,11 @@
   {
     "id": "p148",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "brian.stewart",
+      "name": "Brian Stewart",
+      "avatar": "https://randomuser.me/api/portraits/men/66.jpg",
+      "bio": "Account Executive building relationships with enterprise clients.",
+      "title": "Account Executive"
     },
     "content": "Coffee shop vibes today. Perfect atmosphere for getting work done.",
     "timestamp": "2025-11-24T14:30:00.000Z",
@@ -3472,11 +3472,11 @@
   {
     "id": "p149",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "justin.swanson",
+      "name": "Justin Swanson",
+      "avatar": "https://randomuser.me/api/portraits/men/67.jpg",
+      "bio": "Business Analyst analyzing business requirements and processes.",
+      "title": "Business Analyst"
     },
     "content": "Looking back on this year, I'm grateful for all the growth and learning opportunities.",
     "timestamp": "2025-11-21T00:43:00.000Z",
@@ -3501,11 +3501,11 @@
   {
     "id": "p150",
     "user": {
-      "username": "amanda.white",
-      "name": "Amanda White",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Design Lead creating cohesive design systems and user experiences. Leading design teams.",
-      "title": "Design Lead"
+      "username": "ethan.chavez",
+      "name": "Ethan Chavez",
+      "avatar": "https://randomuser.me/api/portraits/men/68.jpg",
+      "bio": "Technical Lead driving technical decisions and architecture.",
+      "title": "Technical Lead"
     },
     "content": "Starting a new role soon! Excited for the new challenges and opportunities ahead.",
     "timestamp": "2025-11-30T21:24:00.000Z",
@@ -3517,11 +3517,11 @@
   {
     "id": "p151",
     "user": {
-      "username": "maria.garcia",
-      "name": "Maria Garcia",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
-      "title": "Backend Engineer"
+      "username": "angela.scott",
+      "name": "Angela Scott",
+      "avatar": "https://randomuser.me/api/portraits/women/68.jpg",
+      "bio": "Project Manager leading cross-functional projects.",
+      "title": "Project Manager"
     },
     "content": "The little wins matter just as much as the big ones. Celebrating all of them!",
     "timestamp": "2025-11-11T21:22:00.000Z",
@@ -3533,11 +3533,11 @@
   {
     "id": "p152",
     "user": {
-      "username": "maria.garcia",
-      "name": "Maria Garcia",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
-      "title": "Backend Engineer"
+      "username": "jeremiah.nguyen",
+      "name": "Jeremiah Nguyen",
+      "avatar": "https://randomuser.me/api/portraits/men/69.jpg",
+      "bio": "Security Engineer focused on application security and threat detection.",
+      "title": "Security Engineer"
     },
     "content": "New project starting soon! Can't wait to dive in and see what we can build.",
     "timestamp": "2025-11-23T21:03:00.000Z",
@@ -3549,11 +3549,11 @@
   {
     "id": "p153",
     "user": {
-      "username": "david.kim",
-      "name": "David Kim",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "Data Scientist specializing in machine learning and predictive analytics. Turning data into insights.",
-      "title": "Senior Data Scientist"
+      "username": "michelle.brown",
+      "name": "Michelle Brown",
+      "avatar": "https://randomuser.me/api/portraits/women/69.jpg",
+      "bio": "Sales Manager managing sales teams and customer relationships.",
+      "title": "Sales Manager"
     },
     "content": "Exploring a new city today! Love discovering hidden gems and local spots.",
     "timestamp": "2025-11-28T17:53:00.000Z",
@@ -3590,11 +3590,11 @@
   {
     "id": "p154",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "eric.valdez",
+      "name": "Eric Valdez",
+      "avatar": "https://randomuser.me/api/portraits/men/70.jpg",
+      "bio": "Business Analyst analyzing business requirements and processes.",
+      "title": "Business Analyst"
     },
     "content": "End of year reflection: so much has changed and so much has stayed the same.",
     "timestamp": "2025-11-30T01:09:00.000Z",
@@ -3606,11 +3606,11 @@
   {
     "id": "p155",
     "user": {
-      "username": "emily.patel",
-      "name": "Emily Patel",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
-      "title": "Product Manager"
+      "username": "carter.nguyen",
+      "name": "Carter Nguyen",
+      "avatar": "https://randomuser.me/api/portraits/men/71.jpg",
+      "bio": "Product Owner defining product requirements and roadmap.",
+      "title": "Product Owner"
     },
     "content": "What tools are you using for your current project? Always curious to learn about new workflows.",
     "timestamp": "2025-10-06T11:46:00.000Z",
@@ -3622,11 +3622,11 @@
   {
     "id": "p156",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "lisa.andrews",
+      "name": "Lisa Andrews",
+      "avatar": "https://randomuser.me/api/portraits/women/70.jpg",
+      "bio": "Sales Director leading sales teams and driving revenue growth.",
+      "title": "Sales Director"
     },
     "content": "Home cooking experiment: turned out better than expected!",
     "timestamp": "2025-10-07T00:54:00.000Z",
@@ -3638,11 +3638,11 @@
   {
     "id": "p157",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "madison.garza",
+      "name": "Madison Garza",
+      "avatar": "https://randomuser.me/api/portraits/women/71.jpg",
+      "bio": "Marketing Manager driving brand awareness and customer acquisition.",
+      "title": "Marketing Manager"
     },
     "content": "Weekend vibes! Finally got some time to relax and recharge. How's everyone spending their weekend?",
     "timestamp": "2025-12-01T04:19:00.000Z",
@@ -3679,11 +3679,11 @@
   {
     "id": "p158",
     "user": {
-      "username": "michael.rodriguez",
-      "name": "Michael Rodriguez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
-      "title": "Full Stack Developer"
+      "username": "sebastian.sherman",
+      "name": "Sebastian Sherman",
+      "avatar": "https://randomuser.me/api/portraits/men/72.jpg",
+      "bio": "QA Engineer ensuring software quality through automated testing.",
+      "title": "QA Engineer"
     },
     "content": "Team retrospective yesterday was eye-opening. The shift to better processes has improved productivity. Always important to adapt.",
     "timestamp": "2025-11-21T00:37:00.000Z",
@@ -3695,11 +3695,11 @@
   {
     "id": "p159",
     "user": {
-      "username": "william.taylor",
-      "name": "William Taylor",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Lead managing engineering teams and delivering high-quality software. Agile methodologies.",
-      "title": "Engineering Manager"
+      "username": "skylar.campbell",
+      "name": "Skylar Campbell",
+      "avatar": "https://randomuser.me/api/portraits/women/72.jpg",
+      "bio": "UX Researcher focused on understanding user needs and behaviors.",
+      "title": "UX Researcher"
     },
     "content": "Random moment of gratitude. Sometimes you need to pause and appreciate.",
     "timestamp": "2025-11-26T08:40:00.000Z",
@@ -3711,11 +3711,11 @@
   {
     "id": "p160",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "andrew.green",
+      "name": "Andrew Green",
+      "avatar": "https://randomuser.me/api/portraits/men/73.jpg",
+      "bio": "Technical Writer creating clear documentation and developer guides.",
+      "title": "Technical Writer"
     },
     "content": "Hobby time! Sometimes the best ideas come from outside work.",
     "timestamp": "2025-10-22T23:12:00.000Z",
@@ -3727,11 +3727,11 @@
   {
     "id": "p161",
     "user": {
-      "username": "michael.rodriguez",
-      "name": "Michael Rodriguez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
-      "title": "Full Stack Developer"
+      "username": "riley.morales",
+      "name": "Riley Morales",
+      "avatar": "https://randomuser.me/api/portraits/women/73.jpg",
+      "bio": "Senior UX Designer with expertise in user research and design systems.",
+      "title": "Senior UX Designer"
     },
     "content": "Personal project milestone reached! Small wins matter.",
     "timestamp": "2025-11-14T14:25:00.000Z",
@@ -3743,11 +3743,11 @@
   {
     "id": "p162",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "luna.hoffman",
+      "name": "Luna Hoffman",
+      "avatar": "https://randomuser.me/api/portraits/women/74.jpg",
+      "bio": "Product Owner defining product requirements and roadmap.",
+      "title": "Product Owner"
     },
     "content": "How do you stay motivated during long projects? Looking for some inspiration!",
     "timestamp": "2025-10-17T22:09:00.000Z",
@@ -3796,11 +3796,11 @@
   {
     "id": "p163",
     "user": {
-      "username": "sophia.davis",
-      "name": "Sophia Davis",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Writer creating clear documentation and developer guides. Making complex concepts accessible.",
-      "title": "Senior Technical Writer"
+      "username": "sarah.richards",
+      "name": "Sarah Richards",
+      "avatar": "https://randomuser.me/api/portraits/women/75.jpg",
+      "bio": "Sales Director leading sales teams and driving revenue growth.",
+      "title": "Sales Director"
     },
     "content": "Weekend hobby session complete! These activities help me recharge.",
     "timestamp": "2025-11-28T06:58:00.000Z",
@@ -3812,11 +3812,11 @@
   {
     "id": "p164",
     "user": {
-      "username": "david.kim",
-      "name": "David Kim",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "Data Scientist specializing in machine learning and predictive analytics. Turning data into insights.",
-      "title": "Senior Data Scientist"
+      "username": "matthew.bates",
+      "name": "Matthew Bates",
+      "avatar": "https://randomuser.me/api/portraits/men/74.jpg",
+      "bio": "Project Manager leading cross-functional projects.",
+      "title": "Project Manager"
     },
     "content": "Amazing trip! The views were incredible and the experience was unforgettable.",
     "timestamp": "2025-10-13T12:46:00.000Z",
@@ -3865,11 +3865,11 @@
   {
     "id": "p165",
     "user": {
-      "username": "david.kim",
-      "name": "David Kim",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "Data Scientist specializing in machine learning and predictive analytics. Turning data into insights.",
-      "title": "Senior Data Scientist"
+      "username": "brooklyn.peterson",
+      "name": "Brooklyn Peterson",
+      "avatar": "https://randomuser.me/api/portraits/women/76.jpg",
+      "bio": "Product Owner defining product requirements and roadmap.",
+      "title": "Product Owner"
     },
     "content": "Quick share: something that made me smile today.",
     "timestamp": "2025-10-14T22:29:00.000Z",
@@ -3881,11 +3881,11 @@
   {
     "id": "p166",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "rebecca.stevens",
+      "name": "Rebecca Stevens",
+      "avatar": "https://randomuser.me/api/portraits/women/77.jpg",
+      "bio": "DevOps Engineer focused on cloud infrastructure and automation.",
+      "title": "DevOps Engineer"
     },
     "content": "Weekend mode: fully disconnected and recharged.",
     "timestamp": "2025-11-09T13:38:00.000Z",
@@ -3910,11 +3910,11 @@
   {
     "id": "p167",
     "user": {
-      "username": "amanda.white",
-      "name": "Amanda White",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Design Lead creating cohesive design systems and user experiences. Leading design teams.",
-      "title": "Design Lead"
+      "username": "eleanor.morris",
+      "name": "Eleanor Morris",
+      "avatar": "https://randomuser.me/api/portraits/women/78.jpg",
+      "bio": "UX Designer creating intuitive and delightful user experiences.",
+      "title": "UX Designer"
     },
     "content": "Grateful for the opportunities I've had this year. Looking forward to what's next!",
     "timestamp": "2025-11-03T08:02:00.000Z",
@@ -3926,11 +3926,11 @@
   {
     "id": "p168",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "lucas.mcgee",
+      "name": "Lucas Mcgee",
+      "avatar": "https://randomuser.me/api/portraits/men/75.jpg",
+      "bio": "UX Designer creating intuitive and delightful user experiences.",
+      "title": "UX Designer"
     },
     "content": "What's something you wish you knew when you were starting out?",
     "timestamp": "2025-10-05T13:48:00.000Z",
@@ -3942,11 +3942,11 @@
   {
     "id": "p169",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "julian.guerrero",
+      "name": "Julian Guerrero",
+      "avatar": "https://randomuser.me/api/portraits/men/76.jpg",
+      "bio": "UX Researcher focused on understanding user needs and behaviors.",
+      "title": "UX Researcher"
     },
     "content": "Just wrapped up an amazing project! Excited to share some insights from my recent work. Hope it helps others in the field.",
     "timestamp": "2025-11-19T02:14:00.000Z",
@@ -3958,11 +3958,11 @@
   {
     "id": "p170",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "morgan.dennis",
+      "name": "Morgan Dennis",
+      "avatar": "https://randomuser.me/api/portraits/women/79.jpg",
+      "bio": "UX Researcher focused on understanding user needs and behaviors.",
+      "title": "UX Researcher"
     },
     "content": "Personal best today! Progress feels good.",
     "timestamp": "2025-10-24T16:23:00.000Z",
@@ -3974,11 +3974,11 @@
   {
     "id": "p171",
     "user": {
-      "username": "chris.martinez",
-      "name": "Chris Martinez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Mobile Developer building native iOS and Android applications. React Native enthusiast.",
-      "title": "Senior Mobile Developer"
+      "username": "easton.tucker",
+      "name": "Easton Tucker",
+      "avatar": "https://randomuser.me/api/portraits/men/77.jpg",
+      "bio": "Digital Marketing Manager managing digital marketing campaigns.",
+      "title": "Digital Marketing Manager"
     },
     "content": "Celebrating a work anniversary today! Time flies when you're doing what you love.",
     "timestamp": "2025-10-31T21:49:00.000Z",
@@ -4015,11 +4015,11 @@
   {
     "id": "p172",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "andrew.mclaughlin",
+      "name": "Andrew Mclaughlin",
+      "avatar": "https://randomuser.me/api/portraits/men/78.jpg",
+      "bio": "Marketing Director with expertise in digital marketing and brand strategy.",
+      "title": "Marketing Director"
     },
     "content": "Weekend hobby session complete! These activities help me recharge.",
     "timestamp": "2025-10-13T03:54:00.000Z",
@@ -4031,11 +4031,11 @@
   {
     "id": "p173",
     "user": {
-      "username": "sarah.chen",
-      "name": "Sarah Chen",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "Senior UX Designer at Google with 8+ years of experience in mobile and web design.",
-      "title": "Senior UX Designer"
+      "username": "nathan.walsh",
+      "name": "Nathan Walsh",
+      "avatar": "https://randomuser.me/api/portraits/men/79.jpg",
+      "bio": "Technical Writer creating clear documentation and developer guides.",
+      "title": "Technical Writer"
     },
     "content": "Growth moment: realizing how far I've come.",
     "timestamp": "2025-11-20T01:39:00.000Z",
@@ -4047,11 +4047,11 @@
   {
     "id": "p174",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "charlotte.dunn",
+      "name": "Charlotte Dunn",
+      "avatar": "https://randomuser.me/api/portraits/women/80.jpg",
+      "bio": "Senior Product Manager leading product strategy and execution.",
+      "title": "Senior Product Manager"
     },
     "content": "Team retrospective yesterday was eye-opening. The shift to better processes has improved productivity. Always important to adapt.",
     "timestamp": "2025-10-23T00:02:00.000Z",
@@ -4063,11 +4063,11 @@
   {
     "id": "p175",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "victoria.medina",
+      "name": "Victoria Medina",
+      "avatar": "https://randomuser.me/api/portraits/women/81.jpg",
+      "bio": "QA Engineer ensuring software quality through automated testing.",
+      "title": "QA Engineer"
     },
     "content": "Balance goal: working smarter, not just harder.",
     "timestamp": "2025-11-24T11:32:00.000Z",
@@ -4092,11 +4092,11 @@
   {
     "id": "p176",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "aurora.gomez",
+      "name": "Aurora Gomez",
+      "avatar": "https://randomuser.me/api/portraits/women/82.jpg",
+      "bio": "Sales Director leading sales teams and driving revenue growth.",
+      "title": "Sales Director"
     },
     "content": "Reflection: growth comes from stepping outside your comfort zone.",
     "timestamp": "2025-10-02T03:45:00.000Z",
@@ -4108,11 +4108,11 @@
   {
     "id": "p177",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "tyler.matthews",
+      "name": "Tyler Matthews",
+      "avatar": "https://randomuser.me/api/portraits/men/80.jpg",
+      "bio": "UX Designer creating intuitive and delightful user experiences.",
+      "title": "UX Designer"
     },
     "content": "Balance check: making sure to prioritize both work and personal time.",
     "timestamp": "2025-11-14T09:12:00.000Z",
@@ -4124,11 +4124,11 @@
   {
     "id": "p178",
     "user": {
-      "username": "david.kim",
-      "name": "David Kim",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "Data Scientist specializing in machine learning and predictive analytics. Turning data into insights.",
-      "title": "Senior Data Scientist"
+      "username": "easton.cole",
+      "name": "Easton Cole",
+      "avatar": "https://randomuser.me/api/portraits/men/81.jpg",
+      "bio": "Customer Success Manager ensuring customer satisfaction and retention.",
+      "title": "Customer Success Manager"
     },
     "content": "What's your go-to method for staying organized? Always looking to improve my system.",
     "timestamp": "2025-10-15T15:41:00.000Z",
@@ -4177,11 +4177,11 @@
   {
     "id": "p179",
     "user": {
-      "username": "david.kim",
-      "name": "David Kim",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "Data Scientist specializing in machine learning and predictive analytics. Turning data into insights.",
-      "title": "Senior Data Scientist"
+      "username": "chloe.ray",
+      "name": "Chloe Ray",
+      "avatar": "https://randomuser.me/api/portraits/women/83.jpg",
+      "bio": "Data Scientist specializing in machine learning and predictive analytics.",
+      "title": "Data Scientist"
     },
     "content": "Culinary adventure: expanding my cooking skills one recipe at a time.",
     "timestamp": "2025-11-10T10:30:00.000Z",
@@ -4230,11 +4230,11 @@
   {
     "id": "p180",
     "user": {
-      "username": "maria.garcia",
-      "name": "Maria Garcia",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
-      "title": "Backend Engineer"
+      "username": "chloe.cummings",
+      "name": "Chloe Cummings",
+      "avatar": "https://randomuser.me/api/portraits/women/84.jpg",
+      "bio": "Senior Data Scientist turning data into actionable insights.",
+      "title": "Senior Data Scientist"
     },
     "content": "New week, new opportunities! Let's make it count.",
     "timestamp": "2025-10-03T20:35:00.000Z",
@@ -4246,11 +4246,11 @@
   {
     "id": "p181",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "anthony.moreno",
+      "name": "Anthony Moreno",
+      "avatar": "https://randomuser.me/api/portraits/men/82.jpg",
+      "bio": "Mobile Developer building native iOS and Android applications.",
+      "title": "Mobile Developer (iOS/Android)"
     },
     "content": "Mid-week check-in: how's everyone doing? We've got this!",
     "timestamp": "2025-11-08T21:32:00.000Z",
@@ -4262,11 +4262,11 @@
   {
     "id": "p182",
     "user": {
-      "username": "maria.garcia",
-      "name": "Maria Garcia",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
-      "title": "Backend Engineer"
+      "username": "justin.dennis",
+      "name": "Justin Dennis",
+      "avatar": "https://randomuser.me/api/portraits/men/83.jpg",
+      "bio": "UI Designer creating beautiful and functional interfaces.",
+      "title": "UI Designer"
     },
     "content": "Just finished a challenging project. The sense of accomplishment makes it all worth it.",
     "timestamp": "2025-10-08T06:24:00.000Z",
@@ -4303,11 +4303,11 @@
   {
     "id": "p183",
     "user": {
-      "username": "michael.rodriguez",
-      "name": "Michael Rodriguez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
-      "title": "Full Stack Developer"
+      "username": "luke.reynolds",
+      "name": "Luke Reynolds",
+      "avatar": "https://randomuser.me/api/portraits/men/84.jpg",
+      "bio": "Frontend Developer creating responsive and performant web applications.",
+      "title": "Frontend Developer"
     },
     "content": "Amazing trip! The views were incredible and the experience was unforgettable.",
     "timestamp": "2025-11-19T21:04:00.000Z",
@@ -4319,11 +4319,11 @@
   {
     "id": "p184",
     "user": {
-      "username": "sophia.davis",
-      "name": "Sophia Davis",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Writer creating clear documentation and developer guides. Making complex concepts accessible.",
-      "title": "Senior Technical Writer"
+      "username": "brooklyn.tate",
+      "name": "Brooklyn Tate",
+      "avatar": "https://randomuser.me/api/portraits/women/85.jpg",
+      "bio": "Full Stack Developer building end-to-end web applications.",
+      "title": "Full Stack Developer"
     },
     "content": "Weekend mode: fully disconnected and recharged.",
     "timestamp": "2025-11-30T14:42:00.000Z",
@@ -4335,11 +4335,11 @@
   {
     "id": "p185",
     "user": {
-      "username": "michael.rodriguez",
-      "name": "Michael Rodriguez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
-      "title": "Full Stack Developer"
+      "username": "nathan.reed",
+      "name": "Nathan Reed",
+      "avatar": "https://randomuser.me/api/portraits/men/85.jpg",
+      "bio": "Mobile Developer building native iOS and Android applications.",
+      "title": "Mobile Developer (iOS/Android)"
     },
     "content": "Just finished a challenging project. The sense of accomplishment makes it all worth it.",
     "timestamp": "2025-11-21T09:09:00.000Z",
@@ -4351,11 +4351,11 @@
   {
     "id": "p186",
     "user": {
-      "username": "james.wilson",
-      "name": "James Wilson",
-      "avatar": "/media/avatars/person1.jpg",
-      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
-      "title": "Senior DevOps Engineer"
+      "username": "bella.johnston",
+      "name": "Bella Johnston",
+      "avatar": "https://randomuser.me/api/portraits/women/86.jpg",
+      "bio": "Senior UX Designer with expertise in user research and design systems.",
+      "title": "Senior UX Designer"
     },
     "content": "Balance update: prioritizing rest and recovery this week.",
     "timestamp": "2025-10-05T06:15:00.000Z",
@@ -4392,11 +4392,11 @@
   {
     "id": "p187",
     "user": {
-      "username": "maria.garcia",
-      "name": "Maria Garcia",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
-      "title": "Backend Engineer"
+      "username": "owen.cox",
+      "name": "Owen Cox",
+      "avatar": "https://randomuser.me/api/portraits/men/86.jpg",
+      "bio": "Technical Lead driving technical decisions and architecture.",
+      "title": "Technical Lead"
     },
     "content": "Celebrating a work anniversary today! Time flies when you're doing what you love.",
     "timestamp": "2025-10-03T18:56:00.000Z",
@@ -4408,11 +4408,11 @@
   {
     "id": "p188",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "penelope.boyd",
+      "name": "Penelope Boyd",
+      "avatar": "https://randomuser.me/api/portraits/women/87.jpg",
+      "bio": "Sales Director leading sales teams and driving revenue growth.",
+      "title": "Sales Director"
     },
     "content": "Continuous improvement: small changes lead to big results over time.",
     "timestamp": "2025-11-06T11:12:00.000Z",
@@ -4461,11 +4461,11 @@
   {
     "id": "p189",
     "user": {
-      "username": "david.kim",
-      "name": "David Kim",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "Data Scientist specializing in machine learning and predictive analytics. Turning data into insights.",
-      "title": "Senior Data Scientist"
+      "username": "stephanie.porter",
+      "name": "Stephanie Porter",
+      "avatar": "https://randomuser.me/api/portraits/women/88.jpg",
+      "bio": "Machine Learning Engineer building ML models and systems.",
+      "title": "Machine Learning Engineer"
     },
     "content": "Morning run complete! Starting the day with some exercise always sets the right tone.",
     "timestamp": "2025-10-31T02:09:00.000Z",
@@ -4477,11 +4477,11 @@
   {
     "id": "p190",
     "user": {
-      "username": "jennifer.brown",
-      "name": "Jennifer Brown",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
-      "title": "UX Researcher"
+      "username": "amanda.hines",
+      "name": "Amanda Hines",
+      "avatar": "https://randomuser.me/api/portraits/women/89.jpg",
+      "bio": "Design Lead creating cohesive design systems and leading design teams.",
+      "title": "Design Lead"
     },
     "content": "Open source contribution complete! Love being part of the community.",
     "timestamp": "2025-11-24T00:17:00.000Z",
@@ -4493,11 +4493,11 @@
   {
     "id": "p191",
     "user": {
-      "username": "michael.rodriguez",
-      "name": "Michael Rodriguez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
-      "title": "Full Stack Developer"
+      "username": "alex.hamilton",
+      "name": "Alex Hamilton",
+      "avatar": "https://randomuser.me/api/portraits/women/90.jpg",
+      "bio": "Engineering Manager leading development teams and delivering high-quality software.",
+      "title": "Engineering Manager"
     },
     "content": "Random appreciation post: grateful for the small things today.",
     "timestamp": "2025-11-12T08:19:00.000Z",
@@ -4509,11 +4509,11 @@
   {
     "id": "p192",
     "user": {
-      "username": "michael.rodriguez",
-      "name": "Michael Rodriguez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
-      "title": "Full Stack Developer"
+      "username": "oliver.gordon",
+      "name": "Oliver Gordon",
+      "avatar": "https://randomuser.me/api/portraits/men/87.jpg",
+      "bio": "Marketing Director with expertise in digital marketing and brand strategy.",
+      "title": "Marketing Director"
     },
     "content": "Work-life balance check: making time for what matters most.",
     "timestamp": "2025-11-02T22:33:00.000Z",
@@ -4525,11 +4525,11 @@
   {
     "id": "p193",
     "user": {
-      "username": "daniel.clark",
-      "name": "Daniel Clark",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "QA Engineer ensuring software quality through automated testing. Test automation and CI/CD.",
-      "title": "Senior QA Engineer"
+      "username": "penelope.fisher",
+      "name": "Penelope Fisher",
+      "avatar": "https://randomuser.me/api/portraits/women/91.jpg",
+      "bio": "Account Executive building relationships with enterprise clients.",
+      "title": "Account Executive"
     },
     "content": "Casual check-in: how's everyone's week going?",
     "timestamp": "2025-10-13T21:05:00.000Z",
@@ -4566,11 +4566,11 @@
   {
     "id": "p194",
     "user": {
-      "username": "nicole.thompson",
-      "name": "Nicole Thompson",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
-      "title": "Security Engineer"
+      "username": "andrew.hayes",
+      "name": "Andrew Hayes",
+      "avatar": "https://randomuser.me/api/portraits/men/88.jpg",
+      "bio": "Senior UX Designer with expertise in user research and design systems.",
+      "title": "Senior UX Designer"
     },
     "content": "Great conversation with a colleague today. These discussions always spark new ideas.",
     "timestamp": "2025-10-18T05:44:00.000Z",
@@ -4582,11 +4582,11 @@
   {
     "id": "p195",
     "user": {
-      "username": "lisa.anderson",
-      "name": "Lisa Anderson",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
-      "title": "Marketing Director"
+      "username": "jason.garrett",
+      "name": "Jason Garrett",
+      "avatar": "https://randomuser.me/api/portraits/men/89.jpg",
+      "bio": "Marketing Manager driving brand awareness and customer acquisition.",
+      "title": "Marketing Manager"
     },
     "content": "Weekend getaway was exactly what I needed. Sometimes a change of scenery makes all the difference.",
     "timestamp": "2025-11-01T21:26:00.000Z",
@@ -4598,11 +4598,11 @@
   {
     "id": "p196",
     "user": {
-      "username": "david.kim",
-      "name": "David Kim",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "Data Scientist specializing in machine learning and predictive analytics. Turning data into insights.",
-      "title": "Senior Data Scientist"
+      "username": "rebecca.phillips",
+      "name": "Rebecca Phillips",
+      "avatar": "https://randomuser.me/api/portraits/women/92.jpg",
+      "bio": "Sales Manager managing sales teams and customer relationships.",
+      "title": "Sales Manager"
     },
     "content": "Movie night! Any recommendations for what to watch next?",
     "timestamp": "2025-11-05T18:07:00.000Z",
@@ -4614,11 +4614,11 @@
   {
     "id": "p197",
     "user": {
-      "username": "robert.lee",
-      "name": "Robert Lee",
-      "avatar": "/media/avatars/person3.jpg",
-      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
-      "title": "Frontend Architect"
+      "username": "michelle.romero",
+      "name": "Michelle Romero",
+      "avatar": "https://randomuser.me/api/portraits/women/93.jpg",
+      "bio": "Technical Lead driving technical decisions and architecture.",
+      "title": "Technical Lead"
     },
     "content": "Weekend getaway was exactly what I needed. Sometimes a change of scenery makes all the difference.",
     "timestamp": "2025-10-17T10:31:00.000Z",
@@ -4630,11 +4630,11 @@
   {
     "id": "p198",
     "user": {
-      "username": "chris.martinez",
-      "name": "Chris Martinez",
-      "avatar": "/media/avatars/person2.jpg",
-      "bio": "Mobile Developer building native iOS and Android applications. React Native enthusiast.",
-      "title": "Senior Mobile Developer"
+      "username": "scarlett.robinson",
+      "name": "Scarlett Robinson",
+      "avatar": "https://randomuser.me/api/portraits/women/94.jpg",
+      "bio": "Design Lead creating cohesive design systems and leading design teams.",
+      "title": "Design Lead"
     },
     "content": "Foodie moment: discovered an amazing new place.",
     "timestamp": "2025-11-01T07:02:00.000Z",
@@ -4646,11 +4646,11 @@
   {
     "id": "p199",
     "user": {
-      "username": "daniel.clark",
-      "name": "Daniel Clark",
-      "avatar": "/media/avatars/person4.jpg",
-      "bio": "QA Engineer ensuring software quality through automated testing. Test automation and CI/CD.",
-      "title": "Senior QA Engineer"
+      "username": "noah.douglas",
+      "name": "Noah Douglas",
+      "avatar": "https://randomuser.me/api/portraits/men/90.jpg",
+      "bio": "Frontend Developer creating responsive and performant web applications.",
+      "title": "Frontend Developer"
     },
     "content": "Tried a new restaurant today! The food was incredible.",
     "timestamp": "2025-10-03T00:15:00.000Z",
@@ -4662,11 +4662,11 @@
   {
     "id": "p200",
     "user": {
-      "username": "sophia.davis",
-      "name": "Sophia Davis",
-      "avatar": "/media/avatars/default-avatar.jpg",
-      "bio": "Technical Writer creating clear documentation and developer guides. Making complex concepts accessible.",
-      "title": "Senior Technical Writer"
+      "username": "luna.douglas",
+      "name": "Luna Douglas",
+      "avatar": "https://randomuser.me/api/portraits/women/95.jpg",
+      "bio": "Design Lead creating cohesive design systems and leading design teams.",
+      "title": "Design Lead"
     },
     "content": "Cooked something new today and it turned out great! Love trying new recipes.",
     "timestamp": "2025-10-10T03:15:00.000Z",

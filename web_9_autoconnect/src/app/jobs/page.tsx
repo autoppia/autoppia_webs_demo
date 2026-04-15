@@ -11,7 +11,7 @@ import {
   persistAppliedJobs,
   type StoredAppliedJob,
 } from "@/library/localState";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
 
@@ -232,13 +232,13 @@ function JobsContent() {
         <h1 className="font-bold text-2xl">
           {dyn.v3.getVariant("jobs_title", TEXT_VARIANTS_MAP, "Job Search")}
         </h1>
-        <Link
+        <SeedLink
           href="/jobs/applied"
           id={dyn.v3.getVariant("view_all_jobs_link", ID_VARIANTS_MAP, "view-all-jobs-link")}
           className={`text-sm text-blue-700 hover:underline font-semibold ${dyn.v3.getVariant("view_applied_jobs_link", CLASS_VARIANTS_MAP, "")}`}
         >
           View applied jobs ({Object.keys(appliedJobs).length})
-        </Link>
+        </SeedLink>
       </div>
 
       {/* Search Bar */}
