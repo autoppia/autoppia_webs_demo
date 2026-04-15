@@ -4,7 +4,7 @@ import { useDynamicSystem } from "@/dynamic";
 import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP } from "@/dynamic/v3";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import type { Channel, Server } from "@/types/discord";
-import { Hash, Mic, Plus, Settings } from "lucide-react";
+import { Hash, Mic, Plus, Settings, UserPlus } from "lucide-react";
 
 interface ChannelSidebarProps {
   server: Server | null;
@@ -14,6 +14,7 @@ interface ChannelSidebarProps {
   onSelectChannel: (id: string) => void;
   onOpenServerSettings: () => void;
   onAddChannel?: () => void;
+  onInvitePeople?: () => void;
 }
 
 export function ChannelSidebar({
@@ -24,6 +25,7 @@ export function ChannelSidebar({
   onSelectChannel,
   onOpenServerSettings,
   onAddChannel,
+  onInvitePeople,
 }: ChannelSidebarProps) {
   const dyn = useDynamicSystem();
   if (!server) return null;
@@ -52,6 +54,24 @@ export function ChannelSidebar({
         <span className="font-semibold text-white truncate flex-1">
           {server.name}
         </span>
+        {onInvitePeople && (
+          <button
+            type="button"
+            onClick={() => {
+              logEvent(EVENT_TYPES.OPEN_INVITE_MODAL, {
+                server_id: server.id,
+                server_name: server.name,
+              });
+              onInvitePeople();
+            }}
+            className="p-1 rounded text-gray-400 hover:text-white hover:bg-white/10"
+            title="Invite People"
+            aria-label="Invite People"
+            data-testid={dyn.v3.getVariant("invite-people-button", ID_VARIANTS_MAP, "invite-people-button")}
+          >
+            <UserPlus className="w-4 h-4" />
+          </button>
+        )}
         <button
           type="button"
           onClick={() => {

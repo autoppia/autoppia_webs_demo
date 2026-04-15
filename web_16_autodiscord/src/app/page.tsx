@@ -8,6 +8,7 @@ import { DMChatPanel, type DMMessage } from "@/components/DMChatPanel";
 import { DMSidebar } from "@/components/DMSidebar";
 import { AddFriendModal } from "@/components/AddFriendModal";
 import { ErrorState } from "@/components/ErrorState";
+import { InviteModal } from "@/components/InviteModal";
 import { HomeDashboard } from "@/components/HomeDashboard";
 import { MemberSidebar } from "@/components/MemberSidebar";
 import { ServerList } from "@/components/ServerList";
@@ -72,6 +73,8 @@ export default function DiscordPage() {
     setVoiceMuted,
     friends,
     setFriends,
+    invitedMembers,
+    setInvitedMembers,
   } = useLocalDiscordOverlay();
   const data = getDiscordData();
   const [retryCount, setRetryCount] = useState(0);
@@ -100,6 +103,7 @@ export default function DiscordPage() {
   const [createChannelModalOpen, setCreateChannelModalOpen] = useState(false);
   const [serverSettingsModalOpen, setServerSettingsModalOpen] = useState(false);
   const [addFriendModalOpen, setAddFriendModalOpen] = useState(false);
+  const [inviteModalOpen, setInviteModalOpen] = useState(false);
 
   const allServers = useMemo(
     () => [...(data?.servers ?? []), ...localServers],
@@ -140,8 +144,10 @@ export default function DiscordPage() {
 
   const membersForServer = useMemo(() => {
     if (!data || !selectedServerId) return [];
-    return data.members.filter((m) => m.serverId === selectedServerId);
-  }, [data, selectedServerId]);
+    const apiMembers = data.members.filter((m) => m.serverId === selectedServerId);
+    const invited = invitedMembers[selectedServerId] ?? [];
+    return [...apiMembers, ...invited];
+  }, [data, selectedServerId, invitedMembers]);
 
   const selectedServer = useMemo(
     () => allServers.find((s) => s.id === selectedServerId) ?? null,
@@ -476,6 +482,40 @@ export default function DiscordPage() {
     }
     return ids;
   }, [dmPeers, friends]);
+  const existingMemberIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const m of membersForServer) {
+      ids.add(m.id);
+    }
+    return ids;
+  }, [membersForServer]);
+
+  const handleInviteMember = useCallback(
+    (user: MockUser) => {
+      if (!selectedServerId) return;
+      const member: Member = {
+        id: user.id,
+        serverId: selectedServerId,
+        username: user.username,
+        displayName: user.displayName,
+        avatar: user.avatar,
+        role: "member",
+        status: user.status,
+      };
+      setInvitedMembers((prev) => {
+        const list = prev[selectedServerId] ?? [];
+        return { ...prev, [selectedServerId]: [...list, member] };
+      });
+      logEvent(EVENT_TYPES.INVITE_MEMBER, {
+        user_id: user.id,
+        username: user.username,
+        display_name: user.displayName,
+        server_id: selectedServerId,
+        server_name: selectedServer?.name ?? selectedServerId,
+      });
+    },
+    [selectedServerId, selectedServer, setInvitedMembers],
+  );
 
   const handleSendDMMessage = useCallback(
     (content: string) => {
@@ -679,6 +719,7 @@ export default function DiscordPage() {
                 onSelectChannel={handleSelectChannel}
                 onOpenServerSettings={() => setServerSettingsModalOpen(true)}
                 onAddChannel={() => setCreateChannelModalOpen(true)}
+                onInvitePeople={() => setInviteModalOpen(true)}
               />
               {selectedChannel?.type === "voice" ? (
                 voiceChannelId === selectedChannelId ? (
@@ -782,6 +823,13 @@ export default function DiscordPage() {
         friends={friends}
         onSendRequest={handleSendFriendRequest}
         existingPeerIds={existingPeerIds}
+      />
+      <InviteModal
+        open={inviteModalOpen}
+        onClose={() => setInviteModalOpen(false)}
+        serverName={selectedServer?.name ?? ""}
+        existingMemberIds={existingMemberIds}
+        onInvite={handleInviteMember}
       />
     </div>
   );
