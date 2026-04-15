@@ -109,11 +109,15 @@ export default function TemplatesPage() {
   };
 
   const handleCancel = (template: MailTemplate) => {
+    const state = templatesState[template.id];
     updateTemplateState(template.id, { body: template.body, to: "" });
     logEvent(EVENT_TYPES.TEMPLATE_CANCELED, {
       template_id: template.id,
       template_name: template.name,
       subject: template.subject,
+      to: state.to,
+      from: state.from,
+      body: state.body,
     });
   };
 

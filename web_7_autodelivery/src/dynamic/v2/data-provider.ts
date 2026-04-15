@@ -29,8 +29,8 @@ export class DynamicDataProvider {
     });
 
     if (typeof window === "undefined") {
-      this.ready = true;
-      this.resolveReady();
+      // Stay not-ready with empty restaurants so SSR matches the client's first paint
+      // (loading state) and avoids hydration mismatch vs "not found" / loaded content.
       return;
     }
 

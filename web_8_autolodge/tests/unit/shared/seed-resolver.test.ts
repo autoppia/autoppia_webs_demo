@@ -20,21 +20,33 @@ describe("clampSeed", () => {
 });
 
 describe("getSeedFromUrl", () => {
+  const prevV2 = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2;
+
   afterEach(() => {
     window.history.pushState({}, "", "http://localhost/");
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 = prevV2;
   });
 
-  it("returns default when no seed param", () => {
+  it("returns 1 when V2 is disabled even if URL has seed", () => {
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 = "false";
+    window.history.pushState({}, "", "http://localhost/?seed=50");
+    expect(getSeedFromUrl()).toBe(1);
+  });
+
+  it("returns default when no seed param (V2 on)", () => {
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 = "true";
     window.history.pushState({}, "", "http://localhost/");
     expect(getSeedFromUrl()).toBe(1);
   });
 
-  it("returns default when seed is not a number", () => {
+  it("returns default when seed is not a number (V2 on)", () => {
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 = "true";
     window.history.pushState({}, "", "http://localhost/?seed=abc");
     expect(getSeedFromUrl()).toBe(1);
   });
 
-  it("parses valid seed and clamps using clampSeed", () => {
+  it("parses valid seed and clamps using clampSeed (V2 on)", () => {
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 = "true";
     window.history.pushState({}, "", "http://localhost/?seed=50");
     expect(getSeedFromUrl()).toBe(50);
 

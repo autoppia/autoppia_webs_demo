@@ -303,7 +303,7 @@ function HomeContent() {
     return parts.join(", ");
   }, [dyn.v3, guests]);
 
-  const { seed: layoutSeed, layout } = useSeedLayout("stay");
+  const { layout } = useSeedLayout("stay");
   const SearchWrapperTag = (layout?.searchBar?.wrapper ?? "section") as keyof JSX.IntrinsicElements;
   const EventWrapperTag = (layout?.eventElements?.wrapper ?? "div") as keyof JSX.IntrinsicElements;
   const searchWrapperClass =
@@ -327,7 +327,6 @@ function HomeContent() {
         infants: guests.infants,
         pets: guests.pets,
       },
-      seedStructure: layoutSeed,
     });
   };
 

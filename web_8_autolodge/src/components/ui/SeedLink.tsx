@@ -10,7 +10,7 @@ interface SeedLinkProps extends Omit<ComponentProps<typeof Link>, 'href'> {
 }
 
 /**
- * A Link component that automatically preserves v2-seed parameter
+ * Link that preserves `?seed=` in the href when dynamic V2 (dataset loading) is enabled.
  */
 export function SeedLink({ href, preserveSeed = true, ...props }: SeedLinkProps) {
   const { getNavigationUrl } = useSeed();

@@ -425,11 +425,10 @@ function PropertyDetailContent() {
   const priceSubtotal = (prop?.price ?? 0) * nights;
   const total = priceSubtotal + cleaningFee;
 
+  /** Hotel window [datesFrom, datesTo] where datesTo is the checkout day (last selectable end of stay). */
   function isWithinAvailable(date: Date) {
-    return isWithinInterval(date, {
-      start: stayFrom,
-      end: addDays(stayTo, -1),
-    });
+    const d = toStartOfDay(date);
+    return isWithinInterval(d, { start: stayFrom, end: stayTo });
   }
 
   // Log V2 status for debugging
