@@ -291,7 +291,6 @@ export default function BookDetailPage() {
         content: nextMessage,
         previous_content: previous,
         book: { name: book.title },
-        comment_id: commentId,
       });
       setComments((prev) =>
         prev.map((c) => (c.id === commentId ? { ...c, message: nextMessage } : c))
@@ -311,7 +310,6 @@ export default function BookDetailPage() {
         name: target.author,
         content: target.message,
         book: { name: book.title },
-        comment_id: commentId,
       });
       setComments((prev) => prev.filter((c) => c.id !== commentId));
     },

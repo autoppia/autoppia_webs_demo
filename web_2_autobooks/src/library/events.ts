@@ -27,7 +27,7 @@ export const EVENT_TYPES = {
   ADD_TO_CART_BOOK: "ADD_TO_CART_BOOK",
   REMOVE_FROM_CART_BOOK: "REMOVE_FROM_CART_BOOK",
   /** Author profile viewed (UI / validator hook) */
-  VIEW_AUTHOR: "view_author",
+  VIEW_AUTHOR: "VIEW_AUTHOR",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
