@@ -64,6 +64,7 @@ export function logEvent(eventType: EventType, data: Record<string, unknown> = {
   if (debugEvents) {
     console.log("🛒 Logging Event:", backendPayload);
   }
+  console.log("🛒 Logging Event:", backendPayload);
 
   fetch("/api/log-event", {
     method: "POST",

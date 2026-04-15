@@ -93,8 +93,9 @@ export function ProductReviewsSection({
     }
     logEvent(EVENT_TYPES.REVIEW_CREATED, {
       ...productEventPayload,
-      reviewId: res.review.id,
       rating: res.review.rating,
+      reviewerName: res.review.authorName,
+      review: res.review.body,
     });
     setName("");
     setBody("");
@@ -116,8 +117,9 @@ export function ProductReviewsSection({
     }
     logEvent(EVENT_TYPES.REVIEW_UPDATED, {
       ...productEventPayload,
-      reviewId: res.review.id,
       rating: res.review.rating,
+      reviewerName: res.review.authorName,
+      review: res.review.body,
     });
     cancelEdit();
     setReviews(listReviewsForProduct(product.id));
@@ -132,7 +134,9 @@ export function ProductReviewsSection({
     }
     logEvent(EVENT_TYPES.REVIEW_DELETED, {
       ...productEventPayload,
-      reviewId,
+      rating: res.review.rating,
+      reviewerName: res.review.authorName,
+      review: res.review.body,
     });
     cancelEdit();
     setReviews(listReviewsForProduct(product.id));

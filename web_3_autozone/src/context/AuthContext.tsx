@@ -1,6 +1,14 @@
 "use client";
 
 import {
+  createUser,
+  findUser,
+  isBuiltinUserId,
+  upgradePasswordHashForUser,
+} from "@/data/users";
+import { EVENT_TYPES, logEvent } from "@/events";
+import { hashPassword, isStoredPasswordHash } from "@/shared/hash";
+import {
   createContext,
   useCallback,
   useContext,
@@ -8,19 +16,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import { EVENT_TYPES, logEvent } from "@/events";
-import { hashPassword, isStoredPasswordHash } from "@/shared/hash";
 
-const USERS_STORAGE_KEY = "autozone_auth_users_v1";
 const CURRENT_USER_STORAGE_KEY = "autozone_auth_current_user_v1";
-
-type StoredUser = {
-  id: string;
-  username: string;
-  /** SHA-256 hex (preferred) or legacy plain text for backward compatibility. */
-  password: string;
-  createdAt: string;
-};
 
 type SessionUser = {
   id: string;
@@ -44,19 +41,6 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-function isStoredUser(value: unknown): value is StoredUser {
-  if (!value || typeof value !== "object") return false;
-  const candidate = value as Partial<StoredUser>;
-  return (
-    typeof candidate.id === "string" &&
-    candidate.id.length > 0 &&
-    typeof candidate.username === "string" &&
-    candidate.username.length > 0 &&
-    typeof candidate.password === "string" &&
-    typeof candidate.createdAt === "string"
-  );
-}
-
 function isSessionUser(value: unknown): value is SessionUser {
   if (!value || typeof value !== "object") return false;
   const o = value as Partial<SessionUser>;
@@ -66,28 +50,6 @@ function isSessionUser(value: unknown): value is SessionUser {
     typeof o.username === "string" &&
     typeof o.createdAt === "string"
   );
-}
-
-function readUsers(): StoredUser[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(USERS_STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as unknown;
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter(isStoredUser);
-  } catch {
-    return [];
-  }
-}
-
-function writeUsers(users: StoredUser[]): void {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
-}
-
-function toAuthUser(user: StoredUser): AuthUser {
-  return { id: user.id, username: user.username, createdAt: user.createdAt };
 }
 
 function persistSession(session: SessionUser): void {
@@ -144,10 +106,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw new Error("Username and password are required.");
     }
 
-    const users = readUsers();
-    const existing = users.find(
-      (user) => user.username.toLowerCase() === normalizedUsername.toLowerCase()
-    );
+    const existing = findUser(normalizedUsername);
     if (!existing) {
       throw new Error("Invalid credentials.");
     }
@@ -160,16 +119,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw new Error("Invalid credentials.");
     }
 
-    let nextUsers = users;
-    if (!isStoredPasswordHash(existing.password) && existing.password === normalizedPassword) {
+    if (
+      !isBuiltinUserId(existing.id) &&
+      !isStoredPasswordHash(existing.password) &&
+      existing.password === normalizedPassword
+    ) {
       const upgradedHash = await hashPassword(normalizedPassword);
-      nextUsers = users.map((u) =>
-        u.id === existing.id ? { ...u, password: upgradedHash } : u
-      );
-      writeUsers(nextUsers);
+      upgradePasswordHashForUser(existing.id, upgradedHash);
     }
 
-    const authUser = toAuthUser(existing);
+    const authUser: AuthUser = {
+      id: existing.id,
+      username: existing.username,
+      createdAt: existing.createdAt,
+    };
     setCurrentUser(authUser);
     persistSession({
       id: authUser.id,
@@ -198,24 +161,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error("Passwords do not match.");
       }
 
-      const users = readUsers();
-      if (
-        users.some((user) => user.username.toLowerCase() === normalizedUsername.toLowerCase())
-      ) {
-        throw new Error("Username already exists.");
-      }
+      const newUser = await createUser(normalizedUsername, normalizedPassword);
 
-      const passwordHash = await hashPassword(normalizedPassword);
-      const now = new Date().toISOString();
-      const newUser: StoredUser = {
-        id: `u-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-        username: normalizedUsername,
-        password: passwordHash,
-        createdAt: now,
+      const authUser: AuthUser = {
+        id: newUser.id,
+        username: newUser.username,
+        createdAt: newUser.createdAt,
       };
-      writeUsers([...users, newUser]);
-
-      const authUser = toAuthUser(newUser);
       setCurrentUser(authUser);
       persistSession({
         id: authUser.id,

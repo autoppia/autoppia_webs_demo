@@ -74,7 +74,6 @@ export function ShareProductDialog({
       recipientEmail: email,
       stage: "completed",
     };
-    logEvent(EVENT_TYPES.SHARE_PRODUCT, payload);
     logEvent(EVENT_TYPES.SHARE_COMPLETED, {
       ...payload,
     });
