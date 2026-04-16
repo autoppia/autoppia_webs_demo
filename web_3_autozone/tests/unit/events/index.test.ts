@@ -45,8 +45,8 @@ describe("events logger (autozone)", () => {
   });
 
   test("includes new commerce event type keys", () => {
-    expect(EVENT_TYPES.LOGIN).toBe("LOGIN");
-    expect(EVENT_TYPES.REGISTER).toBe("REGISTER");
+    expect(EVENT_TYPES.LOGIN).toBe("AUTOZONE_LOGIN");
+    expect(EVENT_TYPES.REGISTER).toBe("AUTOZONE_REGISTER");
     expect(EVENT_TYPES.SHARE_COMPLETED).toBe("SHARE_COMPLETED");
     expect(EVENT_TYPES.REVIEW_CREATED).toBe("REVIEW_CREATED");
     expect(EVENT_TYPES.REVIEW_UPDATED).toBe("REVIEW_UPDATED");
