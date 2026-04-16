@@ -21,6 +21,9 @@ import {
 } from "@/library/wishlist";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { getCategoryFallback } from "@/data/products-enhanced";
+import { ShareProductDialog } from "@/components/product/ShareProductDialog";
+import { ProductReviewsSection } from "@/components/product/ProductReviewsSection";
+import { getDiscountPercent, hasMeaningfulOriginalPrice } from "@/library/pricing";
 
 
 const DELIVERY_ADDRESS = "Daly City 94016";
@@ -46,9 +49,7 @@ function ProductContent() {
   const [addedToCart, setAddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [wishlistAdded, setWishlistAdded] = useState(false);
-  const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "shared">(
-    "idle"
-  );
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [isExploreOpen, setIsExploreOpen] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
 
@@ -93,6 +94,7 @@ function ProductContent() {
             productId: product.id,
             title: product.title,
             price: product.price,
+            originalPrice: product.originalPrice,
             category: product.category,
             brand: product.brand,
             rating: product.rating,
@@ -185,33 +187,16 @@ function ProductContent() {
     return order.map((idx) => highlightBullets[idx]);
   }, [dyn.v1.changeOrderElements, highlightBullets]);
 
-  const handleShareProduct = async () => {
+  const handleOpenShareDialog = () => {
     if (!product || !productEventData) return;
     const shareUrl =
       typeof window !== "undefined" ? window.location.href : product.id;
-
     logEvent(EVENT_TYPES.SHARE_PRODUCT, {
       ...productEventData,
       shareUrl,
+      stage: "dialog_opened",
     });
-
-    try {
-      if (navigator.share) {
-        await navigator.share({
-          title: product.title,
-          text: product.description ?? product.title,
-          url: shareUrl,
-        });
-        setShareStatus("shared");
-      } else if (navigator.clipboard) {
-        await navigator.clipboard.writeText(shareUrl);
-        setShareStatus("copied");
-      }
-    } catch (error) {
-      console.warn("Share cancelled", error);
-    } finally {
-      setTimeout(() => setShareStatus("idle"), 2500);
-    }
+    setShareDialogOpen(true);
   };
 
   const handleWishlistToggle = () => {
@@ -438,6 +423,9 @@ function ProductContent() {
 
   const formattedPrice = product.price || "$0.00";
   const rating = product.rating || 0;
+  const discountPct = hasMeaningfulOriginalPrice(product.originalPrice, product.price)
+    ? getDiscountPercent(product.originalPrice, product.price)
+    : 0;
 
   return (
     dyn.v1.addWrapDecoy("product-page-main", (
@@ -525,18 +513,12 @@ function ProductContent() {
                             {dyn.v1.addWrapDecoy("product-share-btn", (
                               <button
                                 type="button"
-                                onClick={handleShareProduct}
+                                onClick={handleOpenShareDialog}
                                 id={dyn.v3.getVariant("share-button", ID_VARIANTS_MAP)}
                                 className={dyn.v3.getVariant("button-secondary", CLASS_VARIANTS_MAP, "inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400")}
                               >
                                 <Share2 className="h-4 w-4" />
-                                <span>
-                                  {shareStatus === "shared"
-                                    ? t("share_success", "Shared")
-                                    : shareStatus === "copied"
-                                    ? t("link_copied", "Link copied")
-                                    : t("share_product", "Share product")}
-                                </span>
+                                <span>{t("share_product", "Share product")}</span>
                               </button>
                             ))}
                             {dyn.v1.addWrapDecoy("product-wishlist-btn", (
@@ -563,9 +545,21 @@ function ProductContent() {
                         {dyn.v1.addWrapDecoy("product-price-rating", (
                           <div className="flex flex-wrap items-center gap-4">
                             {renderStars(rating, product.reviews)}
-                            <span className="text-2xl font-semibold text-slate-900">
-                              {formattedPrice}
-                            </span>
+                            <div className="flex flex-wrap items-baseline gap-2">
+                              {discountPct > 0 && product.originalPrice && (
+                                <span className="text-lg text-slate-400 line-through">
+                                  {product.originalPrice}
+                                </span>
+                              )}
+                              <span className="text-2xl font-semibold text-slate-900">
+                                {formattedPrice}
+                              </span>
+                              {discountPct > 0 && (
+                                <span className="rounded-full bg-rose-100 px-2 py-0.5 text-xs font-semibold text-rose-800">
+                                  {t("save_pct", `${discountPct}% off`)}
+                                </span>
+                              )}
+                            </div>
                             <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.4em] text-emerald-700">
                               {t("in_stock", "In stock")}
                             </span>
@@ -634,8 +628,20 @@ function ProductContent() {
                             </span>
                           </div>
                         ))}
-                        <div className="text-3xl font-semibold text-slate-900">
-                          {product.price}
+                        <div className="flex flex-wrap items-baseline gap-2">
+                          {discountPct > 0 && product.originalPrice && (
+                            <span className="text-xl text-slate-400 line-through">
+                              {product.originalPrice}
+                            </span>
+                          )}
+                          <div className="text-3xl font-semibold text-slate-900">
+                            {product.price}
+                          </div>
+                          {discountPct > 0 && (
+                            <span className="text-sm font-semibold text-rose-700">
+                              {discountPct}% {t("off_label", "off")}
+                            </span>
+                          )}
                         </div>
                         <p className="text-sm text-slate-600">
                           {t("free_delivery_label", "Free delivery")}{" "}
@@ -785,6 +791,28 @@ function ProductContent() {
                   ))}
                 </section>
               ))
+            )}
+
+            {productEventData && (
+              <ProductReviewsSection
+                product={product}
+                dyn={dyn}
+                productEventPayload={{ ...productEventData }}
+              />
+            )}
+
+            {product && productEventData && (
+              <ShareProductDialog
+                open={shareDialogOpen}
+                onOpenChange={setShareDialogOpen}
+                dyn={dyn}
+                productId={product.id}
+                productTitle={product.title}
+                shareUrl={
+                  typeof window !== "undefined" ? window.location.href : product.id
+                }
+                productEventPayload={{ ...productEventData }}
+              />
             )}
           </div>
         ))}

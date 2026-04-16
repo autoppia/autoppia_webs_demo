@@ -44,6 +44,15 @@ describe("events logger (autozone)", () => {
     expect(payload.data.user_id).toBe("42");
   });
 
+  test("includes new commerce event type keys", () => {
+    expect(EVENT_TYPES.LOGIN).toBe("AUTOZONE_LOGIN");
+    expect(EVENT_TYPES.REGISTER).toBe("AUTOZONE_REGISTER");
+    expect(EVENT_TYPES.SHARE_COMPLETED).toBe("SHARE_COMPLETED");
+    expect(EVENT_TYPES.REVIEW_CREATED).toBe("REVIEW_CREATED");
+    expect(EVENT_TYPES.REVIEW_UPDATED).toBe("REVIEW_UPDATED");
+    expect(EVENT_TYPES.REVIEW_DELETED).toBe("REVIEW_DELETED");
+  });
+
   test("when user is the string 'null', sends user_id null", () => {
     window.localStorage.setItem("user", "null");
     const fetchMock = (globalThis as any).fetch as jest.Mock;

@@ -1,6 +1,5 @@
 /** @type {import('jest').Config} */
 module.exports = {
-  preset: "ts-jest",
   testEnvironment: "jsdom",
   testMatch: ["<rootDir>/tests/**/*.(test|spec).[jt]s?(x)"],
   coverageProvider: "v8",
@@ -8,6 +7,16 @@ module.exports = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+  },
+  transform: {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: {
+          jsx: "react-jsx",
+        },
+      },
+    ],
   },
   collectCoverageFrom: [
     "src/shared/**/*.{ts,tsx}",

@@ -1,5 +1,8 @@
 
 export const EVENT_TYPES = {
+  LOGIN: "AUTOZONE_LOGIN",
+  REGISTER: "AUTOZONE_REGISTER",
+  LOGOUT: "AUTOZONE_LOGOUT",
   SCROLL_CAROUSEL: "CAROUSEL_SCROLL",
   SEARCH_PRODUCT: "SEARCH_PRODUCT",
   VIEW_DETAIL: "VIEW_DETAIL",
@@ -12,6 +15,10 @@ export const EVENT_TYPES = {
   ORDER_COMPLETED: "ORDER_COMPLETED",
   QUANTITY_CHANGED: "QUANTITY_CHANGED",
   SHARE_PRODUCT: "SHARE_PRODUCT",
+  SHARE_COMPLETED: "SHARE_COMPLETED",
+  REVIEW_CREATED: "REVIEW_CREATED",
+  REVIEW_UPDATED: "REVIEW_UPDATED",
+  REVIEW_DELETED: "REVIEW_DELETED",
   CATEGORY_FILTER: "CATEGORY_FILTER",
   DETAILS_TOGGLE: "DETAILS_TOGGLE",
 } as const;
@@ -57,6 +64,7 @@ export function logEvent(eventType: EventType, data: Record<string, unknown> = {
   if (debugEvents) {
     console.log("🛒 Logging Event:", backendPayload);
   }
+  console.log("🛒 Logging Event:", backendPayload);
 
   fetch("/api/log-event", {
     method: "POST",

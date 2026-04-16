@@ -34,10 +34,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} bg-zinc-50`}
+      className={`${geistSans.variable} ${geistMono.variable} bg-zinc-100`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen font-sans bg-zinc-50" suppressHydrationWarning>
+      <body className="min-h-screen font-sans bg-zinc-100" suppressHydrationWarning>
         <div data-v4-inert-root className="min-h-screen">
           <SeedProvider>
             <LayoutProvider>

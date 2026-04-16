@@ -20,6 +20,12 @@ export const EVENT_TYPES = {
   TRIP_DETAILS: "TRIP_DETAILS",
   // Cancel reservation
   CANCEL_RESERVATION: "CANCEL_RESERVATION",
+  // Reviews
+  SUBMIT_REVIEW: "SUBMIT_REVIEW",
+  // Available trips
+  VIEW_AVAILABLE_TRIPS: "VIEW_AVAILABLE_TRIPS",
+  BOOK_TRIP: "BOOK_TRIP",
+  FILTER_TRIPS: "FILTER_TRIPS",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
@@ -71,6 +77,5 @@ export function logEvent<T extends Record<string, unknown>>(
     body: JSON.stringify(backendPayload),
   }).catch((error) => {
     console.error("❌ Failed to log event:", error);
-    throw error;
   });
 }

@@ -5,7 +5,182 @@ import GlobalHeader from "@/components/GlobalHeader";
 import { EVENT_TYPES, logEvent } from "@/library/event";
 import { simulatedTrips, rides } from "@/data/trips-enhanced";
 import { useDynamicSystem } from "@/dynamic/shared";
-import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynamic/v3";
+import { CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
+
+interface TripReview {
+  id: string;
+  name: string;
+  rating: number;
+  comment: string;
+  date: string;
+}
+
+function readReviewsFromStorage(tripId: string): TripReview[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const reviews = JSON.parse(localStorage.getItem(`reviews-${tripId}`) || "[]");
+    return Array.isArray(reviews) ? reviews : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveReviewsToStorage(tripId: string, reviews: TripReview[]): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(`reviews-${tripId}`, JSON.stringify(reviews));
+}
+
+function ReviewCard({ review }: { review: TripReview }) {
+  return (
+    <div className="border rounded-xl p-4 bg-neutral-50 flex flex-col gap-1">
+      <div className="flex items-center gap-2">
+        <span className="font-semibold text-neutral-800">{review.name}</span>
+        <span className="text-sm text-amber-600 font-semibold">
+          {review.rating.toFixed(1)} ★
+        </span>
+        <span className="text-xs text-neutral-500 ml-auto">{review.date}</span>
+      </div>
+      <p className="text-sm text-neutral-700">{review.comment}</p>
+    </div>
+  );
+}
+
+function ReviewForm({
+  tripId,
+  tripData,
+  onSubmit,
+}: {
+  tripId: string;
+  tripData: { pickup: string; dropoff: string; price: number; ride: { name: string } };
+  onSubmit: (review: TripReview) => void;
+}) {
+  const dyn = useDynamicSystem();
+  const [reviewName, setReviewName] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState("");
+
+  function handleSubmitReview(e: React.FormEvent) {
+    e.preventDefault();
+    if (!reviewComment.trim()) return;
+
+    const newReview: TripReview = {
+      id: `${tripId}-${Date.now()}`,
+      name: reviewName.trim() || "Guest",
+      rating: reviewRating,
+      comment: reviewComment.trim(),
+      date: new Date().toISOString().slice(0, 10),
+    };
+
+    logEvent(EVENT_TYPES.SUBMIT_REVIEW, {
+      tripId,
+      review: newReview,
+      rating: reviewRating,
+      commentLength: reviewComment.trim().length,
+      name: newReview.name,
+      tripData: {
+        pickup: tripData.pickup,
+        dropoff: tripData.dropoff,
+        price: tripData.price,
+        rideType: tripData.ride.name,
+      },
+      timestamp: new Date().toISOString(),
+    });
+
+    onSubmit(newReview);
+    setReviewName("");
+    setReviewRating(5);
+    setReviewComment("");
+  }
+
+  return (
+    <form
+      id={dyn.v3.getVariant("review-form", ID_VARIANTS_MAP, "review-form")}
+      className="flex flex-col gap-3"
+      onSubmit={handleSubmitReview}
+    >
+      <div className="flex gap-2">
+        <input
+          className="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2095d2] focus:border-transparent"
+          placeholder="Your name (optional)"
+          value={reviewName}
+          onChange={(e) => setReviewName(e.target.value)}
+        />
+        <select
+          className="w-[120px] border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2095d2]"
+          value={reviewRating}
+          onChange={(e) => setReviewRating(Number(e.target.value))}
+        >
+          <option value={5}>5 ★</option>
+          <option value={4}>4 ★</option>
+          <option value={3}>3 ★</option>
+          <option value={2}>2 ★</option>
+          <option value={1}>1 ★</option>
+        </select>
+      </div>
+      <textarea
+        className="border rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#2095d2] focus:border-transparent"
+        rows={3}
+        placeholder="Share your experience..."
+        value={reviewComment}
+        onChange={(e) => setReviewComment(e.target.value)}
+      />
+      <button
+        type="submit"
+        className="self-start px-4 py-2 rounded-full bg-[#2095d2] text-white text-sm font-semibold hover:bg-[#1273a0] transition disabled:opacity-50"
+        disabled={!reviewComment.trim()}
+      >
+        {dyn.v3.getVariant("submit-review-button", TEXT_VARIANTS_MAP, "Submit Review")}
+      </button>
+    </form>
+  );
+}
+
+function ReviewSection({
+  tripId,
+  tripData,
+}: {
+  tripId: string;
+  tripData: { pickup: string; dropoff: string; price: number; ride: { name: string } };
+}) {
+  const dyn = useDynamicSystem();
+  const [reviews, setReviews] = useState<TripReview[]>([]);
+
+  useEffect(() => {
+    setReviews(readReviewsFromStorage(tripId));
+  }, [tripId]);
+
+  function handleNewReview(review: TripReview) {
+    const updated = [review, ...reviews];
+    setReviews(updated);
+    saveReviewsToStorage(tripId, updated);
+  }
+
+  return (
+    dyn.v1.addWrapDecoy("review-section", (
+      <div
+        id={dyn.v3.getVariant("review-section", ID_VARIANTS_MAP, "review-section")}
+        className="mt-8 border rounded-2xl p-6 bg-white shadow-sm"
+      >
+        <h2 className="font-semibold text-lg mb-4">
+          {dyn.v3.getVariant("review-section-title", TEXT_VARIANTS_MAP, "Trip Reviews")}
+        </h2>
+        <div className="flex flex-col gap-3 mb-5">
+          {reviews.map((review) => (
+            <ReviewCard key={review.id} review={review} />
+          ))}
+          {reviews.length === 0 && (
+            <p className="text-sm text-neutral-500">
+              No reviews yet. Be the first to share your thoughts!
+            </p>
+          )}
+        </div>
+        {dyn.v1.addWrapDecoy("review-form-wrapper", (
+          <ReviewForm tripId={tripId} tripData={tripData} onSubmit={handleNewReview} />
+        ))}
+      </div>
+    ))
+  );
+}
 
 function formatDateTime(date: string, time: string) {
   if (!date || !time) return "--";
@@ -177,7 +352,7 @@ export default function TripDetailsPage() {
         <div className="shadow max-w-2xl w-full bg-white rounded-xl py-12 px-8 flex flex-col relative">
           <span className="absolute right-4 top-4">
             <img
-              src="https://ext.same-assets.com/407674263/1179166468.png"
+              src={activeTrip.ride.image || activeTrip.ride.icon || "/car1.png"}
               alt="Car"
               className="w-20 h-16 object-contain"
             />
@@ -263,6 +438,15 @@ export default function TripDetailsPage() {
             5 minutes of wait time included to meet your ride. Cancel at no
             charge up to 1 hour in advance.
           </div>
+          <ReviewSection
+            tripId={typeof tripId === "string" ? tripId : Array.isArray(tripId) ? tripId[0] : ""}
+            tripData={{
+              pickup: activeTrip.pickup,
+              dropoff: activeTrip.dropoff,
+              price: activeTrip.price,
+              ride: activeTrip.ride,
+            }}
+          />
           <button
             className={dyn.v3.getVariant("reserved-cancel-trip-button-class", CLASS_VARIANTS_MAP, "w-full bg-[#2095d2] rounded-md text-white font-bold py-3 text-base mt-3 flex items-center justify-center gap-2 hover:bg-[#187bb3] transition")}
             onClick={() => setShowCancelModal(true)}

@@ -5,20 +5,25 @@ import { usePathname } from "next/navigation";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useDynamicSystem } from "@/dynamic/shared";
 import { CLASS_VARIANTS_MAP, ID_VARIANTS_MAP } from "@/dynamic/v3";
+import { useUnreadNotificationsCount } from "@/hooks/useUnreadNotificationsCount";
+import NotificationBadge from "@/components/NotificationBadge";
 
 export default function HeaderNav() {
   const pathname = usePathname();
   const dyn = useDynamicSystem();
+  const unreadNotifications = useUnreadNotificationsCount();
 
   const navTextVariants: Record<string, string[]> = {
     nav_home: ["Home", "Feed", "Dashboard"],
     nav_jobs: ["Jobs", "Careers", "Openings"],
+    nav_notifications: ["Notifications", "Alerts", "Inbox"],
     nav_recommendations: ["Recommendations", "For you", "Suggestions"],
     nav_profile: ["Profile", "Me", "My profile"],
   };
   const navIdVariants: Record<string, string[]> = {
     nav_home_link: ["nav_home_link", "nav_home", "nav-feed"],
     nav_jobs_link: ["nav_jobs_link", "nav_jobs", "nav-careers"],
+    nav_notifications_link: ["nav_notifications_link", "nav_notifications", "nav-inbox"],
     nav_recommendations_link: ["nav_recs_link", "nav_recommendations", "nav-suggestions"],
     nav_profile_link: ["nav_profile_link", "nav_profile", "nav-me"],
   };
@@ -44,6 +49,13 @@ export default function HeaderNav() {
       eventType: EVENT_TYPES.JOBS_NAVBAR,
       eventData: { label: "Jobs" },
       idKey: "nav_jobs_link",
+    },
+    {
+      href: "/notifications",
+      label: "Notifications",
+      eventType: EVENT_TYPES.NOTIFICATIONS_NAVBAR,
+      eventData: { label: "Notifications", unreadCount: unreadNotifications },
+      idKey: "nav_notifications_link",
     },
     {
       href: "/recommendations",
@@ -113,7 +125,21 @@ export default function HeaderNav() {
                       : { fontWeight: 500 }
                   }
                 >
-                  {dyn.v3.getVariant(item.idKey.replace("_link", ""), navTextVariants, item.label)}
+                  {item.href === "/notifications" ? (
+                    <span className="relative inline-flex items-center pr-2">
+                      <span>
+                        {dyn.v3.getVariant(item.idKey.replace("_link", ""), navTextVariants, item.label)}
+                      </span>
+                      <NotificationBadge
+                        count={unreadNotifications}
+                        className="absolute -right-2 -top-1.5 h-4 min-w-4 border-white bg-red-500 px-1 text-[9px] text-white shadow-sm"
+                      />
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-2">
+                      {dyn.v3.getVariant(item.idKey.replace("_link", ""), navTextVariants, item.label)}
+                    </span>
+                  )}
                 </SeedLink>
               );
             })}

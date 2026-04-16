@@ -7,6 +7,7 @@ export {
   dynamicDataProvider,
   getProductById,
   getProductsByCategory,
+  getAllProducts,
   getEffectiveSeed,
   searchProducts,
 } from './data-provider';
