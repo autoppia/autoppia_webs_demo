@@ -362,7 +362,8 @@ interface EmailContextValue extends EmailState {
   toggleCompose: (open?: boolean) => void;
   updateComposeData: (data: Partial<ComposeEmailData>) => void;
   sendEmail: () => void;
-  saveDraft: () => void;
+  /** Pass merged compose (e.g. including uncommitted To/Cc/Bcc from the modal) so saves are not lost to stale state. */
+  saveDraft: (composeOverride?: ComposeEmailData) => void;
 
   // Computed values
   filteredEmails: Email[];
@@ -617,11 +618,12 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
         dispatch({ type: "SET_EDITING_DRAFT_ID", payload: null });
     }, [state.composeData, state.editingDraftId]);
 
-    const saveDraft = useCallback(() => {
+    const saveDraft = useCallback((composeOverride?: ComposeEmailData) => {
+        const compose = composeOverride ?? state.composeData;
         if (
-            !state.composeData.to.length &&
-            !state.composeData.subject &&
-            !state.composeData.body
+            !compose.to.length &&
+            !compose.subject &&
+            !compose.body
         ) {
             return; // Don't save empty drafts
         }
@@ -630,12 +632,12 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
         const draftEmail: Email = {
             id: draftId,
             from: {name: "Me", email: "me@gmail.com"},
-            to: state.composeData.to.map((email) => ({name: email, email})),
-            cc: state.composeData.cc?.map((email) => ({name: email, email})),
-            bcc: state.composeData.bcc?.map((email) => ({name: email, email})),
-            subject: state.composeData.subject || "(no subject)",
-            body: state.composeData.body,
-            snippet: `${state.composeData.body.substring(0, 120)}...`,
+            to: compose.to.map((email) => ({name: email, email})),
+            cc: compose.cc?.map((email) => ({name: email, email})),
+            bcc: compose.bcc?.map((email) => ({name: email, email})),
+            subject: compose.subject || "(no subject)",
+            body: compose.body ?? "",
+            snippet: `${(compose.body ?? "").substring(0, 120)}...`,
             timestamp: new Date(),
             isRead: true,
             isStarred: false,

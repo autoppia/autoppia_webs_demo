@@ -130,11 +130,11 @@ function ReviewsSection({
                 onClick={() => {
                   onDeleteReview(i);
                   logEvent(EVENT_TYPES.DELETE_REVIEW, {
-                    reviewIndex: i,
                     author: r.author,
                     rating: r.rating,
-                    restaurantId: restaurant.id,
+                    cuisine: restaurant.cuisine,
                     restaurantName: restaurant.name,
+                    restaurantRating: restaurant.rating,
                   });
                 }}
                 aria-label={dyn.v3.getVariant('delete-review-btn', TEXT_VARIANTS_MAP, 'Delete review')}

@@ -1,8 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useMemo } from "react";
-import { useSeed } from "@/context/SeedContext";
-import { isDynamicModeEnabled } from "@/dynamic/v2";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -43,14 +41,11 @@ export function getSeedLayout(_seed?: number, pageType: 'stay' | 'confirm' = 'st
   };
 }
 
-// Hook to get current seed and static layout
+// Hook for static page layout (independent of URL seed; V2 owns `?seed=` for data)
 export function useSeedLayout(pageType: 'stay' | 'confirm' = 'stay') {
-  const { seed } = useSeed();
-
-  // Dynamic flag remains for compatibility but layout is static
   const isDynamicEnabled = useMemo(() => false, []);
 
-  const layout = useMemo(() => getSeedLayout(seed, pageType), [seed, pageType]);
+  const layout = useMemo(() => getSeedLayout(undefined, pageType), [pageType]);
 
-  return { seed, layout, isDynamicEnabled };
+  return { layout, isDynamicEnabled };
 }

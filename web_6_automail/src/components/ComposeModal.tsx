@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useEmail } from "@/contexts/EmailContext";
+import type { ComposeEmailData } from "@/types/email";
 import { useLayout } from "@/contexts/LayoutContext";
 import { cn } from "@/library/utils";
 import { Send, Paperclip, Smile, X, Minus, Square, Bold, Italic, Underline, Link, List, Save } from "lucide-react";
@@ -20,7 +21,7 @@ import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynami
 export function ComposeModal() {
   const { currentVariant } = useLayout();
   const dyn = useDynamicSystem();
-  const { isComposeOpen, composeData, toggleCompose, updateComposeData, sendEmail, saveDraft } = useEmail();
+  const { isComposeOpen, composeData, editingDraftId, toggleCompose, updateComposeData, sendEmail, saveDraft } = useEmail();
 
   const [showCc, setShowCc] = useState(false);
   const [showBcc, setShowBcc] = useState(false);
@@ -83,14 +84,31 @@ export function ComposeModal() {
     const allTo = toInput.trim() ? [...composeData.to, toInput.trim()] : composeData.to;
     const allCc = ccInput.trim() ? [...(composeData.cc || []), ccInput.trim()] : composeData.cc || [];
     const allBcc = bccInput.trim() ? [...(composeData.bcc || []), bccInput.trim()] : composeData.bcc || [];
+    const merged: ComposeEmailData = {
+      ...composeData,
+      to: allTo,
+      cc: allCc,
+      bcc: allBcc,
+    };
     logEvent(EVENT_TYPES.EMAIL_SAVE_AS_DRAFT, {
       to: allTo,
       cc: allCc,
       bcc: allBcc,
-      subject: composeData.subject || "",
-      body: composeData.body || "",
+      subject: merged.subject || "",
+      body: merged.body || "",
     });
-    saveDraft();
+    if (merged.action === "edit_draft" && editingDraftId) {
+      logEvent(EVENT_TYPES.EDIT_DRAFT_EMAIL, {
+        email_id: editingDraftId,
+        subject: merged.subject || "",
+        to: allTo,
+        cc: allCc,
+        bcc: allBcc,
+        body: merged.body || "",
+        from: "me@gmail.com",
+      });
+    }
+    saveDraft(merged);
   };
 
   const canSend = composeData.to.length > 0 || toInput.trim();

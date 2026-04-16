@@ -70,6 +70,7 @@ function EditableTime({
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -80,6 +81,27 @@ import { ID_VARIANTS_MAP, CLASS_VARIANTS_MAP, TEXT_VARIANTS_MAP } from "@/dynami
 import { AddToCartModal } from "../food/AddToCartModal";
 import type { CartItem } from "@/store/cart-store";
 import type { MenuItem } from "@/data/restaurants";
+
+/** Line items for ADDRESS_ADDED: includes menu size and preference text for validators. */
+function mapCartItemsForAddressAdded(items: CartItem[]) {
+  return items.map((item) => {
+    const optionsPart = item.selectedOptions?.filter(Boolean).join(", ") ?? "";
+    const prefPart = item.preferences?.trim() ?? "";
+    const preferences =
+      [prefPart, optionsPart ? `Options: ${optionsPart}` : ""]
+        .filter(Boolean)
+        .join(" · ") || null;
+
+    return {
+      itemId: item.id,
+      name: item.name,
+      quantity: item.quantity,
+      price: item.price,
+      size: item.selectedSize?.name ?? null,
+      preferences,
+    };
+  });
+}
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, clearCart, getTotal, updateCartItem } =
@@ -555,6 +577,9 @@ export default function CartPage() {
                   <DialogContent className="max-w-md">
                     <DialogHeader>
                       <DialogTitle>Select a Delivery Address</DialogTitle>
+                      <DialogDescription className="sr-only">
+                        Choose a saved address or enter a custom delivery address.
+                      </DialogDescription>
                     </DialogHeader>
                     <div id="address-options" className="flex flex-col gap-2 mt-2">
                       {predefinedAddresses.map((addr) => (
@@ -594,12 +619,7 @@ export default function CartPage() {
                                 mode: "delivery",
                                 restaurantId: restaurant?.id || "unknown",
                                 restaurantName: restaurant?.name || "Unknown Restaurant",
-                                items: items.map(item => ({
-                                  itemId: item.id,
-                                  name: item.name,
-                                  quantity: item.quantity,
-                                  price: item.price
-                                })),
+                                items: mapCartItemsForAddressAdded(items),
                                 cartTotal: getTotal()
                               });
                               setIsAddressModalOpen(false);
@@ -642,6 +662,9 @@ export default function CartPage() {
                   <DialogContent className="max-w-sm">
                     <DialogHeader>
                       <DialogTitle>Select Drop-off Preference</DialogTitle>
+                      <DialogDescription className="sr-only">
+                        Choose how the courier should deliver your order.
+                      </DialogDescription>
                     </DialogHeader>
                     <div id="dropoff-options" className="flex flex-col gap-3 mt-3">
                       {dropoffOptions.map((option) => (
@@ -725,6 +748,9 @@ export default function CartPage() {
                 <DialogContent className="max-w-md">
                   <DialogHeader>
                     <DialogTitle>Select a Pickup Address</DialogTitle>
+                    <DialogDescription className="sr-only">
+                      Choose a saved address or enter a custom pickup location.
+                    </DialogDescription>
                   </DialogHeader>
                   <div id="pickup-address-options" className="flex flex-col gap-2 mt-2">
                     {predefinedAddresses.map((addr) => (
@@ -764,12 +790,7 @@ export default function CartPage() {
                               mode: "pickup",
                               restaurantId: restaurant?.id || "unknown",
                               restaurantName: restaurant?.name || "Unknown Restaurant",
-                              items: items.map(item => ({
-                                itemId: item.id,
-                                name: item.name,
-                                quantity: item.quantity,
-                                price: item.price
-                              })),
+                              items: mapCartItemsForAddressAdded(items),
                               cartTotal: getTotal()
                               });
                               setIsPickupInfoModalOpen(false);
@@ -991,6 +1012,9 @@ export default function CartPage() {
             <DialogContent className="max-w-sm">
               <DialogHeader>
                 <DialogTitle>Add contact number</DialogTitle>
+                <DialogDescription className="sr-only">
+                  Enter a phone number so the restaurant or courier can reach you about your order.
+                </DialogDescription>
               </DialogHeader>
               <Input
                 id="contact-number-modal-input"

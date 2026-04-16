@@ -3,6 +3,7 @@ import * as React from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogTitle,
   DialogHeader,
   DialogFooter,
@@ -131,11 +132,11 @@ export function AddToCartModal({
         </DialogDescription>
         <div className={`max-h-[90vh] overflow-y-auto ${layout.modal.contentClass}`}>
           <DialogHeader className={`px-6 pt-6 pb-0 ${layout.modal.headerClass}`}>
-            <DialogTitle
-              className={`${layout.modal.headerClass} space-y-1`}
-              id={modalTitleId}
-            >
-              <span className="block text-base md:text-lg font-semibold">
+            <DialogTitle className={`${layout.modal.headerClass} space-y-1`}>
+              <span
+                id={modalTitleId}
+                className="block text-base md:text-lg font-semibold"
+              >
                 {dyn.v3.getVariant("add-to-cart-modal-title", TEXT_VARIANTS_MAP, "Customize your order")}
               </span>
               <span
@@ -145,6 +146,9 @@ export function AddToCartModal({
                 {item.name}
               </span>
             </DialogTitle>
+            <DialogDescription className="sr-only">
+              Customize options, quantity, and special instructions for this menu item before adding it to your cart.
+            </DialogDescription>
           </DialogHeader>
           <div className="px-6 flex gap-3 items-center mb-2">
             <div className="rounded-xl overflow-hidden w-16 h-16 relative">

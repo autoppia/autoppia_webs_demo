@@ -2,12 +2,14 @@
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
-  testMatch: ["<rootDir>/tests/**/*.(test|spec).[jt]s?(x)"],
-  testPathIgnorePatterns: [
-    "<rootDir>/tests/format.test.js",
-    "<rootDir>/tests/use-cases.spec.js",
-  ],
   passWithNoTests: true,
+  testMatch: ["<rootDir>/tests/**/*.(test|spec).[jt]s?(x)"],
+  // format.test.js is run via `node` in npm test; use-cases.spec.js is Playwright (test:e2e).
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "<rootDir>/tests/format\\.test\\.js",
+    "<rootDir>/tests/use-cases\\.spec\\.js",
+  ],
   coverageProvider: "v8",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   moduleNameMapper: {

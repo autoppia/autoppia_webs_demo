@@ -4,6 +4,7 @@ import type React from "react";
 import { createContext, useCallback, useContext, useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { clampSeed, getSeedFromUrl } from "@/shared/seed-resolver";
+import { isV2Enabled } from "@/dynamic/shared/flags";
 
 interface SeedContextType {
   seed: number;
@@ -34,18 +35,24 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
   const [seed, setSeedState] = useState<number>(DEFAULT_SEED);
   const [isSeedReady, setIsSeedReady] = useState<boolean>(false);
 
-  // Source of truth: URL `?seed=` (clamped 1..999). If missing/invalid => 1.
+  // With V2: URL `?seed=` (clamped 1..999). Without V2: always seed 1.
   const seedParam = searchParams.get("seed");
   useEffect(() => {
-    setSeedState(seedParam !== null && seedParam !== "" ? clampSeed(Number(seedParam)) : getSeedFromUrl());
+    if (!isV2Enabled()) {
+      setSeedState(DEFAULT_SEED);
+    } else if (seedParam !== null && seedParam !== "") {
+      setSeedState(clampSeed(Number(seedParam)));
+    } else {
+      setSeedState(getSeedFromUrl());
+    }
     setIsSeedReady(true);
   }, [seedParam]);
 
   // Optional: allow components to update seed and keep it in the URL.
   const setSeed = useCallback((newSeed: number) => {
-    const clamped = clampSeed(newSeed);
+    const clamped = isV2Enabled() ? clampSeed(newSeed) : DEFAULT_SEED;
     setSeedState(clamped);
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && isV2Enabled()) {
       try {
         const url = new URL(window.location.href);
         url.searchParams.set("seed", String(clamped));
@@ -65,7 +72,12 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
         typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
       const [base, qs] = path.split("?");
       const params = new URLSearchParams(qs || "");
-      params.set("seed", seed.toString());
+
+      if (isV2Enabled()) {
+        params.set("seed", seed.toString());
+      } else {
+        params.delete("seed");
+      }
 
       const enableDynamic = currentParams.get("enable_dynamic");
       if (enableDynamic) {
