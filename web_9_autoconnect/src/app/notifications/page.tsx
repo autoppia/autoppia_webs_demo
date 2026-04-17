@@ -103,6 +103,34 @@ const localIdVariants: Record<string, string[]> = {
   ],
 };
 
+const NOTIFICATIONS_PAGE_PATH = "/notifications";
+
+/** Keep analytics payloads bounded (full body can be long). */
+function truncateForEvent(text: string, maxChars = 220): string {
+  const t = text.trim();
+  if (t.length <= maxChars) return t;
+  return `${t.slice(0, maxChars - 1).trimEnd()}…`;
+}
+
+function buildMarkNotificationReadPayload(
+  notification: NotificationItem,
+  action: string,
+  opts?: Record<string, unknown>
+) {
+  return {
+    notificationId: notification.id,
+    type: notification.type,
+    action,
+    title: notification.title,
+    body: truncateForEvent(notification.body),
+    actorName: notification.actorName,
+    href: notification.href,
+    notificationTimestamp: notification.timestamp,
+    actionLabel: notification.actionLabel,
+    ...opts,
+  };
+}
+
 function timeAgo(timestamp: string): string {
   const seconds = Math.max(
     0,
@@ -211,11 +239,14 @@ function NotificationsContent() {
     }
 
     updateReadState(nextReadState);
-    logEvent(EVENT_TYPES.MARK_NOTIFICATION_READ, {
-      notificationId: notification.id,
-      type: notification.type,
-      action: isRead ? "marked_unread" : "marked_read",
-    });
+    logEvent(
+      EVENT_TYPES.MARK_NOTIFICATION_READ,
+      buildMarkNotificationReadPayload(
+        notification,
+        isRead ? "marked_unread" : "marked_read",
+        { wasListedAsRead: isRead }
+      )
+    );
   }
 
   function markAllAsRead(): void {
@@ -230,9 +261,15 @@ function NotificationsContent() {
     );
 
     updateReadState(nextReadState);
+    const previouslyUnreadIds = notifications
+      .filter((n) => !readState[n.id])
+      .map((n) => n.id);
     logEvent(EVENT_TYPES.MARK_ALL_NOTIFICATIONS_READ, {
       count: unreadCount,
       source: "notifications_page",
+      totalCount: notifications.length,
+      previouslyUnreadIds,
+      previouslyUnreadCount: previouslyUnreadIds.length,
     });
   }
 
@@ -361,11 +398,17 @@ function NotificationsContent() {
                           )
                     )}
                     onClick={() => {
+                      const previousFilter = activeFilter;
                       setActiveFilter(filter.key);
                       logEvent(EVENT_TYPES.FILTER_NOTIFICATIONS, {
                         filter: filter.key,
+                        filterLabel: filter.label,
                         count,
+                        totalCount: notifications.length,
+                        unreadCount,
                         source: "notifications_page",
+                        pathname: NOTIFICATIONS_PAGE_PATH,
+                        previousFilter,
                       });
                     }}
                   >
@@ -479,11 +522,17 @@ function NotificationsContent() {
                                 };
                                 updateReadState(nextReadState);
                               }
-                              logEvent(EVENT_TYPES.MARK_NOTIFICATION_READ, {
-                                notificationId: notification.id,
-                                type: notification.type,
-                                action: "opened_from_notification",
-                              });
+                              logEvent(
+                                EVENT_TYPES.MARK_NOTIFICATION_READ,
+                                buildMarkNotificationReadPayload(
+                                  notification,
+                                  "opened_from_notification",
+                                  {
+                                    wasListedAsRead: isRead,
+                                    openedFrom: "notification_cta",
+                                  }
+                                )
+                              );
                             }}
                           >
                             {notification.actionLabel}
