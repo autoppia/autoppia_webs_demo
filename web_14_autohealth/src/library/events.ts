@@ -40,9 +40,9 @@ export const EVENT_TYPES = {
 
   // Contact Events
   /** Fired when user submits the general contact form. */
-  CONTACT_FORM_SUBMITTED: "CONTACT_FORM_SUBMITTED",
+  CONTACT_FORM_SUBMITTED: "AUTOHEALTH_CONTACT_FORM_SUBMITTED",
   /** Fired when user visits the Help page. */
-  VIEW_HELP_PAGE: "VIEW_HELP_PAGE",
+  VIEW_HELP_PAGE: "AUTOHEALTH_VIEW_HELP_PAGE",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
